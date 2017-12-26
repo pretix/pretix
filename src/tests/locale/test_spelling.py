@@ -2,7 +2,7 @@ import polib
 import enchant as ec
 import os
 from enchant.checker import SpellChecker
-from enchant.tokenize import Filter, HTMLChunker
+from enchant.tokenize import Filter, HTMLChunker, URLFilter
 from shutil import rmtree
 
 
@@ -37,6 +37,10 @@ class PythonFormatFilter(Filter):
             return True
         if word[0] == "{":
             return True
+        if word[:2] == "#{":
+            return True
+        if word[:2] == "#%":
+            return True
         return False
 
 
@@ -61,16 +65,21 @@ class Check:
         checklang = LANGUAGES[lang]
         ignore = self.get_ignorefile(lang)
         check_dict = ec.DictWithPWL(checklang, pwl=ignore)
-        self.checker = SpellChecker(check_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter])
-        self.set_output(lang)
+        self.checker = SpellChecker(check_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter, URLFilter])
+        self.set_output(lang, ("djangojs" in path))
 
-    def set_output(self, lang):
-        name = (lang + '_output.txt')
-        files = os.listdir(BUILD_DIR)
+    def set_output(self, lang, js):
+        out_dir = BUILD_DIR + '/' + lang
+        try:
+            os.mkdir(out_dir)
+        except FileExistsError:
+            pass
+        name = "js_output.txt" if js else 'output.txt'
+        files = os.listdir(out_dir)
         if name in files:
-            self.output_file = open(os.path.join(BUILD_DIR, name), 'a')
+            self.output_file = open(os.path.join(out_dir, name), 'a')
         else:
-            self.output_file = open(os.path.join(BUILD_DIR, name), 'w')
+            self.output_file = open(os.path.join(out_dir, name), 'w')
 
     def get_ignorefile(self, lang):
         for f in os.listdir(IGNORES_DIR):
@@ -97,7 +106,7 @@ for root, dirs, files in os.walk(LOCALES_DIR):
             checks.append(Check(os.path.join(root, f)))
 
 en_dict = ec.DictWithPWL("en_US", pwl='./ignore_en.txt')
-en_ckr = SpellChecker(en_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter])
+en_ckr = SpellChecker(en_dict, chunkers=[HTMLChunker], filters=[PythonFormatFilter, URLFilter])
 output_file = open(BUILD_DIR + '/en_output.txt', 'w')
 
 for c in checks:
@@ -108,6 +117,7 @@ for c in checks:
         for err in en_ckr:
             path = os.path.relpath(c.popath, start=LOCALES_DIR)
             print("ERROR: {}:{}: {}".format(path, entry.linenum, err.word))
+            print("EN", err.word)
             output_file.write("ERROR: {}:{}: {}\n".format(path, entry.linenum, err.word))
 
         c.checker.set_text(entry.msgstr)
@@ -116,7 +126,7 @@ for c in checks:
             print("ERROR: {}:{}: {}".format(path, entry.linenum, err.word))
             c.output_file.write("ERROR: {}:{}: {}\n".format(path, entry.linenum, err.word))
 
-print("Spell-checking done. You can find the outputs in", BUILD_DIR + "/<lang>_output")
+print("Spell-checking done. You can find the outputs in", BUILD_DIR + "/<lang>/{js_}output")
 # TODO: extend english wordlist
 # TODO: extend german wordlist
 # TODO: use python test library to make good tests
