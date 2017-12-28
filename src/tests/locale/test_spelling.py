@@ -4,13 +4,13 @@ from shutil import rmtree
 import polib
 from enchant import DictWithPWL
 from enchant.checker import SpellChecker
-from enchant.tokenize import Filter, HTMLChunker, URLFilter
+from enchant.tokenize import Filter, Chunker, HTMLChunker, URLFilter
 
 # The languages dict maps the language of the po-file to the the dictionary
 # language used by pyenchant and an adjective for nicer output
 LANGUAGES = {
-    "de": ["de_DE","german"],
-    "en": ["en_US","english"],
+    "de": "de_DE",
+    "en": "en_US",
 }
 
 # LOCALES_DIR is the directory that contains the po-files per language.
@@ -28,17 +28,64 @@ IGNORES_DIR = os.getcwd()
 BUILD_DIR = os.path.abspath('./_build')
 
 # List of words used by the HyphenationFilter
-HYPHEN_WORDS = ["add-ons"]
+EDGECASE_WORDS = ["add-ons", 'same-origin"-requests', 'MT940', 'MT940-Format',
+    'pre-selected', 'pretix.eu', 'pretix.eu-Blog', 'pretix.eu-Server', '4th']
 
-class HyphenationFilter(Filter):
+# List of phrases that might be used out of language
+PHRASES = ["ticketing powered by", "powered by"]
+
+class PhraseChunker(Chunker):
     """
-    Adding hyphenated words to the personal word lists doesn't make sense,
-    since the tokenization will split them apart. Therefore, if we have a
-    hypenated word that is spelled correctly, we must skip it manually.
+    It may happen that certain phrases are used in a context that would mark
+    them as being incorrectly spelled. We chunk everything but those phrases to
+    ignore them.
+
+    The algorithm find the first index at which a phrase starts. In the case of
+    multiple phrases, that is the first occurrence of any phrase. It returns
+    everything before that phrase and continues with the text after that
+    phrase.
+    """
+
+    def next(self):
+        text = self._text
+        offset = self.offset
+
+        if offset >= len(text):
+            raise StopIteration
+
+        haystack = text[offset:].tounicode()
+
+        needle = None
+        index = None
+        for p in PHRASES:
+            try:
+               found = haystack.index(p)
+            except ValueError:
+                continue
+            if index is None or found < index:
+                index = found
+                needle = p
+
+        if index is None:
+            self.set_offset(len(text))
+            return (text[offset:], offset)
+
+        self.set_offset(index + len(needle))
+        return (text[offset:index], offset)
+
+class EdgecaseFilter(Filter):
+    """
+    Some words might be special edgecase words that cannot really be
+    spellchecked and whose addition to the wordlist doesn't make sense.
+    Examples are hyphenated words, since the tokenization will split them
+    apart, which it should do, but which will sometimes lead to incorrect
+    spellchecks.  Therefore, these have to be skipped it manually beforehand.
     """
 
     def _skip(self, word):
-        if word.lower() in HYPHEN_WORDS:
+        if word in EDGECASE_WORDS:
+            return True
+        elif word.lower() in EDGECASE_WORDS:
             return True
 
 class HTMLFilter(Filter):
@@ -65,7 +112,8 @@ class PythonFormatFilter(Filter):
             return True
         return False
 
-FILTERS = [PythonFormatFilter, URLFilter, HTMLFilter, HyphenationFilter]
+CHUNKERS = [HTMLChunker, PhraseChunker]
+FILTERS = [PythonFormatFilter, URLFilter, HTMLFilter, EdgecaseFilter]
 
 
 class Check:
@@ -86,11 +134,10 @@ class Check:
         self.popath = path
         self.po = polib.pofile(path)
         lang = self.po.metadata["Language"]
-        checklang = LANGUAGES[lang][0]
+        checklang = LANGUAGES[lang]
         ignore = self.get_ignorefile(lang)
         check_dict = DictWithPWL(checklang, pwl=ignore)
-        self.language = LANGUAGES[lang][1]
-        self.checker = SpellChecker(check_dict, chunkers=[HTMLChunker], filters=FILTERS)
+        self.checker = SpellChecker(check_dict, chunkers=CHUNKERS, filters=FILTERS)
         self.set_output(lang, ("djangojs" in path))
 
     def set_output(self, lang, js):
@@ -104,8 +151,8 @@ class Check:
             if lang in f:
                 return f  # as there should be only one language file
 
-def errmsg(lang, outputfile, path, linenum, word):
-    print("{} spelling error: {}:{}: {}".format(lang, path, linenum, word))
+def errmsg(outputfile, path, linenum, word):
+    print("ERROR: {}:{}: {}".format(path, linenum, word))
     outputfile.write("ERROR: {}:{}: {}\n".format(path, linenum, word))
 
 try:
@@ -127,7 +174,7 @@ for root, dirs, files in os.walk(LOCALES_DIR):
             checks.append(Check(os.path.join(root, f)))
 
 en_dict = DictWithPWL("en_US", pwl='./ignore_en.txt')
-en_ckr = SpellChecker(en_dict, chunkers=[HTMLChunker], filters=FILTERS)
+en_ckr = SpellChecker(en_dict, chunkers=CHUNKERS, filters=FILTERS)
 output_file = open(os.path.join(BUILD_DIR, 'en_output.txt'), 'w')
 
 for c in checks:
@@ -138,12 +185,12 @@ for c in checks:
         en_ckr.set_text(entry.msgid)
         for err in en_ckr:
             path = os.path.relpath(c.popath, start=LOCALES_DIR)
-            errmsg("english", output_file, path, entry.linenum, err.word)
+            errmsg(output_file, path, entry.linenum, err.word)
 
         c.checker.set_text(entry.msgstr)
         for err in c.checker:
             path = os.path.relpath(c.popath, start=LOCALES_DIR)
-            errmsg(c.language, c.output_file, path, entry.linenum, err.word)
+            errmsg(c.output_file, path, entry.linenum, err.word)
 
 print("Spell-checking done. You can find the outputs in", BUILD_DIR + "/<lang>/{js_}output")
 # TODO: extend english wordlist
