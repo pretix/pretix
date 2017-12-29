@@ -562,6 +562,8 @@ class Question(LoggedModel):
     TYPE_CHOICE = "C"
     TYPE_CHOICE_MULTIPLE = "M"
     TYPE_FILE = "F"
+    TYPE_DATE = "D"
+    TYPE_TIME = "H"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -570,6 +572,8 @@ class Question(LoggedModel):
         (TYPE_CHOICE, _("Choose one from a list")),
         (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list")),
         (TYPE_FILE, _("File upload")),
+        (TYPE_DATE, _("Date")),
+        (TYPE_TIME, _("Time")),
     )
 
     event = models.ForeignKey(
