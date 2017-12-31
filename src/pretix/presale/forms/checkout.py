@@ -312,7 +312,7 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=initial.answer if initial else None,
-                    widget=forms.TimeInput(),
+                    widget=TimePickerWidget(),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 field = forms.DateTimeField(
