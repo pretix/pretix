@@ -25,8 +25,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    CachedTicket, InvoiceAddress, OrderFee, generate_position_secret,
-    generate_secret,
+    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee,
+    generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
@@ -1085,6 +1085,10 @@ class OrderChangeManager:
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        if self.split_order:
+            CachedTicket.objects.filter(order_position__order=self.split_order).delete()
+            CachedCombinedTicket.objects.filter(order=self.split_order).delete()
 
     def _get_payment_provider(self):
         pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
