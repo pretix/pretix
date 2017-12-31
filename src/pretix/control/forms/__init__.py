@@ -163,4 +163,4 @@ class TimePickerWidget(forms.TimeInput):
             year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
         ).strftime(tf)
 
-        forms.TimeInput.__init__(self, attrs, time_format)
+        forms.TimeInput.__init__(self, time_attrs, time_format)
