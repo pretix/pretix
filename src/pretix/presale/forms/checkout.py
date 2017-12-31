@@ -20,7 +20,7 @@ from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
-from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms import SplitDateTimePickerWidget, DatePickerWidget, TimePickerWidget
 
 logger = logging.getLogger(__name__)
 
@@ -303,12 +303,24 @@ class QuestionsForm(forms.Form):
             elif q.type == Question.TYPE_DATE:
                 field = forms.DateField(
                     label=q.question, required=q.required,
-                    help_text=q.question,
+                    help_text=q.help_text,
+                    initial=initial.answer if initial else None,
+                    widget=DatePickerWidget(),
+                )
+            elif q.type == Question.TYPE_TIME:
+                field = forms.TimeField(
+                    label=q.question, required=q.required,
+                    help_text=q.help_text,
+                    initial=initial.answer if initial else None,
+                    widget=forms.TimeInput(),
+                )
+            elif q.type == Question.TYPE_DATETIME:
+                field = forms.DateTimeField(
+                    label=q.question, required=q.required,
+                    help_text=q.help_text,
                     initial=initial.answer if initial else None,
                     widget=SplitDateTimePickerWidget(),
                 )
-            elif q.type == Question.TYPE_TIME:
-                pass # add question handling
             field.question = q
             if answers:
                 # Cache the answer object for later use

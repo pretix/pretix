@@ -564,6 +564,7 @@ class Question(LoggedModel):
     TYPE_FILE = "F"
     TYPE_DATE = "D"
     TYPE_TIME = "H"
+    TYPE_DATETIME = "W"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -574,6 +575,7 @@ class Question(LoggedModel):
         (TYPE_FILE, _("File upload")),
         (TYPE_DATE, _("Date")),
         (TYPE_TIME, _("Time")),
+        (TYPE_DATETIME, _("Date and time")),
     )
 
     event = models.ForeignKey(
