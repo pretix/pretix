@@ -207,6 +207,7 @@ class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
+        self.object.checkins.all().delete()
         self.object.log_action(action='pretix.event.orders.deleted', user=request.user)
         self.object.delete()
         messages.success(self.request, _('The selected list has been deleted.'))
