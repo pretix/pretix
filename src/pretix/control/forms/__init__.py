@@ -155,7 +155,7 @@ class TimePickerWidget(forms.TimeInput):
         if 'placeholder' in attrs:
             del attrs['placeholder']
         time_attrs = dict(attrs)
-        time_attrs.setdefault('class', 'form-control splitdatetimepart')
+        time_attrs.setdefault('class', 'form-control')
         time_attrs['class'] += ' timepickerfield'
 
         tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
