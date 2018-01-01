@@ -3,6 +3,7 @@ import tempfile
 from collections import OrderedDict
 from zipfile import ZipFile
 
+import dateutil.parser
 from django import forms
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -23,10 +24,16 @@ class InvoiceExporter(BaseExporter):
             qs = qs.filter(order__payment_provider=form_data.get('payment_provider'))
 
         if form_data.get('date_from'):
-            qs = qs.filter(date__gte=form_data.get('date_from'))
+            date_value = form_data.get('date_from')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+            qs = qs.filter(date__gte=date_value)
 
         if form_data.get('date_to'):
-            qs = qs.filter(date__lte=form_data.get('date_to'))
+            date_value = form_data.get('date_to')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+            qs = qs.filter(date__lte=date_value)
 
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
