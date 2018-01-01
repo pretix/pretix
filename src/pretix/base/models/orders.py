@@ -499,7 +499,7 @@ class QuestionAnswer(models.Model):
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
         else:
-            return str(self.answer)
+            return self.answer
 
     def save(self, *args, **kwargs):
         if self.orderposition and self.cartposition:
