@@ -1107,7 +1107,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
-            return OrderError(error_messages['busy'])
+            raise OrderError(str(error_messages['busy']))
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
@@ -1116,6 +1116,6 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         try:
             return _cancel_order(order, user, send_mail, api_token)
         except LockTimeoutException:
-            self.retry(exc=OrderError(error_messages['busy']))
+            self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
-        return OrderError(error_messages['busy'])
+        raise OrderError(error_messages['busy'])
