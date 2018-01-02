@@ -1,15 +1,13 @@
-import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
 
 import pytest
-from django.utils.timezone import now
 from django_countries.fields import Country
 from pytz import UTC
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import InvoiceAddress, Order, OrderPosition, CartPosition, Quota, ItemVariation, ItemAddOn
 from pretix.base.models.orders import OrderFee
-from pretix.base.models import Quota, ItemVariation
 
 
 @pytest.fixture
@@ -286,6 +284,10 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
    assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
 
 
+@pytest.mark.django_db
+def test_item_delete(token_client, organizer, event, item, category2, taxrule2):
+
+
 @pytest.fixture
 def variations(item):
     v = list()
@@ -350,6 +352,28 @@ def test_variations_detail(token_client, organizer, event, item, variation):
 
 
 @pytest.mark.django_db
+def test_variations_create(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "active": True,
+            "description": None,
+            "position": 1,
+            "default_price": None,
+            "price": 23.0
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    var = ItemVariation.objects.get(pk=resp.data['id'])
+    assert var.position == 1
+    assert var.price == 23.0
+
+
+@pytest.mark.django_db
 def test_variations_update(token_client, organizer, event, item, item3, variation):
     res = dict(TEST_VARIATIONS_UPDATE)
     res["id"] = variation.pk
@@ -379,15 +403,15 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
 
 @pytest.fixture
 def order(event, item, taxrule):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, payment_provider='banktransfer', locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -404,6 +428,24 @@ def order(event, item, taxrule):
         return o
 
 
+@pytest.fixture
+def cart_position(event, item, variation):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        c = CartPosition.objects.create(
+            event=event,
+            item=item,
+            datetime=datetime.now(),
+            expires=datetime.now() + timedelta(days=1),
+            variation=variation,
+            price=Decimal("23"),
+            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return c
+
+
 @pytest.mark.django_db
 def test_variations_delete(token_client, organizer, event, item, variation, order):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
@@ -412,7 +454,7 @@ def test_variations_delete(token_client, organizer, event, item, variation, orde
 
 
 @pytest.mark.django_db
-def test_ordered_variations_not_delete(token_client, organizer, event, item, order):
+def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order):
     var = item.variations.create(value="Children")
     op = order.positions.first()
     op.variation = var
@@ -421,6 +463,132 @@ def test_ordered_variations_not_delete(token_client, organizer, event, item, ord
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, var.pk))
     assert resp.status_code == 403
     assert item.variations.filter(pk=var.id).exists()
+
+
+@pytest.mark.django_db
+def test_variations_with_cart_position_not_delete(token_client, organizer, event, item, variation, cart_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+    assert resp.status_code == 403
+    assert item.variations.filter(pk=variation.id).exists()
+
+
+@pytest.fixture
+def addon(item, category):
+    return item.addons.create(addon_category=category, min_count=0, max_count=10, position=1)
+
+
+TEST_ADDONS_RES = {
+      "min_count": 0,
+      "max_count": 10,
+      "position": 1,
+      "price_included": False
+    }
+
+
+@pytest.mark.django_db
+def test_addons_list(token_client, organizer, event, item, addon, category):
+    res = dict(TEST_ADDONS_RES)
+    res["id"] = addon.pk
+    res["addon_category"] = category.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert res['addon_category'] == resp.data['results'][0]['addon_category']
+    assert res['min_count'] == resp.data['results'][0]['min_count']
+    assert res['max_count'] == resp.data['results'][0]['max_count']
+    assert res['position'] == resp.data['results'][0]['position']
+
+
+@pytest.mark.django_db
+def test_addons_detail(token_client, organizer, event, item, addon, category):
+    res = dict(TEST_ADDONS_RES)
+    res["id"] = addon.pk
+    res["addon_category"] = category.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_addons_create(token_client, organizer, event, item, category, category2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category.pk,
+            "min_count": 0,
+            "max_count": 10,
+            "position": 1,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    addon = ItemAddOn.objects.get(pk=resp.data['id'])
+    assert addon.position == 1
+    assert addon.addon_category == category
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category.pk,
+            "min_count": 10,
+            "max_count": 20,
+            "position": 2,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The item all ready have an addon of this category."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category2.pk,
+            "min_count": 10,
+            "max_count": 20,
+            "position": 2,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    addon = ItemAddOn.objects.get(pk=resp.data['id'])
+    assert addon.position == 2
+    assert addon.addon_category == category2
+
+
+@pytest.mark.django_db
+def test_addons_update(token_client, organizer, event, item, addon):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
+        {
+            "min_count": 100,
+            "max_count": 101
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    a = ItemAddOn.objects.get(pk=addon.pk)
+    assert a.min_count == 100
+    assert a.max_count == 101
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, a.pk),
+        {
+            "min_count": 10,
+            "max_count": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The minimum number needs to be lower than the maximum number."]}'
+
+
+@pytest.mark.django_db
+def test_addons_delete(token_client, organizer, event, item, addon):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk))
+    assert resp.status_code == 204
+    assert not item.addons.filter(pk=addon.id).exists()
 
 
 @pytest.fixture

@@ -23,18 +23,27 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
                   'position', 'default_price', 'price')
 
 
+class InlineItemAddOnSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemAddOn
+        fields = ('addon_category', 'min_count', 'max_count',
+                  'position', 'price_included')
+
+
 class ItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
         fields = ('id', 'addon_category', 'min_count', 'max_count',
                   'position', 'price_included')
 
+    def validate(self, data):
+        data = super().validate(data)
+        item = self.context['item']
 
-class InlineItemAddOnSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ItemAddOn
-        fields = ('addon_category', 'min_count', 'max_count',
-                  'position', 'price_included')
+        ItemAddOn.clean_categories(item, data.get('addon_category'))
+        ItemAddOn.clean_max_min_numbers(data.get('max_count'), data.get('min_count'))
+
+        return data
 
 
 class ItemTaxRateField(serializers.Field):

@@ -557,7 +557,17 @@ class ItemAddOn(models.Model):
         ordering = ('position', 'pk')
 
     def clean(self):
-        if self.max_count < self.min_count:
+        self.clean_max_min_numbers(self.max_count, self.min_count)
+
+    @staticmethod
+    def clean_categories(item, category):
+        for addon in item.addons.all():
+            if addon.addon_category == category:
+                raise ValidationError(_('The item all ready have an addon of this category.'))
+
+    @staticmethod
+    def clean_max_min_numbers(max_count, min_count):
+        if max_count < min_count:
             raise ValidationError(_('The minimum number needs to be lower than the maximum number.'))
 
 
