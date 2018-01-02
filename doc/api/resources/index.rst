@@ -10,7 +10,8 @@ Resources and endpoints
    taxrules
    categories
    items
-   variations
+   item_variations
+   item_add-ons
    questions
    quotas
    orders

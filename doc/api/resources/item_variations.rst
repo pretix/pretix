@@ -6,7 +6,7 @@ Resource description
 
 Variations of items can be use for products (items) that are available in different sizes, colours or other variations
 of the same product.
-The variations resource contains the following public fields:
+The addons resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
 
