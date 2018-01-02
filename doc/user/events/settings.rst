@@ -8,4 +8,7 @@ Configuring an event
    ../payments/index
    plugins
    display
+   tickets
+   email
    taxes
+   invoicing

@@ -38,7 +38,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('datetime',)
+        fields = ('datetime', 'list')
 
 
 class OrderDownloadsField(serializers.Field):

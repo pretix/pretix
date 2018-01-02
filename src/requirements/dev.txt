@@ -11,7 +11,7 @@ pytest==3.0.*
 pytest-django
 isort
 pytest-mock==1.4.*
-pytest-rerunfailures
+pytest-rerunfailures==4.*
 pytest-warnings
 pytest-cache
 pytest-sugar

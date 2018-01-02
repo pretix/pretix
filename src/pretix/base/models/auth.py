@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
+from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
 
@@ -38,6 +39,10 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+
+
+def generate_notifications_token():
+    return get_random_string(length=32)
 
 
 class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
@@ -81,6 +86,12 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                                 default=settings.TIME_ZONE,
                                 verbose_name=_('Timezone'))
     require_2fa = models.BooleanField(default=False)
+    notifications_send = models.BooleanField(
+        default=True,
+        verbose_name=_('Receive notifications according to my settings below'),
+        help_text=_('If turned off, you will not get any notifications.')
+    )
+    notifications_token = models.CharField(max_length=255, default=generate_notifications_token)
 
     objects = UserManager()
 

@@ -119,6 +119,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
+        'pretix.event.order.locale.changed': _('The order locale has been changed.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
@@ -141,6 +142,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                                    'your account.'),
         'pretix.user.settings.2fa.device.deleted': _('The two-factor authentication device "{name}" has been removed '
                                                      'from your account.'),
+        'pretix.user.settings.notifications.enabled': _('Notifications have been enabled.'),
+        'pretix.user.settings.notifications.disabled': _('Notifications have been disabled.'),
+        'pretix.user.settings.notifications.changed': _('Your notification settings have been changed.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
         'pretix.voucher.added': _('The voucher has been created.'),

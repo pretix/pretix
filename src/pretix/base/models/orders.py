@@ -786,6 +786,9 @@ class OrderPosition(AbstractPosition):
                     'order_code': order.code
                 })
 
+        # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
+        # due to the deletion cascade.
+        for cartpos in cp:
             cartpos.delete()
         return ops
 

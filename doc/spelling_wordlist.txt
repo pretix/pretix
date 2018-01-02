@@ -11,8 +11,6 @@ booleans
 cancelled
 casted
 checkbox
-checkin
-checkins
 checksum
 config
 contenttypes
@@ -34,6 +32,7 @@ frontpage
 gettext
 gunicorn
 hardcoded
+hostname
 invalidations
 iterable
 libsass
@@ -51,6 +50,7 @@ namespaces
 namespacing
 natively
 nginx
+NotificationType
 ons
 optimizations
 param

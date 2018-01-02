@@ -26,6 +26,10 @@ class EventPluginSignal(django.dispatch.Signal):
     """
 
     def _is_active(self, sender, receiver):
+        if sender is None:
+            # Send to all events!
+            return True
+
         # Find the Django application this belongs to
         searchpath = receiver.__module__
         core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
@@ -138,6 +142,19 @@ This signal is sent out to get all known ticket outputs. Receivers should return
 subclass of pretix.base.ticketoutput.BaseTicketOutput
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+register_notification_types = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known notification types. Receivers should return an
+instance of a subclass of pretix.base.notifications.NotificationType or a list of such
+instances.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event,
+however for this signal, the ``sender`` **may also be None** to allow creating the general
+notification settings!
 """
 
 register_data_exporters = EventPluginSignal(

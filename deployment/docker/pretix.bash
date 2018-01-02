@@ -2,6 +2,7 @@
 cd /pretix/src
 export DJANGO_SETTINGS_MODULE=production_settings
 export DATA_DIR=/data/
+export HOME=/pretix
 NUM_WORKERS=10
 
 if [ ! -d /data/logs ]; then

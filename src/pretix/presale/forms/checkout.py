@@ -35,7 +35,7 @@ class ContactForm(forms.Form):
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
-                             widget=forms.EmailInput(attrs={'data-typocheck-target': '1', 'autofocus': 'autofocus'}))
+                             widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -95,9 +95,8 @@ class InvoiceAddressForm(forms.ModelForm):
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
-            'company': forms.TextInput(attrs={'data-typocheck-source': '1',
-                                              'data-display-dependency': '#id_is_business_1'}),
-            'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
+            'company': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
+            'name': forms.TextInput(attrs={}),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
         }
@@ -222,7 +221,6 @@ class QuestionsForm(forms.Form):
                 max_length=255, required=event.settings.attendee_names_required,
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name),
-                widget=forms.TextInput(attrs={'data-typocheck-source': '1'}),
             )
         if item.admission and event.settings.attendee_emails_asked:
             self.fields['attendee_email'] = forms.EmailField(

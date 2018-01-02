@@ -27,6 +27,7 @@ class PermissionMiddleware(MiddlewareMixin):
         "auth.forgot",
         "auth.forgot.recover",
         "auth.invite",
+        "user.settings.notifications.off",
     )
 
     def _login_redirect(self, request):

@@ -1,5 +1,5 @@
-Logging
-=======
+Logging and notifications
+=========================
 
 As pretix is handling monetary transactions, we are very careful to make it possible to review all changes
 in the system that lead to the current state.
@@ -80,6 +80,61 @@ implementation could look like::
         }
         if logentry.action_type in plains:
             return plains[logentry.action_type]
+
+Sending notifications
+---------------------
+
+If you think that the logged information might be important or urgent enough to send out a notification to interested
+organizers. In this case, you should listen for the :py:attr:`pretix.base.signals.register_notification_types` signal
+to register a notification type::
+
+    @receiver(register_notification_types)
+    def register_my_notification_types(sender, **kwargs):
+        return [MyNotificationType(sender)]
+
+Note that this event is different than other events send out by pretix: ``sender`` may be an event or ``None``. The
+latter case is required to let the user define global notification preferences for all events.
+
+You also need to implement a custom class that specifies how notifications should be handled for your notification type.
+You should subclass the base ``NotificationType`` class and implement all its members:
+
+.. autoclass:: pretix.base.notifications.NotificationType
+   :members: action_type, verbose_name, required_permission, build_notification
+
+A simple implementation could look like this::
+
+    class MyNotificationType(NotificationType):
+        required_permission = "can_view_orders"
+        action_type = "pretix.event.order.paid"
+        verbose_name = _("Order has been paid")
+
+        def build_notification(self, logentry: LogEntry):
+            order = logentry.content_object
+
+            order_url = build_absolute_uri(
+                'control:event.order',
+                kwargs={
+                    'organizer': logentry.event.organizer.slug,
+                    'event': logentry.event.slug,
+                    'code': order.code
+                }
+            )
+
+            n = Notification(
+                event=logentry.event,
+                title=_('Order {code} has been marked as paid').format(code=order.code),
+                url=order_url
+            )
+            n.add_attribute(_('Order code'), order.code)
+            n.add_action(_('View order details'), order_url)
+            return n
+
+As you can see, the relevant code is in the ``build_notification`` method that is supposed to create a ``Notification``
+method that has a title, description, URL, attributes, and actions. The full definition of ``Notification`` is the
+following:
+
+.. autoclass:: pretix.base.notifications.Notification
+   :members: add_action, add_attribute
 
 
 Logging technical information

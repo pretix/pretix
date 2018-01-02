@@ -47,7 +47,7 @@ class WaitingView(EventViewMixin, FormView):
             else:
                 var = None
             return item, var
-        except (Item.DoesNotExist, ItemVariation.DoesNotExist):
+        except (Item.DoesNotExist, ItemVariation.DoesNotExist, ValueError):
             return None
 
     def dispatch(self, request, *args, **kwargs):

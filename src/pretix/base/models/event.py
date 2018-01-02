@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -26,7 +26,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 
 from ..settings import settings_hierarkey
-from .organizer import Organizer
+from .organizer import Organizer, Team
 
 
 class EventMixin:
@@ -511,6 +511,39 @@ class Event(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    def get_users_with_any_permission(self):
+        """
+        Returns a queryset of users who have any permission to this event.
+
+        :return: Iterable of User
+        """
+        return self.get_users_with_permission(None)
+
+    def get_users_with_permission(self, permission):
+        """
+        Returns a queryset of users who have a specific permission to this event.
+
+        :return: Iterable of User
+        """
+        from .auth import User
+
+        if permission:
+            kwargs = {permission: True}
+        else:
+            kwargs = {}
+
+        team_with_perm = Team.objects.filter(
+            members__pk=OuterRef('pk'),
+            organizer=self.organizer,
+            **kwargs
+        ).filter(
+            Q(all_events=True) | Q(limit_events__pk=self.pk)
+        )
+
+        return User.objects.annotate(twp=Exists(team_with_perm)).filter(
+            Q(is_superuser=True) | Q(twp=True)
+        )
+
 
 class SubEvent(EventMixin, LoggedModel):
     """
@@ -664,6 +697,21 @@ class RequiredAction(models.Model):
             if response:
                 return response
         return self.action_type
+
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super().save(*args, **kwargs)
+        if created:
+            from .log import LogEntry
+            from ..services.notifications import notify
+
+            logentry = LogEntry.objects.create(
+                content_object=self,
+                action_type='pretix.event.action_required',
+                event=self.event,
+                visible=False
+            )
+            notify.apply_async(args=(logentry.pk,))
 
 
 class EventMetaProperty(LoggedModel):
