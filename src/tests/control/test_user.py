@@ -1,13 +1,14 @@
 import time
 
 import pytest
+from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from tests.base import SoupTest, extract_form_fields
 from u2flib_server.jsapi import JSONDict
 
-from pretix.base.models import U2FDevice, User
+from pretix.base.models import Event, Organizer, U2FDevice, User
 from pretix.testutils.mock import mocker_context
 
 
@@ -277,3 +278,123 @@ class UserSettings2FATest(SoupTest):
         assert 'alert-success' in r.rendered_content
 
         m.undo()
+
+
+class UserSettingsNotificationsTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(), plugins='pretix.plugins.banktransfer'
+        )
+        t = o.teams.create(can_change_orders=True, all_events=True)
+        t.members.add(self.user)
+
+    def test_toggle_all(self):
+        assert self.user.notifications_send
+        self.client.post('/control/settings/notifications/', {
+            'notifications_send': 'off'
+        })
+        self.user.refresh_from_db()
+        assert not self.user.notifications_send
+        self.client.post('/control/settings/notifications/', {
+            'notifications_send': 'on'
+        })
+        self.user.refresh_from_db()
+        assert self.user.notifications_send
+
+    def test_global_enable(self):
+        self.client.post('/control/settings/notifications/', {
+            'mail:pretix.event.order.placed': 'on'
+        })
+        assert self.user.notification_settings.get(
+            event__isnull=True, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is True
+
+    def test_global_disable(self):
+        self.user.notification_settings.create(
+            event=None, method='mail', action_type='pretix.event.order.placed', enabled=True
+        )
+        self.client.post('/control/settings/notifications/', {
+            'mail:pretix.event.order.placed': 'off'
+        })
+        assert self.user.notification_settings.get(
+            event__isnull=True, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is False
+
+    def test_event_enabled_disable(self):
+        self.user.notification_settings.create(
+            event=self.event, method='mail', action_type='pretix.event.order.placed', enabled=True
+        )
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'off'
+        })
+        assert self.user.notification_settings.get(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is False
+
+    def test_event_global_disable(self):
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'off'
+        })
+        assert self.user.notification_settings.get(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is False
+
+    def test_event_disabled_enable(self):
+        self.user.notification_settings.create(
+            event=self.event, method='mail', action_type='pretix.event.order.placed', enabled=False
+        )
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'on'
+        })
+        assert self.user.notification_settings.get(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is True
+
+    def test_event_global_enable(self):
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'on'
+        })
+        assert self.user.notification_settings.get(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).enabled is True
+
+    def test_event_enabled_global(self):
+        self.user.notification_settings.create(
+            event=self.event, method='mail', action_type='pretix.event.order.placed', enabled=True
+        )
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'global'
+        })
+        assert not self.user.notification_settings.filter(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).exists()
+
+    def test_event_disabled_global(self):
+        self.user.notification_settings.create(
+            event=self.event, method='mail', action_type='pretix.event.order.placed', enabled=False
+        )
+        self.client.post('/control/settings/notifications/?event={}'.format(self.event.pk), {
+            'mail:pretix.event.order.placed': 'global'
+        })
+        assert not self.user.notification_settings.filter(
+            event=self.event, method='mail', action_type='pretix.event.order.placed'
+        ).exists()
+
+    def test_disable_all_via_link(self):
+        assert self.user.notifications_send
+        self.client.get('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
+        self.user.refresh_from_db()
+        assert not self.user.notifications_send
+
+    def test_disable_all_via_link_anonymous(self):
+        self.client.logout()
+        assert self.user.notifications_send
+        self.client.get('/control/settings/notifications/off/{}/{}/'.format(self.user.pk, self.user.notifications_token))
+        self.user.refresh_from_db()
+        assert not self.user.notifications_send

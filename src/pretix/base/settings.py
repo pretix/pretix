@@ -49,6 +49,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_attendee_name': {
+        'default': 'True',
+        'type': bool,
+    },
     'invoice_address_required': {
         'default': 'False',
         'type': bool,

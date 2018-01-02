@@ -47,22 +47,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows %}
+                    {% for row in rows|slice:":100" %}
                         {% with forloop.counter0 as rowid %}
                             <tr>
                                 <td></td>
                                 {% for col in row %}
-                                    <td>{{ col }}<input type="hidden" name="col[{{ rowid }}][{{ forloop.counter0 }}]"
-                                            value="{{ col }}" /></td>
+                                    <td>{{ col }}</td>
                                 {% endfor %}
                             </tr>
                         {% endwith %}
                     {% endfor %}
+                    {% if rows|length > 100 %}
+                        <tr>
+                            <td colspan="{{ rows.0|length|add:1 }}" class="text-center">
+                                <em>{% trans "More data was uploaded but is not shown here. It will still be processed" %}</em>
+                            </td>
+                        </tr>
+                    {% endif %}
                 </tbody>
-                <input type="hidden" name="cols" value="{{ rows.0|length }}" />
-                <input type="hidden" name="rows" value="{{ rows|length }}" />
-
             </table>
         </div>
+        <input type="hidden" name="cols" value="{{ rows.0|length }}" />
+        <input type="hidden" name="rows" value="{{ rows|length }}" />
+        <textarea class="helper-display-none" name="data">
+            {{ json|escape }}
+        </textarea>
     </form>
 {% endblock %}

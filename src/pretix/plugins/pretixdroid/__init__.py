@@ -12,6 +12,7 @@ class PretixdroidApp(AppConfig):
         name = _("pretixdroid API")
         author = _("the pretix team")
         version = version
+        visible = True
         description = _("This plugin allows you to use the pretixdroid Android app for your event.")
 
     def ready(self):

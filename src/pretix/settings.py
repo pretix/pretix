@@ -3,6 +3,7 @@ import os
 import sys
 from urllib.parse import urlparse
 
+from kombu import Queue
 from pycountry import currencies
 
 import django.conf.locale
@@ -261,7 +262,8 @@ REST_FRAMEWORK = {
 CORE_MODULES = {
     "pretix.base",
     "pretix.presale",
-    "pretix.control"
+    "pretix.control",
+    "pretix.plugins.checkinlists",
 }
 
 MIDDLEWARE = [
@@ -513,6 +515,23 @@ if config.has_option('sentry', 'dsn'):
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_TASK_QUEUES = (
+    Queue('default', routing_key='default.#'),
+    Queue('checkout', routing_key='checkout.#'),
+    Queue('mail', routing_key='mail.#'),
+    Queue('background', routing_key='background.#'),
+)
+CELERY_TASK_ROUTES = ([
+    ('pretix.base.services.cart.*', {'queue': 'checkout'}),
+    ('pretix.base.services.orders.*', {'queue': 'checkout'}),
+    ('pretix.base.services.mail.*', {'queue': 'mail'}),
+    ('pretix.base.services.style.*', {'queue': 'background'}),
+    ('pretix.base.services.update_check.*', {'queue': 'background'}),
+    ('pretix.base.services.quotas.*', {'queue': 'background'}),
+    ('pretix.base.services.waitinglist.*', {'queue': 'background'}),
+    ('pretix.plugins.banktransfer.*', {'queue': 'background'}),
+],)
 
 BOOTSTRAP3 = {
     'success_css_class': '',

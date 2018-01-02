@@ -50,6 +50,7 @@ from pretix.control.forms.orders import (
     OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.signals import question_form_fields
@@ -57,10 +58,9 @@ from pretix.presale.signals import question_form_fields
 logger = logging.getLogger(__name__)
 
 
-class OrderList(EventPermissionRequiredMixin, ListView):
+class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Order
     context_object_name = 'orders'
-    paginate_by = 30
     template_name = 'pretixcontrol/orders/index.html'
     permission = 'can_view_orders'
 
@@ -147,7 +147,7 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
-            'item__questions', 'answers', 'answers__question', 'checkins'
+            'item__questions', 'answers', 'answers__question', 'checkins', 'checkins__list'
         ).order_by('positionid')
 
         positions = []
@@ -815,7 +815,7 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     permission = 'can_view_orders'
     model = LogEntry
     context_object_name = 'logs'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         order = Order.objects.filter(
@@ -906,9 +906,21 @@ class ExportMixin:
         responses = register_data_exporters.send(self.request.event)
         for receiver, response in responses:
             ex = response(self.request.event)
+            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+                continue
+
+            # Use form parse cycle to generate useful defaults
+            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+            test_form.fields = ex.export_form_fields
+            test_form.is_valid()
+            initial = {
+                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+            }
+
             ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None),
-                prefix=ex.identifier
+                prefix=ex.identifier,
+                initial=initial
             )
             ex.form.fields = ex.export_form_fields
             exporters.append(ex)

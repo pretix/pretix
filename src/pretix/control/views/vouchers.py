@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Exists, OuterRef, Q, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -16,17 +16,17 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import Voucher
+from pretix.base.models import Checkin, Voucher
 from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
+from pretix.control.views import PaginationMixin
 
 
-class VoucherList(EventPermissionRequiredMixin, ListView):
+class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     model = Voucher
     context_object_name = 'vouchers'
-    paginate_by = 30
     template_name = 'pretixcontrol/vouchers/index.html'
     permission = 'can_view_vouchers'
 
@@ -46,6 +46,13 @@ class VoucherList(EventPermissionRequiredMixin, ListView):
                 qs = qs.filter(redeemed__gt=0)
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
+            elif s == 'c':
+                checkins = Checkin.objects.filter(
+                    position__voucher=OuterRef('pk')
+                )
+                qs = qs.annotate(has_checkin=Exists(checkins)).filter(
+                    redeemed__gt=0, has_checkin=True
+                )
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)

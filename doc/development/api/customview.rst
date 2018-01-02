@@ -25,7 +25,7 @@ If you want to add a custom view to the control area of an event, just register 
             views.admin_view, name='backend'),
     ]
 
-It is required that your URL paramaters are called ``organizer`` and ``event``. If you want to
+It is required that your URL parameters are called ``organizer`` and ``event``. If you want to
 install a view on organizer level, you can leave out the ``event``.
 
 You can then implement the view as you would normally do. Our middleware will automatically

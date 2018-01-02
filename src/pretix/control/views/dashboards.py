@@ -13,12 +13,14 @@ from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
     Event, Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
+from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -34,6 +36,9 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 def base_widgets(sender, subevent=None, **kwargs):
     prodc = Item.objects.filter(
         event=sender, active=True,
+    ).filter(
+        (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
+        (Q(available_from__isnull=True) | Q(available_from__lte=now()))
     ).count()
 
     if subevent:
@@ -71,7 +76,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
@@ -80,7 +85,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(
@@ -90,7 +95,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=prodc, text=_('Active products')),
@@ -186,24 +191,23 @@ def shop_state_widget(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def checkin_widget(sender, **kwargs):
-    size_qs = OrderPosition.objects.filter(order__event=sender, order__status='p')
-    checked_qs = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False)
-
-    # if this setting is False, we check only items for admission
-    if not sender.settings.ticket_download_nonadm:
-        size_qs = size_qs.filter(item__admission=True)
-        checked_qs = checked_qs.filter(item__admission=True)
-
-    return [{
-        'content': NUM_WIDGET.format(num='{}/{}'.format(checked_qs.count(), size_qs.count()), text=_('Checked in')),
-        'display_size': 'small',
-        'priority': 50,
-        'url': reverse('control:event.orders.checkins', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug
+def checkin_widget(sender, subevent=None, **kwargs):
+    widgets = []
+    qs = sender.checkin_lists.filter(subevent=subevent)
+    qs = CheckinList.annotate_with_numbers(qs, sender)
+    for cl in qs:
+        widgets.append({
+            'content': NUM_WIDGET.format(num='{}/{}'.format(cl.checkin_count, cl.position_count),
+                                         text=_('Checked in – {list}').format(list=escape(cl.name))),
+            'display_size': 'small',
+            'priority': 50,
+            'url': reverse('control:event.orders.checkinlists.show', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+                'list': cl.pk
+            })
         })
-    }]
+    return widgets
 
 
 @receiver(signal=event_dashboard_widgets)

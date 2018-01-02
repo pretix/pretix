@@ -47,6 +47,8 @@ class LoggingMixin:
         """
         from .log import LogEntry
         from .event import Event
+        from ..notifications import get_all_notification_types
+        from ..services.notifications import notify
 
         event = None
         if isinstance(self, Event):
@@ -59,6 +61,9 @@ class LoggingMixin:
         if data:
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
         logentry.save()
+
+        if action in get_all_notification_types():
+            notify.apply_async(args=(logentry.pk,))
 
 
 class LoggedModel(models.Model, LoggingMixin):

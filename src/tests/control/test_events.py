@@ -613,6 +613,12 @@ class SubEventsTest(SoupTest):
             'location_0': 'Hamburg',
             'presale_start_0': '2017-06-20',
             'presale_start_1': '10:00:00',
+            'checkinlist_set-TOTAL_FORMS': '1',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-0-name': 'Default',
+            'checkinlist_set-0-all_products': 'on',
             'quotas-TOTAL_FORMS': '1',
             'quotas-INITIAL_FORMS': '0',
             'quotas-MIN_NUM_FORMS': '0',
@@ -638,6 +644,7 @@ class SubEventsTest(SoupTest):
         assert list(q.items.all()) == [self.ticket]
         sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
         assert sei.price == 12
+        assert se.checkinlist_set.count() == 1
 
     def test_modify(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk)
@@ -659,8 +666,15 @@ class SubEventsTest(SoupTest):
             'quotas-0-name': 'Q1',
             'quotas-0-size': '50',
             'quotas-0-itemvars': str(self.ticket.pk),
+            'checkinlist_set-TOTAL_FORMS': '1',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-0-name': 'Default',
+            'checkinlist_set-0-all_products': 'on',
             'item-%d-price' % self.ticket.pk: '12'
         })
+        print(doc)
         assert doc.select(".alert-success")
         self.subevent1.refresh_from_db()
         se = self.subevent1
@@ -678,6 +692,7 @@ class SubEventsTest(SoupTest):
         assert list(q.items.all()) == [self.ticket]
         sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
         assert sei.price == 12
+        assert se.checkinlist_set.count() == 1
 
     def test_delete(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk)

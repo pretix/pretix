@@ -9,7 +9,9 @@ from django.utils.formats import date_format
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, ItemVariation, LogEntry, OrderPosition
+from pretix.base.models import (
+    CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
+)
 from pretix.base.signals import logentry_display
 
 OVERVIEW_BLACKLIST = [
@@ -117,6 +119,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
+        'pretix.event.order.locale.changed': _('The order locale has been changed.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
@@ -139,6 +142,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                                    'your account.'),
         'pretix.user.settings.2fa.device.deleted': _('The two-factor authentication device "{name}" has been removed '
                                                      'from your account.'),
+        'pretix.user.settings.notifications.enabled': _('Notifications have been enabled.'),
+        'pretix.user.settings.notifications.disabled': _('Notifications have been disabled.'),
+        'pretix.user.settings.notifications.changed': _('Your notification settings have been changed.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
         'pretix.voucher.added': _('The voucher has been created.'),
@@ -167,6 +173,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.taxrule.added': _('The tax rule has been added.'),
         'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
         'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
+        'pretix.event.checkinlist.added': _('The check-in list has been added.'),
+        'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
+        'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
         'pretix.event.settings': _('The event settings have been changed.'),
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
         'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
@@ -222,15 +231,24 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         dt = dateutil.parser.parse(data.get('datetime'))
         tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+        if 'list' in data:
+            try:
+                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                checkin_list = _("(unknown)")
+        else:
+            checkin_list = _("(unknown)")
 
         if data.get('first'):
-            return _('Position #{posid} has been checked in manually at {datetime}.').format(
+            return _('Position #{posid} has been checked in manually at {datetime} on list "{list}".').format(
                 posid=data.get('positionid'),
-                datetime=dt_formatted
+                datetime=dt_formatted,
+                list=checkin_list,
             )
-        return _('Position #{posid} has been checked in again at {datetime}.').format(
+        return _('Position #{posid} has been checked in again at {datetime} on list "{list}".').format(
             posid=data.get('positionid'),
-            datetime=dt_formatted
+            datetime=dt_formatted,
+            list=checkin_list
         )
 
     if logentry.action_type == 'pretix.team.member.added':

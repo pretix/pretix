@@ -18,17 +18,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.services.stats import order_overview
 
 
-class Report(BaseExporter):
-    name = "report"
-
-    def verbose_name(self) -> str:
-        raise NotImplementedError()
-
-    def identifier(self) -> str:
-        raise NotImplementedError()
-
-    def __init__(self, event):
-        super().__init__(event)
+class ReportlabExportMixin:
 
     @property
     def pagesize(self):
@@ -38,7 +28,7 @@ class Report(BaseExporter):
 
     def render(self, form_data):
         self.form_data = form_data
-        return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create()
+        return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create(form_data)
 
     def get_filename(self):
         tz = pytz.timezone(self.event.settings.timezone)
@@ -53,7 +43,7 @@ class Report(BaseExporter):
         pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
         pdfmetrics.registerFont(TTFont('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf')))
 
-    def create(self):
+    def create(self, form_data):
         from reportlab.platypus import BaseDocTemplate, PageTemplate
         from reportlab.lib.units import mm
 
@@ -67,7 +57,7 @@ class Report(BaseExporter):
             doc.addPageTemplates([
                 PageTemplate(id='All', frames=self.get_frames(doc), onPage=self.on_page, pagesize=self.pagesize)
             ])
-            doc.build(self.get_story(doc))
+            doc.build(self.get_story(doc, form_data))
             f.seek(0)
             return f.read()
 
@@ -84,7 +74,7 @@ class Report(BaseExporter):
                            id='normal')
         return [self.frame]
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         return []
 
     def get_style(self):
@@ -122,6 +112,19 @@ class Report(BaseExporter):
                     self.pagesize[0] - 15 * mm, self.pagesize[1] - 17 * mm)
 
 
+class Report(ReportlabExportMixin, BaseExporter):
+    name = "report"
+
+    def verbose_name(self) -> str:
+        raise NotImplementedError()
+
+    def identifier(self) -> str:
+        raise NotImplementedError()
+
+    def __init__(self, event):
+        super().__init__(event)
+
+
 class OverviewReport(Report):
     name = "overview"
     identifier = 'pdfreport'
@@ -133,7 +136,7 @@ class OverviewReport(Report):
 
         return pagesizes.landscape(pagesizes.A4)
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
 
@@ -290,7 +293,7 @@ class OrderTaxListReport(Report):
 
         return pagesizes.landscape(pagesizes.A4)
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
 

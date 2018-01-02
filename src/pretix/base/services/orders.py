@@ -25,8 +25,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    CachedTicket, InvoiceAddress, OrderFee, generate_position_secret,
-    generate_secret,
+    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee,
+    generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
@@ -1085,6 +1085,10 @@ class OrderChangeManager:
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        if self.split_order:
+            CachedTicket.objects.filter(order_position__order=self.split_order).delete()
+            CachedCombinedTicket.objects.filter(order=self.split_order).delete()
 
     def _get_payment_provider(self):
         pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
@@ -1103,7 +1107,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
-            return OrderError(error_messages['busy'])
+            raise OrderError(str(error_messages['busy']))
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
@@ -1112,6 +1116,6 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         try:
             return _cancel_order(order, user, send_mail, api_token)
         except LockTimeoutException:
-            self.retry(exc=OrderError(error_messages['busy']))
+            self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
-        return OrderError(error_messages['busy'])
+        raise OrderError(error_messages['busy'])

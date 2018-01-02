@@ -19,13 +19,11 @@
         <form action="?add" method="post" class="form-horizontal">
             {% csrf_token %}
             {% bootstrap_form_errors add_form %}
+            {% bootstrap_field add_form.list layout="horizontal" %}
             {% bootstrap_field add_form.all_items layout="horizontal" %}
             {% bootstrap_field add_form.items layout="horizontal" %}
             {% bootstrap_field add_form.show_info layout="horizontal" %}
             {% bootstrap_field add_form.allow_search layout="horizontal" %}
-            {% if add_form.subevent %}
-                {% bootstrap_field add_form.subevent layout="horizontal" %}
-            {% endif %}
             <div class="form-group">
                 <div class="col-md-offset-3 col-md-9">
                     <button type="submit" class="btn btn-primary btn-save" name="add" value="1">
@@ -48,9 +46,7 @@
                 <thead>
                 <tr>
                     <th>{% trans "ID" %}</th>
-                    {% if request.event.has_subevents %}
-                        <th>{% trans "Date" context "subevent" %}</th>
-                    {% endif %}
+                    <th>{% trans "Check-in list" %}</th>
                     <th>{% trans "Items" %}</th>
                     <th>{% trans "Show info" %}</th>
                     <th>{% trans "Allow search" %}</th>
@@ -61,9 +57,9 @@
                 {% for ac in configs %}
                     <tr>
                         <td>{{ ac.key|slice:"0:8" }}…</td>
-                        {% if request.event.has_subevents %}
-                            <td>{% if ac.subevent %}{{ ac.subevent }}{% else %}{% trans "All" %}{% endif %}</td>
-                        {% endif %}
+                        <td>
+                            <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=ac.list.id %}">{{ ac.list }}</a>
+                        </td>
                         <td>
                             {% if ac.all_items %}
                                 {% trans "All" %}

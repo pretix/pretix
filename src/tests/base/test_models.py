@@ -13,8 +13,9 @@ from django.test import TestCase
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, Question, Quota, User, Voucher, WaitingListEntry,
+    CachedFile, CartPosition, CheckinList, Event, Item, ItemCategory,
+    ItemVariation, Order, OrderPosition, Organizer, Question, Quota, User,
+    Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
@@ -983,6 +984,8 @@ class EventTest(TestCase):
         que1.items.add(i1)
         event1.settings.foo_setting = 23
         event1.settings.tax_rate_default = tr7
+        cl1 = event1.checkin_lists.create(name="All", all_products=False)
+        cl1.limit_products.add(i1)
 
         event2 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab1234',
@@ -990,7 +993,7 @@ class EventTest(TestCase):
         )
         event2.copy_data_from(event1)
 
-        for a in (tr7, c1, c2, i1, q1, que1):
+        for a in (tr7, c1, c2, i1, q1, que1, cl1):
             a.refresh_from_db()
             assert a.event == event1
 
@@ -1012,6 +1015,8 @@ class EventTest(TestCase):
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
         assert event2.settings.tax_rate_default == trnew
+        assert event2.checkin_lists.count() == 1
+        assert [i.pk for i in event2.checkin_lists.first().limit_products.all()] == [i1new.pk]
 
 
 class SubEventTest(TestCase):
@@ -1062,3 +1067,66 @@ class CachedFileTestCase(TestCase):
             assert f.read().strip() == "file_content"
         cf.delete()
         assert not default_storage.exists(cf.file.name)
+
+
+class CheckinListTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        cls.event = Event.objects.create(
+            organizer=cls.organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1),
+        )
+        cls.item1 = cls.event.items.create(name="Ticket", default_price=12)
+        cls.item2 = cls.event.items.create(name="Shirt", default_price=6)
+        cls.cl_all = cls.event.checkin_lists.create(
+            name='All', all_products=True
+        )
+        cls.cl_both = cls.event.checkin_lists.create(
+            name='Both', all_products=False
+        )
+        cls.cl_both.limit_products.add(cls.item1)
+        cls.cl_both.limit_products.add(cls.item2)
+        cls.cl_tickets = cls.event.checkin_lists.create(
+            name='Tickets', all_products=False
+        )
+        cls.cl_tickets.limit_products.add(cls.item1)
+        o = Order.objects.create(
+            code='FOO', event=cls.event, email='dummy@dummy.test',
+            status=Order.STATUS_PAID,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=cls.item1,
+            variation=None,
+            price=Decimal("12"),
+        )
+        op2 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item1,
+            variation=None,
+            price=Decimal("12"),
+        )
+        op3 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item2,
+            variation=None,
+            price=Decimal("6"),
+        )
+        op2.checkins.create(list=cls.cl_tickets)
+        op3.checkins.create(list=cls.cl_both)
+
+    def test_annotated(self):
+        lists = list(CheckinList.annotate_with_numbers(self.event.checkin_lists.order_by('name'), self.event))
+        assert lists == [self.cl_all, self.cl_both, self.cl_tickets]
+        assert lists[0].checkin_count == 0
+        assert lists[0].position_count == 3
+        assert lists[0].percent == 0
+        assert lists[1].checkin_count == 1
+        assert lists[1].position_count == 3
+        assert lists[1].percent == 33
+        assert lists[2].checkin_count == 1
+        assert lists[2].position_count == 2
+        assert lists[2].percent == 50

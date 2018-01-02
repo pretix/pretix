@@ -5,7 +5,7 @@
 }
 #editor-canvas-area {
     position: relative;
-    min-height: 500px;
+    min-height: 250px;
 }
 body {
     overflow-y: scroll;

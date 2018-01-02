@@ -200,6 +200,8 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
         ev = op.subevent or order.event
+        if not o['content']:
+            return '(error)'
         if o['content'] == 'other':
             return o['text'].replace("\n", "<br/>\n")
         elif o['content'].startswith('meta:'):

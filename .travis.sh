@@ -25,19 +25,27 @@ if [ "$1" == "doctests" ]; then
 	cd doc
 	make doctest
 fi
+if [ "$1" == "spelling" ]; then
+	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
+	cd doc
+	make spelling
+	if [ -s _build/spelling/output.txt ]; then
+		exit 1
+	fi
+fi
 if [ "$1" == "tests" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
 	cd src
 	python manage.py check
 	make all compress
-	py.test --rerun 5 tests
+	py.test --reruns 5 tests
 fi
 if [ "$1" == "tests-cov" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
 	cd src
 	python manage.py check
 	make all compress
-	coverage run -m py.test --rerun 5 tests && codecov
+	coverage run -m py.test --reruns 5 tests && codecov
 fi
 if [ "$1" == "plugins" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
@@ -50,7 +58,7 @@ if [ "$1" == "plugins" ]; then
     cd pretix-cartshare
     python setup.py develop
     make
-	py.test --rerun 5 tests
+	py.test --reruns 5 tests
     popd
 
 fi

@@ -241,7 +241,9 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         else:
             context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
-        if self.request.event.settings.event_list_type == "calendar":
+        context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
+
+        if context['list_type'] == "calendar":
             self._set_month_year()
             tz = pytz.timezone(self.request.event.settings.timezone)
             _, ndays = calendar.monthrange(self.year, self.month)
@@ -253,7 +255,8 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             context['after'] = after
 
             ebd = defaultdict(list)
-            add_subevents_for_days(self.request.event.subevents.all(), before, after, ebd, set(), self.request.event)
+            add_subevents_for_days(self.request.event.subevents.all(), before, after, ebd, set(), self.request.event,
+                                   kwargs.get('cart_namespace'))
 
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
@@ -262,6 +265,12 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context['show_cart'] = (
             context['cart']['positions'] and (
                 self.request.event.has_subevents or self.request.event.presale_is_running
+            )
+        )
+        context['show_dates'] = (
+            self.request.event.has_subevents and (
+                'cart_namespace' not in self.kwargs
+                or not self.subevent
             )
         )
 

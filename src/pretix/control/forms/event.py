@@ -547,6 +547,10 @@ class InvoiceSettingsForm(SettingsForm):
         ),
         help_text=_("Invoices will never be automatically generated for free orders.")
     )
+    invoice_attendee_name = forms.BooleanField(
+        label=_("Show attendee names on invoices"),
+        required=False
+    )
     invoice_email_attachment = forms.BooleanField(
         label=_("Attach invoices to emails"),
         help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "

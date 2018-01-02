@@ -20,6 +20,10 @@ variations                            list of integers           List of item va
 subevent                              integer                    ID of the date inside an event series this quota belongs to (or ``null``).
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.10
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
 
 Endpoints
 ---------
@@ -154,7 +158,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/quotas/(id)/
 
    Update a quota. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    You can change all fields of the resource except the ``id`` field.

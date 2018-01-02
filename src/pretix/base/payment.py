@@ -11,7 +11,7 @@ from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
@@ -184,7 +184,9 @@ class BasePaymentProvider:
             ('_invoice_text',
              I18nFormField(
                  label=_('Text on invoices'),
-                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
+                             'This will only be used if the invoice is generated before the order is paid. If the '
+                             'invoice is generated later, it will show a text stating that it has already been paid.'),
                  required=False,
                  widget=I18nTextarea,
                  widget_kwargs={'attrs': {'rows': '2'}}
@@ -205,6 +207,8 @@ class BasePaymentProvider:
         The default implementation returns the content of the _invoice_text configuration
         variable (an I18nString), or an empty string if unconfigured.
         """
+        if order.status == Order.STATUS_PAID:
+            return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
     @property
@@ -324,7 +328,7 @@ class BasePaymentProvider:
         at least store the user's input into his session.
 
         This method should return ``False`` if the user's input was invalid, ``True``
-        if the input was valid and the frontend should continue with default behaviour
+        if the input was valid and the frontend should continue with default behavior
         or a string containing a URL if the user should be redirected somewhere else.
 
         On errors, you should use Django's message framework to display an error message
@@ -375,7 +379,7 @@ class BasePaymentProvider:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
-        If you need any special  behaviour,  you can return a string
+        If you need any special  behavior,  you can return a string
         containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
@@ -523,8 +527,8 @@ class BasePaymentProvider:
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
@@ -588,8 +592,8 @@ class FreeOrderProvider(BasePaymentProvider):
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.

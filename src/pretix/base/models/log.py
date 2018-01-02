@@ -11,6 +11,11 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from pretix.base.signals import logentry_object_link
 
 
+class VisibleOnlyManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(visible=True)
+
+
 class LogEntry(models.Model):
     """
     Represents a change or action that has been performed on another object
@@ -39,6 +44,10 @@ class LogEntry(models.Model):
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.CASCADE)
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')
+    visible = models.BooleanField(default=True)
+
+    objects = VisibleOnlyManager()
+    all = models.Manager()
 
     class Meta:
         ordering = ('-datetime',)

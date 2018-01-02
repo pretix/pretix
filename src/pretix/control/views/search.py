@@ -4,12 +4,12 @@ from django.views.generic import ListView
 
 from pretix.base.models import Order
 from pretix.control.forms.filter import OrderSearchFilterForm
+from pretix.control.views import PaginationMixin
 
 
-class OrderSearch(ListView):
+class OrderSearch(PaginationMixin, ListView):
     model = Order
     context_object_name = 'orders'
-    paginate_by = 30
     template_name = 'pretixcontrol/search/orders.html'
 
     @cached_property

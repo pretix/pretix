@@ -2,7 +2,7 @@ import string
 
 from django.db import models
 from django.utils.crypto import get_random_string
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class AppConfiguration(models.Model):
@@ -10,14 +10,19 @@ class AppConfiguration(models.Model):
     key = models.CharField(max_length=190, db_index=True)
     all_items = models.BooleanField(default=True, verbose_name=_('Can scan all products'))
     items = models.ManyToManyField('pretixbase.Item', blank=True, verbose_name=_('Can scan these products'))
-    subevent = models.ForeignKey('pretixbase.SubEvent', null=True, blank=True,
-                                 verbose_name=pgettext_lazy('subevent', 'Date'))
     show_info = models.BooleanField(default=True, verbose_name=_('Show information'),
                                     help_text=_('If disabled, the device can not see how many tickets exist and how '
                                                 'many are already scanned. pretixdroid 1.6 or newer only.'))
     allow_search = models.BooleanField(default=True, verbose_name=_('Search allowed'),
                                        help_text=_('If disabled, the device can not search for attendees by name. '
                                                    'pretixdroid 1.6 or newer only.'))
+    list = models.ForeignKey(
+        'pretixbase.CheckinList', on_delete=models.CASCADE, verbose_name=_('Check-in list')
+    )
+
+    @property
+    def subevent(self):
+        return self.list.subevent
 
     def save(self, **kwargs):
         if not self.key:

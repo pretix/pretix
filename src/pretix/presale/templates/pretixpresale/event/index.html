@@ -49,7 +49,7 @@
                         {% endif %}
                     </em>
                     <div class="row checkout-button-row">
-                        <div class="col-md-4 col-xs-12">
+                        <div class="col-md-4 col-xs-12 hidden-xs">
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
@@ -67,6 +67,13 @@
                                 {% endif %}
                             </a>
                         </div>
+                        <div class="visible-xs-block col-xs-12">
+                            <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                                {% csrf_token %}
+                                <button class="btn btn-block btn-default btn-lg" type="submit">
+                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                            </form>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -74,7 +81,7 @@
         </div>
     {% endif %}
 
-    {% if event.has_subevents and not cart_namespace %}
+    {% if show_dates %}
         {% if subevent %}
             <a class="subevent-toggle">
                 {% trans "View other date" %}
@@ -83,7 +90,7 @@
             <h3>{% trans "Choose date to buy a ticket" %}</h3>
         {% endif %}
         <div class="subevent-list">
-            {% if event.settings.event_list_type == "calendar" %}
+            {% if list_type == "calendar" %}
                 {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
             {% else %}
                 {% include "pretixpresale/event/fragment_subevent_list.html" %}
@@ -298,6 +305,7 @@
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                     max="{{ var.order_max }}"
+                                                                    pattern="\d*"
                                                                     name="variation_{{ item.id }}_{{ var.id }}">
                                                         {% endif %}
                                                     </div>
@@ -384,6 +392,7 @@
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        pattern="\d*"
                                                         max="{{ item.order_max }}" name="item_{{ item.id }}">
                                             {% endif %}
                                         </div>

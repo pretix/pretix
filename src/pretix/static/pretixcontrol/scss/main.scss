@@ -121,8 +121,14 @@ h1 .btn-sm {
     padding-top: 20px;
 }
 
+.helper-display-block {
+    display: block !important;
+}
 .helper-display-inline {
     display: inline !important;
+}
+.helper-display-none {
+    display: none !important;
 }
 .helper-width-auto {
     width: auto;
@@ -479,4 +485,14 @@ body.loading #wrapper {
     h2 {
         margin-top: 0;
     }
+}
+.iconcol {
+    width: 1.28571em;
+}
+
+ul.pagination {
+    margin-bottom: 0;
+}
+.pagination-container {
+    margin-bottom: 20px;
 }

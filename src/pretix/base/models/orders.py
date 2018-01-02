@@ -188,7 +188,7 @@ class Order(LoggedModel):
     def full_code(self):
         """
         An order code which is unique among all events of a single organizer,
-        built by contatenating the event slug and the order code.
+        built by concatenating the event slug and the order code.
         """
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
@@ -519,7 +519,7 @@ class AbstractPosition(models.Model):
     :type variation: ItemVariation
     :param datetime: The datetime this item was put into the cart
     :type datetime: datetime
-    :param expires: The date until this item is guarenteed to be reserved
+    :param expires: The date until this item is guaranteed to be reserved
     :type expires: datetime
     :param price: The price of this item
     :type price: decimal.Decimal
@@ -769,6 +769,9 @@ class OrderPosition(AbstractPosition):
                     'order_code': order.code
                 })
 
+        # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
+        # due to the deletion cascade.
+        for cartpos in cp:
             cartpos.delete()
         return ops
 

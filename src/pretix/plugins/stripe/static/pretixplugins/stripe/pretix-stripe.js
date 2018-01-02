@@ -28,6 +28,9 @@ var pretixstripe = {
         });
     },
     'load': function () {
+      if (pretixstripe.stripe !== null) {
+          return;
+      }
       $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
         $.ajax(
             {
@@ -66,6 +69,9 @@ var pretixstripe = {
         );
     },
     'load_checkout': function () {
+      if (pretixstripe.checkout_handler !== null) {
+        return;
+      }
       $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
         $.ajax(
             {
@@ -151,7 +157,7 @@ $(function () {
 
     $('.stripe-container').closest("form").submit(
         function () {
-            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment][type=checkbox]").length === 0)
+            if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment][type=radio]").length === 0)
                 && $("#stripe_token").val() == "") {
                 if ($("#stripe-checkout").length) {
                     pretixstripe.show_checkout();

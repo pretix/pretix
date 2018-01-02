@@ -27,12 +27,11 @@
         <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/typocheck.js" %}"></script>
         <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
     {% endcompress %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
 </head>

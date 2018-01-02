@@ -347,14 +347,12 @@ class ImportView(ListView):
         return self.assign_view(data)
 
     def process_csv_hint(self):
-        data = []
-        for i in range(int(self.request.POST.get('rows'))):
-            data.append(
-                [
-                    self.request.POST.get('col[%d][%d]' % (i, j))
-                    for j in range(int(self.request.POST.get('cols')))
-                ]
-            )
+        try:
+            data = json.loads(self.request.POST.get('data').strip())
+        except ValueError:
+            messages.error(self.request, _('Invalid input data.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+
         if 'reference' not in self.request.POST:
             messages.error(self.request, _('You need to select the column containing the payment reference.'))
             return self.assign_view(data)
@@ -382,7 +380,10 @@ class ImportView(ListView):
         return super().get(self.request)
 
     def assign_view(self, parsed):
-        ctx = {'rows': parsed}
+        ctx = {
+            'json': json.dumps(parsed),
+            'rows': parsed,
+        }
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
         else:
