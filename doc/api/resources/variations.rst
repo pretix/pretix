@@ -1,4 +1,4 @@
-Variations
+Item variations
 =====
 
 Resource description
@@ -17,7 +17,7 @@ id                                    integer                    Internal ID of 
 default_price                         money (string)             The price set directly for this variation or ``null``
 price                                 money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
-                                                                 to the item's ``default_price``.
+                                                                 to the item's ``default_price`` (read-only).
 active                                boolean                    If ``False``, this variation will not be sold or shown.
 description                           multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
@@ -111,15 +111,15 @@ Endpoints
       Content-Type: application/json
 
       {
-            "id": 3,
-            "value": {
-                  "en": "Student"
-            },
-             "default_price": "10.00",
-             "price": "10.00",
-             "active": true,
-             "description": null,
-             "position": 0
+        "id": 3,
+        "value": {
+              "en": "Student"
+        },
+         "default_price": "10.00",
+         "price": "10.00",
+         "active": true,
+         "description": null,
+         "position": 0
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -146,7 +146,6 @@ Endpoints
       {
           "value": {"en": "Student"},
           "default_price": "10.00",
-          "price": "10.00",
           "active": true,
           "description": null,
           "position": 0
@@ -184,7 +183,7 @@ Endpoints
    the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can change all fields of the resource except the ``id`` field.
+   You can change all fields of the resource except the ``id`` and the ``price`` field.
 
    **Example request**:
 
