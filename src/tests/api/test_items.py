@@ -20,6 +20,64 @@ def category2(event2):
     return event2.categories.create(name="Tickets2")
 
 
+@pytest.fixture
+def order(event, item, taxrule):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            total=23, payment_provider='banktransfer', locale='en'
+        )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule)
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
+        op = OrderPosition.objects.create(
+            order=o,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name="Peter",
+            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return o
+
+
+@pytest.fixture
+def order_position(item, order):
+    op = OrderPosition.objects.create(
+        order=order,
+        item=item,
+        variation=None,
+        price=Decimal("23"),
+        attendee_name="Peter",
+        secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+    )
+    return op
+
+
+@pytest.fixture
+def cart_position(event, item, variation):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        c = CartPosition.objects.create(
+            event=event,
+            item=item,
+            datetime=datetime.now(),
+            expires=datetime.now() + timedelta(days=1),
+            variation=variation,
+            price=Decimal("23"),
+            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return c
+
+
 TEST_CATEGORY_RES = {
     "name": {"en": "Tickets"},
     "description": {"en": ""},
@@ -285,8 +343,25 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
     assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
 
 
-# @pytest.mark.django_db
-# def test_item_delete(token_client, organizer, event, item, category2, taxrule2):
+@pytest.mark.django_db
+def test_items_delete(token_client, organizer, event, item):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 204
+    assert not event.items.filter(pk=item.id).exists()
+
+
+@pytest.mark.django_db
+def test_items_with_order_position_not_delete(token_client, organizer, event, item, order_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 403
+    assert event.items.filter(pk=item.id).exists()
+
+
+@pytest.mark.django_db
+def test_items_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 403
+    assert event.items.filter(pk=item.id).exists()
 
 
 @pytest.fixture
@@ -401,51 +476,6 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
         format='json'
     )
     assert resp.status_code == 404
-
-
-@pytest.fixture
-def order(event, item, taxrule):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
-
-    with mock.patch('django.utils.timezone.now') as mock_now:
-        mock_now.return_value = testtime
-        o = Order.objects.create(
-            code='FOO', event=event, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
-            total=23, payment_provider='banktransfer', locale='en'
-        )
-        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
-                      tax_value=Decimal('0.05'), tax_rule=taxrule)
-        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
-        OrderPosition.objects.create(
-            order=o,
-            item=item,
-            variation=None,
-            price=Decimal("23"),
-            attendee_name="Peter",
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
-        )
-        return o
-
-
-@pytest.fixture
-def cart_position(event, item, variation):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
-
-    with mock.patch('django.utils.timezone.now') as mock_now:
-        mock_now.return_value = testtime
-        c = CartPosition.objects.create(
-            event=event,
-            item=item,
-            datetime=datetime.now(),
-            expires=datetime.now() + timedelta(days=1),
-            variation=variation,
-            price=Decimal("23"),
-            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
-        )
-        return c
 
 
 @pytest.mark.django_db

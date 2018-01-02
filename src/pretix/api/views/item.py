@@ -121,6 +121,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
                                    'by a user or currently is in a users\'s cart. Please set the variation as '
                                    '"inactive" instead.')
 
+        super().perform_destroy(instance)
         instance.item.log_action(
             'pretix.event.item.variation.deleted',
             user=self.request.user,
@@ -130,8 +131,6 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
                 'id': self.kwargs['pk']
             }
         )
-        super().perform_destroy(instance)
-
 
 class ItemAddOnViewSet(viewsets.ModelViewSet):
     serializer_class = ItemAddOnSerializer
