@@ -2,9 +2,9 @@ import logging
 import os
 from decimal import Decimal
 from itertools import chain
-import pytz
-import dateutil
 
+import dateutil
+import pytz
 import vat_moss.errors
 import vat_moss.id
 from django import forms
@@ -12,8 +12,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
-from django.utils.formats import number_format
-from django.utils.formats import get_format
+from django.utils.formats import get_format, number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -21,9 +20,11 @@ from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.control.forms import (
+    DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
+)
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
-from pretix.control.forms import SplitDateTimePickerWidget, DatePickerWidget, TimePickerWidget
 
 logger = logging.getLogger(__name__)
 

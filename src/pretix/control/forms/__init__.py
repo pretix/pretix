@@ -132,6 +132,7 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         # Skip one hierarchy level
         forms.MultiWidget.__init__(self, widgets, attrs)
 
+
 class DatePickerWidget(forms.DateInput):
 
     def __init__(self, attrs=None, date_format=None):
@@ -148,6 +149,7 @@ class DatePickerWidget(forms.DateInput):
         ).strftime(df)
 
         forms.DateInput.__init__(self, date_attrs, date_format)
+
 
 class TimePickerWidget(forms.TimeInput):
 
