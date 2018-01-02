@@ -40,7 +40,7 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
         data = super().validate(data)
         item = self.context['item']
 
-        ItemAddOn.clean_categories(item, data.get('addon_category'))
+        ItemAddOn.clean_categories(item, self.instance, data.get('addon_category'))
         ItemAddOn.clean_max_min_numbers(data.get('max_count'), data.get('min_count'))
 
         return data

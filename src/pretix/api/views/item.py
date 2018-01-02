@@ -2,18 +2,19 @@ import django_filters
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from rest_framework import viewsets
-from rest_framework.decorators import detail_route
-from rest_framework.filters import OrderingFilter
-from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
 
 from pretix.api.serializers.item import (
-    ItemCategorySerializer, ItemSerializer, QuestionSerializer,
-    QuotaSerializer, ItemVariationSerializer, ItemAddOnSerializer
+    ItemAddOnSerializer, ItemCategorySerializer, ItemSerializer, ItemVariationSerializer, QuestionSerializer,
+    QuotaSerializer
 )
 from pretix.base.models import Item, ItemVariation, ItemAddOn, ItemCategory, Question, Quota
 from pretix.base.models.organizer import TeamAPIToken
+
+from rest_framework import viewsets
+from rest_framework.decorators import detail_route
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
 
 class ItemFilter(FilterSet):
@@ -67,6 +68,11 @@ class ItemViewSet(viewsets.ModelViewSet):
         )
 
     def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied('This item cannot be deleted because it has already been ordered '
+                                   'by a user or currently is in a users\'s cart. Please set the item as '
+                                   '"inactive" instead.')
+
         instance.log_action(
             'pretix.event.item.deleted',
             user=self.request.user,
@@ -85,11 +91,11 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         return item.variations.all()
 
     def perform_create(self, serializer):
-        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         serializer.save(item=item)
         item.log_action(
             'pretix.event.item.variation.added',
@@ -100,9 +106,8 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         )
 
     def perform_update(self, serializer):
-        variation = get_object_or_404(ItemVariation, pk=self.kwargs['pk'])
-        serializer.save(variation=variation)
-        variation.item.log_action(
+        serializer.save(event=self.request.event)
+        serializer.instance.item.log_action(
             'pretix.event.item.variation.changed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
@@ -138,16 +143,16 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        item = get_object_or_404(Item, pk=self.kwargs['item'])
+        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         return item.addons.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'])
+        ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         return ctx
 
     def perform_create(self, serializer):
-        item = serializer.context.get('item')
+        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         category = get_object_or_404(ItemCategory, pk=self.request.data['addon_category'])
         serializer.save(base_item=item, addon_category=category)
         item.log_action(
@@ -158,23 +163,21 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
         )
 
     def perform_update(self, serializer):
-        addon = get_object_or_404(ItemAddOn, pk=self.kwargs['pk'])
-        serializer.save(addon=addon)
-        addon.base_item.log_action(
+        serializer.save(event=self.request.event)
+        serializer.instance.base_item.log_action(
             'pretix.event.item.addons.changed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk}}
         )
 
-    def perform_destroy(self, serializer):
-        addon = get_object_or_404(ItemAddOn, pk=self.kwargs['pk'])
-        super().perform_destroy(addon)
-        addon.base_item.log_action(
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        instance.base_item.log_action(
             'pretix.event.item.addons.removed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data={'category': addon.addon_category.pk}
+            data={'category': instance.addon_category.pk}
         )
 
 

@@ -540,7 +540,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The item all ready have an addon of this category."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The item all ready have an add-on of this category."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),

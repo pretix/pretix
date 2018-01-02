@@ -369,6 +369,14 @@ class Item(LoggedModel):
         return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
+
+        return (
+            not OrderPosition.objects.filter(item=self).exists()
+            and not CartPosition.objects.filter(item=self).exists()
+        )
+
     @cached_property
     def has_variations(self):
         return self.variations.exists()
@@ -560,10 +568,11 @@ class ItemAddOn(models.Model):
         self.clean_max_min_numbers(self.max_count, self.min_count)
 
     @staticmethod
-    def clean_categories(item, category):
-        for addon in item.addons.all():
-            if addon.addon_category == category:
-                raise ValidationError(_('The item all ready have an addon of this category.'))
+    def clean_categories(item, addon, new_category):
+        if addon is None or addon.addon_category != new_category:
+            for addon in item.addons.all():
+                if addon.addon_category == new_category:
+                    raise ValidationError(_('The item all ready have an add-on of this category.'))
 
     @staticmethod
     def clean_max_min_numbers(max_count, min_count):
