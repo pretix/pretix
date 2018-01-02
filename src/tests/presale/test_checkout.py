@@ -84,8 +84,13 @@ class CheckoutTestCase(TestCase):
             event=self.event, question='When was your last haircut?', type=Question.TYPE_DATE,
             required=True
         )
+        q3 = Question.objects.create(
+            event=self.event, question='When are you going to arrive?', type=Question.TYPE_DATETIME,
+            required=True
+        )
         self.ticket.questions.add(q1)
         self.ticket.questions.add(q2)
+        self.ticket.questions.add(q3)
         cr = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
@@ -93,23 +98,27 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr.id, q1.id): '06:30',
             '%s-question_%s' % (cr.id, q2.id): '2005-12-31',
+            '%s-question_%s_0' % (cr.id, q3.id): '2009-01-01',
+            '%s-question_%s_1' % (cr.id, q3.id): '01:23',
             'email': 'admin@localhost',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
-                             target_status_code=200)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), target_status_code=200)
         self.event.settings.set('timezone', 'US/Central')
         o1 = QuestionAnswer.objects.get(question=q1)
         o2 = QuestionAnswer.objects.get(question=q2)
+        o3 = QuestionAnswer.objects.get(question=q3)
         order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
                                      expires=now() + timedelta(days=3),
                                      total=4)
         op = OrderPosition.objects.create(order=order, item=self.ticket, price=42)
-        o1.cartposition, o2.cartposition = None, None
-        o1.orderposition, o2.orderposition = op, op
-        o1.save()
-        o2.save()
-        self.assertNotEqual(str(o1), '06:30')
+        o1.cartposition, o2.cartposition, o3.cartposition = None, None, None
+        o1.orderposition, o2.orderposition, o3.orderposition = op, op, op
+        # timezone differences can differ, we only test that the time has changed
+        self.assertNotEqual(str(o1), '06:30') 
         self.assertEqual(str(o2), '2005-12-31')
+        o3date, o3time = str(o3).split(' ')
+        self.assertEqual(o3date, '2008-12-31')
+        self.assertNotEqual(o3time, '01:23')
 
     def test_questions(self):
         q1 = Question.objects.create(
