@@ -103,6 +103,7 @@ class SlugWidget(forms.TextInput):
 
 
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
+    template_name = 'pretixbase/forms/widgets/splitdatetime.html'
 
     def __init__(self, attrs=None, date_format=None, time_format=None):
         attrs = attrs or {}

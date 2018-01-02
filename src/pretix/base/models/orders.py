@@ -1,8 +1,10 @@
 import copy
 import json
+import pytz
 import os
 import string
 from datetime import datetime, time
+import dateutil
 from decimal import Decimal
 from typing import Any, Dict, List, Union
 
@@ -13,6 +15,7 @@ from django.db.models import F, Sum
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.formats import date_format
 from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
 from django.utils.functional import cached_property
@@ -498,6 +501,21 @@ class QuestionAnswer(models.Model):
             return str(_("No"))
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
+        elif self.question.type == Question.TYPE_DATETIME:
+            d = dateutil.parser.parse(self.answer)
+            if self.orderposition:
+                tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                d = d.astimezone(tz)
+            return date_format(d, "SHORT_DATETIME_FORMAT")
+        elif self.question.type == Question.TYPE_DATE:
+            d = dateutil.parser.parse(self.answer)
+            return date_format(d, "SHORT_DATE_FORMAT")
+        elif self.question.type == Question.TYPE_TIME:
+            d = dateutil.parser.parse(self.answer)
+            if self.orderposition:
+                tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                d = d.astimezone(tz)
+            return date_format(d, "TIME_FORMAT")
         else:
             return self.answer
 

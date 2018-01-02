@@ -2,6 +2,8 @@ import logging
 import os
 from decimal import Decimal
 from itertools import chain
+import pytz
+import dateutil
 
 import vat_moss.errors
 import vat_moss.id
@@ -238,6 +240,7 @@ class QuestionsForm(forms.Form):
                 initial = answers[0]
             else:
                 initial = None
+            tz = pytz.timezone(event.settings.timezone)
             if q.type == Question.TYPE_BOOLEAN:
                 if q.required:
                     # For some reason, django-bootstrap3 does not set the required attribute
@@ -261,7 +264,7 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=initial.answer if initial else None,
-                    min_value=Decimal('0.00')
+                    min_value=Decimal('0.00'),
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
@@ -298,27 +301,27 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
+                    widget=UploadedFileWidget(position=pos, event=event, answer=initial),
                 )
             elif q.type == Question.TYPE_DATE:
                 field = forms.DateField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
-                    initial=initial.answer if initial else None,
+                    initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
                     widget=DatePickerWidget(),
                 )
             elif q.type == Question.TYPE_TIME:
                 field = forms.TimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
-                    initial=initial.answer if initial else None,
+                    initial=dateutil.parser.parse(initial.answer).astimezone(tz).time() if initial and initial.answer else None,
                     widget=TimePickerWidget(),
                 )
             elif q.type == Question.TYPE_DATETIME:
-                field = forms.DateTimeField(
+                field = forms.SplitDateTimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
-                    initial=initial.answer if initial else None,
+                    initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
                     widget=SplitDateTimePickerWidget(),
                 )
             field.question = q
