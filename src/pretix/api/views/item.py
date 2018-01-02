@@ -67,12 +67,12 @@ class ItemViewSet(viewsets.ModelViewSet):
         )
 
     def perform_destroy(self, instance):
-         instance.log_action(
-             'pretix.event.item.deleted',
-             user=self.request.user,
-             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-         )
-         super().perform_destroy(instance)
+        instance.log_action(
+            'pretix.event.item.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+        )
+        super().perform_destroy(instance)
 
 
 class ItemVariationViewSet(viewsets.ModelViewSet):

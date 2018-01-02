@@ -208,84 +208,85 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
 
 @pytest.mark.django_db
 def test_item_create(token_client, organizer, event, item, category, taxrule):
-   resp = token_client.post(
-       '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
-       {
-           "category": category.pk,
-           "name": {
-               "en": "Ticket"
-           },
-           "active": True,
-           "description": None,
-           "default_price": "23.00",
-           "free_price": False,
-           "tax_rate": "19.00",
-           "tax_rule": taxrule.pk,
-           "admission": True,
-           "position": 0,
-           "picture": None,
-           "available_from": None,
-           "available_until": None,
-           "require_voucher": False,
-           "hide_without_voucher": False,
-           "allow_cancel": True,
-           "min_per_order": None,
-           "max_per_order": None,
-           "checkin_attention": False,
-           "has_variations": True
-       },
-       format='json'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True
+        },
+        format='json'
     )
-   assert resp.status_code == 201
+    assert resp.status_code == 201
 
 
 @pytest.mark.django_db
 def test_item_update(token_client, organizer, event, item, category2, taxrule2):
-   resp = token_client.patch(
-       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
-       {
-           "min_per_order": 10,
-           "max_per_order": 2
-       },
-       format='json'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "min_per_order": 10,
+            "max_per_order": 2
+        },
+        format='json'
     )
-   assert resp.status_code == 400
-   assert resp.content.decode() == '{"non_field_errors":["max_per_order must be greater than min_per_order (or null for no limitation)."]}'
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["max_per_order must be greater than min_per_order (or null for no limitation)."]}'
 
-   resp = token_client.patch(
-       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
-       {
-           "available_from": "2017-12-30T12:00",
-           "available_until": "2017-12-29T12:00"
-       },
-       format='json'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "available_from": "2017-12-30T12:00",
+            "available_until": "2017-12-29T12:00"
+        },
+        format='json'
     )
-   assert resp.status_code == 400
-   assert resp.content.decode() == '{"non_field_errors":["The available_from date must be before the available_until date (or null)."]}'
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The available_from date must be before the available_until date (or null)."]}'
 
-   resp = token_client.patch(
-       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
-       {
-           "category": category2.pk
-       },
-       format='json'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "category": category2.pk
+        },
+        format='json'
+
     )
-   assert resp.status_code == 400
-   assert resp.content.decode() == '{"non_field_errors":["The items category must belong to the same event as the item."]}'
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The items category must belong to the same event as the item."]}'
 
-   resp = token_client.patch(
-       '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
-       {
-           "tax_rule": taxrule2.pk
-       },
-       format='json'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "tax_rule": taxrule2.pk
+        },
+        format='json'
     )
-   assert resp.status_code == 400
-   assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
 
 
-@pytest.mark.django_db
-def test_item_delete(token_client, organizer, event, item, category2, taxrule2):
+# @pytest.mark.django_db
+# def test_item_delete(token_client, organizer, event, item, category2, taxrule2):
 
 
 @pytest.fixture
@@ -330,6 +331,7 @@ TEST_VARIATIONS_UPDATE = {
     "default_price": None,
     "price": 23.0
 }
+
 
 @pytest.mark.django_db
 def test_variations_list(token_client, organizer, event, item, variation):
@@ -478,11 +480,11 @@ def addon(item, category):
 
 
 TEST_ADDONS_RES = {
-      "min_count": 0,
-      "max_count": 10,
-      "position": 1,
-      "price_included": False
-    }
+    "min_count": 0,
+    "max_count": 10,
+    "position": 1,
+    "price_included": False
+}
 
 
 @pytest.mark.django_db
@@ -807,8 +809,7 @@ def test_quota_update(token_client, organizer, event, quota, item):
 
 @pytest.mark.django_db
 def test_quota_delete(token_client, organizer, event, quota):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug,
-                                                                                quota.pk))
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk))
     assert resp.status_code == 204
     assert not event.quotas.filter(pk=quota.id).exists()
 
