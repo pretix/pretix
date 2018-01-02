@@ -47,8 +47,8 @@ moment_locales = {
 toJavascript_re = re.compile(r'(?<!\w)(' + '|'.join(date_conversion_to_moment.keys()) + r')\b')
 
 
-def get_javascript_format(format_name):
-    f = get_format(format_name)[0]
+def get_javascript_format(format_name, format_idx = 0):
+    f = get_format(format_name)[format_idx]
     return toJavascript_re.sub(
         lambda x: date_conversion_to_moment[x.group()],
         f

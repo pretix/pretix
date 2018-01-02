@@ -13,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
 from django.utils.formats import number_format
+from django.utils.formats import get_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -315,14 +316,14 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz).time() if initial and initial.answer else None,
-                    widget=TimePickerWidget(),
+                    widget=TimePickerWidget(time_format=get_format('TIME_INPUT_FORMATS')[2]),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 field = forms.SplitDateTimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
-                    widget=SplitDateTimePickerWidget(),
+                    widget=SplitDateTimePickerWidget(time_format=get_format('TIME_INPUT_FORMATS')[2]),
                 )
             field.question = q
             if answers:
