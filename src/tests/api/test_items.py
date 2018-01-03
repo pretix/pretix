@@ -36,23 +36,18 @@ def order(event, item, taxrule):
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
-        op = OrderPosition.objects.create(
-            order=o,
-            item=item,
-            variation=None,
-            price=Decimal("23"),
-            attendee_name="Peter",
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
-        )
         return o
 
 
 @pytest.fixture
-def order_position(item, order):
+def order_position(item, order, taxrule, variation):
     op = OrderPosition.objects.create(
         order=order,
         item=item,
-        variation=None,
+        variation=variation,
+        tax_rule=taxrule,
+        tax_rate=taxrule.rate,
+        tax_value=Decimal("3"),
         price=Decimal("23"),
         attendee_name="Peter",
         secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
@@ -486,19 +481,15 @@ def test_variations_delete(token_client, organizer, event, item, variation, orde
 
 
 @pytest.mark.django_db
-def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order):
-    var = item.variations.create(value="Children")
-    op = order.positions.first()
-    op.variation = var
-    op.save()
-
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, var.pk))
+def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order, variation, order_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 403
-    assert item.variations.filter(pk=var.id).exists()
+    assert item.variations.filter(pk=variation.id).exists()
 
 
 @pytest.mark.django_db
 def test_variations_with_cart_position_not_delete(token_client, organizer, event, item, variation, cart_position):
+    assert item.variations.filter(pk=variation.id).exists()
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 403
     assert item.variations.filter(pk=variation.id).exists()
