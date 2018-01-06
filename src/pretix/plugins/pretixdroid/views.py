@@ -1,5 +1,6 @@
 import json
 import logging
+import urllib.parse
 
 import dateutil.parser
 from django.contrib import messages
@@ -59,13 +60,16 @@ class ConfigCodeView(EventPermissionRequiredMixin, TemplateView):
                 'subevent': self.object.subevent.pk
             })
 
-        ctx['qrdata'] = json.dumps({
+        data = {
             'version': API_VERSION,
             'url': url[:-7],  # the slice removes the redeem/ part at the end
             'key': self.object.key,
             'allow_search': self.object.allow_search,
             'show_info': self.object.show_info
-        })
+        }
+        ctx['config'] = self.object
+        ctx['query'] = urllib.parse.urlencode(data, safe=':/')
+        ctx['qrdata'] = json.dumps(data)
         return ctx
 
 

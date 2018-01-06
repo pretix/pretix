@@ -12,10 +12,14 @@ class AppConfiguration(models.Model):
     items = models.ManyToManyField('pretixbase.Item', blank=True, verbose_name=_('Can scan these products'))
     show_info = models.BooleanField(default=True, verbose_name=_('Show information'),
                                     help_text=_('If disabled, the device can not see how many tickets exist and how '
-                                                'many are already scanned. pretixdroid 1.6 or newer only.'))
+                                                'many are already scanned. pretixdroid 1.6 or pretixdesk only.'))
     allow_search = models.BooleanField(default=True, verbose_name=_('Search allowed'),
                                        help_text=_('If disabled, the device can not search for attendees by name. '
-                                                   'pretixdroid 1.6 or newer only.'))
+                                                   'pretixdroid 1.6 or pretixdesk only.'))
+    app = models.CharField(max_length=190, verbose_name=_('Scan software'), default='pretixdroid', choices=(
+        ('pretixdroid', _('pretixdroid – for Android smartphones')),
+        ('pretixdesk', _('pretixdesk – for desktop computers')),
+    ))
     list = models.ForeignKey(
         'pretixbase.CheckinList', on_delete=models.CASCADE, verbose_name=_('Check-in list')
     )
