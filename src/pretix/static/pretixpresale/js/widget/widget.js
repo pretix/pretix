@@ -203,9 +203,9 @@ Vue.component('pricebox', {
     computed: {
         display_price: function () {
             if (this.$root.display_net_prices) {
-                return floatformat(this.price.net, 2);
+                return roundTo(parseFloat(this.price.net), 2).toFixed(2);
             } else {
-                return floatformat(this.price.gross, 2);
+                return roundTo(parseFloat(this.price.gross), 2).toFixed(2);
             }
         },
         priceline: function () {
