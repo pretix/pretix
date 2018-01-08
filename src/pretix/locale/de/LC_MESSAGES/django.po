@@ -5312,7 +5312,7 @@ msgstr "Willkommen zurück!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
-"You configured your account two require authentification with a second "
+"You configured your account to require authentification with a second "
 "medium, e.g. your phone. Please enter your verification code here:"
 msgstr ""
 "Sie haben Ihr Konto so eingerichtet, dass es zur Authentifizierung ein "
