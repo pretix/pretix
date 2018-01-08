@@ -543,10 +543,10 @@ class Question(LoggedModel):
     * a multi-line string (``TYPE_TEXT``)
     * a boolean (``TYPE_BOOLEAN``)
     * a multiple choice option (``TYPE_CHOICE`` and ``TYPE_CHOICE_MULTIPLE``)
-    * a file upload (``TYPE_FILE``))
-    * a date (``TYPE_DATE``))
-    * a time (``TYPE_TIME``))
-    * a date and a time (``TYPE_DATETIME``))
+    * a file upload (``TYPE_FILE``)
+    * a date (``TYPE_DATE``)
+    * a time (``TYPE_TIME``)
+    * a date and a time (``TYPE_DATETIME``)
 
     :param event: The event this question belongs to
     :type event: Event

@@ -35,6 +35,9 @@ options                               list of objects            In case of ques
 └ answer                              multi-lingual string       The displayed value of this option
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.12
+
+  The values ``D``, ``H``, and ``W`` for the field ``type`` are now allowed.
 
 Endpoints
 ---------
