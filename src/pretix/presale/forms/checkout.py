@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
-from django.utils.formats import get_format, number_format
+from django.utils.formats import number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,6 +25,7 @@ from pretix.control.forms import (
 )
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
+from pretix.control.utils.i18n import get_format_without_seconds
 
 logger = logging.getLogger(__name__)
 
@@ -315,14 +316,14 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz).time() if initial and initial.answer else None,
-                    widget=TimePickerWidget(time_format=get_format('TIME_INPUT_FORMATS')[2]),
+                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 field = forms.SplitDateTimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
-                    widget=SplitDateTimePickerWidget(time_format=get_format('TIME_INPUT_FORMATS')[2]),
+                    widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             field.question = q
             if answers:

@@ -511,9 +511,6 @@ class QuestionAnswer(models.Model):
             return date_format(d, "SHORT_DATE_FORMAT")
         elif self.question.type == Question.TYPE_TIME:
             d = dateutil.parser.parse(self.answer)
-            if self.orderposition:
-                tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
-                d = d.astimezone(tz)
             return date_format(d, "TIME_FORMAT")
         else:
             return self.answer

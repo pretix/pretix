@@ -47,13 +47,24 @@ moment_locales = {
 toJavascript_re = re.compile(r'(?<!\w)(' + '|'.join(date_conversion_to_moment.keys()) + r')\b')
 
 
-def get_javascript_format(format_name, format_idx=0):
-    f = get_format(format_name)[format_idx]
+def get_javascript_format(format_name):
+    f = get_format(format_name)[0]
     return toJavascript_re.sub(
         lambda x: date_conversion_to_moment[x.group()],
         f
     )
 
+def get_format_without_seconds(format_name):
+    formats = get_format(format_name)
+    formats_no_seconds = [f for f in formats if '%S' not in f]
+    return formats_no_seconds[0] if formats_no_seconds else formats[0]
+
+def get_javascript_format_without_seconds(format_name):
+    f = get_format_without_seconds(format_name)
+    return toJavascript_re.sub(
+        lambda x: date_conversion_to_moment[x.group()],
+        f
+    )
 
 def get_moment_locale(locale=None):
     cur_lang = locale or translation.get_language()

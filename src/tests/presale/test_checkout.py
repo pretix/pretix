@@ -98,8 +98,8 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             '%s-question_%s' % (cr.id, q1.id): '06:30',
             '%s-question_%s' % (cr.id, q2.id): '2005-12-31',
-            '%s-question_%s_0' % (cr.id, q3.id): '2009-01-01',
-            '%s-question_%s_1' % (cr.id, q3.id): '01:23',
+            '%s-question_%s_0' % (cr.id, q3.id): '2018-01-01',
+            '%s-question_%s_1' % (cr.id, q3.id): '5:23',
             'email': 'admin@localhost',
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), target_status_code=200)
@@ -113,12 +113,12 @@ class CheckoutTestCase(TestCase):
         op = OrderPosition.objects.create(order=order, item=self.ticket, price=42)
         o1.cartposition, o2.cartposition, o3.cartposition = None, None, None
         o1.orderposition, o2.orderposition, o3.orderposition = op, op, op
-        # timezone differences can differ, we only test that the time has changed
-        self.assertNotEqual(str(o1), '06:30') 
+        # only time and date answers should be unaffected by timezone change
+        self.assertEqual(str(o1), '06:30') 
         self.assertEqual(str(o2), '2005-12-31')
         o3date, o3time = str(o3).split(' ')
-        self.assertEqual(o3date, '2008-12-31')
-        self.assertNotEqual(o3time, '01:23')
+        self.assertEqual(o3date, '2017-12-31')
+        self.assertEqual(o3time, '23:23')
 
     def test_addon_questions(self):
         q1 = Question.objects.create(
