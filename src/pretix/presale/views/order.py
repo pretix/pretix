@@ -15,7 +15,9 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import InvoiceAddress, OrderFee, QuestionAnswer
+from pretix.base.models.orders import (
+    CachedCombinedTicket, InvoiceAddress, OrderFee, QuestionAnswer,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -463,6 +465,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             messages.success(self.request, _(success_message))
 
         CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
