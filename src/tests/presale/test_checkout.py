@@ -114,7 +114,7 @@ class CheckoutTestCase(TestCase):
         o1.cartposition, o2.cartposition, o3.cartposition = None, None, None
         o1.orderposition, o2.orderposition, o3.orderposition = op, op, op
         # only time and date answers should be unaffected by timezone change
-        self.assertEqual(str(o1), '06:30') 
+        self.assertEqual(str(o1), '06:30')
         self.assertEqual(str(o2), '2005-12-31')
         o3date, o3time = str(o3).split(' ')
         self.assertEqual(o3date, '2017-12-31')

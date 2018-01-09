@@ -54,10 +54,12 @@ def get_javascript_format(format_name):
         f
     )
 
+
 def get_format_without_seconds(format_name):
     formats = get_format(format_name)
     formats_no_seconds = [f for f in formats if '%S' not in f]
     return formats_no_seconds[0] if formats_no_seconds else formats[0]
+
 
 def get_javascript_format_without_seconds(format_name):
     f = get_format_without_seconds(format_name)
@@ -65,6 +67,7 @@ def get_javascript_format_without_seconds(format_name):
         lambda x: date_conversion_to_moment[x.group()],
         f
     )
+
 
 def get_moment_locale(locale=None):
     cur_lang = locale or translation.get_language()
