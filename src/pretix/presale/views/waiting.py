@@ -74,9 +74,9 @@ class WaitingView(EventViewMixin, FormView):
 
     def form_valid(self, form):
         availability = (
-            self.item_and_variation[1].check_quotas(count_waitinglist=False, subevent=self.subevent)
+            self.item_and_variation[1].check_quotas(count_waitinglist=True, subevent=self.subevent)
             if self.item_and_variation[1]
-            else self.item_and_variation[0].check_quotas(count_waitinglist=False, subevent=self.subevent)
+            else self.item_and_variation[0].check_quotas(count_waitinglist=True, subevent=self.subevent)
         )
         if availability[0] == 100:
             messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "
