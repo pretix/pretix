@@ -27,7 +27,7 @@ class UserSettingsForm(forms.ModelForm):
     new_pw = forms.CharField(max_length=255,
                              required=False,
                              label=_("New password"),
-                             widget=forms.PasswordInput())
+                             widget=forms.PasswordInput(attrs={'class': 'passwordcheck'}))
     new_pw_repeat = forms.CharField(max_length=255,
                                     required=False,
                                     label=_("Repeat new password"),
@@ -47,6 +47,10 @@ class UserSettingsForm(forms.ModelForm):
             'timezone',
             'email'
         ]
+        widgets = {
+            'fullname': forms.TextInput(attrs={'class': 'password-userinfo'}),
+            'email': forms.EmailInput(attrs={'class': 'password-userinfo'}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')

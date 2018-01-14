@@ -248,7 +248,7 @@ class Recover(TemplateView):
         if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         try:
-            user = User.objects.get(id=self.request.GET.get('id'))
+            self.user = user = User.objects.get(id=self.request.GET.get('id'))
         except User.DoesNotExist:
             return self.invalid('unknownuser')
         if not default_token_generator.check_token(user, self.request.GET.get('token')):
@@ -262,7 +262,7 @@ class Recover(TemplateView):
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
             try:
-                user = User.objects.get(id=self.request.GET.get('id'))
+                self.user = user = User.objects.get(id=self.request.GET.get('id'))
             except User.DoesNotExist:
                 return self.invalid('unknownuser')
             if not default_token_generator.check_token(user, self.request.GET.get('token')):
@@ -283,6 +283,7 @@ class Recover(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form
+        context['user'] = self.user
         return context
 
 

@@ -45,4 +45,4 @@ django-countries
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.0.1
 vat_moss==0.11.0
-django-zxcvbn-password
+django-zxcvbn-password==2.0.*

@@ -43,3 +43,17 @@ footer {
     margin: auto;
     margin-bottom: 20px;
 }
+
+@for $i from 0 through 100 {
+	.progress-bar-#{$i} { width: 1% * $i; }
+}
+.passwordcheck-with-progress {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom: 0px;
+}
+.password-progress {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	margin-bottom: 0;
+}

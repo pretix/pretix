@@ -1,6 +1,8 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load compress %}
+{% load staticfiles %}
 {% block title %}{% trans "Account settings" %}{% endblock %}
 {% block content %}
 <h1>{% trans "Account settings" %}</h1>
@@ -69,4 +71,8 @@
         </button>
     </div>
 </form>
+    {% compress js %}
+        <script type="text/javascript" src="{% static "zxcvbn/zxcvbn.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/password.js" %}"></script>
+    {% endcompress %}
 {% endblock %}

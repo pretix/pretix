@@ -16,4 +16,3 @@ pytest-warnings
 pytest-cache
 pytest-sugar
 responses
-django-zxcvbn-password

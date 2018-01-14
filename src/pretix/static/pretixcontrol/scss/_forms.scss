@@ -271,3 +271,14 @@ table td > .checkbox input[type="checkbox"] {
   margin: 0;
   position: static;
 }
+
+.passwordcheck-with-progress {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 0px;
+}
+.password-progress {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-bottom: 0;
+}

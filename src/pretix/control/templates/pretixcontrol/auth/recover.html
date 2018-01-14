@@ -9,6 +9,8 @@
         {% bootstrap_form_errors form type='all' layout='inline' %}
         {% bootstrap_field form.password %}
         {% bootstrap_field form.password_repeat %}
+        <input type="hidden" class="password-userinfo" value="{{ user.full_name }}">
+        <input type="hidden" class="password-userinfo" value="{{ user.email }}">
 		<div class="form-group buttons">
 
             <button type="submit" class="btn btn-primary">

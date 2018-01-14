@@ -78,11 +78,15 @@ class RegistrationForm(forms.Form):
     }
     email = forms.EmailField(
         label=_('Email address'),
+        widget=forms.EmailInput(attrs={
+            'class': 'password-userinfo'
+        }),
         required=True
     )
     password = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput(attrs={
+            'class': 'passwordcheck',
             'autocomplete': 'new-password'  # see https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
         }),
         required=True
@@ -134,7 +138,9 @@ class PasswordRecoverForm(forms.Form):
     }
     password = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={
+            'class': 'passwordcheck',
+        }),
         required=True
     )
     password_repeat = forms.CharField(

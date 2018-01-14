@@ -32,5 +32,10 @@
         {% endwith %}
     </footer>
 </div>
+{% compress js %}
+    <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "zxcvbn/zxcvbn.js" %}"></script>
+    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/password.js" %}"></script>
+{% endcompress %}
 </body>
 </html>

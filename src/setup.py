@@ -109,6 +109,7 @@ setup(
         'pyuca',
         'defusedcsv',
         'vat_moss==0.11.0',
+        'django-zxcvbn-password==2.0.*'
     ],
     extras_require={
         'dev': [
