@@ -321,6 +321,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         ]
 
     def _get_story(self, doc):
+        has_taxes = any(il.tax_value for il in self.invoice.lines.all())
+
         story = [
             NextPageTemplate('FirstPage'),
             Paragraph(pgettext('invoice', 'Invoice')
@@ -352,28 +354,48 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
         ]
-        tdata = [(
-            pgettext('invoice', 'Description'),
-            pgettext('invoice', 'Tax rate'),
-            pgettext('invoice', 'Net'),
-            pgettext('invoice', 'Gross'),
-        )]
+        if has_taxes:
+            tdata = [(
+                pgettext('invoice', 'Description'),
+                pgettext('invoice', 'Tax rate'),
+                pgettext('invoice', 'Net'),
+                pgettext('invoice', 'Gross'),
+            )]
+        else:
+            tdata = [(
+                pgettext('invoice', 'Description'),
+                pgettext('invoice', 'Amount'),
+            )]
+
         total = Decimal('0.00')
         for line in self.invoice.lines.all():
-            tdata.append((
-                Paragraph(line.description, self.stylesheet['Normal']),
-                localize(line.tax_rate) + " %",
-                localize(line.net_value) + " " + self.invoice.event.currency,
-                localize(line.gross_value) + " " + self.invoice.event.currency,
-            ))
+            if has_taxes:
+                tdata.append((
+                    Paragraph(line.description, self.stylesheet['Normal']),
+                    localize(line.tax_rate) + " %",
+                    localize(line.net_value) + " " + self.invoice.event.currency,
+                    localize(line.gross_value) + " " + self.invoice.event.currency,
+                ))
+            else:
+                tdata.append((
+                    Paragraph(line.description, self.stylesheet['Normal']),
+                    localize(line.gross_value) + " " + self.invoice.event.currency,
+                ))
             taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
             grossvalue_map[line.tax_rate, line.tax_name] += line.gross_value
             total += line.gross_value
 
-        tdata.append([
-            pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency
-        ])
-        colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
+        if has_taxes:
+            tdata.append([
+                pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency
+            ])
+            colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
+        else:
+            tdata.append([
+                pgettext('invoice', 'Invoice total'), localize(total) + " " + self.invoice.event.currency
+            ])
+            colwidths = [a * doc.width for a in (.70, .30)]
+
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
@@ -422,7 +444,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             except ValueError:
                 return localize(val) + ' ' + self.invoice.foreign_currency_display
 
-        if len(tdata) > 1:
+        if len(tdata) > 1 and has_taxes:
             colwidths = [a * doc.width for a in (.25, .15, .15, .15, .3)]
             table = Table(tdata, colWidths=colwidths, repeatRows=2, hAlign=TA_LEFT)
             table.setStyle(TableStyle(tstyledata))
