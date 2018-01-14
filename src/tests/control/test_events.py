@@ -8,7 +8,7 @@ from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Order, OrderPosition, Organizer, Team, User,
+    Event, Order, OrderPosition, Organizer, SubEvent, Team, User,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.testutils.mock import mocker_context
@@ -594,6 +594,7 @@ class SubEventsTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
         self.subevent1 = self.event1.subevents.create(name='SE1', date_from=now())
+        self.subevent2 = self.event1.subevents.create(name='SE2', date_from=now())
 
     def test_list(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/')
@@ -699,7 +700,11 @@ class SubEventsTest(SoupTest):
         assert doc.select("button")
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {})
         assert doc.select(".alert-success")
-        assert not SubEventItem.objects.filter(pk=self.subevent1.pk).exists()
+        # deleting the second event
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
+        assert doc.select(".alert-danger")
+        assert SubEvent.objects.filter(pk=self.subevent2.pk).exists()
+        assert not SubEvent.objects.filter(pk=self.subevent1.pk).exists()
 
     def test_delete_with_orders(self):
         o = Order.objects.create(
