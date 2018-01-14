@@ -34,4 +34,8 @@ class OrderSearch(PaginationMixin, ListView):
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
-        return qs.distinct().prefetch_related('event', 'event__organizer')
+        return qs.distinct().only(
+            'id', 'invoice_address__name', 'code', 'event', 'email', 'datetime', 'total', 'status'
+        ).prefetch_related(
+            'event', 'event__organizer'
+        )

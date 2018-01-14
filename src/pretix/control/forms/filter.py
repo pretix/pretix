@@ -1,6 +1,6 @@
 from django import forms
 from django.apps import apps
-from django.db.models import Exists, F, OuterRef, Q
+from django.db.models import F, Q
 from django.db.models.functions import Coalesce, Concat
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -115,17 +115,14 @@ class OrderFilterForm(FilterForm):
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
-            matching_invoice = Invoice.objects.filter(
-                order=OuterRef('pk'),
-            ).annotate(
+            matching_invoices = Invoice.objects.annotate(
                 inr=Concat('prefix', 'invoice_no')
             ).filter(
                 Q(invoice_no__iexact=u)
                 | Q(invoice_no__iexact=u.zfill(5))
                 | Q(inr=u)
-            )
+            ).values_list('order_id', flat=True)
 
-            qs = qs.annotate(has_inv=Exists(matching_invoice))
             qs = qs.filter(
                 code
                 | Q(email__icontains=u)
@@ -133,7 +130,7 @@ class OrderFilterForm(FilterForm):
                 | Q(positions__attendee_email__icontains=u)
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
-                | Q(has_inv=True)
+                | Q(pk__in=matching_invoices)
             )
 
         if fdata.get('status'):
