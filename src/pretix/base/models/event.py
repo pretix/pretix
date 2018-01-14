@@ -639,6 +639,9 @@ class SubEvent(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    def allow_delete(self):
+        return self.event.subevents.count() > 1
+
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
