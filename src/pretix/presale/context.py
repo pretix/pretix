@@ -4,6 +4,7 @@ from django.utils.translation import get_language_info
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.settings import GlobalSettingsObject
+from pretix.control.utils.i18n import get_javascript_format_without_seconds, get_moment_locale
 
 from .signals import footer_link, html_footer, html_head
 
@@ -70,5 +71,10 @@ def contextprocessor(request):
     ctx['html_foot'] = "".join(_html_foot)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
+
+    ctx['js_datetime_format'] = get_javascript_format_without_seconds('DATETIME_INPUT_FORMATS')
+    ctx['js_date_format'] = get_javascript_format_without_seconds('DATE_INPUT_FORMATS')
+    ctx['js_time_format'] = get_javascript_format_without_seconds('TIME_INPUT_FORMATS')
+    ctx['js_locale'] = get_moment_locale()
 
     return ctx

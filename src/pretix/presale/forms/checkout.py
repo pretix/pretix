@@ -3,6 +3,8 @@ import os
 from decimal import Decimal
 from itertools import chain
 
+import dateutil
+import pytz
 import vat_moss.errors
 import vat_moss.id
 from django import forms
@@ -18,8 +20,12 @@ from pretix.base.models import ItemVariation, Question
 from pretix.base.models.orders import InvoiceAddress, OrderPosition
 from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.control.forms import (
+    DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
+)
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
+from pretix.control.utils.i18n import get_format_without_seconds
 
 logger = logging.getLogger(__name__)
 
@@ -235,6 +241,7 @@ class QuestionsForm(forms.Form):
                 initial = answers[0]
             else:
                 initial = None
+            tz = pytz.timezone(event.settings.timezone)
             if q.type == Question.TYPE_BOOLEAN:
                 if q.required:
                     # For some reason, django-bootstrap3 does not set the required attribute
@@ -258,7 +265,7 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=initial.answer if initial else None,
-                    min_value=Decimal('0.00')
+                    min_value=Decimal('0.00'),
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
@@ -295,7 +302,28 @@ class QuestionsForm(forms.Form):
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
+                    widget=UploadedFileWidget(position=pos, event=event, answer=initial),
+                )
+            elif q.type == Question.TYPE_DATE:
+                field = forms.DateField(
+                    label=q.question, required=q.required,
+                    help_text=q.help_text,
+                    initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
+                    widget=DatePickerWidget(),
+                )
+            elif q.type == Question.TYPE_TIME:
+                field = forms.TimeField(
+                    label=q.question, required=q.required,
+                    help_text=q.help_text,
+                    initial=dateutil.parser.parse(initial.answer).astimezone(tz).time() if initial and initial.answer else None,
+                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                )
+            elif q.type == Question.TYPE_DATETIME:
+                field = forms.SplitDateTimeField(
+                    label=q.question, required=q.required,
+                    help_text=q.help_text,
+                    initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
+                    widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             field.question = q
             if answers:

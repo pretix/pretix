@@ -23,6 +23,9 @@ type                                  string                     The expected ty
                                                                  * ``C`` – choice from a list
                                                                  * ``M`` – multiple choice from a list
                                                                  * ``F`` – file upload
+                                                                 * ``D`` – date
+                                                                 * ``H`` – time
+                                                                 * ``W`` – date and time
 required                              boolean                    If ``True``, the question needs to be filled out.
 position                              integer                    An integer, used for sorting
 items                                 list of integers           List of item IDs this question is assigned to.
@@ -32,6 +35,9 @@ options                               list of objects            In case of ques
 └ answer                              multi-lingual string       The displayed value of this option
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.12
+
+  The values ``D``, ``H``, and ``W`` for the field ``type`` are now allowed.
 
 Endpoints
 ---------

@@ -543,7 +543,10 @@ class Question(LoggedModel):
     * a multi-line string (``TYPE_TEXT``)
     * a boolean (``TYPE_BOOLEAN``)
     * a multiple choice option (``TYPE_CHOICE`` and ``TYPE_CHOICE_MULTIPLE``)
-    * a file upload (``TYPE_FILE``))
+    * a file upload (``TYPE_FILE``)
+    * a date (``TYPE_DATE``)
+    * a time (``TYPE_TIME``)
+    * a date and a time (``TYPE_DATETIME``)
 
     :param event: The event this question belongs to
     :type event: Event
@@ -562,6 +565,9 @@ class Question(LoggedModel):
     TYPE_CHOICE = "C"
     TYPE_CHOICE_MULTIPLE = "M"
     TYPE_FILE = "F"
+    TYPE_DATE = "D"
+    TYPE_TIME = "H"
+    TYPE_DATETIME = "W"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -570,6 +576,9 @@ class Question(LoggedModel):
         (TYPE_CHOICE, _("Choose one from a list")),
         (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list")),
         (TYPE_FILE, _("File upload")),
+        (TYPE_DATE, _("Date")),
+        (TYPE_TIME, _("Time")),
+        (TYPE_DATETIME, _("Date and time")),
     )
 
     event = models.ForeignKey(

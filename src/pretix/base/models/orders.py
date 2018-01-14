@@ -6,6 +6,7 @@ from datetime import datetime, time
 from decimal import Decimal
 from typing import Any, Dict, List, Union
 
+import dateutil
 import pytz
 from django.conf import settings
 from django.db import models
@@ -15,6 +16,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -498,6 +500,18 @@ class QuestionAnswer(models.Model):
             return str(_("No"))
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
+        elif self.question.type == Question.TYPE_DATETIME:
+            d = dateutil.parser.parse(self.answer)
+            if self.orderposition:
+                tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                d = d.astimezone(tz)
+            return date_format(d, "SHORT_DATETIME_FORMAT")
+        elif self.question.type == Question.TYPE_DATE:
+            d = dateutil.parser.parse(self.answer)
+            return date_format(d, "SHORT_DATE_FORMAT")
+        elif self.question.type == Question.TYPE_TIME:
+            d = dateutil.parser.parse(self.answer)
+            return date_format(d, "TIME_FORMAT")
         else:
             return self.answer
 

@@ -22,10 +22,10 @@
                     <legend>{% trans "General information" %}</legend>
                     {% bootstrap_field form.name layout="control" %}
                     {% bootstrap_field form.active layout="control" %}
-                    {% bootstrap_field form.date_from layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.date_to layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.date_from layout="control" %}
+                    {% bootstrap_field form.date_to layout="control" %}
                     {% bootstrap_field form.location layout="control" %}
-                    {% bootstrap_field form.date_admission layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.date_admission layout="control" %}
                     {% bootstrap_field form.frontpage_text layout="control" %}
                     {% if meta_forms %}
                         <div class="form-group metadata-group">
@@ -49,8 +49,8 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Timeline" %}</legend>
-                    {% bootstrap_field form.presale_start layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
-                    {% bootstrap_field form.presale_end layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+                    {% bootstrap_field form.presale_start layout="control" %}
+                    {% bootstrap_field form.presale_end layout="control" %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Quotas" %}</legend>
