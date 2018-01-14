@@ -23,9 +23,9 @@ from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import (
     DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
 )
+from pretix.control.utils.i18n import get_format_without_seconds
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import contact_form_fields, question_form_fields
-from pretix.control.utils.i18n import get_format_without_seconds
 
 logger = logging.getLogger(__name__)
 
