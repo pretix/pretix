@@ -7,17 +7,6 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
-def assign_checkin_lists(apps, schema_editor):
-    AppConfiguration = apps.get_model('pretixdroid', 'AppConfiguration')
-
-    for ac in AppConfiguration.objects.all():
-        cl = ac.event.checkin_lists.get_or_create(subevent=ac.subevent, all_products=True, defaults={
-            'name': ac.subevent.name if ac.subevent else 'Default'
-        })[0]
-        ac.list = cl
-        ac.save()
-
-
 def runfwd(app, schema_editor):
     EventSettingsStore = app.get_model('pretixbase', 'Event_SettingsStore')
     AppConfiguration = app.get_model('pretixdroid', 'AppConfiguration')
@@ -29,6 +18,7 @@ def runfwd(app, schema_editor):
             all_items=True
         )
         setting.delete()
+
 
 class Migration(migrations.Migration):
 
@@ -51,7 +41,6 @@ class Migration(migrations.Migration):
                 ('show_info', models.BooleanField(default=True)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='pretixbase.Event')),
                 ('items', models.ManyToManyField(blank=True, to='pretixbase.Item')),
-                ('subevent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='pretixbase.SubEvent')),
             ],
         ),
         migrations.RunPython(
@@ -82,14 +71,6 @@ class Migration(migrations.Migration):
             model_name='appconfiguration',
             name='show_info',
             field=models.BooleanField(default=True, help_text='If disabled, the device can not see how many tickets exist and how many are already scanned. pretixdroid 1.6 or newer only.', verbose_name='Show information'),
-        ),
-        migrations.RunPython(
-            code=assign_checkin_lists,
-            reverse_code=django.db.migrations.operations.special.RunPython.noop,
-        ),
-        migrations.RemoveField(
-            model_name='appconfiguration',
-            name='subevent',
         ),
         migrations.AlterField(
             model_name='appconfiguration',
