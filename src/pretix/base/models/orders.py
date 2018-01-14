@@ -213,6 +213,12 @@ class Order(LoggedModel):
     def net_total(self):
         return self.total - self.tax_total
 
+    def cancel_allowed(self):
+        return (
+            self.status == Order.STATUS_PENDING
+            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+        )
+
     @staticmethod
     def normalize_code(code):
         tr = str.maketrans({
@@ -272,7 +278,7 @@ class Order(LoggedModel):
         """
         positions = self.positions.all().select_related('item')
         cancelable = all([op.item.allow_cancel for op in positions])
-        return self.event.settings.cancel_allow_user and cancelable
+        return self.cancel_allowed() and self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
