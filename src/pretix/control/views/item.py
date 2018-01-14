@@ -402,11 +402,13 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
+        if self.request.GET.get("status", "np") != "":
+            s = self.request.GET.get("status", "np")
             if s == 'o':
                 qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
-                               expires__lt=now().replace(hour=0, minute=0, second=0))
+                               orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
