@@ -109,9 +109,9 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         send_mail = request.data.get('send_email', True)
 
         order = self.get_object()
-        if order.status != Order.STATUS_PENDING:
+        if not order.cancel_allowed():
             return Response(
-                {'detail': 'The order is not pending.'},
+                {'detail': 'The order is not allowed to be canceled.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
