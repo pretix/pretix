@@ -428,6 +428,12 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             for a in qs:
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
+        elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
+            qs = qs.order_by('answer')
+            qs_model = qs
+            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
+            for a, a_model in zip(qs, qs_model):
+                a['answer'] = str(a_model)
         else:
             qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
 
