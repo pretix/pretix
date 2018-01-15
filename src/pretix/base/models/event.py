@@ -544,6 +544,12 @@ class Event(EventMixin, LoggedModel):
             Q(is_superuser=True) | Q(twp=True)
         )
 
+    @staticmethod
+    def clean_slug(event, slug):
+        if event.slug is not None:
+            if event.slug != slug:
+                raise ValidationError(_('The event slug cannot be changed.'))
+
 
 class SubEvent(EventMixin, LoggedModel):
     """

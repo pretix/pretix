@@ -52,6 +52,10 @@ event_permission_urls = [
     ('put', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('delete', 'can_change_event_settings', 'checkinlists/1/', 404),
+    ('post', 'can_change_event_settings', 'events/', 400),
+    ('put', 'can_change_event_settings', 'events/1/', 404),
+    ('patch', 'can_change_event_settings', 'events/1/', 404),
+    ('delete', 'can_change_event_settings', 'events/1/', 405),
 ]
 
 
