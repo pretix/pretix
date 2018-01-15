@@ -125,7 +125,7 @@ class OrderFilterForm(FilterForm):
 
             matching_positions = OrderPosition.objects.filter(
                 Q(order=OuterRef('pk')) & Q(
-                    Q(attendee_name__icontains=u) & Q(attendee_email__icontains=u)
+                    Q(attendee_name__icontains=u) | Q(attendee_email__icontains=u)
                 )
             ).values('id')
 
