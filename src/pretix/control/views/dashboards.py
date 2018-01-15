@@ -17,7 +17,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
+    Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
 from pretix.base.models.checkin import CheckinList
@@ -280,10 +280,42 @@ def event_index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
-@receiver(signal=user_dashboard_widgets)
-def user_event_widgets(**kwargs):
-    user = kwargs.pop('user')
+def annotated_event_query(user):
+    active_orders = Order.objects.filter(
+        event=OuterRef('pk'),
+        status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+    ).order_by().values('event').annotate(
+        c=Count('*')
+    ).values(
+        'c'
+    )
+
+    required_actions = RequiredAction.objects.filter(
+        event=OuterRef('pk'),
+        done=False
+    )
+    qs = user.get_events_with_any_permission().annotate(
+        order_count=Subquery(active_orders, output_field=IntegerField()),
+        has_ra=Exists(required_actions)
+    ).annotate(
+        min_from=Min('subevents__date_from'),
+        max_from=Max('subevents__date_from'),
+        max_to=Max('subevents__date_to'),
+        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from')),
+    ).annotate(
+        order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
+    )
+    return qs
+
+
+def widgets_for_event_qs(qs, user, nmax):
     widgets = []
+
+    # Get set of events where we have the permission to show the # of orders
+    events_with_orders = set(qs.filter(
+        Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+        | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+    ).values_list('id', flat=True))
 
     tpl = """
         <a href="{url}" class="event">
@@ -299,50 +331,21 @@ def user_event_widgets(**kwargs):
         </div>
     """
 
-    active_orders = Order.objects.filter(
-        event=OuterRef('pk'),
-        status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
-    ).order_by().values('event').annotate(
-        c=Count('*')
-    ).values(
-        'c'
-    )
-
-    required_actions = RequiredAction.objects.filter(
-        event=OuterRef('pk'),
-        done=False
-    )
-
-    # Get set of events where we have the permission to show the # of orders
-    events_with_orders = set(Event.objects.filter(
-        Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-        | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
-    ).values_list('id', flat=True))
-
-    events = user.get_events_with_any_permission().annotate(
-        order_count=Subquery(active_orders, output_field=IntegerField()),
-        has_ra=Exists(required_actions)
-    ).annotate(
-        min_from=Min('subevents__date_from'),
-        max_from=Max('subevents__date_from'),
-        max_to=Max('subevents__date_to'),
-        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
-    ).annotate(
-        order_from=Coalesce('min_from', 'date_from'),
-        order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
-    ).order_by(
-        '-order_from', 'name'
-    ).prefetch_related(
+    events = qs.prefetch_related(
         '_settings_objects', 'organizer___settings_objects'
-    ).select_related('organizer')[:100]
+    ).select_related('organizer')[:nmax]
     for event in events:
-        dr = event.get_date_range_display()
-        tz = pytz.timezone(event.settings.timezone)
+        tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
         if event.has_subevents:
             dr = daterange(
                 (event.min_from).astimezone(tz),
                 (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
             )
+        else:
+            if event.date_to:
+                dr = daterange(event.date_from.astimezone(tz), event.date_to.astimezone(tz))
+            else:
+                dr = date_format(event.date_from.astimezone(tz), "DATE_FORMAT")
 
         if event.has_ra:
             status = ('danger', _('Action required'))
@@ -400,26 +403,42 @@ def user_event_widgets(**kwargs):
     return widgets
 
 
-@receiver(signal=user_dashboard_widgets)
-def new_event_widgets(**kwargs):
-    return [
-        {
-            'content': '<div class="newevent"><span class="fa fa-plus-circle"></span>{t}</div>'.format(
-                t=_('Create a new event')
-            ),
-            'display_size': 'small',
-            'priority': 50,
-            'url': reverse('control:events.add')
-        }
-    ]
-
-
 def user_index(request):
     widgets = []
     for r, result in user_dashboard_widgets.send(request, user=request.user):
         widgets.extend(result)
+
     ctx = {
         'widgets': rearrange(widgets),
+        'upcoming': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
+                )
+            ).order_by('date_from'),
+            request.user,
+            7
+        ),
+        'past': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
+                )
+            ).order_by('-order_to'),
+            request.user,
+            8
+        ),
+        'series': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                has_subevents=True
+            ).order_by('-order_to'),
+            request.user,
+            8
+        ),
     }
     return render(request, 'pretixcontrol/dashboard.html', ctx)
 

@@ -42,7 +42,7 @@ class EventList(PaginationMixin, ListView):
             max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
         ).annotate(
             order_from=Coalesce('min_from', 'date_from'),
-            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
+            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
 
         sum_tickets_paid = Quota.objects.filter(

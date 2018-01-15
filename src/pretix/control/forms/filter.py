@@ -341,6 +341,9 @@ class EventFilterForm(FilterForm):
             ('notlive', _('Shop not live')),
             ('future', _('Presale not started')),
             ('past', _('Presale over')),
+            ('date_future', _('Single event running or in the future')),
+            ('date_past', _('Single event in the past')),
+            ('series', _('Event series')),
         ),
         required=False
     )
@@ -388,6 +391,24 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(presale_start__gte=now())
         elif fdata.get('status') == 'past':
             qs = qs.filter(presale_end__lte=now())
+        elif fdata.get('status') == 'date_future':
+            qs = qs.filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
+                )
+            )
+        elif fdata.get('status') == 'date_past':
+            qs = qs.filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
+                )
+            )
+        elif fdata.get('status') == 'series':
+            qs = qs.filter(has_subevents=True)
 
         if fdata.get('organizer'):
             qs = qs.filter(organizer=fdata.get('organizer'))
