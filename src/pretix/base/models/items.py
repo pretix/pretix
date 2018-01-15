@@ -612,6 +612,11 @@ class Question(LoggedModel):
     position = models.IntegerField(
         default=0
     )
+    ask_during_checkin = models.BooleanField(
+        verbose_name=_('Ask during check-in instead of during registration'),
+        help_text=_('Supported by pretixdroid 1.8 and newer or pretixdesk 0.2 and newer.'),
+        default=False
+    )
 
     class Meta:
         verbose_name = _("Question")
@@ -637,6 +642,23 @@ class Question(LoggedModel):
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
+
+    def clean_answer(self, answer):
+        if self.type == 'C':
+            try:
+                return self.options.get(pk=answer)
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        elif self.type == 'M':
+            try:
+                if isinstance(answer, str):
+                    return self.options.filter(pk__in=answer.split(","))
+                else:
+                    return self.options.filter(pk__in=answer)
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        # TODO
+        pass
 
 
 class QuestionOption(models.Model):

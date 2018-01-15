@@ -45,6 +45,7 @@ class QuestionForm(I18nModelForm):
             'help_text',
             'type',
             'required',
+            'ask_during_checkin',
             'items'
         ]
         widgets = {

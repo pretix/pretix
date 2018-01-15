@@ -326,3 +326,54 @@ def test_status(client, env):
          'variations': []
          }
     ]
+
+
+@pytest.fixture
+def question(env):
+    q = env[0].questions.create(question='Size', type='C', required=True, ask_during_checkin=True)
+    a1 = q.options.create(answer="M")
+    a2 = q.options.create(answer="L")
+    q.items.add(env[3].item)
+    return q, a1, a2
+
+
+@pytest.mark.django_db
+def test_question_optional(client, env, question):
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['version'] == API_VERSION
+    assert jdata['status'] == 'incomplete'
+    assert jdata['questions'] == [
+        {
+            'id': question[0].pk,
+            'type': 'C',
+            'question': 'Size',
+            'required': True,
+            'position': question[0].position,
+            'options': [
+                {
+                    'id': question[1].pk,
+                    'answer': 'M'
+                },
+                {
+                    'id': question[2].pk,
+                    'answer': 'L'
+                }
+            ]
+        }
+    ]
+
+    resp = client.post(
+        '/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+        data={
+            'secret': '1234',
+            'answer_{}'.format(question[0].pk): question[1].pk,
+        }
+    )
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'ok'
+    assert env[3].answers.get(question=question[0]).answer == 'M'
+    assert list(env[3].answers.get(question=question[0]).options.all()) == [question[1]]

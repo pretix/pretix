@@ -4,8 +4,9 @@ import urllib.parse
 
 import dateutil.parser
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Count, Max, OuterRef, Q, Subquery
+from django.db.models import Count, Max, OuterRef, Prefetch, Q, Subquery
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -18,7 +19,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import Checkin, Event, Order, OrderPosition
+from pretix.base.models import (
+    Checkin, Event, Order, OrderPosition, Question, QuestionOption,
+)
 from pretix.base.models.event import SubEvent
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
@@ -29,7 +32,7 @@ from pretix.plugins.pretixdroid.forms import AppConfigurationForm
 from pretix.plugins.pretixdroid.models import AppConfiguration
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
-API_VERSION = 3
+API_VERSION = 4
 
 
 class ConfigCodeView(EventPermissionRequiredMixin, TemplateView):
@@ -169,20 +172,87 @@ class ApiRedeemView(ApiView):
         try:
             with transaction.atomic():
                 created = False
-                op = OrderPosition.objects.select_related('item', 'variation', 'order', 'addon_to').get(
+                op = OrderPosition.objects.select_related(
+                    'item', 'variation', 'order', 'addon_to'
+                ).prefetch_related(
+                    'item__questions',
+                    Prefetch(
+                        'item__questions',
+                        queryset=Question.objects.filter(ask_during_checkin=True),
+                        to_attr='checkin_questions'
+                    ),
+                    'answers'
+                ).get(
                     order__event=self.event, secret=secret, subevent=self.subevent
                 )
+                answers = {a.question: a for a in op.answers.all()}
+                require_answers = []
+                given_answers = {}
+                for q in op.item.checkin_questions:
+                    if 'answer_{}'.format(q.pk) in request.POST:
+                        try:
+                            given_answers[q] = q.clean_answer(request.POST.get('answer_{}'.format(q.pk)))
+                            continue
+                        except ValidationError:
+                            pass
+
+                    if q in answers:
+                        continue
+
+                    require_answers.append({
+                        'id': q.pk,
+                        'type': q.type,
+                        'question': str(q.question),
+                        'required': q.required,
+                        'position': q.position,
+                        'options': [
+                            {
+                                'id': o.pk,
+                                'answer': str(o.answer)
+                            } for o in q.options.all()
+                        ] if q.type in ('C', 'M') else []
+                    })
+
                 if not self.config.list.all_products and op.item_id not in [i.pk for i in self.config.list.limit_products.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
-                if not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
+                elif not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
+                elif require_answers and not force:
+                    response['status'] = 'incomplete'
+                    response['questions'] = require_answers
                 elif op.order.status == Order.STATUS_PAID or force:
                     ci, created = Checkin.objects.get_or_create(position=op, list=self.config.list, defaults={
                         'datetime': dt,
                         'nonce': nonce,
                     })
+                    for q, a in given_answers.items():
+                        if isinstance(a, QuestionOption):
+                            if q in answers:
+                                qa = answers[q]
+                                qa.answer = str(a.answer)
+                                qa.save()
+                                qa.options.clear()
+                            else:
+                                qa = op.answers.create(question=q, answer=str(a.answer))
+                            qa.options.add(a)
+                        elif isinstance(a, list):
+                            if q in answers:
+                                qa = answers[q]
+                                qa.answer = ", ".join([str(o) for o in a])
+                                qa.save()
+                                qa.options.clear()
+                            else:
+                                qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
+                            qa.options.add(*a)
+                        else:
+                            if q in answers:
+                                qa = answers[q]
+                                qa.answer = str(a)
+                                qa.save()
+                            else:
+                                op.answers.create(question=q, answer=str(a))
                 else:
                     response['status'] = 'error'
                     response['reason'] = 'unpaid'
