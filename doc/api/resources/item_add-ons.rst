@@ -24,6 +24,7 @@ addon_category                        integer                    Internal ID of 
 min_count                             integer                    The minimal number of add-ons that need to be chosen.
 max_count                             integer                    The maximal number of add-ons that can be chosen.
 position                              integer                    An integer, used for sorting
+price_included                        boolean                    Adding this add-on to the item is free
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.12

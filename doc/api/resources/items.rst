@@ -33,6 +33,7 @@ admission                             boolean                    ``True`` for it
                                                                  (such as add-ons or merchandise).
 position                              integer                    An integer, used for sorting
 picture                               string                     A product picture to be displayed in the shop
+                                                                 (read-only).
 available_from                        datetime                   The first date time at which this item can be bought
                                                                  (or ``null``).
 available_until                       datetime                   The last date time at which this item can be bought
@@ -72,12 +73,17 @@ addons                                list of objects            Definition of a
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
 ├ max_count                           integer                    The maximal number of add-ons that can be chosen.
 └ position                            integer                    An integer, used for sorting
+└ price_included                      boolean                    Adding this add-on to the item is free
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
 
    The attribute ``tax_rule`` has been added. ``tax_rate`` is kept for compatibility. The attribute
    ``checkin_attention`` has been added.
+
+.. versionchanged:: 1.12
+
+   The attribute ``price_included`` has been added to ``addons``.
 
 
 Endpoints

@@ -67,7 +67,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations',
                   'variations', 'addons')
-        read_only_fields = ('variations', 'addons')
+        read_only_fields = ('has_variations', 'picture', 'variations', 'addons')
 
     def validate(self, data):
         data = super().validate(data)
