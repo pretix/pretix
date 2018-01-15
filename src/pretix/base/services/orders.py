@@ -245,7 +245,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None):
     if isinstance(api_token, int):
         api_token = TeamAPIToken.objects.get(pk=api_token)
     with order.event.lock():
-        if order.status != Order.STATUS_PENDING:
+        if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELED
         order.save()

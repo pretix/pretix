@@ -29,7 +29,7 @@
                             {% trans "Extend payment term" %}
                         </a>
                     {% endif %}
-                    {% if order.status == 'n' %}
+                    {% if order.cancel_allowed %}
                         <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
                             {% trans "Cancel order" %}
                         </a>

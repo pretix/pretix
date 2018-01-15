@@ -223,6 +223,21 @@ def test_order_transition(client, env, process):
 
 
 @pytest.mark.django_db
+def test_order_cancel_free(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_PAID
+    o.total = Decimal('0.00')
+    o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'c'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert o.status == Order.STATUS_CANCELED
+
+
+@pytest.mark.django_db
 def test_order_invoice_create_forbidden(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     env[0].settings.set('invoice_generate', 'no')

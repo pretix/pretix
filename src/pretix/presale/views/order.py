@@ -498,7 +498,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         self.kwargs = kwargs
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status != Order.STATUS_PENDING or not self.order.can_user_cancel:
+        if not self.order.can_user_cancel:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
