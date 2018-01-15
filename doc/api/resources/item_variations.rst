@@ -4,7 +4,7 @@ Item variations
 Resource description
 --------------------
 
-Variations of items can be use for products (items) that are available in different sizes, colours or other variations
+Variations of items can be use for products (items) that are available in different sizes, colors or other variations
 of the same product.
 The addons resource contains the following public fields:
 
@@ -24,6 +24,9 @@ description                           multi-lingual string       A public descri
 position                              integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.12
+
+   This resource has been added.
 
 Endpoints
 ---------
@@ -85,12 +88,12 @@ Endpoints
                           returned.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param id: The ``id`` field of the item
+   :param item: The ``id`` field of the item to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/item does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/variations/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/variations/(id)/
 
    Returns information on one variation, identified by its ID.
 
@@ -115,22 +118,22 @@ Endpoints
         "value": {
               "en": "Student"
         },
-         "default_price": "10.00",
-         "price": "10.00",
-         "active": true,
-         "description": null,
-         "position": 0
+        "default_price": "10.00",
+        "price": "10.00",
+        "active": true,
+        "description": null,
+        "position": 0
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
-   :param id: The ``id`` field of the item
+   :param item: The ``id`` field of the item to fetch
    :param id: The ``id`` field of the variation to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:post:: /api/v1/organizers/bigevents/events/sampleconf/items/1/variations/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/variations/
 
    Creates a new variation
 
@@ -144,11 +147,11 @@ Endpoints
       Content: application/json
 
       {
-          "value": {"en": "Student"},
-          "default_price": "10.00",
-          "active": true,
-          "description": null,
-          "position": 0
+        "value": {"en": "Student"},
+        "default_price": "10.00",
+        "active": true,
+        "description": null,
+        "position": 0
       }
 
    **Example response**:
@@ -160,27 +163,27 @@ Endpoints
       Content-Type: application/json
 
       {
-          "id": 1,
-          "value": {"en": "Student"},
-          "default_price": "10.00",
-          "price": "10.00",
-          "active": true,
-          "description": null,
-          "position": 0
+        "id": 1,
+        "value": {"en": "Student"},
+        "default_price": "10.00",
+        "price": "10.00",
+        "active": true,
+        "description": null,
+        "position": 0
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a variation for
    :param event: The ``slug`` field of the event to create a variation for
-   :param id: The ``id`` field of the item to create a variation for
+   :param item: The ``id`` field of the item to create a variation for
    :statuscode 201: no error
    :statuscode 400: The variation could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
-.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/variations/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/variations/(id)/
 
    Update a variation. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    You can change all fields of the resource except the ``id`` and the ``price`` field.
@@ -196,8 +199,8 @@ Endpoints
       Content-Length: 94
 
       {
-          "active": false,
-          "position": 1
+        "active": false,
+        "position": 1
       }
 
    **Example response**:
@@ -209,13 +212,13 @@ Endpoints
       Content-Type: application/json
 
       {
-          "id": 1,
-          "value": {"en": "Student"},
-          "default_price": "10.00",
-          "price": "10.00",
-          "active": false,
-          "description": null,
-          "position": 1
+        "id": 1,
+        "value": {"en": "Student"},
+        "default_price": "10.00",
+        "price": "10.00",
+        "active": false,
+        "description": null,
+        "position": 1
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
