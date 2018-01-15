@@ -94,9 +94,9 @@ class ActionView(View):
     def _assign(self, trans, code):
         try:
             if '-' in code:
-                trans.order = self.order_qs().get(code=code.split('-')[1], event__slug__iexact=code.split('-')[0])
+                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[1], event__slug__iexact=code.rsplit('-', 1)[0])
             else:
-                trans.order = self.order_qs().get(code=code.split('-')[-1])
+                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[-1])
         except Order.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
