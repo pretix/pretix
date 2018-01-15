@@ -41,6 +41,8 @@ class Invoice(models.Model):
     :type invoice_from: str
     :param invoice_to: The receiver address
     :type invoice_to: str
+    :param full_invoice_no: The full invoice number (for performance reasons only)
+    :type full_invoice_no: str
     :param date: The invoice date
     :type date: date
     :param locale: The locale in which the invoice should be printed
@@ -67,6 +69,7 @@ class Invoice(models.Model):
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
     prefix = models.CharField(max_length=160, db_index=True)
     invoice_no = models.CharField(max_length=19, db_index=True)
+    full_invoice_no = models.CharField(max_length=190, db_index=True)
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
     invoice_from = models.TextField()
@@ -122,6 +125,8 @@ class Invoice(models.Model):
                     # Suppress duplicate key errors and try again
                     if i == 9:
                         raise
+
+        self.full_invoice_no = self.prefix + self.invoice_no
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

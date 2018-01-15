@@ -1,11 +1,13 @@
 from django import forms
 from django.apps import apps
-from django.db.models import F, Q
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import Exists, F, OuterRef, Q
+from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
-from pretix.base.models import Event, Invoice, Item, Order, Organizer, SubEvent
+from pretix.base.models import (
+    Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
+)
 from pretix.base.signals import register_payment_providers
 from pretix.control.utils.i18n import i18ncomp
 from pretix.helpers.database import FixedOrderBy, rolledback_transaction
@@ -115,22 +117,25 @@ class OrderFilterForm(FilterForm):
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
-            matching_invoices = Invoice.objects.annotate(
-                inr=Concat('prefix', 'invoice_no')
-            ).filter(
+            matching_invoices = Invoice.objects.filter(
                 Q(invoice_no__iexact=u)
                 | Q(invoice_no__iexact=u.zfill(5))
-                | Q(inr=u)
+                | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
-            qs = qs.filter(
+            matching_positions = OrderPosition.objects.filter(
+                Q(order=OuterRef('pk')) & Q(
+                    Q(attendee_name__icontains=u) & Q(attendee_email__icontains=u)
+                )
+            ).values('id')
+
+            qs = qs.annotate(has_pos=Exists(matching_positions)).filter(
                 code
                 | Q(email__icontains=u)
-                | Q(positions__attendee_name__icontains=u)
-                | Q(positions__attendee_email__icontains=u)
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
+                | Q(has_pos=True)
             )
 
         if fdata.get('status'):
