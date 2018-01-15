@@ -156,6 +156,35 @@ class ApiView(View):
 
 
 class ApiRedeemView(ApiView):
+
+    def _save_answers(self, op, answers, given_answers):
+        for q, a in given_answers.items():
+            if isinstance(a, QuestionOption):
+                if q in answers:
+                    qa = answers[q]
+                    qa.answer = str(a.answer)
+                    qa.save()
+                    qa.options.clear()
+                else:
+                    qa = op.answers.create(question=q, answer=str(a.answer))
+                qa.options.add(a)
+            elif isinstance(a, list):
+                if q in answers:
+                    qa = answers[q]
+                    qa.answer = ", ".join([str(o) for o in a])
+                    qa.save()
+                    qa.options.clear()
+                else:
+                    qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
+                qa.options.add(*a)
+            else:
+                if q in answers:
+                    qa = answers[q]
+                    qa.answer = str(a)
+                    qa.save()
+                else:
+                    op.answers.create(question=q, answer=str(a))
+
     def post(self, request, **kwargs):
         secret = request.POST.get('secret', '!INVALID!')
         force = request.POST.get('force', 'false') in ('true', 'True')
@@ -213,6 +242,8 @@ class ApiRedeemView(ApiView):
                         ] if q.type in ('C', 'M') else []
                     })
 
+                self._save_answers(op, answers, given_answers)
+
                 if not self.config.list.all_products and op.item_id not in [i.pk for i in self.config.list.limit_products.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
@@ -227,32 +258,6 @@ class ApiRedeemView(ApiView):
                         'datetime': dt,
                         'nonce': nonce,
                     })
-                    for q, a in given_answers.items():
-                        if isinstance(a, QuestionOption):
-                            if q in answers:
-                                qa = answers[q]
-                                qa.answer = str(a.answer)
-                                qa.save()
-                                qa.options.clear()
-                            else:
-                                qa = op.answers.create(question=q, answer=str(a.answer))
-                            qa.options.add(a)
-                        elif isinstance(a, list):
-                            if q in answers:
-                                qa = answers[q]
-                                qa.answer = ", ".join([str(o) for o in a])
-                                qa.save()
-                                qa.options.clear()
-                            else:
-                                qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
-                            qa.options.add(*a)
-                        else:
-                            if q in answers:
-                                qa = answers[q]
-                                qa.answer = str(a)
-                                qa.save()
-                            else:
-                                op.answers.create(question=q, answer=str(a))
                 else:
                     response['status'] = 'error'
                     response['reason'] = 'unpaid'

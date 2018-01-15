@@ -652,13 +652,15 @@ class Question(LoggedModel):
         elif self.type == 'M':
             try:
                 if isinstance(answer, str):
-                    return self.options.filter(pk__in=answer.split(","))
+                    return list(self.options.filter(pk__in=answer.split(",")))
                 else:
-                    return self.options.filter(pk__in=answer)
+                    return list(self.options.filter(pk__in=answer))
             except:
                 raise ValidationError(_('Invalid option selected.'))
-        # TODO
-        pass
+        elif self.type == 'B':
+            return answer == 'True'
+
+        return answer
 
 
 class QuestionOption(models.Model):
