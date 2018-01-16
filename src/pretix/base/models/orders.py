@@ -844,7 +844,7 @@ class CartPosition(AbstractPosition):
     the checkout process. This has all properties of AbstractPosition.
 
     :param event: The event this belongs to
-    :type event: Evnt
+    :type event: Event
     :param cart_id: The user session that contains this cart position
     :type cart_id: str
     """
