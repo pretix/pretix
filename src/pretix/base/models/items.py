@@ -385,23 +385,24 @@ class Item(LoggedModel):
     def clean_per_order(min_per_order, max_per_order):
         if min_per_order is not None and max_per_order is not None:
             if min_per_order > max_per_order:
-                raise ValidationError(_('max_per_order must be greater than min_per_order (or null for no limitation).'))
+                raise ValidationError(_('The maximum number per order can not be lower than the minimum number per '
+                                        'order.'))
 
     @staticmethod
     def clean_category(category, event):
         if category is not None and category.event is not None and category.event != event:
-            raise ValidationError(_('The items category must belong to the same event as the item.'))
+            raise ValidationError(_('The item\'s category must belong to the same event as the item.'))
 
     @staticmethod
     def clean_tax_rule(tax_rule, event):
         if tax_rule is not None and tax_rule.event is not None and tax_rule.event != event:
-            raise ValidationError(_('The items tax_rule must belong to the same event as the item.'))
+            raise ValidationError(_('The item\'s tax rule must belong to the same event as the item.'))
 
     @staticmethod
     def clean_available(from_date, until_date):
         if from_date is not None and until_date is not None:
             if from_date > until_date:
-                raise ValidationError(_('The available_from date must be before the available_until date (or null).'))
+                raise ValidationError(_('The item\'s availability cannot end before it starts.'))
 
 
 class ItemVariation(models.Model):
@@ -514,6 +515,9 @@ class ItemVariation(models.Model):
             and not CartPosition.objects.filter(variation=self).exists()
         )
 
+    def is_only_variation(self):
+        return ItemVariation.objects.filter(item=self.item).count() == 1
+
 
 class ItemAddOn(models.Model):
     """
@@ -572,7 +576,7 @@ class ItemAddOn(models.Model):
         if addon is None or addon.addon_category != new_category:
             for addon in item.addons.all():
                 if addon.addon_category == new_category:
-                    raise ValidationError(_('The item all ready have an add-on of this category.'))
+                    raise ValidationError(_('The item already has an add-on of this category.'))
 
     @staticmethod
     def clean_max_min_numbers(max_count, min_count):

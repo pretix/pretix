@@ -6,7 +6,10 @@ import pytest
 from django_countries.fields import Country
 from pytz import UTC
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition, CartPosition, Quota, ItemVariation, ItemAddOn
+from pretix.base.models import (
+    CartPosition, InvoiceAddress, ItemAddOn, ItemVariation, Order,
+    OrderPosition, Quota,
+)
 from pretix.base.models.orders import OrderFee
 
 
@@ -40,11 +43,11 @@ def order(event, item, taxrule):
 
 
 @pytest.fixture
-def order_position(item, order, taxrule, variation):
+def order_position(item, order, taxrule, variations):
     op = OrderPosition.objects.create(
         order=order,
         item=item,
-        variation=variation,
+        variation=variations[0],
         tax_rule=taxrule,
         tax_rate=taxrule.rate,
         tax_value=Decimal("3"),
@@ -56,7 +59,7 @@ def order_position(item, order, taxrule, variation):
 
 
 @pytest.fixture
-def cart_position(event, item, variation):
+def cart_position(event, item, variations):
     testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
@@ -66,7 +69,7 @@ def cart_position(event, item, variation):
             item=item,
             datetime=datetime.now(),
             expires=datetime.now() + timedelta(days=1),
-            variation=variation,
+            variation=variations[0],
             price=Decimal("23"),
             cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
         )
@@ -303,7 +306,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["max_per_order must be greater than min_per_order (or null for no limitation)."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The maximum number per order can not be lower than the minimum number per order."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -314,7 +317,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The available_from date must be before the available_until date (or null)."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The item\'s availability cannot end before it starts."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -325,7 +328,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
 
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The items category must belong to the same event as the item."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The item\'s category must belong to the same event as the item."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -335,7 +338,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The items tax_rule must belong to the same event as the item."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The item\'s tax rule must belong to the same event as the item."]}'
 
 
 @pytest.mark.django_db
@@ -347,7 +350,7 @@ def test_items_delete(token_client, organizer, event, item):
 
 @pytest.mark.django_db
 def test_items_with_order_position_not_delete(token_client, organizer, event, item, order_position):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug, item.pk))
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
     assert resp.status_code == 403
     assert event.items.filter(pk=item.id).exists()
 
@@ -424,7 +427,7 @@ def test_variations_detail(token_client, organizer, event, item, variation):
 
 
 @pytest.mark.django_db
-def test_variations_create(token_client, organizer, event, item):
+def test_variations_create(token_client, organizer, event, item, variation):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk),
         {
@@ -443,6 +446,28 @@ def test_variations_create(token_client, organizer, event, item):
     var = ItemVariation.objects.get(pk=resp.data['id'])
     assert var.position == 1
     assert var.price == 23.0
+
+
+@pytest.mark.django_db
+def test_variations_create_not_allowed(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "active": True,
+            "description": None,
+            "position": 1,
+            "default_price": None,
+            "price": 23.0
+        },
+        format='json'
+    )
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be created because the item does ' \
+                                    'not have variations. Changing a product without variations to a product with ' \
+                                    'variations is not allowed."}'
 
 
 @pytest.mark.django_db
@@ -474,24 +499,42 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
 
 
 @pytest.mark.django_db
-def test_variations_delete(token_client, organizer, event, item, variation, order):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+def test_variations_delete(token_client, organizer, event, item, variations, order):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
     assert resp.status_code == 204
-    assert not item.variations.filter(pk=variation.id).exists()
+    assert not item.variations.filter(pk=variations[0].pk).exists()
 
 
 @pytest.mark.django_db
-def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order, variation, order_position):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order, variations, order_position):
+    assert item.variations.filter(pk=variations[0].id).exists()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
     assert resp.status_code == 403
-    assert item.variations.filter(pk=variation.id).exists()
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it has already been ordered ' \
+                                    'by a user or currently is in a users\'s cart. Please set the variation as ' \
+                                    '\'inactive\' instead."}'
+    assert item.variations.filter(pk=variations[0].id).exists()
 
 
 @pytest.mark.django_db
-def test_variations_with_cart_position_not_delete(token_client, organizer, event, item, variation, cart_position):
+def test_variations_with_cart_position_not_delete(token_client, organizer, event, item, variations, cart_position):
+    assert item.variations.filter(pk=variations[0].id).exists()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it has already been ordered ' \
+                                    'by a user or currently is in a users\'s cart. Please set the variation as ' \
+                                    '\'inactive\' instead."}'
+    assert item.variations.filter(pk=variations[0].id).exists()
+
+
+@pytest.mark.django_db
+def test_only_variation_not_delete(token_client, organizer, event, item, variation):
     assert item.variations.filter(pk=variation.id).exists()
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it is the only variation. ' \
+                                    'Changing a product with variations to a product without variations is not ' \
+                                    'allowed."}'
     assert item.variations.filter(pk=variation.id).exists()
 
 
@@ -561,7 +604,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The item all ready have an add-on of this category."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The item already has an add-on of this category."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
