@@ -5,6 +5,7 @@ from decimal import Decimal
 
 import pytest
 import pytz
+from dateutil.tz import tzoffset
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -12,6 +13,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
+from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CartPosition, CheckinList, Event, Item, ItemCategory,
     ItemVariation, Order, OrderPosition, Organizer, Question, Quota, User,
@@ -1130,3 +1132,99 @@ class CheckinListTestCase(TestCase):
         assert lists[2].checkin_count == 1
         assert lists[2].position_count == 2
         assert lists[2].percent == 50
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("qtype,answer,expected", [
+    (Question.TYPE_STRING, "a", "a"),
+    (Question.TYPE_TEXT, "v", "v"),
+    (Question.TYPE_NUMBER, "3", Decimal("3")),
+    (Question.TYPE_NUMBER, "2.56", Decimal("2.56")),
+    (Question.TYPE_NUMBER, 2.45, Decimal("2.45")),
+    (Question.TYPE_NUMBER, 3, Decimal("3")),
+    (Question.TYPE_NUMBER, Decimal("4.56"), Decimal("4.56")),
+    (Question.TYPE_NUMBER, "2,56", ValidationError),
+    (Question.TYPE_NUMBER, "abc", ValidationError),
+    (Question.TYPE_BOOLEAN, "True", True),
+    (Question.TYPE_BOOLEAN, "true", True),
+    (Question.TYPE_BOOLEAN, "False", False),
+    (Question.TYPE_BOOLEAN, "false", False),
+    (Question.TYPE_BOOLEAN, "0", False),
+    (Question.TYPE_BOOLEAN, "", False),
+    (Question.TYPE_BOOLEAN, True, True),
+    (Question.TYPE_BOOLEAN, False, False),
+    (Question.TYPE_DATE, "2018-01-16", datetime.date(2018, 1, 16)),
+    (Question.TYPE_DATE, datetime.date(2018, 1, 16), datetime.date(2018, 1, 16)),
+    (Question.TYPE_DATE, "2018-13-16", ValidationError),
+    (Question.TYPE_TIME, "15:20", datetime.time(15, 20)),
+    (Question.TYPE_TIME, datetime.time(15, 20), datetime.time(15, 20)),
+    (Question.TYPE_TIME, "44:20", ValidationError),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00+01:00",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00Z",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 0))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:AB:CD", ValidationError),
+])
+def test_question_answer_validation(qtype, answer, expected):
+    q = Question(type=qtype)
+    if isinstance(expected, type) and issubclass(expected, Exception):
+        with pytest.raises(expected):
+            q.clean_answer(answer)
+    elif callable(expected):
+        assert expected(q.clean_answer(answer))
+    else:
+        assert q.clean_answer(answer) == expected
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_localized_decimal():
+    q = Question(type='N')
+    with language("de"):
+        assert q.clean_answer("2,56") == Decimal("2.56")
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_choice():
+    organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=organizer, name='Dummy', slug='dummy',
+        date_from=now(), date_to=now() - timedelta(hours=1),
+    )
+    q = Question.objects.create(type='C', event=event, question='Q')
+    o1 = q.options.create(answer='A')
+    o2 = q.options.create(answer='B')
+    q2 = Question.objects.create(type='C', event=event, question='Q2')
+    o3 = q2.options.create(answer='C')
+    assert q.clean_answer(str(o1.pk)) == o1
+    assert q.clean_answer(o1.pk) == o1
+    assert q.clean_answer(str(o2.pk)) == o2
+    assert q.clean_answer(o2.pk) == o2
+    with pytest.raises(ValidationError):
+        q.clean_answer(str(o2.pk + 1000))
+    with pytest.raises(ValidationError):
+        q.clean_answer('FOO')
+    with pytest.raises(ValidationError):
+        q.clean_answer(str(o3.pk))
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_multiple_choice():
+    organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=organizer, name='Dummy', slug='dummy',
+        date_from=now(), date_to=now() - timedelta(hours=1),
+    )
+    q = Question.objects.create(type='M', event=event, question='Q')
+    o1 = q.options.create(answer='A')
+    o2 = q.options.create(answer='B')
+    q.options.create(answer='D')
+    q2 = Question.objects.create(type='M', event=event, question='Q2')
+    o3 = q2.options.create(answer='C')
+    assert q.clean_answer("{},{}".format(str(o1.pk), str(o2.pk))) == [o1, o2]
+    assert q.clean_answer([str(o1.pk), str(o2.pk)]) == [o1, o2]
+    assert q.clean_answer([str(o1.pk)]) == [o1]
+    assert q.clean_answer([o1.pk]) == [o1]
+    assert q.clean_answer([o1.pk, o3.pk]) == [o1]
+    assert q.clean_answer([o1.pk, o3.pk + 1000]) == [o1]
+    with pytest.raises(ValidationError):
+        assert q.clean_answer([o1.pk, 'FOO']) == [o1]

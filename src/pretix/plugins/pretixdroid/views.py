@@ -228,19 +228,7 @@ class ApiRedeemView(ApiView):
                     if q in answers:
                         continue
 
-                    require_answers.append({
-                        'id': q.pk,
-                        'type': q.type,
-                        'question': str(q.question),
-                        'required': q.required,
-                        'position': q.position,
-                        'options': [
-                            {
-                                'id': o.pk,
-                                'answer': str(o.answer)
-                            } for o in q.options.all()
-                        ] if q.type in ('C', 'M') else []
-                    })
+                    require_answers.append(serialize_question(q))
 
                 self._save_answers(op, answers, given_answers)
 
@@ -296,6 +284,25 @@ class ApiRedeemView(ApiView):
             response['reason'] = 'unknown_ticket'
 
         return JsonResponse(response)
+
+
+def serialize_question(q, items=False):
+    d = {
+        'id': q.pk,
+        'type': q.type,
+        'question': str(q.question),
+        'required': q.required,
+        'position': q.position,
+        'options': [
+            {
+                'id': o.pk,
+                'answer': str(o.answer)
+            } for o in q.options.all()
+        ] if q.type in ('C', 'M') else []
+    }
+    if items:
+        d['items'] = [i.pk for i in q.items.all()]
+    return d
 
 
 def serialize_op(op, redeemed):
@@ -394,6 +401,9 @@ class ApiDownloadView(ApiView):
             qs = qs.filter(item__in=self.config.items.all())
 
         response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in qs]
+
+        questions = self.event.questions.filter(ask_during_checkin=True).prefetch_related('items', 'options')
+        response['questions'] = [serialize_question(q, items=True) for q in questions]
         return JsonResponse(response)
 
 

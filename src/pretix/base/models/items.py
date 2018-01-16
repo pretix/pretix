@@ -1,13 +1,15 @@
 import sys
 import uuid
-from datetime import datetime
-from decimal import Decimal
+from datetime import date, datetime, time
+from decimal import Decimal, DecimalException
 from typing import Tuple
 
+import dateutil.parser
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
+from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -644,12 +646,17 @@ class Question(LoggedModel):
         return self.sortkey < other.sortkey
 
     def clean_answer(self, answer):
-        if self.type == 'C':
+        if not answer:
+            if self.type == Question.TYPE_BOOLEAN:
+                return False
+            return None
+
+        if self.type == Question.TYPE_CHOICE:
             try:
                 return self.options.get(pk=answer)
             except:
                 raise ValidationError(_('Invalid option selected.'))
-        elif self.type == 'M':
+        elif self.type == Question.TYPE_CHOICE_MULTIPLE:
             try:
                 if isinstance(answer, str):
                     return list(self.options.filter(pk__in=answer.split(",")))
@@ -657,8 +664,39 @@ class Question(LoggedModel):
                     return list(self.options.filter(pk__in=answer))
             except:
                 raise ValidationError(_('Invalid option selected.'))
-        elif self.type == 'B':
-            return answer == 'True'
+        elif self.type == Question.TYPE_BOOLEAN:
+            return answer in ('true', 'True', True)
+        elif self.type == Question.TYPE_NUMBER:
+            print(answer)
+            answer = formats.sanitize_separators(answer)
+            print(answer)
+            answer = str(answer).strip()
+            print(answer)
+            try:
+                return Decimal(answer)
+            except DecimalException:
+                raise ValidationError(_('Invalid number input.'))
+        elif self.type == Question.TYPE_DATE:
+            if isinstance(answer, date):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).date()
+            except:
+                raise ValidationError(_('Invalid date input.'))
+        elif self.type == Question.TYPE_TIME:
+            if isinstance(answer, time):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).time()
+            except:
+                raise ValidationError(_('Invalid time input.'))
+        elif self.type == Question.TYPE_DATETIME:
+            if isinstance(answer, datetime):
+                return answer
+            try:
+                return dateutil.parser.parse(answer)
+            except:
+                raise ValidationError(_('Invalid datetime input.'))
 
         return answer
 
