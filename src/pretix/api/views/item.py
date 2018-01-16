@@ -2,19 +2,21 @@ import django_filters
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-
-from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemCategorySerializer, ItemSerializer, ItemVariationSerializer, QuestionSerializer,
-    QuotaSerializer
-)
-from pretix.base.models import Item, ItemVariation, ItemAddOn, ItemCategory, Question, Quota
-from pretix.base.models.organizer import TeamAPIToken
-
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
+
+from pretix.api.serializers.item import (
+    ItemAddOnSerializer, ItemCategorySerializer, ItemSerializer,
+    ItemVariationSerializer, QuestionSerializer, QuotaSerializer,
+)
+from pretix.base.models import (
+    Item, ItemAddOn, ItemCategory, ItemVariation, Question, Quota,
+)
+from pretix.base.models.organizer import TeamAPIToken
+from pretix.helpers.dicts import merge_dicts
 
 
 class ItemFilter(FilterSet):
@@ -96,13 +98,16 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        if not item.has_variations:
+            raise PermissionDenied('This variation cannot be created because the item does not have variations. '
+                                   'Changing a product without variations to a product with variations is not allowed.')
         serializer.save(item=item)
         item.log_action(
             'pretix.event.item.variation.added',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk},
-                  **{'value': serializer.instance.value}}
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk},
+                             {'value': serializer.instance.value})
         )
 
     def perform_update(self, serializer):
@@ -111,16 +116,18 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
             'pretix.event.item.variation.changed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk},
-                  **{'value': serializer.instance.value}}
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk},
+                             {'value': serializer.instance.value})
         )
 
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('This variation cannot be deleted because it has already been ordered '
                                    'by a user or currently is in a users\'s cart. Please set the variation as '
-                                   '"inactive" instead.')
-
+                                   '\'inactive\' instead.')
+        if instance.is_only_variation():
+            raise PermissionDenied('This variation cannot be deleted because it is the only variation. Changing a '
+                                   'product with variations to a product without variations is not allowed.')
         super().perform_destroy(instance)
         instance.item.log_action(
             'pretix.event.item.variation.deleted',
@@ -159,7 +166,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
             'pretix.event.item.addons.added',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk}}
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
     def perform_update(self, serializer):
@@ -168,7 +175,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
             'pretix.event.item.addons.changed',
             user=self.request.user,
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data={**self.request.data, **{'ORDER': serializer.instance.position}, **{'id': serializer.instance.pk}}
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
     def perform_destroy(self, instance):
