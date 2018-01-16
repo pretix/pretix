@@ -141,7 +141,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/(organizer)/events/(event)/items/(id)/variations/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/sampleconf/items/1/variations/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content: application/json
