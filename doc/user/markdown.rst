@@ -25,7 +25,7 @@ To set a text in italics, you can put it in asterisks or underscores. For exampl
 
 will become:
 
-    Please *really* pay your _ticket_.
+    Please *really* pay your *ticket*.
 
 If you set double asterisks or underscores, the text will be printed in bold. For example,
 
