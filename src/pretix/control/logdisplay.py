@@ -127,6 +127,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
+        'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
+                                                             'is available for download.'),
         'pretix.event.order.email.expire_warning_sent': _('An email has been sent with a warning that the order is about '
                                                           'to expire.'),
         'pretix.event.order.email.order_canceled': _('An email has been sent to notify the user that the order has been canceled.'),
