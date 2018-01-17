@@ -646,7 +646,7 @@ def send_download_reminders(sender, **kwargs):
             try:
                 o.send_mail(
                     email_subject, email_template, email_context,
-                    'pretix.event.order.email.expire_warning_sent'
+                    'pretix.event.order.email.download_reminder_sent'
                 )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
