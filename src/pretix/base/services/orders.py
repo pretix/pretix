@@ -1018,9 +1018,14 @@ class OrderChangeManager:
     def _payment_fee_diff(self):
         prov = self._get_payment_provider()
         if prov:
-            old_total = sum([p.price for p in self.order.positions.all()])
-            new_total = old_total + self._totaldiff
-            old_fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).value
+            try:
+                old_fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).value
+            except OrderFee.MultipleObjectsReturned:
+                fees = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).all()
+                old_fee = sum([f.value for f in fees])
+            except OrderFee.DoesNotExist:
+                old_fee = 0
+            new_total = sum([p.price for p in self.order.positions.all()]) + self._totaldiff
             if new_total != 0:
                 new_fee = prov.calculate_fee(new_total)
                 self._totaldiff += new_fee - old_fee
