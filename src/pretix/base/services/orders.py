@@ -824,7 +824,7 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
-        if self.order.total == 0:
+        if self.order.total == 0 and self._totaldiff < 0:
             try:
                 mark_order_paid(
                     self.order, 'free', send_mail=False, count_waitinglist=False,
@@ -1015,6 +1015,14 @@ class OrderChangeManager:
         self.order.total += sum([f.value for f in self.order.fees.all()])
         self.order.save()
 
+    def _payment_fee_diff(self):
+        prov = self._get_payment_provider()
+        if prov:
+            old_fee = prov.calculate_fee(self.order.total)
+            new_total = self.order.total + self._totaldiff
+            if new_total != 0:
+                self._totaldiff += prov.calculate_fee(new_total) - old_fee
+
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if i and self._invoice_dirty:
@@ -1065,6 +1073,7 @@ class OrderChangeManager:
         if not self._operations:
             # Do nothing
             return
+        self._payment_fee_diff()
         with transaction.atomic():
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
