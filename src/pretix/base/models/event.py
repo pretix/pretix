@@ -4,6 +4,7 @@ from collections import OrderedDict
 from datetime import datetime, time
 
 import pytz
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -258,6 +259,7 @@ class Event(EventMixin, LoggedModel):
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
         ordering = ("date_from", "name")
+        unique_together = ("organizer", "slug")
 
     def __str__(self):
         return str(self.name)
@@ -545,10 +547,57 @@ class Event(EventMixin, LoggedModel):
         )
 
     @staticmethod
-    def clean_slug(event, slug):
-        if event.slug is not None:
+    def has_paid_things(event):
+        Item = apps.get_model('pretixbase', 'Item')
+        ItemVariation = apps.get_model('pretixbase', 'ItemVariation')
+        return Item.objects.filter(event=event, default_price__gt=0).exists()\
+               or ItemVariation.objects.filter(item__event=event, default_price__gt=0).exists()
+
+    @staticmethod
+    def has_payment_provider(event):
+        result = False
+        for provider in event.get_payment_providers().values():
+            if provider.is_enabled and provider.identifier != 'free':
+                result = True
+                break
+        return result
+
+    @staticmethod
+    def clean_payment_methods(event):
+        if Event.has_paid_things(event) and not Event.has_payment_provider(event):
+            raise ValidationError(_('You have configured at least one paid product but have not enabled any payment '
+                                    'methods.'))
+
+    @staticmethod
+    def clean_quotas(event):
+        if event is None or not event.quotas.exists():
+                raise ValidationError(_('You need to configure at least one quota to sell anything.'))
+
+    @staticmethod
+    def clean_live(event):
+        Event.clean_payment_methods(event)
+        Event.clean_quotas(event)
+
+    @staticmethod
+    def clean_slug(organizer, event, slug):
+        if event is not None and event.slug is not None:
             if event.slug != slug:
                 raise ValidationError(_('The event slug cannot be changed.'))
+        else:
+            if Event.objects.filter(slug=slug, organizer=organizer).exists():
+                raise ValidationError(_('This slug has already been used for a different event.'))
+
+    @staticmethod
+    def clean_dates(date_from, date_to):
+        if date_from is not None and date_to is not None:
+            if date_from > date_to:
+                raise ValidationError(_('The event cannot end before it starts.'))\
+
+    @staticmethod
+    def clean_presale(presale_start, presale_end):
+        if presale_start is not None and presale_end is not None:
+            if presale_start > presale_end:
+                raise ValidationError(_('The event\'s presale cannot end before it starts.'))
 
 
 class SubEvent(EventMixin, LoggedModel):

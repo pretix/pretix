@@ -30,7 +30,7 @@ class EventViewSet(viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        serializer.save(event=self.request.event)
+        serializer.save(organizer=self.request.organizer)
         serializer.instance.log_action(
             'pretix.event.added',
             user=self.request.user,

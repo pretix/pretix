@@ -16,8 +16,6 @@ class MetaDataField(Field):
 
 
 class EventSerializer(I18nAwareModelSerializer):
-    # meta_data = MetaDataField(source='*')
-
     class Meta:
         model = Event
         fields = ('name', 'slug', 'live', 'currency', 'date_from',
@@ -26,17 +24,22 @@ class EventSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
-        #event = self.context['event']
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        # Event.clean_slug(self.instance, full_data.get('slug'))
+        Event.clean_dates(data.get('date_from'), data.get('date_to'))
+        Event.clean_presale(data.get('presale_start'), data.get('presale_end'))
 
         return data
 
     def validate_slug(self, value):
-        Event.clean_slug(self.instance, value)
+        Event.clean_slug(self.context['request'].organizer, self.instance, value)
+        return value
+
+    def validate_live(self, value):
+        if value:
+            Event.clean_live(self.instance)
         return value
 
 

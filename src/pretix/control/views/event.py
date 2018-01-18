@@ -738,18 +738,8 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
     @cached_property
     def issues(self):
         issues = []
-        has_paid_things = (
-            Item.objects.filter(event=self.request.event, default_price__gt=0).exists()
-            or ItemVariation.objects.filter(item__event=self.request.event, default_price__gt=0).exists()
-        )
 
-        has_payment_provider = False
-        for provider in self.request.event.get_payment_providers().values():
-            if provider.is_enabled and provider.identifier != 'free':
-                has_payment_provider = True
-                break
-
-        if has_paid_things and not has_payment_provider:
+        if Event.has_paid_things(self.request.event) and not Event.has_payment_provider(self.request.event):
             issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
 
         if not self.request.event.quotas.exists():
