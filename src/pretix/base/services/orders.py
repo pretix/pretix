@@ -1018,10 +1018,12 @@ class OrderChangeManager:
     def _payment_fee_diff(self):
         prov = self._get_payment_provider()
         if prov:
-            old_fee = prov.calculate_fee(self.order.total)
-            new_total = self.order.total + self._totaldiff
+            old_total = sum([p.price for p in self.order.positions.all()])
+            new_total = old_total + self._totaldiff
+            old_fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).value
             if new_total != 0:
-                self._totaldiff += prov.calculate_fee(new_total) - old_fee
+                new_fee = prov.calculate_fee(new_total)
+                self._totaldiff += new_fee - old_fee
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
