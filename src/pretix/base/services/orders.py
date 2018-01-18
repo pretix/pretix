@@ -513,7 +513,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             invoice = generate_invoice(order, trigger_pdf=not event.settings.invoice_email_attachment)
             # send_mail will trigger PDF generation later
 
-    if order.total == Decimal('0.00'):
+    if order.payment_provider == 'free':
         email_template = event.settings.mail_text_order_free
         log_entry = 'pretix.event.order.email.order_free'
     else:
