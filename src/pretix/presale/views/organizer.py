@@ -4,7 +4,8 @@ from datetime import date, datetime, timedelta
 
 import pytz
 from django.conf import settings
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, Max, Min, OuterRef, Q
+from django.db.models.functions import Coalesce, Greatest
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
@@ -98,17 +99,36 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
 
     def get_queryset(self):
         query = Q(is_public=True) & Q(live=True)
-        if "old" in self.request.GET:
-            query &= Q(Q(date_from__lte=now()) & Q(date_to__lte=now()))
-            order = '-date_from'
-        else:
-            query &= Q(Q(date_from__gte=now()) | Q(date_to__gte=now()))
-            order = 'date_from'
-        qs = Event.objects.filter(
-            Q(organizer=self.request.organizer) & query
+        qs = self.request.organizer.events.filter(query)
+        qs = qs.annotate(
+            min_from=Min('subevents__date_from'),
+            min_to=Min('subevents__date_to'),
+            max_from=Max('subevents__date_from'),
+            max_to=Max('subevents__date_to'),
+            max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from')),
         )
+        if "old" in self.request.GET:
+            qs = qs.filter(
+                Q(Q(has_subevents=False) & Q(
+                    Q(date_to__lt=now()) | Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                )) | Q(Q(has_subevents=True) & Q(
+                    Q(min_to__lt=now()) | Q(min_from__lt=now()))
+                )
+            ).annotate(
+                order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
+            ).order_by('-order_to')
+        else:
+            qs = qs.filter(
+                Q(Q(has_subevents=False) & Q(
+                    Q(date_to__gte=now()) | Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                )) | Q(Q(has_subevents=True) & Q(
+                    Q(max_to__gte=now()) | Q(max_from__gte=now()))
+                )
+            ).annotate(
+                order_from=Coalesce('min_from', 'date_from'),
+            ).order_by('order_from')
         qs = filter_qs_by_attr(qs, self.request)
-        return qs.order_by(order)
+        return qs
 
 
 def add_events_for_days(request, organizer, before, after, ebd, timezones):
