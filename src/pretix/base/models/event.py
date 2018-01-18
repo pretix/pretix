@@ -548,10 +548,10 @@ class Event(EventMixin, LoggedModel):
 
     @staticmethod
     def has_paid_things(event):
-        Item = apps.get_model('pretixbase', 'Item')
-        ItemVariation = apps.get_model('pretixbase', 'ItemVariation')
-        return Item.objects.filter(event=event, default_price__gt=0).exists()\
-               or ItemVariation.objects.filter(item__event=event, default_price__gt=0).exists()
+        item = apps.get_model('pretixbase', 'Item')
+        item_variation = apps.get_model('pretixbase', 'ItemVariation')
+        return item.objects.filter(event=event, default_price__gt=0).exists()\
+            or item_variation.objects.filter(item__event=event, default_price__gt=0).exists()
 
     @staticmethod
     def has_payment_provider(event):
@@ -591,7 +591,7 @@ class Event(EventMixin, LoggedModel):
     def clean_dates(date_from, date_to):
         if date_from is not None and date_to is not None:
             if date_from > date_to:
-                raise ValidationError(_('The event cannot end before it starts.'))\
+                raise ValidationError(_('The event cannot end before it starts.'))
 
     @staticmethod
     def clean_presale(presale_start, presale_end):

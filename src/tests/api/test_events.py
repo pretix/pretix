@@ -18,6 +18,7 @@ TEST_EVENT_RES = {
     "meta_data": {"type": "Conference"}
 }
 
+
 @pytest.fixture
 def item(event):
     return event.items.create(name="Budget Ticket", default_price=23)
