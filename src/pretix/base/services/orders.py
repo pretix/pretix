@@ -1017,7 +1017,8 @@ class OrderChangeManager:
 
     def _payment_fee_diff(self):
         prov = self._get_payment_provider()
-        if prov:
+        if self.order.status != Order.STATUS_PAID and prov:
+            #payment fees of paid orders do not change
             try:
                 old_fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).value
             except OrderFee.MultipleObjectsReturned:
