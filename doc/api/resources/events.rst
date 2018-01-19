@@ -27,11 +27,20 @@ location                              multi-lingual string       The event locat
 has_subevents                         boolean                    ``True`` if the event series feature is active for this
                                                                  event
 meta_data                             dict                       Values set for organizer-specific meta data parameters.
+plugins                               dict                       Available plugins for the event with a boolean value
+                                                                 indicating if they are enabled/disabled
 ===================================== ========================== =======================================================
+
+Note that events cannot be deleted once created to ensure data integrity.
 
 .. versionchanged:: 1.7
 
    The ``meta_data`` field has been added.
+
+.. versionchanged:: 1.12
+
+   The ``plugins`` field has been added.
+   The write operations POST, PATCH, AND PUT have been added.
 
 Endpoints
 ---------
@@ -74,7 +83,17 @@ Endpoints
             "presale_end": null,
             "location": null,
             "has_subevents": false,
-            "meta_data": {}
+            "meta_data": {},
+            "plugins": {
+              "pretix.plugins.banktransfer": false,
+              "pretix.plugins.stripe": false,
+              "pretix.plugins.paypal": false,
+              "pretix.plugins.ticketoutputpdf": false,
+              "pretix.plugins.sendmail": false,
+              "pretix.plugins.statistics": false,
+              "pretix.plugins.reports": false,
+              "pretix.plugins.pretixdroid": false
+            }
           }
         ]
       }
@@ -118,7 +137,17 @@ Endpoints
         "presale_end": null,
         "location": null,
         "has_subevents": false,
-        "meta_data": {}
+        "meta_data": {},
+        "plugins": {
+          "pretix.plugins.banktransfer": false,
+          "pretix.plugins.stripe": false,
+          "pretix.plugins.paypal": false,
+          "pretix.plugins.ticketoutputpdf": false,
+          "pretix.plugins.sendmail": false,
+          "pretix.plugins.statistics": false,
+          "pretix.plugins.reports": false,
+          "pretix.plugins.pretixdroid": false
+        }
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -126,3 +155,137 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/
+
+   Creates a new event
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "name": {"en": "Sample Conference"},
+        "slug": "sampleconf",
+        "live": false,
+        "currency": "EUR",
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "is_public": false,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "has_subevents": false,
+        "meta_data": {},
+        "plugins": null
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "name": {"en": "Sample Conference"},
+        "slug": "sampleconf",
+        "live": false,
+        "currency": "EUR",
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "is_public": false,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "has_subevents": false,
+        "meta_data": {},
+        "plugins": {
+          "pretix.plugins.banktransfer": false,
+          "pretix.plugins.stripe": false,
+          "pretix.plugins.paypal": false,
+          "pretix.plugins.ticketoutputpdf": false,
+          "pretix.plugins.sendmail": false,
+          "pretix.plugins.statistics": false,
+          "pretix.plugins.reports": false,
+          "pretix.plugins.pretixdroid": false
+        }
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to create.
+   :statuscode 201: no error
+   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/
+
+   Updates an event
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "plugins": {
+          "pretix.plugins.banktransfer": true,
+          "pretix.plugins.stripe": true,
+          "pretix.plugins.paypal": true,
+          "pretix.plugins.pretixdroid": true
+        }
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "name": {"en": "Sample Conference"},
+        "slug": "sampleconf",
+        "live": false,
+        "currency": "EUR",
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "is_public": false,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "has_subevents": false,
+        "meta_data": {},
+        "plugins": {
+          "pretix.plugins.banktransfer": true,
+          "pretix.plugins.stripe": true,
+          "pretix.plugins.paypal": true,
+          "pretix.plugins.ticketoutputpdf": false,
+          "pretix.plugins.sendmail": false,
+          "pretix.plugins.statistics": false,
+          "pretix.plugins.reports": false,
+          "pretix.plugins.pretixdroid": true
+        }
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to update
+   :param event: The ``slug`` field of the event to update
+   :statuscode 201: no error
+   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.

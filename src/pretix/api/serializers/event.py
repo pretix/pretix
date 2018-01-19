@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
 from rest_framework.fields import Field
 
@@ -15,12 +17,54 @@ class MetaDataField(Field):
         }
 
 
+class PluginsField(Field):
+
+    def to_representation(self, obj):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins = {
+            p.module: (p.module in obj.get_plugins()) for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+        return plugins
+
+    def to_internal_value(self, data):
+        from pretix.base.plugins import get_all_plugins
+        plugins_available = {
+            p.module for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+        for plugin, active in data.items():
+            if plugin not in plugins_available:
+                raise ValidationError(
+                    message=_("Unknown plugin: '%s'."),
+                    params=(plugin,)
+                )
+                break
+            if active is not True and active is not False:
+                raise ValidationError(
+                    message=_("Illegal value '%s' for: '%s'."),
+                    params=(str(active), plugin)
+                )
+                break
+
+        plugins = {plugin_name for plugin_name, active in data.items() if active}
+
+        return {
+            'plugins': ",".join(plugins)
+        }
+
+
 class EventSerializer(I18nAwareModelSerializer):
+    plugins = PluginsField(required=False, source='*')
+
     class Meta:
         model = Event
         fields = ('name', 'slug', 'live', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
-                  'presale_end', 'location', 'has_subevents', 'meta_data')
+                  'presale_end', 'location', 'has_subevents', 'meta_data', 'plugins')
 
     def validate(self, data):
         data = super().validate(data)

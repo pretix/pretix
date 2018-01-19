@@ -26,8 +26,8 @@ from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, LogEntry,
-    Order, RequiredAction, TaxRule, Voucher,
+    CachedCombinedTicket, CachedTicket, Event, LogEntry, Order, RequiredAction,
+    TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets

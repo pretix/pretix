@@ -15,7 +15,17 @@ TEST_EVENT_RES = {
     "location": None,
     "slug": "dummy",
     "has_subevents": False,
-    "meta_data": {"type": "Conference"}
+    "meta_data": {"type": "Conference"},
+    'plugins': {
+        'pretix.plugins.banktransfer': True,
+        'pretix.plugins.paypal': False,
+        'pretix.plugins.pretixdroid': False,
+        'pretix.plugins.reports': False,
+        'pretix.plugins.sendmail': False,
+        'pretix.plugins.statistics': False,
+        'pretix.plugins.stripe': False,
+        'pretix.plugins.ticketoutputpdf': True
+    }
 }
 
 
@@ -210,6 +220,82 @@ def test_event_update_live_free_product(token_client, organizer, event, free_ite
         format='json'
     )
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+def test_event_update_plugins(token_client, organizer, event, free_item, free_quota):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": {
+                "pretix.plugins.banktransfer": False,
+                "pretix.plugins.stripe": False,
+                "pretix.plugins.paypal": False,
+                "pretix.plugins.ticketoutputpdf": True,
+                "pretix.plugins.sendmail": False,
+                "pretix.plugins.statistics": False,
+                "pretix.plugins.reports": False,
+                "pretix.plugins.pretixdroid": True
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data.get('plugins') == {
+        "pretix.plugins.banktransfer": False,
+        "pretix.plugins.stripe": False,
+        "pretix.plugins.paypal": False,
+        "pretix.plugins.ticketoutputpdf": True,
+        "pretix.plugins.sendmail": False,
+        "pretix.plugins.statistics": False,
+        "pretix.plugins.reports": False,
+        "pretix.plugins.pretixdroid": True
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": {
+                "pretix.plugins.banktransfer": True
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data.get('plugins') == {
+        "pretix.plugins.banktransfer": True,
+        "pretix.plugins.stripe": False,
+        "pretix.plugins.paypal": False,
+        "pretix.plugins.ticketoutputpdf": False,
+        "pretix.plugins.sendmail": False,
+        "pretix.plugins.statistics": False,
+        "pretix.plugins.reports": False,
+        "pretix.plugins.pretixdroid": False
+    }
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": {
+                "pretix.plugins.banktransfer": "Enabled",
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"plugins":["Illegal value \'Enabled\' for: \'pretix.plugins.banktransfer\'."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": {
+                "pretix.plugins.test": True,
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"plugins":["Unknown plugin: \'pretix.plugins.test\'."]}'
 
 
 @pytest.mark.django_db
