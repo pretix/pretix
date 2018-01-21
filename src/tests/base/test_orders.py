@@ -734,6 +734,7 @@ class OrderChangeManagerTests(TestCase):
         ia = self._enable_reverse_charge()
         self.ocm.recalculate_taxes()
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         ops = list(self.order.positions.all())
         for op in ops:
             assert op.price == Decimal('21.50')
@@ -791,6 +792,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.change_price(self.op1, Decimal('23.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
         assert self.order.total == Decimal('47.92')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -879,6 +881,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.recalculate_taxes()
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
 
         # Check if reverse charge is active
@@ -911,7 +914,6 @@ class OrderChangeManagerTests(TestCase):
         # New order
         assert self.op2.order != self.order
         o2 = self.op2.order
-        print([p.price for p in o2.positions.all()], [p.value for p in o2.fees.all()])
         assert o2.total == Decimal('21.93')
         fee = o2.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
         assert fee.value == Decimal('0.43')
@@ -971,6 +973,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.change_price(self.op1, Decimal('23.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
         assert self.order.total == Decimal('47.92')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -1019,6 +1022,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.settings.invoice_include_free = False
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
         self.ocm._invoice_dirty = False
 
@@ -1038,6 +1042,7 @@ class OrderChangeManagerTests(TestCase):
     def test_split_to_original_free(self):
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
 
         self.ocm.split(self.op1)
@@ -1054,6 +1059,7 @@ class OrderChangeManagerTests(TestCase):
     def test_split_to_new_free(self):
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
 
         self.ocm.split(self.op2)

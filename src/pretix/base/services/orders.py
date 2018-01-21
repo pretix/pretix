@@ -10,7 +10,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F, Max, Q
+from django.db.models import F, Max, Q, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -680,6 +680,7 @@ class OrderChangeManager:
         self.order = order
         self.user = user
         self.split_order = None
+        self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
@@ -824,7 +825,8 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
-        if self.order.total == 0 and self._totaldiff < 0:
+        if self.order.total == 0 and (self._totaldiff < 0 or self.split_order and self.split_order.total > 0):
+            # if the order becomes free, mark it paid using the 'free' provider
             try:
                 mark_order_paid(
                     self.order, 'free', send_mail=False, count_waitinglist=False,
@@ -1018,14 +1020,8 @@ class OrderChangeManager:
     def _payment_fee_diff(self):
         prov = self._get_payment_provider()
         if self.order.status != Order.STATUS_PAID and prov:
-            #payment fees of paid orders do not change
-            try:
-                old_fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT).value
-            except OrderFee.MultipleObjectsReturned:
-                fees = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).all()
-                old_fee = sum([f.value for f in fees])
-            except OrderFee.DoesNotExist:
-                old_fee = 0
+            # payment fees of paid orders do not change
+            old_fee = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).aggregate(s=Sum('value'))['s'] or 0
             new_total = sum([p.price for p in self.order.positions.all()]) + self._totaldiff
             if new_total != 0:
                 new_fee = prov.calculate_fee(new_total)
@@ -1078,10 +1074,18 @@ class OrderChangeManager:
                 logger.exception('Order changed email could not be sent')
 
     def commit(self):
+        if self._committed:
+            # an order change can only be committed once
+            raise OrderError(error_messages['internal'])
+        self._committed = True
+
         if not self._operations:
             # Do nothing
             return
+
+        # finally, incorporate difference in payment fees
         self._payment_fee_diff()
+
         with transaction.atomic():
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
@@ -1095,6 +1099,7 @@ class OrderChangeManager:
             self._reissue_invoice()
             self._clear_tickets_cache()
         self._check_paid_to_free()
+
         if self.notify:
             self._notify_user(self.order)
             if self.split_order:
