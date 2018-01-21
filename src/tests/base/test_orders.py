@@ -278,6 +278,13 @@ class OrderChangeManagerTests(TestCase):
             country=Country('AT')
         )
 
+    def test_multiple_commits_forbidden(self):
+        self.ocm.change_price(self.op1, Decimal('10.00'))
+        self.ocm.commit()
+        self.ocm.change_price(self.op1, Decimal('42.00'))
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+
     def test_change_subevent_quota_required(self):
         self.event.has_subevents = True
         self.event.save()
@@ -544,6 +551,21 @@ class OrderChangeManagerTests(TestCase):
         assert fee.value == prov.calculate_fee(self.order.total)
         assert fee.tax_rate == Decimal('19.00')
         assert round_decimal(fee.value * (1 - 100 / (100 + fee.tax_rate))) == fee.tax_value
+
+    def test_pending_free_order_stays_pending(self):
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
+        self.ocm.change_price(self.op1, Decimal('0.00'))
+        self.ocm.change_price(self.op2, Decimal('0.00'))
+        self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('0.00')
+        assert self.order.status == Order.STATUS_PAID
+        self.order.status = Order.STATUS_PENDING
+        self.ocm.cancel(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
 
     def test_require_pending(self):
         self.order.status = Order.STATUS_PAID
