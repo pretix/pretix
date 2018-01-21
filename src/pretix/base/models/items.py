@@ -667,11 +667,8 @@ class Question(LoggedModel):
         elif self.type == Question.TYPE_BOOLEAN:
             return answer in ('true', 'True', True)
         elif self.type == Question.TYPE_NUMBER:
-            print(answer)
             answer = formats.sanitize_separators(answer)
-            print(answer)
             answer = str(answer).strip()
-            print(answer)
             try:
                 return Decimal(answer)
             except DecimalException:
@@ -690,7 +687,7 @@ class Question(LoggedModel):
                 return dateutil.parser.parse(answer).time()
             except:
                 raise ValidationError(_('Invalid time input.'))
-        elif self.type == Question.TYPE_DATETIME:
+        elif self.type == Question.TYPE_DATETIME and answer:
             if isinstance(answer, datetime):
                 return answer
             try:

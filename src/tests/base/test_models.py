@@ -1143,7 +1143,6 @@ class CheckinListTestCase(TestCase):
     (Question.TYPE_NUMBER, 2.45, Decimal("2.45")),
     (Question.TYPE_NUMBER, 3, Decimal("3")),
     (Question.TYPE_NUMBER, Decimal("4.56"), Decimal("4.56")),
-    (Question.TYPE_NUMBER, "2,56", ValidationError),
     (Question.TYPE_NUMBER, "abc", ValidationError),
     (Question.TYPE_BOOLEAN, "True", True),
     (Question.TYPE_BOOLEAN, "true", True),

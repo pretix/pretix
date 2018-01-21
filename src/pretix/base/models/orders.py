@@ -500,16 +500,16 @@ class QuestionAnswer(models.Model):
             return str(_("No"))
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
-        elif self.question.type == Question.TYPE_DATETIME:
+        elif self.question.type == Question.TYPE_DATETIME and self.answer:
             d = dateutil.parser.parse(self.answer)
             if self.orderposition:
                 tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
                 d = d.astimezone(tz)
             return date_format(d, "SHORT_DATETIME_FORMAT")
-        elif self.question.type == Question.TYPE_DATE:
+        elif self.question.type == Question.TYPE_DATE and self.answer:
             d = dateutil.parser.parse(self.answer)
             return date_format(d, "SHORT_DATE_FORMAT")
-        elif self.question.type == Question.TYPE_TIME:
+        elif self.question.type == Question.TYPE_TIME and self.answer:
             d = dateutil.parser.parse(self.answer)
             return date_format(d, "TIME_FORMAT")
         else:

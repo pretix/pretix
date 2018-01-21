@@ -159,6 +159,11 @@ class ApiRedeemView(ApiView):
 
     def _save_answers(self, op, answers, given_answers):
         for q, a in given_answers.items():
+            if not a:
+                if q in answers:
+                    answers[q].delete()
+                else:
+                    continue
             if isinstance(a, QuestionOption):
                 if q in answers:
                     qa = answers[q]
