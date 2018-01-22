@@ -10,7 +10,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F, Max, Q
+from django.db.models import F, Max, Q, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -513,7 +513,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             invoice = generate_invoice(order, trigger_pdf=not event.settings.invoice_email_attachment)
             # send_mail will trigger PDF generation later
 
-    if order.total == Decimal('0.00'):
+    if order.payment_provider == 'free':
         email_template = event.settings.mail_text_order_free
         log_entry = 'pretix.event.order.email.order_free'
     else:
@@ -680,6 +680,7 @@ class OrderChangeManager:
         self.order = order
         self.user = user
         self.split_order = None
+        self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
@@ -824,7 +825,10 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
-        if self.order.total == 0:
+        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
+            # if the order becomes free, mark it paid using the 'free' provider
+            # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+            # or positions got split off to a new order (split_order with positive total)
             try:
                 mark_order_paid(
                     self.order, 'free', send_mail=False, count_waitinglist=False,
@@ -1015,6 +1019,16 @@ class OrderChangeManager:
         self.order.total += sum([f.value for f in self.order.fees.all()])
         self.order.save()
 
+    def _payment_fee_diff(self):
+        prov = self._get_payment_provider()
+        if self.order.status != Order.STATUS_PAID and prov:
+            # payment fees of paid orders do not change
+            old_fee = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).aggregate(s=Sum('value'))['s'] or 0
+            new_total = sum([p.price for p in self.order.positions.all()]) + self._totaldiff
+            if new_total != 0:
+                new_fee = prov.calculate_fee(new_total)
+                self._totaldiff += new_fee - old_fee
+
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if i and self._invoice_dirty:
@@ -1062,9 +1076,18 @@ class OrderChangeManager:
                 logger.exception('Order changed email could not be sent')
 
     def commit(self):
+        if self._committed:
+            # an order change can only be committed once
+            raise OrderError(error_messages['internal'])
+        self._committed = True
+
         if not self._operations:
             # Do nothing
             return
+
+        # finally, incorporate difference in payment fees
+        self._payment_fee_diff()
+
         with transaction.atomic():
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
@@ -1078,6 +1101,7 @@ class OrderChangeManager:
             self._reissue_invoice()
             self._clear_tickets_cache()
         self._check_paid_to_free()
+
         if self.notify:
             self._notify_user(self.order)
             if self.split_order:
