@@ -1,15 +1,18 @@
 import sys
 import uuid
-from datetime import datetime
-from decimal import Decimal
+from datetime import date, datetime, time
+from decimal import Decimal, DecimalException
 from typing import Tuple
 
+import dateutil.parser
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
+from django.utils import formats
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -557,6 +560,8 @@ class Question(LoggedModel):
                      items associated with this question.
     :type required: bool
     :param items: A set of ``Items`` objects that this question should be applied to
+    :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
+    :type ask_during_checkin: bool
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -612,6 +617,12 @@ class Question(LoggedModel):
     position = models.IntegerField(
         default=0
     )
+    ask_during_checkin = models.BooleanField(
+        verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+        help_text=_('This will only work if you handle your check-in with pretixdroid 1.8 or newer or '
+                    'pretixdesk 0.2 or newer.'),
+        default=False
+    )
 
     class Meta:
         verbose_name = _("Question")
@@ -637,6 +648,64 @@ class Question(LoggedModel):
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
+
+    def clean_answer(self, answer):
+        if self.required:
+            if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+                raise ValidationError(_('An answer to this question is required to proceed.'))
+        if not answer:
+            if self.type == Question.TYPE_BOOLEAN:
+                return False
+            return None
+
+        if self.type == Question.TYPE_CHOICE:
+            try:
+                return self.options.get(pk=answer)
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        elif self.type == Question.TYPE_CHOICE_MULTIPLE:
+            try:
+                if isinstance(answer, str):
+                    return list(self.options.filter(pk__in=answer.split(",")))
+                else:
+                    return list(self.options.filter(pk__in=answer))
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        elif self.type == Question.TYPE_BOOLEAN:
+            return answer in ('true', 'True', True)
+        elif self.type == Question.TYPE_NUMBER:
+            answer = formats.sanitize_separators(answer)
+            answer = str(answer).strip()
+            try:
+                return Decimal(answer)
+            except DecimalException:
+                raise ValidationError(_('Invalid number input.'))
+        elif self.type == Question.TYPE_DATE:
+            if isinstance(answer, date):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).date()
+            except:
+                raise ValidationError(_('Invalid date input.'))
+        elif self.type == Question.TYPE_TIME:
+            if isinstance(answer, time):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).time()
+            except:
+                raise ValidationError(_('Invalid time input.'))
+        elif self.type == Question.TYPE_DATETIME and answer:
+            if isinstance(answer, datetime):
+                return answer
+            try:
+                dt = dateutil.parser.parse(answer)
+                if is_naive(dt):
+                    dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+                return dt
+            except:
+                raise ValidationError(_('Invalid datetime input.'))
+
+        return answer
 
 
 class QuestionOption(models.Model):

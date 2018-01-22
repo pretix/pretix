@@ -374,9 +374,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for cp in self._positions_for_questions:
             answ = {
-                aw.question_id: aw.answer for aw in cp.answers.all()
+                aw.question_id: aw.answer for aw in cp.answerlist
             }
-            for q in cp.item.questions.all():
+            for q in cp.item.questions_to_ask:
                 if q.required and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))

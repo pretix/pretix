@@ -42,7 +42,14 @@
                         <td><strong><a href="
                     {% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">{{ q.question }}</a></strong>
                         </td>
-                        <td>{{ q.get_type_display }}</td>
+                        <td>
+                            {{ q.get_type_display }}
+                            {% if q.required %}
+                                <span class="fa fa-exclamation-circle text-muted"
+                                data-toggle="tooltip" title="{% trans "Required question" %}">
+                                </span>
+                            {% endif %}
+                        </td>
                         <td>
                             <ul>
                                 {% for item in q.items.all %}

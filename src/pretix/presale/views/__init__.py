@@ -114,7 +114,7 @@ class CartMixin:
             group.has_questions = answers and k[0] != ""
             group.tax_rule = group.item.tax_rule
             if answers:
-                group.cache_answers()
+                group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 
@@ -155,6 +155,16 @@ class CartMixin:
         }
 
 
+def cart_exists(request):
+    from pretix.presale.views.cart import get_or_create_cart_id
+
+    if not hasattr(request, '_cart_cache'):
+        return CartPosition.objects.filter(
+            cart_id=get_or_create_cart_id(request), event=request.event
+        ).exists()
+    return bool(request._cart_cache)
+
+
 def get_cart(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -166,8 +176,6 @@ def get_cart(request):
         ).select_related(
             'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
             'item__tax_rule'
-        ).prefetch_related(
-            'item__questions', 'answers'
         )
     return request._cart_cache
 

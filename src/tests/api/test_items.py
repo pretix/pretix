@@ -453,6 +453,7 @@ TEST_QUESTION_RES = {
     "type": "C",
     "required": False,
     "items": [],
+    "ask_during_checkin": False,
     "position": 0,
     "options": [
         {

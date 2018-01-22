@@ -506,16 +506,16 @@ class QuestionAnswer(models.Model):
             return str(_("No"))
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
-        elif self.question.type == Question.TYPE_DATETIME:
+        elif self.question.type == Question.TYPE_DATETIME and self.answer:
             d = dateutil.parser.parse(self.answer)
             if self.orderposition:
                 tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
                 d = d.astimezone(tz)
             return date_format(d, "SHORT_DATETIME_FORMAT")
-        elif self.question.type == Question.TYPE_DATE:
+        elif self.question.type == Question.TYPE_DATE and self.answer:
             d = dateutil.parser.parse(self.answer)
             return date_format(d, "SHORT_DATE_FORMAT")
-        elif self.question.type == Question.TYPE_TIME:
+        elif self.question.type == Question.TYPE_TIME and self.answer:
             d = dateutil.parser.parse(self.answer)
             return date_format(d, "TIME_FORMAT")
         else:
@@ -605,7 +605,7 @@ class AbstractPosition(models.Model):
         else:
             return {}
 
-    def cache_answers(self):
+    def cache_answers(self, all=True):
         """
         Creates two properties on the object.
         (1) answ: a dictionary of question.id → answer string
@@ -618,7 +618,13 @@ class AbstractPosition(models.Model):
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
-        self.questions = list(copy.copy(q) for q in self.item.questions.all())
+        if not all:
+            if hasattr(self.item, 'questions_to_ask'):
+                self.questions = list(copy.copy(q) for q in self.item.questions_to_ask)
+            else:
+                self.questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False))
+        else:
+            self.questions = list(copy.copy(q) for q in self.item.questions.all())
         for q in self.questions:
             if q.id in self.answ:
                 q.answer = self.answ[q.id]

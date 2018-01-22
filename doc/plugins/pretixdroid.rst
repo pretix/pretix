@@ -9,6 +9,13 @@ uses to communicate with the pretix server.
              general-purpose :ref:`rest-api` that not yet provides all features that this API provides, but will do
              so in the future.
 
+.. versionchanged:: 1.12
+
+   Support for check-in-time questions has been added. The new API features are fully backwards-compatible and
+   negotiated live, so clients which do not need this feature can ignore the change. For this reason, the API version
+   has not been increased and is still set to 3.
+
+
 .. http:post:: /pretixdroid/api/(organizer)/(event)/redeem/
 
    Redeems a ticket, i.e. checks the user in.
@@ -22,17 +29,29 @@ uses to communicate with the pretix server.
       Accept: application/json, text/javascript
       Content-Type: application/x-www-form-urlencoded
 
-      secret=az9u4mymhqktrbupmwkvv6xmgds5dk3
+      secret=az9u4mymhqktrbupmwkvv6xmgds5dk3&questions_supported=true
 
-   You can optionally include the additional parameter ``datetime`` in the body containing an ISO8601-encoded
-   datetime of the entry attempt. If you don't, the current date and time will be used.
+   You **must** set the parameter secret.
 
-   You can optionally include the additional parameter ``force`` to indicate that the request should be logged
+   You **must** set the parameter ``questions_supported`` to ``true`` **if** you support asking questions
+   back to the app operator. You **must not** set it if you do not support this feature. In that case, questions
+   will just be ignored.
+
+   You **may** set the additional parameter ``datetime`` in the body containing an ISO8601-encoded
+   datetime of the entry attempt. If you don"t, the current date and time will be used.
+
+   You **may** set the additional parameter ``force`` to indicate that the request should be logged
    regardless of previous check-ins for the same ticket. This might be useful if you made the entry decision offline.
+   Questions will also always be ignored in this case (i.e. supplied answers will be saved, but no error will be
+   thrown if they are missing or invalid).
 
-   You can optionally include the additional parameter ``nonce`` with a globally unique random value to identify this
+   You **may** set the additional parameter ``nonce`` with a globally unique random value to identify this
    check-in. This is meant to be used to prevent duplicate check-ins when you are just retrying after a connection
    failure.
+
+   If questions are supported and required, you will receive a dictionary ``questions`` containing details on the
+   particular questions to ask. To answer them, just re-send your redemption request with additional parameters of
+   the form ``answer_<question>=<answer>``, e.g. ``answer_12=24``.
 
    **Example successful response**:
 
@@ -43,10 +62,66 @@ uses to communicate with the pretix server.
 
       {
         "status": "ok"
-        "version": 2
+        "version": 3,
+        "data": {
+          "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
+          "order": "ABCDE",
+          "item": "Standard ticket",
+          "item_id": 1,
+          "variation": null,
+          "variation_id": null,
+          "attendee_name": "Peter Higgs",
+          "attention": false,
+          "redeemed": true,
+          "paid": true
+        }
       }
 
-   **Example error response**:
+   **Example response with required questions**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: text/json
+
+      {
+        "status": "incomplete"
+        "version": 3
+        "data": {
+          "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
+          "order": "ABCDE",
+          "item": "Standard ticket",
+          "item_id": 1,
+          "variation": null,
+          "variation_id": null,
+          "attendee_name": "Peter Higgs",
+          "attention": false,
+          "redeemed": true,
+          "paid": true
+        },
+        "questions": [
+          {
+            "id": 12,
+            "type": "C",
+            "question": "Choose a shirt size",
+            "required": true,
+            "position": 2,
+            "items": [1],
+            "options": [
+              {
+                "id": 24,
+                "answer": "M"
+              },
+              {
+                "id": 25,
+                "answer": "L"
+              }
+            ]
+          }
+        ]
+      }
+
+   **Example error response with data**:
 
    .. sourcecode:: http
 
@@ -56,13 +131,39 @@ uses to communicate with the pretix server.
       {
         "status": "error",
         "reason": "already_redeemed",
-        "version": 2
+        "version": 3,
+        "data": {
+          "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
+          "order": "ABCDE",
+          "item": "Standard ticket",
+          "item_id": 1,
+          "variation": null,
+          "variation_id": null,
+          "attendee_name": "Peter Higgs",
+          "attention": false,
+          "redeemed": true,
+          "paid": true
+        }
+      }
+
+   **Example error response without data**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: text/json
+
+      {
+        "status": "error",
+        "reason": "unkown_ticket",
+        "version": 3
       }
 
    Possible error reasons:
 
    * ``unpaid`` - Ticket is not paid for or has been refunded
    * ``already_redeemed`` - Ticket already has been redeemed
+   * ``product`` - Tickets with this product may not be scanned at this device
    * ``unknown_ticket`` - Secret does not match a ticket in the database
 
    :query key: Secret API key
@@ -104,7 +205,7 @@ uses to communicate with the pretix server.
           },
           ...
         ],
-        "version": 2
+        "version": 3
       }
 
    :query query: Search query
@@ -133,6 +234,7 @@ uses to communicate with the pretix server.
       Content-Type: text/json
 
       {
+        "version": 3,
         "results": [
           {
             "secret": "az9u4mymhqktrbupmwkvv6xmgds5dk3",
@@ -146,7 +248,26 @@ uses to communicate with the pretix server.
           },
           ...
         ],
-        "version": 2
+        "questions": [
+          {
+            "id": 12,
+            "type": "C",
+            "question": "Choose a shirt size",
+            "required": true,
+            "position": 2,
+            "items": [1],
+            "options": [
+              {
+                "id": 24,
+                "answer": "M"
+              },
+              {
+                "id": 25,
+                "answer": "L"
+              }
+            ]
+          }
+        ]
       }
 
    :query key: Secret API key
@@ -177,7 +298,7 @@ uses to communicate with the pretix server.
       {
         "checkins": 17,
         "total": 42,
-        "version": 2,
+        "version": 3,
         "event": {
           "name": "Demo Converence",
           "slug": "democon",

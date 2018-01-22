@@ -213,7 +213,15 @@
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
                                         {% for q in line.questions %}
-                                            <dt>{{ q.question }}</dt>
+                                            <dt>
+                                                {{ q.question }}
+                                                {% if q.ask_during_checkin %}
+                                                    <span class="fa fa-qrcode text-muted"
+                                                            data-toggle="tooltip"
+                                                            title="{% trans "This question will be asked during check-in." %}"
+                                                    ></span>
+                                                {% endif %}
+                                            </dt>
                                             <dd>
                                                 {% if q.answer %}
                                                     {% if q.answer.file %}
