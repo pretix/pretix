@@ -69,6 +69,13 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample product description"),
         "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
     }),
+    ("item_category", {
+        "label": _("Product category"),
+        "editor_sample": _("Ticket category"),
+        "evaluate": lambda orderposition, order, event: (
+            str(orderposition.item.category.name) if orderposition.item.category else ""
+        )
+    }),
     ("price", {
         "label": _("Price"),
         "editor_sample": _("123.45 EUR"),
