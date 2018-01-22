@@ -212,7 +212,7 @@ class QuestionsForm(forms.Form):
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
         pos = cartpos or orderpos
         item = pos.item
-        questions = list(item.questions.all())
+        questions = pos.item.questions_to_ask
         event = kwargs.pop('event')
 
         super().__init__(*args, **kwargs)
@@ -232,11 +232,7 @@ class QuestionsForm(forms.Form):
 
         for q in questions:
             # Do we already have an answer? Provide it as the initial value
-            answers = [
-                a for a
-                in (cartpos.answers.all() if cartpos else orderpos.answers.all())
-                if a.question_id == q.id
-            ]
+            answers = [a for a in pos.answerlist if a.question_id == q.id]
             if answers:
                 initial = answers[0]
             else:
@@ -282,7 +278,7 @@ class QuestionsForm(forms.Form):
                 )
             elif q.type == Question.TYPE_CHOICE:
                 field = forms.ModelChoiceField(
-                    queryset=q.options.all(),
+                    queryset=q.options,
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     widget=forms.Select,
@@ -291,7 +287,7 @@ class QuestionsForm(forms.Form):
                 )
             elif q.type == Question.TYPE_CHOICE_MULTIPLE:
                 field = forms.ModelMultipleChoiceField(
-                    queryset=q.options.all(),
+                    queryset=q.options,
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     widget=forms.CheckboxSelectMultiple,

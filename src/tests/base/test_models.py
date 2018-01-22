@@ -1162,10 +1162,18 @@ class CheckinListTestCase(TestCase):
      datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
     (Question.TYPE_DATETIME, "2018-01-16T15:20:00Z",
      datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 0))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
     (Question.TYPE_DATETIME, "2018-01-16T15:AB:CD", ValidationError),
 ])
 def test_question_answer_validation(qtype, answer, expected):
-    q = Question(type=qtype)
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(),
+    )
+    event.settings.timezone = 'Europe/Berlin'
+    q = Question(type=qtype, event=event)
     if isinstance(expected, type) and issubclass(expected, Exception):
         with pytest.raises(expected):
             q.clean_answer(answer)

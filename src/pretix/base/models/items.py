@@ -5,13 +5,14 @@ from decimal import Decimal, DecimalException
 from typing import Tuple
 
 import dateutil.parser
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
 from django.utils import formats
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -646,6 +647,9 @@ class Question(LoggedModel):
         return self.sortkey < other.sortkey
 
     def clean_answer(self, answer):
+        if self.required:
+            if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+                raise ValidationError(_('An answer to this question is required to proceed.'))
         if not answer:
             if self.type == Question.TYPE_BOOLEAN:
                 return False
@@ -691,7 +695,10 @@ class Question(LoggedModel):
             if isinstance(answer, datetime):
                 return answer
             try:
-                return dateutil.parser.parse(answer)
+                dt = dateutil.parser.parse(answer)
+                if is_naive(dt):
+                    dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+                return dt
             except:
                 raise ValidationError(_('Invalid datetime input.'))
 

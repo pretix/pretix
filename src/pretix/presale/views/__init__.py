@@ -155,6 +155,16 @@ class CartMixin:
         }
 
 
+def cart_exists(request):
+    from pretix.presale.views.cart import get_or_create_cart_id
+
+    if not hasattr(request, '_cart_cache'):
+        return CartPosition.objects.filter(
+            cart_id=get_or_create_cart_id(request), event=request.event
+        ).exists()
+    return bool(request._cart_cache)
+
+
 def get_cart(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -166,8 +176,6 @@ def get_cart(request):
         ).select_related(
             'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
             'item__tax_rule'
-        ).prefetch_related(
-            'item__questions', 'answers'
         )
     return request._cart_cache
 
