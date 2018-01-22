@@ -825,8 +825,10 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
-        if self.order.total == 0 and (self._totaldiff < 0 or self.split_order and self.split_order.total > 0):
+        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
             # if the order becomes free, mark it paid using the 'free' provider
+            # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+            # or positions got split off to a new order (split_order with positive total)
             try:
                 mark_order_paid(
                     self.order, 'free', send_mail=False, count_waitinglist=False,
