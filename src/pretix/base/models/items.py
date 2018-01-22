@@ -560,6 +560,8 @@ class Question(LoggedModel):
                      items associated with this question.
     :type required: bool
     :param items: A set of ``Items`` objects that this question should be applied to
+    :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
+    :type ask_during_checkin: bool
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -616,8 +618,9 @@ class Question(LoggedModel):
         default=0
     )
     ask_during_checkin = models.BooleanField(
-        verbose_name=_('Ask during check-in instead of during registration'),
-        help_text=_('Supported by pretixdroid 1.8 and newer or pretixdesk 0.2 and newer.'),
+        verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+        help_text=_('This will only work if you handle your check-in with pretixdroid 1.8 or newer or '
+                    'pretixdesk 0.2 or newer.'),
         default=False
     )
 
