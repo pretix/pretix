@@ -32,7 +32,7 @@ from pretix.plugins.pretixdroid.forms import AppConfigurationForm
 from pretix.plugins.pretixdroid.models import AppConfiguration
 
 logger = logging.getLogger('pretix.plugins.pretixdroid')
-API_VERSION = 4
+API_VERSION = 3
 
 
 class ConfigCodeView(EventPermissionRequiredMixin, TemplateView):
@@ -243,7 +243,7 @@ class ApiRedeemView(ApiView):
                 elif not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
-                elif require_answers and not force:
+                elif require_answers and not force and request.POST.get('questions_supported'):
                     response['status'] = 'incomplete'
                     response['questions'] = require_answers
                 elif op.order.status == Order.STATUS_PAID or force:

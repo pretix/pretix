@@ -114,7 +114,7 @@ class CartMixin:
             group.has_questions = answers and k[0] != ""
             group.tax_rule = group.item.tax_rule
             if answers:
-                group.cache_answers()
+                group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 

@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Prefetch, Sum
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -14,7 +14,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
+from pretix.base.models import (
+    CachedTicket, Invoice, Order, OrderPosition, Question, QuestionOption,
+)
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, QuestionAnswer,
 )
@@ -435,7 +437,21 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
-            'variation', 'item__questions', 'answers'
+            Prefetch('answers',
+                     QuestionAnswer.objects.prefetch_related('options'),
+                     to_attr='answerlist'),
+            Prefetch('item__questions',
+                     Question.objects.filter(ask_during_checkin=False).prefetch_related(
+                         Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                             # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                             # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                             # a prefetch lookup on this query...
+                             'question',
+                             Question.objects.none(),
+                             to_attr='dummy'
+                         )))
+                     ),
+                     to_attr='questions_to_ask')
         ))
 
     @cached_property
