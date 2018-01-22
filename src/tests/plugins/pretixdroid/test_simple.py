@@ -345,7 +345,7 @@ def test_question_number(client, env, question):
     question[0].save()
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -377,7 +377,7 @@ def test_question_choice(client, env, question):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -419,7 +419,7 @@ def test_question_invalid(client, env, question):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -428,7 +428,7 @@ def test_question_invalid(client, env, question):
     resp = client.post(
         '/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
         data={
-            'secret': '1234',
+            'secret': '1234', 'questions_supported': 'true',
             'answer_{}'.format(question[0].pk): "A",
         }
     )
@@ -444,7 +444,7 @@ def test_question_required(client, env, question):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -453,7 +453,7 @@ def test_question_required(client, env, question):
     resp = client.post(
         '/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
         data={
-            'secret': '1234',
+            'secret': '1234', 'questions_supported': 'true',
             'answer_{}'.format(question[0].pk): "",
         }
     )
@@ -469,7 +469,7 @@ def test_question_optional(client, env, question):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -478,7 +478,7 @@ def test_question_optional(client, env, question):
     resp = client.post(
         '/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
         data={
-            'secret': '1234',
+            'secret': '1234', 'questions_supported': 'true',
             'answer_{}'.format(question[0].pk): "",
         }
     )
@@ -493,7 +493,7 @@ def test_question_multiple_choice(client, env, question):
     question[0].save()
 
     resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
-                       data={'secret': '1234'})
+                       data={'secret': '1234', 'questions_supported': 'true'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'incomplete'
@@ -520,7 +520,7 @@ def test_question_multiple_choice(client, env, question):
     resp = client.post(
         '/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
         data={
-            'secret': '1234',
+            'secret': '1234', 'questions_supported': 'true',
             'answer_{}'.format(question[0].pk): "{},{}".format(question[1].pk, question[2].pk),
         }
     )
