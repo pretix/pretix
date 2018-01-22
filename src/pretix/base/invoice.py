@@ -357,6 +357,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         if has_taxes:
             tdata = [(
                 pgettext('invoice', 'Description'),
+                pgettext('invoice', 'Qty'),
                 pgettext('invoice', 'Tax rate'),
                 pgettext('invoice', 'Net'),
                 pgettext('invoice', 'Gross'),
@@ -364,6 +365,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         else:
             tdata = [(
                 pgettext('invoice', 'Description'),
+                pgettext('invoice', 'Qty'),
                 pgettext('invoice', 'Amount'),
             )]
 
@@ -372,6 +374,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             if has_taxes:
                 tdata.append((
                     Paragraph(line.description, self.stylesheet['Normal']),
+                    "1",
                     localize(line.tax_rate) + " %",
                     localize(line.net_value) + " " + self.invoice.event.currency,
                     localize(line.gross_value) + " " + self.invoice.event.currency,
@@ -379,6 +382,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             else:
                 tdata.append((
                     Paragraph(line.description, self.stylesheet['Normal']),
+                    "1",
                     localize(line.gross_value) + " " + self.invoice.event.currency,
                 ))
             taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
@@ -387,14 +391,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if has_taxes:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', '', localize(total) + " " + self.invoice.event.currency
+                pgettext('invoice', 'Invoice total'), '', '', '', localize(total) + " " + self.invoice.event.currency
             ])
-            colwidths = [a * doc.width for a in (.55, .15, .15, .15)]
+            colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
         else:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), localize(total) + " " + self.invoice.event.currency
+                pgettext('invoice', 'Invoice total'), '', localize(total) + " " + self.invoice.event.currency
             ])
-            colwidths = [a * doc.width for a in (.70, .30)]
+            colwidths = [a * doc.width for a in (.65, .05, .30)]
 
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))
