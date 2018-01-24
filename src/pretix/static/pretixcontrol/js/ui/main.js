@@ -279,6 +279,11 @@ $(function () {
     });
 
     $('.collapsible').collapse();
+    $("input[data-toggle=radiocollapse]").change(function () {
+        $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
+        $($(this).attr("data-target")).collapse('show');
+    });
+    $("div.collapsed").removeClass("collapsed").addClass("collapse");
     $(".has-error").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });
