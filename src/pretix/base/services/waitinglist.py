@@ -1,3 +1,5 @@
+import sys
+
 from django.dispatch import receiver
 
 from pretix.base.models import Event, User, WaitingListEntry
@@ -41,7 +43,7 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
                 if wle.variation
                 else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
             )
-            if availability[1] > 0:
+            if availability[1] is None or availability[1] > 0:
                 try:
                     wle.send_voucher(quota_cache, user=user)
                     sent += 1
@@ -52,7 +54,7 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
                 for q in quotas:
                     quota_cache[q.pk] = (
                         quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
-                        quota_cache[q.pk][1] - 1
+                        quota_cache[q.pk][1] - 1 if quota_cache[q.pk][1] is not None else sys.maxsize
                     )
             else:
                 gone.add((wle.item, wle.variation))

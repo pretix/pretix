@@ -87,7 +87,7 @@ class WaitingListEntry(LoggedModel):
             if self.variation
             else self.item.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
         )
-        if availability[1] < 1:
+        if availability[1] is None or availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
         if self.voucher:
             raise WaitingListException(_('A voucher has already been sent to this person.'))

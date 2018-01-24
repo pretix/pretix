@@ -99,6 +99,22 @@ class WaitingListTestCase(TestCase):
             'foo7@bar.com', 'foo8@bar.com', 'foo9@bar.com'
         ]
 
+    def test_send_auto_quota_infinite(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = None
+        self.quota.save()
+        for i in range(10):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
+            )
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='bar{}@bar.com'.format(i)
+            )
+
+        assign_automatically.apply(args=(self.event.pk,))
+        assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 10
+        assert Voucher.objects.count() == 10
+
     def test_send_periodic(self):
         self.event.settings.set('waiting_list_enabled', True)
         self.event.settings.set('waiting_list_auto', True)
