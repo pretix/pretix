@@ -21,7 +21,8 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.invoices import invoice_pdf
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderError, cancel_order, extend_order, mark_order_paid,
+    OrderError, cancel_order, extend_order, mark_order_expired,
+    mark_order_paid,
 )
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
@@ -153,10 +154,8 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        order.status = Order.STATUS_EXPIRED
-        order.save()
-        order.log_action(
-            'pretix.event.order.expired',
+        mark_order_expired(
+            order,
             user=request.user if request.user.is_authenticated else None,
             api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
         )

@@ -128,8 +128,14 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     order_paid.send(order.event, order=order)
 
     invoice = None
-    if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
-        if not order.invoices.exists():
+    if invoice_qualified(order):
+        invoices = order.invoices.filter(is_cancellation=False).count()
+        cancellations = order.invoices.filter(is_cancellation=True).count()
+        gen_invoice = (
+            (invoices == 0 and order.event.settings.get('invoice_generate') in ('True', 'paid')) or
+            0 < invoices <= cancellations
+        )
+        if gen_invoice:
             invoice = generate_invoice(
                 order,
                 trigger_pdf=not send_mail or not order.event.settings.invoice_email_attachment
@@ -224,6 +230,32 @@ def mark_order_refunded(order, user=None):
         order.save()
 
     order.log_action('pretix.event.order.refunded', user=user)
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
+
+    return order
+
+
+@transaction.atomic
+def mark_order_expired(order, user=None, api_token=None):
+    """
+    Mark this order as expired. This sets the payment status and returns the order object.
+    :param order: The order to change
+    :param user: The user that performed the change
+    :param api_token: The API token used to performed the change
+    """
+    if isinstance(order, int):
+        order = Order.objects.get(pk=order)
+    if isinstance(user, int):
+        user = User.objects.get(pk=user)
+    if isinstance(api_token, int):
+        api_token = TeamAPIToken.objects.get(pk=api_token)
+    with order.event.lock():
+        order.status = Order.STATUS_EXPIRED
+        order.save()
+
+    order.log_action('pretix.event.order.expired', user=user, api_token=api_token)
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
@@ -562,9 +594,7 @@ def expire_orders(sender, **kwargs):
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             eventcache[o.event.pk] = expire
         if expire:
-            o.status = Order.STATUS_EXPIRED
-            o.log_action('pretix.event.order.expired')
-            o.save()
+            mark_order_expired(o)
 
 
 @receiver(signal=periodic_task)

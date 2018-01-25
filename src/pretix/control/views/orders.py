@@ -38,7 +38,7 @@ from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, extend_order,
-    mark_order_paid,
+    mark_order_expired, mark_order_paid,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
@@ -229,9 +229,7 @@ class OrderTransition(OrderView):
             self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
-            self.order.status = Order.STATUS_EXPIRED
-            self.order.save()
-            self.order.log_action('pretix.event.order.expired', user=self.request.user)
+            mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))
         elif self.order.status == Order.STATUS_PAID and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
