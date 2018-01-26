@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from pretix.control.utils.i18n import i18ncomp
 from pretix.helpers.daterange import daterange
+from pretix.helpers.i18n import i18ncomp
 
 
 def event_list(request):

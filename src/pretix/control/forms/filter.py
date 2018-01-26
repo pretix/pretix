@@ -9,8 +9,8 @@ from pretix.base.models import (
     Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
-from pretix.control.utils.i18n import i18ncomp
 from pretix.helpers.database import FixedOrderBy, rolledback_transaction
+from pretix.helpers.i18n import i18ncomp
 
 PAYMENT_PROVIDERS = []
 

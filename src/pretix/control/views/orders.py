@@ -43,6 +43,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
 from pretix.base.views.async import AsyncAction
+from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
@@ -623,6 +624,28 @@ class OrderChange(OrderView):
                 return self._redirect_back()
 
         return self.get(*args, **kwargs)
+
+
+class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change_questions.html'
+
+    def post(self, request, *args, **kwargs):
+        failed = not self.save() or not self.invoice_form.is_valid()
+        if failed:
+            messages.error(self.request,
+                           _("We had difficulties processing your input. Please review the errors below."))
+            return self.get(request, *args, **kwargs)
+        self.invoice_form.save()
+        self.order.log_action('pretix.event.order.modified', user=request.user)
+        if self.invoice_form.has_changed():
+            success_message = ('The invoice address has been updated. If you want to generate a new invoice, '
+                               'you need to do this manually.')
+            messages.success(self.request, _(success_message))
+
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        return redirect(self.get_order_url())
 
 
 class OrderContactChange(OrderView):

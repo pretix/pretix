@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Prefetch, Sum
+from django.db.models import Sum
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -14,11 +14,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import (
-    CachedTicket, Invoice, Order, OrderPosition, Question, QuestionOption,
-)
+from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
 from pretix.base.models.orders import (
-    CachedCombinedTicket, InvoiceAddress, OrderFee, QuestionAnswer,
+    CachedCombinedTicket, OrderFee, QuestionAnswer,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -29,12 +27,12 @@ from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
+from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
-from pretix.presale.forms.checkout import InvoiceAddressForm
+from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.async import AsyncAction
-from pretix.presale.views.questions import QuestionsViewMixin
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -425,47 +423,10 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, TemplateView):
+class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, TemplateView):
+    form_class = QuestionsForm
+    invoice_form_class = InvoiceAddressForm
     template_name = "pretixpresale/event/order_modify.html"
-
-    @cached_property
-    def _positions_for_questions(self):
-        return self.positions
-
-    @cached_property
-    def positions(self):
-        return list(self.order.positions.select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            Prefetch('answers',
-                     QuestionAnswer.objects.prefetch_related('options'),
-                     to_attr='answerlist'),
-            Prefetch('item__questions',
-                     Question.objects.filter(ask_during_checkin=False).prefetch_related(
-                         Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                             # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                             # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                             # a prefetch lookup on this query...
-                             'question',
-                             Question.objects.none(),
-                             to_attr='dummy'
-                         )))
-                     ),
-                     to_attr='questions_to_ask')
-        ))
-
-    @cached_property
-    def invoice_address(self):
-        try:
-            return self.order.invoice_address
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress(order=self.order)
-
-    @cached_property
-    def invoice_form(self):
-        return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
-                                  event=self.request.event,
-                                  instance=self.invoice_address, validate_vat_id=False)
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()
@@ -496,13 +457,6 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             messages.error(request, _('You cannot modify this order'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['order'] = self.order
-        ctx['formgroups'] = self.formdict.items()
-        ctx['invoice_form'] = self.invoice_form
-        return ctx
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

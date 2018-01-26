@@ -6,8 +6,8 @@ from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
 
 from pretix.base.settings import GlobalSettingsObject
 
+from ..helpers.i18n import get_javascript_format, get_moment_locale
 from .signals import html_head, nav_event, nav_global, nav_topbar
-from .utils.i18n import get_javascript_format, get_moment_locale
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 

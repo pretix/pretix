@@ -153,6 +153,8 @@ urlpatterns = [
             name='event.order.comment'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/change$', orders.OrderChange.as_view(),
             name='event.order.change'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/info', orders.OrderModifyInformation.as_view(),
+            name='event.order.info'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/sendmail$', orders.OrderSendMail.as_view(),
             name='event.order.sendmail'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/mail_history$', orders.OrderEmailHistory.as_view(),

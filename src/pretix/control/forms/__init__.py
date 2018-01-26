@@ -1,12 +1,14 @@
 import os
 
 from django import forms
-from django.utils.formats import get_format
 from django.utils.html import conditional_escape
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from ...base.forms import I18nModelForm
+# Import for backwards compatibility with okd import paths
+from ...base.forms.widgets import (  # noqa
+    DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
+)
 
 
 class TolerantFormsetModelForm(I18nModelForm):
@@ -100,70 +102,3 @@ class SlugWidget(forms.TextInput):
         ctx = super().get_context(name, value, attrs)
         ctx['pre'] = self.prefix
         return ctx
-
-
-class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
-    template_name = 'pretixbase/forms/widgets/splitdatetime.html'
-
-    def __init__(self, attrs=None, date_format=None, time_format=None):
-        attrs = attrs or {}
-        if 'placeholder' in attrs:
-            del attrs['placeholder']
-        date_attrs = dict(attrs)
-        time_attrs = dict(attrs)
-        date_attrs.setdefault('class', 'form-control splitdatetimepart')
-        time_attrs.setdefault('class', 'form-control splitdatetimepart')
-        date_attrs['class'] += ' datepickerfield'
-        time_attrs['class'] += ' timepickerfield'
-
-        df = date_format or get_format('DATE_INPUT_FORMATS')[0]
-        date_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(df)
-        tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
-        time_attrs['placeholder'] = now().replace(
-            year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
-        ).strftime(tf)
-
-        widgets = (
-            forms.DateInput(attrs=date_attrs, format=date_format),
-            forms.TimeInput(attrs=time_attrs, format=time_format),
-        )
-        # Skip one hierarchy level
-        forms.MultiWidget.__init__(self, widgets, attrs)
-
-
-class DatePickerWidget(forms.DateInput):
-
-    def __init__(self, attrs=None, date_format=None):
-        attrs = attrs or {}
-        if 'placeholder' in attrs:
-            del attrs['placeholder']
-        date_attrs = dict(attrs)
-        date_attrs.setdefault('class', 'form-control')
-        date_attrs['class'] += ' datepickerfield'
-
-        df = date_format or get_format('DATE_INPUT_FORMATS')[0]
-        date_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(df)
-
-        forms.DateInput.__init__(self, date_attrs, date_format)
-
-
-class TimePickerWidget(forms.TimeInput):
-
-    def __init__(self, attrs=None, time_format=None):
-        attrs = attrs or {}
-        if 'placeholder' in attrs:
-            del attrs['placeholder']
-        time_attrs = dict(attrs)
-        time_attrs.setdefault('class', 'form-control')
-        time_attrs['class'] += ' timepickerfield'
-
-        tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
-        time_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(tf)
-
-        forms.TimeInput.__init__(self, time_attrs, time_format)

@@ -4,7 +4,7 @@ from django.utils.translation import get_language_info
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.settings import GlobalSettingsObject
-from pretix.control.utils.i18n import (
+from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
 

@@ -206,16 +206,32 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("input[data-display-dependency]").each(function () {
+    $("input[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
-            update = function () {
-                var enabled = (dependency.attr("type") === 'checkbox') ? dependency.prop('checked') : !!dependency.val();
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (ev) {
+                    dependent.closest('.form-group').slideToggle(enabled);
+                } else {
+                    dependent.closest('.form-group').toggle(enabled);
+                }
             };
         update();
-        dependency.on("change", update);
-        dependency.on("dp.change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+    });
+
+    el.find("input[data-required-if]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-required-if")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
     el.find(".scrolling-multiple-choice").each(function () {

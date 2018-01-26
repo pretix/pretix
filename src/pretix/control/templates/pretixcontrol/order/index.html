@@ -163,6 +163,10 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                            <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Change answers" %}
+                            </a> &middot;
                             <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}
@@ -368,6 +372,14 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
+                                <div class="pull-right">
+                                    {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                                        <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                            <span class="fa fa-edit"></span>
+                                            {% trans "Change" %}
+                                        </a>
+                                    {% endif %}
+                                </div>
                                 <h3 class="panel-title">
                                     {% trans "Invoice information" %}
                                 </h3>
