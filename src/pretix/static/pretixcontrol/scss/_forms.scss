@@ -250,7 +250,14 @@ label .optional {
     text-align: left;
   }
 }
+.select2-hidden-accessible {
+    top: 50px;
+}
 
+.large-select2-field-container .select2-container--bootstrap .select2-selection--multiple {
+  height: 150px;
+  overflow-y: auto;
+}
 div.scrolling-multiple-choice, div.scrolling-choice {
   height: 150px;
   border: 1px solid $input-border;

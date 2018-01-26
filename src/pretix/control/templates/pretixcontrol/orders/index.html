@@ -44,17 +44,20 @@
                     <div class="col-md-1 col-xs-6">
                         {% bootstrap_field filter_form.item layout='inline' %}
                     </div>
-                    <div class="col-md-1 col-xs-6">
+                    <div class="col-md-2 col-xs-6">
                         {% bootstrap_field filter_form.subevent layout='inline' %}
+                    </div>
+                    <div class="col-md-1 col-xs-6">
+                        {% bootstrap_field filter_form.provider layout='inline' %}
                     </div>
                 {% else %}
                     <div class="col-md-2 col-xs-6">
                         {% bootstrap_field filter_form.item layout='inline' %}
                     </div>
+                    <div class="col-md-2 col-xs-6">
+                        {% bootstrap_field filter_form.provider layout='inline' %}
+                    </div>
                 {% endif %}
-                <div class="col-md-2 col-xs-6">
-                    {% bootstrap_field filter_form.provider layout='inline' %}
-                </div>
                 <div class="col-md-2 col-xs-6">
                     {% bootstrap_field filter_form.query layout='inline' %}
                 </div>

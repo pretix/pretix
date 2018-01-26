@@ -2,6 +2,7 @@ from django import forms
 from django.apps import apps
 from django.db.models import Exists, F, OuterRef, Q
 from django.db.models.functions import Coalesce
+from django.urls import reverse, reverse_lazy
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
@@ -9,6 +10,7 @@ from pretix.base.models import (
     Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
+from pretix.control.forms.widgets import Select2
 from pretix.helpers.database import FixedOrderBy, rolledback_transaction
 from pretix.helpers.i18n import i18ncomp
 
@@ -182,6 +184,17 @@ class EventOrderFilterForm(OrderFilterForm):
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         elif 'subevent':
             del self.fields['subevent']
 
@@ -207,7 +220,14 @@ class OrderSearchFilterForm(OrderFilterForm):
         label=_('Organizer'),
         queryset=Organizer.objects.none(),
         required=False,
-        empty_label=_('All organizers')
+        empty_label=_('All organizers'),
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse_lazy('control:organizers.select2'),
+                'data-placeholder': _('All organizers')
+            }
+        )
     )
 
     def __init__(self, *args, **kwargs):
@@ -351,7 +371,14 @@ class EventFilterForm(FilterForm):
         label=_('Organizer'),
         queryset=Organizer.objects.none(),
         required=False,
-        empty_label=_('All organizers')
+        empty_label=_('All organizers'),
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse_lazy('control:organizers.select2'),
+                'data-placeholder': _('All organizers')
+            }
+        )
     )
     query = forms.CharField(
         label=_('Event name'),

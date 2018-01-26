@@ -11,6 +11,8 @@
 @import "_dashboard.scss";
 @import "../../pretixbase/scss/webfont.scss";
 @import "../../fileupload/jquery.fileupload.scss";
+@import "../../select2/select2.scss";
+@import "../../select2/select2_bootstrap.scss";
 @import "../../colorpicker/bootstrap-colorpicker.scss";
 
 footer {
@@ -310,7 +312,7 @@ body.loading #wrapper {
 .event-dropdown {
     width: 300px;
 }
-.event-dropdown, .mobile-event-dropdown {
+.event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full {
         display: block;
     }
@@ -319,7 +321,9 @@ body.loading #wrapper {
         font-size: $font-size-small;
         color: $text-muted;
     }
-    .active .event-daterange, .active .event-organizer, .active a {
+    .active .event-daterange, .active .event-organizer, .active a,
+    .select2-results__option--highlighted .event-daterange,
+    .select2-results__option--highlighted .event-organizer {
         color: white;
     }
     .active {
