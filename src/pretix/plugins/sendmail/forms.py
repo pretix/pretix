@@ -1,9 +1,11 @@
 from django import forms
+from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Item, Order, SubEvent
+from pretix.control.forms.widgets import Select2
 
 
 class MailForm(forms.Form):
@@ -57,5 +59,16 @@ class MailForm(forms.Form):
         self.fields['item'].queryset = event.items.all()
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']

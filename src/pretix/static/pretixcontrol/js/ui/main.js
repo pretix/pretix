@@ -39,7 +39,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     var c = $(jqXHR.responseText).filter('.container');
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
-    } else {
+    } else if (thrownError !== "abort") {
         alert(gettext('Unknown error.'));
     }
 });
@@ -250,8 +250,92 @@ var form_handlers = function (el) {
             e.preventDefault();
             return false;
         });
-    })
-}
+    });
+
+    el.find('.select2-static').select2({
+        theme: "bootstrap",
+        language: $("body").attr("data-select2-locale"),
+    });
+
+    el.find('[data-model-select2=generic]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            placeholder: $(this).attr("data-placeholder"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            }
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            if ($s.hasAttribute("multiple")) {
+                window.setTimeout(function () {
+                    $s.parent().find('.select2-search__field').focus();
+                }, 50);
+            }
+        });
+    });
+
+    el.find('[data-model-select2=event]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            },
+            placeholder: $(this).attr("data-placeholder"),
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
+                );
+                if (res.organizer) {
+                    $ret.append(
+                        $("<span>").addClass("event-organizer").append(
+                            $("<span>").addClass("fa fa-users fa-fw")
+                        ).append(" ").append($("<div>").text(res.organizer).html())
+                    );
+                }
+                $ret.append(
+                    $("<span>").addClass("event-daterange").append(
+                        $("<span>").addClass("fa fa-calendar fa-fw")
+                    ).append(" ").append(res.date_range)
+                );
+                return $ret;
+            },
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            window.setTimeout(function () {
+                $s.parent().find('.select2-search__field').focus();
+            }, 50);
+        });
+    });
+
+    el.find(".simple-subevent-choice").change(function () {
+        $(this).closest("form").submit();
+    });
+};
 
 $(function () {
     "use strict";

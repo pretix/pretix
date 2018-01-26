@@ -3,6 +3,7 @@ from importlib import import_module
 
 from django.conf import settings
 from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
+from django.utils.translation import get_language
 
 from pretix.base.settings import GlobalSettingsObject
 
@@ -57,6 +58,10 @@ def contextprocessor(request):
                 ctx['new_session'] = child_sess
                 request.session['event_access'] = True
 
+        if 'subevent' in request.GET:
+            # Do not use .get() for lazy evaluation
+            ctx['selected_subevents'] = request.event.subevents.filter(pk=request.GET.get('subevent'))
+
     ctx['nav_event'] = _nav_event
     ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
 
@@ -77,6 +82,7 @@ def contextprocessor(request):
     ctx['js_date_format'] = get_javascript_format('DATE_INPUT_FORMATS')
     ctx['js_time_format'] = get_javascript_format('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
+    ctx['select2locale'] = get_language()[:2]
 
     if settings.DEBUG and 'runserver' not in sys.argv:
         ctx['debug_warning'] = True

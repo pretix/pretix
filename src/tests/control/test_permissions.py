@@ -27,6 +27,7 @@ def env():
 superuser_urls = [
     "global/settings/",
     "global/update/",
+    "users/select2",
 ]
 
 event_urls = [
@@ -70,6 +71,7 @@ event_urls = [
     "vouchers/bulk_add",
     "vouchers/rng",
     "subevents/",
+    "subevents/select2",
     "subevents/add",
     "subevents/2/delete",
     "subevents/2/",
@@ -123,6 +125,7 @@ def perf_patch(monkeypatch):
     "admin/",
     "organizers/",
     "organizers/add",
+    "organizers/select2",
     "events/",
     "events/add",
 ] + ['event/dummy/dummy/' + u for u in event_urls] + organizer_urls)
