@@ -19,7 +19,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
-    send_download_reminders,
+    mark_order_paid, send_download_reminders,
 )
 
 
@@ -28,7 +28,8 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now()
+        date_from=now(),
+        plugins='pretix.plugins.banktransfer'
     )
     return event
 
@@ -144,21 +145,42 @@ def test_expiry_dst(event):
 def test_expiring(event):
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
-        status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
-        status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=12, payment_provider='banktransfer'
     )
+    generate_invoice(o2)
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+    assert o2.invoices.last().is_cancellation is True
+
+
+@pytest.mark.django_db
+def test_expiring_paid_invoice(event):
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING, locale='en',
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=12, payment_provider='banktransfer'
+    )
+    generate_invoice(o2)
+    expire_orders(None)
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+    mark_order_paid(o2)
+    assert o2.invoices.count() == 3
+    assert o2.invoices.last().is_cancellation is False
 
 
 @pytest.mark.django_db
