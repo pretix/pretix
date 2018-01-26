@@ -262,7 +262,7 @@ var form_handlers = function (el) {
         $s.select2({
             theme: "bootstrap",
             delay: 100,
-            allowClear: true,
+            allowClear: !$s.prop("required"),
             width: '100%',
             language: $("body").attr("data-select2-locale"),
             placeholder: $(this).attr("data-placeholder"),
@@ -290,7 +290,7 @@ var form_handlers = function (el) {
         $s.select2({
             theme: "bootstrap",
             delay: 100,
-            allowClear: true,
+            allowClear: !$s.prop("required"),
             width: '100%',
             language: $("body").attr("data-select2-locale"),
             ajax: {

@@ -1,10 +1,12 @@
 import pytz
+from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
+from pretix.base.models import Organizer, User
 from pretix.control.permissions import event_permission_required
 from pretix.helpers.daterange import daterange
 from pretix.helpers.i18n import i18ncomp
@@ -97,8 +99,6 @@ def subevent_select2(request, **kwargs):
 
 
 def organizer_select2(request):
-    from pretix.base.models import Organizer
-
     term = request.GET.get('query', '')
     try:
         page = int(request.GET.get('page', '1'))
@@ -119,6 +119,38 @@ def organizer_select2(request):
             {
                 'id': o.pk,
                 'text': str(o.name)
+            } for o in qs[offset:offset + pagesize]
+        ],
+        "pagination": {
+            "more": total >= (offset + pagesize)
+        }
+    }
+
+    return JsonResponse(doc)
+
+
+def users_select2(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied()
+
+    term = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    qs = User.objects.all()
+    if term:
+        qs = qs.filter(Q(email__icontains=term) | Q(fullname__icontains=term))
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+
+    doc = {
+        "results": [
+            {
+                'id': o.pk,
+                'text': str(o.email)
             } for o in qs[offset:offset + pagesize]
         ],
         "pagination": {

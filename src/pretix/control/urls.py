@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
+    url(r'^users/select2$', typeahead.users_select2, name='users.select2'),
     url(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
