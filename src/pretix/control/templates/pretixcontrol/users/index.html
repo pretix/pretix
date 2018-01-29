@@ -1,0 +1,68 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% block title %}{% trans "Users" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Users" %}</h1>
+    <form class="row filter-form" action="" method="get">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.query layout='inline' %}
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.status layout='inline' %}
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.superuser layout='inline' %}
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+            <button class="btn btn-primary btn-block" type="submit">
+                <span class="fa fa-filter"></span>
+                <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+            </button>
+        </div>
+    </form>
+    <p>
+        <a href="{% url "control:users.add" %}" class="btn btn-default">
+            <span class="fa fa-plus"></span>
+            {% trans "Create a new user" %}
+        </a>
+    </p>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>
+                {% trans "E-mail address" %}
+                <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
+                <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a>
+            </th>
+            <th>
+                {% trans "Full name" %}
+                <a href="?{% url_replace request 'ordering' '-fullname' %}"><i class="fa fa-caret-down"></i></a>
+                <a href="?{% url_replace request 'ordering' 'fullname' %}"><i class="fa fa-caret-up"></i></a>
+            </th>
+            <th>{% trans "Active" %}</th>
+            <th>{% trans "Administrator" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:users.edit" id=u.pk %}">{{ u.email }}</a>
+                </strong></td>
+                <td>{{ u.fullname }}</td>
+                <td>{% if u.is_active %}<span class="fa fa-check-circle"></span>{% endif %}</td>
+                <td>{% if u.is_superuser %}<span class="fa fa-check-circle"></span>{% endif %}</td>
+                <td class="text-right">
+                    <a href="{% url "control:users.edit" id=u.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

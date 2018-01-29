@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
@@ -85,7 +86,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     timezone = models.CharField(max_length=100,
                                 default=settings.TIME_ZONE,
                                 verbose_name=_('Timezone'))
-    require_2fa = models.BooleanField(default=False)
+    require_2fa = models.BooleanField(
+        default=False,
+        verbose_name=_('Two-factor authentification is required to log in')
+    )
     notifications_send = models.BooleanField(
         default=True,
         verbose_name=_('Receive notifications according to my settings below'),
@@ -157,6 +161,19 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             )
         except SendMailException:
             pass  # Already logged
+
+    def send_password_reset(self):
+        from pretix.base.services.mail import mail
+
+        mail(
+            self.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
+            {
+                'user': self,
+                'url': (build_absolute_uri('control:auth.forgot.recover')
+                        + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
+            },
+            None, locale=self.locale
+        )
 
     @property
     def all_logentries(self):

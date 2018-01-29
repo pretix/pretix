@@ -1,0 +1,73 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "User" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "User" %} {{ user.email }}</h1>
+    <p>
+        <form action="{% url "control:users.reset" id=user.pk %}" method="post" class="form-inline helper-display-inline">
+            {% csrf_token %}
+            <button class="btn btn-default">{% trans "Send password reset email" %}</button>
+        </form>
+    </p>
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form_errors form %}
+                <fieldset>
+                    <legend>{% trans "Base settings" %}</legend>
+                    {% bootstrap_field form.is_active layout='control' %}
+                    {% bootstrap_field form.fullname layout='control' %}
+                    {% bootstrap_field form.locale layout='control' %}
+                    {% bootstrap_field form.timezone layout='control' %}
+                    {% bootstrap_field form.is_superuser layout='control' %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Log-in settings" %}</legend>
+                    {% bootstrap_field form.email layout='control' %}
+                    {% bootstrap_field form.new_pw layout='control' %}
+                    {% bootstrap_field form.new_pw_repeat layout='control' %}
+                    {% bootstrap_field form.require_2fa layout='control' %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Team memberships" %}</legend>
+                    <ul>
+                        {% for t in teams %}
+                            <li>
+                                <a href="{% url "control:organizer.team" organizer=t.organizer.slug team=t.pk %}">
+                                    {% blocktrans trimmed with team=t.name organizer=t.organizer.name %}
+                                        Team "{{ team }}" of organizer "{{ organizer }}"
+                                    {% endblocktrans %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </fieldset>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-12 col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "User history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=user %}
+                <li class="list-group-item logentry">
+                    <p class="meta">
+                        <span class="fa fa-clock-o"></span> {{ user.date_joined|date:"SHORT_DATETIME_FORMAT" }}
+                    </p>
+                    <p>
+                        {% trans "User created." %}
+                    </p>
+                </li>
+            </div>
+        </div>
+    </div>
+{% endblock %}

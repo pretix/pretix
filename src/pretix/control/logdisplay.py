@@ -282,4 +282,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             text = text + ' ' + str(_('Your email address has been changed to {email}.').format(email=data['email']))
         if 'new_pw' in data:
             text = text + ' ' + str(_('Your password has been changed.'))
+        if data.get('is_active') is True:
+            text = text + ' ' + str(_('Your account has been enabled.'))
+        elif data.get('is_active') is False:
+            text = text + ' ' + str(_('Your account has been disabled.'))
         return text

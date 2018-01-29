@@ -539,3 +539,60 @@ class CheckInFilterForm(FilterForm):
             qs = qs.filter(item=fdata.get('item'))
 
         return qs
+
+
+class UserFilterForm(FilterForm):
+    orders = {
+        'fullname': 'fullname',
+        'email': 'email',
+    }
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All')),
+            ('active', _('Active')),
+            ('inactive', _('Inactive')),
+        ),
+        required=False
+    )
+    superuser = forms.ChoiceField(
+        label=_('Administrator'),
+        choices=(
+            ('', _('All')),
+            ('yes', _('Administrator')),
+            ('no', _('No administrator')),
+        ),
+        required=False
+    )
+    query = forms.CharField(
+        label=_('Search query'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search query'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('status') == 'active':
+            qs = qs.filter(is_active=True)
+        elif fdata.get('status') == 'inactive':
+            qs = qs.filter(is_active=False)
+
+        if fdata.get('superuser') == 'yes':
+            qs = qs.filter(is_superuser=True)
+        elif fdata.get('superuser') == 'no':
+            qs = qs.filter(is_superuser=False)
+
+        if fdata.get('query'):
+            qs = qs.filter(
+                Q(email__icontains=fdata.get('query'))
+                | Q(fullname__icontains=fdata.get('query'))
+            )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+
+        return qs

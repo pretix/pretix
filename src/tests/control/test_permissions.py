@@ -28,6 +28,11 @@ superuser_urls = [
     "global/settings/",
     "global/update/",
     "users/select2",
+    "users/",
+    "users/add",
+    "users/1/",
+    "users/1/impersonate",
+    "users/1/reset",
 ]
 
 event_urls = [
@@ -145,7 +150,7 @@ def test_superuser_required(perf_patch, client, env, url):
     env[1].is_superuser = True
     env[1].save()
     response = client.get('/control/' + url)
-    assert response.status_code == 200
+    assert response.status_code in (200, 302, 404)
 
 
 @pytest.mark.django_db

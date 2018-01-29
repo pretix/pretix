@@ -217,6 +217,15 @@
                                         {% trans "Order search" %}
                                     </a>
                                 </li>
+                                {% if request.user.is_superuser %}
+                                    <li>
+                                        <a href="{% url 'control:users' %}"
+                                                {% if "users" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-user fa-fw"></i>
+                                            {% trans "Users" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 {% for nav in nav_global %}
                                     <li>
                                         <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}

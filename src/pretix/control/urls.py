@@ -2,7 +2,8 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, search, subevents, typeahead, user, vouchers, waitinglist,
+    organizer, search, subevents, typeahead, user, users, vouchers,
+    waitinglist,
 )
 
 urlpatterns = [
@@ -17,7 +18,11 @@ urlpatterns = [
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
+    url(r'^users/$', users.UserListView.as_view(), name='users'),
     url(r'^users/select2$', typeahead.users_select2, name='users.select2'),
+    url(r'^users/add$', users.UserCreateView.as_view(), name='users.add'),
+    url(r'^users/(?P<id>\d+)/$', users.UserEditView.as_view(), name='users.edit'),
+    url(r'^users/(?P<id>\d+)/reset$', users.UserResetView.as_view(), name='users.reset'),
     url(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
