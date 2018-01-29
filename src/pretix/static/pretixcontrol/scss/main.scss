@@ -419,6 +419,22 @@ body.loading #wrapper {
     width: 30%;
 }
 
+.impersonate-warning {
+    background-color: #ffe761;
+    background-image: -webkit-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    padding: 15px;
+}
+
+@media(min-width:768px) {
+    .impersonate-warning {
+        position: inherit;
+        margin: 0 0 0 250px;
+        padding: 15px 30px;
+    }
+}
+
 .quotabox {
     display: inline-block;
     vertical-align: top;

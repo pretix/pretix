@@ -1,6 +1,7 @@
 {% load compress %}
 {% load staticfiles %}
 {% load i18n %}
+{% load hijack_tags %}
 {% load statici18n %}
 {% load eventurl %}
 <!DOCTYPE html>
@@ -258,6 +259,19 @@
                     </div>
                 </div>
             </nav>
+            {% if request|is_hijacked %}
+                <div class="impersonate-warning">
+                    <span class="fa fa-user-secret"></span>
+                    {% blocktrans with user=request.user%}You are currently working on behalf of {{ user }}.{% endblocktrans %}
+
+                    <form action="{% url 'control:users.impersonate.stop' %}" method="post" class="helper-display-inline">
+                        {% csrf_token %}
+                        <button class="btn btn-default btn-sm">
+                            {% trans "Stop impersonating" %}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
             <div id="page-wrapper">
                 <div class="container-fluid">
                     {% if messages %}

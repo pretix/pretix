@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
+from hijack.helpers import login_user, release_hijack
 
 from pretix.base.models import User
 from pretix.base.services.mail import SendMailException
@@ -76,6 +78,9 @@ class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationReq
 
 class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
 
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
     def post(self, request, *args, **kwargs):
         self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
         try:
@@ -91,6 +96,24 @@ class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRe
 
     def get_success_url(self):
         return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        login_user(request, self.object)
+        return redirect(reverse('control:index'))
+
+
+class UserImpersonateStopView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        release_hijack(request)
+        return redirect(reverse('control:index'))
 
 
 class UserCreateView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, CreateView):

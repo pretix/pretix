@@ -9,6 +9,10 @@
             {% csrf_token %}
             <button class="btn btn-default">{% trans "Send password reset email" %}</button>
         </form>
+        <form action="{% url "control:users.impersonate" id=user.pk %}" method="post" class="form-inline helper-display-inline">
+            {% csrf_token %}
+            <button class="btn btn-default">{% trans "Impersonate user" %}</button>
+        </form>
     </p>
     <div class="row">
         <div class="col-md-10 col-xs-12">

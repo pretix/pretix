@@ -109,6 +109,7 @@ setup(
         'pyuca',
         'defusedcsv',
         'vat_moss==0.11.0',
+        'django-hijack==2.1.*'
     ],
     extras_require={
         'dev': [
