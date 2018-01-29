@@ -21,6 +21,7 @@ from pretix.control.views.user import RecentAuthenticationRequiredMixin
 class UserListView(AdministratorPermissionRequiredMixin, ListView):
     template_name = 'pretixcontrol/users/index.html'
     context_object_name = 'users'
+    paginate_by = 30
 
     def get_queryset(self):
         qs = User.objects.all()
