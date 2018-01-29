@@ -724,3 +724,61 @@ class SubEventsTest(SoupTest):
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {}, follow=True)
         assert doc.select(".alert-danger")
         assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
+
+
+class EventDeletionTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
+        self.event1 = Event.objects.create(
+            organizer=self.orga1, name='30C3', slug='30c3',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            plugins='pretix.plugins.banktransfer,tests.testdummy',
+            has_subevents=False
+        )
+
+        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
+                                can_change_items=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event1)
+        self.ticket = self.event1.items.create(name='Early-bird ticket',
+                                               category=None, default_price=23,
+                                               admission=True)
+
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def test_delete_allowed(self):
+        self.client.post('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '30c3'
+        })
+
+        assert not self.orga1.events.exists()
+
+    def test_delete_wrong_slug(self):
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '31c3'
+        })
+        assert self.orga1.events.exists()
+
+    def test_delete_wrong_pw(self):
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'invalid',
+            'slug': '30c3'
+        })
+        assert self.orga1.events.exists()
+
+    def test_delete_orders(self):
+        Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now(),
+            total=14, payment_provider='banktransfer', locale='en'
+        )
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '30c3'
+        })
+        assert self.orga1.events.exists()

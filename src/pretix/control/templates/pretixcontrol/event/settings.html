@@ -78,6 +78,10 @@
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
+            <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
+                    class="btn {% if request.event.allow_delete %}{% endif %} btn-danger btn-lg pull-left">
+                {% trans "Delete event" %}
+            </a>
         </div>
     </form>
 {% endblock %}

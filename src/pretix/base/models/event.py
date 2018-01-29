@@ -544,6 +544,9 @@ class Event(EventMixin, LoggedModel):
             Q(is_superuser=True) | Q(twp=True)
         )
 
+    def allow_delete(self):
+        return not self.orders.exists() and not self.invoices.exists()
+
 
 class SubEvent(EventMixin, LoggedModel):
     """

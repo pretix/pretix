@@ -38,6 +38,8 @@ superuser_urls = [
 event_urls = [
     "",
     "comment/",
+    "live/",
+    "delete/",
     "settings/",
     "settings/plugins",
     "settings/payment",
@@ -173,6 +175,7 @@ def test_wrong_event(perf_patch, client, env, url):
 
 event_permission_urls = [
     ("can_change_event_settings", "live/", 200),
+    ("can_change_event_settings", "delete/", 200),
     ("can_change_event_settings", "settings/", 200),
     ("can_change_event_settings", "settings/plugins", 200),
     ("can_change_event_settings", "settings/payment", 200),

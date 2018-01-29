@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import ProtectedError
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
@@ -34,8 +35,8 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
 from pretix.control.forms.event import (
-    CommentForm, DisplaySettingsForm, EventMetaValueForm, EventSettingsForm,
-    EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
+    CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
+    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
     PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
     WidgetCodeForm,
 )
@@ -784,6 +785,48 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
+
+
+class EventDelete(EventPermissionRequiredMixin, FormView):
+    permission = 'can_change_event_settings'
+    template_name = 'pretixcontrol/event/delete.html'
+    form_class = EventDeleteForm
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.event.allow_delete():
+            messages.error(self.request, _('This event can not be deleted.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                self.request.organizer.log_action(
+                    'pretix.event.deleted', user=self.request.user,
+                    data={
+                        'event_id': self.request.event.pk,
+                        'name': str(self.request.event.name),
+                        'logentries': list(self.request.event.logentry_set.values_list('pk', flat=True))
+                    }
+                )
+                self.request.event.items.all().delete()
+                self.request.event.subevents.all().delete()
+                self.request.event.delete()
+            messages.success(self.request, _('The event has been deleted.'))
+            return redirect(self.get_success_url())
+        except ProtectedError:
+            messages.error(self.request, _('The event could not be deleted as some constraints (e.g. data created by '
+                                           'plug-ins) do not allow it.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:index')
 
 
 class EventLog(EventPermissionRequiredMixin, ListView):
