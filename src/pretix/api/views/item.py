@@ -96,6 +96,11 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         return item.variations.all()
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        return ctx
+
     def perform_create(self, serializer):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         if not item.has_variations:
