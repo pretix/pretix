@@ -46,7 +46,7 @@ class CartActionMixin:
         if '?' in u:
             u += '&require_cookie=true'
         else:
-            u += '?require_cookie=false'
+            u += '?require_cookie=true'
         return u
 
     def get_success_url(self, value=None):
