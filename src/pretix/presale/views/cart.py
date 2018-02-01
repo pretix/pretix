@@ -37,12 +37,17 @@ class CartActionMixin:
 
     def get_next_url(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
-            return self.request.GET.get('next')
+            u = self.request.GET.get('next')
         else:
             kwargs = {}
             if 'cart_namespace' in self.kwargs:
                 kwargs['cart_namespace'] = self.kwargs['cart_namespace']
-            return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
+            u = eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
+        if '?' in u:
+            u += '&require_cookie=true'
+        else:
+            u += '?require_cookie=false'
+        return u
 
     def get_success_url(self, value=None):
         return self.get_next_url()
