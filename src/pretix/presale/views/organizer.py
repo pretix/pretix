@@ -227,7 +227,7 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                 self.month = now().month
         else:
             next_ev = filter_qs_by_attr(Event.objects.filter(
-                event__organizer=self.request.organizer,
+                organizer=self.request.organizer,
                 live=True,
                 is_public=True,
                 date_from__gte=now(),
