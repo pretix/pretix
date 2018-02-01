@@ -21,8 +21,7 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.invoices import invoice_pdf
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderError, cancel_order, extend_order, mark_order_expired,
-    mark_order_paid,
+    OrderError, cancel_order, extend_order, mark_order_expired, mark_order_paid,
 )
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
