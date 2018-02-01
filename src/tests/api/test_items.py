@@ -7,7 +7,7 @@ from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, ItemAddOn, ItemVariation, Order,
+    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Order,
     OrderPosition, Quota,
 )
 from pretix.base.models.orders import OrderFee
@@ -296,6 +296,224 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
 
 
 @pytest.mark.django_db
+def test_item_create_with_variation(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "variations": [
+                {
+                    "value": {
+                        "de": "Kommentar",
+                        "en": "Comment"
+                    },
+                    "active": True,
+                    "description": None,
+                    "position": 0,
+                    "default_price": None,
+                    "price": 23.0
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    new_item = Item.objects.get(pk=resp.data['id'])
+    assert new_item.variations.first().value.localize('de') == "Kommentar"
+    assert new_item.variations.first().value.localize('en') == "Comment"
+
+
+@pytest.mark.django_db
+def test_item_create_with_addon(token_client, organizer, event, item, category, category2, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    item = Item.objects.get(pk=resp.data['id'])
+    assert item.addons.first().addon_category == category
+    assert item.addons.first().max_count == 10
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category2.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The add-on\'s category must belong to the same event as the item."]}'
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 110,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The maximum count needs to be greater than the minimum count."]}'
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": -1,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The minimum count needs to be equal to or greater than zero."]}'
+    assert 2 == Item.objects.all().count()
+
+
+@pytest.mark.django_db
 def test_item_update(token_client, organizer, event, item, category2, taxrule2):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -306,7 +524,8 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The maximum number per order can not be lower than the minimum number per order."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The maximum number per order can not be lower than the ' \
+                                    'minimum number per order."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -328,7 +547,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
 
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The item\'s category must belong to the same event as the item."]}'
+    assert resp.content.decode() == '{"category":["The item\'s category must belong to the same event as the item."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -338,7 +557,74 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The item\'s tax rule must belong to the same event as the item."]}'
+    assert resp.content.decode() == '{"tax_rule":["The item\'s tax rule must belong to the same event as the item."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addons": [
+                {
+                    "addon_category": 1,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_item_update_with_variation(token_client, organizer, event, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "variations": [
+                {
+                    "value": {
+                        "de": "Kommentar",
+                        "en": "Comment"
+                    },
+                    "active": True,
+                    "description": None,
+                    "position": 0,
+                    "default_price": None,
+                    "price": 23.0
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"variations":["Updating variations via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_item_update_with_addon(token_client, organizer, event, item, category):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
 
 
 @pytest.mark.django_db
@@ -556,7 +842,8 @@ def test_addons_list(token_client, organizer, event, item, addon, category):
     res = dict(TEST_ADDONS_RES)
     res["id"] = addon.pk
     res["addon_category"] = category.pk
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug,
+                                                                                      item.pk))
     assert resp.status_code == 200
     assert res['addon_category'] == resp.data['results'][0]['addon_category']
     assert res['min_count'] == resp.data['results'][0]['min_count']
@@ -569,7 +856,8 @@ def test_addons_detail(token_client, organizer, event, item, addon, category):
     res = dict(TEST_ADDONS_RES)
     res["id"] = addon.pk
     res["addon_category"] = category.pk
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug,
+                                                                                         item.pk, addon.pk))
     assert resp.status_code == 200
     assert res == resp.data
 
@@ -604,7 +892,7 @@ def test_addons_create(token_client, organizer, event, item, category, category2
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The item already has an add-on of this category."]}'
+    assert resp.content.decode() == '{"addon_category":["The item already has an add-on of this category."]}'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
@@ -617,10 +905,9 @@ def test_addons_create(token_client, organizer, event, item, category, category2
         },
         format='json'
     )
-    assert resp.status_code == 201
-    addon = ItemAddOn.objects.get(pk=resp.data['id'])
-    assert addon.position == 2
-    assert addon.addon_category == category2
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addon_category":["The add-on\'s category must belong to the same event as ' \
+                                    'the item."]}'
 
 
 @pytest.mark.django_db
@@ -647,12 +934,14 @@ def test_addons_update(token_client, organizer, event, item, addon):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["The minimum number needs to be lower than the maximum number."]}'
+    assert resp.content.decode() == '{"non_field_errors":["The maximum count needs to be greater than the minimum ' \
+                                    'count."]}'
 
 
 @pytest.mark.django_db
 def test_addons_delete(token_client, organizer, event, item, addon):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk))
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug,
+                                                                                            item.pk, addon.pk))
     assert resp.status_code == 204
     assert not item.addons.filter(pk=addon.id).exists()
 

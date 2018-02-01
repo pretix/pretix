@@ -58,6 +58,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['has_variations'] = self.request.data.get('has_variations')
         return ctx
 
     def perform_update(self, serializer):
@@ -160,6 +161,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
         ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         return ctx
 

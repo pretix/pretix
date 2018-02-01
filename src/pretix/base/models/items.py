@@ -569,19 +569,34 @@ class ItemAddOn(models.Model):
         ordering = ('position', 'pk')
 
     def clean(self):
-        self.clean_max_min_numbers(self.max_count, self.min_count)
+        self.clean_min_count(self.min_count)
+        self.clean_max_count(self.max_count)
+        self.clean_max_min_count(self.max_count, self.min_count)
 
     @staticmethod
-    def clean_categories(item, addon, new_category):
-        if addon is None or addon.addon_category != new_category:
-            for addon in item.addons.all():
-                if addon.addon_category == new_category:
-                    raise ValidationError(_('The item already has an add-on of this category.'))
+    def clean_categories(event, item, addon, new_category):
+        if event != new_category.event:
+            raise ValidationError(_('The add-on\'s category must belong to the same event as the item.'))
+        if item is not None:
+            if addon is None or addon.addon_category != new_category:
+                for addon in item.addons.all():
+                    if addon.addon_category == new_category:
+                        raise ValidationError(_('The item already has an add-on of this category.'))
 
     @staticmethod
-    def clean_max_min_numbers(max_count, min_count):
+    def clean_min_count(min_count):
+        if min_count < 0:
+            raise ValidationError(_('The minimum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_count(max_count):
+        if max_count < 0:
+            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_min_count(max_count, min_count):
         if max_count < min_count:
-            raise ValidationError(_('The minimum number needs to be lower than the maximum number.'))
+            raise ValidationError(_('The maximum count needs to be greater than the minimum count.'))
 
 
 class Question(LoggedModel):
