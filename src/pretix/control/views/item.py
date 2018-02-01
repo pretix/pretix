@@ -1031,7 +1031,8 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
-        if self.is_allowed():
+        o = self.get_object()
+        if o.allow_delete():
             self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()

@@ -33,6 +33,7 @@ admission                             boolean                    ``True`` for it
                                                                  (such as add-ons or merchandise).
 position                              integer                    An integer, used for sorting
 picture                               string                     A product picture to be displayed in the shop
+                                                                 (read-only).
 available_from                        datetime                   The first date time at which this item can be bought
                                                                  (or ``null``).
 available_until                       datetime                   The last date time at which this item can be bought
@@ -53,10 +54,9 @@ max_per_order                         integer                    This product ca
 checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
                                                                  that this ticket requires special attention if such
                                                                  a product is being scanned.
-has_variations                        boolean                    Shows whether or not this item has variations
-                                                                 (read-only).
+has_variations                        boolean                    Shows whether or not this item has variations.
 variations                            list of objects            A list with one object for each variation of this item.
-                                                                 Can be empty.
+                                                                 Can be empty. Only writable on POST.
 ├ id                                  integer                    Internal ID of the variation
 ├ default_price                       money (string)             The price set directly for this variation or ``null``
 ├ price                               money (string)             The price used for this variation. This is either the
@@ -66,12 +66,14 @@ variations                            list of objects            A list with one
 ├ description                         multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 └ position                            integer                    An integer, used for sorting
-addons                                list of objects            Definition of add-ons that can be chosen for this item
+addons                                list of objects            Definition of add-ons that can be chosen for this item.
+                                                                 Only writable on POST.
 ├ addon_category                      integer                    Internal ID of the item category the add-on can be
                                                                  chosen from.
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
 ├ max_count                           integer                    The maximal number of add-ons that can be chosen.
 └ position                            integer                    An integer, used for sorting
+└ price_included                      boolean                    Adding this add-on to the item is free
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -79,6 +81,20 @@ addons                                list of objects            Definition of a
    The attribute ``tax_rule`` has been added. ``tax_rate`` is kept for compatibility. The attribute
    ``checkin_attention`` has been added.
 
+.. versionchanged:: 1.12
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+   The attribute ``price_included`` has been added to ``addons``.
+
+Notes
+-----
+Please note that an item either always has variations or never has. Once created with variations the item can never
+change to an item without and vice versa. To create an item with variations ensure that you POST an item with at least
+one variation.
+
+Also note that ``variations`` and ``addons`` are only supported on ``POST``. To update/delete variations and add-ons please
+use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT`` with nested
+``variations`` and/or ``addons``.
 
 Endpoints
 ---------
@@ -239,3 +255,226 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/
+
+   Creates a new item
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/items/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "id": 1,
+        "name": {"en": "Standard ticket"},
+        "default_price": "23.00",
+        "category": null,
+        "active": true,
+        "description": null,
+        "free_price": false,
+        "tax_rate": "0.00",
+        "tax_rule": 1,
+        "admission": false,
+        "position": 0,
+        "picture": null,
+        "available_from": null,
+        "available_until": null,
+        "require_voucher": false,
+        "hide_without_voucher": false,
+        "allow_cancel": true,
+        "min_per_order": null,
+        "max_per_order": null,
+        "checkin_attention": false,
+        "variations": [
+          {
+             "value": {"en": "Student"},
+             "default_price": "10.00",
+             "price": "10.00",
+             "active": true,
+             "description": null,
+             "position": 0
+          },
+          {
+             "value": {"en": "Regular"},
+             "default_price": null,
+             "price": "23.00",
+             "active": true,
+             "description": null,
+             "position": 1
+          }
+        ],
+        "addons": []
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": {"en": "Standard ticket"},
+        "default_price": "23.00",
+        "category": null,
+        "active": true,
+        "description": null,
+        "free_price": false,
+        "tax_rate": "0.00",
+        "tax_rule": 1,
+        "admission": false,
+        "position": 0,
+        "picture": null,
+        "available_from": null,
+        "available_until": null,
+        "require_voucher": false,
+        "hide_without_voucher": false,
+        "allow_cancel": true,
+        "min_per_order": null,
+        "max_per_order": null,
+        "checkin_attention": false,
+        "has_variations": true,
+        "variations": [
+          {
+             "value": {"en": "Student"},
+             "default_price": "10.00",
+             "price": "10.00",
+             "active": true,
+             "description": null,
+             "position": 0
+          },
+          {
+             "value": {"en": "Regular"},
+             "default_price": null,
+             "price": "23.00",
+             "active": true,
+             "description": null,
+             "position": 1
+          }
+        ],
+        "addons": []
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to create an item for
+   :param event: The ``slug`` field of the event to create an item for
+   :statuscode 201: no error
+   :statuscode 400: The item could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/
+
+   Update an item. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   You can change all fields of the resource except the ``has_variations``, ``variations`` and the ``addon`` field. If
+   you need to update/delete variations or add-ons please use the nested dedicated endpoints.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/items/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 94
+
+      {
+        "name": {"en": "Ticket"},
+        "default_price": "25.00"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": {"en": "Ticket"},
+        "default_price": "25.00",
+        "category": null,
+        "active": true,
+        "description": null,
+        "free_price": false,
+        "tax_rate": "0.00",
+        "tax_rule": 1,
+        "admission": false,
+        "position": 0,
+        "picture": null,
+        "available_from": null,
+        "available_until": null,
+        "require_voucher": false,
+        "hide_without_voucher": false,
+        "allow_cancel": true,
+        "min_per_order": null,
+        "max_per_order": null,
+        "checkin_attention": false,
+        "has_variations": true,
+        "variations": [
+          {
+             "value": {"en": "Student"},
+             "default_price": "10.00",
+             "price": "10.00",
+             "active": true,
+             "description": null,
+             "position": 0
+          },
+          {
+             "value": {"en": "Regular"},
+             "default_price": null,
+             "price": "23.00",
+             "active": true,
+             "description": null,
+             "position": 1
+          }
+        ],
+        "addons": []
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the item to modify
+   :statuscode 200: no error
+   :statuscode 400: The item could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
+
+   Delete an item.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/items/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the item to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
+

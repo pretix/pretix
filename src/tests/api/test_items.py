@@ -1,13 +1,79 @@
+from datetime import datetime, timedelta
 from decimal import Decimal
+from unittest import mock
 
 import pytest
+from django_countries.fields import Country
+from pytz import UTC
 
-from pretix.base.models import Quota
+from pretix.base.models import (
+    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Order,
+    OrderPosition, Quota,
+)
+from pretix.base.models.orders import OrderFee
 
 
 @pytest.fixture
 def category(event):
     return event.categories.create(name="Tickets")
+
+
+@pytest.fixture
+def category2(event2):
+    return event2.categories.create(name="Tickets2")
+
+
+@pytest.fixture
+def order(event, item, taxrule):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            total=23, payment_provider='banktransfer', locale='en'
+        )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule)
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
+        return o
+
+
+@pytest.fixture
+def order_position(item, order, taxrule, variations):
+    op = OrderPosition.objects.create(
+        order=order,
+        item=item,
+        variation=variations[0],
+        tax_rule=taxrule,
+        tax_rate=taxrule.rate,
+        tax_value=Decimal("3"),
+        price=Decimal("23"),
+        attendee_name="Peter",
+        secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+    )
+    return op
+
+
+@pytest.fixture
+def cart_position(event, item, variations):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        c = CartPosition.objects.create(
+            event=event,
+            item=item,
+            datetime=datetime.now(),
+            expires=datetime.now() + timedelta(days=1),
+            variation=variations[0],
+            price=Decimal("23"),
+            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return c
 
 
 TEST_CATEGORY_RES = {
@@ -187,7 +253,8 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
         "addon_category": category.pk,
         "min_count": 0,
         "max_count": 1,
-        "position": 0
+        "position": 0,
+        "price_included": False
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -195,20 +262,390 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
     assert res == resp.data
 
 
-@pytest.fixture
-def quota(event, item):
-    q = event.quotas.create(name="Budget Quota", size=200)
-    q.items.add(item)
-    return q
+@pytest.mark.django_db
+def test_item_create(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
 
 
-TEST_QUOTA_RES = {
-    "name": "Budget Quota",
-    "size": 200,
-    "items": [],
-    "variations": [],
-    "subevent": None
-}
+@pytest.mark.django_db
+def test_item_create_with_variation(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "variations": [
+                {
+                    "value": {
+                        "de": "Kommentar",
+                        "en": "Comment"
+                    },
+                    "active": True,
+                    "description": None,
+                    "position": 0,
+                    "default_price": None,
+                    "price": 23.0
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    new_item = Item.objects.get(pk=resp.data['id'])
+    assert new_item.variations.first().value.localize('de') == "Kommentar"
+    assert new_item.variations.first().value.localize('en') == "Comment"
+
+
+@pytest.mark.django_db
+def test_item_create_with_addon(token_client, organizer, event, item, category, category2, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    item = Item.objects.get(pk=resp.data['id'])
+    assert item.addons.first().addon_category == category
+    assert item.addons.first().max_count == 10
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category2.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The add-on\'s category must belong to the same event as the item."]}'
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 110,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The maximum count needs to be greater than the minimum count."]}'
+    assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": -1,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The minimum count needs to be equal to or greater than zero."]}'
+    assert 2 == Item.objects.all().count()
+
+
+@pytest.mark.django_db
+def test_item_update(token_client, organizer, event, item, category2, taxrule2):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "min_per_order": 10,
+            "max_per_order": 2
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The maximum number per order can not be lower than the ' \
+                                    'minimum number per order."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "available_from": "2017-12-30T12:00",
+            "available_until": "2017-12-29T12:00"
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The item\'s availability cannot end before it starts."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "category": category2.pk
+        },
+        format='json'
+
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"category":["The item\'s category must belong to the same event as the item."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "tax_rule": taxrule2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"tax_rule":["The item\'s tax rule must belong to the same event as the item."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addons": [
+                {
+                    "addon_category": 1,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_item_update_with_variation(token_client, organizer, event, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "variations": [
+                {
+                    "value": {
+                        "de": "Kommentar",
+                        "en": "Comment"
+                    },
+                    "active": True,
+                    "description": None,
+                    "position": 0,
+                    "default_price": None,
+                    "price": 23.0
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"variations":["Updating variations via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_item_update_with_addon(token_client, organizer, event, item, category):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addons": [
+                {
+                    "addon_category": category.pk,
+                    "min_count": 0,
+                    "max_count": 10,
+                    "position": 0,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_items_delete(token_client, organizer, event, item):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 204
+    assert not event.items.filter(pk=item.id).exists()
+
+
+@pytest.mark.django_db
+def test_items_with_order_position_not_delete(token_client, organizer, event, item, order_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 403
+    assert event.items.filter(pk=item.id).exists()
+
+
+@pytest.mark.django_db
+def test_items_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 403
+    assert event.items.filter(pk=item.id).exists()
 
 
 @pytest.fixture
@@ -225,6 +662,304 @@ def variations2(item2):
     v.append(item2.variations.create(value="ChildB1"))
     v.append(item2.variations.create(value="ChildB2"))
     return v
+
+
+@pytest.fixture
+def variation(item):
+    return item.variations.create(value="ChildC1")
+
+
+TEST_VARIATIONS_RES = {
+    "value": {
+        "en": "ChildC1"
+    },
+    "active": True,
+    "description": None,
+    "position": 0,
+    "default_price": None,
+    "price": 23.0
+}
+
+TEST_VARIATIONS_UPDATE = {
+    "value": {
+        "en": "ChildC2"
+    },
+    "active": True,
+    "description": None,
+    "position": 1,
+    "default_price": None,
+    "price": 23.0
+}
+
+
+@pytest.mark.django_db
+def test_variations_list(token_client, organizer, event, item, variation):
+    res = dict(TEST_VARIATIONS_RES)
+    res["id"] = variation.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk))
+    assert resp.status_code == 200
+    assert res['value'] == resp.data['results'][0]['value']
+    assert res['position'] == resp.data['results'][0]['position']
+    assert res['price'] == resp.data['results'][0]['price']
+
+
+@pytest.mark.django_db
+def test_variations_detail(token_client, organizer, event, item, variation):
+    res = dict(TEST_VARIATIONS_RES)
+    res["id"] = variation.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_variations_create(token_client, organizer, event, item, variation):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "active": True,
+            "description": None,
+            "position": 1,
+            "default_price": None,
+            "price": 23.0
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    var = ItemVariation.objects.get(pk=resp.data['id'])
+    assert var.position == 1
+    assert var.price == 23.0
+
+
+@pytest.mark.django_db
+def test_variations_create_not_allowed(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "active": True,
+            "description": None,
+            "position": 1,
+            "default_price": None,
+            "price": 23.0
+        },
+        format='json'
+    )
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be created because the item does ' \
+                                    'not have variations. Changing a product without variations to a product with ' \
+                                    'variations is not allowed."}'
+
+
+@pytest.mark.django_db
+def test_variations_update(token_client, organizer, event, item, item3, variation):
+    res = dict(TEST_VARIATIONS_UPDATE)
+    res["id"] = variation.pk
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk),
+        {
+            "value": {
+                "en": "ChildC2"
+            },
+            "position": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert res == resp.data
+
+    # Variation exists but do not belong to item
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item3.pk, variation.pk),
+        {
+            "position": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
+def test_variations_delete(token_client, organizer, event, item, variations, order):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
+    assert resp.status_code == 204
+    assert not item.variations.filter(pk=variations[0].pk).exists()
+
+
+@pytest.mark.django_db
+def test_variations_with_order_position_not_delete(token_client, organizer, event, item, order, variations, order_position):
+    assert item.variations.filter(pk=variations[0].id).exists()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it has already been ordered ' \
+                                    'by a user or currently is in a users\'s cart. Please set the variation as ' \
+                                    '\'inactive\' instead."}'
+    assert item.variations.filter(pk=variations[0].id).exists()
+
+
+@pytest.mark.django_db
+def test_variations_with_cart_position_not_delete(token_client, organizer, event, item, variations, cart_position):
+    assert item.variations.filter(pk=variations[0].id).exists()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variations[0].pk))
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it has already been ordered ' \
+                                    'by a user or currently is in a users\'s cart. Please set the variation as ' \
+                                    '\'inactive\' instead."}'
+    assert item.variations.filter(pk=variations[0].id).exists()
+
+
+@pytest.mark.django_db
+def test_only_variation_not_delete(token_client, organizer, event, item, variation):
+    assert item.variations.filter(pk=variation.id).exists()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
+    assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"This variation cannot be deleted because it is the only variation. ' \
+                                    'Changing a product with variations to a product without variations is not ' \
+                                    'allowed."}'
+    assert item.variations.filter(pk=variation.id).exists()
+
+
+@pytest.fixture
+def addon(item, category):
+    return item.addons.create(addon_category=category, min_count=0, max_count=10, position=1)
+
+
+TEST_ADDONS_RES = {
+    "min_count": 0,
+    "max_count": 10,
+    "position": 1,
+    "price_included": False
+}
+
+
+@pytest.mark.django_db
+def test_addons_list(token_client, organizer, event, item, addon, category):
+    res = dict(TEST_ADDONS_RES)
+    res["id"] = addon.pk
+    res["addon_category"] = category.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug,
+                                                                                      item.pk))
+    assert resp.status_code == 200
+    assert res['addon_category'] == resp.data['results'][0]['addon_category']
+    assert res['min_count'] == resp.data['results'][0]['min_count']
+    assert res['max_count'] == resp.data['results'][0]['max_count']
+    assert res['position'] == resp.data['results'][0]['position']
+
+
+@pytest.mark.django_db
+def test_addons_detail(token_client, organizer, event, item, addon, category):
+    res = dict(TEST_ADDONS_RES)
+    res["id"] = addon.pk
+    res["addon_category"] = category.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug,
+                                                                                         item.pk, addon.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_addons_create(token_client, organizer, event, item, category, category2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category.pk,
+            "min_count": 0,
+            "max_count": 10,
+            "position": 1,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    addon = ItemAddOn.objects.get(pk=resp.data['id'])
+    assert addon.position == 1
+    assert addon.addon_category == category
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category.pk,
+            "min_count": 10,
+            "max_count": 20,
+            "position": 2,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addon_category":["The item already has an add-on of this category."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "addon_category": category2.pk,
+            "min_count": 10,
+            "max_count": 20,
+            "position": 2,
+            "price_included": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addon_category":["The add-on\'s category must belong to the same event as ' \
+                                    'the item."]}'
+
+
+@pytest.mark.django_db
+def test_addons_update(token_client, organizer, event, item, addon):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
+        {
+            "min_count": 100,
+            "max_count": 101
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    a = ItemAddOn.objects.get(pk=addon.pk)
+    assert a.min_count == 100
+    assert a.max_count == 101
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, a.pk),
+        {
+            "min_count": 10,
+            "max_count": 1
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The maximum count needs to be greater than the minimum ' \
+                                    'count."]}'
+
+
+@pytest.mark.django_db
+def test_addons_delete(token_client, organizer, event, item, addon):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug,
+                                                                                            item.pk, addon.pk))
+    assert resp.status_code == 204
+    assert not item.addons.filter(pk=addon.id).exists()
+
+
+@pytest.fixture
+def quota(event, item):
+    q = event.quotas.create(name="Budget Quota", size=200)
+    q.items.add(item)
+    return q
+
+
+TEST_QUOTA_RES = {
+    "name": "Budget Quota",
+    "size": 200,
+    "items": [],
+    "variations": [],
+    "subevent": None
+}
 
 
 @pytest.mark.django_db
@@ -423,6 +1158,13 @@ def test_quota_update(token_client, organizer, event, quota, item):
     quota = Quota.objects.get(pk=resp.data['id'])
     assert quota.name == "Ticket Quota Update"
     assert quota.size == 111
+
+
+@pytest.mark.django_db
+def test_quota_delete(token_client, organizer, event, quota):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk))
+    assert resp.status_code == 204
+    assert not event.quotas.filter(pk=quota.id).exists()
 
 
 @pytest.mark.django_db

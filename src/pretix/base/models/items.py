@@ -372,9 +372,40 @@ class Item(LoggedModel):
         return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
+
+        return (
+            not OrderPosition.objects.filter(item=self).exists()
+            and not CartPosition.objects.filter(item=self).exists()
+        )
+
     @cached_property
     def has_variations(self):
         return self.variations.exists()
+
+    @staticmethod
+    def clean_per_order(min_per_order, max_per_order):
+        if min_per_order is not None and max_per_order is not None:
+            if min_per_order > max_per_order:
+                raise ValidationError(_('The maximum number per order can not be lower than the minimum number per '
+                                        'order.'))
+
+    @staticmethod
+    def clean_category(category, event):
+        if category is not None and category.event is not None and category.event != event:
+            raise ValidationError(_('The item\'s category must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_tax_rule(tax_rule, event):
+        if tax_rule is not None and tax_rule.event is not None and tax_rule.event != event:
+            raise ValidationError(_('The item\'s tax rule must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_available(from_date, until_date):
+        if from_date is not None and until_date is not None:
+            if from_date > until_date:
+                raise ValidationError(_('The item\'s availability cannot end before it starts.'))
 
 
 class ItemVariation(models.Model):
@@ -479,6 +510,17 @@ class ItemVariation(models.Model):
             return self.id < other.id
         return self.position < other.position
 
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
+
+        return (
+            not OrderPosition.objects.filter(variation=self).exists()
+            and not CartPosition.objects.filter(variation=self).exists()
+        )
+
+    def is_only_variation(self):
+        return ItemVariation.objects.filter(item=self.item).count() == 1
+
 
 class ItemAddOn(models.Model):
     """
@@ -530,8 +572,34 @@ class ItemAddOn(models.Model):
         ordering = ('position', 'pk')
 
     def clean(self):
-        if self.max_count < self.min_count:
-            raise ValidationError(_('The minimum number needs to be lower than the maximum number.'))
+        self.clean_min_count(self.min_count)
+        self.clean_max_count(self.max_count)
+        self.clean_max_min_count(self.max_count, self.min_count)
+
+    @staticmethod
+    def clean_categories(event, item, addon, new_category):
+        if event != new_category.event:
+            raise ValidationError(_('The add-on\'s category must belong to the same event as the item.'))
+        if item is not None:
+            if addon is None or addon.addon_category != new_category:
+                for addon in item.addons.all():
+                    if addon.addon_category == new_category:
+                        raise ValidationError(_('The item already has an add-on of this category.'))
+
+    @staticmethod
+    def clean_min_count(min_count):
+        if min_count < 0:
+            raise ValidationError(_('The minimum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_count(max_count):
+        if max_count < 0:
+            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_min_count(max_count, min_count):
+        if max_count < min_count:
+            raise ValidationError(_('The maximum count needs to be greater than the minimum count.'))
 
 
 class Question(LoggedModel):
