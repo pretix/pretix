@@ -80,7 +80,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert len(doc.select('.cart .cart-row')) == 2
@@ -95,7 +95,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/w/aaaaaaaaaaaaaaaa/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/w/aaaaaaaaaaaaaaaa/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/w/aaaaaaaaaaaaaaaa/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert len(doc.select('.cart .cart-row')) == 2
@@ -110,7 +110,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/w/aaaaaaaaaaaaaaab/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/w/aaaaaaaaaaaaaaab/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/w/aaaaaaaaaaaaaaab/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert len(doc.select('.cart .cart-row')) == 2

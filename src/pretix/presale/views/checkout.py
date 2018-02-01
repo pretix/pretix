@@ -22,7 +22,7 @@ class CheckoutView(View):
         kwargs = {}
         if 'cart_namespace' in self.kwargs:
             kwargs['cart_namespace'] = self.kwargs['cart_namespace']
-        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=false'
+        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=true'
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
