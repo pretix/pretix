@@ -324,6 +324,10 @@ class Event(EventMixin, LoggedModel):
             return get_connection(fail_silently=False)
 
     @property
+    def timezone(self):
+        return pytz.timezone(self.settings.timezone)
+
+    @property
     def payment_term_last(self):
         """
         The last datetime of payments for this event.
