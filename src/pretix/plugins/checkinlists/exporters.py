@@ -1,12 +1,15 @@
 import io
 from collections import OrderedDict
 
+import dateutil.parser
 from defusedcsv import csv
 from django import forms
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
-from django.utils.formats import localize
+from django.utils.formats import date_format, localize
+from django.utils.timezone import make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
+from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
@@ -235,8 +238,17 @@ class CSVCheckinList(BaseCheckinList):
         cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
+
+        cqs = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=cl.pk
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
         qs = OrderPosition.objects.filter(
             order__event=self.event,
+        ).annotate(
+            last_checked_in=Subquery(cqs)
         ).prefetch_related(
             'answers', 'answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
@@ -253,7 +265,7 @@ class CSVCheckinList(BaseCheckinList):
             qs = qs.order_by('order__code')
 
         headers = [
-            _('Order code'), _('Attendee name'), _('Product'), _('Price')
+            _('Order code'), _('Attendee name'), _('Product'), _('Price'), _('Checked in')
         ]
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -281,6 +293,13 @@ class CSVCheckinList(BaseCheckinList):
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
                 str(op.item.name) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
+                date_format(
+                    make_aware(
+                        dateutil.parser.parse(op.last_checked_in),
+                        UTC
+                    ).astimezone(self.event.timezone),
+                    'SHORT_DATETIME_FORMAT'
+                ) if op.last_checked_in else ''
             ]
             if not form_data['paid_only']:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
