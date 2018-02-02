@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import (
-    Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
+    Checkin, Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -591,6 +591,98 @@ class UserFilterForm(FilterForm):
                 Q(email__icontains=fdata.get('query'))
                 | Q(fullname__icontains=fdata.get('query'))
             )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+
+        return qs
+
+
+class VoucherFilterForm(FilterForm):
+    orders = {
+    }
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All')),
+            ('v', _('Valid')),
+            ('r', _('Redeemed')),
+            ('e', _('Expired')),
+            ('c', _('Redeemed and checked in with ticket')),
+        ),
+        required=False
+    )
+    tag = forms.CharField(
+        label=_('Filter by tag'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Filter by tag'),
+        }),
+        required=False
+    )
+    search = forms.CharField(
+        label=_('Search voucher'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search voucher'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', 'Date'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        elif 'subevent':
+            del self.fields['subevent']
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('search'):
+            s = fdata.get('search').strip()
+            qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
+
+        if fdata.get('tag'):
+            s = fdata.get('tag').strip()
+            qs = qs.filter(tag__icontains=s)
+
+        if fdata.get('status'):
+            s = fdata.get('status')
+            if s == 'v':
+                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=0)
+            elif s == 'r':
+                qs = qs.filter(redeemed__gt=0)
+            elif s == 'e':
+                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
+            elif s == 'c':
+                checkins = Checkin.objects.filter(
+                    position__voucher=OuterRef('pk')
+                )
+                qs = qs.annotate(has_checkin=Exists(checkins)).filter(
+                    redeemed__gt=0, has_checkin=True
+                )
+
+        if fdata.get('subevent'):
+            qs = qs.filter(subevent_id=fdata.get('subevent').pk)
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())

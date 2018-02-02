@@ -5,19 +5,20 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Exists, OuterRef, Q, Sum
+from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
 )
-from django.utils.timezone import now
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import Checkin, Voucher
+from pretix.base.models import Voucher
 from pretix.base.models.vouchers import _generate_random_code
+from pretix.control.forms.filter import VoucherFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
@@ -32,31 +33,19 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = self.request.event.vouchers.all().select_related('item', 'variation')
-        if self.request.GET.get("search", "") != "":
-            s = self.request.GET.get("search", "").strip()
-            qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
-        if self.request.GET.get("tag", "") != "":
-            s = self.request.GET.get("tag", "")
-            qs = qs.filter(tag__icontains=s)
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
-            if s == 'v':
-                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=0)
-            elif s == 'r':
-                qs = qs.filter(redeemed__gt=0)
-            elif s == 'e':
-                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
-            elif s == 'c':
-                checkins = Checkin.objects.filter(
-                    position__voucher=OuterRef('pk')
-                )
-                qs = qs.annotate(has_checkin=Exists(checkins)).filter(
-                    redeemed__gt=0, has_checkin=True
-                )
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
-        return qs
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return VoucherFilterForm(data=self.request.GET, event=self.request.event)
 
     def get(self, request, *args, **kwargs):
         if request.GET.get("download", "") == "yes":
