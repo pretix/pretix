@@ -1,5 +1,5 @@
 Item variations
-=====
+===============
 
 Resource description
 --------------------

@@ -509,12 +509,15 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"addons":["The minimum count needs to be equal to or greater than zero."]}'
+    assert resp.content.decode() in [
+        '{"addons":["The minimum count needs to be equal to or greater than zero."]}',
+        '{"addons":[{"min_count":["Ensure this value is greater than or equal to 0."]}]}',  # mysql
+    ]
     assert 2 == Item.objects.all().count()
 
 
 @pytest.mark.django_db
-def test_item_update(token_client, organizer, event, item, category2, taxrule2):
+def test_item_update(token_client, organizer, event, item, category, category2, taxrule2):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
@@ -564,7 +567,7 @@ def test_item_update(token_client, organizer, event, item, category2, taxrule2):
         {
             "addons": [
                 {
-                    "addon_category": 1,
+                    "addon_category": category.pk,
                     "min_count": 0,
                     "max_count": 10,
                     "position": 0,

@@ -8,7 +8,7 @@ The settings at "Settings" → "Display" allow you to customize the appearance o
    :class: screenshot
 
 The upper part of the page contains settings that you always need to set specifically for your event. Those are
-currently::
+currently:
 
 Logo image
     This logo will be shown as a banner above your shop. If you set it, the event name and date will no longer be

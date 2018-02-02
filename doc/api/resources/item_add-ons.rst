@@ -1,5 +1,5 @@
 Item add-ons
-=====
+============
 
 Resource description
 --------------------
