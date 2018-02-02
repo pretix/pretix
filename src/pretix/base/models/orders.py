@@ -507,17 +507,26 @@ class QuestionAnswer(models.Model):
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
         elif self.question.type == Question.TYPE_DATETIME and self.answer:
-            d = dateutil.parser.parse(self.answer)
-            if self.orderposition:
-                tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
-                d = d.astimezone(tz)
-            return date_format(d, "SHORT_DATETIME_FORMAT")
+            try:
+                d = dateutil.parser.parse(self.answer)
+                if self.orderposition:
+                    tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                    d = d.astimezone(tz)
+                return date_format(d, "SHORT_DATETIME_FORMAT")
+            except ValueError:
+                return self.answer
         elif self.question.type == Question.TYPE_DATE and self.answer:
-            d = dateutil.parser.parse(self.answer)
-            return date_format(d, "SHORT_DATE_FORMAT")
+            try:
+                d = dateutil.parser.parse(self.answer)
+                return date_format(d, "SHORT_DATE_FORMAT")
+            except ValueError:
+                return self.answer
         elif self.question.type == Question.TYPE_TIME and self.answer:
-            d = dateutil.parser.parse(self.answer)
-            return date_format(d, "TIME_FORMAT")
+            try:
+                d = dateutil.parser.parse(self.answer)
+                return date_format(d, "TIME_FORMAT")
+            except ValueError:
+                return self.answer
         else:
             return self.answer
 
