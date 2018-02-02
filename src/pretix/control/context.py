@@ -58,7 +58,7 @@ def contextprocessor(request):
                 ctx['new_session'] = child_sess
                 request.session['event_access'] = True
 
-        if 'subevent' in request.GET:
+        if request.GET.get('subevent', ''):
             # Do not use .get() for lazy evaluation
             ctx['selected_subevents'] = request.event.subevents.filter(pk=request.GET.get('subevent'))
 
