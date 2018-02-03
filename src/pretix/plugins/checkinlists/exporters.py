@@ -298,13 +298,8 @@ class CSVCheckinList(BaseCheckinList):
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
                 str(op.item.name) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
-                date_format(
-                    make_aware(
-                        dateutil.parser.parse(last_checked_in),
-                        UTC
-                    ).astimezone(self.event.timezone),
-                    'SHORT_DATETIME_FORMAT'
-                ) if last_checked_in else ''
+                date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                if last_checked_in else ''
             ]
             if not form_data['paid_only']:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
