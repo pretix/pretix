@@ -139,7 +139,7 @@ class BaseQuestionsForm(forms.Form):
                 field = forms.TimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
-                    initial=dateutil.parser.parse(initial.answer).astimezone(tz).time() if initial and initial.answer else None,
+                    initial=dateutil.parser.parse(initial.answer).time() if initial and initial.answer else None,
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
