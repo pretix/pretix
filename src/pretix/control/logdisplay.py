@@ -288,3 +288,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         elif data.get('is_active') is False:
             text = text + ' ' + str(_('Your account has been disabled.'))
         return text
+
+    if logentry.action_type == 'pretix.control.auth.user.impersonated':
+        return str(_('You impersonated {}.')).format(data['other_email'])
+
+    if logentry.action_type == 'pretix.control.auth.user.impersonate_stopped':
+        return str(_('You stopped impersonating {}.')).format(data['other_email'])

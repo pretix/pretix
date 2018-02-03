@@ -106,6 +106,12 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
 
     def post(self, request, *args, **kwargs):
         self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        self.request.user.log_action('pretix.control.auth.user.impersonated',
+                                     user=request.user,
+                                     data={
+                                         'other': self.kwargs.get("id"),
+                                         'other_email': self.object.email
+                                     })
         login_user(request, self.object)
         return redirect(reverse('control:index'))
 
@@ -113,7 +119,14 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
 class UserImpersonateStopView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
+        impersonated = request.user
         release_hijack(request)
+        request.user.log_action('pretix.control.auth.user.impersonate_stopped',
+                                user=request.user,
+                                data={
+                                    'other': impersonated.pk,
+                                    'other_email': impersonated.email
+                                })
         return redirect(reverse('control:index'))
 
 
