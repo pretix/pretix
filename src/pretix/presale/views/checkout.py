@@ -10,7 +10,8 @@ from pretix.base.signals import validate_cart
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
 from pretix.presale.views import (
-    allow_frame_if_namespaced, cart_exists, get_cart, iframe_entry_view_wrapper,
+    allow_frame_if_namespaced, cart_exists, get_cart,
+    iframe_entry_view_wrapper,
 )
 
 
