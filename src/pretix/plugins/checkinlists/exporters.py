@@ -288,6 +288,11 @@ class CSVCheckinList(BaseCheckinList):
         writer.writerow(headers)
 
         for op in qs:
+            last_checked_in = None
+            if isinstance(op.last_checked_in, str):  # SQLite
+                last_checked_in = make_aware(dateutil.parser.parse(op.last_checked_in), UTC)
+            elif op.last_checked_in:
+                last_checked_in = op.last_checked_in
             row = [
                 op.order.code,
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
@@ -295,11 +300,11 @@ class CSVCheckinList(BaseCheckinList):
                 op.price,
                 date_format(
                     make_aware(
-                        dateutil.parser.parse(op.last_checked_in),
+                        dateutil.parser.parse(last_checked_in),
                         UTC
                     ).astimezone(self.event.timezone),
                     'SHORT_DATETIME_FORMAT'
-                ) if op.last_checked_in else ''
+                ) if last_checked_in else ''
             ]
             if not form_data['paid_only']:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
