@@ -7,7 +7,7 @@ from django import forms
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.utils.formats import date_format, localize
-from django.utils.timezone import make_aware
+from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 from pytz import UTC
 from reportlab.lib.units import mm
@@ -290,9 +290,11 @@ class CSVCheckinList(BaseCheckinList):
         for op in qs:
             last_checked_in = None
             if isinstance(op.last_checked_in, str):  # SQLite
-                last_checked_in = make_aware(dateutil.parser.parse(op.last_checked_in), UTC)
+                last_checked_in = dateutil.parser.parse(op.last_checked_in)
             elif op.last_checked_in:
                 last_checked_in = op.last_checked_in
+            if last_checked_in and not is_aware(last_checked_in):
+                last_checked_in = make_aware(last_checked_in, UTC)
             row = [
                 op.order.code,
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
