@@ -112,7 +112,7 @@ class CartManager:
     def _check_presale_dates(self):
         if self.event.presale_start and self.now_dt < self.event.presale_start:
             raise CartError(error_messages['not_started'])
-        if self.event.presale_end and self.now_dt > self.event.presale_end:
+        if self.event.presale_has_ended:
             raise CartError(error_messages['ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):

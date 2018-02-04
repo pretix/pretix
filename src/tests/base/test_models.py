@@ -1020,6 +1020,38 @@ class EventTest(TestCase):
         assert event2.checkin_lists.count() == 1
         assert [i.pk for i in event2.checkin_lists.first().limit_products.all()] == [i1new.pk]
 
+    def test_presale_has_ended(self):
+        event = Event(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_from = now().replace(hour=23, minute=59, second=59)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_from = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
+
+        event.date_to = now() + timedelta(days=1)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_to = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
+
+        event.presale_end = now() + timedelta(days=1)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.presale_end = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
+
 
 class SubEventTest(TestCase):
     @classmethod

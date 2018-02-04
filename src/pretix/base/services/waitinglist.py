@@ -35,6 +35,10 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
             if (wle.item, wle.variation) in gone:
                 continue
 
+            ev = (wle.subevent or event)
+            if not ev.presale_is_running:
+                continue
+
             quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
                       if wle.variation
                       else wle.item.quotas.filter(subevent=wle.subevent))
@@ -66,5 +70,5 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
 def process_waitinglist(sender, **kwargs):
     qs = Event.objects.prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
-        if e.settings.waiting_list_enabled and e.settings.waiting_list_auto:
+        if e.settings.waiting_list_enabled and e.settings.waiting_list_auto and e.presale_is_running:
             assign_automatically.apply_async(args=(e.pk,))

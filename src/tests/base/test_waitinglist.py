@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.core import mail as djmail
 from django.test import TestCase
 from django.utils.timezone import now
@@ -114,6 +116,21 @@ class WaitingListTestCase(TestCase):
         assign_automatically.apply(args=(self.event.pk,))
         assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 10
         assert Voucher.objects.count() == 10
+
+    def test_send_periodic_event_over(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        self.event.settings.set('waiting_list_auto', True)
+        self.event.presale_end = now() - timedelta(days=1)
+        self.event.save()
+        for i in range(5):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
+            )
+        process_waitinglist(None)
+        assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 5
+        assert Voucher.objects.count() == 0
+        self.event.presale_end = now() + timedelta(days=1)
+        self.event.save()
 
     def test_send_periodic(self):
         self.event.settings.set('waiting_list_enabled', True)

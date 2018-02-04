@@ -321,7 +321,7 @@ class OrderError(LazyLocaleException):
 def _check_date(event: Event, now_dt: datetime):
     if event.presale_start and now_dt < event.presale_start:
         raise OrderError(error_messages['not_started'])
-    if event.presale_end and now_dt > event.presale_end:
+    if event.presale_has_ended:
         raise OrderError(error_messages['ended'])
 
 

@@ -43,7 +43,7 @@ class EventMixin:
         Returns a shorter formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz),
             "SHORT_DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
@@ -55,7 +55,7 @@ class EventMixin:
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return ""
         return _date(
@@ -68,7 +68,7 @@ class EventMixin:
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz),
             "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
@@ -79,7 +79,7 @@ class EventMixin:
         Returns a formatted string containing the start time of the event, ignoring
         the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz), "TIME_FORMAT"
         )
@@ -90,7 +90,7 @@ class EventMixin:
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return ""
         return _date(
@@ -104,19 +104,26 @@ class EventMixin:
         of the event with respect to the current locale and to the ``show_times`` and
         ``show_date_to`` settings.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
         return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
+
+    @property
+    def timezone(self):
+        return pytz.timezone(self.settings.timezone)
 
     @property
     def presale_has_ended(self):
         """
         Is true, when ``presale_end`` is set and in the past.
         """
-        if self.presale_end and now() > self.presale_end:
-            return True
-        return False
+        if self.presale_end:
+            return now() > self.presale_end
+        elif self.date_to:
+            return now() > self.date_to
+        else:
+            return now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
 
     @property
     def presale_is_running(self):
@@ -126,9 +133,7 @@ class EventMixin:
         """
         if self.presale_start and now() < self.presale_start:
             return False
-        if self.presale_end and now() > self.presale_end:
-            return False
-        return True
+        return not self.presale_has_ended
 
     @property
     def event_microdata(self):
@@ -229,7 +234,8 @@ class Event(EventMixin, LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("Optional. No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date. If you do not set this value, the presale "
+                    "will end after the end date of your event."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
@@ -322,10 +328,6 @@ class Event(EventMixin, LoggedModel):
                                      fail_silently=False)
         else:
             return get_connection(fail_silently=False)
-
-    @property
-    def timezone(self):
-        return pytz.timezone(self.settings.timezone)
 
     @property
     def payment_term_last(self):
@@ -590,7 +592,8 @@ class SubEvent(EventMixin, LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("Optional. No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date. If you do not set this value, the presale "
+                    "will end after the end date of your event."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,

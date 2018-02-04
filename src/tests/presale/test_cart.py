@@ -25,7 +25,7 @@ class CartTestMixin:
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             live=True,
             plugins="pretix.plugins.banktransfer"
         )
@@ -59,6 +59,17 @@ class CartTest(CartTestMixin, TestCase):
 
     def test_after_presale(self):
         self.event.presale_end = now() - timedelta(days=1)
+        self.event.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-danger' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
+
+    def test_after_event(self):
+        self.event.date_to = now() - timedelta(days=1)
         self.event.save()
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'

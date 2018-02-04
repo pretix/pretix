@@ -26,7 +26,7 @@ class CheckoutTestCase(TestCase):
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
             live=True
         )
@@ -1109,6 +1109,19 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
+
+    def test_confirm_event_over(self):
+        self.event.date_to = now() - datetime.timedelta(days=1)
+        self.event.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
 
     def test_confirm_presale_over(self):
         self.event.presale_end = now() - datetime.timedelta(days=1)
