@@ -39,6 +39,7 @@ def notify(logentry_id: int):
     notify_global = {
         (ns.user, ns.method): ns.enabled
         for ns in NotificationSetting.objects.filter(
+            event__isnull=True,
             action_type=logentry.action_type,
             user__pk__in=users.values_list('pk', flat=True)
         )
