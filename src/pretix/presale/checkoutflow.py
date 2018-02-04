@@ -522,6 +522,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 v = self.cart_session.get('contact_form_data', {}).get(key)
+                v = value.bound_data(v, initial='')
                 if v is True:
                     v = _('Yes')
                 elif v is False:

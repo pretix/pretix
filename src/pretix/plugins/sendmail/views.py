@@ -60,7 +60,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        qs = Order.objects.filter(event=self.request.event)
+        qs = Order.objects.filter(event=self.request.event, email__isnull=False)
         statusq = Q(status__in=form.cleaned_data['sendto'])
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())

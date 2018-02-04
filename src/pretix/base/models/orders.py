@@ -395,6 +395,9 @@ class Order(LoggedModel):
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
+        if not self.email:
+            return
+
         with language(self.locale):
             recipient = self.email
             try:

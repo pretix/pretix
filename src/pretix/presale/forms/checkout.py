@@ -14,6 +14,7 @@ from pretix.base.forms.questions import (
 from pretix.base.models import ItemVariation
 from pretix.base.models.tax import TAXED_ZERO
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.base.validators import EmailBlacklistValidator
 from pretix.presale.signals import contact_form_fields
 
 
@@ -23,6 +24,7 @@ class ContactForm(forms.Form):
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
+                             validators=[EmailBlacklistValidator()],
                              widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
 
     def __init__(self, *args, **kwargs):

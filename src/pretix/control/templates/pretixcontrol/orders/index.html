@@ -108,7 +108,7 @@
                             </strong>
                         </td>
                         <td>
-                            {{ o.email }}
+                            {{ o.email|default_if_none:"" }}
                             {% if o.invoice_address.name %}
                                 <br>{{ o.invoice_address.name }}
                             {% endif %}

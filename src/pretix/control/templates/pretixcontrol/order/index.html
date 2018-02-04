@@ -93,21 +93,23 @@
                         {% endif %}
                         <dt>{% trans "User" %}</dt>
                         <dd>
-                            {{ order.email }}&nbsp;&nbsp;
+                            {{ order.email|default_if_none:"" }}&nbsp;&nbsp;
                             <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
                             </a>
-                            <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                <span class="fa fa-envelope-o"></span>
-                            </a>
-                            {% if order.status != "c" %}
-                                <form class="form-inline helper-display-inline" method="post"
-                                        action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-default btn-xs">
-                                        {% trans "Resend link" %}
-                                    </button>
-                                </form>
+                            {% if order.email %}
+                                <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-envelope-o"></span>
+                                </a>
+                                {% if order.status != "c" %}
+                                    <form class="form-inline helper-display-inline" method="post"
+                                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default btn-xs">
+                                            {% trans "Resend link" %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </dd>
                         {% if invoices %}
