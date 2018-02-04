@@ -32,16 +32,16 @@
         <fieldset>
             <legend>{% trans "Choose event" %}</legend>
             <p>
-                <select name="event" class="form-control">
-                    <option value="">{% trans "All my events" %}</option>
-                    {% for e in events %}
-                        <option value="{{ e.pk }}"
-                                {% if e.pk|floatformat:0 == request.GET.event %}selected="selected"{% endif %}>
-                            {{ e.name }} – {{ e.get_date_range_display }}
+                <select name="event" class="form-control simple-subevent-choice"
+                    data-model-select2="event"
+                    data-placeholder="{% trans "All my events" %}"
+                    data-select2-url="{% url "control:events.typeahead" %}">
+                    {% if event %}
+                        <option value="{{ event.pk }}" selected>
+                            {{ event.name }}
                         </option>
-                    {% endfor %}
+                    {% endif %}
                 </select>
-                <button class="btn btn-primary" type="submit">{% trans "Choose" %}</button>
                 <span class="help-block">{% trans "Save your modifications before switching events." %}</span>
             </p>
         </fieldset>
