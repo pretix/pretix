@@ -100,7 +100,8 @@ and by default only asks for the email address. You are supposed to return a dic
 form fields with globally unique keys. The validated form results will be saved into the
 ``contact_form_data`` entry of the order's meta_info dictionary.
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
+argument will contain the request object.
 """
 
 question_form_fields = EventPluginSignal(

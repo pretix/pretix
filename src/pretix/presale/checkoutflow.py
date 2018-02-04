@@ -312,6 +312,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                            event=self.request.event,
+                           request=self.request,
                            initial=initial)
 
     @cached_property
@@ -517,7 +518,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
 
         ctx['contact_info'] = []
-        responses = contact_form_fields.send(self.event)
+        responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 v = self.cart_session.get('contact_form_data', {}).get(key)

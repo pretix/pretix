@@ -27,6 +27,7 @@ class ContactForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
+        self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
 
         if self.event.settings.order_email_asked_twice:
@@ -35,7 +36,7 @@ class ContactForm(forms.Form):
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.')
             )
 
-        responses = contact_form_fields.send(self.event)
+        responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
