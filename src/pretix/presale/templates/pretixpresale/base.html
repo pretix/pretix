@@ -70,6 +70,11 @@
 {% else %}
     <script src="{% statici18n LANGUAGE_CODE %}" async></script>
 {% endif %}
+{% if request.session.iframe_session %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "iframeresizer/iframeResizer.contentWindow.js" %}"></script>
+    {% endcompress %}
+{% endif %}
 {{ html_foot|safe }}
 </body>
 </html>

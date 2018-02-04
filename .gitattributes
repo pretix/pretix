@@ -8,6 +8,7 @@ src/static/fileupload/* linguist-vendored
 src/static/vuejs/* linguist-vendored
 src/static/select2/* linguist-vendored
 src/static/charts/* linguist-vendored
+src/static/iframeresizer/* linguist-vendored
 src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/fabric.* linguist-vendored
 src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/pdf.* linguist-vendored
 
