@@ -487,9 +487,13 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def is_applicable(self, request):
         self.request = request
-        if self._total_order_value == 0:
-            self.cart_session['payment'] = 'free'
-            return False
+
+        for p in self.request.event.get_payment_providers().values():
+            if p.is_implicit:
+                if p.is_allowed(request):
+                    self.cart_session['payment'] = p.identifier
+                    return False
+
         return True
 
 

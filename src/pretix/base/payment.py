@@ -51,6 +51,16 @@ class BasePaymentProvider:
         return self.identifier
 
     @property
+    def is_implicit(self) -> bool:
+        """
+        Returns whether or whether not this payment provider is an "implicit" payment provider that will
+        *always* and unconditionally be used if is_allowed() returns True and does not require any input.
+        This is  intended to be used by the FreePaymentProvider, which skips the payment choice page.
+        By default, this returns ``False``. Please do not set this if you don't know exactly what you are doing.
+        """
+        return False
+
+    @property
     def is_meta(self) -> bool:
         """
         Returns whether or whether not this payment provider is a "meta" payment provider that only
@@ -551,6 +561,10 @@ class PaymentException(Exception):
 
 
 class FreeOrderProvider(BasePaymentProvider):
+
+    @property
+    def is_implicit(self) -> bool:
+        return True
 
     @property
     def is_enabled(self) -> bool:
