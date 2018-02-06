@@ -519,6 +519,15 @@ class Event(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    @property
+    def has_payment_provider(self):
+        result = False
+        for provider in self.get_payment_providers().values():
+            if provider.is_enabled and provider.identifier != 'free':
+                result = True
+                break
+        return result
+
     def get_users_with_any_permission(self):
         """
         Returns a queryset of users who have any permission to this event.
@@ -552,37 +561,27 @@ class Event(EventMixin, LoggedModel):
             Q(is_superuser=True) | Q(twp=True)
         )
 
-    @staticmethod
-    def has_paid_things(event):
-        item = apps.get_model('pretixbase', 'Item')
-        item_variation = apps.get_model('pretixbase', 'ItemVariation')
-        return item.objects.filter(event=event, default_price__gt=0).exists()\
-            or item_variation.objects.filter(item__event=event, default_price__gt=0).exists()
+    def has_paid_things(self):
+        from .items import Item, ItemVariation
 
-    @staticmethod
-    def has_payment_provider(event):
-        result = False
-        for provider in event.get_payment_providers().values():
-            if provider.is_enabled and provider.identifier != 'free':
-                result = True
-                break
-        return result
+        return Item.objects.filter(event=self, default_price__gt=0).exists()\
+            or ItemVariation.objects.filter(item__event=self, default_price__gt=0).exists()
 
-    @staticmethod
-    def clean_payment_methods(event):
-        if Event.has_paid_things(event) and not Event.has_payment_provider(event):
+    def clean_payment_methods(self):
+        if self.has_paid_things() and not self.has_payment_provider:
             raise ValidationError(_('You have configured at least one paid product but have not enabled any payment '
                                     'methods.'))
 
-    @staticmethod
-    def clean_quotas(event):
-        if event is None or not event.quotas.exists():
-                raise ValidationError(_('You need to configure at least one quota to sell anything.'))
+    def clean_quotas(self):
+        if not self.quotas.exists():
+            raise ValidationError(_('You need to configure at least one quota to sell anything.'))
 
-    @staticmethod
-    def clean_live(event):
-        Event.clean_payment_methods(event)
-        Event.clean_quotas(event)
+    def clean_live(self):
+        self.clean_payment_methods()
+        self.clean_quotas()
+
+    def allow_delete(self):
+        return not self.orders.exists() and not self.invoices.exists()
 
     @staticmethod
     def clean_slug(organizer, event, slug):
@@ -604,9 +603,6 @@ class Event(EventMixin, LoggedModel):
         if presale_start is not None and presale_end is not None:
             if presale_start > presale_end:
                 raise ValidationError(_('The event\'s presale cannot end before it starts.'))
-
-    def allow_delete(self):
-        return not self.orders.exists() and not self.invoices.exists()
 
 
 class SubEvent(EventMixin, LoggedModel):

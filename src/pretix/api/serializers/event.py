@@ -83,7 +83,11 @@ class EventSerializer(I18nAwareModelSerializer):
 
     def validate_live(self, value):
         if value:
-            Event.clean_live(self.instance)
+            if self.instance is None:
+                raise ValidationError(_('Events cannot be create as \'live\'. Quotas and payment must be added to the '
+                                        'event before sales can go live.'))
+            else:
+                self.instance.clean_live()
         return value
 
 

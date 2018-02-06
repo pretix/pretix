@@ -132,7 +132,8 @@ def test_event_create(token_client, organizer, event):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"live":["You need to configure at least one quota to sell anything."]}'
+    assert resp.content.decode() == '{"live":["Events cannot be create as \'live\'. Quotas and payment must be added ' \
+                                    'to the event before sales can go live."]}'
 
 
 @pytest.mark.django_db
