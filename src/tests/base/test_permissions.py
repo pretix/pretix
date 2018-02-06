@@ -223,6 +223,7 @@ def test_list_of_events(event, user, admin):
         organizer=orga2, name='Dummy', slug='dummy4',
         date_from=now()
     )
+    User.objects.filter(email="admin@localhost").delete()
 
     assert not user.get_events_with_any_permission()
 

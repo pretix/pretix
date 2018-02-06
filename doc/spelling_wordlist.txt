@@ -101,6 +101,7 @@ unprefixed
 untrusted
 username
 url
+versa
 viewset
 viewsets
 webhook

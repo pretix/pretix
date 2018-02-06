@@ -57,7 +57,7 @@ class InvoiceExporter(BaseExporter):
                      label=_('Start date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=_('Only include invocies issued on or after this date. Note that the invoice date does '
+                     help_text=_('Only include invoices issued on or after this date. Note that the invoice date does '
                                  'not always correspond to the order or payment date.')
                  )),
                 ('date_to',
@@ -65,7 +65,7 @@ class InvoiceExporter(BaseExporter):
                      label=_('End date'),
                      widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                      required=False,
-                     help_text=_('Only include invocies issued on or before this date. Note that the invoice date '
+                     help_text=_('Only include invoices issued on or before this date. Note that the invoice date '
                                  'does not always correspond to the order or payment date.')
                  )),
                 ('payment_provider',
@@ -77,9 +77,9 @@ class InvoiceExporter(BaseExporter):
                          (k, v.verbose_name) for k, v in self.event.get_payment_providers().items()
                      ],
                      required=False,
-                     help_text=_('Only include invocies for orders that are currently set to this payment provider. '
+                     help_text=_('Only include invoices for orders that are currently set to this payment provider. '
                                  'Note that this might include some invoices of other payment providers or misses '
-                                 'some invoices if the payment provider of an order has been changed and a new order '
+                                 'some invoices if the payment provider of an order has been changed and a new invoice '
                                  'has been generated.')
                  )),
             ]

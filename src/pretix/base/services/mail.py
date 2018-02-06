@@ -1,4 +1,5 @@
 import logging
+from email.utils import formataddr
 from typing import Any, Dict, List, Union
 
 import bleach
@@ -90,6 +91,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         body, body_md = render_mail(template, context)
         subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
+        if event:
+            sender = formataddr((str(event.name), sender))
+        else:
+            sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
         subject = str(subject)
         body_plain = body

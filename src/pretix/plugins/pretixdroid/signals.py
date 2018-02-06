@@ -19,13 +19,13 @@ def control_nav_import(sender, request=None, **kwargs):
         return []
     return [
         {
-            'label': _('pretixdroid'),
+            'label': _('Check-in devices'),
             'url': reverse('plugins:pretixdroid:config', kwargs={
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
             'active': (url.namespace == 'plugins:pretixdroid' and url.url_name == 'config'),
-            'icon': 'android',
+            'icon': 'mobile',
         }
     ]
 

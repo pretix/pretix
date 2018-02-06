@@ -38,11 +38,12 @@ from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, extend_order,
-    mark_order_paid,
+    mark_order_expired, mark_order_paid,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
 from pretix.base.views.async import AsyncAction
+from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
@@ -219,7 +220,7 @@ class OrderTransition(OrderView):
                 messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a confirmation mail.'))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
-        elif self.order.status == Order.STATUS_PENDING and to == 'c':
+        elif self.order.cancel_allowed() and to == 'c':
             cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
             messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PAID and to == 'n':
@@ -229,9 +230,7 @@ class OrderTransition(OrderView):
             self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
-            self.order.status = Order.STATUS_EXPIRED
-            self.order.save()
-            self.order.log_action('pretix.event.order.expired', user=self.request.user)
+            mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))
         elif self.order.status == Order.STATUS_PAID and to == 'r':
             ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
@@ -241,7 +240,7 @@ class OrderTransition(OrderView):
 
     def get(self, *args, **kwargs):
         to = self.request.GET.get('status', '')
-        if self.order.status == Order.STATUS_PENDING and to == 'c':
+        if self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'order': self.order,
             })
@@ -625,6 +624,28 @@ class OrderChange(OrderView):
                 return self._redirect_back()
 
         return self.get(*args, **kwargs)
+
+
+class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/order/change_questions.html'
+
+    def post(self, request, *args, **kwargs):
+        failed = not self.save() or not self.invoice_form.is_valid()
+        if failed:
+            messages.error(self.request,
+                           _("We had difficulties processing your input. Please review the errors below."))
+            return self.get(request, *args, **kwargs)
+        self.invoice_form.save()
+        self.order.log_action('pretix.event.order.modified', user=request.user)
+        if self.invoice_form.has_changed():
+            success_message = ('The invoice address has been updated. If you want to generate a new invoice, '
+                               'you need to do this manually.')
+            messages.success(self.request, _(success_message))
+
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        return redirect(self.get_order_url())
 
 
 class OrderContactChange(OrderView):

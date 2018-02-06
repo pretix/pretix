@@ -29,6 +29,10 @@ event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet)
 
+item_router = routers.DefaultRouter()
+item_router.register(r'variations', item.ItemVariationViewSet)
+item_router.register(r'addons', item.ItemAddOnViewSet)
+
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
@@ -39,6 +43,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/', include(orga_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/', include(event_router.urls)),
+    url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/items/(?P<item>[^/]+)/', include(item_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/checkinlists/(?P<list>[^/]+)/',
         include(checkinlist_router.urls)),
 ]

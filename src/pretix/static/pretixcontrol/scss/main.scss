@@ -1,8 +1,8 @@
 @import "_variables.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
-@import "../../typeahead/typeahead.css";
-@import "../../charts/morris.css";
+@import "../../typeahead/typeahead.scss";
+@import "../../charts/morris.scss";
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "_sb-admin-2.scss";
 @import "_forms.scss";
@@ -11,6 +11,8 @@
 @import "_dashboard.scss";
 @import "../../pretixbase/scss/webfont.scss";
 @import "../../fileupload/jquery.fileupload.scss";
+@import "../../select2/select2.scss";
+@import "../../select2/select2_bootstrap.scss";
 @import "../../colorpicker/bootstrap-colorpicker.scss";
 
 footer {
@@ -310,7 +312,7 @@ body.loading #wrapper {
 .event-dropdown {
     width: 300px;
 }
-.event-dropdown, .mobile-event-dropdown {
+.event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full {
         display: block;
     }
@@ -319,7 +321,9 @@ body.loading #wrapper {
         font-size: $font-size-small;
         color: $text-muted;
     }
-    .active .event-daterange, .active .event-organizer, .active a {
+    .active .event-daterange, .active .event-organizer, .active a,
+    .select2-results__option--highlighted .event-daterange,
+    .select2-results__option--highlighted .event-organizer {
         color: white;
     }
     .active {
@@ -413,6 +417,22 @@ body.loading #wrapper {
 
 .event-name-col {
     width: 30%;
+}
+
+.impersonate-warning {
+    background-color: #ffe761;
+    background-image: -webkit-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    background-image: -moz-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
+    padding: 15px;
+}
+
+@media(min-width:768px) {
+    .impersonate-warning {
+        position: inherit;
+        margin: 0 0 0 250px;
+        padding: 15px 30px;
+    }
 }
 
 .quotabox {

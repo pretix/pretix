@@ -9,10 +9,10 @@
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="control" %}
             {% bootstrap_field form.slug layout="control" %}
-            {% bootstrap_field form.date_from layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
-            {% bootstrap_field form.date_to layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.date_from layout="control" %}
+            {% bootstrap_field form.date_to layout="control" %}
             {% bootstrap_field form.location layout="control" %}
-            {% bootstrap_field form.date_admission layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.date_admission layout="control" %}
             {% bootstrap_field form.currency layout="control" %}
             {% bootstrap_field form.is_public layout="control" %}
 
@@ -51,9 +51,9 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.presale_start layout="control" %}
             {% bootstrap_field sform.presale_start_show_date layout="control" %}
-            {% bootstrap_field form.presale_end layout="control" horizontal_field_class="col-md-9 splitdatetimerow" %}
+            {% bootstrap_field form.presale_end layout="control" %}
             {% bootstrap_field sform.show_items_outside_presale_period layout="control" %}
             {% bootstrap_field sform.last_order_modification_date layout="control" %}
         </fieldset>
@@ -78,6 +78,10 @@
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
+            <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
+                    class="btn {% if request.event.allow_delete %}{% endif %} btn-danger btn-lg pull-left">
+                {% trans "Delete event" %}
+            </a>
         </div>
     </form>
 {% endblock %}

@@ -10,7 +10,8 @@ from pretix.base.signals import validate_cart
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
 from pretix.presale.views import (
-    allow_frame_if_namespaced, get_cart, iframe_entry_view_wrapper,
+    allow_frame_if_namespaced, cart_exists, get_cart,
+    iframe_entry_view_wrapper,
 )
 
 
@@ -22,12 +23,12 @@ class CheckoutView(View):
         kwargs = {}
         if 'cart_namespace' in self.kwargs:
             kwargs['cart_namespace'] = self.kwargs['cart_namespace']
-        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
+        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=true'
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
 
-        if not get_cart(request) and "async_id" not in request.GET:
+        if not cart_exists(request) and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
             return redirect(self.get_index_url(self.request))
 

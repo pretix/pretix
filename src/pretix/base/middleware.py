@@ -7,7 +7,6 @@ from django.core.urlresolvers import get_script_prefix
 from django.http import HttpRequest, HttpResponse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
-from django.utils.crypto import get_random_string
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
@@ -166,9 +165,6 @@ class SecurityMiddleware(MiddlewareMixin):
         '/api/v1/docs/',
     )
 
-    def process_request(self, request):
-        request.csp_nonce = get_random_string(length=32)
-
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
@@ -183,7 +179,7 @@ class SecurityMiddleware(MiddlewareMixin):
             # frame-src is deprecated but kept for compatibility with CSP 1.0 browsers, e.g. Safari 9
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'child-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
-            'style-src': ["{static}", "{media}", "'nonce-{nonce}'"],
+            'style-src': ["{static}", "{media}"],
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
             'font-src': ["{static}"],
@@ -222,10 +218,9 @@ class SecurityMiddleware(MiddlewareMixin):
 
         if request.path not in self.CSP_EXEMPT and not getattr(resp, '_csp_ignore', False):
             resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
-                                                                    media=mediadomain, nonce=request.csp_nonce)
+                                                                    media=mediadomain)
             for k, v in h.items():
-                h[k] = ' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain,
-                                          nonce=request.csp_nonce).split(' ')
+                h[k] = ' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain).split(' ')
             resp['Content-Security-Policy'] = _render_csp(h)
         elif 'Content-Security-Policy' in resp:
             del resp['Content-Security-Policy']

@@ -8,7 +8,7 @@
         {% csrf_token %}
         <h3>{% trans "Welcome back!" %}</h3>
         <p>
-            {% trans "You configured your account two require authentification with a second medium, e.g. your phone. Please enter your verification code here:" %}
+            {% trans "You configured your account to require authentification with a second medium, e.g. your phone. Please enter your verification code here:" %}
         </p>
         <div class="form-group">
             <input class="form-control" name="token" placeholder="{% trans "Token" %}"

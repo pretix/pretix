@@ -127,6 +127,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
+        'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
+                                                             'is available for download.'),
         'pretix.event.order.email.expire_warning_sent': _('An email has been sent with a warning that the order is about '
                                                           'to expire.'),
         'pretix.event.order.email.order_canceled': _('An email has been sent to notify the user that the order has been canceled.'),
@@ -135,6 +137,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.order_paid': _('An email has been sent to notify the user that payment has been received.'),
         'pretix.event.order.email.order_placed': _('An email has been sent to notify the user that the order has been received and requires payment.'),
         'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
+        'pretix.control.auth.user.created': _('The user has been created.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
         'pretix.user.settings.2fa.regenemergency': _('Your two-factor emergency codes have been regenerated.'),
@@ -280,4 +283,14 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             text = text + ' ' + str(_('Your email address has been changed to {email}.').format(email=data['email']))
         if 'new_pw' in data:
             text = text + ' ' + str(_('Your password has been changed.'))
+        if data.get('is_active') is True:
+            text = text + ' ' + str(_('Your account has been enabled.'))
+        elif data.get('is_active') is False:
+            text = text + ' ' + str(_('Your account has been disabled.'))
         return text
+
+    if logentry.action_type == 'pretix.control.auth.user.impersonated':
+        return str(_('You impersonated {}.')).format(data['other_email'])
+
+    if logentry.action_type == 'pretix.control.auth.user.impersonate_stopped':
+        return str(_('You stopped impersonating {}.')).format(data['other_email'])

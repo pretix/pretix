@@ -16,9 +16,10 @@
     <form class="form-inline helper-display-inline" action="" method="get">
         <p>
             <select name="status" class="form-control">
-                <option value="">{% trans "All orders" %}</option>
+                <option value="" {% if request.GET.status == "" %}selected="selected"{% endif %}>{% trans "All orders" %}</option>
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
                 <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
+                <option value="np" {% if request.GET.status == "np" or "status" not in request.GET %}selected="selected"{% endif %}>{% trans "Pending or paid" %}</option>
                 <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
                 <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>

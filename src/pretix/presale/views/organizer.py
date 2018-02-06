@@ -111,8 +111,8 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
         return qs.order_by(order)
 
 
-def add_events_for_days(request, organizer, before, after, ebd, timezones):
-    qs = organizer.events.filter(is_public=True, live=True, has_subevents=False).filter(
+def add_events_for_days(request, baseqs, before, after, ebd, timezones):
+    qs = baseqs.filter(is_public=True, live=True, has_subevents=False).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
@@ -121,7 +121,8 @@ def add_events_for_days(request, organizer, before, after, ebd, timezones):
     ).prefetch_related(
         '_settings_objects', 'organizer___settings_objects'
     )
-    qs = filter_qs_by_attr(qs, request)
+    if hasattr(request, 'organizer'):
+        qs = filter_qs_by_attr(qs, request)
     for event in qs:
         timezones.add(event.settings.timezones)
         tz = pytz.timezone(event.settings.timezone)
@@ -226,6 +227,7 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                 self.month = now().month
         else:
             next_ev = filter_qs_by_attr(Event.objects.filter(
+                organizer=self.request.organizer,
                 live=True,
                 is_public=True,
                 date_from__gte=now(),
@@ -277,7 +279,7 @@ class CalendarView(OrganizerViewMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, self.request.organizer, before, after, ebd, timezones)
+        add_events_for_days(self.request, self.request.organizer.events, before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,

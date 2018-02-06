@@ -5,6 +5,7 @@ from urllib.parse import urljoin, urlsplit
 
 import django_libsass
 import sass
+from compressor.filters.cssmin import CSSCompressorFilter
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -54,9 +55,11 @@ def compile_scss(object, file="main.scss", fonts=True):
     cf['static'] = static
     css = sass.compile(
         string="\n".join(sassrules),
-        include_paths=[sassdir], output_style='compressed',
+        include_paths=[sassdir], output_style='nested',
         custom_functions=cf
     )
+    cssf = CSSCompressorFilter(css)
+    css = cssf.output()
     checksum = hashlib.sha1(css.encode('utf-8')).hexdigest()
     return css, checksum
 

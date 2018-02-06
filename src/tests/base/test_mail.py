@@ -45,7 +45,7 @@ def test_send_mail_with_event_sender(env):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
     assert djmail.outbox[0].subject == 'Test subject'
-    assert djmail.outbox[0].from_email == 'foo@bar'
+    assert djmail.outbox[0].from_email == 'Dummy <foo@bar>'
 
 
 @pytest.mark.django_db
@@ -70,7 +70,7 @@ def test_send_mail_with_default_sender(env):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
     assert djmail.outbox[0].subject == 'Test subject'
-    assert djmail.outbox[0].from_email == settings.MAIL_FROM
+    assert djmail.outbox[0].from_email == 'Dummy <%s>' % settings.MAIL_FROM
 
 
 @pytest.mark.django_db

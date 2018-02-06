@@ -274,6 +274,11 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             )
         )
 
+        context['cookie_warning'] = (
+            'require_cookie' in self.request.GET and
+            settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+        )
+
         return context
 
 

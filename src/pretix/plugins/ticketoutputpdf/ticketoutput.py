@@ -1,9 +1,11 @@
 import copy
 import logging
+import re
 import uuid
 from collections import OrderedDict
 from io import BytesIO
 
+import bleach
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
@@ -68,6 +70,13 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Product name and variation"),
         "editor_sample": _("Sample product description"),
         "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
+    }),
+    ("item_category", {
+        "label": _("Product category"),
+        "editor_sample": _("Ticket category"),
+        "evaluate": lambda orderposition, order, event: (
+            str(orderposition.item.category.name) if orderposition.item.category else ""
+        )
     }),
     ("price", {
         "label": _("Price"),
@@ -235,8 +244,14 @@ class PdfTicketOutput(BaseTicketOutput):
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
-
-        p = Paragraph(self._get_text_content(op, order, o) or "", style=style)
+        text = re.sub(
+            "<br[^>]*>", "<br/>",
+            bleach.clean(
+                self._get_text_content(op, order, o) or "",
+                tags=["br"], attributes={}, styles=[], strip=True
+            )
+        )
+        p = Paragraph(text, style=style)
         p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))

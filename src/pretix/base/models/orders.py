@@ -6,6 +6,7 @@ from datetime import datetime, time
 from decimal import Decimal
 from typing import Any, Dict, List, Union
 
+import dateutil
 import pytz
 from django.conf import settings
 from django.db import models
@@ -15,6 +16,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -211,6 +213,12 @@ class Order(LoggedModel):
     def net_total(self):
         return self.total - self.tax_total
 
+    def cancel_allowed(self):
+        return (
+            self.status == Order.STATUS_PENDING
+            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+        )
+
     @staticmethod
     def normalize_code(code):
         tr = str.maketrans({
@@ -270,7 +278,7 @@ class Order(LoggedModel):
         """
         positions = self.positions.all().select_related('item')
         cancelable = all([op.item.allow_cancel for op in positions])
-        return self.event.settings.cancel_allow_user and cancelable
+        return self.cancel_allowed() and self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
@@ -387,6 +395,9 @@ class Order(LoggedModel):
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
+        if not self.email:
+            return
+
         with language(self.locale):
             recipient = self.email
             try:
@@ -498,6 +509,27 @@ class QuestionAnswer(models.Model):
             return str(_("No"))
         elif self.question.type == Question.TYPE_FILE:
             return str(_("<file>"))
+        elif self.question.type == Question.TYPE_DATETIME and self.answer:
+            try:
+                d = dateutil.parser.parse(self.answer)
+                if self.orderposition:
+                    tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                    d = d.astimezone(tz)
+                return date_format(d, "SHORT_DATETIME_FORMAT")
+            except ValueError:
+                return self.answer
+        elif self.question.type == Question.TYPE_DATE and self.answer:
+            try:
+                d = dateutil.parser.parse(self.answer)
+                return date_format(d, "SHORT_DATE_FORMAT")
+            except ValueError:
+                return self.answer
+        elif self.question.type == Question.TYPE_TIME and self.answer:
+            try:
+                d = dateutil.parser.parse(self.answer)
+                return date_format(d, "TIME_FORMAT")
+            except ValueError:
+                return self.answer
         else:
             return self.answer
 
@@ -585,7 +617,7 @@ class AbstractPosition(models.Model):
         else:
             return {}
 
-    def cache_answers(self):
+    def cache_answers(self, all=True):
         """
         Creates two properties on the object.
         (1) answ: a dictionary of question.id → answer string
@@ -598,7 +630,13 @@ class AbstractPosition(models.Model):
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
-        self.questions = list(copy.copy(q) for q in self.item.questions.all())
+        if not all:
+            if hasattr(self.item, 'questions_to_ask'):
+                self.questions = list(copy.copy(q) for q in self.item.questions_to_ask)
+            else:
+                self.questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False))
+        else:
+            self.questions = list(copy.copy(q) for q in self.item.questions.all())
         for q in self.questions:
             if q.id in self.answ:
                 q.answer = self.answ[q.id]
@@ -824,7 +862,7 @@ class CartPosition(AbstractPosition):
     the checkout process. This has all properties of AbstractPosition.
 
     :param event: The event this belongs to
-    :type event: Evnt
+    :type event: Event
     :param cart_id: The user session that contains this cart position
     :type cart_id: str
     """

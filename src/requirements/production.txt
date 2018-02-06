@@ -31,6 +31,7 @@ markdown
 bleach==2.*
 raven
 django-i18nfield>=1.2.1
+django-hijack==2.1.*
 # Stripe
 stripe==1.62.*
 # PayPal

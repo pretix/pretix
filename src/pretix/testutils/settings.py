@@ -51,4 +51,5 @@ class DisableMigrations(object):
         return None
 
 
-MIGRATION_MODULES = DisableMigrations()
+if not os.environ.get("TRAVIS", ""):
+    MIGRATION_MODULES = DisableMigrations()

@@ -15,7 +15,7 @@ E-mail settings
 ---------------
 
 The upper part of the page contains settings that are relevant for the generation of all e-mails alike. Those are
-currently::
+currently:
 
 Subject prefix
     This text will be prepended to the subject of all e-mails that are related to your event. For example, if you

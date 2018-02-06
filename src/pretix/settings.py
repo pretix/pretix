@@ -187,6 +187,7 @@ ENTROPY = {
 }
 
 # Internal settings
+PRETIX_EMAIL_NONE_VALUE = 'none@well-known.pretix.eu'
 
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
 
@@ -226,7 +227,9 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'statici18n',
-    'django_countries'
+    'django_countries',
+    'hijack',
+    'compat',
 ]
 
 try:

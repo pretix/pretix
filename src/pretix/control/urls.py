@@ -2,7 +2,8 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, search, subevents, typeahead, user, vouchers, waitinglist,
+    organizer, search, subevents, typeahead, user, users, vouchers,
+    waitinglist,
 )
 
 urlpatterns = [
@@ -17,6 +18,13 @@ urlpatterns = [
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
+    url(r'^users/$', users.UserListView.as_view(), name='users'),
+    url(r'^users/select2$', typeahead.users_select2, name='users.select2'),
+    url(r'^users/add$', users.UserCreateView.as_view(), name='users.add'),
+    url(r'^users/impersonate/stop', users.UserImpersonateStopView.as_view(), name='users.impersonate.stop'),
+    url(r'^users/(?P<id>\d+)/$', users.UserEditView.as_view(), name='users.edit'),
+    url(r'^users/(?P<id>\d+)/reset$', users.UserResetView.as_view(), name='users.reset'),
+    url(r'^users/(?P<id>\d+)/impersonate', users.UserImpersonateView.as_view(), name='users.impersonate'),
     url(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
@@ -36,6 +44,7 @@ urlpatterns = [
         name='user.settings.2fa.delete'),
     url(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     url(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
+    url(r'^organizers/select2$', typeahead.organizer_select2, name='organizers.select2'),
     url(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     url(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
     url(r'^organizer/(?P<organizer>[^/]+)/settings/display$', organizer.OrganizerDisplaySettings.as_view(),
@@ -57,6 +66,7 @@ urlpatterns = [
         url(r'^$', dashboards.event_index, name='event.index'),
         url(r'^live/$', event.EventLive.as_view(), name='event.live'),
         url(r'^logs/$', event.EventLog.as_view(), name='event.log'),
+        url(r'^delete/$', event.EventDelete.as_view(), name='event.delete'),
         url(r'^requiredactions/$', event.EventActions.as_view(), name='event.requiredactions'),
         url(r'^requiredactions/(?P<id>\d+)/discard$', event.EventActionDiscard.as_view(),
             name='event.requiredaction.discard'),
@@ -80,6 +90,7 @@ urlpatterns = [
         url(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
         url(r'^settings/widget$', event.WidgetSettings.as_view(), name='event.settings.widget'),
         url(r'^subevents/$', subevents.SubEventList.as_view(), name='event.subevents'),
+        url(r'^subevents/select2$', typeahead.subevent_select2, name='event.subevents.select2'),
         url(r'^subevents/(?P<subevent>\d+)/$', subevents.SubEventUpdate.as_view(), name='event.subevent'),
         url(r'^subevents/(?P<subevent>\d+)/delete$', subevents.SubEventDelete.as_view(),
             name='event.subevent.delete'),
@@ -153,6 +164,8 @@ urlpatterns = [
             name='event.order.comment'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/change$', orders.OrderChange.as_view(),
             name='event.order.change'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/info', orders.OrderModifyInformation.as_view(),
+            name='event.order.info'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/sendmail$', orders.OrderSendMail.as_view(),
             name='event.order.sendmail'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/mail_history$', orders.OrderEmailHistory.as_view(),

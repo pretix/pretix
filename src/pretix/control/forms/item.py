@@ -4,7 +4,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
-from django.utils.translation import ugettext as __, ugettext_lazy as _
+from django.urls import reverse
+from django.utils.translation import (
+    pgettext_lazy, ugettext as __, ugettext_lazy as _,
+)
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nFormSet, I18nModelForm
@@ -13,6 +16,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import ItemAddOn
 from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms.widgets import Select2
 
 
 class CategoryForm(I18nModelForm):
@@ -45,6 +49,7 @@ class QuestionForm(I18nModelForm):
             'help_text',
             'type',
             'required',
+            'ask_during_checkin',
             'items'
         ]
         widgets = {
@@ -94,6 +99,18 @@ class QuotaForm(I18nModelForm):
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
 

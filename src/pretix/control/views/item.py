@@ -402,11 +402,13 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
+        if self.request.GET.get("status", "np") != "":
+            s = self.request.GET.get("status", "np")
             if s == 'o':
                 qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
-                               expires__lt=now().replace(hour=0, minute=0, second=0))
+                               orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
@@ -428,6 +430,12 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             for a in qs:
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
+        elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
+            qs = qs.order_by('answer')
+            qs_model = qs
+            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
+            for a, a_model in zip(qs, qs_model):
+                a['answer'] = str(a_model)
         else:
             qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
 
@@ -1023,7 +1031,8 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
-        if self.is_allowed():
+        o = self.get_object()
+        if o.allow_delete():
             self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()

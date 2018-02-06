@@ -312,6 +312,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                            event=self.request.event,
+                           request=self.request,
                            initial=initial)
 
     @cached_property
@@ -374,9 +375,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for cp in self._positions_for_questions:
             answ = {
-                aw.question_id: aw.answer for aw in cp.answers.all()
+                aw.question_id: aw.answer for aw in cp.answerlist
             }
-            for q in cp.item.questions.all():
+            for q in cp.item.questions_to_ask:
                 if q.required and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
@@ -486,9 +487,13 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def is_applicable(self, request):
         self.request = request
-        if self._total_order_value == 0:
-            self.cart_session['payment'] = 'free'
-            return False
+
+        for p in self.request.event.get_payment_providers().values():
+            if p.is_implicit:
+                if p.is_allowed(request):
+                    self.cart_session['payment'] = p.identifier
+                    return False
+
         return True
 
 
@@ -517,10 +522,11 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
 
         ctx['contact_info'] = []
-        responses = contact_form_fields.send(self.event)
+        responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 v = self.cart_session.get('contact_form_data', {}).get(key)
+                v = value.bound_data(v, initial='')
                 if v is True:
                     v = _('Yes')
                 elif v is False:

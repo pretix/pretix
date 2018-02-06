@@ -27,11 +27,19 @@ def env():
 superuser_urls = [
     "global/settings/",
     "global/update/",
+    "users/select2",
+    "users/",
+    "users/add",
+    "users/1/",
+    "users/1/impersonate",
+    "users/1/reset",
 ]
 
 event_urls = [
     "",
     "comment/",
+    "live/",
+    "delete/",
     "settings/",
     "settings/plugins",
     "settings/payment",
@@ -70,6 +78,7 @@ event_urls = [
     "vouchers/bulk_add",
     "vouchers/rng",
     "subevents/",
+    "subevents/select2",
     "subevents/add",
     "subevents/2/delete",
     "subevents/2/",
@@ -123,6 +132,7 @@ def perf_patch(monkeypatch):
     "admin/",
     "organizers/",
     "organizers/add",
+    "organizers/select2",
     "events/",
     "events/add",
 ] + ['event/dummy/dummy/' + u for u in event_urls] + organizer_urls)
@@ -142,7 +152,7 @@ def test_superuser_required(perf_patch, client, env, url):
     env[1].is_superuser = True
     env[1].save()
     response = client.get('/control/' + url)
-    assert response.status_code == 200
+    assert response.status_code in (200, 302, 404)
 
 
 @pytest.mark.django_db
@@ -165,6 +175,7 @@ def test_wrong_event(perf_patch, client, env, url):
 
 event_permission_urls = [
     ("can_change_event_settings", "live/", 200),
+    ("can_change_event_settings", "delete/", 200),
     ("can_change_event_settings", "settings/", 200),
     ("can_change_event_settings", "settings/plugins", 200),
     ("can_change_event_settings", "settings/payment", 200),

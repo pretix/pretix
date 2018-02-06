@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
     {% endcompress %}
     {% if css_file %}
-        <link rel="stylesheet" type="text/css" href="{{ css_file }}" nonce="{{ request.csp_nonce }}" />
+        <link rel="stylesheet" type="text/css" href="{{ css_file }}" />
     {% else %}
         {% compress css %}
             <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
@@ -23,6 +23,7 @@
         <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
         <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
         <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
+        <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
@@ -35,7 +36,7 @@
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
 </head>
-<body data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}">
+<body data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}">
 {% block above %}
 {% endblock %}
 <div class="container">
@@ -68,6 +69,11 @@
     <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
 {% else %}
     <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+{% endif %}
+{% if request.session.iframe_session %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "iframeresizer/iframeResizer.contentWindow.js" %}"></script>
+    {% endcompress %}
 {% endif %}
 {{ html_foot|safe }}
 </body>

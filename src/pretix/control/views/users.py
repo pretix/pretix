@@ -1,0 +1,154 @@
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
+from django.views import View
+from django.views.generic import ListView
+from hijack.helpers import login_user, release_hijack
+
+from pretix.base.models import User
+from pretix.base.services.mail import SendMailException
+from pretix.control.forms.filter import UserFilterForm
+from pretix.control.forms.users import UserEditForm
+from pretix.control.permissions import AdministratorPermissionRequiredMixin
+from pretix.control.views import CreateView, UpdateView
+from pretix.control.views.user import RecentAuthenticationRequiredMixin
+
+
+class UserListView(AdministratorPermissionRequiredMixin, ListView):
+    template_name = 'pretixcontrol/users/index.html'
+    context_object_name = 'users'
+    paginate_by = 30
+
+    def get_queryset(self):
+        qs = User.objects.all()
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return UserFilterForm(data=self.request.GET)
+
+
+class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/users/form.html'
+    context_object_name = 'user'
+    form_class = UserEditForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(User, pk=self.kwargs.get("id"))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['teams'] = self.object.teams.select_related('organizer')
+        return ctx
+
+    def get_success_url(self):
+        return reverse('control:users.edit', kwargs=self.kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+
+        data = {}
+        for k in form.changed_data:
+            if k != 'new_pw_repeat':
+                if 'new_pw' == k:
+                    data['new_pw'] = True
+                else:
+                    data[k] = form.cleaned_data[k]
+
+        sup = super().form_valid(form)
+
+        if 'require_2fa' in form.changed_data and form.cleaned_data['require_2fa']:
+            self.object.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
+        elif 'require_2fa' in form.changed_data and not form.cleaned_data['require_2fa']:
+            self.object.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
+        self.object.log_action('pretix.user.settings.changed', user=self.request.user, data=data)
+
+        return sup
+
+
+class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        try:
+            self.object.send_password_reset()
+        except SendMailException:
+            messages.error(request, _('There was an error sending the mail. Please try again later.'))
+            return redirect(self.get_success_url())
+
+        self.object.log_action('pretix.control.auth.user.forgot_password.mail_sent',
+                               user=request.user)
+        messages.success(request, _('We sent out an e-mail containing further instructions.'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        self.request.user.log_action('pretix.control.auth.user.impersonated',
+                                     user=request.user,
+                                     data={
+                                         'other': self.kwargs.get("id"),
+                                         'other_email': self.object.email
+                                     })
+        login_user(request, self.object)
+        return redirect(reverse('control:index'))
+
+
+class UserImpersonateStopView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        impersonated = request.user
+        release_hijack(request)
+        request.user.log_action('pretix.control.auth.user.impersonate_stopped',
+                                user=request.user,
+                                data={
+                                    'other': impersonated.pk,
+                                    'other_email': impersonated.email
+                                })
+        return redirect(reverse('control:index'))
+
+
+class UserCreateView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, CreateView):
+    template_name = 'pretixcontrol/users/create.html'
+    context_object_name = 'user'
+    form_class = UserEditForm
+
+    def get_form(self, form_class=None):
+        f = super().get_form(form_class)
+        f.fields['new_pw'].required = True
+        f.fields['new_pw_repeat'].required = True
+        return f
+
+    def get_initial(self):
+        i = super().get_initial()
+        i['timezone'] = settings.TIME_ZONE
+        return i
+
+    def get_success_url(self):
+        return reverse('control:users')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The new user has been created.'))
+        return super().form_valid(form)

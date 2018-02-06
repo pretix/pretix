@@ -107,6 +107,28 @@
         </div>
     {% endif %}
 
+    {% if cookie_warning %}
+        <div class="alert alert-danger">
+            {% if cart_namespace %}
+                {% blocktrans trimmed %}
+                    Your browser does not accept cookies from us. However, we need to set a cookie to remember who
+                    you are and what is in your cart. Please try to open the ticket shop in a new tab or change your
+                    browser settings.
+                {% endblocktrans %}
+                <br>
+                <a href="{% eventurl event "presale:event.index" %}" class="btn btn-default" target="_blank">
+                    {% trans "Open ticket shop in new tab" %}
+                </a>
+                <div class="clearfix"></div>
+            {% else %}
+                {% blocktrans trimmed %}
+                    Your browser does not accept cookies from us. However, we need to set a cookie to remember who
+                    you are and what is in your cart. Please change your browser settings accordingly.
+                {% endblocktrans %}
+            {% endif %}
+        </div>
+    {% endif %}
+
     {% if subevent or not event.has_subevents %}
         {% if not ev.presale_is_running %}
             <div class="alert alert-info">
