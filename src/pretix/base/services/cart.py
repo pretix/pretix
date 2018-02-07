@@ -188,7 +188,7 @@ class CartManager:
             if op.subevent and op.subevent.presale_start and self.now_dt < op.subevent.presale_start:
                 raise CartError(error_messages['not_started'])
 
-            if op.subevent and op.subevent.presale_end and self.now_dt > op.subevent.presale_end:
+            if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):

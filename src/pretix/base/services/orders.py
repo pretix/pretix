@@ -361,7 +361,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.delete()
             break
 
-        if cp.subevent and cp.subevent.presale_end and now_dt > cp.subevent.presale_end:
+        if cp.subevent and cp.subevent.presale_has_ended:
             err = err or error_messages['some_subevent_ended']
             cp.delete()
             break

@@ -268,6 +268,13 @@ class Event(EventMixin, LoggedModel):
     def __str__(self):
         return str(self.name)
 
+    @property
+    def presale_has_ended(self):
+        if self.has_subevents:
+            return self.presale_end and now() > self.presale_end
+        else:
+            return super().presale_has_ended
+
     def save(self, *args, **kwargs):
         obj = super().save(*args, **kwargs)
         self.cache.clear()

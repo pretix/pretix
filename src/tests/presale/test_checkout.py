@@ -1401,3 +1401,18 @@ class CheckoutTestCase(TestCase):
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         assert 'presale period for one of the events in your cart has ended.' in response.rendered_content
         assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+    def test_confirm_subevent_ignore_series_dates(self):
+        self.event.has_subevents = True
+        self.event.date_to = now() - datetime.timedelta(days=1)
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() + datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
