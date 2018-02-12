@@ -140,7 +140,7 @@ class OrderListExporter(BaseExporter):
             row.append(', '.join([i.number for i in order.invoices.all()]))
             writer.writerow(row)
 
-        return 'orders.csv', 'text/csv', output.getvalue().encode("utf-8")
+        return '{}_orders.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
 
 
 class QuotaListExporter(BaseExporter):

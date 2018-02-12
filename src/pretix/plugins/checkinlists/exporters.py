@@ -319,4 +319,4 @@ class CSVCheckinList(BaseCheckinList):
 
             writer.writerow(row)
 
-        return 'checkin.csv', 'text/csv', output.getvalue().encode("utf-8")
+        return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
