@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
 from django.utils.formats import date_format, localize
-from django.utils.timezone import now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
 from pretix.base.exporter import BaseExporter
@@ -94,10 +94,11 @@ class ReportlabExportMixin:
     def page_footer(self, canvas, doc):
         from reportlab.lib.units import mm
 
+        tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
         canvas.drawString(15 * mm, 10 * mm, _("Page %d") % (doc.page,))
         canvas.drawRightString(self.pagesize[0] - 15 * mm, 10 * mm,
-                               _("Created: %s") % now().strftime("%d.%m.%Y %H:%M:%S"))
+                               _("Created: %s") % now().astimezone(tz).strftime("%d.%m.%Y %H:%M:%S"))
 
     def page_header(self, canvas, doc):
         from reportlab.lib.units import mm
