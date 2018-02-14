@@ -48,7 +48,7 @@ def login(request):
                 request.session['pretix_auth_2fa_user'] = form.user_cache.pk
                 request.session['pretix_auth_2fa_time'] = str(int(time.time()))
                 twofa_url = reverse('control:auth.login.2fa')
-                if 'next' in request.GET:
+                if "next" in request.GET and is_safe_url(request.GET.get("next")):
                     twofa_url += '?next=' + quote(request.GET.get('next'))
                 return redirect(twofa_url)
             else:
@@ -71,7 +71,10 @@ def logout(request):
     """
     auth_logout(request)
     request.session['pretix_auth_login_time'] = 0
-    return redirect('control:auth.login')
+    next = reverse('control:auth.login')
+    if 'next' in request.GET and is_safe_url(request.GET.get('next')):
+        next += '?next=' + quote(request.GET.get('next'))
+    return redirect(next)
 
 
 def register(request):
