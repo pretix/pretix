@@ -288,4 +288,4 @@ various places like order codes, secrets in the ticket QR codes, etc. Example::
     voucher_code=16
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
-.. _Celery documentation: http://docs.celeryproject.org/en/latest/configuration.html
+.. _Celery documentation: http://docs.celeryproject.org/en/latest/userguide/configuration.html
