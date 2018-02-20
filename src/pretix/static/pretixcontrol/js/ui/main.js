@@ -234,7 +234,10 @@ var form_handlers = function (el) {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    el.find(".scrolling-multiple-choice").each(function () {
+    el.find("div.scrolling-multiple-choice").each(function () {
+        if ($(this).find(".choice-options-all").length > 0) {
+            return;
+        }
         var $small = $("<small>");
         var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("All"));
         var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("None"));
