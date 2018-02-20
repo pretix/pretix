@@ -612,6 +612,15 @@ class VoucherFilterForm(FilterForm):
         ),
         required=False
     )
+    qm = forms.ChoiceField(
+        label=_('Quota handling'),
+        choices=(
+            ('', _('All')),
+            ('b', _('Reserve ticket from quota')),
+            ('i', _('Allow to ignore quota')),
+        ),
+        required=False
+    )
     tag = forms.CharField(
         label=_('Filter by tag'),
         widget=forms.TextInput(attrs={
@@ -632,6 +641,10 @@ class VoucherFilterForm(FilterForm):
         queryset=SubEvent.objects.none(),
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+    itemvar = forms.ChoiceField(
+        label=_("Product"),
+        required=False
     )
 
     def __init__(self, *args, **kwargs):
@@ -654,6 +667,19 @@ class VoucherFilterForm(FilterForm):
         elif 'subevent':
             del self.fields['subevent']
 
+        choices = [('', _('All products'))]
+        for i in self.event.items.prefetch_related('variations').all():
+            variations = list(i.variations.all())
+            if variations:
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+            else:
+                choices.append((str(i.pk), i.name))
+        for q in self.event.quotas.all():
+            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
+        self.fields['itemvar'].choices = choices
+
     def filter_qs(self, qs):
         fdata = self.cleaned_data
 
@@ -664,6 +690,13 @@ class VoucherFilterForm(FilterForm):
         if fdata.get('tag'):
             s = fdata.get('tag').strip()
             qs = qs.filter(tag__icontains=s)
+
+        if fdata.get('qm'):
+            s = fdata.get('qm')
+            if s == 'b':
+                qs = qs.filter(block_quota=True)
+            elif s == 'i':
+                qs = qs.filter(allow_ignore_quota=True)
 
         if fdata.get('status'):
             s = fdata.get('status')
@@ -680,6 +713,15 @@ class VoucherFilterForm(FilterForm):
                 qs = qs.annotate(has_checkin=Exists(checkins)).filter(
                     redeemed__gt=0, has_checkin=True
                 )
+
+        if fdata.get('itemvar'):
+            if fdata.get('itemvar').startswith('q-'):
+                qs = qs.filter(quota_id=fdata.get('itemvar').split('-')[1])
+            elif '-' in fdata.get('itemvar'):
+                qs = qs.filter(item_id=fdata.get('itemvar').split('-')[0],
+                               variation_id=fdata.get('itemvar').split('-')[1])
+            else:
+                qs = qs.filter(item_id=fdata.get('itemvar'))
 
         if fdata.get('subevent'):
             qs = qs.filter(subevent_id=fdata.get('subevent').pk)
