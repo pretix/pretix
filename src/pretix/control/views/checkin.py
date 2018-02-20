@@ -6,7 +6,7 @@ from django.db.models import Max, OuterRef, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, ListView
 from pytz import UTC
@@ -70,7 +70,11 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 if isinstance(e.last_checked_in, str):
                     # Apparently only happens on SQLite
                     e.last_checked_in_aware = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
+                elif not is_aware(e.last_checked_in):
+                    # Apparently only happens on MySQL
+                    e.last_checked_in_aware = make_aware(e.last_checked_in, UTC)
                 else:
+                    # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
                     e.last_checked_in_aware = e.last_checked_in
         return ctx
 
