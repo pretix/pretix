@@ -373,12 +373,168 @@ Vue.component('category', {
         category: Object
     }
 });
+
+var shared_methods = {
+    buy: function (event) {
+        if (this.$root.useIframe) {
+            event.preventDefault();
+        } else {
+            return;
+        }
+        var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
+        this.$root.frame_loading = true;
+        this.async_task_interval = 100;
+        api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
+    },
+    buy_error_callback: function (xhr, data) {
+        this.$root.error_message = strings['cart_error'];
+        this.$root.frame_loading = false;
+    },
+    buy_check_error_callback: function (xhr, data) {
+        if (xhr.status == 200 || (xhr.status >= 400 && xhr.status < 500)) {
+            this.$root.error_message = strings['cart_error'];
+            this.$root.frame_loading = false;
+        } else {
+            this.async_task_timeout = window.setTimeout(this.buy_check, 1000);
+        }
+    },
+    buy_callback: function (data) {
+        if (data.redirect) {
+            var iframe = this.$refs['frame-container'].children[0];
+            this.$root.cart_id = data.cart_id;
+            setCookie(this.$root.cookieName, data.cart_id, 30);
+            if (data.redirect.substr(0, 1) === '/') {
+                data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
+            }
+            var url = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            if (data.success === false) {
+                url = url.replace(/checkout\/start/g, "");
+                this.$root.error_message = data.message;
+                if (data.has_cart) {
+                    this.$root.error_url_after = url;
+                }
+                this.$root.frame_loading = false;
+            } else {
+                iframe.src = url;
+            }
+        } else {
+            this.async_task_id = data.async_id;
+            if (data.check_url) {
+                this.async_task_check_url = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.check_url;
+            }
+            this.async_task_timeout = window.setTimeout(this.buy_check, this.async_task_interval);
+            this.async_task_interval = 250;
+        }
+    },
+    buy_check: function () {
+        api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
+    },
+    errorContinue: function () {
+        var iframe = this.$refs['frame-container'].children[0];
+        iframe.src = this.$root.error_url_after;
+        this.$root.frame_loading = true;
+        this.$root.error_message = null;
+        this.$root.error_url_after = null;
+    },
+    errorClose: function () {
+        this.$root.error_message = null;
+        this.$root.error_url_after = null;
+    },
+    redeem: function () {
+        if (this.$root.useIframe) {
+            event.preventDefault();
+        } else {
+            return;
+        }
+        var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
+        var iframe = this.$refs['frame-container'].children[0];
+        this.$root.frame_loading = true;
+        iframe.src = redirect_url;
+    },
+    resume: function () {
+        var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+        if (this.$root.useIframe) {
+            var iframe = this.$refs['frame-container'].children[0];
+            this.$root.frame_loading = true;
+            iframe.src = redirect_url;
+        } else {
+            window.open(redirect_url);
+        }
+    },
+    close: function () {
+        this.$root.frame_shown = false;
+    },
+    iframeLoaded: function () {
+        if (this.$root.frame_loading) {
+            this.$root.frame_loading = false;
+            this.$root.frame_shown = true;
+        }
+    }
+};
+
+var shared_widget_data = function () {
+    return {
+        async_task_id: null,
+        async_task_check_url: null,
+        async_task_timeout: null,
+        async_task_interval: 100,
+        voucher: null,
+    }
+};
+
+var shared_widget_computed = {
+    frameClasses: function () {
+        return {
+            'pretix-widget-frame-holder': true,
+            'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
+        };
+    },
+    alertClasses: function () {
+        return {
+            'pretix-widget-alert-holder': true,
+            'pretix-widget-alert-shown': this.$root.error_message,
+        };
+    },
+};
+
+var shared_loading_fragment = (
+    '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
+    + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+    + '</div>'
+);
+
+var shared_iframe_fragment = (
+    '<div :class="frameClasses">'
+    + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
+    + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+    + '</div>'
+    + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
+    + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
+    + '        :name="$root.widget_id" src="about:blank" v-once>'
+    + 'Please enable frames in your browser!'
+    + '</iframe>'
+    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
+    + '</div>'
+    + '</div>'
+);
+
+var shared_alert_fragment = (
+    '<div :class="alertClasses">'
+    + '<transition name="bounce">'
+    + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
+    + '<p>{{ $root.error_message }}</p>'
+    + '<p><button v-if="$root.error_url_after" @click.prevent="errorContinue">' + strings.continue + '</button>'
+    + '<button v-else @click.prevent="errorClose">' + strings.close + '</button></p>'
+    + '</div>'
+    + '</transition>'
+    + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
+    + '</div>'
+);
+
 Vue.component('pretix-widget', {
-    template: ('<div>'
+    template: ('<div class="pretix-widget-wrapper">'
         + '<div class="pretix-widget">'
-        + '<div class="pretix-widget-loading" v-show="$root.loading > 0">'
-        + '<svg width="128" height="128" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
-        + '</div>'
+        + shared_loading_fragment
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
@@ -410,154 +566,79 @@ Vue.component('pretix-widget', {
         + strings.poweredby
         + '</div>'
         + '</div>'
-        + '<div :class="frameClasses">'
-        + '<div class="pretix-widget-frame-loading" v-show="$root.frame_loading">'
-        + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
-        + '</div>'
-        + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
-        + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
-        + '        :name="$root.widget_id" src="about:blank" v-once>'
-        + 'Please enable frames in your browser!'
-        + '</iframe>'
-        + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
-        + '</div>'
-        + '</div>'
-        + '<div :class="alertClasses">'
-        + '<transition name="bounce">'
-        + '<div class="pretix-widget-alert-box" v-if="$root.error_message">'
-        + '<p>{{ $root.error_message }}</p>'
-        + '<p><button v-if="$root.error_url_after" @click.prevent="errorContinue">' + strings.continue + '</button>'
-        + '<button v-else @click.prevent="errorClose">' + strings.close + '</button></p>'
-        + '</div>'
-        + '</transition>'
-        + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
-        + '</div>'
+        + shared_iframe_fragment
+        + shared_alert_fragment
         + '</div>'
         + '</div>'
     ),
-    data: function () {
-        return {
-            async_task_id: null,
-            async_task_check_url: null,
-            async_task_timeout: null,
-            async_task_interval: 100,
-            voucher: null,
-        }
-    },
-    methods: {
-        buy: function (event) {
-            if (this.$root.useIframe) {
-                event.preventDefault();
-            } else {
-                return;
-            }
-            var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
-            this.$root.frame_loading = true;
-            this.async_task_interval = 100;
-            api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
-        },
-        buy_error_callback: function (xhr, data) {
-            this.$root.error_message = strings['cart_error'];
-            this.$root.frame_loading = false;
-        },
-        buy_check_error_callback: function (xhr, data) {
-            if (xhr.status == 200 || (xhr.status >= 400 && xhr.status < 500)) {
-                this.$root.error_message = strings['cart_error'];
-                this.$root.frame_loading = false;
-            } else {
-                this.async_task_timeout = window.setTimeout(this.buy_check, 1000);
-            }
-        },
-        buy_callback: function (data) {
-            if (data.redirect) {
-                var iframe = this.$refs['frame-container'].children[0];
-                this.$root.cart_id = data.cart_id;
-                setCookie(this.$root.cookieName, data.cart_id, 30);
-                if (data.redirect.substr(0, 1) === '/') {
-                    data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
-                }
-                var url = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
-                if (data.success === false) {
-                    url = url.replace(/checkout\/start/g, "");
-                    this.$root.error_message = data.message;
-                    if (data.has_cart) {
-                        this.$root.error_url_after = url;
-                    }
-                    this.$root.frame_loading = false;
-                } else {
-                    iframe.src = url;
-                }
-            } else {
-                this.async_task_id = data.async_id;
-                if (data.check_url) {
-                    this.async_task_check_url = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.check_url;
-                }
-                this.async_task_timeout = window.setTimeout(this.buy_check, this.async_task_interval);
-                this.async_task_interval = 250;
-            }
-        },
-        buy_check: function () {
-            api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
-        },
-        errorContinue: function () {
-            var iframe = this.$refs['frame-container'].children[0];
-            iframe.src = this.$root.error_url_after;
-            this.$root.frame_loading = true;
-            this.$root.error_message = null;
-            this.$root.error_url_after = null;
-        },
-        errorClose: function () {
-            this.$root.error_message = null;
-            this.$root.error_url_after = null;
-        },
-        redeem: function () {
-            if (this.$root.useIframe) {
-                event.preventDefault();
-            } else {
-                return;
-            }
-            var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
-            var iframe = this.$refs['frame-container'].children[0];
-            this.$root.frame_loading = true;
-            iframe.src = redirect_url;
-        },
-        resume: function () {
-            var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
-            if (this.$root.useIframe) {
-                var iframe = this.$refs['frame-container'].children[0];
-                this.$root.frame_loading = true;
-                iframe.src = redirect_url;
-            } else {
-                window.open(redirect_url);
-            }
-        },
-        close: function () {
-            this.$root.frame_shown = false;
-        },
-        iframeLoaded: function () {
-            if (this.$root.frame_loading) {
-                this.$root.frame_loading = false;
-                this.$root.frame_shown = true;
-            }
-        }
-    },
-    computed: {
-        frameClasses: function () {
-            return {
-                'pretix-widget-frame-holder': true,
-                'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
-            };
-        },
-        alertClasses: function () {
-            return {
-                'pretix-widget-alert-holder': true,
-                'pretix-widget-alert-shown': this.$root.error_message,
-            };
-        },
-    }
+    data: shared_widget_data,
+    methods: shared_methods,
+    computed: shared_widget_computed,
+});
+
+Vue.component('pretix-button', {
+    template: ('<div class="pretix-widget-wrapper">'
+        + '<div class="pretix-widget-button-container">'
+        + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
+        + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
+        + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" v-for="item in $root.items" :name="item.item" :value="item.count" />'
+        + '<button class="pretix-button" @click="buy">{{ $root.button_text }}</button>'
+        + '</form>'
+        + '<div class="pretix-widget-clear"></div>'
+        + '</div>'
+        + shared_iframe_fragment
+        + shared_alert_fragment
+        + '</div>'
+        + '</div>'
+    ),
+    data: shared_widget_data,
+    methods: shared_methods,
+    computed: shared_widget_computed,
 });
 
 /* Function to create the actual Vue instances */
+
+var shared_root_methods = {
+    open_link_in_frame: function (event) {
+        if (this.$root.useIframe) {
+            event.preventDefault();
+            var url = event.target.attributes.href.value;
+            this.$children[0].$refs['frame-container'].children[0].src = url;
+            this.frame_loading = true;
+        } else {
+            return;
+        }
+    }
+};
+
+var shared_root_computed = {
+    cookieName: function () {
+        return "pretix_widget_" + this.event_url.replace(/[^a-zA-Z0-9]+/g, "_");
+    },
+    voucherFormTarget: function () {
+        var form_target = this.event_url + 'w/' + widget_id + '/redeem?iframe=1&locale=' + lang;
+        if (getCookie(this.cookieName)) {
+            form_target += "&take_cart_id=" + getCookie(this.cookieName);
+        }
+        if (this.subevent) {
+            form_target += "&subevent=" + this.subevent;
+        }
+        return form_target;
+    },
+    formTarget: function () {
+        var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
+        var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + checkout_url;
+        if (getCookie(this.cookieName)) {
+            form_target += "&take_cart_id=" + getCookie(this.cookieName);
+        }
+        return form_target;
+    },
+    useIframe: function () {
+        return window.innerWidth >= 800 && (this.skip_ssl || site_is_secure());
+    }
+};
+
 var create_widget = function (element) {
     var event_url = element.attributes.event.value;
     if (!event_url.match(/\/$/)) {
@@ -578,6 +659,7 @@ var create_widget = function (element) {
                 voucher_code: voucher,
                 display_net_prices: false,
                 show_variations_expanded: false,
+                skip_ssl: skip_ssl,
                 error: null,
                 display_add_to_cart: false,
                 loading: 1,
@@ -623,58 +705,76 @@ var create_widget = function (element) {
                 app.loading--;
             });
         },
-        computed: {
-            cookieName: function () {
-                return "pretix_widget_" + this.event_url.replace(/[^a-zA-Z0-9]+/g, "_");
-            },
-            voucherFormTarget: function () {
-                var form_target = this.event_url + 'w/' + widget_id + '/redeem?iframe=1&locale=' + lang;
-                if (getCookie(this.cookieName)) {
-                    form_target += "&take_cart_id=" + getCookie(this.cookieName);
-                }
-                if (this.subevent) {
-                    form_target += "&subevent=" + this.subevent;
-                }
-                return form_target;
-            },
-            formTarget: function () {
-                var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
-                var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + checkout_url;
-                if (getCookie(this.cookieName)) {
-                    form_target += "&take_cart_id=" + getCookie(this.cookieName);
-                }
-                return form_target;
-            },
-            useIframe: function () {
-                return window.innerWidth >= 800 && (skip_ssl || site_is_secure());
+        computed: shared_root_computed,
+        methods: shared_root_methods
+    });
+    return app;
+};
+
+var create_button = function (element) {
+    var event_url = element.attributes.event.value;
+    if (!event_url.match(/\/$/)) {
+        event_url += "/";
+    }
+    var voucher = element.attributes.voucher ? element.attributes.voucher.value : null;
+    var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
+    var raw_items = element.attributes.items ? element.attributes.items.value : "";
+    var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
+    var button_text = element.innerHTML;
+
+    var itemsplit = raw_items.split(",");
+    var items = [];
+    for (var i = 0; i < itemsplit.length; i++) {
+        if (itemsplit[i].indexOf("=")) {
+            var splitthis = itemsplit[i].split("=");
+            items.push({'item': splitthis[0], 'count': splitthis[1]})
+        }
+    }
+
+    var app = new Vue({
+        el: element,
+        data: function () {
+            return {
+                event_url: event_url,
+                subevent: subevent,
+                skip_ssl: skip_ssl,
+                voucher_code: voucher,
+                items: items,
+                error: null,
+                widget_id: 'pretix-widget-' + widget_id,
+                frame_loading: false,
+                frame_shown: false,
+                error_message: null,
+                error_url_after: null,
+                button_text: button_text
             }
         },
-        methods: {
-            open_link_in_frame: function (event) {
-                if (this.$root.useIframe) {
-                    event.preventDefault();
-                    var url = event.target.attributes.href.value;
-                    this.$children[0].$refs['frame-container'].children[0].src = url;
-                    this.frame_loading = true;
-                } else {
-                    return;
-                }
-            }
-        }
+        created: function () {
+        },
+        computed: shared_root_computed,
+        methods: shared_root_methods
     });
     return app;
 };
 
 /* Find all widgets on the page and render them */
 widgetlist = [];
+buttonlist = [];
 document.createElement("pretix-widget");
+document.createElement("pretix-button");
 docReady(function () {
     var widgets = document.querySelectorAll("pretix-widget");
     var wlength = widgets.length;
-
     for (var i = 0; i < wlength; i++) {
         var widget = widgets[i];
         widgetlist.push(create_widget(widget));
+    }
+
+    var buttons = document.querySelectorAll("pretix-button");
+    var blength = buttons.length;
+    for (var i = 0; i < blength; i++) {
+        var button = buttons[i];
+        buttonlist.push(create_button(button));
     }
 });
 
@@ -682,5 +782,6 @@ docReady(function () {
    unnamed. */
 siteglobals.pretixwidget = {
     'Vue': Vue,
-    'widgets': widgetlist
+    'widgets': widgetlist,
+    'buttons': buttonlist
 };

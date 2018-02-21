@@ -101,4 +101,43 @@ voucher's settings.
         </div>
     </noscript>
 
+pretix Button
+-------------
+
+Instead of a product list, you can also display just a single button. When pressed, the button will add a number of
+products associated with the button to the cart and will immediately proceed to checkout if the operation succeeded.
+You can try out this behavior here:
+
+.. raw:: html
+
+    <pretix-button event="https://pretix.eu/demo/democon/" items="item_6424=1">Buy ticket!</pretix-button>
+    <noscript>
+       <div class="pretix-widget">
+            <div class="pretix-widget-info-message">
+                JavaScript is disabled in your browser. To access our ticket shop without javascript, please <a target="_blank" href="https://pretix.eu/demo/democon/">click here</a>.
+            </div>
+        </div>
+    </noscript>
+    <br><br>
+
+You can embed the pretix Button just like the pretix Widget. Just like above, first embed the CSS and JavaScript
+resources. Then, instead of the ``pretix-widget`` tag, use the ``pretix-button`` tag::
+
+    <pretix-button event="https://pretix.eu/demo/democon/" items="item_6424=1">
+        Buy ticket!
+    </pretix-button>
+
+As you can see, the ``pretix-button`` element takes an additional ``items`` attribute that specifies the items that
+should be added to the cart. The syntax of this attribute is ``item_ITEMID=1,item_ITEMID=2,variation_ITEMID_VARID=4``
+where ``ITEMID`` are the internal IDs of items to be added and ``VARID`` are the internal IDs of variations of those
+items, if the items have variations.
+
+Just as the widget, the button supports the optional attributes ``voucher`` and ``skip-ssl-check``.
+
+You can style the button using the ``pretix-button`` CSS class.
+
+.. versionchanged:: 1.13
+
+   The pretix Button has been added in version 1.13.
+
 .. _Let's Encrypt: https://letsencrypt.org/
