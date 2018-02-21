@@ -21,11 +21,12 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the check-in list
 name                                  string                     The internal name of the check-in list
-all_products                          boolean                    If ``True``, the check-in lists contains tickets of all products in this event. The ``limit_products`` field is ignored in this case.
+all_products                          boolean                    If ``true``, the check-in lists contains tickets of all products in this event. The ``limit_products`` field is ignored in this case.
 limit_products                        list of integers           List of item IDs to include in this list.
 subevent                              integer                    ID of the date inside an event series this list belongs to (or ``null``).
 position_count                        integer                    Number of tickets that match this list (read-only).
 checkin_count                         integer                    Number of check-ins performed on this list (read-only).
+include_pending                       boolean                    If ``true``, the check-in list also contains tickets from orders in pending state.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.10
@@ -35,6 +36,10 @@ checkin_count                         integer                    Number of check
 .. versionchanged:: 1.11
 
    The ``positions`` endpoints have been added.
+
+.. versionchanged:: 1.13
+
+   The ``include_pending`` field has been added.
 
 Endpoints
 ---------
@@ -71,6 +76,7 @@ Endpoints
             "position_count": 456,
             "all_products": true,
             "limit_products": [],
+            "include_pending": false,
             "subevent": null
           }
         ]
@@ -111,6 +117,7 @@ Endpoints
         "position_count": 456,
         "all_products": true,
         "limit_products": [],
+        "include_pending": false,
         "subevent": null
       }
 
@@ -156,6 +163,7 @@ Endpoints
         "position_count": 0,
         "all_products": false,
         "limit_products": [1, 2],
+        "include_pending": false,
         "subevent": null
       }
 
@@ -204,6 +212,7 @@ Endpoints
         "position_count": 42,
         "all_products": false,
         "limit_products": [1, 2],
+        "include_pending": false,
         "subevent": null
       }
 

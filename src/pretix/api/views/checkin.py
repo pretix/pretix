@@ -126,7 +126,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            order__status=Order.STATUS_PAID,
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.checkinlist.include_pending else [Order.STATUS_PAID],
             subevent=self.checkinlist.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)

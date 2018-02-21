@@ -172,6 +172,29 @@ def test_require_paid(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'error'
     assert jdata['reason'] == 'unpaid'
+    assert jdata['data']['checkin_allowed'] is False
+
+
+@pytest.mark.django_db
+def test_check_in_pending(client, env):
+    AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
+    env[2].status = Order.STATUS_PENDING
+    env[2].save()
+
+    env[5].include_pending = True
+    env[5].save()
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'error'
+    assert jdata['reason'] == 'unpaid'
+    assert jdata['data']['checkin_allowed'] is True
+
+    resp = client.post('/pretixdroid/api/%s/%s/redeem/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'),
+                       data={'secret': '1234', 'ignore_unpaid': 'true'})
+    jdata = json.loads(resp.content.decode("utf-8"))
+    assert jdata['status'] == 'ok'
 
 
 @pytest.mark.django_db

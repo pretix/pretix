@@ -23,6 +23,7 @@
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout="control" %}
             {% endif %}
+            {% bootstrap_field form.include_pending layout="control" %}
             <legend>{% trans "Products" %}</legend>
             <p>
                 {% blocktrans trimmed %}

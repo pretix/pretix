@@ -12,7 +12,8 @@ class CheckinListSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = CheckinList
-        fields = ('id', 'name', 'all_products', 'limit_products', 'subevent', 'checkin_count', 'position_count')
+        fields = ('id', 'name', 'all_products', 'limit_products', 'subevent', 'checkin_count', 'position_count',
+                  'include_pending')
 
     def validate(self, data):
         data = super().validate(data)
