@@ -442,7 +442,7 @@
             </form>
         {% endif %}
     {% endif %}
-    {% if vouchers_exist and not event.has_subevents or vouchers_exist and subevent %}
+    {% if show_vouchers %}
         <section class="front-page">
             <h3>{% trans "Redeem a voucher" %}</h3>
             <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
