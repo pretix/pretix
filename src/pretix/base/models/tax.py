@@ -8,6 +8,7 @@ from i18nfield.fields import I18nCharField
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.templatetags.money import money_filter
 
 
 class TaxedPrice:
@@ -22,6 +23,13 @@ class TaxedPrice:
 
     def __repr__(self):
         return '{} + {}% = {}'.format(localize(self.net), localize(self.rate), localize(self.gross))
+
+    def print(self, currency):
+        return '{} + {}% = {}'.format(
+            money_filter(self.net, currency),
+            localize(self.rate),
+            money_filter(self.gross, currency)
+        )
 
 
 TAXED_ZERO = TaxedPrice(

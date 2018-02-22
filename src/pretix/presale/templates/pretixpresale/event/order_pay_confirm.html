@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% block title %}{% trans "Pay order" %}{% endblock %}
 {% block content %}
     <h2>
@@ -18,8 +19,8 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         <strong>
-                            {% blocktrans trimmed with total=order.total|floatformat:2 currency=request.event.currency %}
-                                Total: {{ total }} {{ currency }}
+                            {% blocktrans trimmed with total=order.total|money:request.event.currency %}
+                                Total: {{ total }}
                             {% endblocktrans %}
                         </strong>
                     </div>

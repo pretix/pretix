@@ -5,6 +5,7 @@ from i18nfield.forms import I18nInlineFormSet
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
+from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimePickerWidget
 
 
@@ -54,9 +55,7 @@ class SubEventItemOrVariationFormMixin:
 class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
-            self.item.default_price, self.item.event.currency
-        )
+        self.fields['price'].widget.attrs['placeholder'] = money_filter(self.item.default_price, self.item.event.currency)
         self.fields['price'].label = str(self.item.name)
 
     class Meta:
@@ -67,9 +66,7 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
 class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
-            self.variation.price, self.item.event.currency
-        )
+        self.fields['price'].widget.attrs['placeholder'] = money_filter(self.variation.price, self.item.event.currency)
         self.fields['price'].label = '{} – {}'.format(str(self.item.name), self.variation.value)
 
     class Meta:

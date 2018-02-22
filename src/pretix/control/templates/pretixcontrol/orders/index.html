@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load money %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
@@ -114,7 +115,7 @@
                             {% endif %}
                         </td>
                         <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                        <td class="text-right">{{ o.total|floatformat:2 }} {{ request.event.currency }}</td>
+                        <td class="text-right">{{ o.total|money:request.event.currency }}</td>
                         <td class="text-right">{{ o.pcnt }}</td>
                         <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                     </tr>

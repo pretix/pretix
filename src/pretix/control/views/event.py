@@ -1,6 +1,7 @@
 import re
 from collections import OrderedDict
 from datetime import timedelta
+from decimal import Decimal
 from urllib.parse import urlsplit
 
 from django.conf import settings
@@ -34,6 +35,7 @@ from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
+from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
     EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
@@ -492,8 +494,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
             'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
-            'payment_info': _('{} {} has been transferred to account <9999-9999-9999-9999> at {}').format(
-                42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
+            'payment_info': _('{} has been transferred to account <9999-9999-9999-9999> at {}').format(
+                money_filter(Decimal('42.23'), self.request.event.currency), date_format(now(), 'SHORT_DATETIME_FORMAT'))
         }
 
     # create index-language mapping
