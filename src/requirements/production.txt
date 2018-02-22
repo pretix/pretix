@@ -30,6 +30,7 @@ django-markup
 markdown
 bleach==2.*
 raven
+babel
 django-i18nfield>=1.2.1
 django-hijack==2.1.*
 # Stripe

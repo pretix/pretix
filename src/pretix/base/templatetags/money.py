@@ -1,8 +1,10 @@
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 
+from babel.numbers import format_currency
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import floatformat
+from django.utils import translation
 
 register = template.Library()
 
@@ -21,7 +23,11 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         places = 2
     if hide_currency:
         return floatformat(value, places)
-    return '{} {}'.format(
-        arg,
-        floatformat(value, places)
-    )
+
+    try:
+        return format_currency(value, arg, locale=translation.get_language())
+    except:
+        return '{} {}'.format(
+            arg,
+            floatformat(value, places)
+        )
