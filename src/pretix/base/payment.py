@@ -5,6 +5,7 @@ from typing import Any, Dict, Union
 
 import pytz
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.dispatch import receiver
 from django.forms import Form
@@ -20,6 +21,7 @@ from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
+from pretix.helpers.money import DecimalTextInput
 from pretix.presale.views import get_cart_total
 from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -156,6 +158,7 @@ class BasePaymentProvider:
         .. WARNING:: It is highly discouraged to alter the ``_enabled`` field of the default
                      implementation.
         """
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return OrderedDict([
             ('_enabled',
              forms.BooleanField(
@@ -166,7 +169,10 @@ class BasePaymentProvider:
              forms.DecimalField(
                  label=_('Additional fee'),
                  help_text=_('Absolute value'),
-                 required=False
+                 localize=True,
+                 required=False,
+                 decimal_places=places,
+                 widget=DecimalTextInput(places=places)
              )),
             ('_fee_percent',
              forms.DecimalField(
@@ -174,7 +180,8 @@ class BasePaymentProvider:
                  help_text=_('Percentage of the order total. Note that this percentage will currently only '
                              'be calculated on the summed price of sold tickets, not on other fees like e.g. shipping '
                              'fees, if there are any.'),
-                 required=False
+                 localize=True,
+                 required=False,
              )),
             ('_availability_date',
              RelativeDateField(

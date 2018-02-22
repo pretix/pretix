@@ -120,7 +120,7 @@
                 <fieldset>
                     <legend>{% trans "Item prices" %}</legend>
                     {% for f in itemvar_forms %}
-                        {% bootstrap_field f.price layout="control" %}
+                        {% bootstrap_field f.price addon_after=request.event.currency layout="control" %}
                     {% endfor %}
                 </fieldset>
                 <fieldset>

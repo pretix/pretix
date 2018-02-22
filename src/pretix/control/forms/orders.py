@@ -12,6 +12,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 from pretix.base.templatetags.money import money_filter
+from pretix.helpers.money import change_decimal_field
 
 
 class ExtendForm(I18nModelForm):
@@ -120,6 +121,7 @@ class OrderPositionAddForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
+        localize=True,
         label=_('Gross price'),
         help_text=_("Including taxes, if any. Keep empty for the product's default price")
     )
@@ -165,6 +167,7 @@ class OrderPositionAddForm(forms.Form):
             self.fields['subevent'].queryset = order.event.subevents.all()
         else:
             del self.fields['subevent']
+        change_decimal_field(self.fields['price'], order.event.currency)
 
 
 class OrderPositionChangeForm(forms.Form):
@@ -178,6 +181,7 @@ class OrderPositionChangeForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
+        localize=True,
         label=_('New price (gross)')
     )
     operation = forms.ChoiceField(
@@ -242,6 +246,7 @@ class OrderPositionChangeForm(forms.Form):
                               invoice_address=ia)
                 choices.append((str(i.pk), '%s (%s)' % (pname, p.print(instance.order.event.currency))))
         self.fields['itemvar'].choices = choices
+        change_decimal_field(self.fields['price'], instance.order.event.currency)
 
     def clean(self):
         if self.cleaned_data.get('operation') == 'price' and not self.cleaned_data.get('price', '') != '':
