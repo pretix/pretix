@@ -124,6 +124,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
         'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
+        'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
+                                                  'toggled.'),
         'pretix.event.order.payment.changed': _('The payment method has been changed.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),

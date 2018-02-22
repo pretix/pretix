@@ -337,7 +337,7 @@ def serialize_op(op, redeemed, clist):
         'variation': str(op.variation) if op.variation else None,
         'variation_id': op.variation_id,
         'attendee_name': name,
-        'attention': op.item.checkin_attention,
+        'attention': op.item.checkin_attention or op.order.checkin_attention,
         'redeemed': redeemed,
         'paid': op.order.status == Order.STATUS_PAID,
         'checkin_allowed': checkin_allowed

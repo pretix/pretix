@@ -106,6 +106,7 @@ TEST_ORDER_RES = {
     "payment_fee_tax_value": "0.05",
     "total": "23.00",
     "comment": "",
+    "checkin_attention": False,
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
         "is_business": False,

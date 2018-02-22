@@ -435,6 +435,7 @@
                         {% csrf_token %}
                         <div class="row">
                             {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                            {% bootstrap_field comment_form.checkin_attention layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
                         </div>
                         <button class="btn btn-default">
                             {% trans "Update comment" %}

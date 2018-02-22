@@ -62,7 +62,7 @@ class ExporterForm(forms.Form):
 class CommentForm(I18nModelForm):
     class Meta:
         model = Order
-        fields = ['comment']
+        fields = ['comment', 'checkin_attention']
         widgets = {
             'comment': forms.Textarea(attrs={
                 'rows': 3,

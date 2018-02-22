@@ -136,7 +136,10 @@ class OrderDetail(OrderView):
         ctx['event'] = self.request.event
         ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
-        ctx['comment_form'] = CommentForm(initial={'comment': self.order.comment})
+        ctx['comment_form'] = CommentForm(initial={
+            'comment': self.order.comment,
+            'checkin_attention': self.order.checkin_attention
+        })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
         return ctx
 
@@ -191,11 +194,18 @@ class OrderComment(OrderView):
     def post(self, *args, **kwargs):
         form = CommentForm(self.request.POST)
         if form.is_valid():
-            self.order.comment = form.cleaned_data.get('comment')
+            if form.cleaned_data.get('comment') != self.order.comment:
+                self.order.comment = form.cleaned_data.get('comment')
+                self.order.log_action('pretix.event.order.comment', user=self.request.user, data={
+                    'new_comment': form.cleaned_data.get('comment')
+                })
+
+            if form.cleaned_data.get('checkin_attention') != self.order.checkin_attention:
+                self.order.checkin_attention = form.cleaned_data.get('checkin_attention')
+                self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
+                    'new_value': form.cleaned_data.get('checkin_attention')
+                })
             self.order.save()
-            self.order.log_action('pretix.event.order.comment', user=self.request.user, data={
-                'new_comment': form.cleaned_data.get('comment')
-            })
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))
