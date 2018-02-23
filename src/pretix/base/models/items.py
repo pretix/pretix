@@ -779,6 +779,7 @@ class Question(LoggedModel):
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options')
     answer = I18nCharField(verbose_name=_('Answer'))
+    position = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.answer)
@@ -799,7 +800,7 @@ class Quota(LoggedModel):
 
     Please read the documentation section on quotas carefully before doing
     anything with quotas. This might confuse you otherwise.
-    http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
+    https://docs.pretix.eu/en/latest/development/concepts.html#quotas
 
     The AVAILABILITY_* constants represent various states of a quota allowing
     its items/variations to be up for sale.
