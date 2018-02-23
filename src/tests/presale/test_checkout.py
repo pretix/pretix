@@ -1306,7 +1306,7 @@ class CheckoutTestCase(TestCase):
                              target_status_code=200)
         response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug))
         assert 'Workshop 1' in response.rendered_content
-        assert 'EUR 12.00' in response.rendered_content
+        assert '€12.00' in response.rendered_content
 
     def test_set_addons_included(self):
         ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
@@ -1320,7 +1320,7 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         assert 'Workshop 1' in response.rendered_content
-        assert 'EUR 12.00' not in response.rendered_content
+        assert '€12.00' not in response.rendered_content
 
     def test_set_addons_subevent(self):
         self.event.has_subevents = True
@@ -1340,7 +1340,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ EUR 42.00)' in response.rendered_content
+        assert 'Workshop 1 (+ €42.00)' in response.rendered_content
 
     def test_set_addons_subevent_net_prices(self):
         self.event.has_subevents = True
@@ -1365,8 +1365,8 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% VAT)' in response.rendered_content
-        assert 'A (+ EUR 10.08 plus 19.00% VAT)' in response.rendered_content
+        assert 'Workshop 1 (+ €35.29 plus 19.00% VAT)' in response.rendered_content
+        assert 'A (+ €10.08 plus 19.00% VAT)' in response.rendered_content
 
     def test_confirm_subevent_presale_not_yet(self):
         self.event.has_subevents = True

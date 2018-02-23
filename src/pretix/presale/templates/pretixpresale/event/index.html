@@ -289,10 +289,10 @@
                                                             <span class="input-group-addon">{{ event.currency }}</span>
                                                             <input type="number" class="form-control input-item-price"
                                                                     placeholder="0"
-                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                                     name="price_{{ item.id }}_{{ var.id }}"
                                                                     step="any"
-                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                             >
                                                         </div>
                                                     {% elif not var.display_price.gross %}
@@ -378,9 +378,9 @@
                                             <div class="input-group input-group-price">
                                                 <span class="input-group-addon">{{ event.currency }}</span>
                                                 <input type="number" class="form-control input-item-price" placeholder="0"
-                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="price_{{ item.id }}"
-                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         step="any">
                                             </div>
                                         {% elif not item.display_price.gross %}

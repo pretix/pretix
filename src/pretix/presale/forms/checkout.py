@@ -138,7 +138,7 @@ class AddOnsForm(forms.Form):
                 name=label, price=money_filter(price.gross, event.currency)
             )
         elif event.settings.display_net_prices:
-            n = _('{name} (+ {{price} plus {taxes}% {taxname})').format(
+            n = _('{name} (+ {price} plus {taxes}% {taxname})').format(
                 name=label, price=money_filter(price.net, event.currency),
                 taxes=number_format(price.rate), taxname=price.name
             )

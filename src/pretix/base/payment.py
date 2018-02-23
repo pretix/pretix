@@ -1,6 +1,6 @@
 import logging
 from collections import OrderedDict
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Dict, Union
 
 import pytz
@@ -16,7 +16,6 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -93,10 +92,15 @@ class BasePaymentProvider:
         fee_abs = self.settings.get('_fee_abs', as_type=Decimal, default=0)
         fee_percent = self.settings.get('_fee_percent', as_type=Decimal, default=0)
         fee_reverse_calc = self.settings.get('_fee_reverse_calc', as_type=bool, default=True)
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         if fee_reverse_calc:
-            return round_decimal((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price)
+            return ((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
         else:
-            return round_decimal(price * fee_percent / 100) + fee_abs
+            return (price * fee_percent / 100 + fee_abs).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
 
     @property
     def verbose_name(self) -> str:

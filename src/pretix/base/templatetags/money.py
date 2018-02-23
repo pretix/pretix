@@ -19,15 +19,34 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         raise ValueError("No currency passed.")
 
     places = settings.CURRENCY_PLACES.get(arg, 2)
-    if places < 2 and value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP) != value:
+    rounded = value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
+    if places < 2 and rounded != value:
         places = 2
     if hide_currency:
         return floatformat(value, places)
 
     try:
+        if rounded != value:
+            return '{} {}'.format(
+                arg,
+                floatformat(value, 2)
+            )
         return format_currency(value, arg, locale=translation.get_language())
     except:
         return '{} {}'.format(
             arg,
             floatformat(value, places)
         )
+
+
+@register.filter("money_numberfield")
+def money_numberfield_filter(value: Decimal, arg=''):
+    if isinstance(value, float) or isinstance(value, int):
+        value = Decimal(value)
+    if not isinstance(value, Decimal):
+        raise TypeError("Invalid data type passed to money filter: %r" % type(value))
+    if not arg:
+        raise ValueError("No currency passed.")
+
+    places = settings.CURRENCY_PLACES.get(arg, 2)
+    return str(value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP))

@@ -276,7 +276,7 @@ Your {event} team"""))
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
 we successfully received your order for {event} with a total value
-of {total} {currency}. Please complete your payment before {date}.
+of {total_with_currency}. Please complete your payment before {date}.
 
 {payment_info}
 

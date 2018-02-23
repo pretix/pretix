@@ -12,6 +12,8 @@ from i18nfield.forms import I18nFormField  # noqa
 from i18nfield.strings import LazyI18nString  # noqa
 from i18nfield.utils import I18nJSONEncoder  # noqa
 
+from pretix.base.templatetags.money import money_filter
+
 
 class LazyDate:
     def __init__(self, value):
@@ -22,6 +24,18 @@ class LazyDate:
 
     def __str__(self):
         return date_format(self.value, "SHORT_DATE_FORMAT")
+
+
+class LazyCurrencyNumber:
+    def __init__(self, value, currency):
+        self.value = value
+        self.currency = currency
+
+    def __format__(self, format_spec):
+        return self.__str__()
+
+    def __str__(self):
+        return money_filter(self.value, self.currency)
 
 
 class LazyNumber:

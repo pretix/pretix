@@ -27,6 +27,7 @@ from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
+from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
     Order, RequiredAction, TaxRule, Voucher,
@@ -510,7 +511,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     @cached_property
     def items(self):
         return {
-            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
+            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company', 'total_with_currency',
                                        'event', 'payment_info', 'url', 'invoice_name'],
             'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
             'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
@@ -538,6 +539,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'event': self.request.event.name,
             'total': 42.23,
+            'total_with_currency': LazyCurrencyNumber(42.23, self.request.event.currency),
             'currency': self.request.event.currency,
             'url': self.generate_order_url(user_orders[0]['code'], user_orders[0]['secret']),
             'orders': '\n'.join(orders),

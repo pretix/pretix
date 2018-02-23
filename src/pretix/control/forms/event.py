@@ -666,10 +666,10 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {payment_info}, {url}, "
-                    "{invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{total}', '{currency}', '{date}', '{payment_info}',
-                                          '{url}', '{invoice_name}', '{invoice_company}'])]
+        help_text=_("Available placeholders: {event}, {total_with_currency}, {total}, {currency}, {date}, "
+                    "{payment_info}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
+                                          '{payment_info}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_order_paid = I18nFormField(
         label=_("Text"),
