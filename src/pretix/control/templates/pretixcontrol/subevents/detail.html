@@ -178,9 +178,9 @@
                                         </h4>
                                     </div>
                                     <div class="panel-body form-horizontal">
+                                        {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
                                         {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
                                         {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
-                                        {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
                                     </div>
                                 </div>
                             {% endescapescript %}
