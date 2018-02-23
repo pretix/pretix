@@ -884,7 +884,6 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('SUMMARY:%s' % self.event.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
-        self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
         self.assertTrue(re.search(r'DTSTAMP:\d{8}T\d{6}Z', ical), 'incorrect timestamp')
         self.assertTrue(re.search(r'UID:pretix-\w*-\w*-0@', ical), 'missing UID key')
 
