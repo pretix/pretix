@@ -17,7 +17,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
-    LazyDate, LazyLocaleException, LazyNumber, language,
+    LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
@@ -504,6 +504,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         for fee in fees:
             fee.order = order
             fee._calculate_tax()
+            if not fee.tax_rule.pk:
+                fee.tax_rule = None  # TODO: deprecate
             fee.save()
 
         OrderPosition.transform_cart_positions(positions, order)
@@ -568,6 +570,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         email_context = {
             'total': LazyNumber(order.total),
             'currency': event.currency,
+            'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
             'date': LazyDate(order.expires),
             'event': event.name,
             'url': build_absolute_uri(event, 'presale:event.order', kwargs={

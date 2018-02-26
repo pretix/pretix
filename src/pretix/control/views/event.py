@@ -1,6 +1,7 @@
 import re
 from collections import OrderedDict
 from datetime import timedelta
+from decimal import Decimal
 from urllib.parse import urlsplit
 
 from django.conf import settings
@@ -26,6 +27,7 @@ from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
+from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
     Order, RequiredAction, TaxRule, Voucher,
@@ -34,6 +36,7 @@ from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
+from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
     EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
@@ -492,8 +495,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
             'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
-            'payment_info': _('{} {} has been transferred to account <9999-9999-9999-9999> at {}').format(
-                42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
+            'payment_info': _('{} has been transferred to account <9999-9999-9999-9999> at {}').format(
+                money_filter(Decimal('42.23'), self.request.event.currency), date_format(now(), 'SHORT_DATETIME_FORMAT'))
         }
 
     # create index-language mapping
@@ -508,7 +511,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     @cached_property
     def items(self):
         return {
-            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
+            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company', 'total_with_currency',
                                        'event', 'payment_info', 'url', 'invoice_name'],
             'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
             'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
@@ -536,6 +539,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'event': self.request.event.name,
             'total': 42.23,
+            'total_with_currency': LazyCurrencyNumber(42.23, self.request.event.currency),
             'currency': self.request.event.currency,
             'url': self.generate_order_url(user_orders[0]['code'], user_orders[0]['secret']),
             'orders': '\n'.join(orders),

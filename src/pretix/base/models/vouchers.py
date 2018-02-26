@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -368,9 +368,15 @@ class Voucher(LoggedModel):
         """
         if self.value is not None:
             if self.price_mode == 'set':
-                return self.value
+                p = self.value
             elif self.price_mode == 'subtract':
-                return max(original_price - self.value, Decimal('0.00'))
+                p = max(original_price - self.value, Decimal('0.00'))
             elif self.price_mode == 'percent':
-                return round_decimal(original_price * (Decimal('100.00') - self.value) / Decimal('100.00'))
+                p = round_decimal(original_price * (Decimal('100.00') - self.value) / Decimal('100.00'))
+            else:
+                p = original_price
+            places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+            if places < 2:
+                return p.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
+            return p
         return original_price

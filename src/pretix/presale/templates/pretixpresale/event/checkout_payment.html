@@ -1,5 +1,6 @@
 {% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
+{% load money %}
 {% load bootstrap3 %}
 {% block inner %}
     <p>{% trans "Please select how you want to pay." %}</p>
@@ -12,7 +13,7 @@
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 {% if show_fees %}
-                                <strong class="pull-right">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|floatformat:2|cut:"-" }} {{ event.currency }}</strong>
+                                <strong class="pull-right">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"

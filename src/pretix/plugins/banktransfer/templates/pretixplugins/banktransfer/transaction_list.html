@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load rich_text %}
+{% load money %}
 {% load staticfiles %}
 <div class="table-responsive">
     {% csrf_token %}
@@ -85,7 +86,7 @@
                 <td>
                     {% if trans.order %}
                         <a href="{% url "control:event.order" event=trans.order.event.slug organizer=request.organizer.slug code=trans.order.code %}"
-                            data-toggle="tooltip" title="{{ trans.order.total|floatformat:2 }} {{ trans.order.event.currency }}">
+                            data-toggle="tooltip" title="{{ trans.order.total|money:trans.order.event.currency }}">
                             {% if not request.event %}
                                 {{ trans.order.event.slug|upper }}-{{ trans.order.code }}
                             {% else %}

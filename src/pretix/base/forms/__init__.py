@@ -11,16 +11,16 @@ from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 
 from .validators import PlaceholderValidator  # NOQA
 
-logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
+logger = logging.getLogger(__name__)
 
 
 class BaseI18nModelForm(i18nfield.forms.BaseI18nModelForm):
     # compatibility shim for django-i18nfield library
 
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop('event', None)
-        if event:
-            kwargs['locales'] = event.settings.get('locales')
+        self.event = kwargs.pop('event', None)
+        if self.event:
+            kwargs['locales'] = self.event.settings.get('locales')
         super().__init__(*args, **kwargs)
 
 
@@ -32,9 +32,9 @@ class I18nFormSet(i18nfield.forms.I18nModelFormSet):
     # compatibility shim for django-i18nfield library
 
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop('event', None)
-        if event:
-            kwargs['locales'] = event.settings.get('locales')
+        self.event = kwargs.pop('event', None)
+        if self.event:
+            kwargs['locales'] = self.event.settings.get('locales')
         super().__init__(*args, **kwargs)
 
 

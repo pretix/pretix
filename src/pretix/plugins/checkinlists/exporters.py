@@ -6,7 +6,7 @@ from defusedcsv import csv
 from django import forms
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 from pytz import UTC
@@ -15,6 +15,7 @@ from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Checkin, Order, OrderPosition, Question
+from pretix.base.templatetags.money import money_filter
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
 
@@ -200,7 +201,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 op.order.code,
                 name,
                 str(op.item.name) + (" – " + str(op.variation.value) if op.variation else "") + "\n" +
-                self.event.currency + " " + localize(op.price),
+                money_filter(op.price, self.event.currency),
             ]
             acache = {}
             for a in op.answers.all():

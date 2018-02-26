@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load eventurl %}
+{% load money %}
 {% load safelink %}
 {% load eventsignal %}
 {% block title %}
@@ -257,7 +258,7 @@
                             </div>
                             <div class="col-md-3 col-xs-6 price">
                                 {% if event.settings.display_net_prices %}
-                                    <strong>{{ event.currency }} {{ line.net_price|floatformat:2 }}</strong>
+                                    <strong>{{ line.net_price|money:event.currency }}</strong>
                                     {% if line.tax_rate %}
                                         <br />
                                         <small>
@@ -267,7 +268,7 @@
                                         </small>
                                     {% endif %}
                                 {% else %}
-                                    <strong>{{ event.currency }} {{ line.price|floatformat:2 }}</strong>
+                                    <strong>{{ line.price|money:event.currency }}</strong>
                                     {% if line.tax_rate and line.price %}
                                         <br />
                                         <small>
@@ -291,7 +292,7 @@
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                                 {% if event.settings.display_net_prices %}
-                                    <strong>{{ event.currency }} {{ fee.net_value|floatformat:2 }}</strong>
+                                    <strong>{{ fee.net_value|money:event.currency }}</strong>
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
@@ -301,7 +302,7 @@
                                         </small>
                                     {% endif %}
                                 {% else %}
-                                    <strong>{{ event.currency }} {{ fee.value|floatformat:2 }}</strong>
+                                    <strong>{{ fee.value|money:event.currency }}</strong>
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
@@ -321,7 +322,7 @@
                                 <strong>{% trans "Net total" %}</strong>
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ event.currency }} {{ items.net_total|floatformat:2 }}
+                                {{ items.net_total|money:event.currency }}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -330,7 +331,7 @@
                                 <strong>{% trans "Taxes" %}</strong>
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ event.currency }} {{ items.tax_total|floatformat:2 }}
+                                {{ items.tax_total|money:event.currency }}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -340,7 +341,7 @@
                             <strong>{% trans "Total" %}</strong>
                         </div>
                         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                            <strong>{{ event.currency }} {{ items.total|floatformat:2 }}</strong>
+                            <strong>{{ items.total|money:event.currency }}</strong>
                         </div>
                         <div class="clearfix"></div>
                     </div>

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load eventurl %}
+{% load money %}
 {% load thumbnail %}
 {% load eventsignal %}
 {% load rich_text %}
@@ -250,13 +251,13 @@
                                         </div>
                                         <div class="col-md-2 col-xs-6 price">
                                             {% if item.min_price != item.max_price or item.free_price %}
-                                                {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
-                                                    from {{ currency }} {{ minprice }}
+                                                {% blocktrans trimmed with minprice=item.min_price|money:event.currency %}
+                                                    from {{ minprice }}
                                                 {% endblocktrans %}
                                             {% elif not item.min_price and not item.max_price %}
                                                 {% trans "FREE" context "price" %}
                                             {% else %}
-                                                {{ event.currency }} {{ item.min_price|floatformat:2 }}
+                                                {{ item.min_price|money:event.currency }}
                                             {% endif %}
                                         </div>
                                         <div class="col-md-2 col-xs-6 availability-box">
@@ -288,18 +289,18 @@
                                                             <span class="input-group-addon">{{ event.currency }}</span>
                                                             <input type="number" class="form-control input-item-price"
                                                                     placeholder="0"
-                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                                     name="price_{{ item.id }}_{{ var.id }}"
                                                                     step="any"
-                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                             >
                                                         </div>
                                                     {% elif not var.display_price.gross %}
                                                         {% trans "FREE" context "price" %}
                                                     {% elif event.settings.display_net_prices %}
-                                                        {{ event.currency }} {{ var.display_price.net|floatformat:2 }}
+                                                        {{ var.display_price.net|money:event.currency }}
                                                     {% else %}
-                                                        {{ event.currency }} {{ var.display_price.gross|floatformat:2 }}
+                                                        {{ var.display_price.gross|money:event.currency }}
                                                     {% endif %}
                                                     {% if var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
                                                         <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
@@ -377,17 +378,17 @@
                                             <div class="input-group input-group-price">
                                                 <span class="input-group-addon">{{ event.currency }}</span>
                                                 <input type="number" class="form-control input-item-price" placeholder="0"
-                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="price_{{ item.id }}"
-                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         step="any">
                                             </div>
                                         {% elif not item.display_price.gross %}
                                             {% trans "FREE" context "price" %}
                                         {% elif event.settings.display_net_prices %}
-                                            {{ event.currency }} {{ item.display_price.net|floatformat:2 }}
+                                            {{ item.display_price.net|money:event.currency }}
                                         {% else %}
-                                            {{ event.currency }} {{ item.display_price.gross|floatformat:2 }}
+                                            {{ item.display_price.gross|money:event.currency }}
                                         {% endif %}
                                         {% if item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
                                             <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}

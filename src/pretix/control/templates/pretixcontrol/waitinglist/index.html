@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% load urlreplace %}
 {% block title %}{% trans "Waiting list" %}{% endblock %}
 {% block content %}
@@ -65,9 +66,9 @@
                     {% trans "Sales estimate" %}
                 </div>
                 <div class="panel-body">
-                    {% blocktrans trimmed with amount=estimate|default:0|floatformat:2 currency=request.event.currency %}
+                    {% blocktrans trimmed with amount=estimate|default:0|money:request.event.currency %}
                         If you can make enough room at your event to fit all the persons on the waiting list in, you
-                        could sell tickets worth an additional <strong>{{ amount }} {{ currency }}</strong>.
+                        could sell tickets worth an additional <strong>{{ amount }}</strong>.
                     {% endblocktrans %}
                 </div>
             </div>

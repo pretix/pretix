@@ -13,6 +13,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import ItemVariation
 from pretix.base.models.tax import TAXED_ZERO
+from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBlacklistValidator
 from pretix.presale.signals import contact_form_fields
@@ -133,17 +134,17 @@ class AddOnsForm(forms.Form):
                 name=label
             )
         elif not price.rate:
-            n = _('{name} (+ {currency} {price})').format(
-                name=label, currency=event.currency, price=number_format(price.gross)
+            n = _('{name} (+ {price})').format(
+                name=label, price=money_filter(price.gross, event.currency)
             )
         elif event.settings.display_net_prices:
-            n = _('{name} (+ {currency} {price} plus {taxes}% {taxname})').format(
-                name=label, currency=event.currency, price=number_format(price.net),
+            n = _('{name} (+ {price} plus {taxes}% {taxname})').format(
+                name=label, price=money_filter(price.net, event.currency),
                 taxes=number_format(price.rate), taxname=price.name
             )
         else:
-            n = _('{name} (+ {currency} {price} incl. {taxes}% {taxname})').format(
-                name=label, currency=event.currency, price=number_format(price.gross),
+            n = _('{name} (+ {price} incl. {taxes}% {taxname})').format(
+                name=label, price=money_filter(price.gross, event.currency),
                 taxes=number_format(price.rate), taxname=price.name
             )
 

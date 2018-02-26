@@ -95,6 +95,7 @@ setup(
         'markdown',
         'bleach==2.*',
         'raven',
+        'babel',
         'paypalrestsdk==1.12.*',
         'pycparser==2.13',
         'django-redis==4.7.*',

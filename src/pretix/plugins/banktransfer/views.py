@@ -18,6 +18,7 @@ from pretix.base.models import Order, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
+from pretix.base.templatetags.money import money_filter
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
@@ -147,8 +148,6 @@ class ActionView(View):
             })
 
     def get(self, request, *args, **kwargs):
-        from django.utils.formats import localize
-
         u = request.GET.get('query', '')
         if len(u) < 2:
             return JsonResponse({'results': []})
@@ -178,7 +177,7 @@ class ActionView(View):
                 {
                     'code': o.event.slug.upper() + '-' + o.code,
                     'status': o.get_status_display(),
-                    'total': localize(o.total) + ' ' + o.event.currency
+                    'total': money_filter(o.total, o.event.currency)
                 } for o in qs
             ]
         })

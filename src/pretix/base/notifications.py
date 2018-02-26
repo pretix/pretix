@@ -2,11 +2,12 @@ import logging
 from collections import OrderedDict, namedtuple
 
 from django.dispatch import receiver
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, LogEntry
 from pretix.base.signals import register_notification_types
+from pretix.base.templatetags.money import money_filter
 from pretix.helpers.urls import build_absolute_uri
 
 logger = logging.getLogger(__name__)
@@ -174,7 +175,7 @@ class ParametrizedOrderNotificationType(NotificationType):
             url=order_url
         )
         n.add_attribute(_('Order code'), order.code)
-        n.add_attribute(_('Order total'), '{} {}'.format(localize(order.total), logentry.event.currency))
+        n.add_attribute(_('Order total'), money_filter(order.total, logentry.event.currency))
         n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
         n.add_attribute(_('Order status'), order.get_status_display())
         n.add_attribute(_('Order positions'), str(order.positions.count()))
