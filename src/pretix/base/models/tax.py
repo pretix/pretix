@@ -1,12 +1,12 @@
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 
-from django.conf import settings
 from django.db import models
 from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
 from django_countries.fields import CountryField
 from i18nfield.fields import I18nCharField
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 from pretix.base.templatetags.money import money_filter
 
@@ -129,7 +129,6 @@ class TaxRule(LoggedModel):
                 rate=self.rate, name=self.name
             )
 
-        places = settings.CURRENCY_PLACES.get(self.event.currency, 2) if self.event else 2
         if base_price_is == 'auto':
             if self.price_includes_tax:
                 base_price_is = 'gross'
@@ -138,14 +137,12 @@ class TaxRule(LoggedModel):
 
         if base_price_is == 'gross':
             gross = base_price
-            net = gross - (base_price * (1 - 100 / (100 + self.rate))).quantize(
-                Decimal('1') / 10 ** places, ROUND_HALF_UP
-            )
+            net = round_decimal(gross - (base_price * (1 - 100 / (100 + self.rate))),
+                                self.event.currency if self.event else None)
         elif base_price_is == 'net':
             net = base_price
-            gross = (net * (1 + self.rate / 100)).quantize(
-                Decimal('1') / 10 ** places, ROUND_HALF_UP
-            )
+            gross = round_decimal((net * (1 + self.rate / 100)),
+                                  self.event.currency if self.event else None)
         else:
             raise ValueError('Unknown base price type: {}'.format(base_price_is))
 

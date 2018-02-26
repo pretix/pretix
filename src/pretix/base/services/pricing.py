@@ -1,7 +1,6 @@
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 
-from django.conf import settings
-
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
 )
@@ -61,9 +60,8 @@ def get_price(item: Item, variation: ItemVariation = None,
         price.gross = price.net
         price.name = ''
 
-    places = settings.CURRENCY_PLACES.get(item.event.currency, 2)
-    price.gross = price.gross.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
-    price.net = price.net.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
+    price.gross = round_decimal(price.gross, item.event.currency)
+    price.net = round_decimal(price.net, item.event.currency)
     price.tax = price.gross - price.net
 
     return price
