@@ -92,7 +92,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
         for op in positions:
             created = False
-            if op.order.status == Order.STATUS_PAID:
+            if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
                 ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
                     'datetime': now(),
                 })
