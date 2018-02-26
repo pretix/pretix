@@ -16,7 +16,7 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import Voucher
+from pretix.base.models import LogEntry, Voucher
 from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.filter import VoucherFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
@@ -244,8 +244,15 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
 
     @transaction.atomic
     def form_valid(self, form):
-        for o in form.save(self.request.event):
-            o.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user)
+        log_entries = []
+        form.save(self.request.event)
+        # We need to query them again as form.save() uses bulk_create which does not fill in .pk values on databases
+        # other than PostgreSQL
+        for v in self.request.event.vouchers.filter(code__in=form.cleaned_data['codes']):
+            log_entries.append(
+                v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
+            )
+        LogEntry.objects.bulk_create(log_entries)
         messages.success(self.request, _('The new vouchers have been created.'))
         return HttpResponseRedirect(self.get_success_url())
 
