@@ -42,7 +42,7 @@ class Voucher(LoggedModel):
     :param max_usages: The number of times this voucher can be redeemed
     :type max_usages: int
     :param redeemed: The number of times this voucher already has been redeemed
-    :type redeemed: bool
+    :type redeemed: int
     :param valid_until: The expiration date of this voucher (optional)
     :type valid_until: datetime
     :param block_quota: If set to true, this voucher will reserve quota for its holder

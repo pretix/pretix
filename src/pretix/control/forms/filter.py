@@ -605,7 +605,7 @@ class VoucherFilterForm(FilterForm):
         label=_('Status'),
         choices=(
             ('', _('All')),
-            ('v', _('Valid')),
+            ('v', _('Unredeemed')),
             ('r', _('Redeemed')),
             ('e', _('Expired')),
             ('c', _('Redeemed and checked in with ticket')),
