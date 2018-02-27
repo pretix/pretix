@@ -668,10 +668,12 @@ class OrderFee(models.Model):
     """
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
+    FEE_TYPE_SERVICE = "service"
     FEE_TYPE_OTHER = "other"
     FEE_TYPES = (
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
+        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_OTHER, _("Other fees")),
     )
 
