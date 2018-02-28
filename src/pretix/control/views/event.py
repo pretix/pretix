@@ -1,3 +1,4 @@
+import json
 import re
 from collections import OrderedDict
 from datetime import timedelta
@@ -40,8 +41,8 @@ from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
     EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
-    WidgetCodeForm,
+    PaymentSettingsForm, ProviderForm, TaxRuleForm, TaxRuleLineFormSet,
+    TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
@@ -952,9 +953,30 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
             'name': LazyI18nString.from_gettext(ugettext('VAT'))
         }
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @cached_property
+    def formset(self):
+        return TaxRuleLineFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
+        form.instance.custom_rules = json.dumps([
+            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+        ])
         messages.success(self.request, _('The new tax rule has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.taxrule.added', user=self.request.user, data=dict(form.cleaned_data))
@@ -980,9 +1002,32 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         except TaxRule.DoesNotExist:
             raise Http404(_("The requested tax rule does not exist."))
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object(self.get_queryset())
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @cached_property
+    def formset(self):
+        return TaxRuleLineFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            initial=json.loads(self.object.custom_rules) if self.object.custom_rules else []
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        form.instance.custom_rules = json.dumps([
+            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+        ])
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.taxrule.changed', user=self.request.user, data={

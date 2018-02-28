@@ -4,7 +4,8 @@ Tax rules
 Resource description
 --------------------
 
-Tax rules specify how tax should be calculated for specific products.
+Tax rules specify how tax should be calculated for specific products. Custom taxation rulesets are currently to
+available via the API.
 
 .. rst-class:: rest-resource-table
 

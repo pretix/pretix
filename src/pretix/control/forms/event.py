@@ -4,8 +4,11 @@ from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
+from django.forms import formset_factory
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries import Countries
+from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
@@ -905,6 +908,43 @@ class CommentForm(I18nModelForm):
                 'class': 'helper-width-100',
             }),
         }
+
+
+class CountriesAndEU(Countries):
+    override = {
+        'ZZ': _('Any country'),
+        'EU': _('European Union')
+    }
+    first = ['ZZ', 'EU']
+
+
+class TaxRuleLineForm(forms.Form):
+    country = LazyTypedChoiceField(
+        choices=CountriesAndEU(),
+        required=False
+    )
+    address_type = forms.ChoiceField(
+        choices=[
+            ('', _('Any customer')),
+            ('individual', _('Individual')),
+            ('business', _('Business')),
+            ('business_vat_id', _('Business with valid VAT ID')),
+        ],
+        required=False
+    )
+    action = forms.ChoiceField(
+        choices=[
+            ('vat', _('Charge VAT')),
+            ('reverse', _('Reverse charge')),
+            ('no', _('No VAT')),
+        ],
+    )
+
+
+TaxRuleLineFormSet = formset_factory(
+    TaxRuleLineForm,
+    can_order=False, can_delete=True, extra=0
+)
 
 
 class TaxRuleForm(I18nModelForm):
