@@ -439,8 +439,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
         fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
                              internal_type=payment_provider.identifier))
 
-    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address,
-                                                 meta_info=meta_info, posiitons=positions):
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
+                                                 meta_info=meta_info, positions=positions):
         fees += resp
     return fees
 

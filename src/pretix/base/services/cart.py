@@ -667,7 +667,8 @@ def get_fees(event, request, total, invoice_address, provider):
                         tax_rule=payment_fee_tax_rule
                     ))
 
-    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address):
+    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
+                                                    total=total):
         fees += resp
 
     return fees

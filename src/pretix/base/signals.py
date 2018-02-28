@@ -291,7 +291,7 @@ an OrderedDict of (setting name, form field).
 """
 
 order_fee_calculation = EventPluginSignal(
-    providing_args=['request']
+    providing_args=['positions', 'invoice_address', 'meta_info', 'total']
 )
 """
 This signals allows you to add fees to an order while it is being created. You are expected to
@@ -300,7 +300,9 @@ return a list of ``OrderFee`` objects that are not yet saved to the database
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
-tax calculation). The argument ``meta_info`` contains the order's meta dictionary.
+tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
+keyword argument will contain the total cart sum without any fees. You should not rely on this
+``total`` value for fee calculations as other fees might interfere.
 """
 
 order_fee_type_name = EventPluginSignal(
