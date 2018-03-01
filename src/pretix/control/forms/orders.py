@@ -11,7 +11,6 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
-from pretix.base.templatetags.money import money_filter
 from pretix.helpers.money import change_decimal_field
 
 
@@ -78,7 +77,7 @@ class SubEventChoiceField(forms.ModelChoiceField):
                       voucher=self.instance.voucher,
                       subevent=obj)
         return '{} – {} ({})'.format(obj.name, obj.get_date_range_display(),
-                                     money_filter(p, self.instance.order.event.currency))
+                                     p.print(self.instance.order.event.currency))
 
 
 class OtherOperationsForm(forms.Form):
