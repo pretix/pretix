@@ -204,7 +204,6 @@ class ReturnView(StripeOrderView, View):
         prov = self.pprov
         prov._init_api()
         src = stripe.Source.retrieve(request.GET.get('source'))
-        print(src.client_secret, request.GET.get('client_secret'))
         if src.client_secret != request.GET.get('client_secret'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
@@ -232,7 +231,6 @@ class ReturnView(StripeOrderView, View):
         return self._redirect_to_order()
 
     def _redirect_to_order(self):
-        print(self.request.session.get('payment_stripe_order_secret'), self.order.secret)
         if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))

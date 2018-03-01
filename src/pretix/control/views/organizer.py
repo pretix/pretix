@@ -24,15 +24,15 @@ from pretix.control.forms.organizer import (
 )
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
+from pretix.control.views import PaginationMixin
 from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_organizer_css
 
 
-class OrganizerList(ListView):
+class OrganizerList(PaginationMixin, ListView):
     model = Organizer
     context_object_name = 'organizers'
     template_name = 'pretixcontrol/organizers/index.html'
-    paginate_by = 30
 
     def get_queryset(self):
         qs = Organizer.objects.all()

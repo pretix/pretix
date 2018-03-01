@@ -12,6 +12,7 @@ from .items import (
     Quota, SubEventItem, SubEventItemVariation, itempicture_upload_to,
 )
 from .log import LogEntry
+from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
     InvoiceAddress, Order, OrderPosition, QuestionAnswer,

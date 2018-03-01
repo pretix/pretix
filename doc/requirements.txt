@@ -1,5 +1,7 @@
 -r ../src/requirements.txt
-sphinx
+sphinx==1.6.*
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
 sphinxcontrib-images
+sphinxcontrib-spelling
+pyenchant

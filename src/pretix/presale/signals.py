@@ -64,7 +64,7 @@ order_meta_from_request = EventPluginSignal(
 """
 This signal is sent before an order is created through the pretixpresale frontend. It allows you
 to return a dictionary that will be merged in the meta_info attribute of the order.
-You will recieve the request triggering the order creation as the ``request`` keyword argument.
+You will receive the request triggering the order creation as the ``request`` keyword argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -80,7 +80,7 @@ argument will contain the request object.
 """
 
 fee_calculation_for_cart = EventPluginSignal(
-    providing_args=['request']
+    providing_args=['request', 'invoice_address', 'total']
 )
 """
 This signals allows you to add fees to a cart. You are expected to return a list of ``OrderFee``
@@ -88,7 +88,8 @@ objects that are not yet saved to the database (because there is no order yet).
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object and ``invoice_address`` the invoice address (useful for
-tax calculation).
+tax calculation). The ``total`` keyword argument will contain the total cart sum without any fees.
+You should not rely on this ``total`` value for fee calculations as other fees might interfere.
 """
 
 contact_form_fields = EventPluginSignal(
@@ -100,7 +101,8 @@ and by default only asks for the email address. You are supposed to return a dic
 form fields with globally unique keys. The validated form results will be saved into the
 ``contact_form_data`` entry of the order's meta_info dictionary.
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
+argument will contain the request object.
 """
 
 question_form_fields = EventPluginSignal(

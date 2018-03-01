@@ -39,7 +39,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     var c = $(jqXHR.responseText).filter('.container');
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
-    } else {
+    } else if (thrownError !== "abort") {
         alert(gettext('Unknown error.'));
     }
 });
@@ -206,19 +206,38 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("input[data-display-dependency]").each(function () {
+    $("input[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
-            update = function () {
-                var enabled = (dependency.attr("type") === 'checkbox') ? dependency.prop('checked') : !!dependency.val();
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (ev) {
+                    dependent.closest('.form-group').slideToggle(enabled);
+                } else {
+                    dependent.closest('.form-group').toggle(enabled);
+                }
             };
         update();
-        dependency.on("change", update);
-        dependency.on("dp.change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-    el.find(".scrolling-multiple-choice").each(function () {
+    el.find("input[data-required-if]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-required-if")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+    });
+
+    el.find("div.scrolling-multiple-choice").each(function () {
+        if ($(this).find(".choice-options-all").length > 0) {
+            return;
+        }
         var $small = $("<small>");
         var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("All"));
         var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("None"));
@@ -234,8 +253,92 @@ var form_handlers = function (el) {
             e.preventDefault();
             return false;
         });
-    })
-}
+    });
+
+    el.find('.select2-static').select2({
+        theme: "bootstrap",
+        language: $("body").attr("data-select2-locale"),
+    });
+
+    el.find('[data-model-select2=generic]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            placeholder: $(this).attr("data-placeholder"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            }
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            if ($s.hasAttribute("multiple")) {
+                window.setTimeout(function () {
+                    $s.parent().find('.select2-search__field').focus();
+                }, 50);
+            }
+        });
+    });
+
+    el.find('[data-model-select2=event]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            },
+            placeholder: $(this).attr("data-placeholder"),
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
+                );
+                if (res.organizer) {
+                    $ret.append(
+                        $("<span>").addClass("event-organizer").append(
+                            $("<span>").addClass("fa fa-users fa-fw")
+                        ).append(" ").append($("<div>").text(res.organizer).html())
+                    );
+                }
+                $ret.append(
+                    $("<span>").addClass("event-daterange").append(
+                        $("<span>").addClass("fa fa-calendar fa-fw")
+                    ).append(" ").append(res.date_range)
+                );
+                return $ret;
+            },
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            window.setTimeout(function () {
+                $s.parent().find('.select2-search__field').focus();
+            }, 50);
+        });
+    });
+
+    el.find(".simple-subevent-choice").change(function () {
+        $(this).closest("form").submit();
+    });
+};
 
 $(function () {
     "use strict";
@@ -279,6 +382,11 @@ $(function () {
     });
 
     $('.collapsible').collapse();
+    $("input[data-toggle=radiocollapse]").change(function () {
+        $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
+        $($(this).attr("data-target")).collapse('show');
+    });
+    $("div.collapsed").removeClass("collapsed").addClass("collapse");
     $(".has-error").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });

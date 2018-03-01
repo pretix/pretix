@@ -29,4 +29,4 @@ class AllTicketsPDF(BaseExporter):
 
         p.save()
         outbuffer = o._render_with_background(buffer)
-        return 'tickets.pdf', 'application/pdf', outbuffer.read()
+        return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()

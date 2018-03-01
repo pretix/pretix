@@ -25,7 +25,7 @@ To set a text in italics, you can put it in asterisks or underscores. For exampl
 
 will become:
 
-    Please *really* pay your _ticket_.
+    Please *really* pay your *ticket*.
 
 If you set double asterisks or underscores, the text will be printed in bold. For example,
 
@@ -145,7 +145,7 @@ to get a better plain text representation of your text. Note however, that for
 security reasons you can only use the following HTML elements::
 
     a, abbr, acronym, b, br, code, div, em, h1, h2,
-    h3, h4, h5, h6, hr, i, li, ol, p, span, strong,
+    h3, h4, h5, h6, hr, i, li, ol, p, pre, span, strong,
     table, tbody, td, thead, tr, ul
 
 Additionally, only the following attributes are allowed on them::

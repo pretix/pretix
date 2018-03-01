@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-04 17:14+0000\n"
-"PO-Revision-Date: 2017-10-28 22:59+0200\n"
+"POT-Creation-Date: 2018-02-26 09:47+0000\n"
+"PO-Revision-Date: 2018-02-03 16:56+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -178,11 +178,11 @@ msgstr "Generiere Nachrichten…"
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:223
+#: pretix/static/pretixcontrol/js/ui/main.js:242
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:224
+#: pretix/static/pretixcontrol/js/ui/main.js:243
 msgid "None"
 msgstr "Keine"
 
@@ -295,18 +295,13 @@ msgstr ""
 "den Warenkorb zu verändern."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
-#, fuzzy
-#| msgctxt "widget"
-#| msgid ""
-#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank"
-#| "\">pretix</a>"
 msgctxt "widget"
 msgid ""
 "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
 "\"noopener\">pretix</a>"
 msgstr ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\">pretix</"
-"a>"
+"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+"\"noopener\">pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"

@@ -1,6 +1,7 @@
 @import "_variables.scss";
 @import "../../pretixbase/scss/colors.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 
 @import "_event.scss";
@@ -171,6 +172,9 @@ body.loading .container {
     }
     .checkout-button-row > div {
         margin-bottom: 15px;
+    }
+    .checkout-button-row > div.clearfix {
+        margin: 0;
     }
 }
 

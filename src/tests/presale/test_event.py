@@ -24,7 +24,7 @@ class EventTestMixin:
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             live=True
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -706,6 +706,26 @@ class DeadlineTest(EventTestMixin, TestCase):
         self.assertIn('alert-danger', response.rendered_content)
         self.assertIn('not yet started', response.rendered_content)
 
+    def test_event_over(self):
+        self.event.date_to = now() - datetime.timedelta(days=1)
+        self.event.presale_end = None
+        self.event.save()
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('alert-info', response.rendered_content)
+        self.assertNotIn('btn-add-to-cart', response.rendered_content)
+        response = self.client.post(
+            '/%s/%s/cart/add' % (self.orga.slug, self.event.slug),
+            {
+                'item_%d' % self.item.id: '1'
+            },
+            follow=True
+        )
+        self.assertIn('alert-danger', response.rendered_content)
+        self.assertIn('is over', response.rendered_content)
+
     def test_over(self):
         self.event.presale_end = now() - datetime.timedelta(days=1)
         self.event.save()
@@ -864,7 +884,6 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('SUMMARY:%s' % self.event.name, ical, 'incorrect correct summary')
         self.assertIn('LOCATION:DUMMY ARENA', ical, 'incorrect location')
-        self.assertIn('ORGANIZER:%s' % self.event.organizer.name, ical, 'incorrect organizer')
         self.assertTrue(re.search(r'DTSTAMP:\d{8}T\d{6}Z', ical), 'incorrect timestamp')
         self.assertTrue(re.search(r'UID:pretix-\w*-\w*-0@', ical), 'missing UID key')
 

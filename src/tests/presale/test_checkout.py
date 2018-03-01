@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 from datetime import timedelta
 from decimal import Decimal
@@ -14,7 +15,7 @@ from django_countries.fields import Country
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemCategory, Order,
-    OrderPosition, Organizer, Question, Quota, Voucher,
+    OrderPosition, Organizer, Question, QuestionAnswer, Quota, Voucher,
 )
 from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
 from pretix.testutils.sessions import get_cart_session_key
@@ -26,7 +27,7 @@ class CheckoutTestCase(TestCase):
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer',
             live=True
         )
@@ -37,6 +38,7 @@ class CheckoutTestCase(TestCase):
                                           category=self.category, default_price=23, admission=True,
                                           tax_rule=self.tr19)
         self.quota_tickets.items.add(self.ticket)
+        self.event.settings.set('timezone', 'UTC')
         self.event.settings.set('attendee_names_asked', False)
         self.event.settings.set('payment_banktransfer__enabled', True)
 
@@ -70,8 +72,81 @@ class CheckoutTestCase(TestCase):
 
     def test_empty_cart(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+
+    def test_timezone(self):
+        """ Test basic timezone change handling by date and time questions """
+        q1 = Question.objects.create(
+            event=self.event, question='When did you wake up today?', type=Question.TYPE_TIME,
+            required=True
+        )
+        q2 = Question.objects.create(
+            event=self.event, question='When was your last haircut?', type=Question.TYPE_DATE,
+            required=True
+        )
+        q3 = Question.objects.create(
+            event=self.event, question='When are you going to arrive?', type=Question.TYPE_DATETIME,
+            required=True
+        )
+        self.ticket.questions.add(q1)
+        self.ticket.questions.add(q2)
+        self.ticket.questions.add(q3)
+        cr = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-question_%s' % (cr.id, q1.id): '06:30',
+            '%s-question_%s' % (cr.id, q2.id): '2005-12-31',
+            '%s-question_%s_0' % (cr.id, q3.id): '2018-01-01',
+            '%s-question_%s_1' % (cr.id, q3.id): '5:23',
+            'email': 'admin@localhost',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), target_status_code=200)
+        self.event.settings.set('timezone', 'US/Central')
+        o1 = QuestionAnswer.objects.get(question=q1)
+        o2 = QuestionAnswer.objects.get(question=q2)
+        o3 = QuestionAnswer.objects.get(question=q3)
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=4)
+        op = OrderPosition.objects.create(order=order, item=self.ticket, price=42)
+        o1.cartposition, o2.cartposition, o3.cartposition = None, None, None
+        o1.orderposition, o2.orderposition, o3.orderposition = op, op, op
+        # only time and date answers should be unaffected by timezone change
+        self.assertEqual(str(o1), '06:30')
+        self.assertEqual(str(o2), '2005-12-31')
+        o3date, o3time = str(o3).split(' ')
+        self.assertEqual(o3date, '2017-12-31')
+        self.assertEqual(o3time, '23:23')
+
+    def test_addon_questions(self):
+        q1 = Question.objects.create(
+            event=self.event, question='Age', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        q1.items.add(self.ticket)
+        q1.items.add(self.workshop1)
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        cp1.answers.create(question=q1, answer='12')
+        cp2 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.workshop1, addon_to=cp1,
+            price=0, expires=now() + timedelta(minutes=10)
+        )
+        cp2.answers.create(question=q1, answer='12')
+
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertEqual(OrderPosition.objects.filter(item=self.ticket).first().answers.first().answer, '12')
+        self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).first().answers.first().answer, '12')
 
     def test_questions(self):
         q1 = Question.objects.create(
@@ -341,6 +416,51 @@ class CheckoutTestCase(TestCase):
         ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert not ia.vat_id_validated
 
+    def test_custom_tax_rules(self):
+        self.tr19.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': '', 'action': 'vat'},
+            {'country': 'ZZ', 'address_type': '', 'action': 'reverse'},
+        ])
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('19.33')
+
     def test_question_file_upload(self):
         q1 = Question.objects.create(
             event=self.event, question='Student ID', type=Question.TYPE_FILE,
@@ -479,7 +599,7 @@ class CheckoutTestCase(TestCase):
 
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
         self.event.settings.set('payment_stripe__enabled', True)
@@ -1036,6 +1156,19 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(len(doc.select(".alert-danger")), 1)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
 
+    def test_confirm_event_over(self):
+        self.event.date_to = now() - datetime.timedelta(days=1)
+        self.event.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+
     def test_confirm_presale_over(self):
         self.event.presale_end = now() - datetime.timedelta(days=1)
         self.event.save()
@@ -1219,7 +1352,7 @@ class CheckoutTestCase(TestCase):
                              target_status_code=200)
         response = self.client.get('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug))
         assert 'Workshop 1' in response.rendered_content
-        assert 'EUR 12.00' in response.rendered_content
+        assert '€12.00' in response.rendered_content
 
     def test_set_addons_included(self):
         ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
@@ -1233,7 +1366,7 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         assert 'Workshop 1' in response.rendered_content
-        assert 'EUR 12.00' not in response.rendered_content
+        assert '€12.00' not in response.rendered_content
 
     def test_set_addons_subevent(self):
         self.event.has_subevents = True
@@ -1253,7 +1386,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ EUR 42.00)' in response.rendered_content
+        assert 'Workshop 1 (+ €42.00)' in response.rendered_content
 
     def test_set_addons_subevent_net_prices(self):
         self.event.has_subevents = True
@@ -1278,8 +1411,8 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert 'Workshop 1 (+ EUR 35.29 plus 19.00% VAT)' in response.rendered_content
-        assert 'A (+ EUR 10.08 plus 19.00% VAT)' in response.rendered_content
+        assert 'Workshop 1 (+ €35.29 plus 19.00% VAT)' in response.rendered_content
+        assert 'A (+ €10.08 plus 19.00% VAT)' in response.rendered_content
 
     def test_confirm_subevent_presale_not_yet(self):
         self.event.has_subevents = True
@@ -1314,3 +1447,18 @@ class CheckoutTestCase(TestCase):
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         assert 'presale period for one of the events in your cart has ended.' in response.rendered_content
         assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+    def test_confirm_subevent_ignore_series_dates(self):
+        self.event.has_subevents = True
+        self.event.date_to = now() - datetime.timedelta(days=1)
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() + datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)

@@ -6,7 +6,7 @@ from django.db.models import Max, OuterRef, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, ListView
 from pytz import UTC
@@ -16,13 +16,12 @@ from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.views import CreateView, UpdateView
+from pretix.control.views import CreateView, PaginationMixin, UpdateView
 
 
-class CheckInListShow(EventPermissionRequiredMixin, ListView):
+class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Checkin
     context_object_name = 'entries'
-    paginate_by = 30
     template_name = 'pretixcontrol/checkin/index.html'
     permission = 'can_view_orders'
 
@@ -36,7 +35,7 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            order__status=Order.STATUS_PAID,
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
             subevent=self.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
@@ -71,7 +70,11 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
                 if isinstance(e.last_checked_in, str):
                     # Apparently only happens on SQLite
                     e.last_checked_in_aware = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
+                elif not is_aware(e.last_checked_in):
+                    # Apparently only happens on MySQL
+                    e.last_checked_in_aware = make_aware(e.last_checked_in, UTC)
                 else:
+                    # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
                     e.last_checked_in_aware = e.last_checked_in
         return ctx
 
@@ -89,7 +92,7 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
 
         for op in positions:
             created = False
-            if op.order.status == Order.STATUS_PAID:
+            if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
                 ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
                     'datetime': now(),
                 })
@@ -109,10 +112,9 @@ class CheckInListShow(EventPermissionRequiredMixin, ListView):
         }) + '?' + request.GET.urlencode())
 
 
-class CheckinListList(EventPermissionRequiredMixin, ListView):
+class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
-    paginate_by = 30
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/checkin/lists.html'
 
@@ -209,6 +211,7 @@ class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
+        self.object.checkins.all().delete()
         self.object.log_action(action='pretix.event.orders.deleted', user=request.user)
         self.object.delete()
         messages.success(self.request, _('The selected list has been deleted.'))

@@ -1,174 +1,42 @@
+{% extends "pretixbase/email/base.html" %}
 {% load eventurl %}
 {% load i18n %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=false">
-</head>
-<style type="text/css">
-    body {
-        background-color: #e8e8e8;
-        background-position: top;
-        background-repeat: repeat-x;
-        font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 20px;
-        color: #333;
-        margin: 0;
-    }
-
-    .header h1 {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .header h1 a {
-        text-decoration: none;
-    }
-
-    a {
-        color: {{ color }};
-        font-weight: bold;
-    }
-
-    a:hover, a:focus {
-        color: {{ color }};
-        text-decoration: underline;
-    }
-
-    a:hover, a:active {
-        outline: 0;
-    }
-
-    p {
-        margin: 0 0 10px;
-
-        /* These are technically the same, but use both */
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-
-        -ms-word-break: break-all;
-        /* This is the dangerous one in WebKit, as it breaks things wherever */
-        word-break: break-all;
-        /* Instead use this non-standard one: */
-        word-break: break-word;
-
-        /* Adds a hyphen where the word breaks, if supported (No Blink) */
-        -ms-hyphens: auto;
-        -moz-hyphens: auto;
-        -webkit-hyphens: auto;
-        hyphens: auto;
-    }
-
-    .footer {
-        padding: 10px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .content {
-        padding: 8px 18px 8px;
-    }
-
-    ::selection {
-        background: {{ color }};
-        color: #FFF;
-    }
-
-    table {
-        width: 90%;
-        max-width: 900px;
-        border-spacing: 0px;
-        border-collapse: separate;
-        margin: auto;
-    }
-
-    @media (max-width: 480px) {
-        .header h1 {
-            font-size: 19px;
-            line-height: 24px;
-            margin: 0 9px 3px 0;
-            border-radius: 5px 5px;
-            -webkit-border-radius: 5px 5px;
-            -moz-border-radius: 5px 5px;
-        }
-
-        .header h1 a {
-            padding: 3px 9px;
-            display: block;
-        }
-
-        .header {
-            margin: 0;
-            padding: 12px 0 8px;
-        }
-    }
-
-    td.containertd {
-        background-color: #FFFFFF;
-        border: 1px solid #cccccc;
-    }
-
-    {% block addcss %}{% endblock %}
-</style>
-<body>
-    <table>
+{% block content %}
+    <tr>
+        <td class="containertd">
+            <div class="content">
+                {{ body|safe }}
+            </div>
+        </td>
+    </tr>
+    {% if order %}
         <tr>
-            <td class="header" background="">
-                {% if event %}
-                    <h1><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a></h1>
-                {% else %}
-                    <h1><a href="{{ site_url }}" target="_blank">{{ site }}</a></h1>
-                {% endif %}
-            </td>
+            <td class="gap"></td>
         </tr>
         <tr>
-            <td class="containertd">
+            <td class="order containertd">
                 <div class="content">
-                    {{ body|safe }}
+                    {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
+                    <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
+                    <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
+                    <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
+                    <a href="{% abseventurl event "presale:event.order" order=order.code secret=order.secret %}">
+                        {% trans "View order details" %}
+                    </a>
                 </div>
             </td>
         </tr>
-        {% if order %}
-            <tr>
-                <td class="gap"></td>
-            </tr>
-            <tr>
-                <td class="order containertd">
-                    <div class="content">
-                        {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
-                        <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
-                        <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
-                        <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                        <a href="{% abseventurl event "presale:event.order" order=order.code secret=order.secret %}">
-                            {% trans "View order details" %}
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        {% endif %}
+    {% endif %}
 	{% if signature %}
-            <tr>
-                <td class="gap"></td>
-            </tr>
-            <tr>
-                <td class="order containertd">
-                    <div class="content">
-                        {{ signature | safe }}
-                    </div>
-                </td>
-            </tr>
-        {% endif %}
         <tr>
-            <td class="footer">
-                <div>
-                    {% include "pretixbase/email/email_footer.html" %}
+            <td class="gap"></td>
+        </tr>
+        <tr>
+            <td class="order containertd">
+                <div class="content">
+                    {{ signature | safe }}
                 </div>
             </td>
         </tr>
-    </table>
-    <br/>
-    <br/>
-</body>
-</html>
+    {% endif %}
+{% endblock %}

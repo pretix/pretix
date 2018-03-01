@@ -60,4 +60,4 @@ same 5 %, such that for a ticket with a list price of 100 € you will get your 
     ===================================================== =============
 
     Due to the various rounding steps performed by pretix and by the payment provider, the end total on
-    your bank account might stil vary by one cent.
+    your bank account might still vary by one cent.

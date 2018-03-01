@@ -81,8 +81,8 @@ setup(
         'django-otp==0.3.*',
         'python-u2flib-server==4.*',
         'django-formtools==2.0',
-        'celery==4.0.2',
-        'kombu==4.0.2',
+        'celery==4.1.*',
+        'kombu==4.1.*',
         'django-statici18n==1.3.*',
         'inlinestyler==0.2.*',
         'BeautifulSoup4',
@@ -95,6 +95,7 @@ setup(
         'markdown',
         'bleach==2.*',
         'raven',
+        'babel',
         'paypalrestsdk==1.12.*',
         'pycparser==2.13',
         'django-redis==4.7.*',
@@ -109,6 +110,7 @@ setup(
         'pyuca',
         'defusedcsv',
         'vat_moss==0.11.0',
+        'django-hijack==2.1.*'
     ],
     extras_require={
         'dev': [

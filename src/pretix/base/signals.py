@@ -26,6 +26,10 @@ class EventPluginSignal(django.dispatch.Signal):
     """
 
     def _is_active(self, sender, receiver):
+        if sender is None:
+            # Send to all events!
+            return True
+
         # Find the Django application this belongs to
         searchpath = receiver.__module__
         core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
@@ -138,6 +142,19 @@ This signal is sent out to get all known ticket outputs. Receivers should return
 subclass of pretix.base.ticketoutput.BaseTicketOutput
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+register_notification_types = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known notification types. Receivers should return an
+instance of a subclass of pretix.base.notifications.NotificationType or a list of such
+instances.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event,
+however for this signal, the ``sender`` **may also be None** to allow creating the general
+notification settings!
 """
 
 register_data_exporters = EventPluginSignal(
@@ -274,7 +291,7 @@ an OrderedDict of (setting name, form field).
 """
 
 order_fee_calculation = EventPluginSignal(
-    providing_args=['request']
+    providing_args=['positions', 'invoice_address', 'meta_info', 'total']
 )
 """
 This signals allows you to add fees to an order while it is being created. You are expected to
@@ -283,7 +300,9 @@ return a list of ``OrderFee`` objects that are not yet saved to the database
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
-tax calculation). The argument ``meta_info`` contains the order's meta dictionary.
+tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
+keyword argument will contain the total cart sum without any fees. You should not rely on this
+``total`` value for fee calculations as other fees might interfere.
 """
 
 order_fee_type_name = EventPluginSignal(
@@ -315,7 +334,7 @@ This signal allows you to implement a middleware-style filter on all outgoing em
 return a (possibly modified) copy of the message object passed to you.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-The ``message`` argument will contian an ``EmailMultiAlternatives`` object.
+The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 """

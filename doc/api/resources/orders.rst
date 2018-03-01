@@ -1,3 +1,5 @@
+.. spelling:: checkins
+
 Orders
 ======
 
@@ -32,6 +34,9 @@ payment_fee_tax_value                 money (string)             Tax value inclu
 payment_fee_tax_rule                  integer                    The ID of the used tax rule (or ``null``)
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
+checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if a ticket
+                                                                 of this order is scanned.
 invoice_address                       object                     Invoice address information (can be ``null``)
 ├ last_modified                       datetime                   Last modification date of the address
 ├ company                             string                     Customer company name
@@ -79,12 +84,18 @@ downloads                             list of objects            List of ticket 
 
    The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
    The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
-   deprecated in favour of the new ``fees`` attribute but will still be served and removed in 1.9.
+   deprecated in favor of the new ``fees`` attribute but will still be served and removed in 1.9.
 
 .. versionchanged:: 1.9
 
    First write operations (``…/mark_paid/``, ``…/mark_pending/``, ``…/mark_canceled/``, ``…/mark_expired/``) have been added.
    The attribute ``invoice_address.internal_reference`` has been added.
+
+.. versionchanged:: 1.13
+
+   The field ``checkin_attention`` has been added.
+
+.. _order-position-resource:
 
 Order position resource
 -----------------------
@@ -110,6 +121,7 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 checkins                              list of objects            List of check-ins with this ticket
+├ list                                integer                    Internal ID of the check-in list
 └ datetime                            datetime                   Time of check-in
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
@@ -123,6 +135,10 @@ answers                               list of objects            Answers to user
 .. versionchanged:: 1.7
 
    The attribute ``tax_rule`` has been added.
+
+.. versionchanged:: 1.11
+
+   The attribute ``checkins.list`` has been added.
 
 
 Order endpoints
@@ -166,6 +182,7 @@ Order endpoints
             "fees": [],
             "total": "23.00",
             "comment": "",
+            "checkin_attention": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": True,
@@ -198,6 +215,7 @@ Order endpoints
                 "subevent": null,
                 "checkins": [
                   {
+                    "list": 44,
                     "datetime": "2017-12-25T12:45:23Z"
                   }
                 ],
@@ -272,6 +290,7 @@ Order endpoints
         "fees": [],
         "total": "23.00",
         "comment": "",
+        "checkin_attention": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
@@ -304,6 +323,7 @@ Order endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -342,7 +362,7 @@ Order endpoints
 
    Download tickets for an order, identified by its order code. Depending on the chosen output, the response might
    be a ZIP file, PDF file or something else. The order details response contains a list of output options for this
-   partictular order.
+   particular order.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Note that in some cases the
    ticket file might not yet have been created. In that case, you will receive a status code :http:statuscode:`409` and
@@ -622,6 +642,7 @@ Order position endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -701,6 +722,7 @@ Order position endpoints
         "subevent": null,
         "checkins": [
           {
+            "list": 44,
             "datetime": "2017-12-25T12:45:23Z"
           }
         ],

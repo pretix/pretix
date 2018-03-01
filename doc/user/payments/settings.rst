@@ -11,7 +11,7 @@ of the page shows a number of general settings that affect all payment methods:
 In particular, these are:
 
 Payment term in days
-  If a order has been created, it is supposed to be paid within this number of days. Of course, some payment mehtods
+  If a order has been created, it is supposed to be paid within this number of days. Of course, some payment methods
   (like credit card) succeed immediately in most cases, but others don't (like bank transfer) and even credit card
   payments might fail and you might want to give the customer a chance to try another credit card before losing their
   ticket. Therefore, we recommend setting a few days here. If you are accepting bank transfers, we wouldn't recommend
@@ -19,7 +19,7 @@ Payment term in days
 
 Last date of payments
   There is probably no use for payments received after your event, so you can set a date that the payment deadline of
-  a new order will never exceed. This has precendence over the number of days configured above, so if I create an order
+  a new order will never exceed. This has precedence over the number of days configured above, so if I create an order
   two days before the configured last date of payments, my payment term will only be two days, not ten. If you have
   payment methods that always require some time (like bank transfer), you will later be able to selectively disable them
   once the event comes closer.

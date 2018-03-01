@@ -9,7 +9,7 @@ There are multiple ways to do this.
 First, you could just create some orders in your real shop and cancel/refund them later. If you don't want to process
 real payments for the tests, you can either use a "manual" payment method like bank transfer and just mark the orders
 as paid with the button in the backend, or if you want to use e.g. Stripe, you can configure pretix to use your keys
-for the Stripe test sytem and use their test credit cars. Read our :ref:`Stripe documentation <stripe>` for more
+for the Stripe test system and use their test credit cars. Read our :ref:`Stripe documentation <stripe>` for more
 information.
 
 Second, you could create a separate event, just for testing. In the last step of the :ref:`event creation process <event_create>`,
@@ -24,9 +24,11 @@ received any real orders (i.e. taken the shop public). We won't charge any fees 
 How do I delete an event?
 -------------------------
 
-It is currently not possible to delete events, you can just disable the shop by clicking the first square on your event
-dashboard. Events can't be deleted as they most likely contain information on financial transactions which legally
-needs to be kept on record for multiple years in most countries.
+You can find the event deletion button at the bottom of the event settings page. Note however, that it is not possible
+to delete an event once any order or invoice has been created, as those likely contain information on financial
+transactions which legally may not be tampered with and needs to be kept on record for multiple years in most
+countries. In this case, you can just disable the shop by clicking the first square on your event
+dashboard.
 
 If you are using the hosted service at pretix.eu and want to get rid of an event that you only used for testing, contact
 us at support@pretix.eu and we can remove it for you.

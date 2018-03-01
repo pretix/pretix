@@ -7,8 +7,9 @@ from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
-from django.utils.formats import date_format, localize
-from django.utils.timezone import now
+from django.template.defaultfilters import floatformat
+from django.utils.formats import date_format
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
 from pretix.base.exporter import BaseExporter
@@ -94,10 +95,11 @@ class ReportlabExportMixin:
     def page_footer(self, canvas, doc):
         from reportlab.lib.units import mm
 
+        tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
         canvas.drawString(15 * mm, 10 * mm, _("Page %d") % (doc.page,))
         canvas.drawRightString(self.pagesize[0] - 15 * mm, 10 * mm,
-                               _("Created: %s") % now().strftime("%d.%m.%Y %H:%M:%S"))
+                               _("Created: %s") % now().astimezone(tz).strftime("%d.%m.%Y %H:%M:%S"))
 
     def page_header(self, canvas, doc):
         from reportlab.lib.units import mm
@@ -193,49 +195,50 @@ class OverviewReport(Report):
         ]
 
         items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
 
         for tup in items_by_category:
             if tup[0]:
                 tstyledata.append(('FONTNAME', (0, len(tdata)), (-1, len(tdata)), 'OpenSansBd'))
                 tdata.append([
                     tup[0].name,
-                    str(tup[0].num_canceled[0]), localize(tup[0].num_canceled[1]),
-                    str(tup[0].num_refunded[0]), localize(tup[0].num_refunded[1]),
-                    str(tup[0].num_expired[0]), localize(tup[0].num_expired[1]),
-                    str(tup[0].num_pending[0]), localize(tup[0].num_pending[1]),
-                    str(tup[0].num_paid[0]), localize(tup[0].num_paid[1]),
-                    str(tup[0].num_total[0]), localize(tup[0].num_total[1]),
+                    str(tup[0].num_canceled[0]), floatformat(tup[0].num_canceled[1], places),
+                    str(tup[0].num_refunded[0]), floatformat(tup[0].num_refunded[1], places),
+                    str(tup[0].num_expired[0]), floatformat(tup[0].num_expired[1], places),
+                    str(tup[0].num_pending[0]), floatformat(tup[0].num_pending[1], places),
+                    str(tup[0].num_paid[0]), floatformat(tup[0].num_paid[1], places),
+                    str(tup[0].num_total[0]), floatformat(tup[0].num_total[1], places),
                 ])
             for item in tup[1]:
                 tdata.append([
                     "     " + str(item.name),
-                    str(item.num_canceled[0]), localize(item.num_canceled[1]),
-                    str(item.num_refunded[0]), localize(item.num_refunded[1]),
-                    str(item.num_expired[0]), localize(item.num_expired[1]),
-                    str(item.num_pending[0]), localize(item.num_pending[1]),
-                    str(item.num_paid[0]), localize(item.num_paid[1]),
-                    str(item.num_total[0]), localize(item.num_total[1]),
+                    str(item.num_canceled[0]), floatformat(item.num_canceled[1], places),
+                    str(item.num_refunded[0]), floatformat(item.num_refunded[1], places),
+                    str(item.num_expired[0]), floatformat(item.num_expired[1], places),
+                    str(item.num_pending[0]), floatformat(item.num_pending[1], places),
+                    str(item.num_paid[0]), floatformat(item.num_paid[1], places),
+                    str(item.num_total[0]), floatformat(item.num_total[1], places),
                 ])
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
                             "          " + str(var),
-                            str(var.num_canceled[0]), localize(var.num_canceled[1]),
-                            str(var.num_refunded[0]), localize(var.num_refunded[1]),
-                            str(var.num_expired[0]), localize(var.num_expired[1]),
-                            str(var.num_pending[0]), localize(var.num_pending[1]),
-                            str(var.num_paid[0]), localize(var.num_paid[1]),
-                            str(var.num_total[0]), localize(var.num_total[1]),
+                            str(var.num_canceled[0]), floatformat(var.num_canceled[1], places),
+                            str(var.num_refunded[0]), floatformat(var.num_refunded[1], places),
+                            str(var.num_expired[0]), floatformat(var.num_expired[1], places),
+                            str(var.num_pending[0]), floatformat(var.num_pending[1], places),
+                            str(var.num_paid[0]), floatformat(var.num_paid[1], places),
+                            str(var.num_total[0]), floatformat(var.num_total[1], places),
                         ])
 
         tdata.append([
             _("Total"),
-            str(total['num_canceled'][0]), localize(total['num_canceled'][1]),
-            str(total['num_refunded'][0]), localize(total['num_refunded'][1]),
-            str(total['num_expired'][0]), localize(total['num_expired'][1]),
-            str(total['num_pending'][0]), localize(total['num_pending'][1]),
-            str(total['num_paid'][0]), localize(total['num_paid'][1]),
-            str(total['num_total'][0]), localize(total['num_total'][1]),
+            str(total['num_canceled'][0]), floatformat(total['num_canceled'][1], places),
+            str(total['num_refunded'][0]), floatformat(total['num_refunded'][1], places),
+            str(total['num_expired'][0]), floatformat(total['num_expired'][1], places),
+            str(total['num_pending'][0]), floatformat(total['num_pending'][1], places),
+            str(total['num_paid'][0]), floatformat(total['num_paid'][1], places),
+            str(total['num_total'][0]), floatformat(total['num_total'][1], places),
         ])
 
         table = Table(tdata, colWidths=colwidths, repeatRows=3)

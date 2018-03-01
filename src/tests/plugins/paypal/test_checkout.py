@@ -14,7 +14,7 @@ def env(client):
     orga = Organizer.objects.create(name='CCC', slug='ccc')
     event = Event.objects.create(
         organizer=orga, name='30C3', slug='30c3',
-        date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+        date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
         plugins='pretix.plugins.paypal',
         live=True
     )

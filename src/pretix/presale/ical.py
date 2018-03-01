@@ -31,7 +31,6 @@ def get_ical(events):
         vevent.add('dtstamp').value = creation_time
         if ev.location:
             vevent.add('location').value = str(ev.location)
-        vevent.add('organizer').value = event.organizer.name
         vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
             event.organizer.slug, event.slug,
             ev.pk if not isinstance(ev, Event) else '0',
@@ -56,6 +55,8 @@ def get_ical(events):
             descr.append(str(_('Admission: {datetime}')).format(
                 datetime=date_format(ev.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT')
             ))
+
+        descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
 
         vevent.add('description').value = '\n'.join(descr)
     return cal

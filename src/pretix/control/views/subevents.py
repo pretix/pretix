@@ -22,13 +22,13 @@ from pretix.control.forms.subevents import (
     SubEventItemVariationForm, SubEventMetaValueForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 
 
-class SubEventList(EventPermissionRequiredMixin, ListView):
+class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = SubEvent
     context_object_name = 'subevents'
-    paginate_by = 30
     template_name = 'pretixcontrol/subevents/index.html'
     permission = 'can_change_settings'
 
@@ -101,9 +101,12 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if self.get_object().orderposition_set.count() > 0:
+        if self.object.orderposition_set.count() > 0:
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
                                                   'placed.'))
+            return HttpResponseRedirect(self.get_success_url())
+        elif not self.object.allow_delete():  # checking if this is the last date in the event series
+            messages.error(request, pgettext_lazy('subevent', 'The last date of an event series can not be deleted.'))
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
@@ -145,6 +148,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     'name': cl.name,
                     'all_products': cl.all_products,
                     'limit_products': cl.limit_products.all(),
+                    'include_pending': cl.include_pending,
                 } for cl in self.copy_from.checkinlist_set.prefetch_related('limit_products')
             ]
             extra = len(kwargs['initial'])
@@ -153,6 +157,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                 {
                     'name': '',
                     'all_products': True,
+                    'include_pending': False,
                 }
             ]
             extra = 1

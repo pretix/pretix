@@ -1,0 +1,29 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Create user" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Create user" %}</h1>
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "Base settings" %}</legend>
+            {% bootstrap_field form.is_active layout='control' %}
+            {% bootstrap_field form.fullname layout='control' %}
+            {% bootstrap_field form.locale layout='control' %}
+            {% bootstrap_field form.timezone layout='control' %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Log-in settings" %}</legend>
+            {% bootstrap_field form.email layout='control' %}
+            {% bootstrap_field form.new_pw layout='control' %}
+            {% bootstrap_field form.new_pw_repeat layout='control' %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

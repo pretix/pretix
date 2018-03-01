@@ -1,0 +1,70 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+    <h1>{% trans "Delete event" %}</h1>
+    {% if request.event.allow_delete %}
+        {% bootstrap_form_errors form layout="inline" %}
+        <p>
+            {% blocktrans trimmed %}
+                This operation will destroy your event including all configuration, products, quotas, questions,
+                vouchers, lists, etc.
+            {% endblocktrans %}
+        </p>
+        <p><strong>
+            {% blocktrans trimmed %}
+                This operation is irreversible and there is no way to bring your data back.
+            {% endblocktrans %}
+        </strong></p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>
+                {% blocktrans trimmed with slug=request.event.slug %}
+                    To confirm you really want this, please type out the event's short name ("{{ slug }}") here:
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.slug layout="inline" %}
+            <p>
+                {% blocktrans trimmed with slug=request.event.slug %}
+                    Also, to make sure it's really you, please enter your user password here:
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.user_pw layout="inline" %}
+
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% trans "Delete" %}
+                </button>
+            </div>
+        </form>
+    {% else %}
+        <p>
+            {% trans "Your event can not be deleted as it already contains orders." %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                pretix does not allow deleting orders once they have been placed in order to be audit-proof and
+                trustable by financial authorities.
+            {% endblocktrans %}
+        </p>
+        {% if request.event.live %}
+            <p>
+                {% trans "You can instead take your shop offline. This will hide it from everyone except from the organizer teams you configured to have access to the event." %}
+            </p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="live" value="false">
+
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Go offline" %}
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            <p>
+                {% trans "However, since your shop is offline, it is only visible to the organizing team according to the permissions you configured." %}
+            </p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -25,8 +25,7 @@ from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
 from pretix.base.models import TeamInvite, U2FDevice, User
-from pretix.base.services.mail import SendMailException, mail
-from pretix.helpers.urls import build_absolute_uri
+from pretix.base.services.mail import SendMailException
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +48,7 @@ def login(request):
                 request.session['pretix_auth_2fa_user'] = form.user_cache.pk
                 request.session['pretix_auth_2fa_time'] = str(int(time.time()))
                 twofa_url = reverse('control:auth.login.2fa')
-                if 'next' in request.GET:
+                if "next" in request.GET and is_safe_url(request.GET.get("next")):
                     twofa_url += '?next=' + quote(request.GET.get('next'))
                 return redirect(twofa_url)
             else:
@@ -72,7 +71,10 @@ def logout(request):
     """
     auth_logout(request)
     request.session['pretix_auth_login_time'] = 0
-    return redirect('control:auth.login')
+    next = reverse('control:auth.login')
+    if 'next' in request.GET and is_safe_url(request.GET.get('next')):
+        next += '?next=' + quote(request.GET.get('next'))
+    return redirect(next)
 
 
 def register(request):
@@ -200,15 +202,7 @@ class Forgot(TemplateView):
                     rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
             try:
-                mail(
-                    user.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
-                    {
-                        'user': user,
-                        'url': (build_absolute_uri('control:auth.forgot.recover')
-                                + '?id=%d&token=%s' % (user.id, default_token_generator.make_token(user)))
-                    },
-                    None, locale=user.locale
-                )
+                user.send_password_reset()
             except SendMailException:
                 messages.error(request, _('There was an error sending the mail. Please try again later.'))
                 return self.get(request, *args, **kwargs)

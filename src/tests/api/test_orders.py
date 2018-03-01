@@ -106,6 +106,7 @@ TEST_ORDER_RES = {
     "payment_fee_tax_value": "0.05",
     "total": "23.00",
     "comment": "",
+    "checkin_attention": False,
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
         "is_business": False,
@@ -249,7 +250,7 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
     cl = event.checkin_lists.create(name="Default")
     op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
-    res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z'}]
+    res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z', 'list': cl.pk}]
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']

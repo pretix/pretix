@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load eventurl %}
+{% load money %}
 {% load thumbnail %}
 {% load eventsignal %}
 {% load rich_text %}
@@ -49,7 +50,7 @@
                         {% endif %}
                     </em>
                     <div class="row checkout-button-row">
-                        <div class="col-md-4 col-xs-12">
+                        <div class="col-md-4 col-xs-12 hidden-xs">
                             <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                                 {% csrf_token %}
                                 <button class="btn btn-block btn-default btn-lg" type="submit">
@@ -67,6 +68,13 @@
                                 {% endif %}
                             </a>
                         </div>
+                        <div class="visible-xs-block col-xs-12">
+                            <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                                {% csrf_token %}
+                                <button class="btn btn-block btn-default btn-lg" type="submit">
+                                    <i class="fa fa-close"></i> {% trans "Empty cart" %}</button>
+                            </form>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -74,7 +82,7 @@
         </div>
     {% endif %}
 
-    {% if event.has_subevents and not cart_namespace %}
+    {% if show_dates %}
         {% if subevent %}
             <a class="subevent-toggle">
                 {% trans "View other date" %}
@@ -83,7 +91,7 @@
             <h3>{% trans "Choose date to buy a ticket" %}</h3>
         {% endif %}
         <div class="subevent-list">
-            {% if event.settings.event_list_type == "calendar" %}
+            {% if list_type == "calendar" %}
                 {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
             {% else %}
                 {% include "pretixpresale/event/fragment_subevent_list.html" %}
@@ -97,6 +105,28 @@
     {% if frontpage_text and not cart_namespace %}
         <div>
             {{ frontpage_text|rich_text }}
+        </div>
+    {% endif %}
+
+    {% if cookie_warning %}
+        <div class="alert alert-danger">
+            {% if cart_namespace %}
+                {% blocktrans trimmed %}
+                    Your browser does not accept cookies from us. However, we need to set a cookie to remember who
+                    you are and what is in your cart. Please try to open the ticket shop in a new tab or change your
+                    browser settings.
+                {% endblocktrans %}
+                <br>
+                <a href="{% eventurl event "presale:event.index" %}" class="btn btn-default" target="_blank">
+                    {% trans "Open ticket shop in new tab" %}
+                </a>
+                <div class="clearfix"></div>
+            {% else %}
+                {% blocktrans trimmed %}
+                    Your browser does not accept cookies from us. However, we need to set a cookie to remember who
+                    you are and what is in your cart. Please change your browser settings accordingly.
+                {% endblocktrans %}
+            {% endif %}
         </div>
     {% endif %}
 
@@ -221,13 +251,13 @@
                                         </div>
                                         <div class="col-md-2 col-xs-6 price">
                                             {% if item.min_price != item.max_price or item.free_price %}
-                                                {% blocktrans trimmed with minprice=item.min_price|floatformat:2 currency=event.currency %}
-                                                    from {{ currency }} {{ minprice }}
+                                                {% blocktrans trimmed with minprice=item.min_price|money:event.currency %}
+                                                    from {{ minprice }}
                                                 {% endblocktrans %}
                                             {% elif not item.min_price and not item.max_price %}
                                                 {% trans "FREE" context "price" %}
                                             {% else %}
-                                                {{ event.currency }} {{ item.min_price|floatformat:2 }}
+                                                {{ item.min_price|money:event.currency }}
                                             {% endif %}
                                         </div>
                                         <div class="col-md-2 col-xs-6 availability-box">
@@ -259,18 +289,18 @@
                                                             <span class="input-group-addon">{{ event.currency }}</span>
                                                             <input type="number" class="form-control input-item-price"
                                                                     placeholder="0"
-                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                                     name="price_{{ item.id }}_{{ var.id }}"
                                                                     step="any"
-                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                                    value="{% if event.settings.display_net_prices %}{{var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                             >
                                                         </div>
                                                     {% elif not var.display_price.gross %}
                                                         {% trans "FREE" context "price" %}
                                                     {% elif event.settings.display_net_prices %}
-                                                        {{ event.currency }} {{ var.display_price.net|floatformat:2 }}
+                                                        {{ var.display_price.net|money:event.currency }}
                                                     {% else %}
-                                                        {{ event.currency }} {{ var.display_price.gross|floatformat:2 }}
+                                                        {{ var.display_price.gross|money:event.currency }}
                                                     {% endif %}
                                                     {% if var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
                                                         <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
@@ -298,6 +328,7 @@
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                     max="{{ var.order_max }}"
+                                                                    pattern="\d*"
                                                                     name="variation_{{ item.id }}_{{ var.id }}">
                                                         {% endif %}
                                                     </div>
@@ -347,17 +378,17 @@
                                             <div class="input-group input-group-price">
                                                 <span class="input-group-addon">{{ event.currency }}</span>
                                                 <input type="number" class="form-control input-item-price" placeholder="0"
-                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="price_{{ item.id }}"
-                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                        value="{% if event.settings.display_net_prices %}{{item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         step="any">
                                             </div>
                                         {% elif not item.display_price.gross %}
                                             {% trans "FREE" context "price" %}
                                         {% elif event.settings.display_net_prices %}
-                                            {{ event.currency }} {{ item.display_price.net|floatformat:2 }}
+                                            {{ item.display_price.net|money:event.currency }}
                                         {% else %}
-                                            {{ event.currency }} {{ item.display_price.gross|floatformat:2 }}
+                                            {{ item.display_price.gross|money:event.currency }}
                                         {% endif %}
                                         {% if item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
                                             <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
@@ -384,6 +415,7 @@
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        pattern="\d*"
                                                         max="{{ item.order_max }}" name="item_{{ item.id }}">
                                             {% endif %}
                                         </div>
@@ -411,7 +443,7 @@
             </form>
         {% endif %}
     {% endif %}
-    {% if vouchers_exist %}
+    {% if show_vouchers %}
         <section class="front-page">
             <h3>{% trans "Redeem a voucher" %}</h3>
             <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">

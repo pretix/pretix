@@ -1,0 +1,48 @@
+{% load i18n %}
+{% load urlreplace %}
+<nav class="text-center pagination-container">
+    <ul class="pagination">
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-current"><a>
+                {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count %}
+                    Page {{ page }}
+                {% endblocktrans %}
+            </a></li>
+            {% if page_obj.has_next %}
+                <li>
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        {% else %}
+        {% if page_obj.paginator.count > 1 %}
+                <li class="page-current"><a>
+                    {% blocktrans trimmed with count=page_obj.paginator.count %}
+                        {{ count }} elements
+                    {% endblocktrans %}
+                </a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+    {% if page_size %}
+        <div class="clearfix">
+            <small>
+                {% trans "Show per page:" %}
+            </small>
+            <a href="?{% url_replace request "page_size" "25" "page" "1" %}">
+                {% if page_size == 25 %}<strong>{% endif %}25{% if page_size == 25 %}</strong>{% endif %}</a> |
+            <a href="?{% url_replace request "page_size" "50" "page" "1" %}">
+                {% if page_size == 50 %}<strong>{% endif %}50{% if page_size == 50 %}</strong>{% endif %}</a> |
+            <a href="?{% url_replace request "page_size" "100" "page" "1" %}">
+                {% if page_size == 100 %}<strong>{% endif %}100{% if page_size == 100 %}</strong>{% endif %}</a>
+        </div>
+    {% endif %}
+</nav>

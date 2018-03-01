@@ -5,51 +5,47 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
 )
-from django.utils.timezone import now
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import Voucher
+from pretix.base.models import LogEntry, Voucher
 from pretix.base.models.vouchers import _generate_random_code
+from pretix.control.forms.filter import VoucherFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
+from pretix.control.views import PaginationMixin
 
 
-class VoucherList(EventPermissionRequiredMixin, ListView):
+class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     model = Voucher
     context_object_name = 'vouchers'
-    paginate_by = 30
     template_name = 'pretixcontrol/vouchers/index.html'
     permission = 'can_view_vouchers'
 
     def get_queryset(self):
         qs = self.request.event.vouchers.all().select_related('item', 'variation')
-        if self.request.GET.get("search", "") != "":
-            s = self.request.GET.get("search", "").strip()
-            qs = qs.filter(Q(code__icontains=s) | Q(tag__icontains=s) | Q(comment__icontains=s))
-        if self.request.GET.get("tag", "") != "":
-            s = self.request.GET.get("tag", "")
-            qs = qs.filter(tag__icontains=s)
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
-            if s == 'v':
-                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=0)
-            elif s == 'r':
-                qs = qs.filter(redeemed__gt=0)
-            elif s == 'e':
-                qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
-        return qs
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return VoucherFilterForm(data=self.request.GET, event=self.request.event)
 
     def get(self, request, *args, **kwargs):
         if request.GET.get("download", "") == "yes":
@@ -248,8 +244,15 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
 
     @transaction.atomic
     def form_valid(self, form):
-        for o in form.save(self.request.event):
-            o.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user)
+        log_entries = []
+        form.save(self.request.event)
+        # We need to query them again as form.save() uses bulk_create which does not fill in .pk values on databases
+        # other than PostgreSQL
+        for v in self.request.event.vouchers.filter(code__in=form.cleaned_data['codes']):
+            log_entries.append(
+                v.log_action('pretix.voucher.added', data=form.cleaned_data, user=self.request.user, save=False)
+            )
+        LogEntry.objects.bulk_create(log_entries)
         messages.success(self.request, _('The new vouchers have been created.'))
         return HttpResponseRedirect(self.get_success_url())
 

@@ -55,6 +55,8 @@ class Paypal(BasePaymentProvider):
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
+                     max_length=80,
+                     min_length=80,
                      help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/paypal.html'
@@ -63,6 +65,8 @@ class Paypal(BasePaymentProvider):
                 ('secret',
                  forms.CharField(
                      label=_('Secret'),
+                     max_length=80,
+                     min_length=80,
                  ))
             ]
         )
@@ -166,8 +170,8 @@ class Paypal(BasePaymentProvider):
         Will be called if the user submitted his order successfully to initiate the
         payment process.
 
-        It should return a custom redirct URL, if you need special behaviour, or None to
-        continue with default behaviour.
+        It should return a custom redirct URL, if you need special behavior, or None to
+        continue with default behavior.
 
         On errors, it should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).

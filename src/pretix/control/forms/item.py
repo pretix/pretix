@@ -4,7 +4,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
-from django.utils.translation import ugettext as __, ugettext_lazy as _
+from django.urls import reverse
+from django.utils.translation import (
+    pgettext_lazy, ugettext as __, ugettext_lazy as _,
+)
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nFormSet, I18nModelForm
@@ -13,6 +16,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import ItemAddOn
 from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms.widgets import Select2
+from pretix.helpers.money import change_decimal_field
 
 
 class CategoryForm(I18nModelForm):
@@ -45,6 +50,7 @@ class QuestionForm(I18nModelForm):
             'help_text',
             'type',
             'required',
+            'ask_during_checkin',
             'items'
         ]
         widgets = {
@@ -94,6 +100,18 @@ class QuotaForm(I18nModelForm):
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
 
@@ -142,6 +160,7 @@ class ItemCreateForm(I18nModelForm):
 
         self.fields['category'].queryset = self.instance.event.categories.all()
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
+        change_decimal_field(self.fields['default_price'], self.instance.event.currency)
         self.fields['tax_rule'].empty_label = _('No taxation')
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
@@ -275,6 +294,7 @@ class ItemUpdateForm(I18nModelForm):
             'over 65. This ticket includes access to all parts of the event, except the VIP '
             'area.'
         )
+        change_decimal_field(self.fields['default_price'], self.event.currency)
 
     class Meta:
         model = Item
@@ -328,8 +348,29 @@ class ItemVariationsFormSet(I18nFormSet):
             return False
         return form.cleaned_data.get(DELETION_FIELD_NAME, False)
 
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        self.is_valid()
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            locales=self.locales,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
 
 class ItemVariationForm(I18nModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        change_decimal_field(self.fields['default_price'], self.event.currency)
+
     class Meta:
         model = ItemVariation
         localized_fields = '__all__'
@@ -382,7 +423,6 @@ class ItemAddOnsFormSet(I18nFormSet):
 
 class ItemAddOnForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['addon_category'].queryset = self.event.categories.all()
 

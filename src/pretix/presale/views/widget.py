@@ -12,6 +12,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
+from django.utils.translation import gettext
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import condition
@@ -225,14 +226,14 @@ class WidgetAPIProductList(View):
 
         if not ev.presale_is_running:
             if ev.presale_has_ended:
-                data['error'] = 'The presale period for this event is over.'
+                data['error'] = gettext('The presale period for this event is over.')
             elif request.event.settings.presale_start_show_date:
-                data['error'] = 'The presale for this event will start on %(date)s at %(time)s.' % {
-                    'date': date_format(ev.presale_start, "SHORT_DATE_FORMAT"),
-                    'time': date_format(ev.presale_start, "TIME_FORMAT"),
+                data['error'] = gettext('The presale for this event will start on %(date)s at %(time)s.') % {
+                    'date': date_format(ev.presale_start.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),
+                    'time': date_format(ev.presale_start.astimezone(request.event.timezone), "TIME_FORMAT"),
                 }
             else:
-                data['error'] = 'The presale for this event has not yet started.'
+                data['error'] = gettext('The presale for this event has not yet started.')
 
         self.voucher = None
         if 'voucher' in request.GET:

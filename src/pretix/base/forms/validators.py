@@ -23,6 +23,12 @@ class PlaceholderValidator(BaseValidator):
                 self.__call__(v)
             return
 
+        if value.count('{') != value.count('}'):
+            raise ValidationError(
+                _('Invalid placeholder syntax: You used a different number of "{" than of "}".'),
+                code='invalid',
+            )
+
         data_placeholders = list(re.findall(r'({[\w\s]*})', value, re.X))
         invalid_placeholders = []
         for placeholder in data_placeholders:

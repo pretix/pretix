@@ -1,5 +1,5 @@
 from pretix.base.i18n import language
-from pretix.control.utils.i18n import get_javascript_format, get_moment_locale
+from pretix.helpers.i18n import get_javascript_format, get_moment_locale
 
 
 def test_js_formats():

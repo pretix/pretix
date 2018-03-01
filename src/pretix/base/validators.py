@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
@@ -11,7 +12,7 @@ class BlacklistValidator:
         # Validation logic
         if value in self.blacklist:
             raise ValidationError(
-                _('This slug has an invalid value: %(value)s.'),
+                _('This field has an invalid value: %(value)s.'),
                 code='invalid',
                 params={'value': value},
             )
@@ -55,4 +56,12 @@ class OrganizerSlugBlacklistValidator(BlacklistValidator):
         'api',
         'csp_report',
         'widget',
+    ]
+
+
+@deconstructible
+class EmailBlacklistValidator(BlacklistValidator):
+
+    blacklist = [
+        settings.PRETIX_EMAIL_NONE_VALUE,
     ]

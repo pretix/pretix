@@ -112,7 +112,7 @@ class CartManager:
     def _check_presale_dates(self):
         if self.event.presale_start and self.now_dt < self.event.presale_start:
             raise CartError(error_messages['not_started'])
-        if self.event.presale_end and self.now_dt > self.event.presale_end:
+        if self.event.presale_has_ended:
             raise CartError(error_messages['ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
@@ -188,7 +188,7 @@ class CartManager:
             if op.subevent and op.subevent.presale_start and self.now_dt < op.subevent.presale_start:
                 raise CartError(error_messages['not_started'])
 
-            if op.subevent and op.subevent.presale_end and self.now_dt > op.subevent.presale_end:
+            if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):
@@ -667,7 +667,8 @@ def get_fees(event, request, total, invoice_address, provider):
                         tax_rule=payment_fee_tax_rule
                     ))
 
-    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address):
+    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
+                                                    total=total):
         fees += resp
 
     return fees

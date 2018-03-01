@@ -1,3 +1,5 @@
+import sys
+
 from django.dispatch import receiver
 
 from pretix.base.models import Event, User, WaitingListEntry
@@ -33,6 +35,10 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
             if (wle.item, wle.variation) in gone:
                 continue
 
+            ev = (wle.subevent or event)
+            if not ev.presale_is_running or (wle.subevent and not wle.subevent.active):
+                continue
+
             quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
                       if wle.variation
                       else wle.item.quotas.filter(subevent=wle.subevent))
@@ -41,7 +47,7 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
                 if wle.variation
                 else wle.item.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
             )
-            if availability[1] > 0:
+            if availability[1] is None or availability[1] > 0:
                 try:
                     wle.send_voucher(quota_cache, user=user)
                     sent += 1
@@ -52,7 +58,7 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
                 for q in quotas:
                     quota_cache[q.pk] = (
                         quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
-                        quota_cache[q.pk][1] - 1
+                        quota_cache[q.pk][1] - 1 if quota_cache[q.pk][1] is not None else sys.maxsize
                     )
             else:
                 gone.add((wle.item, wle.variation))
@@ -62,7 +68,9 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
 
 @receiver(signal=periodic_task)
 def process_waitinglist(sender, **kwargs):
-    qs = Event.objects.prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
+    qs = Event.objects.filter(
+        live=True
+    ).prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
-        if e.settings.waiting_list_enabled and e.settings.waiting_list_auto:
+        if e.settings.waiting_list_enabled and e.settings.waiting_list_auto and e.presale_is_running:
             assign_automatically.apply_async(args=(e.pk,))

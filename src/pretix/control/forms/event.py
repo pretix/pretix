@@ -1,10 +1,14 @@
 from django import forms
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
+from django.forms import formset_factory
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries import Countries
+from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
 from pytz import common_timezones, timezone
 
@@ -665,10 +669,10 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {total}, {currency}, {date}, {payment_info}, {url}, "
-                    "{invoice_name}, {invoice_company}"),
-        validators=[PlaceholderValidator(['{event}', '{total}', '{currency}', '{date}', '{payment_info}',
-                                          '{url}', '{invoice_name}', '{invoice_company}'])]
+        help_text=_("Available placeholders: {event}, {total_with_currency}, {total}, {currency}, {date}, "
+                    "{payment_info}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
+                                          '{payment_info}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_order_paid = I18nFormField(
         label=_("Text"),
@@ -906,6 +910,43 @@ class CommentForm(I18nModelForm):
         }
 
 
+class CountriesAndEU(Countries):
+    override = {
+        'ZZ': _('Any country'),
+        'EU': _('European Union')
+    }
+    first = ['ZZ', 'EU']
+
+
+class TaxRuleLineForm(forms.Form):
+    country = LazyTypedChoiceField(
+        choices=CountriesAndEU(),
+        required=False
+    )
+    address_type = forms.ChoiceField(
+        choices=[
+            ('', _('Any customer')),
+            ('individual', _('Individual')),
+            ('business', _('Business')),
+            ('business_vat_id', _('Business with valid VAT ID')),
+        ],
+        required=False
+    )
+    action = forms.ChoiceField(
+        choices=[
+            ('vat', _('Charge VAT')),
+            ('reverse', _('Reverse charge')),
+            ('no', _('No VAT')),
+        ],
+    )
+
+
+TaxRuleLineFormSet = formset_factory(
+    TaxRuleLineForm,
+    can_order=False, can_delete=True, extra=0
+)
+
+
 class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
@@ -951,3 +992,43 @@ class WidgetCodeForm(forms.Form):
             raise ValidationError(_('The given voucher code does not exist.'))
 
         return v
+
+
+class EventDeleteForm(forms.Form):
+    error_messages = {
+        'pw_current_wrong': _("The password you entered was not correct."),
+        'slug_wrong': _("The slug you entered was not correct."),
+    }
+    user_pw = forms.CharField(
+        max_length=255,
+        label=_("New password"),
+        widget=forms.PasswordInput()
+    )
+    slug = forms.CharField(
+        max_length=255,
+        label=_("Event slug"),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+
+    def clean_user_pw(self):
+        user_pw = self.cleaned_data.get('user_pw')
+        if not check_password(user_pw, self.user.password):
+            raise forms.ValidationError(
+                self.error_messages['pw_current_wrong'],
+                code='pw_current_wrong',
+            )
+
+        return user_pw
+
+    def clean_slug(self):
+        slug = self.cleaned_data.get('slug')
+        if slug != self.event.slug:
+            raise forms.ValidationError(
+                self.error_messages['slug_wrong'],
+                code='slug_wrong',
+            )
+        return slug

@@ -221,5 +221,5 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.

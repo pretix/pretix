@@ -8,7 +8,7 @@ from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Order, OrderPosition, Organizer, Team, User,
+    Event, Order, OrderPosition, Organizer, SubEvent, Team, User,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.testutils.mock import mocker_context
@@ -594,6 +594,7 @@ class SubEventsTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
         self.subevent1 = self.event1.subevents.create(name='SE1', date_from=now())
+        self.subevent2 = self.event1.subevents.create(name='SE2', date_from=now())
 
     def test_list(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/')
@@ -699,7 +700,11 @@ class SubEventsTest(SoupTest):
         assert doc.select("button")
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {})
         assert doc.select(".alert-success")
-        assert not SubEventItem.objects.filter(pk=self.subevent1.pk).exists()
+        # deleting the second event
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
+        assert doc.select(".alert-danger")
+        assert SubEvent.objects.filter(pk=self.subevent2.pk).exists()
+        assert not SubEvent.objects.filter(pk=self.subevent1.pk).exists()
 
     def test_delete_with_orders(self):
         o = Order.objects.create(
@@ -719,3 +724,61 @@ class SubEventsTest(SoupTest):
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {}, follow=True)
         assert doc.select(".alert-danger")
         assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
+
+
+class EventDeletionTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
+        self.event1 = Event.objects.create(
+            organizer=self.orga1, name='30C3', slug='30c3',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            plugins='pretix.plugins.banktransfer,tests.testdummy',
+            has_subevents=False
+        )
+
+        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
+                                can_change_items=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event1)
+        self.ticket = self.event1.items.create(name='Early-bird ticket',
+                                               category=None, default_price=23,
+                                               admission=True)
+
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def test_delete_allowed(self):
+        self.client.post('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '30c3'
+        })
+
+        assert not self.orga1.events.exists()
+
+    def test_delete_wrong_slug(self):
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '31c3'
+        })
+        assert self.orga1.events.exists()
+
+    def test_delete_wrong_pw(self):
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'invalid',
+            'slug': '30c3'
+        })
+        assert self.orga1.events.exists()
+
+    def test_delete_orders(self):
+        Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now(),
+            total=14, payment_provider='banktransfer', locale='en'
+        )
+        self.post_doc('/control/event/ccc/30c3/delete/', {
+            'user_pw': 'dummy',
+            'slug': '30c3'
+        })
+        assert self.orga1.events.exists()

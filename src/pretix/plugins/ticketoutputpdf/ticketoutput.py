@@ -1,15 +1,17 @@
 import copy
 import logging
+import re
 import uuid
 from collections import OrderedDict
 from io import BytesIO
 
+import bleach
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -27,6 +29,7 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
+from pretix.base.templatetags.money import money_filter
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.signals import (
     get_fonts, layout_text_variables,
@@ -69,10 +72,17 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample product description"),
         "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
     }),
+    ("item_category", {
+        "label": _("Product category"),
+        "editor_sample": _("Ticket category"),
+        "evaluate": lambda orderposition, order, event: (
+            str(orderposition.item.category.name) if orderposition.item.category else ""
+        )
+    }),
     ("price", {
         "label": _("Price"),
         "editor_sample": _("123.45 EUR"),
-        "evaluate": lambda op, order, event: '{} {}'.format(event.currency, localize(op.price))
+        "evaluate": lambda op, order, event: money_filter(op.price, event.currency)
     }),
     ("attendee_name", {
         "label": _("Attendee name"),
@@ -235,8 +245,14 @@ class PdfTicketOutput(BaseTicketOutput):
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
-
-        p = Paragraph(self._get_text_content(op, order, o) or "", style=style)
+        text = re.sub(
+            "<br[^>]*>", "<br/>",
+            bleach.clean(
+                self._get_text_content(op, order, o) or "",
+                tags=["br"], attributes={}, styles=[], strip=True
+            )
+        )
+        p = Paragraph(text, style=style)
         p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))

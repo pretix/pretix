@@ -5,7 +5,9 @@ from i18nfield.forms import I18nInlineFormSet
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
+from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.helpers.money import change_decimal_field
 
 
 class SubEventForm(I18nModelForm):
@@ -49,32 +51,35 @@ class SubEventItemOrVariationFormMixin:
         self.item = kwargs.pop('item')
         self.variation = kwargs.pop('variation', None)
         super().__init__(*args, **kwargs)
+        change_decimal_field(self.fields['price'], self.item.event.currency)
 
 
 class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
-            self.item.default_price, self.item.event.currency
-        )
+        self.fields['price'].widget.attrs['placeholder'] = money_filter(self.item.default_price, self.item.event.currency, hide_currency=True)
         self.fields['price'].label = str(self.item.name)
 
     class Meta:
         model = SubEventItem
         fields = ['price']
+        widgets = {
+            'price': forms.TextInput
+        }
 
 
 class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs['placeholder'] = '{} {}'.format(
-            self.variation.price, self.item.event.currency
-        )
+        self.fields['price'].widget.attrs['placeholder'] = money_filter(self.variation.price, self.item.event.currency, hide_currency=True)
         self.fields['price'].label = '{} – {}'.format(str(self.item.name), self.variation.value)
 
     class Meta:
         model = SubEventItem
         fields = ['price']
+        widgets = {
+            'price': forms.TextInput
+        }
 
 
 class QuotaFormSet(I18nInlineFormSet):

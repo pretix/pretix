@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load eventurl %}
+{% load money %}
 {% load safelink %}
 {% load eventsignal %}
 {% block title %}
@@ -29,7 +30,7 @@
                             {% trans "Extend payment term" %}
                         </a>
                     {% endif %}
-                    {% if order.status == 'n' %}
+                    {% if order.cancel_allowed %}
                         <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
                             {% trans "Cancel order" %}
                         </a>
@@ -93,21 +94,23 @@
                         {% endif %}
                         <dt>{% trans "User" %}</dt>
                         <dd>
-                            {{ order.email }}&nbsp;&nbsp;
+                            {{ order.email|default_if_none:"" }}&nbsp;&nbsp;
                             <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
                             </a>
-                            <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                <span class="fa fa-envelope-o"></span>
-                            </a>
-                            {% if order.status != "c" %}
-                                <form class="form-inline helper-display-inline" method="post"
-                                        action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-default btn-xs">
-                                        {% trans "Resend link" %}
-                                    </button>
-                                </form>
+                            {% if order.email %}
+                                <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-envelope-o"></span>
+                                </a>
+                                {% if order.status != "c" %}
+                                    <form class="form-inline helper-display-inline" method="post"
+                                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default btn-xs">
+                                            {% trans "Resend link" %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </dd>
                         {% if invoices %}
@@ -163,6 +166,10 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                            <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Change answers" %}
+                            </a> &middot;
                             <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}
@@ -213,7 +220,15 @@
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
                                         {% for q in line.questions %}
-                                            <dt>{{ q.question }}</dt>
+                                            <dt>
+                                                {{ q.question }}
+                                                {% if q.ask_during_checkin %}
+                                                    <span class="fa fa-qrcode text-muted"
+                                                            data-toggle="tooltip"
+                                                            title="{% trans "This question will be asked during check-in." %}"
+                                                    ></span>
+                                                {% endif %}
+                                            </dt>
                                             <dd>
                                                 {% if q.answer %}
                                                     {% if q.answer.file %}
@@ -243,7 +258,7 @@
                             </div>
                             <div class="col-md-3 col-xs-6 price">
                                 {% if event.settings.display_net_prices %}
-                                    <strong>{{ event.currency }} {{ line.net_price|floatformat:2 }}</strong>
+                                    <strong>{{ line.net_price|money:event.currency }}</strong>
                                     {% if line.tax_rate %}
                                         <br />
                                         <small>
@@ -253,7 +268,7 @@
                                         </small>
                                     {% endif %}
                                 {% else %}
-                                    <strong>{{ event.currency }} {{ line.price|floatformat:2 }}</strong>
+                                    <strong>{{ line.price|money:event.currency }}</strong>
                                     {% if line.tax_rate and line.price %}
                                         <br />
                                         <small>
@@ -277,7 +292,7 @@
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                                 {% if event.settings.display_net_prices %}
-                                    <strong>{{ event.currency }} {{ fee.net_value|floatformat:2 }}</strong>
+                                    <strong>{{ fee.net_value|money:event.currency }}</strong>
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
@@ -287,7 +302,7 @@
                                         </small>
                                     {% endif %}
                                 {% else %}
-                                    <strong>{{ event.currency }} {{ fee.value|floatformat:2 }}</strong>
+                                    <strong>{{ fee.value|money:event.currency }}</strong>
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
@@ -307,7 +322,7 @@
                                 <strong>{% trans "Net total" %}</strong>
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ event.currency }} {{ items.net_total|floatformat:2 }}
+                                {{ items.net_total|money:event.currency }}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -316,7 +331,7 @@
                                 <strong>{% trans "Taxes" %}</strong>
                             </div>
                             <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                                {{ event.currency }} {{ items.tax_total|floatformat:2 }}
+                                {{ items.tax_total|money:event.currency }}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -326,7 +341,7 @@
                             <strong>{% trans "Total" %}</strong>
                         </div>
                         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                            <strong>{{ event.currency }} {{ items.total|floatformat:2 }}</strong>
+                            <strong>{{ items.total|money:event.currency }}</strong>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -360,6 +375,14 @@
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
+                                <div class="pull-right">
+                                    {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                                        <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                            <span class="fa fa-edit"></span>
+                                            {% trans "Change" %}
+                                        </a>
+                                    {% endif %}
+                                </div>
                                 <h3 class="panel-title">
                                     {% trans "Invoice information" %}
                                 </h3>
@@ -413,6 +436,7 @@
                         {% csrf_token %}
                         <div class="row">
                             {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                            {% bootstrap_field comment_form.checkin_attention layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
                         </div>
                         <button class="btn btn-default">
                             {% trans "Update comment" %}

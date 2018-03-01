@@ -38,7 +38,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('datetime',)
+        fields = ('datetime', 'list')
 
 
 class OrderDownloadsField(serializers.Field):
@@ -135,7 +135,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value')
+                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value', 'checkin_attention')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):

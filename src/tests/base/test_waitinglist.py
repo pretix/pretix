@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.core import mail as djmail
 from django.test import TestCase
 from django.utils.timezone import now
@@ -17,7 +19,7 @@ class WaitingListTestCase(TestCase):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
         cls.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
+            date_from=now(), live=True
         )
 
     def setUp(self):
@@ -98,6 +100,37 @@ class WaitingListTestCase(TestCase):
         assert sorted(list(WaitingListEntry.objects.filter(voucher__isnull=True).values_list('email', flat=True))) == [
             'foo7@bar.com', 'foo8@bar.com', 'foo9@bar.com'
         ]
+
+    def test_send_auto_quota_infinite(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = None
+        self.quota.save()
+        for i in range(10):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
+            )
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='bar{}@bar.com'.format(i)
+            )
+
+        assign_automatically.apply(args=(self.event.pk,))
+        assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 10
+        assert Voucher.objects.count() == 10
+
+    def test_send_periodic_event_over(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        self.event.settings.set('waiting_list_auto', True)
+        self.event.presale_end = now() - timedelta(days=1)
+        self.event.save()
+        for i in range(5):
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
+            )
+        process_waitinglist(None)
+        assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 5
+        assert Voucher.objects.count() == 0
+        self.event.presale_end = now() + timedelta(days=1)
+        self.event.save()
 
     def test_send_periodic(self):
         self.event.settings.set('waiting_list_enabled', True)

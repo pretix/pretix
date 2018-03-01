@@ -19,7 +19,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
-    send_download_reminders,
+    mark_order_paid, send_download_reminders,
 )
 
 
@@ -28,7 +28,8 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now()
+        date_from=now(),
+        plugins='pretix.plugins.banktransfer'
     )
     return event
 
@@ -144,21 +145,42 @@ def test_expiry_dst(event):
 def test_expiring(event):
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
-        status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, payment_provider='banktransfer'
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
-        status=Order.STATUS_PENDING,
+        status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=12, payment_provider='banktransfer'
     )
+    generate_invoice(o2)
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+    assert o2.invoices.last().is_cancellation is True
+
+
+@pytest.mark.django_db
+def test_expiring_paid_invoice(event):
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING, locale='en',
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=12, payment_provider='banktransfer'
+    )
+    generate_invoice(o2)
+    expire_orders(None)
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_EXPIRED
+    assert o2.invoices.count() == 2
+    mark_order_paid(o2)
+    assert o2.invoices.count() == 3
+    assert o2.invoices.last().is_cancellation is False
 
 
 @pytest.mark.django_db
@@ -277,6 +299,13 @@ class OrderChangeManagerTests(TestCase):
             order=self.order, is_business=True, vat_id='ATU1234567', vat_id_validated=True,
             country=Country('AT')
         )
+
+    def test_multiple_commits_forbidden(self):
+        self.ocm.change_price(self.op1, Decimal('10.00'))
+        self.ocm.commit()
+        self.ocm.change_price(self.op1, Decimal('42.00'))
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
 
     def test_change_subevent_quota_required(self):
         self.event.has_subevents = True
@@ -545,6 +574,21 @@ class OrderChangeManagerTests(TestCase):
         assert fee.tax_rate == Decimal('19.00')
         assert round_decimal(fee.value * (1 - 100 / (100 + fee.tax_rate))) == fee.tax_value
 
+    def test_pending_free_order_stays_pending(self):
+        self.event.settings.set('tax_rate_default', self.tr19.pk)
+        self.ocm.change_price(self.op1, Decimal('0.00'))
+        self.ocm.change_price(self.op2, Decimal('0.00'))
+        self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('0.00')
+        assert self.order.status == Order.STATUS_PAID
+        self.order.status = Order.STATUS_PENDING
+        self.ocm.cancel(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+
     def test_require_pending(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
@@ -734,6 +778,7 @@ class OrderChangeManagerTests(TestCase):
         ia = self._enable_reverse_charge()
         self.ocm.recalculate_taxes()
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         ops = list(self.order.positions.all())
         for op in ops:
             assert op.price == Decimal('21.50')
@@ -791,6 +836,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.change_price(self.op1, Decimal('23.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
         assert self.order.total == Decimal('47.92')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -879,6 +925,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.recalculate_taxes()
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
 
         # Check if reverse charge is active
@@ -911,7 +958,6 @@ class OrderChangeManagerTests(TestCase):
         # New order
         assert self.op2.order != self.order
         o2 = self.op2.order
-        print([p.price for p in o2.positions.all()], [p.value for p in o2.fees.all()])
         assert o2.total == Decimal('21.93')
         fee = o2.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
         assert fee.value == Decimal('0.43')
@@ -971,6 +1017,7 @@ class OrderChangeManagerTests(TestCase):
         prov.settings.set('_fee_reverse_calc', False)
         self.ocm.change_price(self.op1, Decimal('23.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.order.refresh_from_db()
         assert self.order.total == Decimal('47.92')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -1019,6 +1066,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.settings.invoice_include_free = False
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
         self.ocm._invoice_dirty = False
 
@@ -1038,6 +1086,7 @@ class OrderChangeManagerTests(TestCase):
     def test_split_to_original_free(self):
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
 
         self.ocm.split(self.op1)
@@ -1054,6 +1103,7 @@ class OrderChangeManagerTests(TestCase):
     def test_split_to_new_free(self):
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
+        self.ocm = OrderChangeManager(self.order, None)
         self.op2.refresh_from_db()
 
         self.ocm.split(self.op2)

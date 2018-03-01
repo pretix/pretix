@@ -86,6 +86,9 @@
                             </td>
                             <td>
                                 <strong><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=e.order.code %}">{{ e.order.code }}</a></strong>
+                                {% if e.order.status == "n" %}
+                                    <span class="label label-warning">{% trans "unpaid" %}</span>
+                                {% endif %}
                             </td>
                             <td>{{ e.item.name }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
                             <td>{{ e.order.email }}</td>

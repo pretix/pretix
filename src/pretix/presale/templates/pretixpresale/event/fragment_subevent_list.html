@@ -1,7 +1,8 @@
 {% load i18n %}
 {% load eventurl %}
 {% for subev in event.active_future_subevents %}
-    <a href="{% eventurl event "presale:event.index" subevent=subev.id %}" class="subevent-row">
+    <a href="{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}"
+            class="subevent-row">
         <div class="row">
             <div class="col-md-6">
                 <strong>{{ subev.name }}</strong>

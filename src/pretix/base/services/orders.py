@@ -10,14 +10,14 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F, Max, Q
+from django.db.models import F, Max, Q, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
-    LazyDate, LazyLocaleException, LazyNumber, language,
+    LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
@@ -25,8 +25,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    CachedTicket, InvoiceAddress, OrderFee, generate_position_secret,
-    generate_secret,
+    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee,
+    generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
@@ -128,8 +128,14 @@ def mark_order_paid(order: Order, provider: str=None, info: str=None, date: date
     order_paid.send(order.event, order=order)
 
     invoice = None
-    if order.event.settings.get('invoice_generate') in ('True', 'paid') and invoice_qualified(order):
-        if not order.invoices.exists():
+    if invoice_qualified(order):
+        invoices = order.invoices.filter(is_cancellation=False).count()
+        cancellations = order.invoices.filter(is_cancellation=True).count()
+        gen_invoice = (
+            (invoices == 0 and order.event.settings.get('invoice_generate') in ('True', 'paid')) or
+            0 < invoices <= cancellations
+        )
+        if gen_invoice:
             invoice = generate_invoice(
                 order,
                 trigger_pdf=not send_mail or not order.event.settings.invoice_email_attachment
@@ -232,6 +238,32 @@ def mark_order_refunded(order, user=None):
 
 
 @transaction.atomic
+def mark_order_expired(order, user=None, api_token=None):
+    """
+    Mark this order as expired. This sets the payment status and returns the order object.
+    :param order: The order to change
+    :param user: The user that performed the change
+    :param api_token: The API token used to performed the change
+    """
+    if isinstance(order, int):
+        order = Order.objects.get(pk=order)
+    if isinstance(user, int):
+        user = User.objects.get(pk=user)
+    if isinstance(api_token, int):
+        api_token = TeamAPIToken.objects.get(pk=api_token)
+    with order.event.lock():
+        order.status = Order.STATUS_EXPIRED
+        order.save()
+
+    order.log_action('pretix.event.order.expired', user=user, api_token=api_token)
+    i = order.invoices.filter(is_cancellation=False).last()
+    if i:
+        generate_cancellation(i)
+
+    return order
+
+
+@transaction.atomic
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None):
     """
     Mark this order as canceled
@@ -245,7 +277,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None):
     if isinstance(api_token, int):
         api_token = TeamAPIToken.objects.get(pk=api_token)
     with order.event.lock():
-        if order.status != Order.STATUS_PENDING:
+        if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELED
         order.save()
@@ -289,7 +321,7 @@ class OrderError(LazyLocaleException):
 def _check_date(event: Event, now_dt: datetime):
     if event.presale_start and now_dt < event.presale_start:
         raise OrderError(error_messages['not_started'])
-    if event.presale_end and now_dt > event.presale_end:
+    if event.presale_has_ended:
         raise OrderError(error_messages['ended'])
 
 
@@ -329,7 +361,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.delete()
             break
 
-        if cp.subevent and cp.subevent.presale_end and now_dt > cp.subevent.presale_end:
+        if cp.subevent and cp.subevent.presale_has_ended:
             err = err or error_messages['some_subevent_ended']
             cp.delete()
             break
@@ -407,8 +439,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
         fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
                              internal_type=payment_provider.identifier))
 
-    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address,
-                                                 meta_info=meta_info, posiitons=positions):
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
+                                                 meta_info=meta_info, positions=positions):
         fees += resp
     return fees
 
@@ -472,6 +504,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         for fee in fees:
             fee.order = order
             fee._calculate_tax()
+            if not fee.tax_rule.pk:
+                fee.tax_rule = None  # TODO: deprecate
             fee.save()
 
         OrderPosition.transform_cart_positions(positions, order)
@@ -488,6 +522,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     pprov = event.get_payment_providers().get(payment_provider)
     if not pprov:
         raise OrderError(error_messages['internal'])
+
+    if email == settings.PRETIX_EMAIL_NONE_VALUE:
+        email = None
 
     addr = None
     if address is not None:
@@ -510,44 +547,49 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
     invoice = order.invoices.last()  # Might be generated by plugin already
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
         if not invoice:
-            invoice = generate_invoice(order, trigger_pdf=not event.settings.invoice_email_attachment)
+            invoice = generate_invoice(
+                order,
+                trigger_pdf=not event.settings.invoice_email_attachment or not order.email
+            )
             # send_mail will trigger PDF generation later
 
-    if order.total == Decimal('0.00'):
-        email_template = event.settings.mail_text_order_free
-        log_entry = 'pretix.event.order.email.order_free'
-    else:
-        email_template = event.settings.mail_text_order_placed
-        log_entry = 'pretix.event.order.email.order_placed'
+    if order.email:
+        if order.payment_provider == 'free':
+            email_template = event.settings.mail_text_order_free
+            log_entry = 'pretix.event.order.email.order_free'
+        else:
+            email_template = event.settings.mail_text_order_placed
+            log_entry = 'pretix.event.order.email.order_placed'
 
-    try:
-        invoice_name = order.invoice_address.name
-        invoice_company = order.invoice_address.company
-    except InvoiceAddress.DoesNotExist:
-        invoice_name = ""
-        invoice_company = ""
-    email_context = {
-        'total': LazyNumber(order.total),
-        'currency': event.currency,
-        'date': LazyDate(order.expires),
-        'event': event.name,
-        'url': build_absolute_uri(event, 'presale:event.order', kwargs={
-            'order': order.code,
-            'secret': order.secret
-        }),
-        'payment_info': str(pprov.order_pending_mail_render(order)),
-        'invoice_name': invoice_name,
-        'invoice_company': invoice_company,
-    }
-    email_subject = _('Your order: %(code)s') % {'code': order.code}
-    try:
-        order.send_mail(
-            email_subject, email_template, email_context,
-            log_entry,
-            invoices=[invoice] if invoice and event.settings.invoice_email_attachment else []
-        )
-    except SendMailException:
-        logger.exception('Order received email could not be sent')
+        try:
+            invoice_name = order.invoice_address.name
+            invoice_company = order.invoice_address.company
+        except InvoiceAddress.DoesNotExist:
+            invoice_name = ""
+            invoice_company = ""
+        email_context = {
+            'total': LazyNumber(order.total),
+            'currency': event.currency,
+            'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
+            'date': LazyDate(order.expires),
+            'event': event.name,
+            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+                'order': order.code,
+                'secret': order.secret
+            }),
+            'payment_info': str(pprov.order_pending_mail_render(order)),
+            'invoice_name': invoice_name,
+            'invoice_company': invoice_company,
+        }
+        email_subject = _('Your order: %(code)s') % {'code': order.code}
+        try:
+            order.send_mail(
+                email_subject, email_template, email_context,
+                log_entry,
+                invoices=[invoice] if invoice and event.settings.invoice_email_attachment else []
+            )
+        except SendMailException:
+            logger.exception('Order received email could not be sent')
 
     return order.id
 
@@ -562,9 +604,7 @@ def expire_orders(sender, **kwargs):
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             eventcache[o.event.pk] = expire
         if expire:
-            o.status = Order.STATUS_EXPIRED
-            o.log_action('pretix.event.order.expired')
-            o.save()
+            mark_order_expired(o)
 
 
 @receiver(signal=periodic_task)
@@ -646,7 +686,7 @@ def send_download_reminders(sender, **kwargs):
             try:
                 o.send_mail(
                     email_subject, email_template, email_context,
-                    'pretix.event.order.email.expire_warning_sent'
+                    'pretix.event.order.email.download_reminder_sent'
                 )
             except SendMailException:
                 logger.exception('Reminder email could not be sent')
@@ -680,6 +720,7 @@ class OrderChangeManager:
         self.order = order
         self.user = user
         self.split_order = None
+        self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
         self._operations = []
@@ -774,7 +815,7 @@ class OrderChangeManager:
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
-            if item.tax_rule.tax_applicable(self._invoice_address):
+            if item.tax_rule and item.tax_rule.tax_applicable(self._invoice_address):
                 price = item.tax(price, base_price_is='gross')
             else:
                 price = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
@@ -824,7 +865,10 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['paid_price_change'])
 
     def _check_paid_to_free(self):
-        if self.order.total == 0:
+        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
+            # if the order becomes free, mark it paid using the 'free' provider
+            # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
+            # or positions got split off to a new order (split_order with positive total)
             try:
                 mark_order_paid(
                     self.order, 'free', send_mail=False, count_waitinglist=False,
@@ -1015,6 +1059,16 @@ class OrderChangeManager:
         self.order.total += sum([f.value for f in self.order.fees.all()])
         self.order.save()
 
+    def _payment_fee_diff(self):
+        prov = self._get_payment_provider()
+        if self.order.status != Order.STATUS_PAID and prov:
+            # payment fees of paid orders do not change
+            old_fee = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).aggregate(s=Sum('value'))['s'] or 0
+            new_total = sum([p.price for p in self.order.positions.all()]) + self._totaldiff
+            if new_total != 0:
+                new_fee = prov.calculate_fee(new_total)
+                self._totaldiff += new_fee - old_fee
+
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if i and self._invoice_dirty:
@@ -1062,9 +1116,18 @@ class OrderChangeManager:
                 logger.exception('Order changed email could not be sent')
 
     def commit(self):
+        if self._committed:
+            # an order change can only be committed once
+            raise OrderError(error_messages['internal'])
+        self._committed = True
+
         if not self._operations:
             # Do nothing
             return
+
+        # finally, incorporate difference in payment fees
+        self._payment_fee_diff()
+
         with transaction.atomic():
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
@@ -1078,6 +1141,7 @@ class OrderChangeManager:
             self._reissue_invoice()
             self._clear_tickets_cache()
         self._check_paid_to_free()
+
         if self.notify:
             self._notify_user(self.order)
             if self.split_order:
@@ -1085,6 +1149,10 @@ class OrderChangeManager:
 
     def _clear_tickets_cache(self):
         CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        if self.split_order:
+            CachedTicket.objects.filter(order_position__order=self.split_order).delete()
+            CachedCombinedTicket.objects.filter(order=self.split_order).delete()
 
     def _get_payment_provider(self):
         pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
@@ -1103,7 +1171,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
-            return OrderError(error_messages['busy'])
+            raise OrderError(str(error_messages['busy']))
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
@@ -1112,6 +1180,6 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         try:
             return _cancel_order(order, user, send_mail, api_token)
         except LockTimeoutException:
-            self.retry(exc=OrderError(error_messages['busy']))
+            self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
-        return OrderError(error_messages['busy'])
+        raise OrderError(error_messages['busy'])

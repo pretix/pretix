@@ -5,6 +5,7 @@ from collections import OrderedDict
 
 import stripe
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.template.loader import get_template
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -165,6 +166,10 @@ class StripeMethod(BasePaymentProvider):
     def order_prepare(self, request, order):
         return self.checkout_prepare(request, None)
 
+    def _get_amount(self, order):
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+        return int(order.total * 10 ** places)
+
     def _init_api(self):
         stripe.api_version = '2017-06-05'
         stripe.api_key = self.settings.get('secret_key')
@@ -180,7 +185,7 @@ class StripeMethod(BasePaymentProvider):
     def _charge_source(self, request, source, order):
         try:
             charge = stripe.Charge.create(
-                amount=int(order.total * 100),
+                amount=self._get_amount(order),
                 currency=self.event.currency.lower(),
                 source=source,
                 metadata={
@@ -269,7 +274,7 @@ class StripeMethod(BasePaymentProvider):
         if order.payment_info:
             payment_info = json.loads(order.payment_info)
             if 'amount' in payment_info:
-                payment_info['amount'] /= 100
+                payment_info['amount'] /= 10 ** settings.CURRENCY_PLACES.get(self.event.currency, 2)
         else:
             payment_info = None
         template = get_template('pretixplugins/stripe/control.html')
@@ -411,7 +416,7 @@ class StripeCC(StripeMethod):
                     request.session['payment_stripe_order_secret'] = order.secret
                     source = stripe.Source.create(
                         type='three_d_secure',
-                        amount=int(order.total * 100),
+                        amount=self._get_amount(order),
                         currency=self.event.currency.lower(),
                         three_d_secure={
                             'card': src.id
@@ -479,7 +484,7 @@ class StripeGiropay(StripeMethod):
         try:
             source = stripe.Source.create(
                 type='giropay',
-                amount=int(order.total * 100),
+                amount=self._get_amount(order),
                 currency=self.event.currency.lower(),
                 metadata={
                     'order': str(order.id),
@@ -538,7 +543,7 @@ class StripeIdeal(StripeMethod):
     def _create_source(self, request, order):
         source = stripe.Source.create(
             type='ideal',
-            amount=int(order.total * 100),
+            amount=self._get_amount(order),
             currency=self.event.currency.lower(),
             metadata={
                 'order': str(order.id),
@@ -585,7 +590,7 @@ class StripeAlipay(StripeMethod):
     def _create_source(self, request, order):
         source = stripe.Source.create(
             type='alipay',
-            amount=int(order.total * 100),
+            amount=self._get_amount(order),
             currency=self.event.currency.lower(),
             metadata={
                 'order': str(order.id),
@@ -634,7 +639,7 @@ class StripeBancontact(StripeMethod):
         try:
             source = stripe.Source.create(
                 type='bancontact',
-                amount=int(order.total * 100),
+                amount=self._get_amount(order),
                 currency=self.event.currency.lower(),
                 metadata={
                     'order': str(order.id),
@@ -706,7 +711,7 @@ class StripeSofort(StripeMethod):
     def _create_source(self, request, order):
         source = stripe.Source.create(
             type='sofort',
-            amount=int(order.total * 100),
+            amount=self._get_amount(order),
             currency=self.event.currency.lower(),
             metadata={
                 'order': str(order.id),

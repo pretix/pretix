@@ -39,7 +39,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="invoice" class="panel-collapse collapse{% if event.settings.invoice_address_required or event.settings.invoice_name_required %} in {% endif %}">
+                    <div id="invoice" class="panel-collapse collapse {% if event.settings.invoice_address_required or event.settings.invoice_name_required or "invoice" in request.GET %} in{% endif %}">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
@@ -95,12 +95,6 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
-        <div class="alert alert-warning typo-alert">
-            <strong>{% trans "Are you sure your email address is correct?" %}</strong><br>
-            {% blocktrans trimmed with entered="<span data-typodisplay></span>" suggestion="<span data-typosuggest></span>" %}
-                You entered "{{ entered }}". Did you mean "{{ suggestion }}"?
-            {% endblocktrans %}
         </div>
         <div class="row checkout-button-row">
             <div class="col-md-4">

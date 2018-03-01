@@ -1,3 +1,5 @@
+.. spelling:: checkin
+
 Questions
 =========
 
@@ -23,15 +25,25 @@ type                                  string                     The expected ty
                                                                  * ``C`` – choice from a list
                                                                  * ``M`` – multiple choice from a list
                                                                  * ``F`` – file upload
+                                                                 * ``D`` – date
+                                                                 * ``H`` – time
+                                                                 * ``W`` – date and time
 required                              boolean                    If ``True``, the question needs to be filled out.
 position                              integer                    An integer, used for sorting
 items                                 list of integers           List of item IDs this question is assigned to.
+ask_during_checkin                    boolean                    If ``True``, this question will not be asked while
+                                                                 buying the ticket, but will show up when redeeming
+                                                                 the ticket instead.
 options                               list of objects            In case of question type ``C`` or ``M``, this lists the
                                                                  available objects.
 ├ id                                  integer                    Internal ID of the option
 └ answer                              multi-lingual string       The displayed value of this option
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 1.12
+
+  The values ``D``, ``H``, and ``W`` for the field ``type`` are now allowed and the ``ask_during_checkin`` field has
+  been added.
 
 Endpoints
 ---------
@@ -68,6 +80,7 @@ Endpoints
             "required": false,
             "items": [1, 2],
             "position": 1,
+            "ask_during_checkin": false,
             "options": [
               {
                 "id": 1,
@@ -121,6 +134,7 @@ Endpoints
         "type": "C",
         "required": false,
         "items": [1, 2],
+        "ask_during_checkin": false,
         "position": 1,
         "options": [
           {

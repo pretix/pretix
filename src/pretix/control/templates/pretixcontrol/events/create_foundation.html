@@ -5,4 +5,8 @@
     {% bootstrap_field form.organizer layout="horizontal" %}
     {% bootstrap_field form.locales layout="horizontal" %}
     {% bootstrap_field form.has_subevents layout="horizontal" %}
+    <p>
+        <span class="fa fa-info-circle"></span>
+        {% trans "Please note that you will only be able to delete your event until the first order has been created." %}
+    </p>
 {% endblock %}

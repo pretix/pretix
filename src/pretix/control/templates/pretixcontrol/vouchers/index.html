@@ -1,5 +1,7 @@
 {% extends "pretixcontrol/vouchers/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
 {% block inside %}
     <p>
@@ -8,33 +10,42 @@
             reserve some quota for your very special guests.
         {% endblocktrans %}
     </p>
-    <form class="form-inline helper-display-inline" action="" method="get">
-        <p>
-            <input type="text" name="search" class="form-control" placeholder="{% trans "Search voucher" %}"
-                   value="{{ request.GET.search }}" autofocus>
-            <input type="text" name="tag" class="form-control" placeholder="{% trans "Filter by tag" %}"
-                   value="{{ request.GET.tag }}">
-            <select name="status" class="form-control">
-                <option value="">{% trans "All vouchers" %}</option>
-                <option value="v" {% if request.GET.status == "v" %}selected="selected"{% endif %}>{% trans "Valid" %}</option>
-                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Redeemed" %}</option>
-                <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
-            </select>
+    <div class="row filter-form">
+        <form class="" action="" method="get">
+            <div class="col-md-2 col-xs-6">
+                {% bootstrap_field filter_form.search layout='inline' %}
+            </div>
+            <div class="col-md-2 col-xs-6">
+                {% bootstrap_field filter_form.tag layout='inline' %}
+            </div>
             {% if request.event.has_subevents %}
-                <select name="subevent" class="form-control">
-                    <option value="">{% trans "All dates" context "subevent" %}</option>
-                    {% for se in request.event.subevents.all %}
-                        <option value="{{ se.id }}"
-                                {% if request.GET.subevent|add:0 == se.id %}selected="selected"{% endif %}>
-                            {{ se.name }} – {{ se.get_date_range_display }}
-                        </option>
-                    {% endfor %}
-                </select>
+                <div class="col-md-1 col-xs-6">
+                    {% bootstrap_field filter_form.status layout='inline' %}
+                </div>
+                <div class="col-md-2 col-xs-6">
+                    {% bootstrap_field filter_form.subevent layout='inline' %}
+                </div>
+            {% else %}
+                <div class="col-md-3 col-xs-6">
+                    {% bootstrap_field filter_form.status layout='inline' %}
+                </div>
             {% endif %}
-            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-            <button class="btn btn-default" type="submit" name="download" value="yes">{% trans "Download list" %}</button>
-        </p>
-    </form>
+            <div class="col-md-2 col-xs-6">
+                {% bootstrap_field filter_form.itemvar layout='inline' %}
+            </div>
+            <div class="col-md-1 col-xs-6">
+                {% bootstrap_field filter_form.qm layout='inline' %}
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                            {% trans "Filter" %}
+                        </span>
+                </button>
+            </div>
+        </form>
+    </div>
     {% if vouchers|length == 0 %}
         <div class="empty-collection">
             <p>
@@ -59,6 +70,9 @@
             <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i>
                 {% trans "Create multiple new vouchers" %}</a>
+            <a href="?{% url_replace request "download" "yes" %}"
+                    class="btn btn-default"><i class="fa fa-download"></i>
+                {% trans "Download list" %}</a>
         </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">

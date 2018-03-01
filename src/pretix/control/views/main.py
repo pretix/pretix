@@ -22,12 +22,12 @@ from pretix.control.forms.event import (
 )
 from pretix.control.forms.filter import EventFilterForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 
 
-class EventList(ListView):
+class EventList(PaginationMixin, ListView):
     model = Event
     context_object_name = 'events'
-    paginate_by = 30
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
@@ -42,7 +42,7 @@ class EventList(ListView):
             max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
         ).annotate(
             order_from=Coalesce('min_from', 'date_from'),
-            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
+            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
         )
 
         sum_tickets_paid = Quota.objects.filter(

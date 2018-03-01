@@ -1,6 +1,8 @@
+import json
 import re
 from collections import OrderedDict
 from datetime import timedelta
+from decimal import Decimal
 from urllib.parse import urlsplit
 
 from django.conf import settings
@@ -9,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import ProtectedError
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
@@ -25,6 +28,7 @@ from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
+from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
     Order, RequiredAction, TaxRule, Voucher,
@@ -33,11 +37,12 @@ from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import event_live_issues, register_ticket_outputs
+from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
-    CommentForm, DisplaySettingsForm, EventMetaValueForm, EventSettingsForm,
-    EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, TaxRuleForm, TicketSettingsForm,
-    WidgetCodeForm,
+    CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
+    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
+    PaymentSettingsForm, ProviderForm, TaxRuleForm, TaxRuleLineFormSet,
+    TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
@@ -45,7 +50,7 @@ from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.style import regenerate_css
 
-from . import CreateView, UpdateView
+from . import CreateView, PaginationMixin, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
 
 
@@ -491,8 +496,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
             'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
-            'payment_info': _('{} {} has been transferred to account <9999-9999-9999-9999> at {}').format(
-                42.23, self.request.event.currency, date_format(now(), 'SHORT_DATETIME_FORMAT'))
+            'payment_info': _('{} has been transferred to account <9999-9999-9999-9999> at {}').format(
+                money_filter(Decimal('42.23'), self.request.event.currency), date_format(now(), 'SHORT_DATETIME_FORMAT'))
         }
 
     # create index-language mapping
@@ -507,7 +512,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
     @cached_property
     def items(self):
         return {
-            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company',
+            'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company', 'total_with_currency',
                                        'event', 'payment_info', 'url', 'invoice_name'],
             'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
             'mail_text_order_free': ['event', 'url', 'invoice_name', 'invoice_company'],
@@ -535,6 +540,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return {
             'event': self.request.event.name,
             'total': 42.23,
+            'total_with_currency': LazyCurrencyNumber(42.23, self.request.event.currency),
             'currency': self.request.event.currency,
             'url': self.generate_order_url(user_orders[0]['code'], user_orders[0]['secret']),
             'orders': '\n'.join(orders),
@@ -786,6 +792,48 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         })
 
 
+class EventDelete(EventPermissionRequiredMixin, FormView):
+    permission = 'can_change_event_settings'
+    template_name = 'pretixcontrol/event/delete.html'
+    form_class = EventDeleteForm
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.event.allow_delete():
+            messages.error(self.request, _('This event can not be deleted.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                self.request.organizer.log_action(
+                    'pretix.event.deleted', user=self.request.user,
+                    data={
+                        'event_id': self.request.event.pk,
+                        'name': str(self.request.event.name),
+                        'logentries': list(self.request.event.logentry_set.values_list('pk', flat=True))
+                    }
+                )
+                self.request.event.items.all().delete()
+                self.request.event.subevents.all().delete()
+                self.request.event.delete()
+            messages.success(self.request, _('The event has been deleted.'))
+            return redirect(self.get_success_url())
+        except ProtectedError:
+            messages.error(self.request, _('The event could not be deleted as some constraints (e.g. data created by '
+                                           'plug-ins) do not allow it.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:index')
+
+
 class EventLog(EventPermissionRequiredMixin, ListView):
     template_name = 'pretixcontrol/event/logs.html'
     model = LogEntry
@@ -877,10 +925,9 @@ class EventComment(EventPermissionRequiredMixin, View):
         })
 
 
-class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, ListView):
+class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = TaxRule
     context_object_name = 'taxrules'
-    paginate_by = 30
     template_name = 'pretixcontrol/event/tax_index.html'
     permission = 'can_change_event_settings'
 
@@ -906,9 +953,30 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
             'name': LazyI18nString.from_gettext(ugettext('VAT'))
         }
 
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @cached_property
+    def formset(self):
+        return TaxRuleLineFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
     @transaction.atomic
     def form_valid(self, form):
         form.instance.event = self.request.event
+        form.instance.custom_rules = json.dumps([
+            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+        ])
         messages.success(self.request, _('The new tax rule has been created.'))
         ret = super().form_valid(form)
         form.instance.log_action('pretix.event.taxrule.added', user=self.request.user, data=dict(form.cleaned_data))
@@ -934,9 +1002,32 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         except TaxRule.DoesNotExist:
             raise Http404(_("The requested tax rule does not exist."))
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object(self.get_queryset())
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @cached_property
+    def formset(self):
+        return TaxRuleLineFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            initial=json.loads(self.object.custom_rules) if self.object.custom_rules else []
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        form.instance.custom_rules = json.dumps([
+            f.cleaned_data for f in self.formset if f not in self.formset.deleted_forms
+        ])
         if form.has_changed():
             self.object.log_action(
                 'pretix.event.taxrule.changed', user=self.request.user, data={
