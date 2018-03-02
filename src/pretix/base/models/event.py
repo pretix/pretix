@@ -656,6 +656,10 @@ class SubEvent(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    @property
+    def currency(self):
+        return self.event.currency
+
     def allow_delete(self):
         return self.event.subevents.count() > 1
 
