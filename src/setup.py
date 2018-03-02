@@ -1,7 +1,6 @@
-import os
 from codecs import open
 from distutils.command.build import build
-from os import path
+from os import path, environ
 
 from setuptools import find_packages, setup
 
@@ -19,7 +18,7 @@ except:
 
 class CustomBuild(build):
     def run(self):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
+        environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
         import django
         django.setup()
         from django.conf import settings
