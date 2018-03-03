@@ -101,7 +101,7 @@ def generate_widget_js(lang):
 
 
 @condition(etag_func=widget_js_etag)
-@cache_page(60)
+@cache_page(1 if settings.DEBUG else 60)
 def widget_js(request, lang, **kwargs):
     if lang not in [lc for lc, ll in settings.LANGUAGES]:
         raise Http404()
