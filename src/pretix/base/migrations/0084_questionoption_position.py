@@ -16,7 +16,7 @@ def set_position(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0082_auto_20180222_0938'),
+        ('pretixbase', '0083_auto_20180228_2102'),
     ]
 
     operations = [

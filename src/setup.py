@@ -69,7 +69,7 @@ setup(
         'python-dateutil==2.4.*',
         'pytz',
         'django-bootstrap3==8.2.*',
-        'django-formset-js-improved==0.5.0.1',
+        'django-formset-js-improved==0.5.0.2',
         'django-compressor==2.1',
         'django-hierarkey==1.0.*,>=1.0.2',
         'django-filter==1.0.*',

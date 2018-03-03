@@ -790,6 +790,7 @@ class QuestionOption(models.Model):
         verbose_name_plural = _("Question options")
         ordering = ('position', 'id')
 
+
 class Quota(LoggedModel):
     """
     A quota is a "pool of tickets". It is there to limit the number of items
