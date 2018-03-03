@@ -682,8 +682,9 @@ class Question(LoggedModel):
         blank=True,
         help_text=_('This question will be asked to buyers of the selected products')
     )
-    position = models.IntegerField(
-        default=0
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
     )
     ask_during_checkin = models.BooleanField(
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
@@ -784,6 +785,10 @@ class QuestionOption(models.Model):
     def __str__(self):
         return str(self.answer)
 
+    class Meta:
+        verbose_name = _("Question option")
+        verbose_name_plural = _("Question options")
+        ordering = ('position', 'id')
 
 class Quota(LoggedModel):
     """

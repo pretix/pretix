@@ -50,6 +50,7 @@
                             <div class="sr-only">
                                 {{ form.id }}
                                 {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
                             </div>
                             <div class="row question-option-row">
                                 <div class="col-xs-10">
@@ -57,6 +58,10 @@
                                     {% bootstrap_field form.answer layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                        <i class="fa fa-arrow-up"></i></button>
+                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                        <i class="fa fa-arrow-down"></i></button>
                                     <button type="button" class="btn btn-danger" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>
@@ -70,12 +75,17 @@
                             <div class="sr-only">
                                 {{ formset.empty_form.id }}
                                 {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
                             </div>
                             <div class="row question-option-row">
                                 <div class="col-xs-10">
                                     {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
                                 </div>
                                 <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                        <i class="fa fa-arrow-up"></i></button>
+                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                        <i class="fa fa-arrow-down"></i></button>
                                     <button type="button" class="btn btn-danger" data-formset-delete-button>
                                         <i class="fa fa-trash"></i></button>
                                 </div>

@@ -338,7 +338,7 @@ class QuestionMixin:
         formsetclass = inlineformset_factory(
             Question, QuestionOption,
             form=QuestionOptionForm, formset=I18nFormSet,
-            can_order=False, can_delete=True, extra=0
+            can_order=True, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             queryset=(QuestionOption.objects.filter(question=self.object)
@@ -358,29 +358,24 @@ class QuestionMixin:
                     )
                     form.instance.delete()
                     form.instance.pk = None
-                elif form.has_changed():
-                    form.instance.question = obj
-                    form.save()
+
+            forms = self.formset.ordered_forms + [
+                ef for ef in self.formset.extra_forms
+                if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
+            ]
+            for i, form in enumerate(forms):
+                form.instance.position = i
+                form.instance.question = obj
+                created = not form.instance.pk
+                form.save()
+                if form.has_changed():
                     change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                     change_data['id'] = form.instance.pk
                     obj.log_action(
+                        'pretix.event.question.option.added' if created else
                         'pretix.event.question.option.changed',
                         user=self.request.user, data=change_data
                     )
-
-            for form in self.formset.extra_forms:
-                if not form.has_changed():
-                    continue
-                if self.formset._should_delete_form(form):
-                    continue
-                form.instance.question = obj
-                form.save()
-                change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                change_data['id'] = form.instance.pk
-                obj.log_action(
-                    'pretix.event.question.option.added',
-                    user=self.request.user, data=change_data
-                )
 
             return True
         return False
