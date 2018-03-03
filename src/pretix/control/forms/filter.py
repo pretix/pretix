@@ -606,7 +606,9 @@ class VoucherFilterForm(FilterForm):
         choices=(
             ('', _('All')),
             ('v', _('Valid')),
-            ('r', _('Redeemed')),
+            ('u', _('Unredeemed')),
+            ('r', _('Redeemed at least once')),
+            ('f', _('Fully redeemed')),
             ('e', _('Expired')),
             ('c', _('Redeemed and checked in with ticket')),
         ),
@@ -701,9 +703,13 @@ class VoucherFilterForm(FilterForm):
         if fdata.get('status'):
             s = fdata.get('status')
             if s == 'v':
-                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed=0)
+                qs = qs.filter(Q(valid_until__isnull=True) | Q(valid_until__gt=now())).filter(redeemed__lt=F('max_usages'))
             elif s == 'r':
                 qs = qs.filter(redeemed__gt=0)
+            elif s == 'u':
+                qs = qs.filter(redeemed=0)
+            elif s == 'f':
+                qs = qs.filter(redeemed__gte=F('max_usages'))
             elif s == 'e':
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
             elif s == 'c':
