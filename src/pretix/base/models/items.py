@@ -682,8 +682,9 @@ class Question(LoggedModel):
         blank=True,
         help_text=_('This question will be asked to buyers of the selected products')
     )
-    position = models.IntegerField(
-        default=0
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
     )
     ask_during_checkin = models.BooleanField(
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
@@ -779,9 +780,15 @@ class Question(LoggedModel):
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options')
     answer = I18nCharField(verbose_name=_('Answer'))
+    position = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.answer)
+
+    class Meta:
+        verbose_name = _("Question option")
+        verbose_name_plural = _("Question options")
+        ordering = ('position', 'id')
 
 
 class Quota(LoggedModel):
@@ -799,7 +806,7 @@ class Quota(LoggedModel):
 
     Please read the documentation section on quotas carefully before doing
     anything with quotas. This might confuse you otherwise.
-    http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
+    https://docs.pretix.eu/en/latest/development/concepts.html#quotas
 
     The AVAILABILITY_* constants represent various states of a quota allowing
     its items/variations to be up for sale.
