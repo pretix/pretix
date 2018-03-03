@@ -100,7 +100,7 @@ class EventMixin:
 
     def get_date_range_display(self, tz=None) -> str:
         """
-        Returns a formatted string containing the start date and the event date
+        Returns a formatted string containing the start date and the end date
         of the event with respect to the current locale and to the ``show_times`` and
         ``show_date_to`` settings.
         """
