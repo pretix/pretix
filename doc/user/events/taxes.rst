@@ -100,6 +100,16 @@ taxes" at the end of the page.
           errors of usually up to one cent from the intended price. This is unavoidable due to the
           flexible nature in which prices are being calculated.
 
+Custom tax rules
+----------------
+
+If you have very special requirements for the conditions in which VAT will or will not be charged, you can use the
+"Custom tax rules" section instead of the options listed above. Here, you can create a set of rules consisting of
+conditions (i.e. a country or a type of customer) and actions (i.e. do or do not charge VAT).
+
+The rules will then be checked from top to bottom and the first matching rule will be used to decide if VAT will be
+charged to the user.
+
 Taxation of payment fees
 ------------------------
 

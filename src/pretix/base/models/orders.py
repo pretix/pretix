@@ -162,6 +162,13 @@ class Order(LoggedModel):
         help_text=_("The text entered in this field will not be visible to the user and is available for your "
                     "convenience.")
     )
+    checkin_attention = models.BooleanField(
+        verbose_name=_('Requires special attention'),
+        default=False,
+        help_text=_('If you set this, the check-in app will show a visible warning that tickets of this order require '
+                    'special attention. This will not show any details or custom message, so you need to brief your '
+                    'check-in staff how to handle these cases.')
+    )
     expiry_reminder_sent = models.BooleanField(
         default=False
     )
@@ -661,10 +668,12 @@ class OrderFee(models.Model):
     """
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
+    FEE_TYPE_SERVICE = "service"
     FEE_TYPE_OTHER = "other"
     FEE_TYPES = (
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
+        (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_OTHER, _("Other fees")),
     )
 

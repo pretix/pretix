@@ -36,7 +36,8 @@ class CheckinListForm(forms.ModelForm):
             'name',
             'all_products',
             'limit_products',
-            'subevent'
+            'subevent',
+            'include_pending'
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={

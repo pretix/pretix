@@ -1116,6 +1116,9 @@ class CheckinListTestCase(TestCase):
         cls.cl_all = cls.event.checkin_lists.create(
             name='All', all_products=True
         )
+        cls.cl_all_pending = cls.event.checkin_lists.create(
+            name='Z Pending', all_products=True, include_pending=True
+        )
         cls.cl_both = cls.event.checkin_lists.create(
             name='Both', all_products=False
         )
@@ -1152,9 +1155,23 @@ class CheckinListTestCase(TestCase):
         op2.checkins.create(list=cls.cl_tickets)
         op3.checkins.create(list=cls.cl_both)
 
+        o = Order.objects.create(
+            code='FOO', event=cls.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+        )
+        op4 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item2,
+            variation=None,
+            price=Decimal("6"),
+        )
+        op4.checkins.create(list=cls.cl_all_pending)
+
     def test_annotated(self):
         lists = list(CheckinList.annotate_with_numbers(self.event.checkin_lists.order_by('name'), self.event))
-        assert lists == [self.cl_all, self.cl_both, self.cl_tickets]
+        assert lists == [self.cl_all, self.cl_both, self.cl_tickets, self.cl_all_pending]
         assert lists[0].checkin_count == 0
         assert lists[0].position_count == 3
         assert lists[0].percent == 0
@@ -1164,6 +1181,9 @@ class CheckinListTestCase(TestCase):
         assert lists[2].checkin_count == 1
         assert lists[2].position_count == 2
         assert lists[2].percent == 50
+        assert lists[3].checkin_count == 1
+        assert lists[3].position_count == 4
+        assert lists[3].percent == 25
 
 
 @pytest.mark.django_db

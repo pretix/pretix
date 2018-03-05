@@ -409,7 +409,7 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
         assert 'Test dummy' in response.rendered_content
-        assert '+ 12.00' in response.rendered_content
+        assert '+ €12.00' in response.rendered_content
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {

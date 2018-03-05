@@ -317,7 +317,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def eu_reverse_charge_relevant(self):
-        return any([p.item.tax_rule and p.item.tax_rule.eu_reverse_charge
+        return any([p.item.tax_rule and (p.item.tax_rule.eu_reverse_charge or p.item.tax_rule.custom_rules)
                     for p in self.positions])
 
     @cached_property
@@ -521,7 +521,9 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
 
-        ctx['contact_info'] = []
+        ctx['contact_info'] = [
+            (_('E-mail'), self.cart_session.get('contact_form_data', {}).get('email')),
+        ]
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():

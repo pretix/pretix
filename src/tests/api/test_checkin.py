@@ -111,6 +111,7 @@ TEST_LIST_RES = {
     "limit_products": [],
     "position_count": 0,
     "checkin_count": 0,
+    "include_pending": False,
     "subevent": None
 }
 

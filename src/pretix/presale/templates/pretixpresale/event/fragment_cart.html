@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load safelink %}
+{% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 {% for line in cart.positions %}
     <div class="row cart-row {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}has-downloads{% endif %}">
@@ -71,9 +72,9 @@
             <div class="count">&nbsp;</div>
             <div class="singleprice price">
                 {% if event.settings.display_net_prices %}
-                    {{ event.currency }} {{ line.net_price|floatformat:2 }}
+                    {{ line.net_price|money:event.currency }}
                 {% else %}
-                    {{ event.currency }} {{ line.price|floatformat:2 }}
+                    {{ line.price|money:event.currency }}
                 {% endif %}
             </div>
         {% else %}
@@ -113,15 +114,15 @@
             </div>
             <div class="singleprice price">
                 {% if event.settings.display_net_prices %}
-                    {{ event.currency }} {{ line.net_price|floatformat:2 }}
+                    {{ line.net_price|money:event.currency }}
                 {% else %}
-                    {{ event.currency }} {{ line.price|floatformat:2 }}
+                    {{ line.price|money:event.currency }}
                 {% endif %}
             </div>
         {% endif %}
         <div class="totalprice price">
             {% if event.settings.display_net_prices %}
-                <strong>{{ event.currency }} {{ line.net_total|floatformat:2 }}</strong>
+                <strong>{{ line.net_total|money:event.currency }}</strong>
                 {% if line.tax_rate and line.total %}
                     <br />
                     <small>
@@ -131,7 +132,7 @@
                     </small>
                 {% endif %}
             {% else %}
-                <strong>{{ event.currency }} {{ line.total|floatformat:2 }}</strong>
+                <strong>{{ line.total|money:event.currency }}</strong>
                 {% if line.tax_rate and line.total %}
                     <br />
                     <small>
@@ -165,7 +166,7 @@
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
             {% if event.settings.display_net_prices %}
-                <strong>{{ event.currency }} {{ fee.net_value|floatformat:2 }}</strong>
+                <strong>{{ fee.net_value|money:event.currency }}</strong>
                 {% if fee.tax_rate %}
                     <br />
                     <small>
@@ -175,7 +176,7 @@
                     </small>
                 {% endif %}
             {% else %}
-                <strong>{{ event.currency }} {{ fee.value|floatformat:2 }}</strong>
+                <strong>{{ fee.value|money:event.currency }}</strong>
                 {% if fee.tax_rate %}
                     <br />
                     <small>
@@ -195,7 +196,7 @@
             <strong>{% trans "Net total" %}</strong>
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-            {{ event.currency }} {{ cart.net_total|floatformat:2 }}
+            {{ cart.net_total|money:event.currency }}
         </div>
         <div class="clearfix"></div>
     </div>
@@ -204,7 +205,7 @@
             <strong>{% trans "Taxes" %}</strong>
         </div>
         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-            {{ event.currency }} {{ cart.tax_total|floatformat:2 }}
+            {{ cart.tax_total|money:event.currency }}
         </div>
         <div class="clearfix"></div>
     </div>
@@ -214,7 +215,7 @@
         <strong>{% trans "Total" %}</strong>
     </div>
     <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-        <strong>{{ event.currency }} {{ cart.total|floatformat:2 }}</strong>
+        <strong>{{ cart.total|money:event.currency }}</strong>
     </div>
     <div class="clearfix"></div>
 </div>

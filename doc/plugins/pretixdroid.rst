@@ -15,6 +15,10 @@ uses to communicate with the pretix server.
    negotiated live, so clients which do not need this feature can ignore the change. For this reason, the API version
    has not been increased and is still set to 3.
 
+.. versionchanged:: 1.13
+
+   Support for checking in unpaid tickets has been added.
+
 
 .. http:post:: /pretixdroid/api/(organizer)/(event)/redeem/
 
@@ -49,6 +53,9 @@ uses to communicate with the pretix server.
    check-in. This is meant to be used to prevent duplicate check-ins when you are just retrying after a connection
    failure.
 
+   You **may** set the additional parameter ``ignore_unpaid`` to indicate that the check-in should be performed even
+   if the order is in pending state.
+
    If questions are supported and required, you will receive a dictionary ``questions`` containing details on the
    particular questions to ask. To answer them, just re-send your redemption request with additional parameters of
    the form ``answer_<question>=<answer>``, e.g. ``answer_12=24``.
@@ -73,6 +80,7 @@ uses to communicate with the pretix server.
           "attendee_name": "Peter Higgs",
           "attention": false,
           "redeemed": true,
+          "checkin_allowed": true,
           "paid": true
         }
       }
@@ -97,6 +105,7 @@ uses to communicate with the pretix server.
           "attendee_name": "Peter Higgs",
           "attention": false,
           "redeemed": true,
+          "checkin_allowed": true,
           "paid": true
         },
         "questions": [
@@ -142,6 +151,7 @@ uses to communicate with the pretix server.
           "attendee_name": "Peter Higgs",
           "attention": false,
           "redeemed": true,
+          "checkin_allowed": true,
           "paid": true
         }
       }
@@ -201,6 +211,7 @@ uses to communicate with the pretix server.
             "attendee_name": "Peter Higgs",
             "redeemed": false,
             "attention": false,
+            "checkin_allowed": true,
             "paid": true
           },
           ...
@@ -244,6 +255,7 @@ uses to communicate with the pretix server.
             "attendee_name": "Peter Higgs",
             "redeemed": false,
             "attention": false,
+            "checkin_allowed": true,
             "paid": true
           },
           ...

@@ -11,7 +11,7 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -29,6 +29,7 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
+from pretix.base.templatetags.money import money_filter
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.signals import (
     get_fonts, layout_text_variables,
@@ -81,7 +82,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("price", {
         "label": _("Price"),
         "editor_sample": _("123.45 EUR"),
-        "evaluate": lambda op, order, event: '{} {}'.format(event.currency, localize(op.price))
+        "evaluate": lambda op, order, event: money_filter(op.price, event.currency)
     }),
     ("attendee_name", {
         "label": _("Attendee name"),

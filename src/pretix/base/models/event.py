@@ -101,7 +101,7 @@ class EventMixin:
 
     def get_date_range_display(self, tz=None) -> str:
         """
-        Returns a formatted string containing the start date and the event date
+        Returns a formatted string containing the start date and the end date
         of the event with respect to the current locale and to the ``show_times`` and
         ``show_date_to`` settings.
         """
@@ -269,6 +269,13 @@ class Event(EventMixin, LoggedModel):
 
     def __str__(self):
         return str(self.name)
+
+    @property
+    def presale_has_ended(self):
+        if self.has_subevents:
+            return self.presale_end and now() > self.presale_end
+        else:
+            return super().presale_has_ended
 
     def save(self, *args, **kwargs):
         obj = super().save(*args, **kwargs)
@@ -699,6 +706,10 @@ class SubEvent(EventMixin, LoggedModel):
         data = self.event.meta_data
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
+
+    @property
+    def currency(self):
+        return self.event.currency
 
     def allow_delete(self):
         return self.event.subevents.count() > 1

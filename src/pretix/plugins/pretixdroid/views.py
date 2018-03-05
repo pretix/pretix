@@ -122,7 +122,6 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
 
 
 class ApiView(View):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, **kwargs):
         try:
@@ -156,7 +155,6 @@ class ApiView(View):
 
 
 class ApiRedeemView(ApiView):
-
     def _save_answers(self, op, answers, given_answers):
         for q, a in given_answers.items():
             if not a:
@@ -193,6 +191,7 @@ class ApiRedeemView(ApiView):
     def post(self, request, **kwargs):
         secret = request.POST.get('secret', '!INVALID!')
         force = request.POST.get('force', 'false') in ('true', 'True')
+        ignore_unpaid = request.POST.get('ignore_unpaid', 'false') in ('true', 'True')
         nonce = request.POST.get('nonce')
         response = {
             'version': API_VERSION
@@ -237,23 +236,26 @@ class ApiRedeemView(ApiView):
 
                 self._save_answers(op, answers, given_answers)
 
-                if not self.config.list.all_products and op.item_id not in [i.pk for i in self.config.list.limit_products.all()]:
+                if not self.config.list.all_products and op.item_id not in [i.pk for i in
+                                                                            self.config.list.limit_products.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
                 elif not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
                     response['status'] = 'error'
                     response['reason'] = 'product'
+                elif op.order.status != Order.STATUS_PAID and not force and not (
+                    ignore_unpaid and self.config.list.include_pending and op.order.status == Order.STATUS_PENDING
+                ):
+                    response['status'] = 'error'
+                    response['reason'] = 'unpaid'
                 elif require_answers and not force and request.POST.get('questions_supported'):
                     response['status'] = 'incomplete'
                     response['questions'] = require_answers
-                elif op.order.status == Order.STATUS_PAID or force:
+                else:
                     ci, created = Checkin.objects.get_or_create(position=op, list=self.config.list, defaults={
                         'datetime': dt,
                         'nonce': nonce,
                     })
-                else:
-                    response['status'] = 'error'
-                    response['reason'] = 'unpaid'
 
             if 'status' not in response:
                 if created or (nonce and nonce == ci.nonce):
@@ -282,7 +284,8 @@ class ApiRedeemView(ApiView):
                         'list': self.config.list.pk
                     })
 
-            response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force)
+            response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force,
+                                            clist=self.config.list)
 
         except OrderPosition.DoesNotExist:
             response['status'] = 'error'
@@ -310,7 +313,7 @@ def serialize_question(q, items=False):
     return d
 
 
-def serialize_op(op, redeemed):
+def serialize_op(op, redeemed, clist):
     name = op.attendee_name
     if not name and op.addon_to:
         name = op.addon_to.attendee_name
@@ -319,6 +322,13 @@ def serialize_op(op, redeemed):
             name = op.order.invoice_address.name
         except:
             pass
+    checkin_allowed = (
+        op.order.status == Order.STATUS_PAID
+        or (
+            op.order.status == Order.STATUS_PENDING
+            and clist.include_pending
+        )
+    )
     return {
         'secret': op.secret,
         'order': op.order.code,
@@ -327,9 +337,10 @@ def serialize_op(op, redeemed):
         'variation': str(op.variation) if op.variation else None,
         'variation_id': op.variation_id,
         'attendee_name': name,
-        'attention': op.item.checkin_attention,
+        'attention': op.item.checkin_attention or op.order.checkin_attention,
         'redeemed': redeemed,
         'paid': op.order.status == Order.STATUS_PAID,
+        'checkin_allowed': checkin_allowed
     }
 
 
@@ -371,7 +382,7 @@ class ApiSearchView(ApiView):
                     | Q(order__invoice_address__name__icontains=query)
                 )[:25]
 
-            response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in ops]
+            response['results'] = [serialize_op(op, bool(op.last_checked_in), self.config.list) for op in ops]
         else:
             response['results'] = []
 
@@ -393,7 +404,8 @@ class ApiDownloadView(ApiView):
 
         qs = OrderPosition.objects.filter(
             order__event=self.event,
-            order__status=Order.STATUS_PAID,
+            order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if self.config.list.include_pending else
+                                                     []),
             subevent=self.config.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
@@ -405,7 +417,7 @@ class ApiDownloadView(ApiView):
         if not self.config.all_items:
             qs = qs.filter(item__in=self.config.items.all())
 
-        response['results'] = [serialize_op(op, bool(op.last_checked_in)) for op in qs]
+        response['results'] = [serialize_op(op, bool(op.last_checked_in), self.config.list) for op in qs]
 
         questions = self.event.questions.filter(ask_during_checkin=True).prefetch_related('items', 'options')
         response['questions'] = [serialize_question(q, items=True) for q in questions]
@@ -417,11 +429,15 @@ class ApiStatusView(ApiView):
 
         cqs = Checkin.objects.filter(
             position__order__event=self.event, position__subevent=self.subevent,
-            position__order__status=Order.STATUS_PAID,
+            position__order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if
+                                                               self.config.list.include_pending else []),
             list=self.config.list
         )
         pqs = OrderPosition.objects.filter(
-            order__event=self.event, order__status=Order.STATUS_PAID, subevent=self.subevent,
+            order__event=self.event,
+            order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if self.config.list.include_pending else
+                                                     []),
+            subevent=self.subevent,
         )
         if not self.config.list.all_products:
             pqs = pqs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))

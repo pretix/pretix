@@ -11,6 +11,11 @@
 @import "_checkout.scss";
 @import "../../pretixbase/scss/webfont.scss";
 
+/* See https://github.com/pretix/pretix/pull/761 */
+.bootstrap-datetimepicker-widget table td span {
+    line-height: 1.8em;
+}
+
 footer {
     text-align: center;
     padding: 10px 0;

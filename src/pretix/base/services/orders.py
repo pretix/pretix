@@ -17,7 +17,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
-    LazyDate, LazyLocaleException, LazyNumber, language,
+    LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
     CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
@@ -361,7 +361,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.delete()
             break
 
-        if cp.subevent and cp.subevent.presale_end and now_dt > cp.subevent.presale_end:
+        if cp.subevent and cp.subevent.presale_has_ended:
             err = err or error_messages['some_subevent_ended']
             cp.delete()
             break
@@ -439,8 +439,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
         fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
                              internal_type=payment_provider.identifier))
 
-    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address,
-                                                 meta_info=meta_info, posiitons=positions):
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
+                                                 meta_info=meta_info, positions=positions):
         fees += resp
     return fees
 
@@ -504,6 +504,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         for fee in fees:
             fee.order = order
             fee._calculate_tax()
+            if not fee.tax_rule.pk:
+                fee.tax_rule = None  # TODO: deprecate
             fee.save()
 
         OrderPosition.transform_cart_positions(positions, order)
@@ -568,6 +570,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         email_context = {
             'total': LazyNumber(order.total),
             'currency': event.currency,
+            'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
             'date': LazyDate(order.expires),
             'event': event.name,
             'url': build_absolute_uri(event, 'presale:event.order', kwargs={
@@ -812,7 +815,7 @@ class OrderChangeManager:
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
-            if item.tax_rule.tax_applicable(self._invoice_address):
+            if item.tax_rule and item.tax_rule.tax_applicable(self._invoice_address):
                 price = item.tax(price, base_price_is='gross')
             else:
                 price = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')

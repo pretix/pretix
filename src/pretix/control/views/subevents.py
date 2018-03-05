@@ -148,6 +148,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     'name': cl.name,
                     'all_products': cl.all_products,
                     'limit_products': cl.limit_products.all(),
+                    'include_pending': cl.include_pending,
                 } for cl in self.copy_from.checkinlist_set.prefetch_related('limit_products')
             ]
             extra = len(kwargs['initial'])
@@ -156,6 +157,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                 {
                     'name': '',
                     'all_products': True,
+                    'include_pending': False,
                 }
             ]
             extra = 1

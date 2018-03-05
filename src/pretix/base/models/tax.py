@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 from django.db import models
@@ -8,6 +9,7 @@ from i18nfield.fields import I18nCharField
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.templatetags.money import money_filter
 
 
 class TaxedPrice:
@@ -22,6 +24,13 @@ class TaxedPrice:
 
     def __repr__(self):
         return '{} + {}% = {}'.format(localize(self.net), localize(self.rate), localize(self.gross))
+
+    def print(self, currency):
+        return '{} + {}% = {}'.format(
+            money_filter(self.net, currency),
+            localize(self.rate),
+            money_filter(self.gross, currency)
+        )
 
 
 TAXED_ZERO = TaxedPrice(
@@ -80,6 +89,7 @@ class TaxRule(LoggedModel):
         help_text=_('Your country of residence. This is the country the EU reverse charge rule will not apply in, '
                     'if configured above.'),
     )
+    custom_rules = models.TextField(blank=True, null=True)
 
     def allow_delete(self):
         from pretix.base.models.orders import OrderFee, OrderPosition
@@ -129,10 +139,12 @@ class TaxRule(LoggedModel):
 
         if base_price_is == 'gross':
             gross = base_price
-            net = gross - round_decimal(base_price * (1 - 100 / (100 + self.rate)))
+            net = round_decimal(gross - (base_price * (1 - 100 / (100 + self.rate))),
+                                self.event.currency if self.event else None)
         elif base_price_is == 'net':
             net = base_price
-            gross = round_decimal(net * (1 + self.rate / 100))
+            gross = round_decimal((net * (1 + self.rate / 100)),
+                                  self.event.currency if self.event else None)
         else:
             raise ValueError('Unknown base price type: {}'.format(base_price_is))
 
@@ -141,7 +153,27 @@ class TaxRule(LoggedModel):
             rate=self.rate, name=self.name
         )
 
+    def get_matching_rule(self, invoice_address):
+        rules = json.loads(self.custom_rules)
+        for r in rules:
+            if r['country'] == 'EU' and str(invoice_address.country) not in EU_COUNTRIES:
+                continue
+            if r['country'] not in ('ZZ', 'EU') and r['country'] != str(invoice_address.country):
+                continue
+            if r['address_type'] == 'individual' and invoice_address.is_business:
+                continue
+            if r['address_type'] in ('business', 'business_vat_id') and not invoice_address.is_business:
+                continue
+            if r['address_type'] == 'business_vat_id' and (not invoice_address.vat_id or not invoice_address.vat_id_validated):
+                continue
+            return r
+        return {'action': 'vat'}
+
     def is_reverse_charge(self, invoice_address):
+        if self.custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            return rule['action'] == 'reverse'
+
         if not self.eu_reverse_charge:
             return False
 
@@ -160,6 +192,10 @@ class TaxRule(LoggedModel):
         return False
 
     def tax_applicable(self, invoice_address):
+        if self.custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            return rule.get('action', 'vat') == 'vat'
+
         if not self.eu_reverse_charge:
             # No reverse charge rules? Always apply VAT!
             return True

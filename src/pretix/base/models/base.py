@@ -36,7 +36,7 @@ def cached_file_delete(sender, instance, **kwargs):
 
 class LoggingMixin:
 
-    def log_action(self, action, data=None, user=None, api_token=None):
+    def log_action(self, action, data=None, user=None, api_token=None, save=True):
         """
         Create a LogEntry object that is related to this object.
         See the LogEntry documentation for details.
@@ -60,10 +60,12 @@ class LoggingMixin:
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
         if data:
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
-        logentry.save()
+        if save:
+            logentry.save()
 
-        if action in get_all_notification_types():
-            notify.apply_async(args=(logentry.pk,))
+            if action in get_all_notification_types():
+                notify.apply_async(args=(logentry.pk,))
+        return logentry
 
 
 class LoggedModel(models.Model, LoggingMixin):

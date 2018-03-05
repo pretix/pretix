@@ -1,4 +1,3 @@
-import time
 from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
@@ -11,6 +10,9 @@ from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import Event, Organizer
+from pretix.helpers.security import (
+    SessionInvalid, SessionReauthRequired, assert_session_valid,
+)
 
 
 class PermissionMiddleware(MiddlewareMixin):
@@ -64,18 +66,15 @@ class PermissionMiddleware(MiddlewareMixin):
         if not request.user.is_authenticated:
             return self._login_redirect(request)
 
-        if not settings.PRETIX_LONG_SESSIONS or not request.session.get('pretix_auth_long_session', False):
+        try:
             # If this logic is updated, make sure to also update the logic in pretix/api/auth/permission.py
-            last_used = request.session.get('pretix_auth_last_used', time.time())
-            if time.time() - request.session.get('pretix_auth_login_time', time.time()) > settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE:
-                logout(request)
-                request.session['pretix_auth_login_time'] = 0
-                return self._login_redirect(request)
+            assert_session_valid(request)
+        except SessionInvalid:
+            logout(request)
+            return self._login_redirect(request)
+        except SessionReauthRequired:
             if url_name != 'user.reauth':
-                if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE:
-                    return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
-
-                request.session['pretix_auth_last_used'] = int(time.time())
+                return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             request.event = Event.objects.filter(

@@ -102,6 +102,8 @@ The provider class
 
    .. automethod:: order_control_refund_perform
 
+   .. automethod:: is_implicit
+
 
 Additional views
 ----------------

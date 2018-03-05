@@ -12,7 +12,7 @@ at the following locations. It will try to read the file from the specified path
 the following order. The file that is found *last* will override the settings from
 the files found before.
 
-1. ``PREFIX_CONFIG_FILE`` environment variable
+1. ``PRETIX_CONFIG_FILE`` environment variable
 2. ``/etc/pretix/pretix.cfg``
 3. ``~/.pretix.cfg``
 4. ``pretix.cfg`` in the current working directory
@@ -288,4 +288,4 @@ various places like order codes, secrets in the ticket QR codes, etc. Example::
     voucher_code=16
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
-.. _Celery documentation: http://docs.celeryproject.org/en/latest/configuration.html
+.. _Celery documentation: http://docs.celeryproject.org/en/latest/userguide/configuration.html

@@ -24,6 +24,7 @@ from reportlab.platypus import (
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice
 from pretix.base.signals import register_invoice_renderers
+from pretix.base.templatetags.money import money_filter
 
 
 class BaseInvoiceRenderer:
@@ -376,14 +377,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     Paragraph(line.description, self.stylesheet['Normal']),
                     "1",
                     localize(line.tax_rate) + " %",
-                    localize(line.net_value) + " " + self.invoice.event.currency,
-                    localize(line.gross_value) + " " + self.invoice.event.currency,
+                    money_filter(line.net_value, self.invoice.event.currency),
+                    money_filter(line.gross_value, self.invoice.event.currency),
                 ))
             else:
                 tdata.append((
                     Paragraph(line.description, self.stylesheet['Normal']),
                     "1",
-                    localize(line.gross_value) + " " + self.invoice.event.currency,
+                    money_filter(line.gross_value, self.invoice.event.currency),
                 ))
             taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
             grossvalue_map[line.tax_rate, line.tax_name] += line.gross_value
@@ -391,12 +392,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if has_taxes:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', '', '', localize(total) + " " + self.invoice.event.currency
+                pgettext('invoice', 'Invoice total'), '', '', '', money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
         else:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', localize(total) + " " + self.invoice.event.currency
+                pgettext('invoice', 'Invoice total'), '', money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.65, .05, .30)]
 
@@ -436,9 +437,9 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             tax = taxvalue_map[idx]
             tdata.append([
                 localize(rate) + " % " + name,
-                localize(gross - tax) + " " + self.invoice.event.currency,
-                localize(gross) + " " + self.invoice.event.currency,
-                localize(tax) + " " + self.invoice.event.currency,
+                money_filter(gross - tax, self.invoice.event.currency),
+                money_filter(gross, self.invoice.event.currency),
+                money_filter(tax, self.invoice.event.currency),
                 ''
             ])
 

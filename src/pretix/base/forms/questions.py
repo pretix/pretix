@@ -232,5 +232,13 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                                                      'your country is currently not available. We will therefore '
                                                      'need to charge VAT on your invoice. You can get the tax amount '
                                                      'back via the VAT reimbursement process.'))
+            except vat_moss.errors.WebServiceError:
+                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
+                self.instance.vat_id_validated = False
+                if self.request and self.vat_warning:
+                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
+                                                     'your country returned an incorrect result. We will therefore '
+                                                     'need to charge VAT on your invoice. Please contact support to '
+                                                     'resolve this manually.'))
         else:
             self.instance.vat_id_validated = False

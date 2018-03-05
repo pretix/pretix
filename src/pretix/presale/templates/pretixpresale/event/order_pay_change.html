@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% block title %}{% trans "Change payment method" %}{% endblock %}
 {% block content %}
     <h2>
@@ -22,7 +23,7 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <label class="radio">
-                                <strong class="pull-right">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|floatformat:2 }} {{ event.currency }}</strong>
+                                <strong class="pull-right">{% if p.fee_diff >= 0 %}+{% else %}-{% endif %} {{ p.fee_diff_abs|money:event.currency }}</strong>
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}

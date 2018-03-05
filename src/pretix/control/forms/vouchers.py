@@ -179,6 +179,6 @@ class VoucherBulkForm(VoucherForm):
             data['code'] = code
             data['bulk'] = True
             del data['codes']
-            obj.save()
             objs.append(obj)
+        Voucher.objects.bulk_create(objs)
         return objs

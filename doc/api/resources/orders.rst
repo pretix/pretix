@@ -34,6 +34,9 @@ payment_fee_tax_value                 money (string)             Tax value inclu
 payment_fee_tax_rule                  integer                    The ID of the used tax rule (or ``null``)
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
+checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if a ticket
+                                                                 of this order is scanned.
 invoice_address                       object                     Invoice address information (can be ``null``)
 ├ last_modified                       datetime                   Last modification date of the address
 ├ company                             string                     Customer company name
@@ -87,6 +90,10 @@ downloads                             list of objects            List of ticket 
 
    First write operations (``…/mark_paid/``, ``…/mark_pending/``, ``…/mark_canceled/``, ``…/mark_expired/``) have been added.
    The attribute ``invoice_address.internal_reference`` has been added.
+
+.. versionchanged:: 1.13
+
+   The field ``checkin_attention`` has been added.
 
 .. _order-position-resource:
 
@@ -175,6 +182,7 @@ Order endpoints
             "fees": [],
             "total": "23.00",
             "comment": "",
+            "checkin_attention": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": True,
@@ -282,6 +290,7 @@ Order endpoints
         "fees": [],
         "total": "23.00",
         "comment": "",
+        "checkin_attention": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",

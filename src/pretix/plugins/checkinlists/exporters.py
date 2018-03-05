@@ -6,7 +6,7 @@ from defusedcsv import csv
 from django import forms
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 from pytz import UTC
@@ -15,6 +15,7 @@ from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Checkin, Order, OrderPosition, Question
+from pretix.base.templatetags.money import money_filter
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
 
@@ -35,12 +36,6 @@ class BaseCheckinList(BaseExporter):
                 ('secrets',
                  forms.BooleanField(
                      label=_('Include QR-code secret'),
-                     required=False
-                 )),
-                ('paid_only',
-                 forms.BooleanField(
-                     label=_('Only paid orders'),
-                     initial=True,
                      required=False
                  )),
                 ('sort',
@@ -182,7 +177,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
         elif form_data['sort'] == 'code':
             qs = qs.order_by('order__code')
 
-        if form_data['paid_only']:
+        if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
         else:
             qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
@@ -206,7 +201,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 op.order.code,
                 name,
                 str(op.item.name) + (" – " + str(op.variation.value) if op.variation else "") + "\n" +
-                self.event.currency + " " + localize(op.price),
+                money_filter(op.price, self.event.currency),
             ]
             acache = {}
             for a in op.answers.all():
@@ -267,7 +262,7 @@ class CSVCheckinList(BaseCheckinList):
         headers = [
             _('Order code'), _('Attendee name'), _('Product'), _('Price'), _('Checked in')
         ]
-        if form_data['paid_only']:
+        if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
         else:
             qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
@@ -303,7 +298,7 @@ class CSVCheckinList(BaseCheckinList):
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 if last_checked_in else ''
             ]
-            if not form_data['paid_only']:
+            if cl.include_pending:
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
             if form_data['secrets']:
                 row.append(op.secret)
@@ -319,4 +314,4 @@ class CSVCheckinList(BaseCheckinList):
 
             writer.writerow(row)
 
-        return 'checkin.csv', 'text/csv', output.getvalue().encode("utf-8")
+        return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
