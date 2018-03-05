@@ -1,10 +1,15 @@
-import pytest
-
 from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
 
-from pretix.base.models import Event
+import pytest
+from django_countries.fields import Country
+from pytz import UTC
+
+from pretix.base.models import (
+    CartPosition, Event, InvoiceAddress, Order, OrderPosition,
+)
+from pretix.base.models.orders import OrderFee
 
 
 @pytest.fixture

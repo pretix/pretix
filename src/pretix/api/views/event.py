@@ -1,9 +1,8 @@
+from django.db import transaction
+from django.db.models import ProtectedError
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 from rest_framework.exceptions import PermissionDenied
-
-from django.db import transaction
-from django.db.models import ProtectedError
 
 from pretix.api.serializers.event import (
     EventSerializer, SubEventSerializer, TaxRuleSerializer,

@@ -4,7 +4,6 @@ from collections import OrderedDict
 from datetime import datetime, time
 
 import pytz
-from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
