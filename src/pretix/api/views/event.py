@@ -2,6 +2,9 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 from rest_framework.exceptions import PermissionDenied
 
+from django.db import transaction
+from django.db.models import ProtectedError
+
 from pretix.api.serializers.event import (
     EventSerializer, SubEventSerializer, TaxRuleSerializer,
 )
@@ -15,7 +18,6 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
-    http_method_names = ['head', 'get', 'post', 'patch', 'put']
 
     def get_queryset(self):
         return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
@@ -37,6 +39,27 @@ class EventViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
             data=self.request.data
         )
+
+    def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'live\''
+                                   ' to false to hide the event and take the shop offline instead.')
+        try:
+            with transaction.atomic():
+                instance.organizer.log_action(
+                    'pretix.event.deleted', user=self.request.user,
+                    data={
+                        'event_id': instance.pk,
+                        'name': str(instance.name),
+                        'logentries': list(instance.logentry_set.values_list('pk', flat=True))
+                    }
+                )
+                instance.items.all().delete()
+                instance.subevents.all().delete()
+                super().perform_destroy(instance)
+        except ProtectedError:
+            raise PermissionDenied('The event could not be deleted as some constraints (e.g. data created by plug-ins) '
+                                   'do not allow it.')
 
 
 class SubEventFilter(FilterSet):

@@ -1,6 +1,64 @@
 import pytest
 
+from datetime import datetime, timedelta
+from decimal import Decimal
+from unittest import mock
+
 from pretix.base.models import Event
+
+
+@pytest.fixture
+def order(event, item, taxrule):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            total=23, payment_provider='banktransfer', locale='en'
+        )
+        o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
+                      tax_value=Decimal('0.05'), tax_rule=taxrule)
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
+        return o
+
+
+@pytest.fixture
+def order_position(item, order, taxrule, variations):
+    op = OrderPosition.objects.create(
+        order=order,
+        item=item,
+        variation=variations[0],
+        tax_rule=taxrule,
+        tax_rate=taxrule.rate,
+        tax_value=Decimal("3"),
+        price=Decimal("23"),
+        attendee_name="Peter",
+        secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+    )
+    return op
+
+
+@pytest.fixture
+def cart_position(event, item, variations):
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        c = CartPosition.objects.create(
+            event=event,
+            item=item,
+            datetime=datetime.now(),
+            expires=datetime.now() + timedelta(days=1),
+            variation=variations[0],
+            price=Decimal("23"),
+            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+        )
+        return c
+
 
 TEST_EVENT_RES = {
     "name": {"en": "Dummy"},
@@ -306,3 +364,24 @@ def test_event_detail(token_client, organizer, event, team):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert TEST_EVENT_RES == resp.data
+
+
+@pytest.mark.django_db
+def test_event_delete(token_client, organizer, event):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 204
+    assert not organizer.event.filter(pk=event.id).exists()
+
+
+@pytest.mark.django_db
+def test_event_with_order_position_not_delete(token_client, organizer, event, item, order_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 403
+    assert organizer.event.filter(pk=event.id).exists()
+
+
+@pytest.mark.django_db
+def test_event_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 403
+    assert organizer.event.filter(pk=event.id).exists()
