@@ -2,6 +2,8 @@
 
 .. _`config`:
 
+.. spelling:: Galera
+
 Configuration file
 ==================
 
@@ -10,7 +12,7 @@ at the following locations. It will try to read the file from the specified path
 the following order. The file that is found *last* will override the settings from
 the files found before.
 
-1. ``PREFIX_CONFIG_FILE`` environment variable
+1. ``PRETIX_CONFIG_FILE`` environment variable
 2. ``/etc/pretix/pretix.cfg``
 3. ``~/.pretix.cfg``
 4. ``pretix.cfg`` in the current working directory
@@ -45,7 +47,7 @@ Example::
 
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar
-    data. Defaults to thea value of the environment variable ``DATA_DIR`` or ``data``.
+    data. Defaults to the value of the environment variable ``DATA_DIR`` or ``data``.
 
 ``plugins_default``
     A comma-separated list of plugins that are enabled by default for all new events.
@@ -286,4 +288,4 @@ various places like order codes, secrets in the ticket QR codes, etc. Example::
     voucher_code=16
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
-.. _Celery documentation: http://docs.celeryproject.org/en/latest/configuration.html
+.. _Celery documentation: http://docs.celeryproject.org/en/latest/userguide/configuration.html

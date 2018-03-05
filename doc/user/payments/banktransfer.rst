@@ -30,3 +30,9 @@ many orders could be processed correctly and how many could not. You can then go
 transfers from your bank statement that are not yet matched to an order. Using the input field and the buttons on the
 left of each transaction, you can manually enter an order code to match it to or just discard it from the list, e.g.
 if the transaction is not related to the event at all.
+
+
+.. tip:: If you aren't afraid of getting a bit more technical and your bank supports the HBCI/FinTS protocol (as most
+         German banks do), you can use `pretix-banktool`_ to fully automate this process.
+
+.. _pretix-banktool: https://github.com/pretix/pretix-banktool

@@ -41,6 +41,8 @@ class Invoice(models.Model):
     :type invoice_from: str
     :param invoice_to: The receiver address
     :type invoice_to: str
+    :param full_invoice_no: The full invoice number (for performance reasons only)
+    :type full_invoice_no: str
     :param date: The invoice date
     :type date: date
     :param locale: The locale in which the invoice should be printed
@@ -55,9 +57,9 @@ class Invoice(models.Model):
     :type footer_text: str
     :param foreign_currency_display: A different currency that taxes should also be displayed in.
     :type foreign_currency_display: str
-    :param foreign_currency_rate: The rate of a forein currency that the taxes should be displayed in.
+    :param foreign_currency_rate: The rate of a foreign currency that the taxes should be displayed in.
     :type foreign_currency_rate: Decimal
-    :param foreign_currency_rate_date: The date of the forein currency exchange rates.
+    :param foreign_currency_rate_date: The date of the foreign currency exchange rates.
     :type foreign_currency_rate_date: date
     :param file: The filename of the rendered invoice
     :type file: File
@@ -67,6 +69,7 @@ class Invoice(models.Model):
     event = models.ForeignKey('Event', related_name='invoices', db_index=True)
     prefix = models.CharField(max_length=160, db_index=True)
     invoice_no = models.CharField(max_length=19, db_index=True)
+    full_invoice_no = models.CharField(max_length=190, db_index=True)
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True)
     invoice_from = models.TextField()
@@ -80,7 +83,9 @@ class Invoice(models.Model):
     foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
     foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
     foreign_currency_rate_date = models.DateField(null=True, blank=True)
+
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
+    internal_reference = models.TextField(blank=True)
 
     @staticmethod
     def _to_numeric_invoice_number(number):
@@ -121,6 +126,8 @@ class Invoice(models.Model):
                     # Suppress duplicate key errors and try again
                     if i == 9:
                         raise
+
+        self.full_invoice_no = self.prefix + self.invoice_no
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

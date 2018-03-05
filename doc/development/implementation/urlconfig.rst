@@ -67,7 +67,7 @@ available as ``plugins:sendmail:send``.
 Generating a URL for the frontend is a complicated task, because you need to know whether the event's
 organizer uses a custom URL or not and then generate the URL with a different domain and different
 arguments based on this information. pretix provides some helpers to make this easier. The first helper
-is a python method that emulates a behaviour similar to ``reverse``:
+is a python method that emulates a behavior similar to ``reverse``:
 
 .. autofunction:: pretix.multidomain.urlreverse.eventreverse
 
@@ -82,5 +82,5 @@ Implementation details
 ----------------------
 
 There are some other caveats when using a design like this, e.g. you have to care about cookie domains
-and referer verification yourself. If you want to see how we built this, look into the ``pretix/multidomain/``
+and referrer verification yourself. If you want to see how we built this, look into the ``pretix/multidomain/``
 sub-tree.

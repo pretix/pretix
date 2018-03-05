@@ -1,3 +1,5 @@
+.. _payment-fees:
+
 Payment method fees
 ===================
 
@@ -17,6 +19,9 @@ might also decide to go for option one to make it easier for customers who don't
              selling to consumers only or to business customers as well. Depending on your country, this
              legislation might already be in place or become relevant from January 2018 the latest. This is not
              legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
+
+If you go for the first option (as you should in the EU), you can just leave the payment fee fields in pretix' settings
+empty.
 
 If you go for the second option, you can configure pretix to charge the payment method fees to your user. You can
 define both an absolute fee as well as a percental fee based on the order total. If you do so, there are two
@@ -55,4 +60,4 @@ same 5 %, such that for a ticket with a list price of 100 € you will get your 
     ===================================================== =============
 
     Due to the various rounding steps performed by pretix and by the payment provider, the end total on
-    your bank account might stil vary by one cent.
+    your bank account might still vary by one cent.

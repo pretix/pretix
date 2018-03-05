@@ -101,12 +101,6 @@
                         {% trans "Waiting list" %}
                     </a>
                 </li>
-                <li>
-                    <a href="{% url 'control:event.orders.checkins' organizer=request.event.organizer.slug event=request.event.slug %}"
-                       {% if url_name == "event.orders.checkins" %}class="active"{% endif %}>
-                        {% trans "Check-ins" %}
-                    </a>
-                </li>
             </ul>
         </li>
     {% endif %}
@@ -116,6 +110,15 @@
                     {% if url_name == "event.voucher" %}class="active"{% endif %}>
                 <i class="fa fa-tags fa-fw"></i>
                 {% trans "Vouchers" %}
+            </a>
+        </li>
+    {% endif %}
+    {% if 'can_view_orders' in request.eventpermset %}
+        <li>
+            <a href="{% url 'control:event.orders.checkinlists' organizer=request.event.organizer.slug event=request.event.slug %}"
+                    {% if "event.orders.checkin" in url_name %}class="active"{% endif %}>
+                <i class="fa fa-check-square-o fa-fw"></i>
+                {% trans "Check-in lists" %}
             </a>
         </li>
     {% endif %}

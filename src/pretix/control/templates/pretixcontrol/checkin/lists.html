@@ -1,0 +1,114 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Check-in lists" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Check-in lists" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can create check-in lists that you can use e.g. at the entrance of your event to track who is coming
+            and if they actually bought a ticket. You can do this process by printing out the list on paper, using this
+            web interface or by using one of our mobile or desktop apps to automatically scan tickets.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            You can create multiple check-in lists to separate multiple parts of your event, for example if you have
+            separate entries for multiple ticket types. Different check-in lists are completely independent: If a ticket
+            shows up on two lists, it is valid once on every list. This might be useful if you run a festival with
+            festival passes that allow access to every or multiple performances as well as tickets only valid for single
+            performances.
+        {% endblocktrans %}
+    </p>
+    {% if request.event.has_subevents %}
+        <form class="form-inline helper-display-inline" action="" method="get">
+            <form class="form-inline helper-display-inline" action="" method="get">
+                {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+            </form>
+        </form>
+    {% endif %}
+    {% if checkinlists|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% if request.GET.subevent %}
+                    {% trans "Your search did not match any check-in lists." %}
+                {% else %}
+                    {% blocktrans trimmed %}
+                        You haven't created any check-in lists yet.
+                    {% endblocktrans %}
+                {% endif %}
+            </p>
+
+            {% if "can_change_event_settings" in request.eventpermset %}
+                <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                    {% trans "Create a new check-in list" %}</a>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if "can_change_event_settings" in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}
+                </a>
+            </p>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Check-in lists" %}</th>
+                    <th>{% trans "Checked in" %}</th>
+                    {% if request.event.has_subevents %}
+                        <th>{% trans "Date" context "subevent" %}</th>
+                    {% endif %}
+                    <th>{% trans "Products" %}</th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cl in checkinlists %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}">{{ cl.name }}</a></strong>
+                        </td>
+                        <td>
+                            <div class="quotabox availability">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success progress-bar-{{ cl.percent }}">
+                                    </div>
+                                </div>
+                                <div class="numbers">
+                                    {{ cl.checkin_count|default_if_none:"0" }} / {{ cl.position_count|default_if_none:"0" }}
+                                </div>
+                            </div>
+                        </td>
+                        {% if request.event.has_subevents %}
+                            <td>{{ cl.subevent.name }} – {{ cl.subevent.get_date_range_display }}</td>
+                        {% endif %}
+                        <td>
+                            {% if cl.all_products %}
+                                <em>{% trans "All" %}</em>
+                            {% else %}
+                                <ul>
+                                    {% for item in cl.limit_products.all %}
+                                        <li>
+                                            <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
+                            {% if "can_change_event_settings" in request.eventpermset %}
+                                <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.orders.checkinlists.delete" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

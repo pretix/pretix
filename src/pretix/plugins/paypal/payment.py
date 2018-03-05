@@ -1,10 +1,12 @@
 import json
 import logging
+import urllib.parse
 from collections import OrderedDict
 
 import paypalrestsdk
 from django import forms
 from django.contrib import messages
+from django.core import signing
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
@@ -53,7 +55,9 @@ class Paypal(BasePaymentProvider):
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
-                     help_text=_('<a target="_blank" href="{docs_url}">{text}</a>').format(
+                     max_length=80,
+                     min_length=80,
+                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/paypal.html'
                      )
@@ -61,6 +65,8 @@ class Paypal(BasePaymentProvider):
                 ('secret',
                  forms.CharField(
                      label=_('Secret'),
+                     max_length=80,
+                     min_length=80,
                  ))
             ]
         )
@@ -89,14 +95,18 @@ class Paypal(BasePaymentProvider):
 
     def checkout_prepare(self, request, cart):
         self.init_api()
+        kwargs = {}
+        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
             'payer': {
                 "payment_method": "paypal",
             },
             "redirect_urls": {
-                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+                "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
             },
             "transactions": [
                 {
@@ -131,7 +141,14 @@ class Paypal(BasePaymentProvider):
                 request.session['payment_paypal_id'] = payment.id
                 for link in payment.links:
                     if link.method == "REDIRECT" and link.rel == "approval_url":
-                        return str(link.href)
+                        if request.session.get('iframe_session', False):
+                            signer = signing.Signer(salt='safe-redirect')
+                            return (
+                                build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                                urllib.parse.quote(signer.sign(link.href))
+                            )
+                        else:
+                            return str(link.href)
             else:
                 messages.error(request, _('We had trouble communicating with PayPal'))
                 logger.error('Error on creating payment: ' + str(payment.error))
@@ -153,8 +170,8 @@ class Paypal(BasePaymentProvider):
         Will be called if the user submitted his order successfully to initiate the
         payment process.
 
-        It should return a custom redirct URL, if you need special behaviour, or None to
-        continue with default behaviour.
+        It should return a custom redirct URL, if you need special behavior, or None to
+        continue with default behavior.
 
         On errors, it should use Django's message framework to display an error message
         to the user (or the normal form validation error messages).
@@ -217,7 +234,6 @@ class Paypal(BasePaymentProvider):
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
-            return
 
         if order.status == Order.STATUS_PAID:
             logger.warning('PayPal success event even though order is already marked as paid')

@@ -15,7 +15,7 @@
     {% else %}
         {% if job.state == "error" %}
             <div class="alert alert-danger">
-                {% trans "An internal error occured during processing your data." %}
+                {% trans "An internal error occurred during processing your data." %}
             </div>
         {% elif transactions_ignored == 0 and transactions_invalid == 0 and transactions_valid == 0 %}
             <div class="alert alert-info">

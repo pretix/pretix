@@ -162,7 +162,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
         -v /etc/pretix:/etc/pretix \
         -v /var/run/redis:/var/run/redis \
         -v /var/run/mysqld:/var/run/mysqld \
-        pretix/standalone all
+        pretix/standalone:stable all
     ExecStop=/usr/bin/docker stop %n
 
     [Install]
@@ -238,6 +238,8 @@ Updates are fairly simple, but require at least a short downtime::
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
 Replace ``stable`` above with a specific version number like ``1.0`` or with ``latest`` for the development
 version, if you want to.
+
+.. _`docker_plugininstall`:
 
 Install a plugin
 ----------------

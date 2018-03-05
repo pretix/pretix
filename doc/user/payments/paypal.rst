@@ -12,6 +12,12 @@ If you look into pretix' settings, you are required to fill in two keys:
 
 Unfortunately, it is not straightforward how to get those keys from PayPal's website. In order to do so, you
 need to go to `developer.paypal.com`_ to link the account to your pretix event.
+
+.. warning::
+
+   Unfortunately, PayPal tries to confuse you by having multiple APIs with different keys. You really need to
+   go to https://developer.paypal.com for the API we use, not to your normal account settings!
+
 Click on "Log In" in the top-right corner and log in with your PayPal account.
 
 .. image:: img/paypal2.png
@@ -46,8 +52,8 @@ webhooks. To create one, scroll a bit down and click "Add Webhook".
 .. image:: img/paypal7.png
    :class: screenshot
 
-Then, enter the webhook URL that you find on the pretix settings page. It should look similar to the one in the
-screenshot but contain your event name. Tick the box "All events" and save.
+Then, enter the webhook URL that you find on the pretix settings page. If you use pretix Hosted, this is always ``https://pretix.eu/_paypal/webhook/``.
+Tick the box "All events" and save.
 
 .. image:: img/paypal8.png
    :class: screenshot

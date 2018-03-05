@@ -4,7 +4,8 @@ from datetime import date, datetime, timedelta
 
 import pytz
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Exists, Max, Min, OuterRef, Q
+from django.db.models.functions import Coalesce, Greatest
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
@@ -14,10 +15,71 @@ from django.views.generic import ListView, TemplateView
 from pytz import UTC
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, SubEvent
+from pretix.base.models import (
+    Event, EventMetaValue, SubEvent, SubEventMetaValue,
+)
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
+
+
+def filter_qs_by_attr(qs, request):
+    """
+    We'll allow to filter the event list using attributes defined in the event meta data
+    models in the format ?attr[meta_name]=meta_value
+    """
+    attrs = {}
+    for i, item in enumerate(request.GET.items()):
+        k, v = item
+        if k.startswith("attr[") and k.endswith("]"):
+            attrs[k[5:-1]] = v
+
+    props = {
+        p.name: p for p in request.organizer.meta_properties.filter(
+            name__in=attrs.keys()
+        )
+    }
+
+    for i, item in enumerate(attrs.items()):
+        attr, v = item
+        emv_with_value = EventMetaValue.objects.filter(
+            event=OuterRef('event' if qs.model == SubEvent else 'pk'),
+            property__name=attr,
+            value=v
+        )
+        emv_with_any_value = EventMetaValue.objects.filter(
+            event=OuterRef('event' if qs.model == SubEvent else 'pk'),
+            property__name=attr,
+        )
+        if qs.model == SubEvent:
+            semv_with_value = SubEventMetaValue.objects.filter(
+                subevent=OuterRef('pk'),
+                property__name=attr,
+                value=v
+            )
+            semv_with_any_value = SubEventMetaValue.objects.filter(
+                subevent=OuterRef('pk'),
+                property__name=attr,
+            )
+
+        prop = props[attr]
+        annotations = {'attr_{}'.format(i): Exists(emv_with_value)}
+        if qs.model == SubEvent:
+            annotations['attr_{}_sub'.format(i)] = Exists(semv_with_value)
+            annotations['attr_{}_sub_any'.format(i)] = Exists(semv_with_any_value)
+            filters = Q(**{'attr_{}_sub'.format(i): True})
+            filters |= Q(Q(**{'attr_{}_sub_any'.format(i): False}) & Q(**{'attr_{}'.format(i): True}))
+            if prop.default == v:
+                annotations['attr_{}_any'.format(i)] = Exists(emv_with_any_value)
+                filters |= Q(Q(**{'attr_{}_sub_any'.format(i): False}) & Q(**{'attr_{}_any'.format(i): False}))
+        else:
+            filters = Q(**{'attr_{}'.format(i): True})
+            if prop.default == v:
+                annotations['attr_{}_any'.format(i)] = Exists(emv_with_any_value)
+                filters |= Q(**{'attr_{}_any'.format(i): False})
+
+        qs = qs.annotate(**annotations).filter(filters)
+    return qs
 
 
 class OrganizerIndex(OrganizerViewMixin, ListView):
@@ -37,19 +99,40 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
 
     def get_queryset(self):
         query = Q(is_public=True) & Q(live=True)
+        qs = self.request.organizer.events.filter(query)
+        qs = qs.annotate(
+            min_from=Min('subevents__date_from'),
+            min_to=Min('subevents__date_to'),
+            max_from=Max('subevents__date_from'),
+            max_to=Max('subevents__date_to'),
+            max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from')),
+        )
         if "old" in self.request.GET:
-            query &= Q(Q(date_from__lte=now()) & Q(date_to__lte=now()))
-            order = '-date_from'
+            qs = qs.filter(
+                Q(Q(has_subevents=False) & Q(
+                    Q(date_to__lt=now()) | Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                )) | Q(Q(has_subevents=True) & Q(
+                    Q(min_to__lt=now()) | Q(min_from__lt=now()))
+                )
+            ).annotate(
+                order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
+            ).order_by('-order_to')
         else:
-            query &= Q(Q(date_from__gte=now()) | Q(date_to__gte=now()))
-            order = 'date_from'
-        return Event.objects.filter(
-            Q(organizer=self.request.organizer) & query
-        ).order_by(order)
+            qs = qs.filter(
+                Q(Q(has_subevents=False) & Q(
+                    Q(date_to__gte=now()) | Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                )) | Q(Q(has_subevents=True) & Q(
+                    Q(max_to__gte=now()) | Q(max_from__gte=now()))
+                )
+            ).annotate(
+                order_from=Coalesce('min_from', 'date_from'),
+            ).order_by('order_from')
+        qs = filter_qs_by_attr(qs, self.request)
+        return qs
 
 
-def add_events_for_days(organizer, before, after, ebd, timezones):
-    qs = organizer.events.filter(is_public=True, live=True, has_subevents=False).filter(
+def add_events_for_days(request, baseqs, before, after, ebd, timezones):
+    qs = baseqs.filter(is_public=True, live=True, has_subevents=False).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
@@ -58,6 +141,8 @@ def add_events_for_days(organizer, before, after, ebd, timezones):
     ).prefetch_related(
         '_settings_objects', 'organizer___settings_objects'
     )
+    if hasattr(request, 'organizer'):
+        qs = filter_qs_by_attr(qs, request)
     for event in qs:
         timezones.add(event.settings.timezones)
         tz = pytz.timezone(event.settings.timezone)
@@ -87,7 +172,7 @@ def add_events_for_days(organizer, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
+def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None):
     qs = qs.filter(active=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
@@ -96,6 +181,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
         'date_from'
     )
     for se in qs:
+        kwargs = {'subevent': se.pk}
+        if cart_namespace:
+            kwargs['cart_namespace'] = cart_namespace
+
         settings = event.settings if event else se.event.settings
         timezones.add(settings.timezones)
         tz = pytz.timezone(settings.timezone)
@@ -111,9 +200,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
                     'timezone': settings.timezone,
                     'time': datetime_from.time().replace(tzinfo=None) if first and settings.show_times else None,
                     'event': se,
-                    'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                        'subevent': se.pk
-                    }),
+                    'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs)
                 })
                 d += timedelta(days=1)
 
@@ -122,9 +209,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None):
                 'event': se,
                 'continued': False,
                 'time': datetime_from.time().replace(tzinfo=None) if se.event.settings.show_times else None,
-                'url': eventreverse(se.event, 'presale:event.index', kwargs={
-                    'subevent': se.pk
-                }),
+                'url': eventreverse(se.event, 'presale:event.index', kwargs=kwargs),
                 'timezone': se.event.settings.timezone,
             })
 
@@ -161,19 +246,20 @@ class CalendarView(OrganizerViewMixin, TemplateView):
                 self.year = now().year
                 self.month = now().month
         else:
-            next_ev = Event.objects.filter(
+            next_ev = filter_qs_by_attr(Event.objects.filter(
+                organizer=self.request.organizer,
                 live=True,
                 is_public=True,
                 date_from__gte=now(),
                 has_subevents=False
-            ).order_by('date_from').first()
-            next_sev = SubEvent.objects.filter(
+            ), self.request).order_by('date_from').first()
+            next_sev = filter_qs_by_attr(SubEvent.objects.filter(
                 event__organizer=self.request.organizer,
                 event__is_public=True,
                 event__live=True,
                 active=True,
                 date_from__gte=now()
-            ).select_related('event').order_by('date_from').first()
+            ), self.request).select_related('event').order_by('date_from').first()
 
             datetime_from = None
             if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
@@ -213,14 +299,14 @@ class CalendarView(OrganizerViewMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request.organizer, before, after, ebd, timezones)
-        add_subevents_for_days(SubEvent.objects.filter(
+        add_events_for_days(self.request, self.request.organizer.events, before, after, ebd, timezones)
+        add_subevents_for_days(filter_qs_by_attr(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
         ).prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
-        ), before, after, ebd, timezones)
+        ), self.request), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -229,18 +315,24 @@ class CalendarView(OrganizerViewMixin, TemplateView):
 class OrganizerIcalDownload(OrganizerViewMixin, View):
     def get(self, request, *args, **kwargs):
         events = list(
-            self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False).order_by(
+            filter_qs_by_attr(
+                self.request.organizer.events.filter(is_public=True, live=True, has_subevents=False),
+                request
+            ).order_by(
                 'date_from'
             ).prefetch_related(
                 '_settings_objects', 'organizer___settings_objects'
             )
         )
         events += list(
-            SubEvent.objects.filter(
-                event__organizer=self.request.organizer,
-                event__is_public=True,
-                event__live=True,
-                active=True
+            filter_qs_by_attr(
+                SubEvent.objects.filter(
+                    event__organizer=self.request.organizer,
+                    event__is_public=True,
+                    event__live=True,
+                    active=True
+                ),
+                request
             ).prefetch_related(
                 'event___settings_objects', 'event__organizer___settings_objects'
             ).order_by(

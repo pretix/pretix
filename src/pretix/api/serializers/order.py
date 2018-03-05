@@ -26,7 +26,7 @@ class InvoiceAdddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
-                  'vat_id_validated')
+                  'vat_id_validated', 'internal_reference')
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
@@ -38,7 +38,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('datetime',)
+        fields = ('datetime', 'list')
 
 
 class OrderDownloadsField(serializers.Field):
@@ -135,7 +135,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value')
+                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value', 'checkin_attention')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
@@ -153,4 +153,5 @@ class InvoiceSerializer(I18nAwareModelSerializer):
         model = Invoice
         fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_to', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines',
-                  'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date')
+                  'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date',
+                  'internal_reference')

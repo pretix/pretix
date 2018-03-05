@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% load urlreplace %}
 {% block title %}{% trans "Waiting list" %}{% endblock %}
 {% block content %}
@@ -37,7 +38,7 @@
                                     You can either send them one-by-one in an order of your choice by clicking the
                                     buttons next to a line in this table (if sufficient quota is available) or you can
                                     press the big button below this text to send out as many vouchers as currently
-                                    possible to the persons who waitet longest.
+                                    possible to the persons who waited longest.
                                 {% endblocktrans %}
                             </p>
                         {% endif %}
@@ -65,9 +66,9 @@
                     {% trans "Sales estimate" %}
                 </div>
                 <div class="panel-body">
-                    {% blocktrans trimmed with amount=estimate|default:0|floatformat:2 currency=request.event.currency %}
+                    {% blocktrans trimmed with amount=estimate|default:0|money:request.event.currency %}
                         If you can make enough room at your event to fit all the persons on the waiting list in, you
-                        could sell tickets worth an additional <strong>{{ amount }} {{ currency }}</strong>.
+                        could sell tickets worth an additional <strong>{{ amount }}</strong>.
                     {% endblocktrans %}
                 </div>
             </div>

@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -26,7 +26,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 
 from ..settings import settings_hierarkey
-from .organizer import Organizer
+from .organizer import Organizer, Team
 
 
 class EventMixin:
@@ -43,7 +43,7 @@ class EventMixin:
         Returns a shorter formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz),
             "SHORT_DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
@@ -55,7 +55,7 @@ class EventMixin:
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return ""
         return _date(
@@ -68,7 +68,7 @@ class EventMixin:
         Returns a formatted string containing the start date of the event with respect
         to the current locale and to the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz),
             "DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT"
@@ -79,7 +79,7 @@ class EventMixin:
         Returns a formatted string containing the start time of the event, ignoring
         the ``show_times`` setting.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         return _date(
             self.date_from.astimezone(tz), "TIME_FORMAT"
         )
@@ -90,7 +90,7 @@ class EventMixin:
         to the current locale and to the ``show_times`` setting. Returns an empty string
         if ``show_date_to`` is ``False``.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return ""
         return _date(
@@ -100,23 +100,30 @@ class EventMixin:
 
     def get_date_range_display(self, tz=None) -> str:
         """
-        Returns a formatted string containing the start date and the event date
+        Returns a formatted string containing the start date and the end date
         of the event with respect to the current locale and to the ``show_times`` and
         ``show_date_to`` settings.
         """
-        tz = tz or pytz.timezone(self.settings.timezone)
+        tz = tz or self.timezone
         if not self.settings.show_date_to or not self.date_to:
             return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
         return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
+
+    @property
+    def timezone(self):
+        return pytz.timezone(self.settings.timezone)
 
     @property
     def presale_has_ended(self):
         """
         Is true, when ``presale_end`` is set and in the past.
         """
-        if self.presale_end and now() > self.presale_end:
-            return True
-        return False
+        if self.presale_end:
+            return now() > self.presale_end
+        elif self.date_to:
+            return now() > self.date_to
+        else:
+            return now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
 
     @property
     def presale_is_running(self):
@@ -126,9 +133,7 @@ class EventMixin:
         """
         if self.presale_start and now() < self.presale_start:
             return False
-        if self.presale_end and now() > self.presale_end:
-            return False
-        return True
+        return not self.presale_has_ended
 
     @property
     def event_microdata(self):
@@ -199,8 +204,8 @@ class Event(EventMixin, LoggedModel):
     slug = models.SlugField(
         max_length=50, db_index=True,
         help_text=_(
-            "Should be short, only contain lowercase letters and numbers, and must be unique among your events. "
-            "We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
+            "Should be short, only contain lowercase letters, numbers, dots, and dashes, and must be unique among your "
+            "events. We recommend some kind of abbreviation or a date with less than 10 characters that can be easily "
             "remembered, but you can also choose to use a random value. "
             "This will be used in URLs, order codes, invoice numbers, and bank transfer references."),
         validators=[
@@ -229,7 +234,8 @@ class Event(EventMixin, LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("Optional. No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date. If you do not set this value, the presale "
+                    "will end after the end date of your event."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
@@ -261,6 +267,13 @@ class Event(EventMixin, LoggedModel):
 
     def __str__(self):
         return str(self.name)
+
+    @property
+    def presale_has_ended(self):
+        if self.has_subevents:
+            return self.presale_end and now() > self.presale_end
+        else:
+            return super().presale_has_ended
 
     def save(self, *args, **kwargs):
         obj = super().save(*args, **kwargs)
@@ -394,18 +407,29 @@ class Event(EventMixin, LoggedModel):
             for v in vars:
                 q.variations.add(variation_map[v.pk])
 
+        question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
             items = list(q.items.all())
             opts = list(q.options.all())
+            question_map[q.pk] = q
             q.pk = None
             q.event = self
             q.save()
+
             for i in items:
                 q.items.add(item_map[i.pk])
             for o in opts:
                 o.pk = None
                 o.question = q
                 o.save()
+
+        for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
+            items = list(cl.limit_products.all())
+            cl.pk = None
+            cl.event = self
+            cl.save()
+            for i in items:
+                cl.limit_products.add(item_map[i.pk])
 
         for s in other.settings._objects.all():
             s.object = self
@@ -431,7 +455,11 @@ class Event(EventMixin, LoggedModel):
             else:
                 s.save()
 
-        event_copy_data.send(sender=self, other=other)
+        event_copy_data.send(
+            sender=self, other=other,
+            tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
+            question_map=question_map
+        )
 
     def get_payment_providers(self) -> dict:
         """
@@ -496,6 +524,42 @@ class Event(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    def get_users_with_any_permission(self):
+        """
+        Returns a queryset of users who have any permission to this event.
+
+        :return: Iterable of User
+        """
+        return self.get_users_with_permission(None)
+
+    def get_users_with_permission(self, permission):
+        """
+        Returns a queryset of users who have a specific permission to this event.
+
+        :return: Iterable of User
+        """
+        from .auth import User
+
+        if permission:
+            kwargs = {permission: True}
+        else:
+            kwargs = {}
+
+        team_with_perm = Team.objects.filter(
+            members__pk=OuterRef('pk'),
+            organizer=self.organizer,
+            **kwargs
+        ).filter(
+            Q(all_events=True) | Q(limit_events__pk=self.pk)
+        )
+
+        return User.objects.annotate(twp=Exists(team_with_perm)).filter(
+            Q(is_superuser=True) | Q(twp=True)
+        )
+
+    def allow_delete(self):
+        return not self.orders.exists() and not self.invoices.exists()
+
 
 class SubEvent(EventMixin, LoggedModel):
     """
@@ -535,7 +599,8 @@ class SubEvent(EventMixin, LoggedModel):
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
-        help_text=_("Optional. No products will be sold after this date."),
+        help_text=_("Optional. No products will be sold after this date. If you do not set this value, the presale "
+                    "will end after the end date of your event."),
     )
     presale_start = models.DateTimeField(
         null=True, blank=True,
@@ -590,6 +655,13 @@ class SubEvent(EventMixin, LoggedModel):
         data = self.event.meta_data
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
+
+    @property
+    def currency(self):
+        return self.event.currency
+
+    def allow_delete(self):
+        return self.event.subevents.count() > 1
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -650,6 +722,21 @@ class RequiredAction(models.Model):
                 return response
         return self.action_type
 
+    def save(self, *args, **kwargs):
+        created = not self.pk
+        super().save(*args, **kwargs)
+        if created:
+            from .log import LogEntry
+            from ..services.notifications import notify
+
+            logentry = LogEntry.objects.create(
+                content_object=self,
+                action_type='pretix.event.action_required',
+                event=self.event,
+                visible=False
+            )
+            notify.apply_async(args=(logentry.pk,))
+
 
 class EventMetaProperty(LoggedModel):
     """
@@ -667,7 +754,7 @@ class EventMetaProperty(LoggedModel):
     name = models.CharField(
         max_length=50, db_index=True,
         help_text=_(
-            "Can not contain spaces or special characters execpt underscores"
+            "Can not contain spaces or special characters except underscores"
         ),
         validators=[
             RegexValidator(

@@ -13,12 +13,14 @@ from django.template.loader import get_template
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
-    Event, Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
+    Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
 )
+from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -34,6 +36,9 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 def base_widgets(sender, subevent=None, **kwargs):
     prodc = Item.objects.filter(
         event=sender, active=True,
+    ).filter(
+        (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
+        (Q(available_from__isnull=True) | Q(available_from__lte=now()))
     ).count()
 
     if subevent:
@@ -71,7 +76,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
@@ -80,7 +85,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(
@@ -90,7 +95,7 @@ def base_widgets(sender, subevent=None, **kwargs):
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
-            })
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
             'content': NUM_WIDGET.format(num=prodc, text=_('Active products')),
@@ -186,24 +191,23 @@ def shop_state_widget(sender, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def checkin_widget(sender, **kwargs):
-    size_qs = OrderPosition.objects.filter(order__event=sender, order__status='p')
-    checked_qs = OrderPosition.objects.filter(order__event=sender, order__status='p', checkins__isnull=False)
-
-    # if this setting is False, we check only items for admission
-    if not sender.settings.ticket_download_nonadm:
-        size_qs = size_qs.filter(item__admission=True)
-        checked_qs = checked_qs.filter(item__admission=True)
-
-    return [{
-        'content': NUM_WIDGET.format(num='{}/{}'.format(checked_qs.count(), size_qs.count()), text=_('Checked in')),
-        'display_size': 'small',
-        'priority': 50,
-        'url': reverse('control:event.orders.checkins', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug
+def checkin_widget(sender, subevent=None, **kwargs):
+    widgets = []
+    qs = sender.checkin_lists.filter(subevent=subevent)
+    qs = CheckinList.annotate_with_numbers(qs, sender)
+    for cl in qs:
+        widgets.append({
+            'content': NUM_WIDGET.format(num='{}/{}'.format(cl.checkin_count, cl.position_count),
+                                         text=_('Checked in – {list}').format(list=escape(cl.name))),
+            'display_size': 'small',
+            'priority': 50,
+            'url': reverse('control:event.orders.checkinlists.show', kwargs={
+                'event': sender.slug,
+                'organizer': sender.organizer.slug,
+                'list': cl.pk
+            })
         })
-    }]
+    return widgets
 
 
 @receiver(signal=event_dashboard_widgets)
@@ -276,10 +280,42 @@ def event_index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
-@receiver(signal=user_dashboard_widgets)
-def user_event_widgets(**kwargs):
-    user = kwargs.pop('user')
+def annotated_event_query(user):
+    active_orders = Order.objects.filter(
+        event=OuterRef('pk'),
+        status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+    ).order_by().values('event').annotate(
+        c=Count('*')
+    ).values(
+        'c'
+    )
+
+    required_actions = RequiredAction.objects.filter(
+        event=OuterRef('pk'),
+        done=False
+    )
+    qs = user.get_events_with_any_permission().annotate(
+        order_count=Subquery(active_orders, output_field=IntegerField()),
+        has_ra=Exists(required_actions)
+    ).annotate(
+        min_from=Min('subevents__date_from'),
+        max_from=Max('subevents__date_from'),
+        max_to=Max('subevents__date_to'),
+        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from')),
+    ).annotate(
+        order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
+    )
+    return qs
+
+
+def widgets_for_event_qs(qs, user, nmax):
     widgets = []
+
+    # Get set of events where we have the permission to show the # of orders
+    events_with_orders = set(qs.filter(
+        Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+        | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+    ).values_list('id', flat=True))
 
     tpl = """
         <a href="{url}" class="event">
@@ -295,50 +331,21 @@ def user_event_widgets(**kwargs):
         </div>
     """
 
-    active_orders = Order.objects.filter(
-        event=OuterRef('pk'),
-        status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
-    ).order_by().values('event').annotate(
-        c=Count('*')
-    ).values(
-        'c'
-    )
-
-    required_actions = RequiredAction.objects.filter(
-        event=OuterRef('pk'),
-        done=False
-    )
-
-    # Get set of events where we have the permission to show the # of orders
-    events_with_orders = set(Event.objects.filter(
-        Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-        | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
-    ).values_list('id', flat=True))
-
-    events = user.get_events_with_any_permission().annotate(
-        order_count=Subquery(active_orders, output_field=IntegerField()),
-        has_ra=Exists(required_actions)
-    ).annotate(
-        min_from=Min('subevents__date_from'),
-        max_from=Max('subevents__date_from'),
-        max_to=Max('subevents__date_to'),
-        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
-    ).annotate(
-        order_from=Coalesce('min_from', 'date_from'),
-        order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to'),
-    ).order_by(
-        '-order_from', 'name'
-    ).prefetch_related(
+    events = qs.prefetch_related(
         '_settings_objects', 'organizer___settings_objects'
-    ).select_related('organizer')[:100]
+    ).select_related('organizer')[:nmax]
     for event in events:
-        dr = event.get_date_range_display()
-        tz = pytz.timezone(event.settings.timezone)
+        tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
         if event.has_subevents:
             dr = daterange(
                 (event.min_from).astimezone(tz),
                 (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
             )
+        else:
+            if event.date_to:
+                dr = daterange(event.date_from.astimezone(tz), event.date_to.astimezone(tz))
+            else:
+                dr = date_format(event.date_from.astimezone(tz), "DATE_FORMAT")
 
         if event.has_ra:
             status = ('danger', _('Action required'))
@@ -396,26 +403,42 @@ def user_event_widgets(**kwargs):
     return widgets
 
 
-@receiver(signal=user_dashboard_widgets)
-def new_event_widgets(**kwargs):
-    return [
-        {
-            'content': '<div class="newevent"><span class="fa fa-plus-circle"></span>{t}</div>'.format(
-                t=_('Create a new event')
-            ),
-            'display_size': 'small',
-            'priority': 50,
-            'url': reverse('control:events.add')
-        }
-    ]
-
-
 def user_index(request):
     widgets = []
     for r, result in user_dashboard_widgets.send(request, user=request.user):
         widgets.extend(result)
+
     ctx = {
         'widgets': rearrange(widgets),
+        'upcoming': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
+                )
+            ).order_by('date_from'),
+            request.user,
+            7
+        ),
+        'past': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                Q(has_subevents=False) &
+                Q(
+                    Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                    | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
+                )
+            ).order_by('-order_to'),
+            request.user,
+            8
+        ),
+        'series': widgets_for_event_qs(
+            annotated_event_query(request.user).filter(
+                has_subevents=True
+            ).order_by('-order_to'),
+            request.user,
+            8
+        ),
     }
     return render(request, 'pretixcontrol/dashboard.html', ctx)
 

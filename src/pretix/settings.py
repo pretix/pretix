@@ -3,6 +3,7 @@ import os
 import sys
 from urllib.parse import urlparse
 
+from kombu import Queue
 from pycountry import currencies
 
 import django.conf.locale
@@ -19,6 +20,7 @@ else:
     config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
                 encoding='utf-8')
 
+CONFIG_FILE = config
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
@@ -101,6 +103,24 @@ FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
 CURRENCIES = list(currencies)
+CURRENCY_PLACES = {
+    # default is 2
+    'BIF': 0,
+    'CLP': 0,
+    'DJF': 0,
+    'GNF': 0,
+    'JPY': 0,
+    'KMF': 0,
+    'KRW': 0,
+    'MGA': 0,
+    'PYG': 0,
+    'RWF': 0,
+    'VND': 0,
+    'VUV': 0,
+    'XAF': 0,
+    'XOF': 0,
+    'XPF': 0,
+}
 
 ALLOWED_HOSTS = ['*']
 
@@ -119,7 +139,7 @@ EMAIL_SUBJECT_PREFIX = '[pretix] '
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
 
-METRICS_ENABLED = config.get('metrics', 'enabled', fallback=False)
+METRICS_ENABLED = config.getboolean('metrics', 'enabled', fallback=False)
 METRICS_USER = config.get('metrics', 'user', fallback="metrics")
 METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
 
@@ -185,6 +205,7 @@ ENTROPY = {
 }
 
 # Internal settings
+PRETIX_EMAIL_NONE_VALUE = 'none@well-known.pretix.eu'
 
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
 
@@ -224,7 +245,9 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'statici18n',
-    'django_countries'
+    'django_countries',
+    'hijack',
+    'compat',
 ]
 
 try:
@@ -252,6 +275,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
+    'EXCEPTION_HANDLER': 'pretix.api.exception.custom_exception_handler',
     'UNICODE_JSON': False
 }
 
@@ -259,7 +283,8 @@ REST_FRAMEWORK = {
 CORE_MODULES = {
     "pretix.base",
     "pretix.presale",
-    "pretix.control"
+    "pretix.control",
+    "pretix.plugins.checkinlists",
 }
 
 MIDDLEWARE = [
@@ -511,6 +536,23 @@ if config.has_option('sentry', 'dsn'):
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_TASK_QUEUES = (
+    Queue('default', routing_key='default.#'),
+    Queue('checkout', routing_key='checkout.#'),
+    Queue('mail', routing_key='mail.#'),
+    Queue('background', routing_key='background.#'),
+)
+CELERY_TASK_ROUTES = ([
+    ('pretix.base.services.cart.*', {'queue': 'checkout'}),
+    ('pretix.base.services.orders.*', {'queue': 'checkout'}),
+    ('pretix.base.services.mail.*', {'queue': 'mail'}),
+    ('pretix.base.services.style.*', {'queue': 'background'}),
+    ('pretix.base.services.update_check.*', {'queue': 'background'}),
+    ('pretix.base.services.quotas.*', {'queue': 'background'}),
+    ('pretix.base.services.waitinglist.*', {'queue': 'background'}),
+    ('pretix.plugins.banktransfer.*', {'queue': 'background'}),
+],)
 
 BOOTSTRAP3 = {
     'success_css_class': '',

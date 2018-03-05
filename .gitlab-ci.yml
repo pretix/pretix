@@ -8,6 +8,8 @@ tests:
         - XDG_CACHE_HOME=/cache bash .travis.sh tests
     tags:
         - python3
+    except:
+        - pypi
 pypi:
     stage: release
     script:
@@ -17,12 +19,16 @@ pypi:
         - pip install -U pip wheel setuptools
         - XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
         - cd src
+        - python setup.py sdist
+        - pip install dist/pretix-*.tar.gz
+        - python -m pretix migrate
+        - python -m pretix check
         - python setup.py sdist upload
         - python setup.py bdist_wheel upload
     tags:
         - python3
     only:
-        - release
+        - pypi
     artifacts:
         paths:
             - src/dist/

@@ -1,7 +1,11 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from pretix.base.models import Event
 from pretix.base.models.organizer import Organizer, TeamAPIToken
+from pretix.helpers.security import (
+    SessionInvalid, SessionReauthRequired, assert_session_valid,
+)
 
 
 class EventPermission(BasePermission):
@@ -9,8 +13,6 @@ class EventPermission(BasePermission):
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated and not isinstance(request.auth, TeamAPIToken):
-            if request.method in SAFE_METHODS and request.path.startswith('/api/v1/docs/'):
-                return True
             return False
 
         if request.method not in SAFE_METHODS and hasattr(view, 'write_permission'):
@@ -19,6 +21,15 @@ class EventPermission(BasePermission):
             required_permission = getattr(view, 'permission')
         else:
             required_permission = None
+
+        if request.user.is_authenticated:
+            try:
+                # If this logic is updated, make sure to also update the logic in pretix/control/middleware.py
+                assert_session_valid(request)
+            except SessionInvalid:
+                return False
+            except SessionReauthRequired:
+                return False
 
         perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken)
                        else request.user)
@@ -46,3 +57,18 @@ class EventPermission(BasePermission):
             if required_permission and required_permission not in request.orgapermset:
                 return False
         return True
+
+
+def permission_required(required_permission):
+    def decorator(function):
+        def wrapper(self, request, *args, **kw):
+            if 'event' in request.resolver_match.kwargs and 'organizer' in request.resolver_match.kwargs:
+                if required_permission and required_permission not in request.eventpermset:
+                    raise PermissionDenied('You do not have permission to perform this operation.')
+            elif 'organizer' in request.resolver_match.kwargs:
+                if required_permission and required_permission not in request.orgapermset:
+                    raise PermissionDenied('You do not have permission to perform this operation.')
+
+            return function(self, request, *args, **kw)
+        return wrapper
+    return decorator

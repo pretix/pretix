@@ -32,7 +32,7 @@ from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
 
-from . import ChartContainingView, CreateView, UpdateView
+from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
 class ItemList(ListView):
@@ -46,6 +46,8 @@ class ItemList(ListView):
     def get_queryset(self):
         return Item.objects.filter(
             event=self.request.event
+        ).annotate(
+            var_count=Count('variations')
         ).prefetch_related("category")
 
 
@@ -190,10 +192,9 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CategoryList(ListView):
+class CategoryList(PaginationMixin, ListView):
     model = ItemCategory
     context_object_name = 'categories'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/categories.html'
 
     def get_queryset(self):
@@ -243,10 +244,9 @@ def category_move_down(request, organizer, event, category):
                     event=request.event.slug)
 
 
-class QuestionList(ListView):
+class QuestionList(PaginationMixin, ListView):
     model = Question
     context_object_name = 'questions'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
@@ -338,7 +338,7 @@ class QuestionMixin:
         formsetclass = inlineformset_factory(
             Question, QuestionOption,
             form=QuestionOptionForm, formset=I18nFormSet,
-            can_order=False, can_delete=True, extra=0
+            can_order=True, can_delete=True, extra=0
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             queryset=(QuestionOption.objects.filter(question=self.object)
@@ -358,29 +358,24 @@ class QuestionMixin:
                     )
                     form.instance.delete()
                     form.instance.pk = None
-                elif form.has_changed():
-                    form.instance.question = obj
-                    form.save()
+
+            forms = self.formset.ordered_forms + [
+                ef for ef in self.formset.extra_forms
+                if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
+            ]
+            for i, form in enumerate(forms):
+                form.instance.position = i
+                form.instance.question = obj
+                created = not form.instance.pk
+                form.save()
+                if form.has_changed():
                     change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                     change_data['id'] = form.instance.pk
                     obj.log_action(
+                        'pretix.event.question.option.added' if created else
                         'pretix.event.question.option.changed',
                         user=self.request.user, data=change_data
                     )
-
-            for form in self.formset.extra_forms:
-                if not form.has_changed():
-                    continue
-                if self.formset._should_delete_form(form):
-                    continue
-                form.instance.question = obj
-                form.save()
-                change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                change_data['id'] = form.instance.pk
-                obj.log_action(
-                    'pretix.event.question.option.added',
-                    user=self.request.user, data=change_data
-                )
 
             return True
         return False
@@ -402,11 +397,13 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             question=self.object, orderposition__isnull=False,
             orderposition__order__event=self.request.event
         )
-        if self.request.GET.get("status", "") != "":
-            s = self.request.GET.get("status", "")
+        if self.request.GET.get("status", "np") != "":
+            s = self.request.GET.get("status", "np")
             if s == 'o':
                 qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
-                               expires__lt=now().replace(hour=0, minute=0, second=0))
+                               orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
@@ -428,6 +425,12 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             for a in qs:
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
+        elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
+            qs = qs.order_by('answer')
+            qs_model = qs
+            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
+            for a, a_model in zip(qs, qs_model):
+                a['answer'] = str(a_model)
         else:
             qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
 
@@ -543,10 +546,9 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
         return ret
 
 
-class QuotaList(ListView):
+class QuotaList(PaginationMixin, ListView):
     model = Quota
     context_object_name = 'quotas'
-    paginate_by = 30
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
@@ -1024,7 +1026,8 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
-        if self.is_allowed():
+        o = self.get_object()
+        if o.allow_delete():
             self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()

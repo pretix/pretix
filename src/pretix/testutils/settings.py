@@ -38,3 +38,18 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+# Don't run migrations
+
+
+class DisableMigrations(object):
+
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+if not os.environ.get("TRAVIS", ""):
+    MIGRATION_MODULES = DisableMigrations()

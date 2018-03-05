@@ -1,12 +1,6 @@
-import logging
-import os
-from decimal import Decimal
 from itertools import chain
 
-import vat_moss.errors
-import vat_moss.id
 from django import forms
-from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch, Q
 from django.utils.encoding import force_text
@@ -14,14 +8,15 @@ from django.utils.formats import number_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import ItemVariation, Question
-from pretix.base.models.orders import InvoiceAddress, OrderPosition
-from pretix.base.models.tax import EU_COUNTRIES, TAXED_ZERO
+from pretix.base.forms.questions import (
+    BaseInvoiceAddressForm, BaseQuestionsForm,
+)
+from pretix.base.models import ItemVariation
+from pretix.base.models.tax import TAXED_ZERO
+from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.signals import contact_form_fields, question_form_fields
-
-logger = logging.getLogger(__name__)
+from pretix.base.validators import EmailBlacklistValidator
+from pretix.presale.signals import contact_form_fields
 
 
 class ContactForm(forms.Form):
@@ -30,10 +25,12 @@ class ContactForm(forms.Form):
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
-                             widget=forms.EmailInput(attrs={'data-typocheck-target': '1'}))
+                             validators=[EmailBlacklistValidator()],
+                             widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
+        self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
 
         if self.event.settings.order_email_asked_twice:
@@ -42,7 +39,7 @@ class ContactForm(forms.Form):
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.')
             )
 
-        responses = contact_form_fields.send(self.event)
+        responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
@@ -54,261 +51,18 @@ class ContactForm(forms.Form):
                 raise ValidationError(_('Please enter the same email address twice.'))
 
 
-class BusinessBooleanRadio(forms.RadioSelect):
-    def __init__(self, attrs=None):
-        choices = (
-            ('individual', _('Individual customer')),
-            ('business', _('Business customer')),
-        )
-        super().__init__(attrs, choices)
-
-    def format_value(self, value):
-        try:
-            return {True: 'business', False: 'individual'}[value]
-        except KeyError:
-            return 'individual'
-
-    def value_from_datadict(self, data, files, name):
-        value = data.get(name)
-        return {
-            'business': True,
-            True: True,
-            'True': True,
-            'individual': False,
-            'False': False,
-            False: False,
-        }.get(value)
-
-
-class InvoiceAddressForm(forms.ModelForm):
+class InvoiceAddressForm(BaseInvoiceAddressForm):
     required_css_class = 'required'
-
-    class Meta:
-        model = InvoiceAddress
-        fields = ('is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id')
-        widgets = {
-            'is_business': BusinessBooleanRadio,
-            'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
-            'company': forms.TextInput(attrs={'data-typocheck-source': '1',
-                                              'data-display-dependency': '#id_is_business_1'}),
-            'name': forms.TextInput(attrs={'data-typocheck-source': '1'}),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
-        }
-        labels = {
-            'is_business': ''
-        }
-
-    def __init__(self, *args, **kwargs):
-        self.event = event = kwargs.pop('event')
-        self.request = kwargs.pop('request', None)
-        self.validate_vat_id = kwargs.pop('validate_vat_id')
-        super().__init__(*args, **kwargs)
-        if not event.settings.invoice_address_vatid:
-            del self.fields['vat_id']
-        if not event.settings.invoice_address_required:
-            for k, f in self.fields.items():
-                f.required = False
-                f.widget.is_required = False
-                if 'required' in f.widget.attrs:
-                    del f.widget.attrs['required']
-
-            if event.settings.invoice_name_required:
-                self.fields['name'].required = True
-        else:
-            self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
-            self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'
-
-    def clean(self):
-        data = self.cleaned_data
-        if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
-            raise ValidationError(_('You need to provide either a company name or your name.'))
-
-        if 'vat_id' in self.changed_data or not data.get('vat_id'):
-            self.instance.vat_id_validated = False
-
-        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
-            pass
-        elif self.validate_vat_id and data.get('is_business') and data.get('country') in EU_COUNTRIES and data.get('vat_id'):
-            if data.get('vat_id')[:2] != str(data.get('country')):
-                raise ValidationError(_('Your VAT ID does not match the selected country.'))
-            try:
-                result = vat_moss.id.validate(data.get('vat_id'))
-                if result:
-                    country_code, normalized_id, company_name = result
-                    self.instance.vat_id_validated = True
-                    self.instance.vat_id = normalized_id
-            except vat_moss.errors.InvalidError:
-                raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
-            except vat_moss.errors.WebServiceUnavailableError:
-                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
-                self.instance.vat_id_validated = False
-                if self.request:
-                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
-                                                     'your country is currently not available. We will therefore '
-                                                     'need to charge VAT on your invoice. You can get the tax amount '
-                                                     'back via the VAT reimbursement process.'))
-        else:
-            self.instance.vat_id_validated = False
+    vat_warning = True
 
 
-class UploadedFileWidget(forms.ClearableFileInput):
-    def __init__(self, *args, **kwargs):
-        self.position = kwargs.pop('position')
-        self.event = kwargs.pop('event')
-        self.answer = kwargs.pop('answer')
-        super().__init__(*args, **kwargs)
-
-    class FakeFile:
-        def __init__(self, file, position, event, answer):
-            self.file = file
-            self.position = position
-            self.event = event
-            self.answer = answer
-
-        def __str__(self):
-            return os.path.basename(self.file.name).split('.', 1)[-1]
-
-        @property
-        def url(self):
-            if isinstance(self.position, OrderPosition):
-                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.position.order.code,
-                    'secret': self.position.order.secret,
-                    'answer': self.answer.pk,
-                })
-            else:
-                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.answer.pk,
-                })
-
-    def format_value(self, value):
-        if self.is_initial(value):
-            return self.FakeFile(value, self.position, self.event, self.answer)
-
-
-class QuestionsForm(forms.Form):
+class QuestionsForm(BaseQuestionsForm):
     """
     This form class is responsible for asking order-related questions. This includes
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
     """
     required_css_class = 'required'
-
-    def __init__(self, *args, **kwargs):
-        """
-        Takes two additional keyword arguments:
-
-        :param cartpos: The cart position the form should be for
-        :param event: The event this belongs to
-        """
-        cartpos = self.cartpos = kwargs.pop('cartpos', None)
-        orderpos = self.orderpos = kwargs.pop('orderpos', None)
-        pos = cartpos or orderpos
-        item = pos.item
-        questions = list(item.questions.all())
-        event = kwargs.pop('event')
-
-        super().__init__(*args, **kwargs)
-
-        if item.admission and event.settings.attendee_names_asked:
-            self.fields['attendee_name'] = forms.CharField(
-                max_length=255, required=event.settings.attendee_names_required,
-                label=_('Attendee name'),
-                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name),
-                widget=forms.TextInput(attrs={'data-typocheck-source': '1'}),
-            )
-        if item.admission and event.settings.attendee_emails_asked:
-            self.fields['attendee_email'] = forms.EmailField(
-                required=event.settings.attendee_emails_required,
-                label=_('Attendee email'),
-                initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email)
-            )
-
-        for q in questions:
-            # Do we already have an answer? Provide it as the initial value
-            answers = [
-                a for a
-                in (cartpos.answers.all() if cartpos else orderpos.answers.all())
-                if a.question_id == q.id
-            ]
-            if answers:
-                initial = answers[0]
-            else:
-                initial = None
-            if q.type == Question.TYPE_BOOLEAN:
-                if q.required:
-                    # For some reason, django-bootstrap3 does not set the required attribute
-                    # itself.
-                    widget = forms.CheckboxInput(attrs={'required': 'required'})
-                else:
-                    widget = forms.CheckboxInput()
-
-                if initial:
-                    initialbool = (initial.answer == "True")
-                else:
-                    initialbool = False
-
-                field = forms.BooleanField(
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    initial=initialbool, widget=widget,
-                )
-            elif q.type == Question.TYPE_NUMBER:
-                field = forms.DecimalField(
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    initial=initial.answer if initial else None,
-                    min_value=Decimal('0.00')
-                )
-            elif q.type == Question.TYPE_STRING:
-                field = forms.CharField(
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    initial=initial.answer if initial else None,
-                )
-            elif q.type == Question.TYPE_TEXT:
-                field = forms.CharField(
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    widget=forms.Textarea,
-                    initial=initial.answer if initial else None,
-                )
-            elif q.type == Question.TYPE_CHOICE:
-                field = forms.ModelChoiceField(
-                    queryset=q.options.all(),
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    widget=forms.RadioSelect,
-                    initial=initial.options.first() if initial else None,
-                )
-            elif q.type == Question.TYPE_CHOICE_MULTIPLE:
-                field = forms.ModelMultipleChoiceField(
-                    queryset=q.options.all(),
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    widget=forms.CheckboxSelectMultiple,
-                    initial=initial.options.all() if initial else None,
-                )
-            elif q.type == Question.TYPE_FILE:
-                field = forms.FileField(
-                    label=q.question, required=q.required,
-                    help_text=q.help_text,
-                    initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(position=pos, event=event, answer=initial)
-                )
-            field.question = q
-            if answers:
-                # Cache the answer object for later use
-                field.answer = answers[0]
-            self.fields['question_%s' % q.id] = field
-
-        responses = question_form_fields.send(sender=event, position=pos)
-        data = pos.meta_info_data
-        for r, response in sorted(responses, key=lambda r: str(r[0])):
-            for key, value in response.items():
-                # We need to be this explicit, since OrderedDict.update does not retain ordering
-                self.fields[key] = value
-                value.initial = data.get('question_form_data', {}).get(key)
 
 
 class AddOnRadioSelect(forms.RadioSelect):
@@ -380,17 +134,17 @@ class AddOnsForm(forms.Form):
                 name=label
             )
         elif not price.rate:
-            n = _('{name} (+ {currency} {price})').format(
-                name=label, currency=event.currency, price=number_format(price.gross)
+            n = _('{name} (+ {price})').format(
+                name=label, price=money_filter(price.gross, event.currency)
             )
         elif event.settings.display_net_prices:
-            n = _('{name} (+ {currency} {price} plus {taxes}% {taxname})').format(
-                name=label, currency=event.currency, price=number_format(price.net),
+            n = _('{name} (+ {price} plus {taxes}% {taxname})').format(
+                name=label, price=money_filter(price.net, event.currency),
                 taxes=number_format(price.rate), taxname=price.name
             )
         else:
-            n = _('{name} (+ {currency} {price} incl. {taxes}% {taxname})').format(
-                name=label, currency=event.currency, price=number_format(price.gross),
+            n = _('{name} (+ {price} incl. {taxes}% {taxname})').format(
+                name=label, price=money_filter(price.gross, event.currency),
                 taxes=number_format(price.rate), taxname=price.name
             )
 

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load money %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Order search" %}{% endblock %}
 {% block content %}
@@ -47,9 +48,6 @@
                 <th class="text-right">{% trans "Order total" %}
                     <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
-                <th class="text-right">{% trans "Positions" %}
-                    <a href="?{% url_replace request 'ordering' '-pcnt' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'pcnt' %}"><i class="fa fa-caret-up"></i></a></th>
                 <th class="text-right">{% trans "Status" %}
                     <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
@@ -67,14 +65,13 @@
                     </td>
                     <td>{{ o.event.name }}</td>
                     <td>
-                        {{ o.email }}
+                        {{ o.email|default_if_none:"" }}
                         {% if o.invoice_address.name %}
                             <br>{{ o.invoice_address.name }}
                         {% endif %}
                     </td>
                     <td>{{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td class="text-right">{{ o.total|floatformat:2 }} {{ o.event.currency }}</td>
-                    <td class="text-right">{{ o.pcnt }}</td>
+                    <td class="text-right">{{ o.total|money:o.event.currency }}</td>
                     <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                 </tr>
             {% empty %}
@@ -87,5 +84,5 @@
             </tbody>
         </table>
     </div>
-    {% include "pretixcontrol/pagination.html" %}
+    {% include "pretixcontrol/pagination_huge.html" %}
 {% endblock %}

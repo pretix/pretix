@@ -61,6 +61,8 @@ error_messages = {
                         'cart if you want to use it for a different product.'),
     'voucher_expired': _('This voucher is expired.'),
     'voucher_invalid_item': _('This voucher is not valid for this product.'),
+    'voucher_item_not_available': _(
+        'Your voucher is valid for a product that is currently not for sale.'),
     'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
     'voucher_required': _('You need a valid voucher code to order this product.'),
     'inactive_subevent': pgettext_lazy('subevent', 'The selected event date is not active.'),
@@ -110,7 +112,7 @@ class CartManager:
     def _check_presale_dates(self):
         if self.event.presale_start and self.now_dt < self.event.presale_start:
             raise CartError(error_messages['not_started'])
-        if self.event.presale_end and self.now_dt > self.event.presale_end:
+        if self.event.presale_has_ended:
             raise CartError(error_messages['ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
@@ -186,7 +188,7 @@ class CartManager:
             if op.subevent and op.subevent.presale_start and self.now_dt < op.subevent.presale_start:
                 raise CartError(error_messages['not_started'])
 
-            if op.subevent and op.subevent.presale_end and self.now_dt > op.subevent.presale_end:
+            if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):
@@ -318,7 +320,7 @@ class CartManager:
             self._check_item_constraints(op)
             operations.append(op)
 
-        self._quota_diff += quota_diff
+        self._quota_diff.update(quota_diff)
         self._voucher_use_diff += voucher_use_diff
         self._operations += operations
 
@@ -456,7 +458,7 @@ class CartManager:
             for k, v in al.items():
                 if k not in input_addons[cp.id]:
                     if v.expires > self.now_dt:
-                        quotas = list(cp.quotas)
+                        quotas = list(v.quotas)
 
                         for quota in quotas:
                             quota_diff[quota] -= 1
@@ -464,12 +466,14 @@ class CartManager:
                     op = self.RemoveOperation(position=v)
                     operations.append(op)
 
-        self._quota_diff += quota_diff
+        self._quota_diff.update(quota_diff)
         self._operations += operations
 
     def _get_quota_availability(self):
-        quotas_ok = {}
+        quotas_ok = defaultdict(int)
         for quota, count in self._quota_diff.items():
+            if count <= 0:
+                quotas_ok[quota] = 0
             avail = quota.availability(self.now_dt)
             if avail[1] is not None and avail[1] < count:
                 quotas_ok[quota] = min(count, avail[1])
@@ -541,6 +545,9 @@ class CartManager:
 
         for op in self._operations:
             if isinstance(op, self.RemoveOperation):
+                if op.position.expires > self.now_dt:
+                    for q in op.position.quotas:
+                        quotas_ok[q] += 1
                 op.position.delete()
 
             elif isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
@@ -660,7 +667,8 @@ def get_fees(event, request, total, invoice_address, provider):
                         tax_rule=payment_fee_tax_rule
                     ))
 
-    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address):
+    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
+                                                    total=total):
         fees += resp
 
     return fees

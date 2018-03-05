@@ -78,6 +78,36 @@ def test_perform_success(env, factory, monkeypatch):
 
 
 @pytest.mark.django_db
+def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
+    event, order = env
+    event.currency = 'JPY'
+    event.save()
+
+    def charge_create(**kwargs):
+        assert kwargs['amount'] == 13
+        assert kwargs['currency'] == 'jpy'
+        assert kwargs['source'] == 'tok_189fTT2eZvKYlo2CvJKzEzeu'
+        c = MockedCharge()
+        c.status = 'succeeded'
+        c.paid = True
+        return c
+
+    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    prov = StripeCC(event)
+    req = factory.post('/', {
+        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_last4': '4242',
+        'stripe_brand': 'Visa'
+    })
+    req.session = {}
+    prov.checkout_prepare(req, {})
+    assert 'payment_stripe_token' in req.session
+    prov.payment_perform(req, order)
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_perform_card_error(env, factory, monkeypatch):
     event, order = env
 

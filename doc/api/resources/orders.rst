@@ -1,3 +1,5 @@
+.. spelling:: checkins
+
 Orders
 ======
 
@@ -24,7 +26,7 @@ email                                 string                     The customer em
 locale                                string                     The locale used for communication with this customer
 datetime                              datetime                   Time of order creation
 expires                               datetime                   The order will expire, if it is still pending by this time
-payment_date                          date                       Date of payment receival
+payment_date                          date                       Date of payment receipt
 payment_provider                      string                     Payment provider used for this order
 payment_fee                           money (string)             Payment fee included in this order's total
 payment_fee_tax_rate                  decimal (string)           Tax rate applied to the payment fee
@@ -32,6 +34,9 @@ payment_fee_tax_value                 money (string)             Tax value inclu
 payment_fee_tax_rule                  integer                    The ID of the used tax rule (or ``null``)
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
+checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if a ticket
+                                                                 of this order is scanned.
 invoice_address                       object                     Invoice address information (can be ``null``)
 ├ last_modified                       datetime                   Last modification date of the address
 ├ company                             string                     Customer company name
@@ -43,6 +48,7 @@ invoice_address                       object                     Invoice address
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
 ├ country                             string                     Customer country
+├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
 ├ vat_id                              string                     Customer VAT ID
 └ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
@@ -78,8 +84,18 @@ downloads                             list of objects            List of ticket 
 
    The attributes ``invoice_address.vat_id_validated`` and ``invoice_address.is_business`` have been added.
    The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate`` and ``order.payment_fee_tax_value`` have been
-   deprecated in favour of the new ``fees`` attribute but will still be served and removed in 1.9.
+   deprecated in favor of the new ``fees`` attribute but will still be served and removed in 1.9.
 
+.. versionchanged:: 1.9
+
+   First write operations (``…/mark_paid/``, ``…/mark_pending/``, ``…/mark_canceled/``, ``…/mark_expired/``) have been added.
+   The attribute ``invoice_address.internal_reference`` has been added.
+
+.. versionchanged:: 1.13
+
+   The field ``checkin_attention`` has been added.
+
+.. _order-position-resource:
 
 Order position resource
 -----------------------
@@ -89,7 +105,7 @@ Order position resource
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-id                                    integer                    Internal ID of the order positon
+id                                    integer                    Internal ID of the order position
 code                                  string                     Order code of the order the position belongs to
 positionid                            integer                    Number of the position within the order
 item                                  integer                    ID of the purchased item
@@ -105,6 +121,7 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 checkins                              list of objects            List of check-ins with this ticket
+├ list                                integer                    Internal ID of the check-in list
 └ datetime                            datetime                   Time of check-in
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
@@ -118,6 +135,10 @@ answers                               list of objects            Answers to user
 .. versionchanged:: 1.7
 
    The attribute ``tax_rule`` has been added.
+
+.. versionchanged:: 1.11
+
+   The attribute ``checkins.list`` has been added.
 
 
 Order endpoints
@@ -161,6 +182,7 @@ Order endpoints
             "fees": [],
             "total": "23.00",
             "comment": "",
+            "checkin_attention": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": True,
@@ -170,6 +192,7 @@ Order endpoints
                 "zipcode": "12345",
                 "city": "Testington",
                 "country": "Testikistan",
+                "internal_reference": "",
                 "vat_id": "EU123456789",
                 "vat_id_validated": False
             },
@@ -192,6 +215,7 @@ Order endpoints
                 "subevent": null,
                 "checkins": [
                   {
+                    "list": 44,
                     "datetime": "2017-12-25T12:45:23Z"
                   }
                 ],
@@ -266,6 +290,7 @@ Order endpoints
         "fees": [],
         "total": "23.00",
         "comment": "",
+        "checkin_attention": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
@@ -275,6 +300,7 @@ Order endpoints
             "zipcode": "12345",
             "city": "Testington",
             "country": "Testikistan",
+            "internal_reference": "",
             "vat_id": "EU123456789",
             "vat_id_validated": False
         },
@@ -297,6 +323,7 @@ Order endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -329,12 +356,13 @@ Order endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
 
    Download tickets for an order, identified by its order code. Depending on the chosen output, the response might
    be a ZIP file, PDF file or something else. The order details response contains a list of output options for this
-   partictular order.
+   particular order.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Note that in some cases the
    ticket file might not yet have been created. In that case, you will receive a status code :http:statuscode:`409` and
@@ -365,10 +393,207 @@ Order endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
-                    **or** downlodas are not available for this order at this time. The response content will
+                    **or** downloads are not available for this order at this time. The response content will
                     contain more details.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 404: The requested order or output provider does not exist.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
+
+   Marks a pending or expired order as successfully paid.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_paid/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "p",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as paid, either because the current order status does not allow it or because no quota is left to perform the operation.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_canceled/
+
+   Marks a pending order as canceled.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_canceled/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: text/json
+
+      {
+          "send_email": true
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "c",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as canceled since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_pending/
+
+   Marks a paid order as unpaid.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_pending/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as unpaid since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_expired/
+
+   Marks a unpaid order as expired.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_expired/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "e",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as expired since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/extend/
+
+   Extends the payment deadline of a pending order. If the order is already expired and quota is still
+   available, its state will be changed to pending.
+
+   The only required parameter of this operation is ``expires``, which should contain a date in the future.
+   Note that only a date is expected, not a datetime, since pretix will always set the deadline to the end of the
+   day in the event's timezone.
+
+   You can pass the optional parameter ``force``. If it is set to ``true``, the operation will be performed even if
+   it leads to an overbooked quota because the order was expired and the tickets have been sold again.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/extend/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: text/json
+
+      {
+          "expires": "2017-10-28",
+          "force": false
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        "expires": "2017-10-28T23:59:59Z",
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be extended since the current order status does not allow it or no quota is available or the submitted date is invalid.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
 
 
 Order position endpoints
@@ -417,6 +642,7 @@ Order position endpoints
             "subevent": null,
             "checkins": [
               {
+                "list": 44,
                 "datetime": "2017-12-25T12:45:23Z"
               }
             ],
@@ -496,6 +722,7 @@ Order position endpoints
         "subevent": null,
         "checkins": [
           {
+            "list": 44,
             "datetime": "2017-12-25T12:45:23Z"
           }
         ],
@@ -520,12 +747,13 @@ Order position endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position does not exist.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/download/(output)/
 
    Download tickets for one order position, identified by its internal ID.
    Depending on the chosen output, the response might be a ZIP file, PDF file or something else. The order details
-   response contains a list of output options for this partictular order position.
+   response contains a list of output options for this particular order position.
 
    Tickets can be only downloaded if the order is paid and if ticket downloads are active. Also, depending on event
    configuration downloads might be only unavailable for add-on products or non-admission products.
@@ -557,7 +785,8 @@ Order position endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource
-                    **or** downlodas are not available for this order position at this time. The response content will
+                    **or** downloads are not available for this order position at this time. The response content will
                     contain more details.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 404: The requested order position or download provider does not exist.
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.

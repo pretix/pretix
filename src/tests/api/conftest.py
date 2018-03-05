@@ -34,6 +34,28 @@ def event(organizer, meta_prop):
 
 
 @pytest.fixture
+def event2(organizer, meta_prop):
+    e = Event.objects.create(
+        organizer=organizer, name='Dummy2', slug='dummy2',
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+    )
+    e.meta_values.create(property=meta_prop, value="Conference")
+    return e
+
+
+@pytest.fixture
+def event3(organizer, meta_prop):
+    e = Event.objects.create(
+        organizer=organizer, name='Dummy3', slug='dummy3',
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+    )
+    e.meta_values.create(property=meta_prop, value="Conference")
+    return e
+
+
+@pytest.fixture
 def team(organizer):
     return Team.objects.create(
         organizer=organizer,
@@ -41,12 +63,24 @@ def team(organizer):
         can_change_event_settings=True,
         can_change_vouchers=True,
         can_view_vouchers=True,
+        can_change_orders=True,
     )
 
 
 @pytest.fixture
 def user():
     return User.objects.create_user('dummy@dummy.dummy', 'dummy')
+
+
+@pytest.fixture
+def user_client(client, team, user):
+    team.can_view_orders = True
+    team.can_view_vouchers = True
+    team.all_events = True
+    team.save()
+    team.members.add(user)
+    client.force_authenticate(user=user)
+    return client
 
 
 @pytest.fixture
@@ -64,8 +98,17 @@ def token_client(client, team):
 def subevent(event, meta_prop):
     event.has_subevents = True
     event.save()
-    se = event.subevents.create(name="Foobar",
-                                date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+    se = event.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+
+    se.meta_values.create(property=meta_prop, value="Workshop")
+    return se
+
+
+@pytest.fixture
+def subevent2(event2, meta_prop):
+    event2.has_subevents = True
+    event2.save()
+    se = event2.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
 
     se.meta_values.create(property=meta_prop, value="Workshop")
     return se
@@ -74,3 +117,8 @@ def subevent(event, meta_prop):
 @pytest.fixture
 def taxrule(event):
     return event.tax_rules.create(name="VAT", rate=19)
+
+
+@pytest.fixture
+def taxrule2(event2):
+    return event2.tax_rules.create(name="VAT", rate=25)

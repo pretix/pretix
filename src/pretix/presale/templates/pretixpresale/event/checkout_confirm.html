@@ -3,22 +3,31 @@
 {% load bootstrap3 %}
 {% load eventurl %}
 {% load eventsignal %}
-{% block title %}{% trans "Confirm order" %}{% endblock %}
+{% block title %}{% trans "Review order" %}{% endblock %}
 {% block content %}
-    <h2>{% trans "Confirm order" %}</h2>
+    <h2>{% trans "Review order" %}</h2>
+    {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     <p>{% trans "Please review the details below and confirm your order." %}</p>
     <form method="post" data-asynctask>
         {% csrf_token %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
-                <div class="pull-right">
-                    <a href="
-                    {% eventurl request.event "presale:event.index" %}">
+                <div class="pull-right cart-modify">
+                    <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">
                         <span class="fa fa-edit"></span>
                         {% trans "Modify" %}
                     </a>
                 </div>
+                <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}"
+                    class="pull-right">
+                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                        {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                    {% else %}
+                        {% trans "Cart expired" %}
+                    {% endif %}
+                </strong>
                 <h3 class="panel-title">
+                    <i class="fa fa-shopping-cart"></i>
                     {% trans "Your cart" %}
                 </h3>
             </div>
@@ -27,7 +36,7 @@
                 <div class="cart-row row">
                     <div class="col-md-6 col-xs-12">
                         <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                            {% if cart.minutes_left > 0 %}
+                            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                                 {% blocktrans trimmed with minutes=cart.minutes_left %}
                                     The items in your cart are reserved for you for {{ minutes }} minutes.
                                 {% endblocktrans %}
@@ -44,7 +53,7 @@
             <div class="panel-heading">
                 {% if payment_provider.identifier != "free" %}
                     <div class="pull-right">
-                        <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">
+                        <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
                             <span class="fa fa-edit"></span>
                             {% trans "Modify" %}
                         </a>
@@ -65,7 +74,7 @@
                     <div class="panel panel-primary panel-contact">
                         <div class="panel-heading">
                             <div class="pull-right">
-                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1">
                                     <span class="fa fa-edit"></span>
                                     {% trans "Modify" %}
                                 </a>
@@ -90,6 +99,8 @@
                                     <dt>{% trans "VAT ID" %}</dt>
                                     <dd>{{ addr.vat_id }}</dd>
                                 {% endif %}
+                                <dt>{% trans "Internal reference" %}</dt>
+                                <dd>{{ addr.internal_reference }}</dd>
                             </dl>
                         </div>
                     </div>
@@ -99,7 +110,7 @@
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" %}">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Modify" %}
                             </a>
@@ -109,10 +120,12 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            <dt>{% trans "E-mail address" %}</dt>
-                            <dd>{{ cart_session.email }}</dd>
-                        </dl>
+                        {% if "email" not in contact_info.keys %}
+                            <dl class="dl-horizontal">
+                                <dt>{% trans "E-mail address" %}</dt>
+                                <dd>{{ cart_session.email }}</dd>
+                            </dl>
+                        {% endif %}
                         {% for l, v in contact_info %}
                             <dl class="dl-horizontal">
                                 <dt>{{ l }}</dt>

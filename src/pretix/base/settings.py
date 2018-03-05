@@ -49,6 +49,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_attendee_name': {
+        'default': 'True',
+        'type': bool,
+    },
     'invoice_address_required': {
         'default': 'False',
         'type': bool,
@@ -128,6 +132,10 @@ DEFAULTS = {
     'invoice_language': {
         'default': '__user__',
         'type': str
+    },
+    'invoice_email_attachment': {
+        'default': 'False',
+        'type': bool
     },
     'show_items_outside_presale_period': {
         'default': 'True',
@@ -268,7 +276,7 @@ Your {event} team"""))
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
 we successfully received your order for {event} with a total value
-of {total} {currency}. Please complete your payment before {date}.
+of {total_with_currency}. Please complete your payment before {date}.
 
 {payment_info}
 
@@ -424,6 +432,14 @@ Your {event} team"""))
         'type': str
     },
     'presale_css_checksum': {
+        'default': None,
+        'type': str
+    },
+    'presale_widget_css_file': {
+        'default': None,
+        'type': str
+    },
+    'presale_widget_css_checksum': {
         'default': None,
         'type': str
     },

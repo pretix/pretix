@@ -9,5 +9,7 @@ wanting to use pretix to sell tickets.
 
    organizers/index
    events/create
-   events/taxes
-   payments/index
+   events/settings
+   events/widget
+   faq
+   markdown

@@ -41,6 +41,7 @@ foreign_currency_rate                 decimal (string)           If ``foreign_cu
                                                                  invoicing time, it is stored here.
 foreign_currency_rate_date            date                       If ``foreign_currency_rate`` is set, this signifies the
                                                                  date at which the currency rate was obtained.
+internal_reference                    string                     Customer's reference to be printed on the invoice.
 ===================================== ========================== =======================================================
 
 
@@ -55,6 +56,11 @@ foreign_currency_rate_date            date                       If ``foreign_cu
 
    The attributes ``lines.tax_name``, ``foreign_currency_display``, ``foreign_currency_rate``, and
    ``foreign_currency_rate_date`` have been added.
+
+
+.. versionchanged:: 1.9
+
+   The attribute ``internal_reference`` has been added.
 
 
 Endpoints
@@ -95,6 +101,7 @@ Endpoints
             "refers": null,
             "locale": "en",
             "introductory_text": "thank you for your purchase of the following items:",
+            "internal_reference": "",
             "additional_text": "We are looking forward to see you on our conference!",
             "payment_provider_text": "Please transfer the money to our account ABC…",
             "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
@@ -118,7 +125,7 @@ Endpoints
    :query boolean is_cancellation: If set to ``true`` or ``false``, only invoices with this value for the field
                                    ``is_cancellation`` will be returned.
    :query string order: If set, only invoices belonging to the order with the given order code will be returned.
-   :query string refers: If set, only invoices refering to the given invoice will be returned.
+   :query string refers: If set, only invoices referring to the given invoice will be returned.
    :query string locale: If set, only invoices with the given locale will be returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date`` and
                            ``nr`` (equals to ``number``). Default: ``nr``
@@ -158,6 +165,7 @@ Endpoints
         "refers": null,
         "locale": "en",
         "introductory_text": "thank you for your purchase of the following items:",
+        "internal_reference": "",
         "additional_text": "We are looking forward to see you on our conference!",
         "payment_provider_text": "Please transfer the money to our account ABC…",
         "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
@@ -213,5 +221,5 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting vor a few
+   :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.

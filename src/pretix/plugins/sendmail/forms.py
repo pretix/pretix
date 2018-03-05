@@ -1,16 +1,23 @@
 from django import forms
+from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import PlaceholderValidator
-from pretix.base.models import Order
-from pretix.base.models.event import SubEvent
+from pretix.base.models import Item, Order, SubEvent
+from pretix.control.forms.widgets import Select2
 
 
 class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
+    item = forms.ModelChoiceField(
+        Item.objects.none(),
+        label=_('Only send to people who bought'),
+        required=False,
+        empty_label=_('Any product')
+    )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=_('Only send to customers of'),
@@ -22,6 +29,7 @@ class MailForm(forms.Form):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
+            label=_('Subject'),
             widget=I18nTextInput, required=True,
             locales=event.settings.get('locales'),
             help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
@@ -30,6 +38,7 @@ class MailForm(forms.Form):
                                               '{invoice_name}', '{invoice_company}'])]
         )
         self.fields['message'] = I18nFormField(
+            label=_('Message'),
             widget=I18nTextarea, required=True,
             locales=event.settings.get('locales'),
             help_text=_("Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
@@ -47,7 +56,19 @@ class MailForm(forms.Form):
             widget=forms.CheckboxSelectMultiple,
             choices=choices
         )
+        self.fields['item'].queryset = event.items.all()
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']

@@ -3,32 +3,52 @@ import logging
 
 import paypalrestsdk
 from django.contrib import messages
+from django.core import signing
 from django.db import transaction
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.payment import PaymentException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.payment import Paypal
 from pretix.plugins.stripe.models import ReferencedStripeObject
-from pretix.presale.utils import event_view
 
 logger = logging.getLogger('pretix.plugins.paypal')
 
 
-@event_view(require_live=False)
+@xframe_options_exempt
+def redirect_view(request, *args, **kwargs):
+    signer = signing.Signer(salt='safe-redirect')
+    try:
+        url = signer.unsign(request.GET.get('url', ''))
+    except signing.BadSignature:
+        return HttpResponseBadRequest('Invalid parameter')
+
+    r = render(request, 'pretixplugins/paypal/redirect.html', {
+        'url': url,
+    })
+    r._csp_ignore = True
+    return r
+
+
 def success(request, *args, **kwargs):
     pid = request.GET.get('paymentId')
     token = request.GET.get('token')
     payer = request.GET.get('PayerID')
     request.session['payment_paypal_token'] = token
     request.session['payment_paypal_payer'] = payer
+
+    urlkwargs = {}
+    if 'cart_namespace' in kwargs:
+        urlkwargs['cart_namespace'] = kwargs['cart_namespace']
 
     if request.session.get('payment_paypal_order'):
         order = Order.objects.get(pk=request.session.get('payment_paypal_order'))
@@ -38,13 +58,19 @@ def success(request, *args, **kwargs):
     if pid == request.session.get('payment_paypal_id', None):
         if order:
             prov = Paypal(request.event)
-            resp = prov.payment_perform(request, order)
+            try:
+                resp = prov.payment_perform(request, order)
+            except PaymentException as e:
+                messages.error(request, str(e))
+                urlkwargs['step'] = 'payment'
+                return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
             if resp:
                 return resp
     else:
         messages.error(request, _('Invalid response from PayPal received.'))
         logger.error('Session did not contain payment_paypal_id')
-        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
+        urlkwargs['step'] = 'payment'
+        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
 
     if order:
         return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
@@ -52,7 +78,8 @@ def success(request, *args, **kwargs):
             'secret': order.secret
         }) + ('?paid=yes' if order.status == Order.STATUS_PAID else ''))
     else:
-        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'confirm'}))
+        urlkwargs['step'] = 'confirm'
+        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
 
 
 def abort(request, *args, **kwargs):

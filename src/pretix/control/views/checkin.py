@@ -1,92 +1,224 @@
-from django.db.models import F, Prefetch, Q
-from django.db.models.functions import Coalesce
-from django.views.generic import ListView
+import dateutil.parser
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.db import transaction
+from django.db.models import Max, OuterRef, Subquery
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
+from django.utils.functional import cached_property
+from django.utils.timezone import is_aware, make_aware, now
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import DeleteView, ListView
+from pytz import UTC
 
-from pretix.base.models import Checkin, Item, OrderPosition
+from pretix.base.models import Checkin, Order, OrderPosition
+from pretix.base.models.checkin import CheckinList
+from pretix.control.forms.checkin import CheckinListForm
+from pretix.control.forms.filter import CheckInFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import CreateView, PaginationMixin, UpdateView
 
 
-class CheckInView(EventPermissionRequiredMixin, ListView):
+class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Checkin
     context_object_name = 'entries'
-    paginate_by = 30
     template_name = 'pretixcontrol/checkin/index.html'
     permission = 'can_view_orders'
 
+    def get_queryset(self, filter=True):
+        cqs = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=self.list.pk
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
+
+        qs = OrderPosition.objects.filter(
+            order__event=self.request.event,
+            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
+            subevent=self.list.subevent
+        ).annotate(
+            last_checked_in=Subquery(cqs)
+        ).select_related('item', 'variation', 'order', 'addon_to')
+
+        if not self.list.all_products:
+            qs = qs.filter(item__in=self.list.limit_products.values_list('id', flat=True))
+
+        if filter and self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        return qs
+
+    @cached_property
+    def filter_form(self):
+        return CheckInFilterForm(
+            data=self.request.GET,
+            event=self.request.event,
+            list=self.list
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['checkinlist'] = self.list
+        ctx['filter_form'] = self.filter_form
+        for e in ctx['entries']:
+            if e.last_checked_in:
+                if isinstance(e.last_checked_in, str):
+                    # Apparently only happens on SQLite
+                    e.last_checked_in_aware = make_aware(dateutil.parser.parse(e.last_checked_in), UTC)
+                elif not is_aware(e.last_checked_in):
+                    # Apparently only happens on MySQL
+                    e.last_checked_in_aware = make_aware(e.last_checked_in, UTC)
+                else:
+                    # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
+                    e.last_checked_in_aware = e.last_checked_in
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        if "can_change_orders" not in request.eventpermset:
+            messages.error(request, _('You do not have permission to perform this action.'))
+            return redirect(reverse('control:event.orders.checkins', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            }) + '?' + request.GET.urlencode())
+
+        positions = self.get_queryset(filter=False).filter(
+            pk__in=request.POST.getlist('checkin')
+        )
+
+        for op in positions:
+            created = False
+            if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
+                ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
+                    'datetime': now(),
+                })
+            op.order.log_action('pretix.control.views.checkin', data={
+                'position': op.id,
+                'positionid': op.positionid,
+                'first': created,
+                'datetime': now(),
+                'list': self.list.pk
+            }, user=request.user)
+
+        messages.success(request, _('The selected tickets have been marked as checked in.'))
+        return redirect(reverse('control:event.orders.checkinlists.show', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug,
+            'list': self.list.pk
+        }) + '?' + request.GET.urlencode())
+
+
+class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
+    model = CheckinList
+    context_object_name = 'checkinlists'
+    permission = 'can_view_orders'
+    template_name = 'pretixcontrol/checkin/lists.html'
+
     def get_queryset(self):
-
-        qs = OrderPosition.objects.filter(order__event=self.request.event, order__status='p')
-
-        # if this setting is False, we check only items for admission
-        if not self.request.event.settings.ticket_download_nonadm:
-            qs = qs.filter(item__admission=True)
-
-        if self.request.GET.get("status", "") != "":
-            p = self.request.GET.get("status", "")
-            if p == '1':
-                # records with check-in record
-                qs = qs.filter(checkins__isnull=False)
-            elif p == '0':
-                qs = qs.filter(checkins__isnull=True)
-
-        if self.request.GET.get("user", "") != "":
-            u = self.request.GET.get("user", "")
-            qs = qs.filter(
-                Q(order__email__icontains=u) | Q(attendee_name__icontains=u) | Q(attendee_email__icontains=u)
-            )
-
-        if self.request.GET.get("item", "") != "":
-            u = self.request.GET.get("item", "")
-            qs = qs.filter(item_id=u)
+        qs = self.request.event.checkin_lists.prefetch_related("limit_products")
+        qs = CheckinList.annotate_with_numbers(qs, self.request.event)
 
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)
+        return qs
 
-        qs = qs.prefetch_related(
-            Prefetch('checkins', queryset=Checkin.objects.filter(position__order__event=self.request.event))
-        ).select_related('order', 'item', 'addon_to')
 
-        if self.request.GET.get("ordering", "") != "":
-            p = self.request.GET.get("ordering", "")
-            keys_allowed = self.get_ordering_keys_mappings()
-            if p in keys_allowed:
-                mapped_field = keys_allowed[p]
-                if isinstance(mapped_field, dict):
-                    order = mapped_field.pop('_order')
-                    qs = qs.annotate(**mapped_field).order_by(order)
-                elif isinstance(mapped_field, (list, tuple)):
-                    qs = qs.order_by(*mapped_field)
-                else:
-                    qs = qs.order_by(mapped_field)
+class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
+    model = CheckinList
+    form_class = CheckinListForm
+    template_name = 'pretixcontrol/checkin/list_edit.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'checkinlist'
 
-        return qs.distinct()
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.checkinlists', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['items'] = Item.objects.filter(event=self.request.event)
-        ctx['filtered'] = ("status" in self.request.GET or "user" in self.request.GET or "item" in self.request.GET
-                           or "subevent" in self.request.GET)
-        return ctx
+    @transaction.atomic
+    def form_valid(self, form):
+        form.instance.event = self.request.event
+        messages.success(self.request, _('The new check-in list has been created.'))
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.event.checkinlist.added', user=self.request.user,
+                                 data=dict(form.cleaned_data))
+        return ret
 
-    @staticmethod
-    def get_ordering_keys_mappings():
-        return {
-            'code': 'order__code',
-            '-code': '-order__code',
-            'email': 'order__email',
-            '-email': '-order__email',
-            # Set nulls_first to be consistent over databases
-            'status': F('checkins__id').asc(nulls_first=True),
-            '-status': F('checkins__id').desc(nulls_last=True),
-            'timestamp': F('checkins__datetime').asc(nulls_first=True),
-            '-timestamp': F('checkins__datetime').desc(nulls_last=True),
-            'item': ('item__name', 'variation__value'),
-            '-item': ('-item__name', 'variation__value'),
-            'subevent': ('subevent__date_from', 'subevent__name'),
-            '-subevent': ('-subevent__date_from', '-subevent__name'),
-            'name': {'_order': F('display_name').asc(nulls_first=True),
-                     'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
-            '-name': {'_order': F('display_name').desc(nulls_last=True),
-                      'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
-        }
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = CheckinList
+    form_class = CheckinListForm
+    template_name = 'pretixcontrol/checkin/list_edit.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'checkinlist'
+
+    def get_object(self, queryset=None) -> CheckinList:
+        try:
+            return self.request.event.checkin_lists.get(
+                id=self.kwargs['list']
+            )
+        except CheckinList.DoesNotExist:
+            raise Http404(_("The requested list does not exist."))
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.checkinlist.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.checkinlists.show', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'list': self.object.pk
+        })
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
+    model = CheckinList
+    template_name = 'pretixcontrol/checkin/list_delete.html'
+    permission = 'can_change_event_settings'
+    context_object_name = 'checkinlist'
+
+    def get_object(self, queryset=None) -> CheckinList:
+        try:
+            return self.request.event.checkin_lists.get(
+                id=self.kwargs['list']
+            )
+        except CheckinList.DoesNotExist:
+            raise Http404(_("The requested list does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.checkins.all().delete()
+        self.object.log_action(action='pretix.event.orders.deleted', user=request.user)
+        self.object.delete()
+        messages.success(self.request, _('The selected list has been deleted.'))
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.checkinlists', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })

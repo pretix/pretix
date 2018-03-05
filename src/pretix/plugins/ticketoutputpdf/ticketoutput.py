@@ -1,15 +1,17 @@
 import copy
 import logging
+import re
 import uuid
 from collections import OrderedDict
 from io import BytesIO
 
+import bleach
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -25,7 +27,9 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
+from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
+from pretix.base.templatetags.money import money_filter
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.signals import (
     get_fonts, layout_text_variables,
@@ -68,10 +72,17 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample product description"),
         "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
     }),
+    ("item_category", {
+        "label": _("Product category"),
+        "editor_sample": _("Ticket category"),
+        "evaluate": lambda orderposition, order, event: (
+            str(orderposition.item.category.name) if orderposition.item.category else ""
+        )
+    }),
     ("price", {
         "label": _("Price"),
         "editor_sample": _("123.45 EUR"),
-        "evaluate": lambda op, order, event: '{} {}'.format(event.currency, localize(op.price))
+        "evaluate": lambda op, order, event: money_filter(op.price, event.currency)
     }),
     ("attendee_name", {
         "label": _("Attendee name"),
@@ -130,7 +141,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: order.invoice_address.name if getattr(order, 'invoice_address') else ''
     }),
     ("invoice_company", {
-        "label": _("Invocie address: company"),
+        "label": _("Invoice address: company"),
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address') else ''
     }),
@@ -199,6 +210,8 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
         ev = op.subevent or order.event
+        if not o['content']:
+            return '(error)'
         if o['content'] == 'other':
             return o['text'].replace("\n", "<br/>\n")
         elif o['content'].startswith('meta:'):
@@ -232,8 +245,14 @@ class PdfTicketOutput(BaseTicketOutput):
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
-
-        p = Paragraph(self._get_text_content(op, order, o) or "", style=style)
+        text = re.sub(
+            "<br[^>]*>", "<br/>",
+            bleach.clean(
+                self._get_text_content(op, order, o) or "",
+                tags=["br"], attributes={}, styles=[], strip=True
+            )
+        )
+        p = Paragraph(text, style=style)
         p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
         # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
         ad = getAscentDescent(font, float(o['fontsize']))
@@ -252,12 +271,13 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate_order(self, order: Order):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
-        for op in order.positions.all():
-            if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                continue
-            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
-                continue
-            self._draw_page(p, op, order)
+        with language(order.locale):
+            for op in order.positions.all():
+                if op.addon_to_id and not self.event.settings.ticket_download_addons:
+                    continue
+                if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+                    continue
+                self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
@@ -266,7 +286,8 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         order = op.order
-        self._draw_page(p, op, order)
+        with language(order.locale):
+            self._draw_page(p, op, order)
         p.save()
         outbuffer = self._render_with_background(buffer)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
@@ -359,11 +380,11 @@ class PdfTicketOutput(BaseTicketOutput):
         ]
 
     def _migrate_from_old_settings(self):
-        l = []
+        layout = []
 
         event_s = self.settings.get('event_s', default=22, as_type=float)
         if event_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('event_x', default=15, as_type=float),
@@ -380,7 +401,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         order_s = self.settings.get('order_s', default=17, as_type=float)
         if order_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('order_x', default=15, as_type=float),
@@ -397,7 +418,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         name_s = self.settings.get('name_s', default=17, as_type=float)
         if name_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('name_x', default=15, as_type=float),
@@ -414,7 +435,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         price_s = self.settings.get('price_s', default=17, as_type=float)
         if price_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('price_x', default=15, as_type=float),
@@ -431,7 +452,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         qr_s = self.settings.get('qr_s', default=80, as_type=float)
         if qr_s:
-            l.append({
+            layout.append({
                 'type': 'barcodearea',
                 'left': self.settings.get('qr_x', default=10, as_type=float),
                 'bottom': self.settings.get('qr_y', default=120, as_type=float),
@@ -440,7 +461,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         code_s = self.settings.get('code_s', default=11, as_type=float)
         if code_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('code_x', default=15, as_type=float),
@@ -457,7 +478,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         attendee_s = self.settings.get('attendee_s', default=0, as_type=float)
         if attendee_s:
-            l.append({
+            layout.append({
                 'type': 'textarea',
                 'fontfamily': 'Helvetica',
                 'left': self.settings.get('attendee_x', default=15, as_type=float),
@@ -472,4 +493,4 @@ class PdfTicketOutput(BaseTicketOutput):
                 'align': 'left'
             })
 
-        return l
+        return layout

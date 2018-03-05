@@ -6,7 +6,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
@@ -33,6 +33,7 @@ from pretix.presale.views.questions import QuestionsViewMixin
 
 class BaseCheckoutFlowStep:
     requires_valid_cart = True
+    icon = 'pencil'
 
     def __init__(self, event):
         self.event = event
@@ -41,6 +42,10 @@ class BaseCheckoutFlowStep:
     @property
     def identifier(self):
         raise NotImplementedError()
+
+    @property
+    def label(self):
+        return pgettext_lazy('checkoutflow', 'Step')
 
     @property
     def priority(self):
@@ -70,20 +75,26 @@ class BaseCheckoutFlowStep:
     def post(self, request):
         return HttpResponseNotAllowed([])
 
-    def get_step_url(self):
-        return eventreverse(self.event, 'presale:event.checkout', kwargs={'step': self.identifier})
+    def get_step_url(self, request):
+        kwargs = {'step': self.identifier}
+        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+        return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
 
     def get_prev_url(self, request):
         prev = self.get_prev_applicable(request)
         if not prev:
-            return eventreverse(self.event, 'presale:event.index')
+            kwargs = {}
+            if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+                kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+            return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
         else:
-            return prev.get_step_url()
+            return prev.get_step_url(request)
 
     def get_next_url(self, request):
         n = self.get_next_applicable(request)
         if n:
-            return n.get_step_url()
+            return n.get_step_url(request)
 
     @cached_property
     def cart_session(self):
@@ -131,6 +142,11 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
         kwargs.setdefault('step', self)
         kwargs.setdefault('event', self.event)
         kwargs.setdefault('prev_url', self.get_prev_url(self.request))
+        kwargs.setdefault('checkout_flow', [
+            step
+            for step in self.request._checkout_flow
+            if step.is_applicable(self.request)
+        ])
         return kwargs
 
     def render(self, **kwargs):
@@ -160,6 +176,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     task = set_cart_addons
     known_errortypes = ['CartError']
     requires_valid_cart = False
+    label = pgettext_lazy('checkoutflow', 'Add-on products')
+    icon = 'puzzle-piece'
 
     def is_applicable(self, request):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
@@ -167,6 +185,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return request._checkoutflow_addons_applicable
 
     def is_completed(self, request, warn=False):
+        if getattr(self, '_completed', None) is not None:
+            return self._completed
         for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__item'
         ):
@@ -174,7 +194,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             for iao in cartpos.item.addons.all():
                 found = len([1 for p in a if p.item.category_id == iao.addon_category_id])
                 if found < iao.min_count or found > iao.max_count:
+                    self._completed = False
                     return False
+        self._completed = True
         return True
 
     @cached_property
@@ -188,7 +210,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         item_cache = {}
         for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
-        ):
+        ).order_by('pk'):
             current_addon_products = {
                 a.item_id: a.variation_id for a in cartpos.addons.all()
             }
@@ -225,6 +247,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
+        ctx['cart'] = self.get_cart()
         return ctx
 
     def get_success_message(self, value):
@@ -234,7 +257,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_next_url(self.request)
 
     def get_error_url(self):
-        return self.get_step_url()
+        return self.get_step_url(self.request)
 
     def get(self, request):
         self.request = request
@@ -276,6 +299,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
+    label = pgettext_lazy('checkoutflow', 'Your information')
 
     def is_applicable(self, request):
         return True
@@ -288,11 +312,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                            event=self.request.event,
+                           request=self.request,
                            initial=initial)
 
     @cached_property
     def eu_reverse_charge_relevant(self):
-        return any([p.item.tax_rule and p.item.tax_rule.eu_reverse_charge
+        return any([p.item.tax_rule and (p.item.tax_rule.eu_reverse_charge or p.item.tax_rule.custom_rules)
                     for p in self.positions])
 
     @cached_property
@@ -348,11 +373,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             messages.warning(request, _('Please enter your name.'))
             return False
 
-        for cp in self.positions:
+        for cp in self._positions_for_questions:
             answ = {
-                aw.question_id: aw.answer for aw in cp.answers.all()
+                aw.question_id: aw.answer for aw in cp.answerlist
             }
-            for q in cp.item.questions.all():
+            for q in cp.item.questions_to_ask:
                 if q.required and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
@@ -382,6 +407,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
         ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
+        ctx['cart'] = self.get_cart()
         return ctx
 
 
@@ -389,6 +415,8 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 200
     identifier = "payment"
     template_name = "pretixpresale/event/checkout_payment.html"
+    label = pgettext_lazy('checkoutflow', 'Payment')
+    icon = 'credit-card'
 
     @cached_property
     def _total_order_value(self):
@@ -436,6 +464,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['selected'] = self.request.POST.get('payment', self.cart_session.get('payment', ''))
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
+        ctx['cart'] = self.get_cart()
         return ctx
 
     @cached_property
@@ -458,9 +487,13 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def is_applicable(self, request):
         self.request = request
-        if self._total_order_value == 0:
-            self.cart_session['payment'] = 'free'
-            return False
+
+        for p in self.request.event.get_payment_providers().values():
+            if p.is_implicit:
+                if p.is_allowed(request):
+                    self.cart_session['payment'] = p.identifier
+                    return False
+
         return True
 
 
@@ -470,6 +503,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     template_name = "pretixpresale/event/checkout_confirm.html"
     task = perform_order
     known_errortypes = ['OrderError']
+    label = pgettext_lazy('checkoutflow', 'Review order')
+    icon = 'eye'
 
     def is_applicable(self, request):
         return True
@@ -486,11 +521,14 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
 
-        ctx['contact_info'] = []
-        responses = contact_form_fields.send(self.event)
+        ctx['contact_info'] = [
+            (_('E-mail'), self.cart_session.get('contact_form_data', {}).get('email')),
+        ]
+        responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 v = self.cart_session.get('contact_form_data', {}).get(key)
+                v = value.bound_data(v, initial='')
                 if v is True:
                     v = _('Yes')
                 elif v is False:
@@ -557,7 +595,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return super().get_error_message(exception)
 
     def get_error_url(self):
-        return self.get_step_url()
+        return self.get_step_url(self.request)
 
     def get_order_url(self, order):
         return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={

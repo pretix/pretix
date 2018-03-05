@@ -86,7 +86,7 @@ and head to http://localhost:8000/
 
 As we did not implement an overall front page yet, you need to go directly to
 http://localhost:8000/control/ for the admin view or, if you imported the test
-data as suggested above, to the event page at http://localhost:8000/bigevents/2018/
+data as suggested above, to the event page at http://localhost:8000/bigevents/2019/
 
 .. note:: If you want the development server to listen on a different interface or
           port (for example because you develop on `pretixdroid`_), you can check
@@ -106,7 +106,7 @@ Execute the following commands to check for code style errors::
     isort -c -rc .
     python manage.py check
 
-Execute the following command to run pretix' test suite (might take a coumple of minutes)::
+Execute the following command to run pretix' test suite (might take a couple of minutes)::
 
     py.test
 
@@ -122,7 +122,7 @@ for example::
     flake8 . || exit 1
     isort -q -rc -c . || exit 1
 
-This keeps you from accidentally creating commits violating the sdtyle guide.
+This keeps you from accidentally creating commits violating the style guide.
 
 Working with mails
 ^^^^^^^^^^^^^^^^^^

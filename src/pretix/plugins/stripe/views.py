@@ -8,14 +8,17 @@ from django.db import transaction
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.payment import PaymentException
+from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
@@ -95,6 +98,8 @@ def charge_webhook(event, event_json, charge_id):
     elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and charge['status'] == 'succeeded' and not is_refund:
         try:
             mark_order_paid(order, user=None)
+        except LockTimeoutException:
+            return HttpResponse("Lock timeout, please try again.", status=503)
         except Quota.QuotaExceededException:
             if not RequiredAction.objects.filter(event=event, action_type='pretix.plugins.stripe.overpaid',
                                                  data__icontains=order.code).exists():
@@ -193,12 +198,12 @@ class StripeOrderView:
         return self.request.event.get_payment_providers()[self.order.payment_provider]
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
         prov = self.pprov
         prov._init_api()
         src = stripe.Source.retrieve(request.GET.get('source'))
-        print(src.client_secret, request.GET.get('client_secret'))
         if src.client_secret != request.GET.get('client_secret'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
@@ -226,7 +231,6 @@ class ReturnView(StripeOrderView, View):
         return self._redirect_to_order()
 
     def _redirect_to_order(self):
-        print(self.request.session.get('payment_stripe_order_secret'), self.order.secret)
         if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))

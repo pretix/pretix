@@ -2,7 +2,6 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.formats import localize
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
@@ -12,6 +11,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
+from pretix.helpers.money import change_decimal_field
 
 
 class ExtendForm(I18nModelForm):
@@ -62,7 +62,7 @@ class ExporterForm(forms.Form):
 class CommentForm(I18nModelForm):
     class Meta:
         model = Order
-        fields = ['comment']
+        fields = ['comment', 'checkin_attention']
         widgets = {
             'comment': forms.Textarea(attrs={
                 'rows': 3,
@@ -76,8 +76,8 @@ class SubEventChoiceField(forms.ModelChoiceField):
         p = get_price(self.instance.item, self.instance.variation,
                       voucher=self.instance.voucher,
                       subevent=obj)
-        return '{} – {} ({} {})'.format(obj.name, obj.get_date_range_display(),
-                                        p, self.instance.order.event.currency)
+        return '{} – {} ({})'.format(obj.name, obj.get_date_range_display(),
+                                     p.print(self.instance.order.event.currency))
 
 
 class OtherOperationsForm(forms.Form):
@@ -88,6 +88,14 @@ class OtherOperationsForm(forms.Form):
             'This operation re-checks if taxes should be paid to the items due to e.g. configured reverse charge rules '
             'and changes the prices and tax values accordingly. This is useful e.g. after an invoice address change. '
             'Use with care and only if you need to. Note that rounding differences might occur in this procedure.'
+        )
+    )
+    notify = forms.BooleanField(
+        label=_('Notify user'),
+        required=False,
+        initial=True,
+        help_text=_(
+            'Send an email to the customer notifying that their order has been changed.'
         )
     )
 
@@ -112,6 +120,7 @@ class OrderPositionAddForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
+        localize=True,
         label=_('Gross price'),
         help_text=_("Including taxes, if any. Keep empty for the product's default price")
     )
@@ -141,10 +150,10 @@ class OrderPositionAddForm(forms.Form):
                 for v in variations:
                     p = get_price(i, v, invoice_address=ia)
                     choices.append(('%d-%d' % (i.pk, v.pk),
-                                    '%s – %s (%s %s)' % (pname, v.value, p, order.event.currency)))
+                                    '%s – %s (%s)' % (pname, v.value, p.print(order.event.currency))))
             else:
                 p = get_price(i, invoice_address=ia)
-                choices.append((str(i.pk), '%s (%s %s)' % (pname, p, order.event.currency)))
+                choices.append((str(i.pk), '%s (%s)' % (pname, p.print(order.event.currency))))
         self.fields['itemvar'].choices = choices
         if ItemAddOn.objects.filter(base_item__event=order.event).exists():
             self.fields['addon_to'].queryset = order.positions.filter(addon_to__isnull=True).select_related(
@@ -157,6 +166,7 @@ class OrderPositionAddForm(forms.Form):
             self.fields['subevent'].queryset = order.event.subevents.all()
         else:
             del self.fields['subevent']
+        change_decimal_field(self.fields['price'], order.event.currency)
 
 
 class OrderPositionChangeForm(forms.Form):
@@ -170,6 +180,7 @@ class OrderPositionChangeForm(forms.Form):
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
+        localize=True,
         label=_('New price (gross)')
     )
     operation = forms.ChoiceField(
@@ -179,7 +190,8 @@ class OrderPositionChangeForm(forms.Form):
             ('product', 'Change product'),
             ('price', 'Change price'),
             ('subevent', 'Change event date'),
-            ('cancel', 'Remove product')
+            ('cancel', 'Remove product'),
+            ('split', 'Split into new order'),
         )
     )
 
@@ -227,14 +239,13 @@ class OrderPositionChangeForm(forms.Form):
                     p = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent,
                                   invoice_address=ia)
                     choices.append(('%d-%d' % (i.pk, v.pk),
-                                    '%s – %s (%s %s)' % (pname, v.value, localize(p),
-                                                         instance.order.event.currency)))
+                                    '%s – %s (%s)' % (pname, v.value, p.print(instance.order.event.currency))))
             else:
                 p = get_price(i, None, voucher=instance.voucher, subevent=instance.subevent,
                               invoice_address=ia)
-                choices.append((str(i.pk), '%s (%s %s)' % (pname, localize(p),
-                                                           instance.order.event.currency)))
+                choices.append((str(i.pk), '%s (%s)' % (pname, p.print(instance.order.event.currency))))
         self.fields['itemvar'].choices = choices
+        change_decimal_field(self.fields['price'], instance.order.event.currency)
 
     def clean(self):
         if self.cleaned_data.get('operation') == 'price' and not self.cleaned_data.get('price', '') != '':

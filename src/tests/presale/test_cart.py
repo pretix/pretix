@@ -15,7 +15,7 @@ from pretix.base.models import (
 from pretix.base.models.items import (
     ItemAddOn, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.cart import CartError, CartManager
+from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.sessions import get_cart_session_key
 
 
@@ -25,10 +25,11 @@ class CartTestMixin:
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-            live=True
+            date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
+            live=True,
+            plugins="pretix.plugins.banktransfer"
         )
-        self.tr19 = self.event.tax_rules.create(rate=19)
+        self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12,
@@ -62,7 +63,18 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-danger' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
+
+    def test_after_event(self):
+        self.event.date_to = now() - timedelta(days=1)
+        self.event.save()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         assert 'alert-danger' in response.rendered_content
         assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
@@ -73,7 +85,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         assert 'alert-danger' in response.rendered_content
         assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
@@ -82,7 +94,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -116,7 +128,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -205,6 +217,21 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=False)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
+
+    def test_subevent_ignore_series_date(self):
+        self.event.has_subevents = True
+        self.event.date_to = now() - timedelta(days=1)
+        self.event.save()
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True,
+                                         presale_end=now() + timedelta(days=1))
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
 
     def test_subevent_sale_over(self):
         self.event.has_subevents = True
@@ -320,7 +347,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d' % self.ticket.id: '1',
             'price_%d' % self.ticket.id: '24.00'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -340,7 +367,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d' % self.ticket.id: '1',
             'price_%d' % self.ticket.id: '24.00'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -360,7 +387,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d' % self.ticket.id: '1',
             'price_%d' % self.ticket.id: '12.00'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -379,7 +406,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
@@ -388,7 +415,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Shirt', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -409,7 +436,7 @@ class CartTest(CartTestMixin, TestCase):
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
             'price_%d_%d' % (self.shirt.id, self.shirt_red.id): '16',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Shirt', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -445,7 +472,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -464,7 +491,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d' % self.ticket.id: '2',
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart')[0].text)
@@ -479,7 +506,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: 'a',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('numbers only', doc.select('.alert-danger')[0].text)
@@ -488,7 +515,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '-2',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('numbers only', doc.select('.alert-danger')[0].text)
@@ -496,7 +523,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): 'a',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('numbers only', doc.select('.alert-danger')[0].text)
@@ -505,7 +532,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_a_%d' % (self.shirt_blue.id): '-2',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('numbers only', doc.select('.alert-danger')[0].text)
@@ -513,7 +540,7 @@ class CartTest(CartTestMixin, TestCase):
 
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('did not select any products', doc.select('.alert-warning')[0].text)
@@ -528,7 +555,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % shirt2.id: '1',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('not available', doc.select('.alert-danger')[0].text)
@@ -539,7 +566,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % shirt2.id: '1',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -579,7 +606,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '5',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
@@ -595,7 +622,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
@@ -611,7 +638,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 3)
 
@@ -624,7 +651,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '4',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('at least', doc.select('.alert-danger')[0].text)
@@ -639,13 +666,13 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '10',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 10)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '3',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 13)
 
@@ -655,7 +682,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -667,7 +694,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '2'
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -695,7 +722,7 @@ class CartTest(CartTestMixin, TestCase):
             'item_%d' % self.ticket.id: '2',
             'subevent': se.pk
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
@@ -966,6 +993,15 @@ class CartTest(CartTestMixin, TestCase):
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_voucher_item_not_available_error(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event)
+        self.ticket.available_until = now() - timedelta(days=2)
+        self.ticket.save()
+        response = self.client.get('/%s/%s/redeem' % (self.orga.slug, self.event.slug),
+                                   {'voucher': v.code},
+                                   follow=True)
+        assert error_messages['voucher_item_not_available'] in response.rendered_content
+
     def test_voucher_price(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='set')
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -1023,7 +1059,7 @@ class CartTest(CartTestMixin, TestCase):
             'price_%d' % self.ticket.id: '21.00',
             '_voucher_code': v.code,
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -1045,7 +1081,7 @@ class CartTest(CartTestMixin, TestCase):
             'price_%d' % self.ticket.id: '20.00',
             '_voucher_code': v.code,
         }, follow=True)
-        self.assertRedirects(response, '/%s/%s/' % (self.orga.slug, self.event.slug),
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
@@ -1736,6 +1772,43 @@ class CartAddonTest(CartTestMixin, TestCase):
             }
         ])
         self.cm.commit()
+
+    def test_sold_out_swap_addons(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop2, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp2
+        )
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop2.pk,
+                'variation': None
+            },
+            {
+                'addon_to': cp2.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            },
+        ])
+        self.cm.commit()
+        assert cp1.addons.count() == 1
+        assert cp2.addons.count() == 1
+        assert cp1.addons.first().item == self.workshop2
+        assert cp2.addons.first().item == self.workshop1
 
     def test_expand_expired(self):
         cp1 = CartPosition.objects.create(

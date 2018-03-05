@@ -11,22 +11,24 @@ from django.utils.functional import cached_property
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import Quota, SubEventItem, SubEventItemVariation
+from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
-    QuotaFormSet, SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm,
+    CheckinListFormSet, QuotaFormSet, SubEventForm, SubEventItemForm,
+    SubEventItemVariationForm, SubEventMetaValueForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 
 
-class SubEventList(EventPermissionRequiredMixin, ListView):
+class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = SubEvent
     context_object_name = 'subevents'
-    paginate_by = 30
     template_name = 'pretixcontrol/subevents/index.html'
     permission = 'can_change_settings'
 
@@ -99,9 +101,12 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if self.get_object().orderposition_set.count() > 0:
+        if self.object.orderposition_set.count() > 0:
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
                                                   'placed.'))
+            return HttpResponseRedirect(self.get_success_url())
+        elif not self.object.allow_delete():  # checking if this is the last date in the event series
+            messages.error(request, pgettext_lazy('subevent', 'The last date of an event series can not be deleted.'))
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
@@ -133,6 +138,43 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         )
 
     @cached_property
+    def cl_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.copy_from:
+            kwargs['initial'] = [
+                {
+                    'name': cl.name,
+                    'all_products': cl.all_products,
+                    'limit_products': cl.limit_products.all(),
+                    'include_pending': cl.include_pending,
+                } for cl in self.copy_from.checkinlist_set.prefetch_related('limit_products')
+            ]
+            extra = len(kwargs['initial'])
+        elif not self.object:
+            kwargs['initial'] = [
+                {
+                    'name': '',
+                    'all_products': True,
+                    'include_pending': False,
+                }
+            ]
+            extra = 1
+
+        formsetclass = inlineformset_factory(
+            SubEvent, CheckinList,
+            form=CheckinListForm, formset=CheckinListFormSet,
+            can_order=False, can_delete=True, extra=extra,
+        )
+        if self.object:
+            kwargs['queryset'] = self.object.checkinlist_set.prefetch_related('limit_products')
+
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            instance=self.object,
+                            event=self.request.event, **kwargs)
+
+    @cached_property
     def formset(self):
         extra = 0
         kwargs = {}
@@ -160,6 +202,38 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             instance=self.object,
                             event=self.request.event, **kwargs)
+
+    def save_cl_formset(self, obj):
+        for form in self.cl_formset.initial_forms:
+            if form in self.cl_formset.deleted_forms:
+                if not form.instance.pk:
+                    continue
+                form.instance.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user)
+                form.instance.delete()
+                form.instance.pk = None
+            elif form.has_changed():
+                form.instance.subevent = obj
+                form.instance.event = obj.event
+                form.save()
+                change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                change_data['id'] = form.instance.pk
+                form.instance.log_action(
+                    'pretix.event.checkinlist.changed', user=self.request.user, data={
+                        k: form.cleaned_data.get(k) for k in form.changed_data
+                    }
+                )
+
+        for form in self.cl_formset.extra_forms:
+            if not form.has_changed():
+                continue
+            if self.formset._should_delete_form(form):
+                continue
+            form.instance.subevent = obj
+            form.instance.event = obj.event
+            form.save()
+            change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+            change_data['id'] = form.instance.pk
+            form.instance.log_action(action='pretix.event.checkinlist.added', user=self.request.user, data=change_data)
 
     def save_formset(self, obj):
         for form in self.formset.initial_forms:
@@ -204,6 +278,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
+        ctx['cl_formset'] = self.cl_formset
         ctx['itemvar_forms'] = self.itemvar_forms
         ctx['meta_forms'] = self.meta_forms
         return ctx
@@ -259,7 +334,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
     def is_valid(self, form):
         return form.is_valid() and all([f.is_valid() for f in self.itemvar_forms]) and self.formset.is_valid() and (
             all([f.is_valid() for f in self.meta_forms])
-        )
+        ) and self.cl_formset.is_valid()
 
 
 class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
@@ -288,6 +363,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
     @transaction.atomic
     def form_valid(self, form):
         self.save_formset(self.object)
+        self.save_cl_formset(self.object)
         self.save_meta()
 
         for f in self.itemvar_forms:
@@ -355,6 +431,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         form.instance.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
 
         self.save_formset(form.instance)
+        self.save_cl_formset(form.instance)
         for f in self.itemvar_forms:
             f.instance.subevent = form.instance
             f.save()

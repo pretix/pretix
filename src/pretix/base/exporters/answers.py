@@ -55,7 +55,7 @@ class AnswerFilesExporter(BaseExporter):
                         i.file.close()
 
             with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
-                return 'answers.zip', 'application/zip', zipf.read()
+                return '{}_answers.zip'.format(self.event.slug), 'application/zip', zipf.read()
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_answers")

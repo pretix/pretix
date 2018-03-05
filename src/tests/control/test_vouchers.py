@@ -456,6 +456,19 @@ class VoucherFormTest(SoupTest):
             'itemvar': '%d' % self.ticket.pk,
         })
 
+    def test_subevent_non_blocking_quota_no_date(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        self.event.subevents.create(name="Bar", date_from=now())
+
+        self.quota_tickets.subevent = se1
+        self.quota_tickets.save()
+
+        self._create_voucher({
+            'itemvar': 'q-%d' % self.quota_tickets.pk,
+        })
+
     def test_subevent_required_for_blocking(self):
         self.event.has_subevents = True
         self.event.save()

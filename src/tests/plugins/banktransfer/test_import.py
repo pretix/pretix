@@ -81,6 +81,8 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
     }
     for inp in doc.select("input[type=hidden]"):
         data[inp.attrs['name']] = inp.attrs['value']
+    for inp in doc.select("textarea"):
+        data[inp.attrs['name']] = inp.text
     r = client.post('/control/event/dummy/dummy/banktransfer/import/', data)
     assert '/job/' in r['Location']
 
@@ -233,3 +235,43 @@ def test_wrong_event_organizer(env, orga_job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_import_very_long_csv_file(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.get('/control/event/dummy/dummy/banktransfer/import/')
+    assert r.status_code == 200
+
+    payload = """
+Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betrag in EUR;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karl Kunde;Bestellung 2015ABCDE;23,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMYFGHIJ;42,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY1234S;42,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY1234S;23,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY6789Z;23,00;
+09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY6789Z;23,00;
+"""
+    payload += "09.04.2015;09.04.2015;SEPA-Überweisung;Karla Kundin;Bestellung DUMMY6789Z;23,00;\n" * 1000
+
+    file = SimpleUploadedFile('file.csv', payload.encode("utf-8"), content_type="text/csv")
+
+    r = client.post('/control/event/dummy/dummy/banktransfer/import/', {
+        'file': file
+    })
+    doc = BeautifulSoup(r.content, "lxml")
+    assert r.status_code == 200
+    assert len(doc.select("input[name=date]")) > 0
+    data = {
+        'payer': [3],
+        'reference': [4],
+        'date': 1,
+        'amount': 5,
+        'cols': 7
+    }
+    for inp in doc.select("input[type=hidden]"):
+        data[inp.attrs['name']] = inp.attrs['value']
+    for inp in doc.select("textarea"):
+        data[inp.attrs['name']] = inp.text
+    r = client.post('/control/event/dummy/dummy/banktransfer/import/', data)
+    assert '/job/' in r['Location']

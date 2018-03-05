@@ -101,7 +101,7 @@ class JSONExporter(BaseExporter):
             }
         }
 
-        return 'pretixdata.json', 'application/json', json.dumps(jo, cls=DjangoJSONEncoder)
+        return '{}_pretixdata.json'.format(self.event.slug), 'application/json', json.dumps(jo, cls=DjangoJSONEncoder)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_json")

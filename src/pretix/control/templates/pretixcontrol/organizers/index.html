@@ -1,20 +1,46 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
 {% load eventurl %}
 {% block title %}{% trans "Organizers" %}{% endblock %}
 {% block content %}
 	<h1>{% trans "Organizers" %}</h1>
 	<p>{% trans "The list below shows all organizer accounts you have administrative access to." %}</p>
+    <form class="row filter-form" action="" method="get">
+        <div class="col-md-10 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.query layout='inline' %}
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+            <button class="btn btn-primary btn-block" type="submit">
+                <span class="fa fa-filter"></span>
+                <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+            </button>
+        </div>
+    </form>
     {% if request.user.is_superuser %}
-        <a href="{% url "control:organizers.add" %}" class="btn btn-default">
-            <span class="fa fa-plus"></span>
-            {% trans "Create a new organizer" %}
-        </a>
+        <p>
+            <a href="{% url "control:organizers.add" %}" class="btn btn-default">
+                <span class="fa fa-plus"></span>
+                {% trans "Create a new organizer" %}
+            </a>
+        </p>
     {% endif %}
 	<table class="table table-condensed table-hover">
 		<thead>
 			<tr>
-				<th>{% trans "Organizer name" %}</th>
+                <th>
+                    {% trans "Organizer name" %}
+                    <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th>
+                    {% trans "Short form" %}
+                    <a href="?{% url_replace request 'ordering' '-slug' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'slug' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,6 +49,7 @@
 				<td><strong>
                     <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
                 </strong></td>
+                <td>{{ o.slug }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>

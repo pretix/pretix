@@ -1,25 +1,26 @@
 import logging
 from collections import OrderedDict
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Dict, Union
 
 import pytz
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import CartPosition, Event, Order, Quota
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
+from pretix.helpers.money import DecimalTextInput
 from pretix.presale.views import get_cart_total
 from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -49,6 +50,16 @@ class BasePaymentProvider:
 
     def __str__(self):
         return self.identifier
+
+    @property
+    def is_implicit(self) -> bool:
+        """
+        Returns whether or whether not this payment provider is an "implicit" payment provider that will
+        *always* and unconditionally be used if is_allowed() returns True and does not require any input.
+        This is  intended to be used by the FreePaymentProvider, which skips the payment choice page.
+        By default, this returns ``False``. Please do not set this if you don't know exactly what you are doing.
+        """
+        return False
 
     @property
     def is_meta(self) -> bool:
@@ -81,10 +92,15 @@ class BasePaymentProvider:
         fee_abs = self.settings.get('_fee_abs', as_type=Decimal, default=0)
         fee_percent = self.settings.get('_fee_percent', as_type=Decimal, default=0)
         fee_reverse_calc = self.settings.get('_fee_reverse_calc', as_type=bool, default=True)
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         if fee_reverse_calc:
-            return round_decimal((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price)
+            return ((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
         else:
-            return round_decimal(price * fee_percent / 100) + fee_abs
+            return (price * fee_percent / 100 + fee_abs).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
 
     @property
     def verbose_name(self) -> str:
@@ -146,6 +162,7 @@ class BasePaymentProvider:
         .. WARNING:: It is highly discouraged to alter the ``_enabled`` field of the default
                      implementation.
         """
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return OrderedDict([
             ('_enabled',
              forms.BooleanField(
@@ -156,7 +173,10 @@ class BasePaymentProvider:
              forms.DecimalField(
                  label=_('Additional fee'),
                  help_text=_('Absolute value'),
-                 required=False
+                 localize=True,
+                 required=False,
+                 decimal_places=places,
+                 widget=DecimalTextInput(places=places)
              )),
             ('_fee_percent',
              forms.DecimalField(
@@ -164,7 +184,8 @@ class BasePaymentProvider:
                  help_text=_('Percentage of the order total. Note that this percentage will currently only '
                              'be calculated on the summed price of sold tickets, not on other fees like e.g. shipping '
                              'fees, if there are any.'),
-                 required=False
+                 localize=True,
+                 required=False,
              )),
             ('_availability_date',
              RelativeDateField(
@@ -176,7 +197,7 @@ class BasePaymentProvider:
              forms.BooleanField(
                  label=_('Calculate the fee from the total value including the fee.'),
                  help_text=_('We recommend to enable this if you want your users to pay the payment fees of your '
-                             'payment provider. <a href="{docs_url}" target="_blank">Click here '
+                             'payment provider. <a href="{docs_url}" target="_blank" rel="noopener">Click here '
                              'for detailed information on what this does.</a> Don\'t forget to set the correct fees '
                              'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
                  required=False
@@ -184,7 +205,9 @@ class BasePaymentProvider:
             ('_invoice_text',
              I18nFormField(
                  label=_('Text on invoices'),
-                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices.'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
+                             'This will only be used if the invoice is generated before the order is paid. If the '
+                             'invoice is generated later, it will show a text stating that it has already been paid.'),
                  required=False,
                  widget=I18nTextarea,
                  widget_kwargs={'attrs': {'rows': '2'}}
@@ -205,6 +228,8 @@ class BasePaymentProvider:
         The default implementation returns the content of the _invoice_text configuration
         variable (an I18nString), or an empty string if unconfigured.
         """
+        if order.status == Order.STATUS_PAID:
+            return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
     @property
@@ -324,7 +349,7 @@ class BasePaymentProvider:
         at least store the user's input into his session.
 
         This method should return ``False`` if the user's input was invalid, ``True``
-        if the input was valid and the frontend should continue with default behaviour
+        if the input was valid and the frontend should continue with default behavior
         or a string containing a URL if the user should be redirected somewhere else.
 
         On errors, you should use Django's message framework to display an error message
@@ -375,7 +400,7 @@ class BasePaymentProvider:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
-        If you need any special  behaviour,  you can return a string
+        If you need any special  behavior,  you can return a string
         containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
@@ -523,8 +548,8 @@ class BasePaymentProvider:
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.
@@ -547,6 +572,10 @@ class PaymentException(Exception):
 
 
 class FreeOrderProvider(BasePaymentProvider):
+
+    @property
+    def is_implicit(self) -> bool:
+        return True
 
     @property
     def is_enabled(self) -> bool:
@@ -588,8 +617,8 @@ class FreeOrderProvider(BasePaymentProvider):
         Will be called if the event administrator confirms the refund.
 
         This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behaviour or None to continue
-        with default behaviour.
+        user should be redirected to if you need special behavior or None to continue
+        with default behavior.
 
         On failure, you should use Django's message framework to display an error message
         to the user.

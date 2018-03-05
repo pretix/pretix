@@ -5,6 +5,7 @@ from decimal import Decimal
 
 import pytest
 import pytz
+from dateutil.tz import tzoffset
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -12,9 +13,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 
+from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CartPosition, Event, Item, ItemCategory, ItemVariation, Order,
-    OrderPosition, Organizer, Question, Quota, User, Voucher, WaitingListEntry,
+    CachedFile, CartPosition, CheckinList, Event, Item, ItemCategory,
+    ItemVariation, Order, OrderPosition, Organizer, Question, Quota, User,
+    Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
@@ -656,6 +659,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
     def test_paid_expired_unavailable(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
         self.order.status = Order.STATUS_EXPIRED
         self.order.save()
@@ -667,6 +671,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
     def test_paid_after_deadline_but_not_expired(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         mark_order_paid(self.order)
@@ -674,11 +679,37 @@ class OrderTestCase(BaseQuotaTestCase):
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
     def test_paid_expired_unavailable_force(self):
+        self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
         self.order.save()
         self.quota.size = 0
         self.quota.save()
         mark_order_paid(self.order, force=True)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
+
+    def test_paid_expired_unavailable_waiting_list(self):
+        self.event.settings.payment_term_accept_late = True
+        self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
+        self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota.size = 2
+        self.quota.save()
+        with self.assertRaises(Quota.QuotaExceededException):
+            mark_order_paid(self.order)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
+
+    def test_paid_expired_unavailable_waiting_list_ignore(self):
+        self.event.waitinglistentries.create(item=self.item1, email='foo@bar.com')
+        self.order.expires = now() - timedelta(days=2)
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota.size = 2
+        self.quota.save()
+        mark_order_paid(self.order, count_waitinglist=False)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -955,6 +986,8 @@ class EventTest(TestCase):
         que1.items.add(i1)
         event1.settings.foo_setting = 23
         event1.settings.tax_rate_default = tr7
+        cl1 = event1.checkin_lists.create(name="All", all_products=False)
+        cl1.limit_products.add(i1)
 
         event2 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab1234',
@@ -962,7 +995,7 @@ class EventTest(TestCase):
         )
         event2.copy_data_from(event1)
 
-        for a in (tr7, c1, c2, i1, q1, que1):
+        for a in (tr7, c1, c2, i1, q1, que1, cl1):
             a.refresh_from_db()
             assert a.event == event1
 
@@ -984,6 +1017,40 @@ class EventTest(TestCase):
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
         assert event2.settings.tax_rate_default == trnew
+        assert event2.checkin_lists.count() == 1
+        assert [i.pk for i in event2.checkin_lists.first().limit_products.all()] == [i1new.pk]
+
+    def test_presale_has_ended(self):
+        event = Event(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_from = now().replace(hour=23, minute=59, second=59)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_from = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
+
+        event.date_to = now() + timedelta(days=1)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.date_to = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
+
+        event.presale_end = now() + timedelta(days=1)
+        assert not event.presale_has_ended
+        assert event.presale_is_running
+
+        event.presale_end = now() - timedelta(days=1)
+        assert event.presale_has_ended
+        assert not event.presale_is_running
 
 
 class SubEventTest(TestCase):
@@ -1034,3 +1101,189 @@ class CachedFileTestCase(TestCase):
             assert f.read().strip() == "file_content"
         cf.delete()
         assert not default_storage.exists(cf.file.name)
+
+
+class CheckinListTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        cls.event = Event.objects.create(
+            organizer=cls.organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1),
+        )
+        cls.item1 = cls.event.items.create(name="Ticket", default_price=12)
+        cls.item2 = cls.event.items.create(name="Shirt", default_price=6)
+        cls.cl_all = cls.event.checkin_lists.create(
+            name='All', all_products=True
+        )
+        cls.cl_all_pending = cls.event.checkin_lists.create(
+            name='Z Pending', all_products=True, include_pending=True
+        )
+        cls.cl_both = cls.event.checkin_lists.create(
+            name='Both', all_products=False
+        )
+        cls.cl_both.limit_products.add(cls.item1)
+        cls.cl_both.limit_products.add(cls.item2)
+        cls.cl_tickets = cls.event.checkin_lists.create(
+            name='Tickets', all_products=False
+        )
+        cls.cl_tickets.limit_products.add(cls.item1)
+        o = Order.objects.create(
+            code='FOO', event=cls.event, email='dummy@dummy.test',
+            status=Order.STATUS_PAID,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=cls.item1,
+            variation=None,
+            price=Decimal("12"),
+        )
+        op2 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item1,
+            variation=None,
+            price=Decimal("12"),
+        )
+        op3 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item2,
+            variation=None,
+            price=Decimal("6"),
+        )
+        op2.checkins.create(list=cls.cl_tickets)
+        op3.checkins.create(list=cls.cl_both)
+
+        o = Order.objects.create(
+            code='FOO', event=cls.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+        )
+        op4 = OrderPosition.objects.create(
+            order=o,
+            item=cls.item2,
+            variation=None,
+            price=Decimal("6"),
+        )
+        op4.checkins.create(list=cls.cl_all_pending)
+
+    def test_annotated(self):
+        lists = list(CheckinList.annotate_with_numbers(self.event.checkin_lists.order_by('name'), self.event))
+        assert lists == [self.cl_all, self.cl_both, self.cl_tickets, self.cl_all_pending]
+        assert lists[0].checkin_count == 0
+        assert lists[0].position_count == 3
+        assert lists[0].percent == 0
+        assert lists[1].checkin_count == 1
+        assert lists[1].position_count == 3
+        assert lists[1].percent == 33
+        assert lists[2].checkin_count == 1
+        assert lists[2].position_count == 2
+        assert lists[2].percent == 50
+        assert lists[3].checkin_count == 1
+        assert lists[3].position_count == 4
+        assert lists[3].percent == 25
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("qtype,answer,expected", [
+    (Question.TYPE_STRING, "a", "a"),
+    (Question.TYPE_TEXT, "v", "v"),
+    (Question.TYPE_NUMBER, "3", Decimal("3")),
+    (Question.TYPE_NUMBER, "2.56", Decimal("2.56")),
+    (Question.TYPE_NUMBER, 2.45, Decimal("2.45")),
+    (Question.TYPE_NUMBER, 3, Decimal("3")),
+    (Question.TYPE_NUMBER, Decimal("4.56"), Decimal("4.56")),
+    (Question.TYPE_NUMBER, "abc", ValidationError),
+    (Question.TYPE_BOOLEAN, "True", True),
+    (Question.TYPE_BOOLEAN, "true", True),
+    (Question.TYPE_BOOLEAN, "False", False),
+    (Question.TYPE_BOOLEAN, "false", False),
+    (Question.TYPE_BOOLEAN, "0", False),
+    (Question.TYPE_BOOLEAN, "", False),
+    (Question.TYPE_BOOLEAN, True, True),
+    (Question.TYPE_BOOLEAN, False, False),
+    (Question.TYPE_DATE, "2018-01-16", datetime.date(2018, 1, 16)),
+    (Question.TYPE_DATE, datetime.date(2018, 1, 16), datetime.date(2018, 1, 16)),
+    (Question.TYPE_DATE, "2018-13-16", ValidationError),
+    (Question.TYPE_TIME, "15:20", datetime.time(15, 20)),
+    (Question.TYPE_TIME, datetime.time(15, 20), datetime.time(15, 20)),
+    (Question.TYPE_TIME, "44:20", ValidationError),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00+01:00",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00Z",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 0))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:20:00",
+     datetime.datetime(2018, 1, 16, 15, 20, 0, tzinfo=tzoffset(None, 3600))),
+    (Question.TYPE_DATETIME, "2018-01-16T15:AB:CD", ValidationError),
+])
+def test_question_answer_validation(qtype, answer, expected):
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(),
+    )
+    event.settings.timezone = 'Europe/Berlin'
+    q = Question(type=qtype, event=event)
+    if isinstance(expected, type) and issubclass(expected, Exception):
+        with pytest.raises(expected):
+            q.clean_answer(answer)
+    elif callable(expected):
+        assert expected(q.clean_answer(answer))
+    else:
+        assert q.clean_answer(answer) == expected
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_localized_decimal():
+    q = Question(type='N')
+    with language("de"):
+        assert q.clean_answer("2,56") == Decimal("2.56")
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_choice():
+    organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=organizer, name='Dummy', slug='dummy',
+        date_from=now(), date_to=now() - timedelta(hours=1),
+    )
+    q = Question.objects.create(type='C', event=event, question='Q')
+    o1 = q.options.create(answer='A')
+    o2 = q.options.create(answer='B')
+    q2 = Question.objects.create(type='C', event=event, question='Q2')
+    o3 = q2.options.create(answer='C')
+    assert q.clean_answer(str(o1.pk)) == o1
+    assert q.clean_answer(o1.pk) == o1
+    assert q.clean_answer(str(o2.pk)) == o2
+    assert q.clean_answer(o2.pk) == o2
+    with pytest.raises(ValidationError):
+        q.clean_answer(str(o2.pk + 1000))
+    with pytest.raises(ValidationError):
+        q.clean_answer('FOO')
+    with pytest.raises(ValidationError):
+        q.clean_answer(str(o3.pk))
+
+
+@pytest.mark.django_db
+def test_question_answer_validation_multiple_choice():
+    organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=organizer, name='Dummy', slug='dummy',
+        date_from=now(), date_to=now() - timedelta(hours=1),
+    )
+    q = Question.objects.create(type='M', event=event, question='Q')
+    o1 = q.options.create(answer='A')
+    o2 = q.options.create(answer='B')
+    q.options.create(answer='D')
+    q2 = Question.objects.create(type='M', event=event, question='Q2')
+    o3 = q2.options.create(answer='C')
+    assert q.clean_answer("{},{}".format(str(o1.pk), str(o2.pk))) == [o1, o2]
+    assert q.clean_answer([str(o1.pk), str(o2.pk)]) == [o1, o2]
+    assert q.clean_answer([str(o1.pk)]) == [o1]
+    assert q.clean_answer([o1.pk]) == [o1]
+    assert q.clean_answer([o1.pk, o3.pk]) == [o1]
+    assert q.clean_answer([o1.pk, o3.pk + 1000]) == [o1]
+    with pytest.raises(ValidationError):
+        assert q.clean_answer([o1.pk, 'FOO']) == [o1]

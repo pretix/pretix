@@ -18,6 +18,7 @@ from pretix.base.models import Order, Quota
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid
 from pretix.base.settings import SettingsSandbox
+from pretix.base.templatetags.money import money_filter
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
@@ -71,7 +72,7 @@ class ActionView(View):
                 'date': trans.date,
                 'payer': trans.payer,
                 'trans_id': trans.pk
-            }))
+            }), count_waitinglist=False)
             trans.state = BankTransaction.STATE_VALID
             trans.save()
         except Quota.QuotaExceededException as e:
@@ -94,9 +95,9 @@ class ActionView(View):
     def _assign(self, trans, code):
         try:
             if '-' in code:
-                trans.order = self.order_qs().get(code=code.split('-')[1], event__slug__iexact=code.split('-')[0])
+                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[1], event__slug__iexact=code.rsplit('-', 1)[0])
             else:
-                trans.order = self.order_qs().get(code=code.split('-')[-1])
+                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[-1])
         except Order.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
@@ -147,8 +148,6 @@ class ActionView(View):
             })
 
     def get(self, request, *args, **kwargs):
-        from django.utils.formats import localize
-
         u = request.GET.get('query', '')
         if len(u) < 2:
             return JsonResponse({'results': []})
@@ -178,7 +177,7 @@ class ActionView(View):
                 {
                     'code': o.event.slug.upper() + '-' + o.code,
                     'status': o.get_status_display(),
-                    'total': localize(o.total) + ' ' + o.event.currency
+                    'total': money_filter(o.total, o.event.currency)
                 } for o in qs
             ]
         })
@@ -347,14 +346,12 @@ class ImportView(ListView):
         return self.assign_view(data)
 
     def process_csv_hint(self):
-        data = []
-        for i in range(int(self.request.POST.get('rows'))):
-            data.append(
-                [
-                    self.request.POST.get('col[%d][%d]' % (i, j))
-                    for j in range(int(self.request.POST.get('cols')))
-                ]
-            )
+        try:
+            data = json.loads(self.request.POST.get('data').strip())
+        except ValueError:
+            messages.error(self.request, _('Invalid input data.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+
         if 'reference' not in self.request.POST:
             messages.error(self.request, _('You need to select the column containing the payment reference.'))
             return self.assign_view(data)
@@ -382,7 +379,10 @@ class ImportView(ListView):
         return super().get(self.request)
 
     def assign_view(self, parsed):
-        ctx = {'rows': parsed}
+        ctx = {
+            'json': json.dumps(parsed),
+            'rows': parsed,
+        }
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
         else:

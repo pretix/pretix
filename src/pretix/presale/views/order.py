@@ -7,13 +7,17 @@ from django.db import transaction
 from django.db.models import Sum
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
-from pretix.base.models.orders import InvoiceAddress, OrderFee, QuestionAnswer
+from pretix.base.models.orders import (
+    CachedCombinedTicket, OrderFee, QuestionAnswer,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
@@ -23,12 +27,12 @@ from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
+from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.helpers.safedownload import check_token
-from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.forms.checkout import InvoiceAddressForm
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.async import AsyncAction
-from pretix.presale.views.questions import QuestionsViewMixin
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -59,6 +63,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
         })
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
@@ -112,6 +117,12 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
             self.request.event.settings.invoice_generate == 'user'
         )
+        ctx['url'] = build_absolute_uri(
+            self.request.event, 'presale:event.order', kwargs={
+                'order': self.order.code,
+                'secret': self.order.secret
+            }
+        )
 
         if self.order.status == Order.STATUS_PENDING:
             ctx['payment'] = self.payment_provider.order_pending_render(self.request, self.order)
@@ -134,6 +145,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         return ctx
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
     """
     This is used if a payment is retried or the payment method is changed. It shows the payment
@@ -172,6 +184,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['form'] = self.form
+        ctx['provider'] = self.payment_provider
         return ctx
 
     @cached_property
@@ -185,6 +198,7 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
     """
     This is used if a payment is retried or the payment method is changed. It is shown after the
@@ -231,6 +245,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
     """
     This is used for the first try of a payment. This means the user just entered payment
@@ -272,6 +287,7 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         })
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = 'pretixpresale/event/order_pay_change.html'
 
@@ -383,6 +399,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         })
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -405,32 +422,11 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         return redirect(self.get_order_url())
 
 
-class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, TemplateView):
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, TemplateView):
+    form_class = QuestionsForm
+    invoice_form_class = InvoiceAddressForm
     template_name = "pretixpresale/event/order_modify.html"
-
-    def _positions_for_questions(self):
-        return self.positions
-
-    @cached_property
-    def positions(self):
-        return list(self.order.positions.select_related(
-            'item', 'variation'
-        ).prefetch_related(
-            'variation', 'item__questions', 'answers'
-        ))
-
-    @cached_property
-    def invoice_address(self):
-        try:
-            return self.order.invoice_address
-        except InvoiceAddress.DoesNotExist:
-            return InvoiceAddress(order=self.order)
-
-    @cached_property
-    def invoice_form(self):
-        return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
-                                  event=self.request.event,
-                                  instance=self.invoice_address, validate_vat_id=False)
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()
@@ -446,6 +442,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             messages.success(self.request, _(success_message))
 
         CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
         return redirect(self.get_order_url())
 
     def get(self, request, *args, **kwargs):
@@ -461,14 +458,8 @@ class OrderModify(EventViewMixin, OrderDetailMixin, QuestionsViewMixin, Template
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['order'] = self.order
-        ctx['formgroups'] = self.formdict.items()
-        ctx['invoice_form'] = self.invoice_form
-        return ctx
 
-
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_cancel.html"
 
@@ -477,7 +468,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         self.kwargs = kwargs
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status != Order.STATUS_PENDING or not self.order.can_user_cancel:
+        if not self.order.can_user_cancel:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
@@ -491,6 +482,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         return ctx
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     task = cancel_order
     known_errortypes = ['OrderError']
@@ -518,6 +510,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         return _('The order has been canceled.')
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
@@ -539,6 +532,7 @@ class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
         return resp
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderDownload(EventViewMixin, OrderDetailMixin, View):
 
     def get_self_url(self):
@@ -634,6 +628,7 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return resp
 
 
+@method_decorator(xframe_options_exempt, 'dispatch')
 class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
 
     def get(self, request, *args, **kwargs):

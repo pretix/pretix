@@ -60,13 +60,16 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        qs = Order.objects.filter(event=self.request.event)
+        qs = Order.objects.filter(event=self.request.event, email__isnull=False)
         statusq = Q(status__in=form.cleaned_data['sendto'])
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
+        if form.cleaned_data.get('item'):
+            orders = orders.filter(positions__item=form.cleaned_data.get('item'))
         if form.cleaned_data.get('subevent'):
-            orders = orders.filter(positions__subevent__in=(form.cleaned_data.get('subevent'),)).distinct()
+            orders = orders.filter(positions__subevent__in=(form.cleaned_data.get('subevent'),))
+        orders = orders.distinct()
 
         tz = pytz.timezone(self.request.event.settings.timezone)
 

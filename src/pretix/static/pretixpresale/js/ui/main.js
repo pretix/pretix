@@ -13,8 +13,90 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+var form_handlers = function (el) {
+    el.find(".datetimepicker").each(function() {
+        $(this).datetimepicker({
+            format: $("body").attr("data-datetimeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+        if (!$(this).val()) {
+            $(this).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0));
+        }
+    });
+
+    el.find(".datepickerfield").each(function() {
+        var opts = {
+            format: $("body").attr("data-dateformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            },
+        };
+        $(this).datetimepicker(opts);
+        if ($(this).parent().is('.splitdatetimerow')) {
+            $(this).on("dp.change", function (ev) {
+                var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
+                var date = $(this).data('DateTimePicker').date();
+                if (date === null) {
+                    return;
+                }
+                if ($timepicker.val() === "") {
+                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    $timepicker.data('DateTimePicker').date(date);
+                }
+            });
+        }
+    });
+
+    el.find(".timepickerfield").each(function() {
+        var opts = {
+            format: $("body").attr("data-timeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        };
+        $(this).datetimepicker(opts);
+	});
+}
+
+
 $(function () {
     "use strict";
+
     $("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
@@ -118,6 +200,8 @@ $(function () {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
+
+	form_handlers($("body"));
 
     // Lightbox
     lightbox.init();

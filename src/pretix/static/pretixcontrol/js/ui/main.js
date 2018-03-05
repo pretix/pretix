@@ -39,10 +39,306 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     var c = $(jqXHR.responseText).filter('.container');
     if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
-    } else {
+    } else if (thrownError !== "abort") {
         alert(gettext('Unknown error.'));
     }
 });
+
+var form_handlers = function (el) {
+    el.find(".datetimepicker").each(function() {
+        $(this).datetimepicker({
+            format: $("body").attr("data-datetimeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        });
+        if (!$(this).val()) {
+            $(this).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0));
+        }
+    });
+
+    el.find(".datepickerfield").each(function() {
+        var opts = {
+            format: $("body").attr("data-dateformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            },
+        };
+        if ($(this).is('[data-is-payment-date]'))
+            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
+        $(this).datetimepicker(opts);
+        if ($(this).parent().is('.splitdatetimerow')) {
+            $(this).on("dp.change", function (ev) {
+                var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
+                var date = $(this).data('DateTimePicker').date();
+                if (date === null) {
+                    return;
+                }
+                if ($timepicker.val() === "") {
+                    date.set({'hour': 0, 'minute': 0, 'second': 0});
+                    $timepicker.data('DateTimePicker').date(date);
+                }
+            });
+        }
+    });
+
+    el.find(".timepickerfield").each(function() {
+        var opts = {
+            format: $("body").attr("data-timeformat"),
+            locale: $("body").attr("data-datetimelocale"),
+            useCurrent: false,
+            showClear: !$(this).prop("required"),
+            icons: {
+                time: 'fa fa-clock-o',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-screenshot',
+                clear: 'fa fa-trash',
+                close: 'fa fa-remove'
+            }
+        };
+        if ($(this).is('[data-is-payment-date]'))
+            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
+        $(this).datetimepicker(opts);
+    });
+
+    el.find(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function() {
+        var later_field = $(this),
+            earlier_field = $($(this).attr("data-date-after")),
+            update = function () {
+                var earlier = earlier_field.data('DateTimePicker').date(),
+                    later = later_field.data('DateTimePicker').date();
+                if (earlier === null) {
+                    earlier = false;
+                } else if (later !== null && later.isBefore(earlier) && !later.isSame(earlier)) {
+                    later_field.data('DateTimePicker').date(earlier.add(1, 'h'));
+                }
+                later_field.data('DateTimePicker').minDate(earlier);
+            };
+        update();
+        earlier_field.on("dp.change", update);
+    });
+
+    el.find(".datetimepicker[data-date-default]").each(function() {
+        var fill_field = $(this),
+            default_field = $($(this).attr("data-date-default")),
+            show = function () {
+                var fill_date = fill_field.data('DateTimePicker').date(),
+                    default_date = default_field.data('DateTimePicker').date();
+                if (fill_date === null) {
+                    fill_field.data("DateTimePicker").defaultDate(default_date);
+                }
+            };
+        fill_field.on("dp.show", show);
+    });
+
+    el.find(".colorpickerfield").colorpicker({
+        format: 'hex',
+        align: 'left',
+        customClass: 'colorpicker-2x',
+        sliders: {
+            saturation: {
+                maxLeft: 200,
+                maxTop: 200
+            },
+            hue: {
+                maxTop: 200
+            },
+            alpha: {
+                maxTop: 200
+            }
+        }
+    });
+
+    el.find("input[data-checkbox-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-checkbox-dependency")),
+            update = function () {
+                var enabled = dependency.prop('checked');
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+                if (!enabled) {
+                    dependent.prop('checked', false);
+                }
+            };
+        update();
+        dependency.on("change", update);
+    });
+
+    el.find("input[data-inverse-dependency]").each(function () {
+        var dependency = $(this).attr("data-inverse-dependency");
+        if (dependency.substr(0, 1) === '<') {
+            dependency = $(this).closest("form, .form-horizontal").find(dependency.substr(1));
+        } else {
+            dependency = $(dependency);
+        }
+
+        var dependent = $(this),
+            update = function () {
+                var enabled = !dependency.prop('checked');
+                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
+            };
+        update();
+        dependency.on("change", update);
+    });
+
+    $("input[data-display-dependency]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-display-dependency")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (ev) {
+                    dependent.closest('.form-group').slideToggle(enabled);
+                } else {
+                    dependent.closest('.form-group').toggle(enabled);
+                }
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+    });
+
+    el.find("input[data-required-if]").each(function () {
+        var dependent = $(this),
+            dependency = $($(this).attr("data-required-if")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+    });
+
+    el.find("div.scrolling-multiple-choice").each(function () {
+        if ($(this).find(".choice-options-all").length > 0) {
+            return;
+        }
+        var $small = $("<small>");
+        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("All"));
+        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("None"));
+        $(this).prepend($small.append($a_all).append(" / ").append($a_none));
+
+        $(this).find(".choice-options-none").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", false);
+            e.preventDefault();
+            return false;
+        });
+        $(this).find(".choice-options-all").click(function (e) {
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", true);
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    el.find('.select2-static').select2({
+        theme: "bootstrap",
+        language: $("body").attr("data-select2-locale"),
+    });
+
+    el.find('[data-model-select2=generic]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            placeholder: $(this).attr("data-placeholder"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            }
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            if ($s.hasAttribute("multiple")) {
+                window.setTimeout(function () {
+                    $s.parent().find('.select2-search__field').focus();
+                }, 50);
+            }
+        });
+    });
+
+    el.find('[data-model-select2=event]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            },
+            placeholder: $(this).attr("data-placeholder"),
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
+                );
+                if (res.organizer) {
+                    $ret.append(
+                        $("<span>").addClass("event-organizer").append(
+                            $("<span>").addClass("fa fa-users fa-fw")
+                        ).append(" ").append($("<div>").text(res.organizer).html())
+                    );
+                }
+                $ret.append(
+                    $("<span>").addClass("event-daterange").append(
+                        $("<span>").addClass("fa fa-calendar fa-fw")
+                    ).append(" ").append(res.date_range)
+                );
+                return $ret;
+            },
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            window.setTimeout(function () {
+                $s.parent().find('.select2-search__field').focus();
+            }, 50);
+        });
+    });
+
+    el.find(".simple-subevent-choice").change(function () {
+        $(this).closest("form").submit();
+    });
+};
 
 $(function () {
     "use strict";
@@ -53,6 +349,9 @@ $(function () {
             reorderMode: 'animate'
         }
     );
+    $("[data-formset]").on("formAdded", "div", function (event) {
+        form_handlers($(event.target));
+    });
     $(document).on("click", ".variations .variations-select-all", function (e) {
         $(this).parent().parent().find("input[type=checkbox]").prop("checked", true).change();
         e.stopPropagation();
@@ -83,6 +382,11 @@ $(function () {
     });
 
     $('.collapsible').collapse();
+    $("input[data-toggle=radiocollapse]").change(function () {
+        $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
+        $($(this).attr("data-target")).collapse('show');
+    });
+    $("div.collapsed").removeClass("collapsed").addClass("collapse");
     $(".has-error").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });
@@ -137,175 +441,7 @@ $(function () {
         }
     });
 
-    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
-    moment.locale($("body").attr("data-datetimelocale"));
-
-    $(".datetimepicker").each(function() {
-        $(this).datetimepicker({
-            format: $("body").attr("data-datetimeformat"),
-            locale: $("body").attr("data-datetimelocale"),
-            useCurrent: false,
-            showClear: !$(this).prop("required"),
-            icons: {
-                time: 'fa fa-clock-o',
-                date: 'fa fa-calendar',
-                up: 'fa fa-chevron-up',
-                down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
-                today: 'fa fa-screenshot',
-                clear: 'fa fa-trash',
-                close: 'fa fa-remove'
-            }
-        });
-        if (!$(this).val()) {
-            $(this).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0));
-        }
-    });
-
-    $(".datepickerfield").each(function() {
-        var opts = {
-            format: $("body").attr("data-dateformat"),
-            locale: $("body").attr("data-datetimelocale"),
-            useCurrent: false,
-            showClear: !$(this).prop("required"),
-            icons: {
-                time: 'fa fa-clock-o',
-                date: 'fa fa-calendar',
-                up: 'fa fa-chevron-up',
-                down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
-                today: 'fa fa-screenshot',
-                clear: 'fa fa-trash',
-                close: 'fa fa-remove'
-            },
-        };
-        if ($(this).is('[data-is-payment-date]'))
-            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
-        $(this).datetimepicker(opts);
-        if ($(this).parent().is('.splitdatetimerow')) {
-            $(this).on("dp.change", function (ev) {
-                var $timepicker = $(this).closest(".splitdatetimerow").find(".timepickerfield");
-                var date = $(this).data('DateTimePicker').date();
-                if (date === null) {
-                    return;
-                }
-                if ($timepicker.val() === "") {
-                    date.set({'hour': 0, 'minute': 0, 'second': 0});
-                    $timepicker.data('DateTimePicker').date(date);
-                }
-            });
-        }
-    });
-
-    $(".timepickerfield").each(function() {
-        var opts = {
-            format: $("body").attr("data-timeformat"),
-            locale: $("body").attr("data-datetimelocale"),
-            useCurrent: false,
-            showClear: !$(this).prop("required"),
-            icons: {
-                time: 'fa fa-clock-o',
-                date: 'fa fa-calendar',
-                up: 'fa fa-chevron-up',
-                down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
-                today: 'fa fa-screenshot',
-                clear: 'fa fa-trash',
-                close: 'fa fa-remove'
-            }
-        };
-        if ($(this).is('[data-is-payment-date]'))
-            opts["daysOfWeekDisabled"] = JSON.parse($("body").attr("data-payment-weekdays-disabled"));
-        $(this).datetimepicker(opts);
-    });
-
-    $(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function() {
-        var later_field = $(this),
-            earlier_field = $($(this).attr("data-date-after")),
-            update = function () {
-                var earlier = earlier_field.data('DateTimePicker').date(),
-                    later = later_field.data('DateTimePicker').date();
-                if (earlier === null) {
-                    earlier = false;
-                } else if (later !== null && later.isBefore(earlier) && !later.isSame(earlier)) {
-                    later_field.data('DateTimePicker').date(earlier.add(1, 'h'));
-                }
-                later_field.data('DateTimePicker').minDate(earlier);
-            };
-        update();
-        earlier_field.on("dp.change", update);
-    });
-
-    $(".datetimepicker[data-date-default]").each(function() {
-        var fill_field = $(this),
-            default_field = $($(this).attr("data-date-default")),
-            show = function () {
-                var fill_date = fill_field.data('DateTimePicker').date(),
-                    default_date = default_field.data('DateTimePicker').date();
-                if (fill_date === null) {
-                    fill_field.data("DateTimePicker").defaultDate(default_date);
-                }
-            };
-        fill_field.on("dp.show", show);
-    });
-
-    $(".colorpickerfield").colorpicker({
-        format: 'hex',
-        align: 'left',
-        customClass: 'colorpicker-2x',
-        sliders: {
-            saturation: {
-                maxLeft: 200,
-                maxTop: 200
-            },
-            hue: {
-                maxTop: 200
-            },
-            alpha: {
-                maxTop: 200
-            }
-        }
-    });
-
-    $("input[data-checkbox-dependency]").each(function () {
-        var dependent = $(this),
-            dependency = $($(this).attr("data-checkbox-dependency")),
-            update = function () {
-                var enabled = dependency.prop('checked');
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
-                if (!enabled) {
-                    dependent.prop('checked', false);
-                }
-            };
-        update();
-        dependency.on("change", update);
-    });
-
-    $("input[data-inverse-dependency]").each(function () {
-        var dependent = $(this),
-            dependency = $($(this).attr("data-inverse-dependency")),
-            update = function () {
-                var enabled = !dependency.prop('checked');
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
-            };
-        update();
-        dependency.on("change", update);
-    });
-
-    $("input[data-display-dependency]").each(function () {
-        var dependent = $(this),
-            dependency = $($(this).attr("data-display-dependency")),
-            update = function () {
-                var enabled = (dependency.attr("type") === 'checkbox') ? dependency.prop('checked') : !!dependency.val();
-                dependent.prop('disabled', !enabled).parents('.form-group').toggleClass('disabled', !enabled);
-            };
-        update();
-        dependency.on("change", update);
-        dependency.on("dp.change", update);
-    });
+    form_handlers($("body"));
 
     $(".qrcode-canvas").each(function() {
         $(this).qrcode(
@@ -324,21 +460,6 @@ $(function () {
         return true;
     })
 
-    $(".scrolling-multiple-choice").each(function () {
-        var $small = $("<small>");
-        var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("Alle"));
-        var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("Keine"));
-        $(this).prepend($small.append($a_all).append(" / ").append($a_none));
-
-        $(this).find(".choice-options-none").click(function (e) {
-            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", false);
-            e.preventDefault();
-            return false;
-        });
-        $(this).find(".choice-options-all").click(function (e) {
-            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", true);
-            e.preventDefault();
-            return false;
-        });
-    })
+    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
+    moment.locale($("body").attr("data-datetimelocale"));
 });

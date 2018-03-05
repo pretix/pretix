@@ -4,7 +4,8 @@ Tax rules
 Resource description
 --------------------
 
-Tax rules specify how tax should be calculated for specific products.
+Tax rules specify how tax should be calculated for specific products. Custom taxation rule sets are currently to
+available via the API.
 
 .. rst-class:: rest-resource-table
 
@@ -162,7 +163,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/taxrules/(id)/
 
    Update a tax rule. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
@@ -231,5 +232,4 @@ Endpoints
    :param id: The ``id`` field of the tax rule to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it
-                    **or** this tax rule cannot be deleted since it is currently in use.
+   :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it **or** this tax rule cannot be deleted since it is currently in use.

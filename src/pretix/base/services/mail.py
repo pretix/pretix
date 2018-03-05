@@ -1,9 +1,11 @@
 import logging
+from email.utils import formataddr
 from typing import Any, Dict, List, Union
 
 import bleach
 import cssutils
 import markdown
+from celery import chain
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
@@ -12,7 +14,10 @@ from i18nfield.strings import LazyI18nString
 from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, InvoiceAddress, Order
+from pretix.base.models import Event, Invoice, InvoiceAddress, Order
+from pretix.base.services.invoices import invoice_pdf_task
+from pretix.base.signals import email_filter
+from pretix.base.templatetags.rich_text import markdown_compile
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -33,7 +38,7 @@ class SendMailException(Exception):
 
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None, headers: dict=None, sender: str=None):
+         order: Order=None, headers: dict=None, sender: str=None, invoices: list=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -61,6 +66,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     :param sender: Set the sender email address. If not set and ``event`` is set, the event's default will be used,
         otherwise the system default.
 
+    :param invoices: A list of invoices to attach to this email.
+
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
     """
@@ -84,6 +91,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         body, body_md = render_mail(template, context)
         subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
+        if event:
+            sender = formataddr((str(event.name), sender))
+        else:
+            sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
         subject = str(subject)
         body_plain = body
@@ -137,20 +148,57 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
         tpl = get_template('pretixbase/email/plainwrapper.html')
         body_html = tpl.render(htmlctx)
-        return mail_send([email], subject, body_plain, body_html, sender, event.id if event else None, headers)
+
+        send_task = mail_send_task.si(
+            to=[email],
+            subject=subject,
+            body=body_plain,
+            html=body_html,
+            sender=sender,
+            event=event.id if event else None,
+            headers=headers,
+            invoices=[i.pk for i in invoices] if invoices else [],
+            order=order.pk if order else None
+        )
+
+        if invoices:
+            task_chain = [invoice_pdf_task.si(i.pk).on_error(send_task) for i in invoices if not i.file]
+        else:
+            task_chain = []
+
+        task_chain.append(send_task)
+        chain(*task_chain).apply_async()
 
 
 @app.task
-def mail_send_task(to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, headers: dict=None, bcc: List[str]=None) -> bool:
+def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sender: str,
+                   event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
+                   order: int=None) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(inline_css(html), "text/html")
+    if invoices:
+        invoices = Invoice.objects.filter(pk__in=invoices)
+        for inv in invoices:
+            if inv.file:
+                email.attach(
+                    '{}.pdf'.format(inv.number),
+                    inv.file.file.read(),
+                    'application/pdf'
+                )
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
     else:
         backend = get_connection(fail_silently=False)
+
+    if event:
+        if order:
+            try:
+                order = event.orders.get(pk=order)
+            except Order.DoesNotExist:
+                order = None
+        email = email_filter.send_chained(event, 'message', message=email, order=order)
 
     try:
         backend.send_messages([email])
@@ -168,11 +216,8 @@ def render_mail(template, context):
         body = str(template)
         if context:
             body = body.format_map(TolerantDict(context))
-        body_md = bleach.linkify(bleach.clean(markdown.markdown(body), tags=bleach.ALLOWED_TAGS + [
-            'p', 'pre'
-        ]))
     else:
         tpl = get_template(template)
         body = tpl.render(context)
-        body_md = bleach.linkify(markdown.markdown(body))
+    body_md = bleach.linkify(markdown_compile(body))
     return body, body_md

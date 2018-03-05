@@ -1,13 +1,18 @@
 from collections import defaultdict
-from datetime import timedelta
+from datetime import datetime, timedelta
+from functools import wraps
 from itertools import groupby
 
+from django.conf import settings
 from django.db.models import Sum
+from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
+from pretix.base.i18n import language
 from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
 from pretix.base.services.cart import get_fees
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
 
 
@@ -109,7 +114,7 @@ class CartMixin:
             group.has_questions = answers and k[0] != ""
             group.tax_rule = group.item.tax_rule
             if answers:
-                group.cache_answers()
+                group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 
@@ -128,10 +133,13 @@ class CartMixin:
 
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
-            minutes_left = max(first_expiry - now(), timedelta()).seconds // 60
+            total_seconds_left = max(first_expiry - now(), timedelta()).total_seconds()
+            minutes_left = int(total_seconds_left // 60)
+            seconds_left = int(total_seconds_left % 60)
         except AttributeError:
             first_expiry = None
             minutes_left = None
+            seconds_left = None
 
         return {
             'positions': positions,
@@ -142,8 +150,19 @@ class CartMixin:
             'fees': fees,
             'answers': answers,
             'minutes_left': minutes_left,
+            'seconds_left': seconds_left,
             'first_expiry': first_expiry,
         }
+
+
+def cart_exists(request):
+    from pretix.presale.views.cart import get_or_create_cart_id
+
+    if not hasattr(request, '_cart_cache'):
+        return CartPosition.objects.filter(
+            cart_id=get_or_create_cart_id(request), event=request.event
+        ).exists()
+    return bool(request._cart_cache)
 
 
 def get_cart(request):
@@ -157,8 +176,6 @@ def get_cart(request):
         ).select_related(
             'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
             'item__tax_rule'
-        ).prefetch_related(
-            'item__questions', 'answers'
         )
     return request._cart_cache
 
@@ -182,9 +199,61 @@ class EventViewMixin:
         context['event'] = self.request.event
         return context
 
+    def get_index_url(self):
+        kwargs = {}
+        if 'cart_namespace' in self.kwargs:
+            kwargs['cart_namespace'] = self.kwargs['cart_namespace']
+        return eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
+
 
 class OrganizerViewMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['organizer'] = self.request.organizer
         return context
+
+
+def allow_frame_if_namespaced(view_func):
+    """
+    Drop X-Frame-Options header, but only if a cart namespace is set. See get_or_create_cart_id()
+    for the reasoning.
+    """
+    def wrapped_view(request, *args, **kwargs):
+        resp = view_func(request, *args, **kwargs)
+        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+            resp.xframe_options_exempt = True
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+
+
+def allow_cors_if_namespaced(view_func):
+    """
+    Add Access-Control-Allow-Origin header, but only if a cart namespace is set.
+    See get_or_create_cart_id() for the reasoning.
+    """
+    def wrapped_view(request, *args, **kwargs):
+        resp = view_func(request, *args, **kwargs)
+        if request.resolver_match and request.resolver_match.kwargs.get('cart_namespace'):
+            resp['Access-Control-Allow-Origin'] = '*'
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)
+
+
+def iframe_entry_view_wrapper(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if 'iframe' in request.GET:
+            request.session['iframe_session'] = True
+
+        locale = request.GET.get('locale')
+        if locale and locale in [lc for lc, ll in settings.LANGUAGES]:
+            with language(locale):
+                resp = view_func(request, *args, **kwargs)
+            max_age = 10 * 365 * 24 * 60 * 60
+            resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, locale, max_age=max_age,
+                            expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
+                            domain=settings.SESSION_COOKIE_DOMAIN)
+            return resp
+
+        resp = view_func(request, *args, **kwargs)
+        return resp
+    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)

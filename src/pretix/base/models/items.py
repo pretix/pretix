@@ -1,15 +1,18 @@
 import sys
 import uuid
-from datetime import datetime
-from decimal import Decimal
+from datetime import date, datetime, time
+from decimal import Decimal, DecimalException
 from typing import Tuple
 
+import dateutil.parser
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
+from django.utils import formats
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -179,7 +182,7 @@ class Item(LoggedModel):
     :type max_per_order: int
     :param min_per_order: Minimum number of times this item needs to be in an order if bought at all. None for unlimited.
     :type min_per_order: int
-    :param checkin_attention: Requires special attention at checkin
+    :param checkin_attention: Requires special attention at check-in
     :type checkin_attention: bool
     """
 
@@ -369,9 +372,40 @@ class Item(LoggedModel):
         return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
+
+        return (
+            not OrderPosition.objects.filter(item=self).exists()
+            and not CartPosition.objects.filter(item=self).exists()
+        )
+
     @cached_property
     def has_variations(self):
         return self.variations.exists()
+
+    @staticmethod
+    def clean_per_order(min_per_order, max_per_order):
+        if min_per_order is not None and max_per_order is not None:
+            if min_per_order > max_per_order:
+                raise ValidationError(_('The maximum number per order can not be lower than the minimum number per '
+                                        'order.'))
+
+    @staticmethod
+    def clean_category(category, event):
+        if category is not None and category.event is not None and category.event != event:
+            raise ValidationError(_('The item\'s category must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_tax_rule(tax_rule, event):
+        if tax_rule is not None and tax_rule.event is not None and tax_rule.event != event:
+            raise ValidationError(_('The item\'s tax rule must belong to the same event as the item.'))
+
+    @staticmethod
+    def clean_available(from_date, until_date):
+        if from_date is not None and until_date is not None:
+            if from_date > until_date:
+                raise ValidationError(_('The item\'s availability cannot end before it starts.'))
 
 
 class ItemVariation(models.Model):
@@ -476,6 +510,17 @@ class ItemVariation(models.Model):
             return self.id < other.id
         return self.position < other.position
 
+    def allow_delete(self):
+        from pretix.base.models.orders import CartPosition, OrderPosition
+
+        return (
+            not OrderPosition.objects.filter(variation=self).exists()
+            and not CartPosition.objects.filter(variation=self).exists()
+        )
+
+    def is_only_variation(self):
+        return ItemVariation.objects.filter(item=self.item).count() == 1
+
 
 class ItemAddOn(models.Model):
     """
@@ -527,8 +572,34 @@ class ItemAddOn(models.Model):
         ordering = ('position', 'pk')
 
     def clean(self):
-        if self.max_count < self.min_count:
-            raise ValidationError(_('The minimum number needs to be lower than the maximum number.'))
+        self.clean_min_count(self.min_count)
+        self.clean_max_count(self.max_count)
+        self.clean_max_min_count(self.max_count, self.min_count)
+
+    @staticmethod
+    def clean_categories(event, item, addon, new_category):
+        if event != new_category.event:
+            raise ValidationError(_('The add-on\'s category must belong to the same event as the item.'))
+        if item is not None:
+            if addon is None or addon.addon_category != new_category:
+                for addon in item.addons.all():
+                    if addon.addon_category == new_category:
+                        raise ValidationError(_('The item already has an add-on of this category.'))
+
+    @staticmethod
+    def clean_min_count(min_count):
+        if min_count < 0:
+            raise ValidationError(_('The minimum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_count(max_count):
+        if max_count < 0:
+            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+
+    @staticmethod
+    def clean_max_min_count(max_count, min_count):
+        if max_count < min_count:
+            raise ValidationError(_('The maximum count needs to be greater than the minimum count.'))
 
 
 class Question(LoggedModel):
@@ -543,17 +614,22 @@ class Question(LoggedModel):
     * a multi-line string (``TYPE_TEXT``)
     * a boolean (``TYPE_BOOLEAN``)
     * a multiple choice option (``TYPE_CHOICE`` and ``TYPE_CHOICE_MULTIPLE``)
-    * a file upload (``TYPE_FILE``))
+    * a file upload (``TYPE_FILE``)
+    * a date (``TYPE_DATE``)
+    * a time (``TYPE_TIME``)
+    * a date and a time (``TYPE_DATETIME``)
 
     :param event: The event this question belongs to
     :type event: Event
     :param question: The question text. This will be displayed next to the input field.
     :type question: str
     :param type: One of the above types
-    :param required: Whether answering this question is required for submiting an order including
+    :param required: Whether answering this question is required for submitting an order including
                      items associated with this question.
     :type required: bool
     :param items: A set of ``Items`` objects that this question should be applied to
+    :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
+    :type ask_during_checkin: bool
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -562,6 +638,9 @@ class Question(LoggedModel):
     TYPE_CHOICE = "C"
     TYPE_CHOICE_MULTIPLE = "M"
     TYPE_FILE = "F"
+    TYPE_DATE = "D"
+    TYPE_TIME = "H"
+    TYPE_DATETIME = "W"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -570,6 +649,9 @@ class Question(LoggedModel):
         (TYPE_CHOICE, _("Choose one from a list")),
         (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list")),
         (TYPE_FILE, _("File upload")),
+        (TYPE_DATE, _("Date")),
+        (TYPE_TIME, _("Time")),
+        (TYPE_DATETIME, _("Date and time")),
     )
 
     event = models.ForeignKey(
@@ -600,8 +682,15 @@ class Question(LoggedModel):
         blank=True,
         help_text=_('This question will be asked to buyers of the selected products')
     )
-    position = models.IntegerField(
-        default=0
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
+    )
+    ask_during_checkin = models.BooleanField(
+        verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+        help_text=_('This will only work if you handle your check-in with pretixdroid 1.8 or newer or '
+                    'pretixdesk 0.2 or newer.'),
+        default=False
     )
 
     class Meta:
@@ -629,13 +718,77 @@ class Question(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
+    def clean_answer(self, answer):
+        if self.required:
+            if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+                raise ValidationError(_('An answer to this question is required to proceed.'))
+        if not answer:
+            if self.type == Question.TYPE_BOOLEAN:
+                return False
+            return None
+
+        if self.type == Question.TYPE_CHOICE:
+            try:
+                return self.options.get(pk=answer)
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        elif self.type == Question.TYPE_CHOICE_MULTIPLE:
+            try:
+                if isinstance(answer, str):
+                    return list(self.options.filter(pk__in=answer.split(",")))
+                else:
+                    return list(self.options.filter(pk__in=answer))
+            except:
+                raise ValidationError(_('Invalid option selected.'))
+        elif self.type == Question.TYPE_BOOLEAN:
+            return answer in ('true', 'True', True)
+        elif self.type == Question.TYPE_NUMBER:
+            answer = formats.sanitize_separators(answer)
+            answer = str(answer).strip()
+            try:
+                return Decimal(answer)
+            except DecimalException:
+                raise ValidationError(_('Invalid number input.'))
+        elif self.type == Question.TYPE_DATE:
+            if isinstance(answer, date):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).date()
+            except:
+                raise ValidationError(_('Invalid date input.'))
+        elif self.type == Question.TYPE_TIME:
+            if isinstance(answer, time):
+                return answer
+            try:
+                return dateutil.parser.parse(answer).time()
+            except:
+                raise ValidationError(_('Invalid time input.'))
+        elif self.type == Question.TYPE_DATETIME and answer:
+            if isinstance(answer, datetime):
+                return answer
+            try:
+                dt = dateutil.parser.parse(answer)
+                if is_naive(dt):
+                    dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+                return dt
+            except:
+                raise ValidationError(_('Invalid datetime input.'))
+
+        return answer
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options')
     answer = I18nCharField(verbose_name=_('Answer'))
+    position = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.answer)
+
+    class Meta:
+        verbose_name = _("Question option")
+        verbose_name_plural = _("Question options")
+        ordering = ('position', 'id')
 
 
 class Quota(LoggedModel):
@@ -653,7 +806,7 @@ class Quota(LoggedModel):
 
     Please read the documentation section on quotas carefully before doing
     anything with quotas. This might confuse you otherwise.
-    http://docs.pretix.eu/en/latest/development/concepts.html#restriction-by-number
+    https://docs.pretix.eu/en/latest/development/concepts.html#quotas
 
     The AVAILABILITY_* constants represent various states of a quota allowing
     its items/variations to be up for sale.
@@ -667,7 +820,7 @@ class Quota(LoggedModel):
         again if those people do not proceed to the checkout.
 
     AVAILABILITY_ORDERED
-        This item is currently not availalbe for sale because all available
+        This item is currently not available for sale because all available
         items are ordered. It might become available again if those people
         do not pay.
 
@@ -897,3 +1050,30 @@ class Quota(LoggedModel):
 
     class QuotaExceededException(Exception):
         pass
+
+    @staticmethod
+    def clean_variations(items, variations):
+        for variation in variations:
+            if variation.item not in items:
+                raise ValidationError(_('All variations must belong to an item contained in the items list.'))
+                break
+
+    @staticmethod
+    def clean_items(event, items, variations):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items do not belong to this event.'))
+            if item.has_variations:
+                if not any(var.item == item for var in variations):
+                    raise ValidationError(_('One or more items has variations but none of these are in the variations list.'))
+
+    @staticmethod
+    def clean_subevent(event, subevent):
+        if event.has_subevents:
+            if not subevent:
+                raise ValidationError(_('Subevent cannot be null for event series.'))
+            if event != subevent.event:
+                raise ValidationError(_('The subevent does not belong to this event.'))
+        else:
+            if subevent:
+                raise ValidationError(_('The subevent does not belong to this event.'))

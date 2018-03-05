@@ -1,18 +1,21 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import translation
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import FormView
 
 from pretix.base.models.event import SubEvent
+from pretix.presale.views import EventViewMixin
 
+from . import allow_frame_if_namespaced
 from ...base.models import Item, ItemVariation, WaitingListEntry
-from ...multidomain.urlreverse import eventreverse
 from ..forms.waitinglist import WaitingListForm
 
 
-class WaitingView(FormView):
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class WaitingView(EventViewMixin, FormView):
     template_name = 'pretixpresale/event/waitinglist.html'
     form_class = WaitingListForm
 
@@ -27,7 +30,7 @@ class WaitingView(FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['event'] = self.request.event
         ctx['subevent'] = self.subevent
         ctx['item'], ctx['variation'] = self.item_and_variation
@@ -44,7 +47,7 @@ class WaitingView(FormView):
             else:
                 var = None
             return item, var
-        except (Item.DoesNotExist, ItemVariation.DoesNotExist):
+        except (Item.DoesNotExist, ItemVariation.DoesNotExist, ValueError):
             return None
 
     def dispatch(self, request, *args, **kwargs):
@@ -52,11 +55,11 @@ class WaitingView(FormView):
 
         if not self.request.event.settings.waiting_list_enabled:
             messages.error(request, _("Waiting lists are disabled for this event."))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect(self.get_index_url())
 
         if not self.item_and_variation:
             messages.error(request, _("We could not identify the product you selected."))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect(self.get_index_url())
 
         self.subevent = None
         if request.event.has_subevents:
@@ -65,20 +68,20 @@ class WaitingView(FormView):
                                                   active=True)
             else:
                 messages.error(request, pgettext_lazy('subevent', "You need to select a date."))
-                return redirect(eventreverse(self.request.event, 'presale:event.index'))
+                return redirect(self.get_index_url())
 
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         availability = (
-            self.item_and_variation[1].check_quotas(count_waitinglist=False, subevent=self.subevent)
+            self.item_and_variation[1].check_quotas(count_waitinglist=True, subevent=self.subevent)
             if self.item_and_variation[1]
-            else self.item_and_variation[0].check_quotas(count_waitinglist=False, subevent=self.subevent)
+            else self.item_and_variation[0].check_quotas(count_waitinglist=True, subevent=self.subevent)
         )
         if availability[0] == 100:
             messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "
                                            "available."))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect(self.get_index_url())
 
         form.save()
         messages.success(self.request, _("We've added you to the waiting list. You will receive "
@@ -86,4 +89,4 @@ class WaitingView(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return eventreverse(self.request.event, 'presale:event.index')
+        return self.get_index_url()

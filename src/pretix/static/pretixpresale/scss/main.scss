@@ -1,13 +1,20 @@
 @import "_variables.scss";
 @import "../../pretixbase/scss/colors.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
+@import "../../datetimepicker/_bootstrap-datetimepicker.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 
 @import "_event.scss";
 @import "_cart.scss";
 @import "_forms.scss";
 @import "_calendar.scss";
+@import "_checkout.scss";
 @import "../../pretixbase/scss/webfont.scss";
+
+/* See https://github.com/pretix/pretix/pull/761 */
+.bootstrap-datetimepicker-widget table td span {
+    line-height: 1.8em;
+}
 
 footer {
     text-align: center;
@@ -171,6 +178,9 @@ body.loading .container {
     .checkout-button-row > div {
         margin-bottom: 15px;
     }
+    .checkout-button-row > div.clearfix {
+        margin: 0;
+    }
 }
 
 .dl-horizontal dt  {
@@ -201,6 +211,12 @@ body.loading .container {
     text-decoration: none;
 }
 
-.panel-title a[data-toggle="collapse"]:hover {
+.panel-default .panel-title a[data-toggle="collapse"]:hover {
     background-color: #eeeeee;
 }
+
+.panel-primary .panel-title a[data-toggle="collapse"]:hover {
+    background-color: darken($btn-primary-bg, 10%);
+}
+
+@import "_iframe.scss";

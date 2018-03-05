@@ -6,13 +6,14 @@ from pretix import __version__ as version
 
 class PretixdroidApp(AppConfig):
     name = 'pretix.plugins.pretixdroid'
-    verbose_name = _("pretixdroid API")
+    verbose_name = _("Check-in device API")
 
     class PretixPluginMeta:
-        name = _("pretixdroid API")
+        name = _("Check-in device API")
         author = _("the pretix team")
         version = version
-        description = _("This plugin allows you to use the pretixdroid Android app for your event.")
+        visible = True
+        description = _("This plugin allows you to use the pretixdroid and pretixdesk apps for your event.")
 
     def ready(self):
         from . import signals  # NOQA

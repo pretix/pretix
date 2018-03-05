@@ -7,8 +7,9 @@ from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
-from django.utils.formats import date_format, localize
-from django.utils.timezone import now
+from django.template.defaultfilters import floatformat
+from django.utils.formats import date_format
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
 from pretix.base.exporter import BaseExporter
@@ -18,17 +19,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.services.stats import order_overview
 
 
-class Report(BaseExporter):
-    name = "report"
-
-    def verbose_name(self) -> str:
-        raise NotImplementedError()
-
-    def identifier(self) -> str:
-        raise NotImplementedError()
-
-    def __init__(self, event):
-        super().__init__(event)
+class ReportlabExportMixin:
 
     @property
     def pagesize(self):
@@ -38,7 +29,7 @@ class Report(BaseExporter):
 
     def render(self, form_data):
         self.form_data = form_data
-        return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create()
+        return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create(form_data)
 
     def get_filename(self):
         tz = pytz.timezone(self.event.settings.timezone)
@@ -53,7 +44,7 @@ class Report(BaseExporter):
         pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
         pdfmetrics.registerFont(TTFont('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf')))
 
-    def create(self):
+    def create(self, form_data):
         from reportlab.platypus import BaseDocTemplate, PageTemplate
         from reportlab.lib.units import mm
 
@@ -67,7 +58,7 @@ class Report(BaseExporter):
             doc.addPageTemplates([
                 PageTemplate(id='All', frames=self.get_frames(doc), onPage=self.on_page, pagesize=self.pagesize)
             ])
-            doc.build(self.get_story(doc))
+            doc.build(self.get_story(doc, form_data))
             f.seek(0)
             return f.read()
 
@@ -84,7 +75,7 @@ class Report(BaseExporter):
                            id='normal')
         return [self.frame]
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         return []
 
     def get_style(self):
@@ -104,10 +95,11 @@ class Report(BaseExporter):
     def page_footer(self, canvas, doc):
         from reportlab.lib.units import mm
 
+        tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
         canvas.drawString(15 * mm, 10 * mm, _("Page %d") % (doc.page,))
         canvas.drawRightString(self.pagesize[0] - 15 * mm, 10 * mm,
-                               _("Created: %s") % now().strftime("%d.%m.%Y %H:%M:%S"))
+                               _("Created: %s") % now().astimezone(tz).strftime("%d.%m.%Y %H:%M:%S"))
 
     def page_header(self, canvas, doc):
         from reportlab.lib.units import mm
@@ -122,6 +114,19 @@ class Report(BaseExporter):
                     self.pagesize[0] - 15 * mm, self.pagesize[1] - 17 * mm)
 
 
+class Report(ReportlabExportMixin, BaseExporter):
+    name = "report"
+
+    def verbose_name(self) -> str:
+        raise NotImplementedError()
+
+    def identifier(self) -> str:
+        raise NotImplementedError()
+
+    def __init__(self, event):
+        super().__init__(event)
+
+
 class OverviewReport(Report):
     name = "overview"
     identifier = 'pdfreport'
@@ -133,7 +138,7 @@ class OverviewReport(Report):
 
         return pagesizes.landscape(pagesizes.A4)
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
 
@@ -190,49 +195,50 @@ class OverviewReport(Report):
         ]
 
         items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
 
         for tup in items_by_category:
             if tup[0]:
                 tstyledata.append(('FONTNAME', (0, len(tdata)), (-1, len(tdata)), 'OpenSansBd'))
                 tdata.append([
                     tup[0].name,
-                    str(tup[0].num_canceled[0]), localize(tup[0].num_canceled[1]),
-                    str(tup[0].num_refunded[0]), localize(tup[0].num_refunded[1]),
-                    str(tup[0].num_expired[0]), localize(tup[0].num_expired[1]),
-                    str(tup[0].num_pending[0]), localize(tup[0].num_pending[1]),
-                    str(tup[0].num_paid[0]), localize(tup[0].num_paid[1]),
-                    str(tup[0].num_total[0]), localize(tup[0].num_total[1]),
+                    str(tup[0].num_canceled[0]), floatformat(tup[0].num_canceled[1], places),
+                    str(tup[0].num_refunded[0]), floatformat(tup[0].num_refunded[1], places),
+                    str(tup[0].num_expired[0]), floatformat(tup[0].num_expired[1], places),
+                    str(tup[0].num_pending[0]), floatformat(tup[0].num_pending[1], places),
+                    str(tup[0].num_paid[0]), floatformat(tup[0].num_paid[1], places),
+                    str(tup[0].num_total[0]), floatformat(tup[0].num_total[1], places),
                 ])
             for item in tup[1]:
                 tdata.append([
                     "     " + str(item.name),
-                    str(item.num_canceled[0]), localize(item.num_canceled[1]),
-                    str(item.num_refunded[0]), localize(item.num_refunded[1]),
-                    str(item.num_expired[0]), localize(item.num_expired[1]),
-                    str(item.num_pending[0]), localize(item.num_pending[1]),
-                    str(item.num_paid[0]), localize(item.num_paid[1]),
-                    str(item.num_total[0]), localize(item.num_total[1]),
+                    str(item.num_canceled[0]), floatformat(item.num_canceled[1], places),
+                    str(item.num_refunded[0]), floatformat(item.num_refunded[1], places),
+                    str(item.num_expired[0]), floatformat(item.num_expired[1], places),
+                    str(item.num_pending[0]), floatformat(item.num_pending[1], places),
+                    str(item.num_paid[0]), floatformat(item.num_paid[1], places),
+                    str(item.num_total[0]), floatformat(item.num_total[1], places),
                 ])
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
                             "          " + str(var),
-                            str(var.num_canceled[0]), localize(var.num_canceled[1]),
-                            str(var.num_refunded[0]), localize(var.num_refunded[1]),
-                            str(var.num_expired[0]), localize(var.num_expired[1]),
-                            str(var.num_pending[0]), localize(var.num_pending[1]),
-                            str(var.num_paid[0]), localize(var.num_paid[1]),
-                            str(var.num_total[0]), localize(var.num_total[1]),
+                            str(var.num_canceled[0]), floatformat(var.num_canceled[1], places),
+                            str(var.num_refunded[0]), floatformat(var.num_refunded[1], places),
+                            str(var.num_expired[0]), floatformat(var.num_expired[1], places),
+                            str(var.num_pending[0]), floatformat(var.num_pending[1], places),
+                            str(var.num_paid[0]), floatformat(var.num_paid[1], places),
+                            str(var.num_total[0]), floatformat(var.num_total[1], places),
                         ])
 
         tdata.append([
             _("Total"),
-            str(total['num_canceled'][0]), localize(total['num_canceled'][1]),
-            str(total['num_refunded'][0]), localize(total['num_refunded'][1]),
-            str(total['num_expired'][0]), localize(total['num_expired'][1]),
-            str(total['num_pending'][0]), localize(total['num_pending'][1]),
-            str(total['num_paid'][0]), localize(total['num_paid'][1]),
-            str(total['num_total'][0]), localize(total['num_total'][1]),
+            str(total['num_canceled'][0]), floatformat(total['num_canceled'][1], places),
+            str(total['num_refunded'][0]), floatformat(total['num_refunded'][1], places),
+            str(total['num_expired'][0]), floatformat(total['num_expired'][1], places),
+            str(total['num_pending'][0]), floatformat(total['num_pending'][1], places),
+            str(total['num_paid'][0]), floatformat(total['num_paid'][1], places),
+            str(total['num_total'][0]), floatformat(total['num_total'][1], places),
         ])
 
         table = Table(tdata, colWidths=colwidths, repeatRows=3)
@@ -290,7 +296,7 @@ class OrderTaxListReport(Report):
 
         return pagesizes.landscape(pagesizes.A4)
 
-    def get_story(self, doc):
+    def get_story(self, doc, form_data):
         from reportlab.platypus import Paragraph, Spacer, TableStyle, Table
         from reportlab.lib.units import mm
 

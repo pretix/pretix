@@ -1,0 +1,71 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load eventurl %}
+{% load eventsignal %}
+{% block inside %}
+    <legend>{% trans "Widget" %}</legend>
+    <p>
+        {% blocktrans trimmed %}
+            The pretix widget is a way to embed your ticket shop into your event website. This way, your visitors can
+            buy their ticket right away without leaving your website.
+        {% endblocktrans %}
+    </p>
+    {% if valid %}
+        <p>
+            {% blocktrans trimmed %}
+                To embed the widget onto your website, simply copy the following code to the <code>&lt;head&gt;</code>
+                section of your website:
+            {% endblocktrans %}
+        </p>
+        <pre>&lt;link rel="stylesheet" type="text/css" href="{% abseventurl request.event "presale:event.widget.css" %}"&gt;
+&lt;script type="text/javascript" src="{{ urlprefix }}{% url "presale:widget.js" lang=form.cleaned_data.language %}" async&gt;&lt;/script&gt;</pre>
+        <p>
+            {% blocktrans trimmed %}
+                Then, copy the following code to the place of your website where you want the widget to show up:
+            {% endblocktrans %}
+        </p>
+        {% if form.cleaned_data.subevent %}
+            {% abseventurl request.event "presale:event.index" subevent=form.cleaned_data.subevent.pk as indexurl %}
+        {% else %}
+          {% abseventurl request.event "presale:event.index" as indexurl %}
+        {% endif %}
+        <pre>&lt;pretix-widget event="{% abseventurl request.event "presale:event.index" %}"{% if form.cleaned_data.subevent %} subevent="{{ form.cleaned_data.subevent.pk }}"{% endif %}{% if form.cleaned_data.voucher %} voucher="{{ form.cleaned_data.voucher }}"{% endif %}&gt;&lt;/pretix-widget&gt;
+&lt;noscript&gt;
+   &lt;div class="pretix-widget"&gt;
+        &lt;div class="pretix-widget-info-message"&gt;
+            {% blocktrans trimmed with a_attr='target="_blank" rel="noopener" href="'|add:indexurl|add:'"'|safe %}
+                JavaScript is disabled in your browser. To access our ticket shop without JavaScript,
+                please &lt;a {{ a_attr }}&gt;click here&lt;/a&gt;.
+            {% endblocktrans %}
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/noscript&gt;
+</pre>
+        <p>
+            <a href="https://docs.pretix.eu/en/latest/user/events/widget.html" target="_blank" rel="noopener">
+                <span class="fa fa-question-circle"></span>
+                {% trans "Read our documentation for more information" %}
+            </a>
+        </p>
+    {% else %}
+        <p>
+            {% blocktrans trimmed %}
+                Using this form, you can generate a code to copy and paste to your website source.
+            {% endblocktrans %}
+        </p>
+        <form action="" method="post" class="form-horizontal">
+            {% csrf_token %}
+            {% bootstrap_form form layout="control" %}
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Generate widget code" %}
+                    </button>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+    {% eventsignal request.event "pretix.control.signals.event_settings_widget" request=request  %}
+{% endblock %}

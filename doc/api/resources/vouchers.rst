@@ -44,6 +44,10 @@ subevent                              integer                    ID of the date 
 ===================================== ========================== =======================================================
 
 
+.. versionchanged:: 1.9
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
 Endpoints
 ---------
 
@@ -224,14 +228,14 @@ Endpoints
    :statuscode 201: no error
    :statuscode 400: The voucher could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
 
    Update a voucher. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be resetted to default. With ``PATCH``, you only need to provide the fields that you
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
-her.
 
    You can change all fields of the resource except the ``id`` and ``redeemed`` fields.
 
@@ -278,11 +282,12 @@ her.
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the tax rule to modify
+   :param id: The ``id`` field of the voucher to modify
    :statuscode 200: no error
    :statuscode 400: The voucher could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
 
@@ -305,7 +310,7 @@ her.
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the tax rule to delete
+   :param id: The ``id`` field of the voucher to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.

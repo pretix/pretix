@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
 )
@@ -58,5 +59,9 @@ def get_price(item: Item, variation: ItemVariation = None,
         price.rate = Decimal('0.00')
         price.gross = price.net
         price.name = ''
+
+    price.gross = round_decimal(price.gross, item.event.currency)
+    price.net = round_decimal(price.net, item.event.currency)
+    price.tax = price.gross - price.net
 
     return price
