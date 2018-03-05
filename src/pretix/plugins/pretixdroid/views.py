@@ -378,7 +378,10 @@ class ApiSearchView(ApiView):
                 )[:25]
             else:
                 ops = qs.filter(
-                    Q(secret__istartswith=query) | Q(attendee_name__icontains=query) | Q(order__code__istartswith=query)
+                    Q(secret__istartswith=query)
+                    | Q(attendee_name__icontains=query)
+                    | Q(addon_to__attendee_name__icontains=query)
+                    | Q(order__code__istartswith=query)
                     | Q(order__invoice_address__name__icontains=query)
                 )[:25]
 
