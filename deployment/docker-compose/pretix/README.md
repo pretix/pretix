@@ -14,6 +14,14 @@ Prepare
 Run with nginx container:
 -------------------------
 
+Remove these lines from docker-compose.yml
+
+```bash
+ports:
+  - "0.0.0.0:8000:8000"
+```
+
+Run following command to start:
 ```bash
 cp -r ../../../src src_tmp # Due to security reasons Docker cant build from parent directories
 docker-compose -f docker-compose.yml -f docker-compose.nginx.yml up --force-recreate --build
