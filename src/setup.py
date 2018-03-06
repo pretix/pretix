@@ -132,7 +132,7 @@ setup(
         ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],
-        'postgres': ['psycopg2'],
+        'postgres': ['psycopg2-binary'],
     },
 
     packages=find_packages(exclude=['tests', 'tests.*']),
