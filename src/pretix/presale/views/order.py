@@ -114,9 +114,14 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             [p.item.admission for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
-        ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate == 'user'
+        can_generate_invoice = (
+            self.request.event.settings.get('invoice_generate') in ('user', 'True')
+            or (
+                self.request.event.settings.get('invoice_generate') == 'paid'
+                and self.order.status == Order.STATUS_PAID
+            )
         )
+        ctx['can_generate_invoice'] = invoice_qualified(self.order) and can_generate_invoice
         ctx['url'] = build_absolute_uri(
             self.request.event, 'presale:event.order', kwargs={
                 'order': self.order.code,
@@ -409,7 +414,14 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') != 'user' or not invoice_qualified(self.order):
+        can_generate_invoice = (
+            self.request.event.settings.get('invoice_generate') in ('user', 'True')
+            or (
+                self.request.event.settings.get('invoice_generate') == 'paid'
+                and self.order.status == Order.STATUS_PAID
+            )
+        )
+        if not can_generate_invoice or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
