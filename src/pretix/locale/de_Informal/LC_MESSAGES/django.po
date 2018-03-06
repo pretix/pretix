@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-03 20:06+0000\n"
+"POT-Creation-Date: 2018-03-06 17:25+0000\n"
 "PO-Revision-Date: 2018-03-03 21:09+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Raphael Michel <michel@rami.io>\n"
@@ -2775,8 +2775,8 @@ msgstr "Zahlung erhalten für die Bestellung: %(code)s"
 msgid "The new expiry date needs to be in the future."
 msgstr "Die neue Frist muss in der Zukunft liegen."
 
-#: pretix/base/services/orders.py:281 pretix/presale/views/order.py:472
-#: pretix/presale/views/order.py:500
+#: pretix/base/services/orders.py:281 pretix/presale/views/order.py:484
+#: pretix/presale/views/order.py:512
 msgid "You cannot cancel this order."
 msgstr "Du kannst diese Bestellung nicht stornieren."
 
@@ -5124,7 +5124,7 @@ msgid "The order has been refunded."
 msgstr "Die Bestellung wurde zurückerstattet."
 
 #: pretix/control/logdisplay.py:111 pretix/control/views/orders.py:235
-#: pretix/presale/views/order.py:510
+#: pretix/presale/views/order.py:522
 msgid "The order has been canceled."
 msgstr "Die Bestellung wurde storniert."
 
@@ -5144,7 +5144,7 @@ msgid "The order locale has been changed."
 msgstr "Die Sprache der Bestellung wurde geändert."
 
 #: pretix/control/logdisplay.py:116 pretix/control/views/orders.py:284
-#: pretix/presale/views/order.py:421
+#: pretix/presale/views/order.py:433
 msgid "The invoice has been generated."
 msgstr "Die Rechnung wurde erstellt."
 
@@ -9105,7 +9105,7 @@ msgstr ""
 msgid "invalid item"
 msgstr "Ungültiges Produkt"
 
-#: pretix/control/views/event.py:606 pretix/presale/views/order.py:574
+#: pretix/control/views/event.py:606 pretix/presale/views/order.py:586
 msgid "You requested an invalid ticket output type."
 msgstr "Du hast einen ungültigen Ausgabetyp gewählt."
 
@@ -9288,11 +9288,11 @@ msgstr ""
 msgid "The order has been marked as not paid."
 msgstr "Die Bestellung wurde als unbezahlt markiert."
 
-#: pretix/control/views/orders.py:276 pretix/presale/views/order.py:413
+#: pretix/control/views/orders.py:276 pretix/presale/views/order.py:425
 msgid "You cannot generate an invoice for this order."
 msgstr "Du kannst für diese Bestellung keine Rechnung erzeugen."
 
-#: pretix/control/views/orders.py:278 pretix/presale/views/order.py:415
+#: pretix/control/views/orders.py:278 pretix/presale/views/order.py:427
 msgid "An invoice for this order already exists."
 msgstr "Zu dieser Bestellung gibt es bereits eine Rechnung."
 
@@ -9338,11 +9338,11 @@ msgstr "Die Rechnung wurde bereits storniert."
 msgid "The email has been queued to be sent."
 msgstr "Die E-Mail wurde zum Versenden gespeichert."
 
-#: pretix/control/views/orders.py:444 pretix/presale/views/order.py:645
+#: pretix/control/views/orders.py:444 pretix/presale/views/order.py:657
 msgid "This invoice has not been found"
 msgstr "Diese Rechnung wurde nicht gefunden"
 
-#: pretix/control/views/orders.py:452 pretix/presale/views/order.py:653
+#: pretix/control/views/orders.py:452 pretix/presale/views/order.py:665
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -9385,7 +9385,7 @@ msgid "The order has been changed."
 msgstr "Die Bestellung wurde geändert."
 
 #: pretix/control/views/orders.py:647 pretix/presale/checkoutflow.py:338
-#: pretix/presale/views/order.py:435
+#: pretix/presale/views/order.py:447
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr "Wir hatten Schwierigkeiten, deine Eingabe zu verarbeiten."
@@ -9413,7 +9413,7 @@ msgstr "Die Nachricht wurde gespeichert und wird an {} versendet."
 msgid "Failed to send mail to the following user: {}"
 msgstr "Die Mail an den folgenden Benutzer konnte nicht versendet werden: {}"
 
-#: pretix/control/views/orders.py:874 pretix/presale/views/order.py:523
+#: pretix/control/views/orders.py:874 pretix/presale/views/order.py:535
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -11619,12 +11619,12 @@ msgctxt "checkoutflow"
 msgid "Payment"
 msgstr "Zahlung"
 
-#: pretix/presale/checkoutflow.py:457 pretix/presale/views/order.py:386
+#: pretix/presale/checkoutflow.py:457 pretix/presale/views/order.py:391
 msgid "Please select a payment method."
 msgstr "Bitte wähle eine Zahlungsmethode aus."
 
 #: pretix/presale/checkoutflow.py:478 pretix/presale/checkoutflow.py:484
-#: pretix/presale/views/order.py:220 pretix/presale/views/order.py:261
+#: pretix/presale/views/order.py:225 pretix/presale/views/order.py:266
 msgid "The payment information you entered was incomplete."
 msgstr "Die eingegebenen Zahlungsinformationen sind unvollständig."
 
@@ -12440,46 +12440,46 @@ msgstr "Ungültiger Termin ausgewählt."
 msgid "Please go back and try again."
 msgstr "Bitte gehe einen Schritt zurück und versuche es erneut."
 
-#: pretix/presale/views/order.py:73 pretix/presale/views/order.py:159
-#: pretix/presale/views/order.py:213 pretix/presale/views/order.py:258
-#: pretix/presale/views/order.py:297 pretix/presale/views/order.py:408
-#: pretix/presale/views/order.py:455 pretix/presale/views/order.py:470
-#: pretix/presale/views/order.py:498 pretix/presale/views/order.py:576
-#: pretix/presale/views/order.py:636
+#: pretix/presale/views/order.py:73 pretix/presale/views/order.py:164
+#: pretix/presale/views/order.py:218 pretix/presale/views/order.py:263
+#: pretix/presale/views/order.py:302 pretix/presale/views/order.py:413
+#: pretix/presale/views/order.py:467 pretix/presale/views/order.py:482
+#: pretix/presale/views/order.py:510 pretix/presale/views/order.py:588
+#: pretix/presale/views/order.py:648
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
 "Unbekannte Bestellnummer oder Bestellung gehört einem anderen Benutzer."
 
-#: pretix/presale/views/order.py:163 pretix/presale/views/order.py:216
+#: pretix/presale/views/order.py:168 pretix/presale/views/order.py:221
 msgid "The payment for this order cannot be continued."
 msgstr "Diese Bestellung kann nicht mehr bezahlt werden."
 
-#: pretix/presale/views/order.py:168 pretix/presale/views/order.py:266
-#: pretix/presale/views/order.py:304
+#: pretix/presale/views/order.py:173 pretix/presale/views/order.py:271
+#: pretix/presale/views/order.py:309
 msgid "The payment is too late to be accepted."
 msgstr "Die Zahlung kommt zu spät, um akzeptiert werden zu können."
 
-#: pretix/presale/views/order.py:299
+#: pretix/presale/views/order.py:304
 msgid "The payment method for this order cannot be changed."
 msgstr "Die Zahlungsmethode für diese Bestellung kann nicht geändert werden."
 
-#: pretix/presale/views/order.py:457
+#: pretix/presale/views/order.py:469
 msgid "You cannot modify this order"
 msgstr "Du kannst diese Bestellung nicht bearbeiten"
 
-#: pretix/presale/views/order.py:578
+#: pretix/presale/views/order.py:590
 msgid "Order is not paid."
 msgstr "Die Bestellung ist nicht bezahlt."
 
-#: pretix/presale/views/order.py:582
+#: pretix/presale/views/order.py:594
 msgid "Ticket download is not (yet) enabled."
 msgstr "Der Ticket-Download ist (noch) nicht freigeschaltet."
 
-#: pretix/presale/views/order.py:584
+#: pretix/presale/views/order.py:596
 msgid "Ticket download is not enabled for add-on products."
 msgstr "Der Ticket-Download ist für Zusatzprodukte nicht freigeschaltet."
 
-#: pretix/presale/views/order.py:586
+#: pretix/presale/views/order.py:598
 msgid "Ticket download is not enabled for non-admission products."
 msgstr "Der Ticket-Download ist nur für Zutrittsprodukte freigeschaltet."
 
