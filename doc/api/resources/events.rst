@@ -27,8 +27,7 @@ location                              multi-lingual string       The event locat
 has_subevents                         boolean                    ``True`` if the event series feature is active for this
                                                                  event
 meta_data                             dict                       Values set for organizer-specific meta data parameters.
-plugins                               dict                       Available plugins for the event with a boolean value
-                                                                 indicating if they are enabled/disabled
+plugins                               list                       Enabled plugins for the event.
 ===================================== ========================== =======================================================
 
 Note that events cannot be deleted once created to ensure data integrity.
@@ -37,7 +36,7 @@ Note that events cannot be deleted once created to ensure data integrity.
 
    The ``meta_data`` field has been added.
 
-.. versionchanged:: 1.12
+.. versionchanged:: 1.14
 
    The ``plugins`` field has been added.
    The write operations POST, PATCH, AND PUT have been added.
@@ -84,25 +83,21 @@ Endpoints
             "location": null,
             "has_subevents": false,
             "meta_data": {},
-            "plugins": {
-              "pretix.plugins.banktransfer": false,
-              "pretix.plugins.stripe": false,
-              "pretix.plugins.paypal": false,
-              "pretix.plugins.ticketoutputpdf": false,
-              "pretix.plugins.sendmail": false,
-              "pretix.plugins.statistics": false,
-              "pretix.plugins.reports": false,
-              "pretix.plugins.pretixdroid": false
-            }
+            "plugins": [
+              "pretix.plugins.banktransfer"
+              "pretix.plugins.stripe"
+              "pretix.plugins.paypal"
+              "pretix.plugins.ticketoutputpdf"
+            ]
           }
         ]
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
-   :param organizer: The ``slug`` field of a valid organizer
+       :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+       :statuscode 401: Authentication failure
+       :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/
 
@@ -138,23 +133,19 @@ Endpoints
         "location": null,
         "has_subevents": false,
         "meta_data": {},
-        "plugins": {
-          "pretix.plugins.banktransfer": false,
-          "pretix.plugins.stripe": false,
-          "pretix.plugins.paypal": false,
-          "pretix.plugins.ticketoutputpdf": false,
-          "pretix.plugins.sendmail": false,
-          "pretix.plugins.statistics": false,
-          "pretix.plugins.reports": false,
-          "pretix.plugins.pretixdroid": false
-        }
+        "plugins": [
+          "pretix.plugins.banktransfer"
+          "pretix.plugins.stripe"
+          "pretix.plugins.paypal"
+          "pretix.plugins.ticketoutputpdf"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+       :statuscode 401: Authentication failure
+       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/
 
@@ -183,7 +174,10 @@ Endpoints
         "location": null,
         "has_subevents": false,
         "meta_data": {},
-        "plugins": null
+        "plugins": [
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal"
+        ]
       }
 
    **Example response**:
@@ -208,23 +202,17 @@ Endpoints
         "location": null,
         "has_subevents": false,
         "meta_data": {},
-        "plugins": {
-          "pretix.plugins.banktransfer": false,
-          "pretix.plugins.stripe": false,
-          "pretix.plugins.paypal": false,
-          "pretix.plugins.ticketoutputpdf": false,
-          "pretix.plugins.sendmail": false,
-          "pretix.plugins.statistics": false,
-          "pretix.plugins.reports": false,
-          "pretix.plugins.pretixdroid": false
-        }
+        "plugins": [
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create.
    :statuscode 201: no error
-   :statuscode 400: The event could not be created due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+       :statuscode 400: The event could not be created due to invalid submitted data.
+       :statuscode 401: Authentication failure
+       :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
 
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/
@@ -241,12 +229,12 @@ Endpoints
       Content: application/json
 
       {
-        "plugins": {
-          "pretix.plugins.banktransfer": true,
-          "pretix.plugins.stripe": true,
-          "pretix.plugins.paypal": true,
-          "pretix.plugins.pretixdroid": true
-        }
+        "plugins": [
+          "pretix.plugins.banktransfer",
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal",
+          "pretix.plugins.pretixdroid"
+        ]
       }
 
    **Example response**:
@@ -271,24 +259,20 @@ Endpoints
         "location": null,
         "has_subevents": false,
         "meta_data": {},
-        "plugins": {
-          "pretix.plugins.banktransfer": true,
-          "pretix.plugins.stripe": true,
-          "pretix.plugins.paypal": true,
-          "pretix.plugins.ticketoutputpdf": false,
-          "pretix.plugins.sendmail": false,
-          "pretix.plugins.statistics": false,
-          "pretix.plugins.reports": false,
-          "pretix.plugins.pretixdroid": true
-        }
+        "plugins": [
+          "pretix.plugins.banktransfer",
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal",
+          "pretix.plugins.pretixdroid"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to update
    :param event: The ``slug`` field of the event to update
    :statuscode 201: no error
-   :statuscode 400: The event could not be created due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+       :statuscode 400: The event could not be created due to invalid submitted data.
+       :statuscode 401: Authentication failure
+       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
@@ -313,5 +297,5 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to delete
    :statuscode 204: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
+       :statuscode 401: Authentication failure
+       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.

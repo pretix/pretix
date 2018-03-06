@@ -13,6 +13,14 @@ from pretix.base.models.orders import OrderFee
 
 
 @pytest.fixture
+def variations(item):
+    v = list()
+    v.append(item.variations.create(value="ChildA1"))
+    v.append(item.variations.create(value="ChildA2"))
+    return v
+
+
+@pytest.fixture
 def order(event, item, taxrule):
     testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
@@ -80,14 +88,8 @@ TEST_EVENT_RES = {
     "has_subevents": False,
     "meta_data": {"type": "Conference"},
     'plugins': {
-        'pretix.plugins.banktransfer': True,
-        'pretix.plugins.paypal': False,
-        'pretix.plugins.pretixdroid': False,
-        'pretix.plugins.reports': False,
-        'pretix.plugins.sendmail': False,
-        'pretix.plugins.statistics': False,
-        'pretix.plugins.stripe': False,
-        'pretix.plugins.ticketoutputpdf': True
+        'pretix.plugins.banktransfer',
+        'pretix.plugins.ticketoutputpdf'
     }
 }
 
@@ -114,7 +116,7 @@ def test_event_list(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
     assert resp.status_code == 200
     print(resp.data)
-    assert TEST_EVENT_RES == dict(resp.data['results'][0])
+    assert TEST_EVENT_RES == resp.data['results'][0]
 
 
 @pytest.mark.django_db
@@ -291,69 +293,38 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
-            "plugins": {
-                "pretix.plugins.banktransfer": False,
-                "pretix.plugins.stripe": False,
-                "pretix.plugins.paypal": False,
-                "pretix.plugins.ticketoutputpdf": True,
-                "pretix.plugins.sendmail": False,
-                "pretix.plugins.statistics": False,
-                "pretix.plugins.reports": False,
-                "pretix.plugins.pretixdroid": True
-            }
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf",
+                "pretix.plugins.pretixdroid"
+            ]
         },
         format='json'
     )
     assert resp.status_code == 200
     assert resp.data.get('plugins') == {
-        "pretix.plugins.banktransfer": False,
-        "pretix.plugins.stripe": False,
-        "pretix.plugins.paypal": False,
-        "pretix.plugins.ticketoutputpdf": True,
-        "pretix.plugins.sendmail": False,
-        "pretix.plugins.statistics": False,
-        "pretix.plugins.reports": False,
-        "pretix.plugins.pretixdroid": True
+        "pretix.plugins.ticketoutputpdf",
+        "pretix.plugins.pretixdroid"
     }
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
             "plugins": {
-                "pretix.plugins.banktransfer": True
+                "pretix.plugins.banktransfer"
             }
         },
         format='json'
     )
     assert resp.status_code == 200
     assert resp.data.get('plugins') == {
-        "pretix.plugins.banktransfer": True,
-        "pretix.plugins.stripe": False,
-        "pretix.plugins.paypal": False,
-        "pretix.plugins.ticketoutputpdf": False,
-        "pretix.plugins.sendmail": False,
-        "pretix.plugins.statistics": False,
-        "pretix.plugins.reports": False,
-        "pretix.plugins.pretixdroid": False
+        "pretix.plugins.banktransfer"
     }
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
             "plugins": {
-                "pretix.plugins.banktransfer": "Enabled",
-            }
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"plugins":["Illegal value \'Enabled\' for: \'pretix.plugins.banktransfer\'."]}'
-
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
-        {
-            "plugins": {
-                "pretix.plugins.test": True,
+                "pretix.plugins.test"
             }
         },
         format='json'
@@ -375,18 +346,18 @@ def test_event_detail(token_client, organizer, event, team):
 def test_event_delete(token_client, organizer, event):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 204
-    assert not organizer.event.filter(pk=event.id).exists()
+    assert not organizer.events.filter(pk=event.id).exists()
 
 
 @pytest.mark.django_db
 def test_event_with_order_position_not_delete(token_client, organizer, event, item, order_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 403
-    assert organizer.event.filter(pk=event.id).exists()
+    assert organizer.events.filter(pk=event.id).exists()
 
 
 @pytest.mark.django_db
 def test_event_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 403
-    assert organizer.event.filter(pk=event.id).exists()
+    assert organizer.events.filter(pk=event.id).exists()

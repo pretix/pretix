@@ -23,34 +23,29 @@ class PluginsField(Field):
         from pretix.base.plugins import get_all_plugins
 
         plugins = {
-            p.module: (p.module in obj.get_plugins()) for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
+            p.module for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
         }
 
         return plugins
 
     def to_internal_value(self, data):
         from pretix.base.plugins import get_all_plugins
+
         plugins_available = {
             p.module for p in get_all_plugins()
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
-        for plugin, active in data.items():
+        for plugin in data:
             if plugin not in plugins_available:
                 raise ValidationError(
                     message=_("Unknown plugin: '%s'."),
                     params=(plugin,)
                 )
                 break
-            if active is not True and active is not False:
-                raise ValidationError(
-                    message=_("Illegal value '%s' for: '%s'."),
-                    params=(str(active), plugin)
-                )
-                break
 
-        plugins = {plugin_name for plugin_name, active in data.items() if active}
+        plugins = {plugin_name for plugin_name in data}
 
         return {
             'plugins': ",".join(plugins)
