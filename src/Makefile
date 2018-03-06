@@ -5,8 +5,8 @@ localecompile:
 	./manage.py compilemessages
 
 localegen:
-	./manage.py makemessages --all --ignore "pretix/helpers/*"
-	./manage.py makemessages --all -d djangojs --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "build/*"
+	./manage.py makemessages --keep-pot --all --ignore "pretix/helpers/*"
+	./manage.py makemessages --keep-pot --all -d djangojs --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "build/*"
 
 staticfiles: jsi18n
 	./manage.py collectstatic --noinput
