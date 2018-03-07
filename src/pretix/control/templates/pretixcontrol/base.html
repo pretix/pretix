@@ -272,6 +272,17 @@
                     </form>
                 </div>
             {% endif %}
+            {% if global_settings.banner_message %}
+                <div class="impersonate-warning">
+                    <span class="fa fa-bell"></span>
+                    {{ global_settings.banner_message }}
+                    {% if global_settings.banner_message %}
+                        <a href="{% url 'control:global.message' %}">
+                            {% trans "Read more" %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
             <div id="page-wrapper">
                 <div class="container-fluid">
                     {% if messages %}

@@ -1,0 +1,9 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load rich_text %}
+
+{% block title %}{% trans "System message" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "System message" %}</h1>
+    {{ global_settings.banner_message_detail|rich_text }}
+{% endblock %}

@@ -486,7 +486,15 @@ Your {event} team"""))
     'update_check_id': {
         'default': None,
         'type': str
-    }
+    },
+    'banner_message': {
+        'default': '',
+        'type': LazyI18nString
+    },
+    'banner_message_detail': {
+        'default': '',
+        'type': LazyI18nString
+    },
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
