@@ -347,6 +347,7 @@ LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
+    ('nl', _('Dutch')),
 ]
 
 EXTRA_LANG_INFO = {
