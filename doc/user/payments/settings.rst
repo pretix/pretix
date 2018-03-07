@@ -1,7 +1,7 @@
 General settings
 ================
 
-At "Settings" → "Pages", you can configure every aspect related to the payments you want to accept. The upper part
+At "Settings" → "Payment", you can configure every aspect related to the payments you want to accept. The upper part
 of the page shows a number of general settings that affect all payment methods:
 
 .. thumbnail:: ../../screens/event/settings_payment.png
