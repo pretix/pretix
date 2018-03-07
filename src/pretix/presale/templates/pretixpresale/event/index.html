@@ -60,7 +60,7 @@
                         <div class="col-md-4 col-md-offset-4 col-xs-12">
                             <a class="btn btn-block btn-primary btn-lg"
                                     href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
-                                {% if has_addon_choices %}
+                                {% if has_addon_choices or cart.total == 0 %}
                                     <i class="fa fa-shopping-cart"></i> {% trans "Continue" %}
                                     </a>
                                 {% else %}
