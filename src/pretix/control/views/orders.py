@@ -110,7 +110,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
-            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid')
+            self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'True')
         )
         return ctx
 
