@@ -78,6 +78,7 @@ renderer
 renderers
 reportlab
 screenshot
+selectable
 serializers
 serializers
 sexualized
