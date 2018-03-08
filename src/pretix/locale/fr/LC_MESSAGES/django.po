@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 21:48+0000\n"
-"PO-Revision-Date: 2018-03-08 15:57+0000\n"
+"PO-Revision-Date: 2018-03-10 13:20+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French "
 "<https://translate.pretix.eu/projects/pretix/pretix/fr/>\n"
@@ -18,7 +18,6 @@ msgstr ""
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
 #: pretix/control/views/dashboards.py:353
-#, fuzzy
 msgid "Shop disabled"
 msgstr "Boutique désactivée"
 
@@ -26,7 +25,6 @@ msgstr "Boutique désactivée"
 #: pretix/control/forms/filter.py:268 pretix/control/forms/filter.py:363
 #: pretix/control/templates/pretixcontrol/events/index.html:124
 #: pretix/control/templates/pretixcontrol/subevents/index.html:91
-#, fuzzy
 msgid "Presale over"
 msgstr "Prévente terminée"
 
@@ -63,16 +61,22 @@ msgid "The subevent does not belong to this event."
 msgstr "Le sous-événement n'appartient pas à cet événement."
 
 #: pretix/api/serializers/item.py:106
+#, fuzzy
 msgid ""
 "Updating variations via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"La mise à jour des variantes via PATCH/PUT n'est pas prise en charge. "
+"Veuillez utiliser le point de terminaison imbriqué dédié."
 
 #: pretix/api/serializers/item.py:112
+#, fuzzy
 msgid ""
 "Updating add-ons via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"La mise à jour des add-ons via PATCH/PUT n'est pas prise en charge. Veuillez "
+"utiliser le point de terminaison imbriqué dédié."
 
 #: pretix/base/exporters/answers.py:18
 #, fuzzy
@@ -1905,7 +1909,7 @@ msgstr "Frais d'expédition"
 
 #: pretix/base/models/orders.py:676
 msgid "Service fee"
-msgstr ""
+msgstr "Frais de service"
 
 #: pretix/base/models/orders.py:677
 #, fuzzy
