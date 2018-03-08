@@ -1,21 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# pretix translation file Dutch
+# Copyright (C) 2018 the pretix authors
+# This file is distributed under the same license as the pretix package.
+# Maarten Visscher <mail@maartenvisscher.nl>, 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-06 17:25+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2018-03-01 14:32+0000\n"
+"PO-Revision-Date: 2018-03-08 16:59+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -35,7 +36,7 @@ msgstr ""
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
 msgid "Paid orders"
-msgstr ""
+msgstr "Betaalde bestellingen"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:21
 msgid "Total revenue"
@@ -165,7 +166,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:242
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:243
 msgid "None"
@@ -181,11 +182,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "De items in uw winkelwagen zijn niet meer voor u gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Winkelwagen is verlopen"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -206,12 +207,12 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:11
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Gereserveerd"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:12
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "GRATIS"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:13
 msgctxt "widget"
@@ -263,7 +264,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Wachtlijst"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -283,7 +284,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Wissel een voucher in"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
@@ -293,7 +294,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Vouchercode"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
@@ -303,7 +304,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Verdergaan"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
