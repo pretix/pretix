@@ -30,7 +30,7 @@ meta_data                             dict                       Values set for 
 plugins                               list                       Enabled plugins for the event.
 ===================================== ========================== =======================================================
 
-Note that events cannot be deleted once created to ensure data integrity.
+Note that events with orders cannot be deleted to ensure data integrity.
 
 .. versionchanged:: 1.7
 
@@ -210,9 +210,78 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer of the event to create.
    :statuscode 201: no error
-       :statuscode 400: The event could not be created due to invalid submitted data.
-       :statuscode 401: Authentication failure
-       :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/clone/
+
+   Creates a new event with properties as set in the request body and settings and items copied from the exiting event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/clone/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "name": {"en": "Sample Conference"},
+        "slug": "sampleconf",
+        "live": false,
+        "currency": "EUR",
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "is_public": false,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "has_subevents": false,
+        "meta_data": {},
+        "plugins": [
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal"
+        ]
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "name": {"en": "Sample Conference"},
+        "slug": "sampleconf",
+        "live": false,
+        "currency": "EUR",
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "is_public": false,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "has_subevents": false,
+        "meta_data": {},
+        "plugins": [
+          "pretix.plugins.stripe",
+          "pretix.plugins.paypal"
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to create.
+   :param event: The ``slug`` field of the event to copy settings and items from.
+   :statuscode 201: no error
+   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
 
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/

@@ -14,6 +14,7 @@ orga_router.register(r'events', event.EventViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)
+event_router.register(r'clone', event.CloneEventViewSet)
 event_router.register(r'items', item.ItemViewSet)
 event_router.register(r'categories', item.ItemCategoryViewSet)
 event_router.register(r'questions', item.QuestionViewSet)
