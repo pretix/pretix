@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:18+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -14481,8 +14481,7 @@ msgstr ""
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
-msgstr ""
-"Tofaktorgodkendelsesenheden \"{name}\" er blevet fjernet fra din konto."
+msgstr "Tofaktorgodkendelsesenheden \"{name}\" er blevet fjernet fra din konto."
 
 #: pretix/control/logdisplay.py:457
 msgid "Notifications have been enabled."
@@ -15314,9 +15313,9 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
-"Hvis du allerede har en konto på dette site, så kan du <a "
-"%(login_href)s>logge ind</a> først og så igen klikke på dette link for at "
-"acceptere invitationen med din eksisterende konto."
+"Hvis du allerede har en konto på dette site, så kan du <a %(login_href)"
+"s>logge ind</a> først og så igen klikke på dette link for at acceptere "
+"invitationen med din eksisterende konto."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
@@ -16007,8 +16006,7 @@ msgstr ""
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
-msgstr ""
-"Dette vil også slette oplysninger om <strong>%(num)s</strong> tjek-ind."
+msgstr "Dette vil også slette oplysninger om <strong>%(num)s</strong> tjek-ind."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -22679,8 +22677,8 @@ msgid ""
 "Are you sure you want to delete the following waiting list entry "
 "<strong>%(entry)s</strong>?"
 msgstr ""
-"Er du sikker på at du vil slette ventelistepladsen <strong>%(entry)s</"
-"strong>?"
+"Er du sikker på at du vil slette ventelistepladsen "
+"<strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -22929,8 +22927,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:321
 msgid "We were unable to find the user you requested a new password for."
-msgstr ""
-"Vi kunne ikke finde brugeren som du efterspurgte en ny adgangskode til."
+msgstr "Vi kunne ikke finde brugeren som du efterspurgte en ny adgangskode til."
 
 #: pretix/control/views/auth.py:354
 msgid "You can now login using your new password."
