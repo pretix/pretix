@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 14:32+0000\n"
-"PO-Revision-Date: 2018-03-08 15:48+0000\n"
+"POT-Creation-Date: 2018-03-01 14:33+0000\n"
+"PO-Revision-Date: 2018-03-08 16:56+0000\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -5406,7 +5406,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/base.html:63
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Uw aanvraag is in behandeling …"
 
 #: pretix/control/templates/pretixcontrol/base.html:325
 #: pretix/presale/templates/pretixpresale/base.html:65
@@ -6571,7 +6571,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:14
 msgid "Sold out"
-msgstr ""
+msgstr "Uitverkocht"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:7
 msgid ""
@@ -6641,7 +6641,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Count"
-msgstr ""
+msgstr "Aantal"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:90
 msgid "Question history"
@@ -9192,7 +9192,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Opmerking:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -10290,7 +10290,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Ticketontwerp"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -11046,7 +11046,7 @@ msgstr "Voeg toe aan winkelwagen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:448
 msgid "Redeem a voucher"
-msgstr "Wissel een voucher in"
+msgstr "Verzilver een voucher"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:461
 msgid "Redeem voucher"
