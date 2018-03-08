@@ -145,6 +145,10 @@ and update the ``*.po`` files accordingly::
 
     make localegen
 
+However, most of the time you don't need to care about this. Just create your pull request
+with functionality and English strings only, and we'll push the new translation strings
+to our translation platform after the merge.
+
 To actually see pretix in your language, you have to compile the ``*.po`` files to their
 optimized binary ``*.mo`` counterparts::
 
