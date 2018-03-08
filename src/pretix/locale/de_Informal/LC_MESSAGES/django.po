@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-08 13:55+0000\n"
-"PO-Revision-Date: 2018-03-08 14:01+0000\n"
+"PO-Revision-Date: 2018-03-10 13:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) "
 "<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
@@ -10282,7 +10282,7 @@ msgstr "Es gab einen Fehler beim Versenden der Bestätigungs-E-Mail."
 
 #: pretix/plugins/paypal/payment.py:293 pretix/plugins/stripe/payment.py:308
 msgid "Your input was invalid, please try again."
-msgstr "Die Eingabe war nicht korrekt, bitte erneut versuchen."
+msgstr "Deine Eingabe war ungültig, bitte erneut versuchen."
 
 #: pretix/plugins/paypal/payment.py:310 pretix/plugins/paypal/payment.py:323
 #: pretix/plugins/stripe/payment.py:323 pretix/plugins/stripe/payment.py:344
