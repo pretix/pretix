@@ -1,0 +1,18 @@
+{% load i18n %}
+{% if wrap_label %}
+    <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>
+{% endif %}
+{% include "django/forms/widgets/input.html" %}
+{% if wrap_label %}
+    {{ widget.label }}
+    {% if widget.incubating %}
+        <span class="label label-danger" data-toggle="tooltip" title="{% trans "The translation for this language is still in progress. This language can currently only be selected on development installations of pretix, not in production." %}">
+            {% trans "Translation in development" %}
+        </span>
+    {% elif not widget.official %}
+        <span class="label label-warning" data-toggle="tooltip" title="{% trans "This translation is not maintained by the pretix team. We cannot vouch for its correctness and new or recently changed features might not be translated and will show in English instead. You can help translating at translate.pretix.eu." %}">
+            {% trans "Inofficial translation" %}
+        </span>
+    {% endif %}
+    </label>
+{% endif %}

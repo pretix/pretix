@@ -24,7 +24,8 @@ Inofficial languages
     guarantee that new or changed features in pretix will be translated in time.
 
 Incubating languages
-    are currently in the process of being translated. They can not yet be selected in pretix by end users.
+    are currently in the process of being translated. They can not yet be selected in pretix by end users on
+    production installations and are only available in development mode for testing.
 
 Please contact translate@pretix.eu if you think an incubated language should be promoted to an inofficial one or if
 you are interested in a partnership to make your language official.
@@ -60,6 +61,12 @@ the top-right corner.
 Going back to the dashboard by clicking on the logo in the top-left corner, you can select between different lists
 of translation projects. You can either filter by projects that already have a translation in your language, or you
 go to the `pretix project page`_ where you can select specific components.
+
+.. note::
+
+   If you want to translate pretix to a new language that is not yet listed here, you are very welcome to do so!
+   While you technically can add the language to the portal yourself, we ask you to drop us a short mail to
+   translate@pretix.eu so we can add it to all components at once and also make it selectabel in pretix itself.
 
 .. image:: img/weblate4.png
    :class: screenshot

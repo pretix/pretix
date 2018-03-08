@@ -1,6 +1,7 @@
 import os
 
 from django import forms
+from django.conf import settings
 from django.utils.html import conditional_escape
 from django.utils.translation import ugettext_lazy as _
 
@@ -102,3 +103,68 @@ class SlugWidget(forms.TextInput):
         ctx = super().get_context(name, value, attrs)
         ctx['pre'] = self.prefix
         return ctx
+
+
+class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
+    option_template_name = 'pretixcontrol/multi_languages_widget.html'
+
+    def sort(self):
+        self.choices = sorted(self.choices, key=lambda l: (
+            (
+                0 if l[0] in settings.LANGUAGES_OFFICIAL
+                else (
+                    1 if l[0] not in settings.LANGUAGES_INCUBATING
+                    else 2
+                )
+            ), str(l[1])
+        ))
+
+    def options(self, name, value, attrs=None):
+        self.sort()
+        return super().options(name, value, attrs)
+
+    def optgroups(self, name, value, attrs=None):
+        self.sort()
+        return super().optgroups(name, value, attrs)
+
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        opt = super().create_option(name, value, label, selected, index, subindex, attrs)
+        opt['official'] = value in settings.LANGUAGES_OFFICIAL
+        opt['incubating'] = value in settings.LANGUAGES_INCUBATING
+        return opt
+
+
+class SingleLanguageWidget(forms.Select):
+
+    def modify(self):
+        if hasattr(self, '_modified'):
+            return self.choices
+        self.choices = sorted(self.choices, key=lambda l: (
+            (
+                0 if l[0] in settings.LANGUAGES_OFFICIAL
+                else (
+                    1 if l[0] not in settings.LANGUAGES_INCUBATING
+                    else 2
+                )
+            ), str(l[1])
+        ))
+        new_choices = []
+        for k, v in self.choices:
+            new_choices.append((
+                k,
+                v if k in settings.LANGUAGES_OFFICIAL
+                else (
+                    '{} (inofficial translation)'.format(v) if k not in settings.LANGUAGES_INCUBATING
+                    else '{} (translation in progress)'.format(v)
+                )
+            ))
+        self._modified = True
+        self.choices = new_choices
+
+    def options(self, name, value, attrs=None):
+        self.modify()
+        return super().options(name, value, attrs)
+
+    def optgroups(self, name, value, attrs=None):
+        self.modify()
+        return super().optgroups(name, value, attrs)
