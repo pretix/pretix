@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-05 15:54+0100\n"
-"PO-Revision-Date: 2018-03-08 18:03+0000\n"
+"PO-Revision-Date: 2018-03-09 13:06+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/da/>\n"
@@ -103,12 +103,12 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:116
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
-msgstr "Der er sket en fejl. Fejlkode: {code}"
+msgstr "Der er sket en fejl ({code})."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
 msgid "We are processing your request …"
-msgstr "Vi behandler din forespørgsel …"
+msgstr "Vi behandler din bestilling …"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
@@ -270,7 +270,7 @@ msgstr "Billetbutikken kunne ikke hentes."
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Kurven kunne ikke oprettes. Prøv igen senere."
+msgstr "Kurven kunne ikke oprettes. Prøv igen senere"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
