@@ -1,311 +1,389 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# pretix translation file German
+# Copyright (C) 2016 the pretix authors
+# This file is distributed under the same license as the pretix package.
+# Raphael Michel <michel@rami.io>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-06 17:25+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2018-01-06 21:48+0000\n"
+"PO-Revision-Date: 2018-03-08 15:58+0000\n"
+"Last-Translator: Claude <superoxyde@laposte.net>\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.19.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
+#, fuzzy
 msgid "Marked as paid"
-msgstr ""
+msgstr "Marqué comme payé"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
+#, fuzzy
 msgid "Comment:"
-msgstr ""
+msgstr "Commentaire:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
+#, fuzzy
 msgid "Placed orders"
-msgstr ""
+msgstr "Commandes passées"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
+#, fuzzy
 msgid "Paid orders"
-msgstr ""
+msgstr "Ordres payés"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:21
+#, fuzzy
 msgid "Total revenue"
-msgstr ""
+msgstr "Revenu total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
+#, fuzzy
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "Contacter Stripe ..."
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
+#, fuzzy
 msgid "QR Code"
-msgstr ""
+msgstr "QR Code"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:210
+#, fuzzy
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
+"Le fichier d'arrière-plan PDF n' a pas pu être chargé pour la raison "
+"suivante:"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:359
+#, fuzzy
 msgid "Group of objects"
-msgstr ""
+msgstr "Groupe d'objets"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:365
+#, fuzzy
 msgid "Text object"
-msgstr ""
+msgstr "Objet texte"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:367
+#, fuzzy
 msgid "Barcode area"
-msgstr ""
+msgstr "Zone de code-barres"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:369
+#, fuzzy
 msgid "Object"
-msgstr ""
+msgstr "Objet"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:373
+#, fuzzy
 msgid "Ticket design"
-msgstr ""
+msgstr "Conception des billets"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:609
+#, fuzzy
 msgid "Saving failed."
-msgstr ""
+msgstr "L'enregistrement a échoué."
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:656
+#, fuzzy
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
+"Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
+#, fuzzy
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
 #: pretix/static/pretixbase/js/asynctask.js:94
+#, fuzzy
 msgid ""
 "Your request has been queued on the server and will now be processed. If "
 "this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"Votre demande a été mise en attente sur le serveur et sera traitée. Si cela "
+"prend plus de deux minutes, veuillez nous contacter ou retourner dans votre "
+"navigateur et réessayer."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
+#, fuzzy
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "Une erreur de type {code} s'est produite."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
+#, fuzzy
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Nous traitons votre demande ..."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
+#, fuzzy
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Nous envoyons actuellement votre demande au serveur. Si cela prend plus "
+"d'une minute, veuillez vérifier votre connexion Internet, puis recharger "
+"cette page et réessayer."
 
 #: pretix/static/pretixbase/js/asynctask.js:38
 #: pretix/static/pretixbase/js/asynctask.js:90
+#, fuzzy
 msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
+"Votre demande a été mise en attente sur le serveur et sera traitée. Selon la "
+"taille de votre événement, cela peut prendre jusqu' à quelques minutes."
 
 #: pretix/static/pretixbase/js/asynctask.js:65
+#, fuzzy
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Nous ne pouvons actuellement pas atteindre le serveur, mais nous continuons "
+"d'essayer. Dernier code d'erreur: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:107
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
+#, fuzzy
 msgid "The request took to long. Please try again."
-msgstr ""
+msgstr "La requête a prit trop de temps. Veuillez réessayer."
 
 #: pretix/static/pretixbase/js/asynctask.js:119
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
+#, fuzzy
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Actuellement, nous ne pouvons pas atteindre le serveur. Veuillez réessayer. "
+"Code d'erreur: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:174
 #: pretix/static/pretixcontrol/js/ui/main.js:28
+#, fuzzy
 msgid "Close message"
-msgstr ""
+msgstr "Fermer le message"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
+#, fuzzy
 msgid "Copied!"
-msgstr ""
+msgstr "Copié !"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
+#, fuzzy
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Appuyez sur Ctrl-C pour copier !"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
+#, fuzzy
 msgid "An error has occurred."
-msgstr ""
+msgstr "Une erreur s'est produite."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
+#, fuzzy
 msgid "Generating messages …"
-msgstr ""
+msgstr "Création de messages ..."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
+#, fuzzy
 msgid "Unknown error."
-msgstr ""
+msgstr "Erreur inconnue."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:242
+#, fuzzy
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:243
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
+#, fuzzy
 msgid "Others"
-msgstr ""
+msgstr "Autres"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:70
+#, fuzzy
 msgid "Count"
-msgstr ""
+msgstr "Compter"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
+#, fuzzy
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Les articles de votre panier ne vous sont plus réservés."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
+#, fuzzy
 msgid "Cart expired"
-msgstr ""
+msgstr "Panier expiré"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
+#, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Les articles de votre panier vous sont réservés pour une minute."
+msgstr[1] "Les articles de votre panier vous sont réservés pour {num} minutes."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:9
+#, fuzzy
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Epuisé"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:10
+#, fuzzy
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Acheter"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:11
+#, fuzzy
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Réservé"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:12
+#, fuzzy
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "GRATUIT"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:13
+#, fuzzy
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "de %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:14
+#, fuzzy
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "incl. %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
+#, fuzzy
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
-#, javascript-format
+#, fuzzy, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "actuellement disponible: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
+#, fuzzy
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Disponible avec un bon de réduction"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
-#, javascript-format
+#, fuzzy, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "quantité minimum à commander: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
+#, fuzzy
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Fermer la billetterie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
+#, fuzzy
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "La billetterie n' a pas pu être chargée."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
+#, fuzzy
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Le panier n' a pas pu être créé. Veuillez réessayer plus tard"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
+#, fuzzy
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Liste d'attente"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
+#, fuzzy
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart. Click on this message to "
 "continue checkout with your cart."
 msgstr ""
+"Vous avez actuellement un panier actif pour cet événement. Si vous "
+"sélectionnez d'autres produits, ils seront ajoutés à votre panier. Cliquez "
+"sur ce message pour continuer votre commande avec votre panier."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
 msgctxt "widget"
 msgid ""
 "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
 "\"noopener\">pretix</a>"
 msgstr ""
+"généré par <a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\""
+">pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
+#, fuzzy
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Utiliser un bon d'achat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
+#, fuzzy
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Echanger"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
+#, fuzzy
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Code de réduction"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
+#, fuzzy
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
+#, fuzzy
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Continuer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
+#, fuzzy
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "Voir les variations"
