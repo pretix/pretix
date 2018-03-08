@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-05 15:54+0100\n"
-"PO-Revision-Date: 2018-03-08 18:02+0000\n"
+"PO-Revision-Date: 2018-03-09 13:07+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
@@ -816,7 +816,7 @@ msgstr ""
 #: pretix/base/models/event.py:214 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
-"Det korte navn må kun indeholde bogstaver, tal, punktummer og bindestreger."
+"Den korte url må kun indeholder bogstaver, tal, punktummer og bindestreger."
 
 #: pretix/base/models/event.py:218 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -6014,7 +6014,7 @@ msgstr "Installerede plugins"
 #: pretix/control/views/user.py:77 pretix/control/views/users.py:59
 #: pretix/control/views/vouchers.py:174
 msgid "Your changes have been saved."
-msgstr "Ændringer gemt."
+msgstr "Dine ændringer er blevet gemt."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
@@ -10331,7 +10331,7 @@ msgstr "<Svar: {question}>"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Billetdesign"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -10849,7 +10849,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:49
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Varerne i din kurv er ikke længere reserverede for dig."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
