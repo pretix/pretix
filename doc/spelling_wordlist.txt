@@ -33,6 +33,7 @@ gettext
 gunicorn
 hardcoded
 hostname
+inofficial
 invalidations
 iterable
 libsass

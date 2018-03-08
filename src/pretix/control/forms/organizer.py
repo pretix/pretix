@@ -7,7 +7,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Organizer, Team
-from pretix.control.forms import ExtFileField
+from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
 
@@ -158,7 +158,7 @@ class OrganizerDisplaySettingsForm(SettingsForm):
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
         label=_("Use languages"),
-        widget=forms.CheckboxSelectMultiple,
+        widget=MultipleLanguagesWidget,
         help_text=_('Choose all languages that your organizer homepage should be available in.')
     )
     primary_font = forms.ChoiceField(

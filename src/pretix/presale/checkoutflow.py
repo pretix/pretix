@@ -338,10 +338,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.render()
         self.cart_session['email'] = self.contact_form.cleaned_data['email']
+        self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
         if request.event.settings.invoice_address_asked:
             addr = self.invoice_form.save()
             self.cart_session['invoice_address'] = addr.pk
-            self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
 
             update_tax_rates(
                 event=request.event,
@@ -408,6 +408,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['invoice_form'] = self.invoice_form
         ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
         ctx['cart'] = self.get_cart()
+        ctx['cart_session'] = self.cart_session
         return ctx
 
 

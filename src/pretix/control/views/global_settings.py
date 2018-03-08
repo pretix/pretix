@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
@@ -56,3 +56,7 @@ class UpdateCheckView(AdministratorPermissionRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('control:global.update')
+
+
+class MessageView(TemplateView):
+    template_name = 'pretixcontrol/global_message.html'

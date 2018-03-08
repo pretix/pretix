@@ -321,7 +321,7 @@ Your {event} team"""))
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
 we did not yet receive a payment for your order for {event}.
-Please keep in mind that if we only guarantee your order if we receive
+Please keep in mind that we only guarantee your order if we receive
 your payment before {expire_date}.
 
 You can view the payment information and the status of your order at
@@ -486,7 +486,15 @@ Your {event} team"""))
     'update_check_id': {
         'default': None,
         'type': str
-    }
+    },
+    'banner_message': {
+        'default': '',
+        'type': LazyI18nString
+    },
+    'banner_message_detail': {
+        'default': '',
+        'type': LazyI18nString
+    },
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')

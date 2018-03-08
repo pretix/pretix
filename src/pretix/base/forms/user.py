@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.models import User
+from pretix.control.forms import SingleLanguageWidget
 
 
 class UserSettingsForm(forms.ModelForm):
@@ -47,6 +48,9 @@ class UserSettingsForm(forms.ModelForm):
             'timezone',
             'email'
         ]
+        widgets = {
+            'locale': SingleLanguageWidget
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')

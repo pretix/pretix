@@ -18,6 +18,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     Event, EventMetaValue, SubEvent, SubEventMetaValue,
 )
+from pretix.helpers.daterange import daterange
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -129,6 +130,17 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
             ).order_by('order_from')
         qs = filter_qs_by_attr(qs, self.request)
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        for event in ctx['events']:
+            tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+            if event.has_subevents:
+                event.daterange = daterange(
+                    event.min_from.astimezone(tz),
+                    (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
+                )
+        return ctx
 
 
 def add_events_for_days(request, baseqs, before, after, ebd, timezones):

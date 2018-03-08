@@ -17,6 +17,7 @@ class SendMailApp(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+        from . import tasks  # NOQA
 
 
 default_app_config = 'pretix.plugins.sendmail.SendMailApp'

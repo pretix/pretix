@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from i18nfield.forms import I18nFormField, I18nTextInput
+from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
 from pretix.base.forms import SettingsForm
 from pretix.base.settings import GlobalSettingsObject
@@ -26,13 +26,26 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("Additional footer link"),
                 help_text=_("Will be included as the link in the additional footer text.")
-            ))
+            )),
+            ('banner_message', I18nFormField(
+                widget=I18nTextarea,
+                required=False,
+                label=_("Global message banner"),
+            )),
+            ('banner_message_detail', I18nFormField(
+                widget=I18nTextarea,
+                required=False,
+                label=_("Global message banner detail text"),
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value
+
+        self.fields['banner_message'].widget.attrs['rows'] = '2'
+        self.fields['banner_message_detail'].widget.attrs['rows'] = '3'
 
 
 class UpdateSettingsForm(SettingsForm):

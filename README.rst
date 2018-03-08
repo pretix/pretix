@@ -40,6 +40,9 @@ Contributing
 If you want to contribute to pretix, please read the `developer documentation`_
 in our documentation. If you have any further questions, please do not hesitate to ask!
 
+.. image:: https://translate.pretix.eu/widgets/pretix/-/pretix/multi-blue.svg
+   :target: https://translate.pretix.eu/engage/pretix/
+
 Code of Conduct
 ---------------
 We have a `Code of Conduct`_ in place that applies to all project contributions,

@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^$', dashboards.user_index, name='index'),
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
+    url(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
     url(r'^users/$', users.UserListView.as_view(), name='users'),
     url(r'^users/select2$', typeahead.users_select2, name='users.select2'),

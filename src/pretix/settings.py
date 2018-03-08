@@ -343,11 +343,26 @@ FORMAT_MODULE_PATH = [
     'pretix.helpers.formats',
 ]
 
-LANGUAGES = [
+ALL_LANGUAGES = [
     ('en', _('English')),
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
+    ('nl', _('Dutch')),
+    ('da', _('Danish')),
+    ('pt-br', _('Portuguese (Brazil)')),
 ]
+LANGUAGES_OFFICIAL = {
+    'en', 'de', 'de-informal'
+}
+LANGUAGES_INCUBATING = {
+    'nl', 'pt-br', 'da'
+}
+
+if DEBUG:
+    LANGUAGES = ALL_LANGUAGES
+else:
+    LANGUAGES = [(k, v) for k, v in ALL_LANGUAGES if k not in LANGUAGES_INCUBATING]
+
 
 EXTRA_LANG_INFO = {
     'de-informal': {

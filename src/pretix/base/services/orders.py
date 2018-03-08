@@ -504,7 +504,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         for fee in fees:
             fee.order = order
             fee._calculate_tax()
-            if not fee.tax_rule.pk:
+            if fee.tax_rule and not fee.tax_rule.pk:
                 fee.tax_rule = None  # TODO: deprecate
             fee.save()
 

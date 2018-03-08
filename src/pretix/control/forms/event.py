@@ -17,7 +17,8 @@ from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import (
-    ExtFileField, SlugWidget, SplitDateTimePickerWidget,
+    ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
+    SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.style import get_fonts
@@ -27,7 +28,7 @@ class EventWizardFoundationForm(forms.Form):
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
         label=_("Use languages"),
-        widget=forms.CheckboxSelectMultiple,
+        widget=MultipleLanguagesWidget,
         help_text=_('Choose all languages that your event should be available in.')
     )
     has_subevents = forms.BooleanField(
@@ -279,11 +280,12 @@ class EventSettingsForm(SettingsForm):
     )
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
-        widget=forms.CheckboxSelectMultiple,
+        widget=MultipleLanguagesWidget,
         label=_("Available languages"),
     )
     locale = forms.ChoiceField(
         choices=settings.LANGUAGES,
+        widget=SingleLanguageWidget,
         label=_("Default language"),
     )
     show_quota_left = forms.BooleanField(
@@ -637,6 +639,8 @@ class InvoiceSettingsForm(SettingsForm):
             (r.identifier, r.verbose_name) for r in event.get_invoice_renderers().values()
         ]
         self.fields['invoice_numbers_prefix'].widget.attrs['placeholder'] = event.slug.upper() + '-'
+        locale_names = dict(settings.LANGUAGES)
+        self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
 
 
 class MailSettingsForm(SettingsForm):

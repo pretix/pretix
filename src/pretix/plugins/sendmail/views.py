@@ -1,7 +1,6 @@
 import logging
 from datetime import timedelta
 
-import pytz
 from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
@@ -12,11 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
 
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import InvoiceAddress, LogEntry, Order
+from pretix.base.models import LogEntry, Order
 from pretix.base.models.event import SubEvent
-from pretix.base.services.mail import SendMailException, mail
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.sendmail.tasks import send_mails
 
 from . import forms
 
@@ -71,9 +70,6 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             orders = orders.filter(positions__subevent__in=(form.cleaned_data.get('subevent'),))
         orders = orders.distinct()
 
-        tz = pytz.timezone(self.request.event.settings.timezone)
-
-        failures = []
         self.output = {}
         if not orders:
             messages.error(self.request, _('There are no orders matching this selection.'))
@@ -110,50 +106,19 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
             return self.get(self.request, *self.args, **self.kwargs)
 
-        for o in orders:
-            try:
-                invoice_name = o.invoice_address.name
-                invoice_company = o.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
-            try:
-                with language(o.locale):
-                    email_context = {
-                        'event': o.event,
-                        'code': o.code,
-                        'date': date_format(o.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                        'expire_date': date_format(o.expires, 'SHORT_DATE_FORMAT'),
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        }),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    }
-                    mail(
-                        o.email, form.cleaned_data['subject'], form.cleaned_data['message'],
-                        email_context,
-                        self.request.event, locale=o.locale, order=o)
-                    o.log_action(
-                        'pretix.plugins.sendmail.order.email.sent',
-                        user=self.request.user,
-                        data={
-                            'subject': form.cleaned_data['subject'].localize(o.locale),
-                            'message': form.cleaned_data['message'].localize(o.locale).format_map(email_context),
-                            'recipient': o.email
-                        }
-                    )
-            except SendMailException:
-                failures.append(o.email)
+        send_mails.apply_async(
+            kwargs={
+                'event': self.request.event.pk,
+                'user': self.request.user.pk,
+                'subject': form.cleaned_data['subject'].data,
+                'message': form.cleaned_data['message'].data,
+                'orders': [o.pk for o in orders],
+            }
+        )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
                                       user=self.request.user,
                                       data=dict(form.cleaned_data))
-        if failures:
-            messages.error(self.request,
-                           _('Failed to send mails to the following users: {}'.format(' '.join(failures))))
-        else:
-            messages.success(self.request, _('Your message has been queued and will be sent to the selected users.'))
+        messages.success(self.request, _('Your message has been queued and will be sent to %d users in the next minutes.') % len(orders))
 
         return redirect(
             'plugins:sendmail:send',

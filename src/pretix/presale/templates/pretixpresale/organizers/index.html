@@ -53,7 +53,7 @@
                 <tr>
                     <td><a href="{{ url }}">{{ e.name }}</a></td>
                     <td>
-                        {{ e.get_date_range_display }}
+                        {{ e.daterange|default:e.get_date_range_display }}
                     </td>
                     <td class="text-right">
                         <a class="btn btn-primary" href="{{ url }}">
