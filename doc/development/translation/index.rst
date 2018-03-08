@@ -66,7 +66,7 @@ go to the `pretix project page`_ where you can select specific components.
 
    If you want to translate pretix to a new language that is not yet listed here, you are very welcome to do so!
    While you technically can add the language to the portal yourself, we ask you to drop us a short mail to
-   translate@pretix.eu so we can add it to all components at once and also make it selectabel in pretix itself.
+   translate@pretix.eu so we can add it to all components at once and also make it selectable in pretix itself.
 
 .. image:: img/weblate4.png
    :class: screenshot
