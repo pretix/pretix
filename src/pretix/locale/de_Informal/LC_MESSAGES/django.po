@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-08 13:55+0000\n"
-"PO-Revision-Date: 2018-03-03 21:09+0100\n"
+"PO-Revision-Date: 2018-03-08 14:01+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Raphael Michel <michel@rami.io>\n"
-"Language: de\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.19.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -3123,19 +3124,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:321
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a payment for your order for {event}.\n"
-#| "Please keep in mind that if we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4707,11 +4696,11 @@ msgstr "Der zusätzliche Text in der Fußzeile wird zu dieser URL verlinkt."
 
 #: pretix/control/forms/global_settings.py:33
 msgid "Global message banner"
-msgstr ""
+msgstr "Systemweite Banner-Nachricht"
 
 #: pretix/control/forms/global_settings.py:38
 msgid "Global message banner detail text"
-msgstr ""
+msgstr "Details zur systemweiten Banner-Nachricht"
 
 #: pretix/control/forms/global_settings.py:54
 msgid "Perform update checks"
@@ -5825,7 +5814,7 @@ msgstr "Zurück zum eigenen Benutzer"
 
 #: pretix/control/templates/pretixcontrol/base.html:281
 msgid "Read more"
-msgstr ""
+msgstr "Mehr erfahren"
 
 #: pretix/control/templates/pretixcontrol/base.html:298
 msgid ""
@@ -6953,10 +6942,8 @@ msgstr "Aktuell verfügbar: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
-#, fuzzy
-#| msgid "Hide message"
 msgid "System message"
-msgstr "Löschen"
+msgstr "Systemnachricht"
 
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:16
 msgid "Update check"
@@ -7452,12 +7439,13 @@ msgid ""
 "currently only be selected on development installations of pretix, not in "
 "production."
 msgstr ""
+"Die Übersetzung für diese Sprache ist noch in Arbeit. Die Sprache kann "
+"derzeit nur in Entwicklungsumgebungen von pretix ausgewählt werden, nicht in "
+"Produktivinstallationen."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:10
-#, fuzzy
-#| msgid "running in development mode"
 msgid "Translation in development"
-msgstr "im Entwicklermodus"
+msgstr "Übersetzung in Arbeit"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:13
 msgid ""
@@ -7466,12 +7454,14 @@ msgid ""
 "and will show in English instead. You can help translating at translate."
 "pretix.eu."
 msgstr ""
+"Diese Übersetzung wird nicht vom pretix-Team gepflegt. Wir können für ihre "
+"Korrektheit nicht garantieren und neue oder kürzlich geänderte Funktionen "
+"können stattdessen auf Englisch erscheinen. Du kannst unter "
+"translate.pretix.eu bei der Übersetzung helfen."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
-#, fuzzy
-#| msgid "Unresolved transactions"
 msgid "Inofficial translation"
-msgstr "Unzugeordnete Überweisungen"
+msgstr "inoffizielle Übersetzung"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/cancel.html:8
@@ -10806,14 +10796,13 @@ msgid "Sample Company LLC"
 msgstr "Musterfirma GmbH"
 
 #: pretix/plugins/sendmail/views.py:121
-#, fuzzy, python-format
-#| msgid "Your message has been queued and will be sent to the selected users."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to %d users in the next "
 "minutes."
 msgstr ""
-"Die Nachricht wurde gespeichert und wird nun an die ausgewählten Benutzer "
-"versendet."
+"Die Nachricht wurde gespeichert und wird in den nächsten Minuten an %d "
+"Benutzer versendet."
 
 #: pretix/plugins/statistics/__init__.py:9
 #: pretix/plugins/statistics/__init__.py:12
@@ -12605,15 +12594,15 @@ msgstr "Deutsch (Du)"
 
 #: pretix/settings.py:350
 msgid "Dutch"
-msgstr ""
+msgstr "Niederländisch"
 
 #: pretix/settings.py:351
 msgid "Danish"
-msgstr ""
+msgstr "Dänisch"
 
 #: pretix/settings.py:352
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugiesisch (Brasilien)"
 
 #~ msgid "Failed to send mails to the following users: {}"
 #~ msgstr "Mails an die folgenden Benutzer konnten nicht versendet werden: {}"
