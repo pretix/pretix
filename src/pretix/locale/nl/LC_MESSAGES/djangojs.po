@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 13:11+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-10 13:20+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/nl/>\n"
 "Language: nl\n"
@@ -56,7 +56,6 @@ msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Het PDF achtergrondbestand kon niet geladen worden met als reden:"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:359
-#, fuzzy
 msgid "Group of objects"
 msgstr "Groep van objecten"
 
