@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:05+0000\n"
+"PO-Revision-Date: 2018-03-09 15:08+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -43,7 +43,7 @@ msgstr "Voorverkoop nog niet begonnen"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:95
 #: pretix/control/views/dashboards.py:359
 msgid "On sale"
-msgstr ""
+msgstr "In de verkoop"
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:1065
 msgid "One or more items do not belong to this event."
@@ -448,6 +448,10 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"Uw btw-nummer kon niet worden gecontroleerd omdat de controledienst voor btw-"
+"nummers van uw land een ongeldig resultaat teruggaf. We zullen hierom btw "
+"over uw factuur moeten rekenen. Neem contact op met ondersteuning om dit "
+"handmatig op te lossen."
 
 #: pretix/base/forms/user.py:15 pretix/control/forms/users.py:15
 msgid ""
@@ -10123,28 +10127,32 @@ msgstr ""
 
 #: pretix/plugins/stripe/signals.py:62
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Geschil aangemaakt. Reden: {}"
 
 #: pretix/plugins/stripe/signals.py:64
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Geschil bijgewerkt. Reden: {}"
 
 #: pretix/plugins/stripe/signals.py:66
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Geschil gesloten. Status: {}"
 
 #: pretix/plugins/stripe/signals.py:69
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe meldde een gebeurtenis: {}"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, but "
 "the order %(order)s is expired and the product was sold out in the meantime. "
 "Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
+"De Stripe-transactie <a %(stripe_href)s>%(charge)s</a> is gelukt, maar de "
+"bestelling %(order)s is verlopen en het product is ondertussen uitverkocht. "
+"Hierom kon de betaling niet worden geaccepteerd. Neem contact op met de "
+"gebruiker en restitueer de betaling via de website van Stripe."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:5
 #, python-format
@@ -10153,6 +10161,9 @@ msgid ""
 "been refunded. Do you want to refund mark the matching order (%(order)s) as "
 "refunded?"
 msgstr ""
+"Stripe meldde dat de transactie <a %(stripe_href)s>%(charge)s</a> is "
+"gerestitueerd. Wilt u de bijbehorende bestelling (%(order)s) als "
+"terugbetaald aanmerken?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
