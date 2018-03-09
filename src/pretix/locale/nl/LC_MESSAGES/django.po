@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:27+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-09 15:28+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1958,7 +1958,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:122
 msgid "Allow to bypass quota"
-msgstr ""
+msgstr "Sta toe om quotum te negeren"
 
 #: pretix/base/models/vouchers.py:124
 msgid ""
