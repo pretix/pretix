@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
 "PO-Revision-Date: 2018-03-09 15:21+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1482,7 +1482,7 @@ msgstr "Quota"
 
 #: pretix/base/models/items.py:1058
 msgid "All variations must belong to an item contained in the items list."
-msgstr ""
+msgstr "Alle varianten moeten bij een item behoren dat in de itemlijst staat."
 
 #: pretix/base/models/items.py:1068
 msgid ""
