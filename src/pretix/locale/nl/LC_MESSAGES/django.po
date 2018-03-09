@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:34+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-09 15:36+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -5357,7 +5357,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:76
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:324
 msgid "Save"
-msgstr ""
+msgstr "Opslaan"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
