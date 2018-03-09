@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:39+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-10 13:20+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1998,7 +1998,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:22
 #: pretix/control/views/vouchers.py:61
 msgid "Tag"
-msgstr ""
+msgstr "Label"
 
 #: pretix/base/models/vouchers.py:166
 msgid ""
