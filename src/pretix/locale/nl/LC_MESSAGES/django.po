@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:08+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2018-03-09 15:09+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1438,12 +1438,14 @@ msgid "Answer"
 msgstr "Antwoord"
 
 #: pretix/base/models/items.py:789
+#, fuzzy
 msgid "Question option"
-msgstr ""
+msgstr "Antwoordoptie"
 
 #: pretix/base/models/items.py:790
+#, fuzzy
 msgid "Question options"
-msgstr ""
+msgstr "Antwoordopties"
 
 #: pretix/base/models/items.py:865
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
