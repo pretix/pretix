@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
 "PO-Revision-Date: 2018-03-09 15:25+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1928,7 +1928,7 @@ msgstr "Vouchercode"
 
 #: pretix/base/models/vouchers.py:100 pretix/control/views/vouchers.py:61
 msgid "Maximum usages"
-msgstr ""
+msgstr "Maximum aantal keren te gebruiken"
 
 #: pretix/base/models/vouchers.py:101
 msgid "Number of times this voucher can be redeemed."
