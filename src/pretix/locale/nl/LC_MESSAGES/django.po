@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:37+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-09 15:39+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1974,7 +1974,7 @@ msgstr "Prijsberekening"
 
 #: pretix/base/models/vouchers.py:134
 msgid "Voucher value"
-msgstr ""
+msgstr "Voucherwaarde"
 
 #: pretix/base/models/vouchers.py:142 pretix/control/forms/vouchers.py:17
 msgid "This product is added to the user's cart if the voucher is redeemed."
@@ -1990,6 +1990,8 @@ msgstr "Deze variant van het hierboven geselecteerde product wordt gebruikt."
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Als dit is ingeschakeld is de voucher geldig voor ieder product getroffen "
+"door dit quotum."
 
 #: pretix/base/models/vouchers.py:163
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:84
