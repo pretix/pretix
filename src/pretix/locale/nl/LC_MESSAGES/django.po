@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:23+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2018-03-09 15:25+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1489,6 +1489,8 @@ msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
 msgstr ""
+"Eén of meer items bevatten varianten, maar geen van deze varianten staan in "
+"de variantenlijst."
 
 #: pretix/base/models/log.py:75
 #, python-brace-format
@@ -1858,7 +1860,6 @@ msgid "The configured product prices include the tax amount"
 msgstr "De ingestelde productprijzen zijn inclusief belasting"
 
 #: pretix/base/models/tax.py:78
-#, fuzzy
 msgid "Use EU reverse charge taxation rules"
 msgstr "Gebruik EU-regels voor verleggingsheffing"
 
