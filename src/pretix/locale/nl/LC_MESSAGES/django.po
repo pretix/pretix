@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-01 14:33+0000\n"
-"PO-Revision-Date: 2018-03-09 15:21+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-03-09 15:23+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -8968,7 +8968,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/__init__.py:16
 msgid "This plugin allows you to receive payments via bank transfer "
 msgstr ""
-"Deze plugin staat u toe om betalingen te ontvangen via bankoverschrijvingen "
+"Deze plug-in staat u toe om betalingen te ontvangen via bankoverschrijvingen "
 
 #: pretix/plugins/banktransfer/__init__.py:29
 msgid ""
@@ -9314,10 +9314,9 @@ msgid "Check-in list exporter"
 msgstr ""
 
 #: pretix/plugins/checkinlists/__init__.py:17
-#, fuzzy
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
-"Deze plugin staat u toe om inchecklijsten te genereren voor uw conferentie."
+"Deze plug-in staat u toe om inchecklijsten te genereren voor uw conferentie."
 
 #: pretix/plugins/checkinlists/exporters.py:38
 msgid "Include QR-code secret"
@@ -9358,7 +9357,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/__init__.py:16
 msgid "This plugin allows you to receive payments via PayPal"
-msgstr "Deze plugin staat u toe om betalingen te ontvangen via PayPal"
+msgstr "Deze plug-in staat u toe om betalingen te ontvangen via PayPal"
 
 #: pretix/plugins/paypal/payment.py:27 pretix/plugins/stripe/payment.py:28
 msgid "Refund automatically?"
@@ -9575,7 +9574,7 @@ msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
-"Deze plugin staat u toe om de pretixdroid- en pretixdesk-apps voor uw "
+"Deze plug-in staat u toe om de pretixdroid- en pretixdesk-apps voor uw "
 "evenement te gebruiken."
 
 #: pretix/plugins/pretixdroid/models.py:11
@@ -9774,7 +9773,7 @@ msgstr ""
 #: pretix/plugins/reports/__init__.py:16
 msgid "This plugin allows you to generate printable reports about your sales."
 msgstr ""
-"Deze plugin staat u toe om printbare rapporten te genereren over uw "
+"Deze plug-in staat u toe om printbare rapporten te genereren over uw "
 "verkoopcijfers."
 
 #: pretix/plugins/reports/exporters.py:100
@@ -9837,7 +9836,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."
-msgstr "Deze plugin staat u toe om emails naar al uw klanten te versturen."
+msgstr "Deze plug-in staat u toe om emails naar al uw klanten te versturen."
 
 #: pretix/plugins/sendmail/forms.py:17
 msgid "Only send to people who bought"
@@ -9905,7 +9904,7 @@ msgstr ""
 
 #: pretix/plugins/statistics/__init__.py:15
 msgid "This plugin shows you various statistics."
-msgstr ""
+msgstr "Deze plug-in toont u verschillende statistieken."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:17
 msgid "Orders by day"
@@ -10331,7 +10330,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:16
 msgid "This plugin allows you to print out tickets as PDF files"
-msgstr ""
+msgstr "Deze plug-in staat u toe om tickets uit te printen als PDF-bestanden"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:13
 msgid "All paid PDF tickets in one file"
