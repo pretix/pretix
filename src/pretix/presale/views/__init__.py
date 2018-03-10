@@ -124,8 +124,10 @@ class CartMixin:
 
         if order:
             fees = order.fees.all()
-        else:
+        elif positions:
             fees = get_fees(self.request.event, self.request, total, self.invoice_address, self.cart_session.get('payment'))
+        else:
+            fees = []
 
         total += sum([f.value for f in fees])
         net_total += sum([f.net_value for f in fees])
@@ -169,14 +171,18 @@ def get_cart(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_cache'):
-        request._cart_cache = CartPosition.objects.filter(
-            cart_id=get_or_create_cart_id(request), event=request.event
-        ).order_by(
-            'item', 'variation'
-        ).select_related(
-            'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
-            'item__tax_rule'
-        )
+        cart_id = get_or_create_cart_id(request, create=False)
+        if not cart_id:
+            request._cart_cache = CartPosition.objects.none()
+        else:
+            request._cart_cache = CartPosition.objects.filter(
+                cart_id=cart_id, event=request.event
+            ).order_by(
+                'item', 'variation'
+            ).select_related(
+                'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
+                'item__tax_rule'
+            )
     return request._cart_cache
 
 

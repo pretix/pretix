@@ -184,7 +184,7 @@ def create_empty_cart_id(request, replace_current=True):
     return new_id
 
 
-def get_or_create_cart_id(request):
+def get_or_create_cart_id(request, create=True):
     """
     This method returns the cart ID in use for this request or creates a new cart ID if required.
 
@@ -232,6 +232,8 @@ def get_or_create_cart_id(request):
     This method migrates legacy sessions created before the upgrade to 1.8.0 on a best-effort basis,
     meaning that the migration does not respect plugin-specific data and works best if the user only
     used the session for one event at the time of migration.
+
+    If ``create`` is ``False`` and no session currently exists, ``None`` will be returned.
     """
     session_keyname = 'current_cart_event_{}'.format(request.event.pk)
     prefix = ''
@@ -254,6 +256,8 @@ def get_or_create_cart_id(request):
         if prefix and 'take_cart_id' in request.GET and current_id:
             new_id = current_id
         else:
+            if not create:
+                return None
             new_id = generate_cart_id(prefix=prefix)
 
         # Migrate legacy data
