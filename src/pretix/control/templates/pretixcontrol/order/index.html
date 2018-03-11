@@ -195,7 +195,7 @@
                                 {% endif %}
                                 {% if line.checkins.all %}
                                     {% for c in line.checkins.all %}
-                                        <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'d.m.Y H:i' %}First scanned: {{ date }}{% endblocktrans %}"></span>
+                                        <span class="fa fa-fw fa-check" data-toggle="tooltip_html" title="{{ c.list.name }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}First scanned: {{ date }}{% endblocktrans %}"></span>
                                     {% endfor %}
                                 {% endif %}
                                 {% if line.voucher %}
