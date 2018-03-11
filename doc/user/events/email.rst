@@ -138,7 +138,7 @@ If you are using our hosted service at pretix.eu, you can add the following to y
 
    include:_spf.pretix.eu
 
-A complete record could look like this:
+A complete record could look like this::
 
    v=spf1 a mx include:_spf.pretix.eu ~all
 
