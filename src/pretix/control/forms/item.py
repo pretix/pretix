@@ -41,6 +41,7 @@ class QuestionForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['items'].queryset = self.instance.event.items.all()
+        self.fields['identifier'].required = False
 
     class Meta:
         model = Question
@@ -51,6 +52,7 @@ class QuestionForm(I18nModelForm):
             'type',
             'required',
             'ask_during_checkin',
+            'identifier',
             'items'
         ]
         widgets = {

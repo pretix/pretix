@@ -1187,9 +1187,9 @@ def test_quota_availability(token_client, organizer, event, quota, item):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question="T-Shirt size", type="C")
+    q = event.questions.create(question="T-Shirt size", type="C", identifier="ABC")
     q.items.add(item)
-    q.options.create(answer="XL")
+    q.options.create(answer="XL", identifier="FOO")
     return q
 
 
@@ -1199,10 +1199,12 @@ TEST_QUESTION_RES = {
     "required": False,
     "items": [],
     "ask_during_checkin": False,
+    "identifier": "ABC",
     "position": 0,
     "options": [
         {
             "id": 0,
+            "identifier": "FOO",
             "answer": {"en": "XL"}
         }
     ]

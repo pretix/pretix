@@ -129,7 +129,9 @@ downloads                             list of objects            List of ticket 
 answers                               list of objects            Answers to user-defined questions
 ├ question                            integer                    Internal ID of the answered question
 ├ answer                              string                     Text representation of the answer
-└ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
+├ question_identifier                 string                     The question's ``identifier`` field
+├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
+└ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -139,6 +141,10 @@ answers                               list of objects            Answers to user
 .. versionchanged:: 1.11
 
    The attribute ``checkins.list`` has been added.
+
+.. versionchanged:: 1.14
+
+  The attributes ``answers.question_identifier`` and ``answers.option_identifiers`` have been added.
 
 
 Order endpoints
@@ -222,7 +228,9 @@ Order endpoints
                 "answers": [
                   {
                     "question": 12,
+                    "question_identifier": "WY3TP9SL",
                     "answer": "Foo",
+                    "option_idenfiters": [],
                     "options": []
                   }
                 ],
@@ -330,7 +338,9 @@ Order endpoints
             "answers": [
               {
                 "question": 12,
+                "question_identifier": "WY3TP9SL",
                 "answer": "Foo",
+                "option_idenfiters": [],
                 "options": []
               }
             ],
@@ -649,7 +659,9 @@ Order position endpoints
             "answers": [
               {
                 "question": 12,
+                "question_identifier": "WY3TP9SL",
                 "answer": "Foo",
+                "option_idenfiters": [],
                 "options": []
               }
             ],
@@ -729,7 +741,9 @@ Order position endpoints
         "answers": [
           {
             "question": 12,
+            "question_identifier": "WY3TP9SL",
             "answer": "Foo",
+            "option_idenfiters": [],
             "options": []
           }
         ],

@@ -29,10 +29,23 @@ class InvoiceAdddressSerializer(I18nAwareModelSerializer):
                   'vat_id_validated', 'internal_reference')
 
 
+class AnswerQuestionIdentifierField(serializers.Field):
+    def to_representation(self, instance: QuestionAnswer):
+        return instance.question.identifier
+
+
+class AnswerQuestionOptionsIdentifierField(serializers.Field):
+    def to_representation(self, instance: QuestionAnswer):
+        return [o.identifier for o in instance.options.all()]
+
+
 class AnswerSerializer(I18nAwareModelSerializer):
+    question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
+    option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
+
     class Meta:
         model = QuestionAnswer
-        fields = ('question', 'answer', 'options')
+        fields = ('question', 'answer', 'question_identifier', 'options', 'option_identifiers')
 
 
 class CheckinSerializer(I18nAwareModelSerializer):
