@@ -87,6 +87,9 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        if self.instance and ('addons' in data or 'variations' in data):
+            raise ValidationError(_('Updating add-ons or variations via PATCH/PUT is not supported. Please use the '
+                                    'dedicated nested endpoint.'))
 
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
@@ -101,17 +104,8 @@ class ItemSerializer(I18nAwareModelSerializer):
         Item.clean_tax_rule(value, self.context['event'])
         return value
 
-    def validate_variations(self, value):
-        if self.instance is not None:
-            raise ValidationError(_('Updating variations via PATCH/PUT is not supported. Please use the dedicated'
-                                    ' nested endpoint.'))
-        return value
-
     def validate_addons(self, value):
-        if self.instance is not None:
-            raise ValidationError(_('Updating add-ons via PATCH/PUT is not supported. Please use the dedicated'
-                                    ' nested endpoint.'))
-        else:
+        if not self.instance:
             for addon_data in value:
                 ItemAddOn.clean_categories(self.context['event'], None, self.instance, addon_data['addon_category'])
                 ItemAddOn.clean_min_count(addon_data['min_count'])

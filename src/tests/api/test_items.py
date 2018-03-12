@@ -521,6 +521,17 @@ def test_item_update(token_client, organizer, event, item, category, category2, 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
+            "min_per_order": 1,
+            "max_per_order": 2
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert Item.objects.get(pk=item.pk).max_per_order == 2
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
             "min_per_order": 10,
             "max_per_order": 2
         },
@@ -578,7 +589,7 @@ def test_item_update(token_client, organizer, event, item, category, category2, 
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
@@ -604,7 +615,7 @@ def test_item_update_with_variation(token_client, organizer, event, item):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"variations":["Updating variations via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
@@ -626,7 +637,7 @@ def test_item_update_with_addon(token_client, organizer, event, item, category):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"addons":["Updating add-ons via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
