@@ -142,7 +142,7 @@ class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = QuestionOption
-        fields = ('id', 'answer')
+        fields = ('id', 'identifier', 'answer')
 
 
 class QuestionSerializer(I18nAwareModelSerializer):
@@ -151,7 +151,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin')
+                  'ask_during_checkin', 'identifier')
 
 
 class QuotaSerializer(I18nAwareModelSerializer):
