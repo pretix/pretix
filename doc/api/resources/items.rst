@@ -56,7 +56,8 @@ checkin_attention                     boolean                    If ``True``, th
                                                                  a product is being scanned.
 has_variations                        boolean                    Shows whether or not this item has variations.
 variations                            list of objects            A list with one object for each variation of this item.
-                                                                 Can be empty. Only writable on POST.
+                                                                 Can be empty. Only writable during creation,
+                                                                 use separate endpoint to modify this later.
 ├ id                                  integer                    Internal ID of the variation
 ├ default_price                       money (string)             The price set directly for this variation or ``null``
 ├ price                               money (string)             The price used for this variation. This is either the
@@ -67,7 +68,8 @@ variations                            list of objects            A list with one
                                                                  Markdown syntax or can be ``null``.
 └ position                            integer                    An integer, used for sorting
 addons                                list of objects            Definition of add-ons that can be chosen for this item.
-                                                                 Only writable on POST.
+                                                                 Only writable during creation,
+                                                                 use separate endpoint to modify this later.
 ├ addon_category                      integer                    Internal ID of the item category the add-on can be
                                                                  chosen from.
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
@@ -256,7 +258,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/items/
 
    Creates a new item
 
@@ -315,7 +317,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -369,7 +371,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
-.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/items/(item)/
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
 
    Update an item. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
