@@ -147,7 +147,7 @@ record for the subdomain ``pretix._domainkey`` with the following contents::
 
    v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXrDk6lwOWX00e2MbiiJac6huI+gnzLf9N4G1FnBv3PXq8fz3i2q1szH72OF5mAlKm3zXO4cl/uxx+lfidS1ERbX6Bn9BRstBTQUKWC4JFj8Yk9+fwT7LWehDURazLdTzfsIjJFudLLvxtOKSaOCtMhbPX05DIhziaqVCBqgz/NQIDAQAB
 
-Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mailservers.
+Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mail servers.
 
 
 .. _Sender Policy Framework: https://en.wikipedia.org/wiki/Sender_Policy_Framework
