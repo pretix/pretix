@@ -716,7 +716,14 @@ class Question(LoggedModel):
             self.event.cache.clear()
 
     def clean_identifier(self, code):
-        if Question.objects.filter(event=self.event, identifier=code).exclude(pk=self.pk).exists():
+        Question._clean_identifier(self.event, code, self)
+
+    @staticmethod
+    def _clean_identifier(event, code, instance=None):
+        qs = Question.objects.filter(event=event, identifier=code)
+        if instance:
+            qs = qs.exclude(pk=instance.pk)
+        if qs.exists():
             raise ValidationError(_('This identifier is already used for a different question.'))
 
     def save(self, *args, **kwargs):
@@ -796,6 +803,12 @@ class Question(LoggedModel):
 
         return answer
 
+    @staticmethod
+    def clean_items(event, items):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items do not belong to this event.'))
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options')
@@ -815,6 +828,14 @@ class QuestionOption(models.Model):
                     self.identifier = code
                     break
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def clean_identifier(event, code, instance=None, known=[]):
+        qs = QuestionOption.objects.filter(question__event=event, identifier=code)
+        if instance:
+            qs = qs.exclude(pk=instance.pk)
+        if qs.exists() or code in known:
+            raise ValidationError(_('The identifier "{}" is already used for a different option.').format(code))
 
     class Meta:
         verbose_name = _("Question option")

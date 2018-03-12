@@ -8,7 +8,7 @@ from pytz import UTC
 
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Order,
-    OrderPosition, Quota,
+    OrderPosition, Question, QuestionOption, Quota,
 )
 from pretix.base.models.orders import OrderFee
 
@@ -843,6 +843,11 @@ def addon(item, category):
     return item.addons.create(addon_category=category, min_count=0, max_count=10, position=1)
 
 
+@pytest.fixture
+def option(question):
+    return question.options.create(answer='XL', identifier='LVETRWVU')
+
+
 TEST_ADDONS_RES = {
     "min_count": 0,
     "max_count": 10,
@@ -1200,7 +1205,7 @@ def test_quota_availability(token_client, organizer, event, quota, item):
 def question(event, item):
     q = event.questions.create(question="T-Shirt size", type="C", identifier="ABC")
     q.items.add(item)
-    q.options.create(answer="XL", identifier="FOO")
+    q.options.create(answer="XL", identifier="LVETRWVU")
     return q
 
 
@@ -1215,7 +1220,8 @@ TEST_QUESTION_RES = {
     "options": [
         {
             "id": 0,
-            "identifier": "FOO",
+            "position": 0,
+            "identifier": "LVETRWVU",
             "answer": {"en": "XL"}
         }
     ]
@@ -1246,3 +1252,240 @@ def test_question_detail(token_client, organizer, event, question, item):
                                                                                    question.pk))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_question_create(token_client, organizer, event, event2, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    question = Question.objects.get(pk=resp.data['id'])
+    assert question.question == "What's your name?"
+    assert question.type == "S"
+    assert question.identifier is not None
+    assert len(question.items.all()) == 1
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event2.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["One or more items do not belong to this event."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": question.identifier
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"identifier":["This identifier is already used for a different question."]}'
+
+
+@pytest.mark.django_db
+def test_question_update(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "question": "What's your shoe size?",
+            "type": "N",
+        },
+        format='json'
+    )
+    print(resp.content)
+    assert resp.status_code == 200
+    question = Question.objects.get(pk=resp.data['id'])
+    assert question.question == "What's your shoe size?"
+    assert question.type == "N"
+
+
+@pytest.mark.django_db
+def test_question_update_options(token_client, organizer, event, question, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "options": [
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Updating options via PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
+
+
+@pytest.mark.django_db
+def test_question_delete(token_client, organizer, event, question):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk))
+    assert resp.status_code == 204
+    assert not event.questions.filter(pk=question.id).exists()
+
+
+TEST_OPTIONS_RES = {
+    "identifier": "LVETRWVU",
+    "answer": {"en": "XL"},
+    "position": 0
+}
+
+
+@pytest.mark.django_db
+def test_options_list(token_client, organizer, event, question, option):
+    res = dict(TEST_OPTIONS_RES)
+    res["id"] = option.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/{}/options/'.format(
+        organizer.slug, event.slug, question.pk)
+    )
+    assert resp.status_code == 200
+    assert res['identifier'] == resp.data['results'][0]['identifier']
+    assert res['answer'] == resp.data['results'][0]['answer']
+
+
+@pytest.mark.django_db
+def test_options_detail(token_client, organizer, event, question, option):
+    res = dict(TEST_OPTIONS_RES)
+    res["id"] = option.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/{}/options/{}/'.format(
+        organizer.slug, event.slug, question.pk, option.pk
+    ))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_options_create(token_client, organizer, event, question):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/{}/options/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "identifier": "DFEMJWMJ",
+            "answer": "A",
+            "position": 0
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    option = QuestionOption.objects.get(pk=resp.data['id'])
+    assert option.answer == "A"
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/{}/options/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "identifier": "DFEMJWMJ",
+            "answer": "A",
+            "position": 0
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"identifier":["The identifier \\"DFEMJWMJ\\" is already used for a different option."]}'
+
+
+@pytest.mark.django_db
+def test_options_update(token_client, organizer, event, question, option):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/options/{}/'.format(organizer.slug, event.slug, question.pk, option.pk),
+        {
+            "answer": "B",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    a = QuestionOption.objects.get(pk=option.pk)
+    assert a.answer == "B"
+
+
+@pytest.mark.django_db
+def test_options_delete(token_client, organizer, event, question, option):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/questions/{}/options/{}/'.format(
+        organizer.slug, event.slug, question.pk, option.pk
+    ))
+    assert resp.status_code == 204
+    assert not question.options.filter(pk=option.id).exists()
+
+
+@pytest.mark.django_db
+def test_question_create_with_option(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": None,
+            "options": [
+                {
+                    "identifier": None,
+                    "answer": {"en": "A"},
+                    "position": 0,
+                },
+                {
+                    "identifier": None,
+                    "answer": {"en": "B"},
+                    "position": 1,
+                },
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    question = Question.objects.get(pk=resp.data['id'])
+    assert str(question.options.first().answer) == "A"
+    assert question.options.first().identifier is not None
+    assert str(question.options.last().answer) == "B"
+    assert 2 == question.options.count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "identifier": None,
+            "options": [
+                {
+                    "identifier": "ABC",
+                    "answer": {"en": "A"},
+                    "position": 0,
+                },
+                {
+                    "identifier": "ABC",
+                    "answer": {"en": "B"},
+                    "position": 1,
+                },
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"options":["The identifier \\"ABC\\" is already used for a different option."]}'
