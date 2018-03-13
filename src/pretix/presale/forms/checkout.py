@@ -26,7 +26,7 @@ class ContactForm(forms.Form):
                                          'confirmation including a link that you need in case you want to make '
                                          'modifications to your order or download your ticket later.'),
                              validators=[EmailBlacklistValidator()],
-                             widget=forms.EmailInput(attrs={'autofocus': 'autofocus'}))
+                             )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -38,6 +38,12 @@ class ContactForm(forms.Form):
                 label=_('E-mail address (repeated)'),
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.')
             )
+
+        if self.request.session.get('iframe_session', False):
+            # There is a browser quirk in Chrome that leads to incorrect initial scrolling in iframes if there
+            # is an autofocus field. Who would have thought… See e.g. here:
+            # https://floatboxjs.com/forum/topic.php?post=8440&usebb_sid=2e116486a9ec6b7070e045aea8cded5b#post8440
+            self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
 
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):

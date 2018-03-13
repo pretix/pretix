@@ -83,8 +83,8 @@ def test_unknown_event_on_custom_domain(env, client):
 @pytest.mark.django_db
 def test_cookie_domain_on_custom_domain(env, client):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    client.post('/2015/cart/add', HTTP_HOST='foobar')
     r = client.get('/2015/', HTTP_HOST='foobar')
-    assert r.status_code == 200
     assert r.client.cookies['pretix_csrftoken']['domain'] == ''
     assert r.client.cookies['pretix_session']['domain'] == ''
 
@@ -92,8 +92,8 @@ def test_cookie_domain_on_custom_domain(env, client):
 @pytest.mark.django_db
 def test_cookie_domain_on_main_domain(env, client):
     with override_settings(SESSION_COOKIE_DOMAIN='example.com'):
+        client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com')
         r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
-        assert r.status_code == 200
         assert r.client.cookies['pretix_csrftoken']['domain'] == 'example.com'
         assert r.client.cookies['pretix_session']['domain'] == 'example.com'
 

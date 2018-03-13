@@ -126,4 +126,29 @@ With the checkbox "Use custom SMTP server" you can turn using your SMTP server o
 button "Save and test custom SMTP connection", you can test if the connection and authentication to your SMTP server
 succeeds, even before turning that checkbox on.
 
+Spam issues
+-----------
+
+If you use an email address of your own domain as a sender address and do not use a custom SMTP server, it is very
+likely that at least some of your emails will go to the spam folders of their recipients. We **strongly recommend**
+to use your organization's SMTP server in this case, making your email really come from your organization. If you don't
+want that or cannot do that, you should add the pretix application server to your SPF record.
+
+If you are using our hosted service at pretix.eu, you can add the following to your SPF record::
+
+   include:_spf.pretix.eu
+
+A complete record could look like this::
+
+   v=spf1 a mx include:_spf.pretix.eu ~all
+
+Make sure to read up on the `SPF specification`_. If you want to authenticate your emails with DKIM, set up a DNS TXT
+record for the subdomain ``pretix._domainkey`` with the following contents::
+
+   v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXrDk6lwOWX00e2MbiiJac6huI+gnzLf9N4G1FnBv3PXq8fz3i2q1szH72OF5mAlKm3zXO4cl/uxx+lfidS1ERbX6Bn9BRstBTQUKWC4JFj8Yk9+fwT7LWehDURazLdTzfsIjJFudLLvxtOKSaOCtMhbPX05DIhziaqVCBqgz/NQIDAQAB
+
+Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mail servers.
+
+
 .. _Sender Policy Framework: https://en.wikipedia.org/wiki/Sender_Policy_Framework
+.. _SPF specification: http://www.openspf.org/SPF_Record_Syntax

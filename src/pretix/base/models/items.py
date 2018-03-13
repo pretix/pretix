@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Func, Q, Sum
 from django.utils import formats
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -630,6 +631,8 @@ class Question(LoggedModel):
     :param items: A set of ``Items`` objects that this question should be applied to
     :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
     :type ask_during_checkin: bool
+    :param identifier: An arbitrary, internal identifier
+    :type identifier: str
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -660,6 +663,12 @@ class Question(LoggedModel):
     )
     question = I18nTextField(
         verbose_name=_("Question")
+    )
+    identifier = models.CharField(
+        max_length=190,
+        verbose_name=_("Internal identifier"),
+        help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
+                    'not input one, we will generate one automatically.')
     )
     help_text = I18nTextField(
         verbose_name=_("Help text"),
@@ -706,7 +715,25 @@ class Question(LoggedModel):
         if self.event:
             self.event.cache.clear()
 
+    def clean_identifier(self, code):
+        Question._clean_identifier(self.event, code, self)
+
+    @staticmethod
+    def _clean_identifier(event, code, instance=None):
+        qs = Question.objects.filter(event=event, identifier=code)
+        if instance:
+            qs = qs.exclude(pk=instance.pk)
+        if qs.exists():
+            raise ValidationError(_('This identifier is already used for a different question.'))
+
     def save(self, *args, **kwargs):
+        if not self.identifier:
+            charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+            while True:
+                code = get_random_string(length=8, allowed_chars=charset)
+                if not Question.objects.filter(event=self.event, identifier=code).exists():
+                    self.identifier = code
+                    break
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
@@ -776,14 +803,39 @@ class Question(LoggedModel):
 
         return answer
 
+    @staticmethod
+    def clean_items(event, items):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items do not belong to this event.'))
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options')
+    identifier = models.CharField(max_length=190)
     answer = I18nCharField(verbose_name=_('Answer'))
     position = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.answer)
+
+    def save(self, *args, **kwargs):
+        if not self.identifier:
+            charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+            while True:
+                code = get_random_string(length=8, allowed_chars=charset)
+                if not QuestionOption.objects.filter(question__event=self.question.event, identifier=code).exists():
+                    self.identifier = code
+                    break
+        super().save(*args, **kwargs)
+
+    @staticmethod
+    def clean_identifier(event, code, instance=None, known=[]):
+        qs = QuestionOption.objects.filter(question__event=event, identifier=code)
+        if instance:
+            qs = qs.exclude(pk=instance.pk)
+        if qs.exists() or code in known:
+            raise ValidationError(_('The identifier "{}" is already used for a different option.').format(code))
 
     class Meta:
         verbose_name = _("Question option")

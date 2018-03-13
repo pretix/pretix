@@ -30,6 +30,9 @@ event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet)
 
+question_router = routers.DefaultRouter()
+question_router.register(r'options', item.QuestionOptionViewSet)
+
 item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
 item_router.register(r'addons', item.ItemAddOnViewSet)
@@ -45,6 +48,8 @@ urlpatterns = [
     url(r'^organizers/(?P<organizer>[^/]+)/', include(orga_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/', include(event_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/items/(?P<item>[^/]+)/', include(item_router.urls)),
+    url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/questions/(?P<question>[^/]+)/',
+        include(question_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/checkinlists/(?P<list>[^/]+)/',
         include(checkinlist_router.urls)),
 ]

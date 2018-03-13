@@ -43,3 +43,6 @@ addons:
   apt:
       packages:
           - enchant
+branches:
+  except:
+  - /^weblate-.*/

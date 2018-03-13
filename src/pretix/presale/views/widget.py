@@ -246,10 +246,16 @@ class WidgetAPIProductList(View):
                     data['error'] = error_messages['voucher_expired']
                     fail = True
 
-                redeemed_in_carts = CartPosition.objects.filter(
-                    Q(voucher=self.voucher) & Q(event=request.event) &
-                    (Q(expires__gte=now()) | Q(cart_id=get_or_create_cart_id(request)))
-                )
+                cart_id = get_or_create_cart_id(request, create=False)
+                if cart_id:
+                    redeemed_in_carts = CartPosition.objects.filter(
+                        Q(voucher=self.voucher) & Q(event=request.event) &
+                        (Q(expires__gte=now()) | Q(cart_id=get_or_create_cart_id(request)))
+                    )
+                else:
+                    redeemed_in_carts = CartPosition.objects.filter(
+                        Q(voucher=self.voucher) & Q(event=request.event) & Q(expires__gte=now())
+                    )
                 v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
 
                 if v_avail < 1:

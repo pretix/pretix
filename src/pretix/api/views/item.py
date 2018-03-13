@@ -10,10 +10,12 @@ from rest_framework.response import Response
 
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemCategorySerializer, ItemSerializer,
-    ItemVariationSerializer, QuestionSerializer, QuotaSerializer,
+    ItemVariationSerializer, QuestionOptionSerializer, QuestionSerializer,
+    QuotaSerializer,
 )
 from pretix.base.models import (
-    Item, ItemAddOn, ItemCategory, ItemVariation, Question, Quota,
+    Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
+    Quota,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.dicts import merge_dicts
@@ -214,7 +216,7 @@ class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
         return self.request.event.categories.all()
 
 
-class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
     filter_backends = (OrderingFilter,)
@@ -224,6 +226,85 @@ class QuestionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('options').all()
+
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.question.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+        )
+        super().perform_destroy(instance)
+
+
+class QuestionOptionViewSet(viewsets.ModelViewSet):
+    serializer_class = QuestionOptionSerializer
+    queryset = QuestionOption.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    ordering_fields = ('id', 'position')
+    ordering = ('position',)
+    permission = 'can_change_items'
+    write_permission = 'can_change_items'
+
+    def get_queryset(self):
+        q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
+        return q.options.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['question'] = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
+        return ctx
+
+    def perform_create(self, serializer):
+        q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
+        serializer.save(question=q)
+        q.log_action(
+            'pretix.event.question.option.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
+        )
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.question.log_action(
+            'pretix.event.question.option.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
+        )
+
+    def perform_destroy(self, instance):
+        instance.question.log_action(
+            'pretix.event.question.option.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data={'id': instance.pk}
+        )
+        super().perform_destroy(instance)
 
 
 class QuotaFilter(FilterSet):

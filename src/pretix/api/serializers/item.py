@@ -87,6 +87,9 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        if self.instance and ('addons' in data or 'variations' in data):
+            raise ValidationError(_('Updating add-ons or variations via PATCH/PUT is not supported. Please use the '
+                                    'dedicated nested endpoint.'))
 
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
@@ -101,17 +104,8 @@ class ItemSerializer(I18nAwareModelSerializer):
         Item.clean_tax_rule(value, self.context['event'])
         return value
 
-    def validate_variations(self, value):
-        if self.instance is not None:
-            raise ValidationError(_('Updating variations via PATCH/PUT is not supported. Please use the dedicated'
-                                    ' nested endpoint.'))
-        return value
-
     def validate_addons(self, value):
-        if self.instance is not None:
-            raise ValidationError(_('Updating add-ons via PATCH/PUT is not supported. Please use the dedicated'
-                                    ' nested endpoint.'))
-        else:
+        if not self.instance:
             for addon_data in value:
                 ItemAddOn.clean_categories(self.context['event'], None, self.instance, addon_data['addon_category'])
                 ItemAddOn.clean_min_count(addon_data['min_count'])
@@ -138,20 +132,72 @@ class ItemCategorySerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'description', 'position', 'is_addon')
 
 
-class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
+class QuestionOptionSerializer(I18nAwareModelSerializer):
+    identifier = serializers.CharField(allow_null=True)
 
     class Meta:
         model = QuestionOption
-        fields = ('id', 'answer')
+        fields = ('id', 'identifier', 'answer', 'position')
+
+    def validate_identifier(self, value):
+        QuestionOption.clean_identifier(self.context['event'], value, self.instance)
+        return value
+
+
+class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
+    identifier = serializers.CharField(allow_null=True)
+
+    class Meta:
+        model = QuestionOption
+        fields = ('id', 'identifier', 'answer', 'position')
 
 
 class QuestionSerializer(I18nAwareModelSerializer):
-    options = InlineQuestionOptionSerializer(many=True)
+    options = InlineQuestionOptionSerializer(many=True, required=False)
+    identifier = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin')
+                  'ask_during_checkin', 'identifier')
+
+    def validate_identifier(self, value):
+        Question._clean_identifier(self.context['event'], value, self.instance)
+        return value
+
+    def validate(self, data):
+        data = super().validate(data)
+        if self.instance and 'options' in data:
+            raise ValidationError(_('Updating options via PATCH/PUT is not supported. Please use the dedicated'
+                                    ' nested endpoint.'))
+
+        event = self.context['event']
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        Question.clean_items(event, full_data.get('items'))
+        return data
+
+    def validate_options(self, value):
+        if not self.instance:
+            known = []
+            for opt_data in value:
+                if opt_data.get('identifier'):
+                    QuestionOption.clean_identifier(self.context['event'], opt_data.get('identifier'), self.instance,
+                                                    known)
+                    known.append(opt_data.get('identifier'))
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        options_data = validated_data.pop('options') if 'options' in validated_data else []
+        items = validated_data.pop('items')
+        question = Question.objects.create(**validated_data)
+        question.items.set(items)
+        for opt_data in options_data:
+            QuestionOption.objects.create(question=question, **opt_data)
+        return question
 
 
 class QuotaSerializer(I18nAwareModelSerializer):

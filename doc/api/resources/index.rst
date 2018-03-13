@@ -13,6 +13,7 @@ Resources and endpoints
    item_variations
    item_add-ons
    questions
+   question_options
    quotas
    orders
    invoices
