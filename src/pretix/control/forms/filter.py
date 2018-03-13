@@ -137,6 +137,7 @@ class OrderFilterForm(FilterForm):
                 | Q(invoice_address__name__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
+                | Q(comment__icontains=u)
                 | Q(has_pos=True)
             )
 
