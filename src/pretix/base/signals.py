@@ -119,7 +119,7 @@ register_payment_providers = EventPluginSignal(
 )
 """
 This signal is sent out to get all known payment providers. Receivers should return a
-subclass of pretix.base.payment.BasePaymentProvider
+subclass of pretix.base.payment.BasePaymentProvider or a list of these
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -129,7 +129,17 @@ register_invoice_renderers = EventPluginSignal(
 )
 """
 This signal is sent out to get all known invoice renderers. Receivers should return a
-subclass of pretix.base.invoice.BaseInvoiceRenderer
+subclass of pretix.base.invoice.BaseInvoiceRenderer or a list of these
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+register_data_shredders = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known data shredders. Receivers should return a
+subclass of pretix.base.shredder.BaseDataShredder or a list of these
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

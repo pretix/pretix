@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, pdf, search, subevents, typeahead, user, users, vouchers,
+    organizer, pdf, search, shredder, subevents, typeahead, user, users, vouchers,
     waitinglist,
 )
 
@@ -190,6 +190,7 @@ urlpatterns = [
         url(r'^orders/export/do$', orders.ExportDoView.as_view(), name='event.orders.export.do'),
         url(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),
         url(r'^orders/$', orders.OrderList.as_view(), name='event.orders'),
+        url(r'^shredder/$', shredder.StartShredView.as_view(), name='event.shredder.start'),
         url(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
         url(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
         url(r'^waitinglist/(?P<entry>\d+)/delete$', waitinglist.EntryDelete.as_view(),
