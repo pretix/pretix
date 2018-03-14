@@ -202,6 +202,40 @@ def test_event_create(token_client, organizer, event):
 
 
 @pytest.mark.django_db
+def test_event_create_with_clone(token_client, organizer, event):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "meta_data": {
+                "type": "Conference"
+            },
+            "plugins": {
+                "pretix.plugins.ticketoutputpdf"
+            }
+        },
+        format='json'
+    )
+
+    assert resp.status_code == 201
+    event = Event.objects.get(organizer=organizer.pk, slug='2030')
+    assert event.plugins == 'pretix.plugins.ticketoutputpdf'
+
+
+@pytest.mark.django_db
 def test_event_update(token_client, organizer, event, item):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
