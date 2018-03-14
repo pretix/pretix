@@ -745,7 +745,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
     def issues(self):
         issues = []
 
-        if Event.has_paid_things(self.request.event) and not Event.has_payment_provider(self.request.event):
+        if self.request.event.has_paid_things and not self.request.event.has_payment_provider:
             issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
 
         if not self.request.event.quotas.exists():
