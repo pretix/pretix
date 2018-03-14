@@ -158,6 +158,9 @@ class AddOnsForm(forms.Form):
             n += ' – {}'.format(_('SOLD OUT'))
         elif avail[0] < 100:
             n += ' – {}'.format(_('Currently unavailable'))
+        else:
+            if avail[1] is not None and event.settings.show_quota_left:
+                n += ' – {}'.format(_('%(num)s currently available') % {'num': avail[1]})
 
         return n
 
