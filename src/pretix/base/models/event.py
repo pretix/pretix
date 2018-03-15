@@ -533,6 +533,13 @@ class Event(EventMixin, LoggedModel):
                 break
         return result
 
+    @property
+    def has_paid_things(self):
+        from .items import Item, ItemVariation
+
+        return Item.objects.filter(event=self, default_price__gt=0).exists()\
+            or ItemVariation.objects.filter(item__event=self, default_price__gt=0).exists()
+
     def get_users_with_any_permission(self):
         """
         Returns a queryset of users who have any permission to this event.
@@ -566,14 +573,8 @@ class Event(EventMixin, LoggedModel):
             Q(is_superuser=True) | Q(twp=True)
         )
 
-    def has_paid_things(self):
-        from .items import Item, ItemVariation
-
-        return Item.objects.filter(event=self, default_price__gt=0).exists()\
-            or ItemVariation.objects.filter(item__event=self, default_price__gt=0).exists()
-
     def clean_payment_methods(self):
-        if self.has_paid_things() and not self.has_payment_provider:
+        if self.has_paid_things and not self.has_payment_provider:
             raise ValidationError(_('You have configured at least one paid product but have not enabled any payment '
                                     'methods.'))
 
