@@ -45,6 +45,7 @@ class LogEntry(models.Model):
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')
     visible = models.BooleanField(default=True)
+    shredded = models.BooleanField(default=False)
 
     objects = VisibleOnlyManager()
     all = models.Manager()

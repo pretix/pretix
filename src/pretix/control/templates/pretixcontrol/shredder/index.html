@@ -30,7 +30,8 @@
             {{ constraints }}
         </div>
     {% else %}
-        <form action="" method="post">
+        <form action="{% url "control:event.shredder.export" event=request.event.slug organizer=request.organizer.slug %}"
+              method="post" class="form-horizontal" data-asynctask>
             <legend>{% trans "Data selection" %}</legend>
             {% csrf_token %}
             <div class="panel-group" id="payment_accordion">
@@ -44,8 +45,7 @@
                                 </h4>
                             </div>
                         </label>
-                        <div id="payment_{{ p.provider.identifier }}"
-                                class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
+                        <div id="payment_{{ p.provider.identifier }}" class="panel-collapse in">
                             <div class="panel-body">
                                 {{ shredder.description|safe }}
                             </div>

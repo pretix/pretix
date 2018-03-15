@@ -1,12 +1,19 @@
+import json
 from datetime import timedelta
 from typing import List, Tuple
 
+from django.db import transaction
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import Event
+from pretix.base.i18n import LazyLocaleException
+from pretix.base.models import Event, OrderPosition
 from pretix.base.signals import register_data_shredders
+
+
+class ShredError(LazyLocaleException):
+    pass
 
 
 def shred_constraints(event: Event):
@@ -66,18 +73,46 @@ class BaseDataShredder:
         raise NotImplementedError()  # NOQA
 
 
+def shred_log_fields(logentry, blacklist=None, whitelist=None):
+    d = logentry.parsed_data
+    if whitelist:
+        for k, v in d.items():
+            if k not in whitelist:
+                d[k] = '█'
+    elif blacklist:
+        for f in blacklist:
+            if f in d:
+                d[f] = '█'
+    logentry.data = json.dumps(d)
+    logentry.shredded = True
+    logentry.save(update_fields=['data', 'shredded'])
+
+
 class EmailAddressShredder(BaseDataShredder):
-    verbose_name = _('E-mail addresses')
+    verbose_name = _('E-mails')
     identifier = 'order_emails'
-    description = _('This will remove all e-mail addresses from orders and attendees')
+    description = _('This will remove all e-mail addresses from orders and attendees, as well as logged email '
+                    'contents.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
-        # TODO: Implement
-        pass
+        yield 'emails-by-order.json', 'application/json', json.dumps({
+            o.code: o.email for o in self.event.orders.filter(email__isnull=False)
+        }, indent=4)
+        yield 'emails-by-attendee.json', 'application/json', json.dumps({
+            '{}-{}'.format(op.order.code, op.positionid): op.attendee_email
+            for op in OrderPosition.objects.filter(order__event=self.event, attendee_email__isnull=False)
+        }, indent=4)
 
+    @transaction.atomic
     def shred_data(self):
-        # TODO: Implement
-        pass
+        OrderPosition.objects.filter(order__event=self.event, attendee_email__isnull=False).update(attendee_email=None)
+        self.event.orders.filter(email__isnull=False).update(email=None)
+
+        for le in self.event.logentry_set.filter(action_type__contains="order.email"):
+            shred_log_fields(le, blacklist=['recipient', 'message'])
+
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
+            shred_log_fields(le, blacklist=['old_email', 'new_email'])
 
 
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")

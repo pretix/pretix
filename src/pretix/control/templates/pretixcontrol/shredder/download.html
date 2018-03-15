@@ -1,0 +1,24 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load order_overview %}
+{% block title %}{% trans "Data shredder" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Data shredder" %}
+    </h1>
+    <form action="{% url "control:event.shredder.shred" event=request.event.slug organizer=request.organizer.slug %}"
+          method="post" class="form-horizontal" data-asynctask>
+        <legend>{% trans "Download data" %}</legend>
+        {% csrf_token %}
+        <a href="{% url "cachedfile.download" id=file.pk %}" class="btn btn-primary btn-lg">
+            {% trans "Download data" %}
+        </a>
+        <input type="hidden" name="file" value="{{ file.pk }}">
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
