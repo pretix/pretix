@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 11:13+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
-"Last-Translator: Claude <superoxyde@laposte.net>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"POT-Creation-Date: 2018-03-16 11:32+0000\n"
+"PO-Revision-Date: 2018-03-17 21:10+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Language-Team: French "
+"<https://translate.pretix.eu/projects/pretix/pretix/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,6 @@ msgstr "Prévente non commencée"
 #: pretix/control/templates/pretixcontrol/events/index.html:128
 #: pretix/control/templates/pretixcontrol/subevents/index.html:95
 #: pretix/control/views/dashboards.py:359
-#, fuzzy
 msgid "On sale"
 msgstr "En vente"
 
