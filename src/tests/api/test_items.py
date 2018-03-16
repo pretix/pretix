@@ -24,6 +24,14 @@ def category2(event2):
 
 
 @pytest.fixture
+def category3(event, item):
+    cat = event.categories.create(name="Tickets")
+    item.category = cat
+    item.save()
+    return cat
+
+
+@pytest.fixture
 def order(event, item, taxrule):
     testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
@@ -147,7 +155,7 @@ def test_category_update(token_client, organizer, event, team, category):
 
 
 @pytest.mark.django_db
-def test_category_update_wrong_event(token_client, organizer, event2, team, category):
+def test_category_update_wrong_event(token_client, organizer, event2, category):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event2.slug, category.pk),
         {
@@ -159,11 +167,12 @@ def test_category_update_wrong_event(token_client, organizer, event2, team, cate
 
 
 @pytest.mark.django_db
-def test_category_delete(token_client, organizer, event, team, category):
+def test_category_delete(token_client, organizer, event, category3, item):
     resp = token_client.delete(
-        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category.pk))
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category3.pk))
     assert resp.status_code == 204
-    assert not event.categories.filter(pk=category.id).exists()
+    assert not event.categories.filter(pk=category3.id).exists()
+    assert Item.objects.get(pk=item.pk).category is None
 
 
 @pytest.fixture

@@ -240,6 +240,9 @@ class ItemCategoryViewSet(viewsets.ModelViewSet):
         )
 
     def perform_destroy(self, instance):
+        for item in instance.items.all():
+            item.category = None
+            item.save()
         instance.log_action(
             'pretix.event.category.deleted',
             user=self.request.user,
