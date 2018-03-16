@@ -8499,7 +8499,7 @@ msgid ""
 "If you chose \"split into new order\" for multiple positions, they will be "
 "all split in one second order together, not multiple orders."
 msgstr ""
-"Si vous choisissez \" diviser en nouvel ordre \" pour plusieurs positions, "
+"Si vous choisissez \" diviser en nouvel ordre \" pour plusieurs positions, "
 "elles seront toutes divisées en un seul second ordre ensemble, et non en "
 "plusieurs ordres."
 

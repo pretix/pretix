@@ -23,7 +23,7 @@ class OrganizerForm(I18nModelForm):
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
-        if Organizer.objects.filter(slug=slug).exists():
+        if Organizer.objects.filter(slug__iexact=slug).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_slug'],
                 code='duplicate_slug',
