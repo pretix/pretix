@@ -411,7 +411,7 @@ class EventSettingsForm(SettingsForm):
 class PaymentSettingsForm(SettingsForm):
     payment_term_days = forms.IntegerField(
         label=_('Payment term in days'),
-        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
+        help_text=_("The number of days after placing an order the user has to pay to preserve their reservation."),
     )
     payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
