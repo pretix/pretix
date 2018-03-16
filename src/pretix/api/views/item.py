@@ -203,7 +203,7 @@ class ItemCategoryFilter(FilterSet):
         fields = ['is_addon']
 
 
-class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class ItemCategoryViewSet(viewsets.ModelViewSet):
     serializer_class = ItemCategorySerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -211,9 +211,41 @@ class ItemCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = 'can_change_items'
+    write_permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.categories.all()
+
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.category.added',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.category.changed',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.category.deleted',
+            user=self.request.user,
+            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+        )
+        super().perform_destroy(instance)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
