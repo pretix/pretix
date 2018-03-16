@@ -399,7 +399,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
         if v:
             v = v.strip()
             try:
-                self.voucher = Voucher.objects.get(code=v, event=request.event)
+                self.voucher = Voucher.objects.get(code__iexact=v, event=request.event)
                 if self.voucher.redeemed >= self.voucher.max_usages:
                     err = error_messages['voucher_redeemed']
                 if self.voucher.valid_until is not None and self.voucher.valid_until < now():

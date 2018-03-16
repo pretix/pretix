@@ -238,7 +238,7 @@ class WidgetAPIProductList(View):
         self.voucher = None
         if 'voucher' in request.GET:
             try:
-                self.voucher = request.event.vouchers.get(code=request.GET.get('voucher').strip())
+                self.voucher = request.event.vouchers.get(code__iexact=request.GET.get('voucher').strip())
                 if self.voucher.redeemed >= self.voucher.max_usages:
                     data['error'] = error_messages['voucher_redeemed']
                     fail = True

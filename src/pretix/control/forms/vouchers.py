@@ -2,6 +2,7 @@ import copy
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models.functions import Lower
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
@@ -164,7 +165,10 @@ class VoucherBulkForm(VoucherForm):
     def clean(self):
         data = super().clean()
 
-        if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
+        vouchers = self.instance.event.vouchers.annotate(
+            code_lower=Lower('code')
+        ).filter(code_lower__in=[c.lower() for c in data['codes']])
+        if vouchers.exists():
             raise ValidationError(_('A voucher with one of these codes already exists.'))
 
         return data
