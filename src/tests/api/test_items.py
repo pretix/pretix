@@ -7,8 +7,8 @@ from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Order,
-    OrderPosition, Question, QuestionOption, Quota,
+    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemCategory, ItemVariation,
+    Order, OrderPosition, Question, QuestionOption, Quota,
 )
 from pretix.base.models.orders import OrderFee
 
@@ -21,6 +21,14 @@ def category(event):
 @pytest.fixture
 def category2(event2):
     return event2.categories.create(name="Tickets2")
+
+
+@pytest.fixture
+def category3(event, item):
+    cat = event.categories.create(name="Tickets")
+    item.category = cat
+    item.save()
+    return cat
 
 
 @pytest.fixture
@@ -116,6 +124,55 @@ def test_category_detail(token_client, organizer, event, team, category):
                                                                                     category.pk))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_category_create(token_client, organizer, event, team):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/categories/'.format(organizer.slug, event.slug),
+        {
+            "name": {"en": "Tickets"},
+            "description": {"en": ""},
+            "position": 0,
+            "is_addon": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_category_update(token_client, organizer, event, team, category):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category.pk),
+        {
+            "name": {"en": "Test"},
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert ItemCategory.objects.get(pk=category.pk).name == {"en": "Test"}
+
+
+@pytest.mark.django_db
+def test_category_update_wrong_event(token_client, organizer, event2, category):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event2.slug, category.pk),
+        {
+            "name": {"en": "Test"},
+        },
+        format='json'
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
+def test_category_delete(token_client, organizer, event, category3, item):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/categories/{}/'.format(organizer.slug, event.slug, category3.pk))
+    assert resp.status_code == 204
+    assert not event.categories.filter(pk=category3.id).exists()
+    assert Item.objects.get(pk=item.pk).category is None
 
 
 @pytest.fixture
