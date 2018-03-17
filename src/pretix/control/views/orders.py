@@ -648,7 +648,10 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
         self.invoice_form.save()
-        self.order.log_action('pretix.event.order.modified', user=request.user)
+        self.order.log_action('pretix.event.order.modified', {
+            'invoice_data': self.invoice_form.cleaned_data,
+            'data': [f.cleaned_data for f in self.forms]
+        }, user=request.user)
         if self.invoice_form.has_changed():
             success_message = ('The invoice address has been updated. If you want to generate a new invoice, '
                                'you need to do this manually.')

@@ -7,8 +7,13 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.api.serializers.order import (
+    AnswerSerializer, InvoiceAdddressSerializer,
+)
 from pretix.base.i18n import LazyLocaleException
-from pretix.base.models import Event, OrderPosition
+from pretix.base.models import (
+    Event, InvoiceAddress, OrderPosition, QuestionAnswer,
+)
 from pretix.base.signals import register_data_shredders
 
 
@@ -114,7 +119,101 @@ class EmailAddressShredder(BaseDataShredder):
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
             shred_log_fields(le, blacklist=['old_email', 'new_email'])
 
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+            d = le.parsed_data
+            if 'data' in d:
+                for row in d['data']:
+                    if 'attendee_email' in row:
+                        row['attendee_email'] = '█'
+                le.data = json.dumps(d)
+                le.shredded = True
+                le.save(update_fields=['data', 'shredded'])
+
+
+class AttendeeNameShredder(BaseDataShredder):
+    verbose_name = _('Attendee names')
+    identifier = 'attendee_names'
+    description = _('This will remove all attendee names from order positions, as well as logged changes to them.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        yield 'attendee-names.json', 'application/json', json.dumps({
+            '{}-{}'.format(op.order.code, op.positionid): op.attendee_name
+            for op in OrderPosition.objects.filter(order__event=self.event, attendee_name__isnull=False)
+        }, indent=4)
+
+    @transaction.atomic
+    def shred_data(self):
+        OrderPosition.objects.filter(order__event=self.event, attendee_name__isnull=False).update(attendee_name=None)
+
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+            d = le.parsed_data
+            if 'data' in d:
+                for i, row in enumerate(d['data']):
+                    if 'attendee_name' in row:
+                        d['data'][i]['attendee_name'] = '█'
+                le.data = json.dumps(d)
+                le.shredded = True
+                le.save(update_fields=['data', 'shredded'])
+
+
+class InvoiceAddressShredder(BaseDataShredder):
+    verbose_name = _('Invoice addresses')
+    identifier = 'invoice_addresses'
+    description = _('This will remove all invoice addresses from orders, as well as logged changes to them.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        yield 'invoice-addresses.json', 'application/json', json.dumps({
+            ia.order.code: InvoiceAdddressSerializer(ia).data
+            for ia in InvoiceAddress.objects.filter(order__event=self.event)
+        }, indent=4)
+
+    @transaction.atomic
+    def shred_data(self):
+        InvoiceAddress.objects.filter(order__event=self.event).delete()
+
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+            d = le.parsed_data
+            if 'invoice_data' in d and not isinstance(d['invoice_data'], bool):
+                for field in d['invoice_data']:
+                    if d['invoice_data'][field]:
+                        d['invoice_data'][field] = '█'
+                le.data = json.dumps(d)
+                le.shredded = True
+                le.save(update_fields=['data', 'shredded'])
+
+
+class QuestionAnswerShredder(BaseDataShredder):
+    verbose_name = _('Question answers')
+    identifier = 'question_answers'
+    description = _('This will remove all answers to questions, as well as logged changes to them.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        yield 'question-answers.json', 'application/json', json.dumps({
+            '{}-{}'.format(op.order.code, op.positionid): AnswerSerializer(op.answers.all(), many=True).data
+            for op in OrderPosition.objects.filter(order__event=self.event).prefetch_related('answers')
+        }, indent=4)
+
+    @transaction.atomic
+    def shred_data(self):
+        QuestionAnswer.objects.filter(orderposition__order__event=self.event).delete()
+
+        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+            d = le.parsed_data
+            if 'data' in d:
+                for i, row in enumerate(d['data']):
+                    for f in row:
+                        if f not in ('attendee_name', 'attendee_email'):
+                            d['data'][i][f] = '█'
+                le.data = json.dumps(d)
+                le.shredded = True
+                le.save(update_fields=['data', 'shredded'])
+
 
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")
 def register_payment_provider(sender, **kwargs):
-    return [EmailAddressShredder]
+    return [
+        EmailAddressShredder,
+        AttendeeNameShredder,
+        InvoiceAddressShredder,
+        QuestionAnswerShredder
+    ]
