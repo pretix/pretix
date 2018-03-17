@@ -369,7 +369,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             messages.warning(request, _('Please enter your invoicing address.'))
             return False
 
-        if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
+        if request.event.settings.invoice_address_asked and request.event.settings.invoice_name_required and (
+                not self.invoice_address or not self.invoice_address.name):
             messages.warning(request, _('Please enter your name.'))
             return False
 
