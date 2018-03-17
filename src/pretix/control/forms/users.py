@@ -41,7 +41,7 @@ class UserEditForm(forms.ModelForm):
             'email',
             'require_2fa',
             'is_active',
-            'is_superuser'
+            'is_staff'
         ]
 
     def __init__(self, *args, **kwargs):

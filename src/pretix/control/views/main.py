@@ -31,7 +31,7 @@ class EventList(PaginationMixin, ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        qs = self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
+        qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
             '_settings_objects', 'organizer___settings_objects'
         ).order_by('-date_from')
 

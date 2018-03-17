@@ -6,7 +6,7 @@
             <p class="meta">
                 <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
                 {% if log.user %}
-                    {% if log.user.is_superuser %}
+                    {% if log.user.is_staff %}
                         <span class="fa fa-id-card fa-danger fa-fw"
                                 data-toggle="tooltip"
                                 title="{% trans "This change was performed by a pretix administrator." %}">

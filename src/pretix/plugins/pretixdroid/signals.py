@@ -15,7 +15,7 @@ from pretix.control.signals import nav_event
 @receiver(nav_event, dispatch_uid="pretixdroid_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders'):
+    if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
         return []
     return [
         {

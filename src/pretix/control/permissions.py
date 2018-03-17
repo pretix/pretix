@@ -18,8 +18,7 @@ def event_permission_required(permission):
                 raise PermissionDenied()
 
             allowed = (
-                request.user.is_superuser
-                or request.user.has_event_permission(request.organizer, request.event, permission)
+                request.user.has_event_permission(request.organizer, request.event, permission, request=request)
             )
             if allowed:
                 return function(request, *args, **kw)
@@ -57,10 +56,7 @@ def organizer_permission_required(permission):
                 # just a double check, should not ever happen
                 raise PermissionDenied()
 
-            allowed = (
-                request.user.is_superuser
-                or request.user.has_organizer_permission(request.organizer, permission)
-            )
+            allowed = request.user.has_organizer_permission(request.organizer, permission, request=request)
             if allowed:
                 return function(request, *args, **kw)
 
@@ -92,7 +88,7 @@ def administrator_permission_required():
             if not request.user.is_authenticated:  # NOQA
                 # just a double check, should not ever happen
                 raise PermissionDenied()
-            if not request.user.is_superuser:
+            if not request.user.has_active_staff_session(request.session.session_key):
                 raise PermissionDenied(_('You do not have permission to view this content.'))
             return function(request, *args, **kw)
         return wrapper

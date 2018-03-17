@@ -10,6 +10,7 @@ from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import Event, Organizer
+from pretix.base.models.auth import SuperuserPermissionSet
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
 )
@@ -81,16 +82,23 @@ class PermissionMiddleware(MiddlewareMixin):
                 slug=url.kwargs['event'],
                 organizer__slug=url.kwargs['organizer'],
             ).select_related('organizer').first()
-            if not request.event or not request.user.has_event_permission(request.event.organizer, request.event):
+            if not request.event or not request.user.has_event_permission(request.event.organizer, request.event,
+                                                                          request=request):
                 raise Http404(_("The selected event was not found or you "
                                 "have no permission to administrate it."))
             request.organizer = request.event.organizer
-            request.eventpermset = request.user.get_event_permission_set(request.organizer, request.event)
+            if request.user.has_active_staff_session(request.session.session_key):
+                request.eventpermset = SuperuserPermissionSet()
+            else:
+                request.eventpermset = request.user.get_event_permission_set(request.organizer, request.event)
         elif 'organizer' in url.kwargs:
             request.organizer = Organizer.objects.filter(
                 slug=url.kwargs['organizer'],
             ).first()
-            if not request.organizer or not request.user.has_organizer_permission(request.organizer):
+            if not request.organizer or not request.user.has_organizer_permission(request.organizer, request=request):
                 raise Http404(_("The selected organizer was not found or you "
                                 "have no permission to administrate it."))
-            request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
+            if request.user.has_active_staff_session(request.session.session_key):
+                request.orgapermset = SuperuserPermissionSet()
+            else:
+                request.orgapermset = request.user.get_organizer_permission_set(request.organizer)

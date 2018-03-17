@@ -191,7 +191,7 @@
                                         {% trans "Dashboard" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:global.settings' %}"
                                                 {% if "global.settings" in url_name %}class="active"{% endif %}>
@@ -219,7 +219,7 @@
                                         {% trans "Order search" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_sessions %}
                                     <li>
                                         <a href="{% url 'control:users' %}"
                                                 {% if "users" in url_name %}class="active"{% endif %}>

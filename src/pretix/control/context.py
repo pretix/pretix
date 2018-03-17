@@ -93,10 +93,12 @@ def contextprocessor(request):
     ctx['warning_update_check_active'] = False
     gs = GlobalSettingsObject()
     ctx['global_settings'] = gs.settings
-    if request.user.is_superuser:
+    if request.user.is_staff:
         if gs.settings.update_check_result_warning:
             ctx['warning_update_available'] = True
         if not gs.settings.update_check_ack and 'runserver' not in sys.argv:
             ctx['warning_update_check_active'] = True
+
+    ctx['staff_session'] = request.user.has_active_staff_session(request.session.session_key)
 
     return ctx
