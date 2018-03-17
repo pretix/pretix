@@ -4,13 +4,14 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME, logout
 from django.core.urlresolvers import get_script_prefix, resolve, reverse
 from django.http import Http404
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
+from hijack.templatetags.hijack_tags import is_hijacked
 
 from pretix.base.models import Event, Organizer
-from pretix.base.models.auth import SuperuserPermissionSet
+from pretix.base.models.auth import SuperuserPermissionSet, User
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
 )
@@ -102,3 +103,32 @@ class PermissionMiddleware(MiddlewareMixin):
                 request.orgapermset = SuperuserPermissionSet()
             else:
                 request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
+
+
+class AuditLogMiddleware:
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path.startswith(get_script_prefix() + 'control') and request.user.is_authenticated:
+            if is_hijacked(request):
+                hijack_history = request.session.get('hijack_history', False)
+                hijacker = get_object_or_404(User, pk=hijack_history[0])
+                ss = hijacker.get_active_staff_session(request.session.get('hijacker_session'))
+                if ss:
+                    ss.logs.create(
+                        url=request.path,
+                        method=request.method,
+                        impersonating=request.user
+                    )
+            else:
+                ss = request.user.get_active_staff_session(request.session.session_key)
+                if ss:
+                    ss.logs.create(
+                        url=request.path,
+                        method=request.method
+                    )
+
+        response = self.get_response(request)
+        return response

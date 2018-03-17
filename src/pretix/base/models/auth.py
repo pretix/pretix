@@ -296,8 +296,15 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         )
 
     def has_active_staff_session(self, session_key=None):
+        """
+        Returns whether or not a user has an active staff session (formerly known as superuser session)
+        with the given session key.
+        """
+        return self.get_active_staff_session(session_key) is not None
+
+    def get_active_staff_session(self, session_key=None):
         if not self.is_staff:
-            return False
+            return None
         if not hasattr(self, '_staff_session_cache'):
             self._staff_session_cache = {}
         if session_key not in self._staff_session_cache:
@@ -306,7 +313,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             )
             if session_key:
                 qs = qs.filter(session_key=session_key)
-            self._staff_session_cache[session_key] = qs.exists()
+            self._staff_session_cache[session_key] = qs.first()
         return self._staff_session_cache[session_key]
 
 
@@ -317,11 +324,19 @@ class StaffSession(models.Model):
     session_key = models.CharField(max_length=255)
     comment = models.TextField()
 
+    class Meta:
+        ordering = ('date_start',)
+
 
 class StaffSessionAuditLog(models.Model):
     session = models.ForeignKey('StaffSession', related_name='logs')
     datetime = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
+    method = models.CharField(max_length=255)
+    impersonating = models.ForeignKey('User', null=True, blank=True)
+
+    class Meta:
+        ordering = ('datetime',)
 
 
 class U2FDevice(Device):

@@ -8,6 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.models import User
+from pretix.base.models.auth import StaffSession
+
+
+class StaffSessionForm(forms.ModelForm):
+    class Meta:
+        model = StaffSession
+        fields = ['comment']
 
 
 class UserEditForm(forms.ModelForm):

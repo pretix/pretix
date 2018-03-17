@@ -151,6 +151,22 @@
                         </li>
                     {% endfor %}
 
+                    {% if request.user.is_staff and not staff_session %}
+                        <li>
+                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link" id="button-sudo">
+                                    <i class="fa fa-id-card"></i> {% trans "Admin mode" %}
+                                </button>
+                            </form>
+                        </li>
+                    {% elif request.user.is_staff and staff_session %}
+                        <li>
+                            <a href="{% url 'control:user.sudo.stop' %}" class="danger">
+                                <i class="fa fa-id-card"></i> {% trans "End admin session" %}
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if warning_update_available %}
                         <li>
                             <a href="{% url 'control:global.update' %}" class="danger">
@@ -219,7 +235,7 @@
                                         {% trans "Order search" %}
                                     </a>
                                 </li>
-                                {% if staff_sessions %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:users' %}"
                                                 {% if "users" in url_name %}class="active"{% endif %}>

@@ -81,7 +81,7 @@ class OrganizerPermissionRequiredMixin:
 def administrator_permission_required():
     """
     This view decorator rejects all requests with a 403 response which are not from
-    users with the is_superuser flag.
+    users with a current staff member session.
     """
     def decorator(function):
         def wrapper(request, *args, **kw):
@@ -89,6 +89,23 @@ def administrator_permission_required():
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             if not request.user.has_active_staff_session(request.session.session_key):
+                raise PermissionDenied(_('You do not have permission to view this content.'))
+            return function(request, *args, **kw)
+        return wrapper
+    return decorator
+
+
+def staff_member_required():
+    """
+    This view decorator rejects all requests with a 403 response which are not staff
+    members (but do not need to have an active session).
+    """
+    def decorator(function):
+        def wrapper(request, *args, **kw):
+            if not request.user.is_authenticated:  # NOQA
+                # just a double check, should not ever happen
+                raise PermissionDenied()
+            if not request.user.is_staff:
                 raise PermissionDenied(_('You do not have permission to view this content.'))
             return function(request, *args, **kw)
         return wrapper
@@ -104,3 +121,14 @@ class AdministratorPermissionRequiredMixin:
     def as_view(cls, **initkwargs):
         view = super(AdministratorPermissionRequiredMixin, cls).as_view(**initkwargs)
         return administrator_permission_required()(view)
+
+
+class StaffMemberRequiredMixin:
+    """
+    This mixin is equivalent to the staff_memer_required view decorator but
+    is in a form suitable for class-based views.
+    """
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(StaffMemberRequiredMixin, cls).as_view(**initkwargs)
+        return staff_member_required()(view)
