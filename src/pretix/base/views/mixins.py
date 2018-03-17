@@ -144,6 +144,7 @@ class BaseQuestionsViewMixin:
 
 class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     invoice_form_class = BaseInvoiceAddressForm
+    only_user_visible = True
 
     @cached_property
     def _positions_for_questions(self):
@@ -151,6 +152,9 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
+        qqs = Question.objects.all()
+        if self.only_user_visible:
+            qqs = qqs.filter(ask_during_checkin=False)
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
@@ -158,7 +162,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
             Prefetch('item__questions',
-                     Question.objects.filter(ask_during_checkin=False).prefetch_related(
+                     qqs.prefetch_related(
                          Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                              # This prefetch statement is utter bullshit, but it actually prevents Django from doing
                              # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
