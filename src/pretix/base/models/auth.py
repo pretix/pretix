@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
@@ -7,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
 
@@ -313,7 +316,14 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             )
             if session_key:
                 qs = qs.filter(session_key=session_key)
-            self._staff_session_cache[session_key] = qs.first()
+            sess = qs.first()
+            if sess:
+                if sess.date_start < now() - timedelta(seconds=settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE):
+                    sess.date_end = now()
+                    sess.save()
+                    sess = None
+
+            self._staff_session_cache[session_key] = sess
         return self._staff_session_cache[session_key]
 
 
