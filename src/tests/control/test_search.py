@@ -99,8 +99,9 @@ class OrderSearchTest(SoupTest):
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
-    def test_suberuser(self):
-        self.user.is_superuser = True
+    def test_superuser(self):
+        self.user.is_staff = True
+        self.user.staffsession_set.create(date_start=now(), session_key=self.client.session.session_key)
         self.user.save()
         self.team.members.clear()
         resp = self.client.get('/control/search/orders/').rendered_content

@@ -212,7 +212,11 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_event(organizer, event)
-        return set.union(*[t.permission_set() for t in teams])
+        sets = [t.permission_set() for t in teams]
+        if sets:
+            return set.union(*sets)
+        else:
+            return set()
 
     def get_organizer_permission_set(self, organizer) -> set:
         """
@@ -222,7 +226,11 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_organizer(organizer)
-        return set.union(*[t.permission_set() for t in teams])
+        sets = [t.permission_set() for t in teams]
+        if sets:
+            return set.union(*sets)
+        else:
+            return set()
 
     def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
         """

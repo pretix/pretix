@@ -26,13 +26,20 @@ def env():
 
 superuser_urls = [
     "global/settings/",
-    "global/update/",
     "users/select2",
     "users/",
     "users/add",
     "users/1/",
     "users/1/impersonate",
     "users/1/reset",
+    "sudo/sessions/",
+]
+
+
+staff_urls = [
+    "global/update/",
+    "sudo/",
+    "sudo/2/",
 ]
 
 event_urls = [
@@ -147,9 +154,22 @@ def test_logged_out(client, env, url):
 @pytest.mark.parametrize("url", superuser_urls)
 def test_superuser_required(perf_patch, client, env, url):
     client.login(email='dummy@dummy.dummy', password='dummy')
+    env[1].is_staff = True
+    env[1].save()
     response = client.get('/control/' + url)
     assert response.status_code == 403
-    env[1].is_superuser = True
+    env[1].staffsession_set.create(date_start=now(), session_key=client.session.session_key)
+    response = client.get('/control/' + url)
+    assert response.status_code in (200, 302, 404)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", staff_urls)
+def test_staff_required(perf_patch, client, env, url):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/' + url)
+    assert response.status_code == 403
+    env[1].is_staff = True
     env[1].save()
     response = client.get('/control/' + url)
     assert response.status_code in (200, 302, 404)
