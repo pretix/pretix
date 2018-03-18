@@ -15,7 +15,7 @@ from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
-from django.views.generic import FormView, TemplateView, UpdateView
+from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from u2flib_server import u2f
@@ -26,7 +26,9 @@ from pretix.base.models import Event, NotificationSetting, U2FDevice, User
 from pretix.base.models.auth import StaffSession
 from pretix.base.notifications import get_all_notification_types
 from pretix.control.forms.users import StaffSessionForm
-from pretix.control.permissions import StaffMemberRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
+)
 from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
@@ -479,7 +481,8 @@ class UserNotificationsEditView(TemplateView):
         return ctx
 
 
-class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMixin, View):
+class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/user/staff_session_start.html'
 
     def post(self, request, *args, **kwargs):
         if not request.user.has_active_staff_session(request.session.session_key):
@@ -506,6 +509,16 @@ class StopStaffSession(StaffMemberRequiredMixin, View):
         session.date_end = now()
         session.save()
         return redirect(reverse("control:user.sudo.edit", kwargs={'id': session.pk}))
+
+
+class StaffSessionList(AdministratorPermissionRequiredMixin, ListView):
+    context_object_name = 'sessions'
+    template_name = 'pretixcontrol/user/staff_session_list.html'
+    paginate_by = 25
+    model = StaffSession
+
+    def get_queryset(self):
+        return StaffSession.objects.select_related('user').order_by('-date_start')
 
 
 class EditStaffSession(StaffMemberRequiredMixin, UpdateView):

@@ -238,9 +238,16 @@
                                 {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:users' %}"
-                                                {% if "users" in url_name %}class="active"{% endif %}>
+                                           {% if "users" in url_name %}class="active"{% endif %}>
                                             <i class="fa fa-user fa-fw"></i>
                                             {% trans "Users" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'control:user.sudo.list' %}"
+                                                {% if "sudo" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-id-card fa-fw"></i>
+                                            {% trans "Admin sessions" %}
                                         </a>
                                     </li>
                                 {% endif %}

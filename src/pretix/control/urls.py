@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^sudo/$', user.StartStaffSession.as_view(), name='user.sudo'),
     url(r'^sudo/stop/$', user.StopStaffSession.as_view(), name='user.sudo.stop'),
     url(r'^sudo/(?P<id>\d+)/$', user.EditStaffSession.as_view(), name='user.sudo.edit'),
+    url(r'^sudo/sessions/$', user.StaffSessionList.as_view(), name='user.sudo.list'),
     url(r'^users/$', users.UserListView.as_view(), name='users'),
     url(r'^users/select2$', typeahead.users_select2, name='users.select2'),
     url(r'^users/add$', users.UserCreateView.as_view(), name='users.add'),

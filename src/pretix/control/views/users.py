@@ -122,8 +122,9 @@ class UserImpersonateStopView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         impersonated = request.user
+        hijs = request.session['hijacker_session']
         release_hijack(request)
-        ss = request.user.get_active_staff_session(request.session.get('hijacker_session'))
+        ss = request.user.get_active_staff_session(hijs)
         if ss:
             request.session.save()
             ss.session_key = request.session.session_key

@@ -15,6 +15,14 @@
         </div>
     </form>
     <h1>{% trans "Audit log" %}</h1>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Start date" %}</dt>
+        <dd>{{ session.date_start|date:"SHORT_DATETIME_FORMAT" }}</dd>
+        <dt>{% trans "End date" %}</dt>
+        <dd>{{ session.date_end|date:"SHORT_DATETIME_FORMAT" }}</dd>
+        <dt>{% trans "User" %}</dt>
+        <dd>{{ session.user.email }}</dd>
+    </dl>
     <table class="table table-condensed">
     <thead>
     <tr>
