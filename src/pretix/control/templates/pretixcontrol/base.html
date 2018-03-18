@@ -283,6 +283,21 @@
                     </div>
                 </div>
             </nav>
+            {% if staff_need_to_explain %}
+                <div class="impersonate-warning">
+                    <span class="fa fa-id-card"></span>
+                    {% blocktrans trimmed %}
+                        Please leave a short comment on what you did in the following admin sessions:
+                    {% endblocktrans %}
+                    <ul>
+                        {% for s in staff_need_to_explain %}
+                            <li>
+                                <a href="{% url "control:user.sudo.edit" id=s.pk %}">#{{ s.pk }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
             {% if request|is_hijacked %}
                 <div class="impersonate-warning">
                     <span class="fa fa-user-secret"></span>

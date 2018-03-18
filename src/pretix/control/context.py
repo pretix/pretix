@@ -3,8 +3,10 @@ from importlib import import_module
 
 from django.conf import settings
 from django.core.urlresolvers import Resolver404, get_script_prefix, resolve
+from django.db.models import Q
 from django.utils.translation import get_language
 
+from pretix.base.models.auth import StaffSession
 from pretix.base.settings import GlobalSettingsObject
 
 from ..helpers.i18n import get_javascript_format, get_moment_locale
@@ -101,5 +103,11 @@ def contextprocessor(request):
 
     if request.user.is_authenticated:
         ctx['staff_session'] = request.user.has_active_staff_session(request.session.session_key)
+        ctx['staff_need_to_explain'] = (
+            StaffSession.objects.filter(user=request.user, date_end__isnull=False).filter(
+                Q(comment__isnull=True) | Q(comment="")
+            )
+            if request.user.is_staff and settings.PRETIX_ADMIN_AUDIT_COMMENTS else StaffSession.objects.none()
+        )
 
     return ctx

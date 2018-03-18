@@ -272,7 +272,7 @@ def event_index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
-def annotated_event_query(user):
+def annotated_event_query(request):
     active_orders = Order.objects.filter(
         event=OuterRef('pk'),
         status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
@@ -286,7 +286,7 @@ def annotated_event_query(user):
         event=OuterRef('pk'),
         done=False
     )
-    qs = user.get_events_with_any_permission().annotate(
+    qs = request.user.get_events_with_any_permission(request).annotate(
         order_count=Subquery(active_orders, output_field=IntegerField()),
         has_ra=Exists(required_actions)
     ).annotate(
@@ -404,7 +404,7 @@ def user_index(request):
         'widgets': rearrange(widgets),
         'upcoming': widgets_for_event_qs(
             request,
-            annotated_event_query(request.user).filter(
+            annotated_event_query(request).filter(
                 Q(has_subevents=False) &
                 Q(
                     Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
@@ -416,7 +416,7 @@ def user_index(request):
         ),
         'past': widgets_for_event_qs(
             request,
-            annotated_event_query(request.user).filter(
+            annotated_event_query(request).filter(
                 Q(has_subevents=False) &
                 Q(
                     Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
@@ -428,7 +428,7 @@ def user_index(request):
         ),
         'series': widgets_for_event_qs(
             request,
-            annotated_event_query(request.user).filter(
+            annotated_event_query(request).filter(
                 has_subevents=True
             ).order_by('-order_to'),
             request.user,
