@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 11:13+0000\n"
-"PO-Revision-Date: 2018-03-13 08:09+0000\n"
+"POT-Creation-Date: 2018-03-16 11:32+0000\n"
+"PO-Revision-Date: 2018-03-19 22:00+0000\n"
 "Last-Translator: Ture Gjørup <ture@ignatz.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -260,7 +260,7 @@ msgstr "Betalingstype"
 
 #: pretix/base/exporters/orderlist.py:66 pretix/base/services/stats.py:162
 msgid "Fees"
-msgstr ""
+msgstr "Gebyrer"
 
 #: pretix/base/exporters/orderlist.py:71
 #, python-brace-format
@@ -408,7 +408,7 @@ msgstr "Gadenavn og nummer"
 
 #: pretix/base/forms/questions.py:209
 msgid "You need to provide either a company name or your name."
-msgstr ""
+msgstr "Du skal oplyse enten et firmanavn eller dit eget navn."
 
 #: pretix/base/forms/questions.py:218 pretix/control/views/orders.py:315
 msgid "Your VAT ID does not match the selected country."
@@ -619,7 +619,7 @@ msgstr ""
 #: pretix/base/invoice.py:362 pretix/base/invoice.py:425
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "Skatteprocent"
 
 #: pretix/base/invoice.py:363
 msgctxt "invoice"
@@ -634,7 +634,7 @@ msgstr "I alt"
 #: pretix/base/invoice.py:370
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Beløb"
 
 #: pretix/base/invoice.py:395 pretix/base/invoice.py:400
 msgctxt "invoice"
@@ -654,7 +654,7 @@ msgstr "I alt"
 #: pretix/base/invoice.py:428
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "Skat"
 
 #: pretix/base/invoice.py:457
 msgctxt "invoice"
@@ -712,15 +712,15 @@ msgstr "Tidszone"
 
 #: pretix/base/models/auth.py:91
 msgid "Two-factor authentification is required to log in"
-msgstr ""
+msgstr "To-faktor bekræftelse er påkrævet for at logge ind"
 
 #: pretix/base/models/auth.py:95
 msgid "Receive notifications according to my settings below"
-msgstr ""
+msgstr "Modtag notifikationer som angivet i nedenstående indstillinger"
 
 #: pretix/base/models/auth.py:96
 msgid "If turned off, you will not get any notifications."
-msgstr ""
+msgstr "Fravælg for ikke at modtage notifikationer."
 
 #: pretix/base/models/auth.py:107
 #: pretix/control/templates/pretixcontrol/order/index.html:95
@@ -778,7 +778,7 @@ msgstr "Dato"
 #: pretix/base/models/checkin.py:17
 msgctxt "checkin"
 msgid "Include pending orders"
-msgstr ""
+msgstr "Inkluder afventende ordre"
 
 #: pretix/base/models/checkin.py:19
 msgid ""
@@ -786,6 +786,8 @@ msgid ""
 "been paid. This only works with pretixdesk 0.3.0 or newer or pretixdroid 1.9 "
 "or newer."
 msgstr ""
+"Hvis tilvalgt vil folk kunne tjekke ind selvom ordren ikke er betalt. Dette "
+"virker kun for pretixdesk 0.3.0 eller nyere og pretixdroid 1.9 eller nyere."
 
 #: pretix/base/models/event.py:36
 msgid "The end of the presale period has to be later than its start."
@@ -869,6 +871,8 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
+"Valgfrit. Ingen produkter vil blive solgt efter denne dato. Hvis du ikke "
+"udfylder dette felt vil forsalget slutte efter din begivenheds slutdato."
 
 #: pretix/base/models/event.py:242 pretix/base/models/event.py:608
 msgid "Start of presale"
