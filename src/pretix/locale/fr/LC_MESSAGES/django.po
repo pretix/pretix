@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 21:48+0000\n"
-"PO-Revision-Date: 2018-03-20 22:58+0000\n"
+"PO-Revision-Date: 2018-03-21 08:00+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French "
 "<https://translate.pretix.eu/projects/pretix/pretix/fr/>\n"
@@ -5851,7 +5851,7 @@ msgstr "exécution en mode développement"
 #: pretix/presale/templates/pretixpresale/base.html:63
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "Nous traitons votre demande...."
+msgstr "Nous traitons votre demande …"
 
 #: pretix/control/templates/pretixcontrol/base.html:336
 #: pretix/presale/templates/pretixpresale/base.html:65
@@ -10087,7 +10087,7 @@ msgstr "Réessayer"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr "Commentaires:"
+msgstr "Commentaire:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -11322,7 +11322,7 @@ msgstr "<Answer: {question}>"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr "Ticket design"
+msgstr "Conception des billets"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
