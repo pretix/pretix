@@ -52,7 +52,6 @@ def create_thumbnail(source, size):
 
     scale, crop = get_sizes(size, image.size)
     image = image.resize(scale)
-    print(scale, crop)
     if crop:
         image = image.crop(crop)
 
