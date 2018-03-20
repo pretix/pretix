@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 21:48+0000\n"
-"PO-Revision-Date: 2018-03-20 22:58+0000\n"
+"PO-Revision-Date: 2018-03-21 08:00+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/fr/>\n"
@@ -44,7 +44,7 @@ msgstr "Revenu total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
 msgid "Contacting Stripe …"
-msgstr "Contacter Stripe ..."
+msgstr "Contacter Stripe …"
 
 #: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
 msgid "QR Code"
@@ -111,7 +111,7 @@ msgstr "Une erreur de type {code} s'est produite."
 #: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
 msgid "We are processing your request …"
-msgstr "Nous traitons votre demande ..."
+msgstr "Nous traitons votre demande …"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
