@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:18+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3788,8 +3788,7 @@ msgstr "Une ou plusieurs variations n'appartiennent pas à cet événement."
 
 #: pretix/base/models/event.py:1623 pretix/base/models/items.py:1993
 msgid "Can not contain spaces or special characters except underscores"
-msgstr ""
-"Ne peut pas contenir d'espaces ou de caractères spéciaux sauf soulignés"
+msgstr "Ne peut pas contenir d'espaces ou de caractères spéciaux sauf soulignés"
 
 #: pretix/base/models/event.py:1628 pretix/base/models/items.py:1998
 msgid "The property name may only contain letters, numbers and underscores."
@@ -5703,8 +5702,7 @@ msgstr "Valeur du bon"
 
 #: pretix/base/models/vouchers.py:254 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr ""
-"Ce produit est ajouté au panier de l'utilisateur si le bon est utilisé."
+msgstr "Ce produit est ajouté au panier de l'utilisateur si le bon est utilisé."
 
 #: pretix/base/models/vouchers.py:264
 msgid "This variation of the product select above is being used."
@@ -7635,8 +7633,8 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
-"Vous pouvez consulter les détails de votre commande à l'adresse URL "
-"suivante:\n"
+"Vous pouvez consulter les détails de votre commande à l'adresse URL suivante:"
+"\n"
 "{orderurl}."
 
 #: pretix/base/services/mail.py:282
@@ -7916,8 +7914,7 @@ msgstr "Vous devez sélectionner une variante du produit."
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr ""
-"Le quota {name} n' a plus assez de capacité pour effectuer l'opération."
+msgstr "Le quota {name} n' a plus assez de capacité pour effectuer l'opération."
 
 #: pretix/base/services/orders.py:1443
 msgid "There is no quota defined that allows this operation."
@@ -8736,8 +8733,7 @@ msgstr "Afficher la date de début"
 
 #: pretix/base/settings.py:947
 msgid "Show the presale start date before presale has started."
-msgstr ""
-"Indiquer la date de début de la prévente avant le début de la prévente."
+msgstr "Indiquer la date de début de la prévente avant le début de la prévente."
 
 #: pretix/base/settings.py:962 pretix/base/settings.py:973
 #, fuzzy
@@ -10276,8 +10272,8 @@ msgstr ""
 "\n"
 "Vous avez acheté un billet pour {event}.\n"
 "\n"
-"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket "
-"ici:\n"
+"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket ici:"
+"\n"
 "{url}\n"
 "\n"
 "Sincères salutations,\n"
@@ -10363,8 +10359,7 @@ msgstr ""
 #: pretix/base/settings.py:2624 pretix/base/settings.py:2632
 #: pretix/base/settings.py:2646 pretix/base/settings.py:2653
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr ""
-"Veuillez entrer le code hexadécimal d'une couleur, par exemple #990000."
+msgstr "Veuillez entrer le code hexadécimal d'une couleur, par exemple #990000."
 
 #: pretix/base/settings.py:2585
 msgid "Primary color"
@@ -11133,8 +11128,7 @@ msgstr "Texte de confirmation"
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
-msgstr ""
-"Vous recevez ces e-mails en fonction de vos paramètres de notification."
+msgstr "Vous recevez ces e-mails en fonction de vos paramètres de notification."
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
@@ -15177,8 +15171,7 @@ msgstr "Un utilisateur a été retiré de l'équipe d'événement."
 
 #: pretix/control/logdisplay.py:529
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
-"Un bon de réduction a été envoyé à une personne sur la liste d'attente."
+msgstr "Un bon de réduction a été envoyé à une personne sur la liste d'attente."
 
 #: pretix/control/logdisplay.py:530
 msgid "An entry has been removed from the waiting list."
@@ -15345,8 +15338,8 @@ msgstr ""
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste "
-"\"{list}\"."
+"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:639
 #, python-brace-format
@@ -18061,11 +18054,11 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
-"Ces réglages sont destinés aux utilisateurs avancés. Voir la <a "
-"href=\"%(docs)s\">documentation</a> pour plus d'informations. Notez que nous "
-"ne sommes pas responsables d'un traitement correct ou non des taxes dans "
-"votre billetterie. En cas de doute, veuillez communiquer avec un avocat ou "
-"un conseiller fiscal."
+"Ces réglages sont destinés aux utilisateurs avancés. Voir la <a href=\""
+"%(docs)s\">documentation</a> pour plus d'informations. Notez que nous ne "
+"sommes pas responsables d'un traitement correct ou non des taxes dans votre "
+"billetterie. En cas de doute, veuillez communiquer avec un avocat ou un "
+"conseiller fiscal."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
 msgid "Custom taxation rules"
@@ -18206,8 +18199,8 @@ msgid ""
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
 "JavaScript est désactivé dans votre navigateur. Pour accéder à notre "
-"billetterie sans JavaScript, veuillez &lt;a %(a_attr)s&gt;cliquer ic&lt;/"
-"a&gt;."
+"billetterie sans JavaScript, veuillez &lt;a %(a_attr)s&gt;cliquer "
+"ic&lt;/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
@@ -22902,8 +22895,8 @@ msgstr "Supprimer un dispositif d'authentification à deux facteurs"
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer le dispositif d'authentification "
-"\"%(device)s\"?"
+"Êtes-vous sûr de vouloir supprimer le dispositif d'authentification \""
+"%(device)s\"?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -23557,8 +23550,8 @@ msgid ""
 msgstr ""
 "Vous avez configuré que les bons <strong>1not</strong>2 seront envoyés "
 "automatiquement. Vous pouvez soit les envoyer un par un dans l'ordre de "
-"votre choix en cliquant sur les boutons à côté d'une ligne dans ce tableau "
-"(si un quota suffisant est disponible), soit vous pouvez appuyer sur le gros "
+"votre choix en cliquant sur les boutons à côté d'une ligne dans ce tableau ("
+"si un quota suffisant est disponible), soit vous pouvez appuyer sur le gros "
 "bouton en dessous de ce texte pour envoyer autant de bons que possible aux "
 "personnes qui ont attendu le plus longtemps."
 
@@ -25261,8 +25254,7 @@ msgstr "Bon de réduction"
 
 #: pretix/control/views/user.py:145
 msgid "The password you entered was invalid, please try again."
-msgstr ""
-"Le mot de passe que vous avez entré était invalide, veuillez réessayer."
+msgstr "Le mot de passe que vous avez entré était invalide, veuillez réessayer."
 
 #: pretix/control/views/user.py:322
 #, fuzzy
@@ -28913,8 +28905,7 @@ msgstr "Veuillez choisir un mode de paiement."
 #: pretix/presale/checkoutflow.py:1306 pretix/presale/views/order.py:464
 #: pretix/presale/views/order.py:534
 msgid "The payment information you entered was incomplete."
-msgstr ""
-"Les informations de paiement que vous avez saisies étaient incomplètes."
+msgstr "Les informations de paiement que vous avez saisies étaient incomplètes."
 
 #: pretix/presale/checkoutflow.py:1347
 msgctxt "checkoutflow"
@@ -29103,8 +29094,7 @@ msgstr "Basculer la navigation"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:29
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
-"Cette boutique n'est actuellement visible que par vous et votre équipe."
+msgstr "Cette boutique n'est actuellement visible que par vous et votre équipe."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:31
 msgid "Take it live now"
