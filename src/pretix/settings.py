@@ -225,6 +225,7 @@ INSTALLED_APPS = [
     'pretix.presale',
     'pretix.multidomain',
     'pretix.api',
+    'pretix.helpers',
     'rest_framework',
     'django_filters',
     'compressor',
@@ -239,7 +240,6 @@ INSTALLED_APPS = [
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
-    'easy_thumbnails',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
@@ -462,13 +462,6 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
 }
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
-THUMBNAIL_ALIASES = {
-    '': {
-        'productlist': {'size': (60, 60), 'crop': True},
-        'logo': {'size': (5000, 120), 'crop': False},
-    },
-}
 
 loglevel = 'DEBUG' if DEBUG else 'INFO'
 

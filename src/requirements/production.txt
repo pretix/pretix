@@ -10,7 +10,7 @@ django-hierarkey==1.0.*,>=1.0.3
 django-filter==1.0.*
 reportlab==3.4.*
 PyPDF2==1.26.*
-easy-thumbnails==2.4.*
+Pillow
 django-libsass
 libsass
 django-otp==0.3.*

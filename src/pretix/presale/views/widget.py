@@ -1,6 +1,5 @@
 import hashlib
 import json
-from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -19,7 +18,6 @@ from django.views.decorators.http import condition
 from django.views.i18n import (
     get_formats, get_javascript_catalog, js_catalog_template,
 )
-from easy_thumbnails.files import get_thumbnailer
 from lxml import etree
 
 from pretix.base.i18n import language
@@ -27,6 +25,7 @@ from pretix.base.models import CartPosition, Voucher
 from pretix.base.services.cart import error_messages
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.helpers.thumb import get_thumbnail
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -136,8 +135,7 @@ def price_dict(price):
 
 
 def get_picture(picture):
-    thumb = get_thumbnailer(picture)['productlist']
-    return urljoin(settings.SITE_URL, thumb.url)
+    return get_thumbnail(picture.name, '60x60^').thumb.url
 
 
 class WidgetAPIProductList(View):

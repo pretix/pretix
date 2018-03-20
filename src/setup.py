@@ -74,7 +74,7 @@ setup(
         'django-hierarkey==1.0.*,>=1.0.2',
         'django-filter==1.0.*',
         'reportlab==3.4.*',
-        'easy-thumbnails==2.4.*',
+        'Pillow',
         'PyPDF2==1.26.*',
         'django-libsass',
         'libsass',
