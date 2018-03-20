@@ -138,7 +138,7 @@ class EditorView(EventPermissionRequiredMixin, TemplateView):
 
                 # Create new file
                 nonce = get_random_string(length=8)
-                fname = '%s-%s/%s/%s.%s.%s' % (
+                fname = 'pub/%s-%s/%s/%s.%s.%s' % (
                     'event', 'settings', self.request.event.pk, 'ticketoutput_{}_layout'.format(self.identifier), nonce, 'pdf'
                 )
                 newname = default_storage.save(fname, cf.file)

@@ -69,4 +69,5 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
             )
         else:
             fname = '%s/%s.%s.%s' % (self.obj.slug, name, nonce, name.split('.')[-1])
-        return fname
+        # TODO: make sure pub is always correct
+        return 'pub/' + fname

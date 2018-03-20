@@ -45,7 +45,8 @@ def compile_scss(object, file="main.scss", fonts=True):
     if font != 'Open Sans' and fonts:
         sassrules.append(get_font_stylesheet(font))
         sassrules.append(
-            '$font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default'.format(
+            '$font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif '
+            '!default'.format(
                 font
             ))
 
@@ -70,7 +71,7 @@ def regenerate_css(event_id: int):
 
     # main.scss
     css, checksum = compile_scss(event)
-    fname = '{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
+    fname = 'pub/{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if event.settings.get('presale_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
@@ -79,7 +80,7 @@ def regenerate_css(event_id: int):
 
     # widget.scss
     css, checksum = compile_scss(event, file='widget.scss', fonts=False)
-    fname = '{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
+    fname = 'pub/{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if event.settings.get('presale_widget_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
@@ -93,7 +94,7 @@ def regenerate_organizer_css(organizer_id: int):
 
     # main.scss
     css, checksum = compile_scss(organizer)
-    fname = '{}/presale.{}.css'.format(organizer.slug, checksum[:16])
+    fname = 'pub/{}/presale.{}.css'.format(organizer.slug, checksum[:16])
     if organizer.settings.get('presale_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         organizer.settings.set('presale_css_file', newname)
@@ -101,7 +102,7 @@ def regenerate_organizer_css(organizer_id: int):
 
     # widget.scss
     css, checksum = compile_scss(organizer)
-    fname = '{}/widget.{}.css'.format(organizer.slug, checksum[:16])
+    fname = 'pub/{}/widget.{}.css'.format(organizer.slug, checksum[:16])
     if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         organizer.settings.set('presale_widget_css_file', newname)

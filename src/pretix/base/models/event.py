@@ -437,7 +437,8 @@ class Event(EventMixin, LoggedModel):
             if s.value.startswith('file://'):
                 fi = default_storage.open(s.value[7:], 'rb')
                 nonce = get_random_string(length=8)
-                fname = '%s/%s/%s.%s.%s' % (
+                # TODO: make sure pub is always correct
+                fname = 'pub/%s/%s/%s.%s.%s' % (
                     self.organizer.slug, self.slug, s.key, nonce, s.value.split('.')[-1]
                 )
                 newname = default_storage.save(fname, fi)

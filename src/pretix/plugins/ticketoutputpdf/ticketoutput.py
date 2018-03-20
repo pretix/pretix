@@ -317,7 +317,7 @@ class PdfTicketOutput(BaseTicketOutput):
             bgf = default_storage.open(bg_file.name, "rb")
         else:
             bgf = self._get_default_background()
-        bg_pdf = PdfFileReader(bgf)
+        bg_pdf = PdfFileReader(BytesIO(bgf.read()))
 
         for page in new_pdf.pages:
             bg_page = copy.copy(bg_pdf.getPage(0))
