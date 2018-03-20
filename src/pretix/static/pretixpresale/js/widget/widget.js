@@ -406,7 +406,12 @@ var shared_methods = {
             if (data.redirect.substr(0, 1) === '/') {
                 data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
             }
-            var url = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            var url = data.redirect;
+            if (url.indexOf('?')) {
+                url = url + '&iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            } else {
+                url = url + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            }
             if (data.success === false) {
                 url = url.replace(/checkout\/start/g, "");
                 this.$root.error_message = data.message;
