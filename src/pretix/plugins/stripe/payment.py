@@ -1,12 +1,14 @@
 import hashlib
 import json
 import logging
+import urllib.parse
 from collections import OrderedDict
 
 import stripe
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core import signing
 from django.template.loader import get_template
 from django.utils.translation import ugettext, ugettext_lazy as _
 
@@ -371,7 +373,17 @@ class StripeMethod(BasePaymentProvider):
         order.payment_info = str(source)
         order.save(update_fields=['payment_info'])
         request.session['payment_stripe_order_secret'] = order.secret
-        return source.redirect.url
+        return self.redirect(request, source.redirect.url)
+
+    def redirect(self, request, url):
+        if request.session.get('iframe_session', False):
+            signer = signing.Signer(salt='safe-redirect')
+            return (
+                build_absolute_uri(request.event, 'plugins:stripe:redirect') + '?url=' +
+                urllib.parse.quote(signer.sign(url))
+            )
+        else:
+            return str(url)
 
 
 class StripeCC(StripeMethod):
@@ -436,7 +448,7 @@ class StripeCC(StripeMethod):
                     if source.status == "pending":
                         order.payment_info = str(source)
                         order.save(update_fields=['payment_info'])
-                        return source.redirect.url
+                        return self.redirect(request, source.redirect.url)
             except stripe.error.StripeError as e:
                 if e.json_body:
                     err = e.json_body['error']

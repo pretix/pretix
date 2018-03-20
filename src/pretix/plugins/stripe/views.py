@@ -4,9 +4,10 @@ import logging
 
 import stripe
 from django.contrib import messages
+from django.core import signing
 from django.db import transaction
-from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -26,6 +27,21 @@ from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC
 
 logger = logging.getLogger('pretix.plugins.stripe')
+
+
+@xframe_options_exempt
+def redirect_view(request, *args, **kwargs):
+    signer = signing.Signer(salt='safe-redirect')
+    try:
+        url = signer.unsign(request.GET.get('url', ''))
+    except signing.BadSignature:
+        return HttpResponseBadRequest('Invalid parameter')
+
+    r = render(request, 'pretixplugins/paypal/redirect.html', {
+        'url': url,
+    })
+    r._csp_ignore = True
+    return r
 
 
 @csrf_exempt
