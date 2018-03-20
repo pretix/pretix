@@ -4,6 +4,7 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image
+from PIL.Image import LANCZOS
 
 from pretix.helpers.models import Thumbnail
 
@@ -41,9 +42,8 @@ def get_sizes(size, imgsize):
             return (int(imgsize[0] * hfactor), size[1]), None
 
 
-def create_thumbnail(source, size):
-    if isinstance(source, str):
-        source = default_storage.open(source)
+def create_thumbnail(sourcename, size):
+    source = default_storage.open(sourcename)
     image = Image.open(BytesIO(source.read()))
     try:
         image.load()
@@ -51,7 +51,7 @@ def create_thumbnail(source, size):
         raise ThumbnailError('Could not load image')
 
     scale, crop = get_sizes(size, image.size)
-    image = image.resize(scale)
+    image = image.resize(scale, resample=LANCZOS)
     if crop:
         image = image.crop(crop)
 
@@ -61,7 +61,7 @@ def create_thumbnail(source, size):
     image.save(fp=buffer, format='PNG')
     imgfile = ContentFile(buffer.getvalue())
 
-    t = Thumbnail.objects.create(source=source, size=size)
+    t = Thumbnail.objects.create(source=sourcename, size=size)
     t.thumb.save(name, imgfile)
     return t
 
