@@ -1,5 +1,6 @@
 import hashlib
 import json
+import logging
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -30,6 +31,8 @@ from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def indent(s):
@@ -107,11 +110,17 @@ def widget_js(request, lang, **kwargs):
 
     gs = GlobalSettingsObject()
     fname = gs.settings.get('widget_file_{}'.format(lang))
-    print(fname, settings.DEBUG)
-    if not fname or settings.DEBUG:
+    resp = None
+    if fname and not settings.DEBUG:
+        try:
+            resp = HttpResponse(default_storage.open(fname).read(), content_type='text/javascript')
+        except:
+            logger.exception('Failed to open widget.js')
+
+    if not resp:
         data = generate_widget_js(lang).encode()
         checksum = hashlib.sha1(data).hexdigest()
-        if not fname:
+        if not settings.DEBUG:
             newname = default_storage.save(
                 'widget/widget.{}.{}.js'.format(lang, checksum),
                 ContentFile(data)
@@ -119,8 +128,6 @@ def widget_js(request, lang, **kwargs):
             gs.settings.set('widget_file_{}'.format(lang), 'file://' + newname)
             gs.settings.set('widget_checksum_{}'.format(lang), checksum)
         resp = HttpResponse(data, content_type='text/javascript')
-    else:
-        resp = FileResponse(default_storage.open(fname), content_type='text/javascript')
     return resp
 
 
