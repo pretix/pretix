@@ -208,10 +208,16 @@ class EventWizard(SessionWizardView):
             event.settings.set('locale', basics_data['locale'])
             event.settings.set('locales', foundation_data['locales'])
 
-        return redirect(reverse('control:event.settings', kwargs={
-            'organizer': event.organizer.slug,
-            'event': event.slug,
-        }) + '?congratulations=1')
+        if (copy_data and copy_data['copy_from_event']) or event.has_subevents:
+            return redirect(reverse('control:event.settings', kwargs={
+                'organizer': event.organizer.slug,
+                'event': event.slug,
+            }) + '?congratulations=1')
+        else:
+            return redirect(reverse('control:event.quick', kwargs={
+                'organizer': event.organizer.slug,
+                'event': event.slug,
+            }) + '?congratulations=1')
 
 
 class SlugRNG(OrganizerPermissionRequiredMixin, View):

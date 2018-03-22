@@ -9,7 +9,9 @@ from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.forms import (
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+)
 from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
@@ -362,6 +364,8 @@ class EventSettingsForm(SettingsForm):
     )
     imprint_url = forms.URLField(
         label=_("Imprint URL"),
+        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
+                    "information."),
         required=False,
     )
     confirm_text = I18nFormField(
@@ -375,7 +379,7 @@ class EventSettingsForm(SettingsForm):
     contact_mail = forms.EmailField(
         label=_("Contact address"),
         required=False,
-        help_text=_("Public email address for contacting the organizer")
+        help_text=_("We'll show this publicly to allow attendees to contact you.")
     )
     cancel_allow_user = forms.BooleanField(
         label=_("Allow users to cancel unpaid orders"),
@@ -1039,3 +1043,101 @@ class EventDeleteForm(forms.Form):
                 code='slug_wrong',
             )
         return slug
+
+
+class QuickSetupForm(forms.Form):
+    show_quota_left = forms.BooleanField(
+        label=_("Show number of tickets left"),
+        help_text=_("Publicly show how many tickets of a certain type are still available."),
+        required=False
+    )
+    waiting_list_enabled = forms.BooleanField(
+        label=_("Waiting list"),
+        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
+                    "becomes available again, it will be reserved for the first person on the waiting list and this "
+                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
+        required=False
+    )
+    ticket_download = forms.BooleanField(
+        label=_("Ticket downloads"),
+        # TODO: Wallet only if installed
+        help_text=_("Your customers will be able to download their tickets in PDF format."),
+        required=False
+    )
+    attendee_names_required = forms.BooleanField(
+        label=_("Require all attendees to fill in their names"),
+        help_text=_("By default, we will ask for names but not require them. You can turn this off completely in the "
+                    "settings."),
+        required=False
+    )
+    imprint_url = forms.URLField(
+        label=_("Imprint URL"),
+        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
+                    "information."),
+        required=False,
+    )
+    contact_mail = forms.EmailField(
+        label=_("Contact address"),
+        required=False,
+        help_text=_("We'll show this publicly to allow attendees to contact you.")
+    )
+    total_quota = forms.IntegerField(
+        label=_("Total capacity"),
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={
+                'placeholder': '∞'
+            }
+        ),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.obj = kwargs.pop('event', None)
+        self.locales = self.obj.settings.get('locales') if self.obj else kwargs.pop('locales', None)
+        super().__init__(*args, **kwargs)
+
+
+class QuickSetupProductForm(I18nForm):
+    name = I18nFormField(
+        max_length=255,
+        label=_("Product name"),
+        widget=I18nTextInput
+    )
+    default_price = forms.DecimalField(
+        label=_("Price (optional)"),
+        max_digits=7, decimal_places=2, required=False,
+        localize=True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Free')
+            }
+        ),
+    )
+    quota = forms.IntegerField(
+        label=_("Quantity available"),
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={
+                'placeholder': '∞'
+            }
+        ),
+        initial=100,
+        required=False
+    )
+
+
+class BaseQuickSetupProductFormSet(I18nFormSetMixin, forms.BaseFormSet):
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)
+        if event:
+            kwargs['locales'] = event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+QuickSetupProductFormSet = formset_factory(
+    QuickSetupProductForm,
+    formset=BaseQuickSetupProductFormSet,
+    can_order=False, can_delete=True, extra=0
+)

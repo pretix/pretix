@@ -281,3 +281,18 @@ table td > .checkbox input[type="checkbox"] {
 .panel-title .radio {
   margin-left: 20px;
 }
+
+.form-quicksetup-total-capacity {
+  height: 34px;
+  strong {
+    line-height: 34px;
+  }
+}
+.form-horizontal [data-formset] .form-quicksetup-total-capacity .form-group {
+  margin: 0;
+  width: auto;
+}
+.form-quicksetup-total-capacity .form-control {
+  width: 100px;
+  display: inline;
+}
