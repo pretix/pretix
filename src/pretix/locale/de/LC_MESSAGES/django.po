@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 11:13+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
+"POT-Creation-Date: 2018-03-16 11:32+0000\n"
+"PO-Revision-Date: 2018-03-23 02:00+0000\n"
 "Last-Translator: Felix Rindt <felix@rindt.me>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German "
+"<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1440,9 +1440,7 @@ msgstr ""
 #, fuzzy
 #| msgid "This username is already taken. Please choose a different one."
 msgid "This identifier is already used for a different question."
-msgstr ""
-"Dieser Benutzername ist bereits in Verwendung, bitte wählen Sie einen "
-"anderen."
+msgstr "Diese ID ist bereits in Verwendung, bitte wählen Sie einen anderen."
 
 #: pretix/base/models/items.py:751
 msgid "An answer to this question is required to proceed."
@@ -1474,12 +1472,8 @@ msgid "Answer"
 msgstr "Antwort"
 
 #: pretix/base/models/items.py:838
-#, fuzzy
-#| msgid "This username is already taken. Please choose a different one."
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
-"Dieser Benutzername ist bereits in Verwendung, bitte wählen Sie einen "
-"anderen."
+msgstr "Die ID \"{}\" wird bereits für eine andere Variante verwendet."
 
 #: pretix/base/models/items.py:841
 msgid "Question option"
@@ -7413,10 +7407,8 @@ msgid "Answer option %(id)s"
 msgstr "Antwortoptionen"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:90
-#, fuzzy
-#| msgid "Answer options"
 msgid "New answer option"
-msgstr "Antwortoptionen"
+msgstr "Neue Antwortoption"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:109
 msgid "Add a new option"
