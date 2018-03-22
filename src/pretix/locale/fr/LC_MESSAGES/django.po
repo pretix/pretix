@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 21:48+0000\n"
-"PO-Revision-Date: 2018-03-21 08:00+0000\n"
+"PO-Revision-Date: 2018-03-22 17:35+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French "
 "<https://translate.pretix.eu/projects/pretix/pretix/fr/>\n"
@@ -691,8 +691,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
-"En utilisant le taux de conversion de 1: {rate} publié par la Banque "
-"centrale européenne le {date}, cela correspond à:"
+"En utilisant le taux de conversion de 1:{rate} publié par la Banque centrale "
+"européenne le {date}, cela correspond à:"
 
 #: pretix/base/invoice.py:498
 #, python-brace-format
@@ -1040,7 +1040,7 @@ msgstr "Nom de l'article"
 #: pretix/base/models/items.py:213 pretix/base/models/items.py:434
 #: pretix/base/models/items.py:441
 msgid "Description"
-msgstr "Déscription"
+msgstr "Description"
 
 #: pretix/base/models/items.py:214
 msgid "This is shown below the product name in lists."
