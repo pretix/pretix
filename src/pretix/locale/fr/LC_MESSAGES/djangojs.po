@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 21:48+0000\n"
-"PO-Revision-Date: 2018-03-21 08:00+0000\n"
+"PO-Revision-Date: 2018-03-22 17:35+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/fr/>\n"
@@ -173,7 +173,7 @@ msgstr "Une erreur s'est produite."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr "Création de messages ..."
+msgstr "Création de messages …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."
