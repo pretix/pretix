@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 
+import requests
 import stripe
 from django.contrib import messages
 from django.core import signing
@@ -17,10 +18,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.models import Order, Quota, RequiredAction, Event
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
+from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
@@ -42,6 +44,34 @@ def redirect_view(request, *args, **kwargs):
     })
     r._csp_ignore = True
     return r
+
+
+def oauth_return(request, *args, **kwargs):
+    # TODO: check state
+    # TODO: check event ID
+    # TODO: error handling
+    gs = GlobalSettingsObject()
+    event = get_object_or_404(Event, pk=request.session['payment_stripe_oauth_event'])
+
+    resp = requests.post('https://connect.stripe.com/oauth/token', data={
+        'grant_type': 'authorization_code',
+        'client_secret': gs.settings.payment_stripe_connect_secret_key,
+        'code': request.GET.get('code')
+    })
+    data = resp.json()
+    if 'error' in data:
+        messages.error(request, _('Stripe returned an error: {}').format(data['error_description']))
+    else:
+        event.settings.payment_stripe_publishable_key = data['stripe_publishable_key']
+        # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
+        event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
+        event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': event.organizer.slug,
+        'event': event.slug,
+        'provider': 'stripe_settings'
+    }))
 
 
 @csrf_exempt

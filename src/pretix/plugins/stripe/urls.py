@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.multidomain import event_url
 
-from .views import ReturnView, redirect_view, refund, webhook
+from .views import ReturnView, redirect_view, refund, webhook, oauth_return
 
 event_patterns = [
     url(r'^stripe/', include([
@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/stripe/refund/(?P<id>\d+)/',
         refund, name='refund'),
     url(r'^_stripe/webhook/$', webhook, name='webhook'),
+    url(r'^_stripe/oauth_return/$', oauth_return, name='oauth.return'),
 ]
