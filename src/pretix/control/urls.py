@@ -76,6 +76,8 @@ urlpatterns = [
         url(r'^settings/$', event.EventUpdate.as_view(), name='event.settings'),
         url(r'^settings/plugins$', event.EventPlugins.as_view(), name='event.settings.plugins'),
         url(r'^settings/permissions$', event.EventPermissions.as_view(), name='event.settings.permissions'),
+        url(r'^settings/payment/(?P<provider>[^/]+)$', event.PaymentProviderSettings.as_view(),
+            name='event.settings.payment.provider'),
         url(r'^settings/payment$', event.PaymentSettings.as_view(), name='event.settings.payment'),
         url(r'^settings/tickets$', event.TicketSettings.as_view(), name='event.settings.tickets'),
         url(r'^settings/tickets/preview/(?P<output>[^/]+)$', event.TicketSettingsPreview.as_view(),

@@ -41,8 +41,8 @@ class Paypal(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        return OrderedDict(
-            list(super().settings_form_fields.items()) + [
+        d = OrderedDict(
+            [
                 ('endpoint',
                  forms.ChoiceField(
                      label=_('Endpoint'),
@@ -68,8 +68,10 @@ class Paypal(BasePaymentProvider):
                      max_length=80,
                      min_length=80,
                  ))
-            ]
+            ] + list(super().settings_form_fields.items())
         )
+        d.move_to_end('_enabled', False)
+        return d
 
     def settings_content_render(self, request):
         return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (

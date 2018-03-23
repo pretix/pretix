@@ -135,52 +135,38 @@ class EventsTest(SoupTest):
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
         assert len(doc.select(".btn-primary")) == 0
 
-    def test_payment_settings(self):
-        tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
-        self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
+    def test_payment_settings_provider(self):
+        self.get_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug))
+        self.post_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug), {
             'payment_banktransfer__enabled': 'true',
             'payment_banktransfer__fee_abs': '12.23',
             'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-tax_rate_default': tr19.pk,
         })
         self.event1.settings.flush()
         assert self.event1.settings.get('payment_banktransfer__enabled', as_type=bool)
         assert self.event1.settings.get('payment_banktransfer__fee_abs', as_type=Decimal) == Decimal('12.23')
 
-    def test_payment_settings_dont_require_fields_of_inactive_providers(self):
+    def test_payment_settings(self):
         tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'settings-tax_rate_default': tr19.pk,
-            'settings-payment_term_days': '2'
-        }, follow=True)
-        assert doc.select('.alert-success')
-
-    def test_payment_settings_require_fields_of_active_providers(self):
-        tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'settings-payment_term_days': '2',
-            'settings-tax_rate_default': tr19.pk,
+        self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
+        self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
+            'payment_term_days': '2',
+            'tax_rate_default': tr19.pk,
         })
-        assert doc.select('.alert-danger')
+        self.event1.settings.flush()
+        assert self.event1.settings.get('payment_term_days', as_type=int) == 2
 
     def test_payment_settings_last_date_payment_after_presale_end(self):
         tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
         self.event1.presale_end = datetime.datetime.now()
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-payment_term_last_0': 'absolute',
-            'settings-payment_term_last_1': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
-            'settings-payment_term_last_2': '0',
-            'settings-payment_term_last_3': 'date_from',
-            'settings-tax_rate_default': tr19.pk,
+            'payment_term_days': '2',
+            'payment_term_last_0': 'absolute',
+            'payment_term_last_1': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
+            'payment_term_last_2': '0',
+            'payment_term_last_3': 'date_from',
+            'tax_rate_default': tr19.pk,
         })
         assert doc.select('.alert-danger')
         self.event1.presale_end = None
@@ -191,15 +177,12 @@ class EventsTest(SoupTest):
         self.event1.presale_end = self.event1.date_from - datetime.timedelta(days=5)
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-payment_term_last_0': 'relative',
-            'settings-payment_term_last_1': '',
-            'settings-payment_term_last_2': '10',
-            'settings-payment_term_last_3': 'date_from',
-            'settings-tax_rate_default': tr19.pk,
+            'payment_term_days': '2',
+            'payment_term_last_0': 'relative',
+            'payment_term_last_1': '',
+            'payment_term_last_2': '10',
+            'payment_term_last_3': 'date_from',
+            'tax_rate_default': tr19.pk,
         })
         assert doc.select('.alert-danger')
         self.event1.presale_end = None

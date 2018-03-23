@@ -411,7 +411,10 @@ class EventSettingsForm(SettingsForm):
 class PaymentSettingsForm(SettingsForm):
     payment_term_days = forms.IntegerField(
         label=_('Payment term in days'),
-        help_text=_("The number of days after placing an order the user has to pay to preserve their reservation."),
+        help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
+                    "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
+                    "payment methods, we recommend still setting two or three days to allow people to retry failed "
+                    "payments."),
     )
     payment_term_last = RelativeDateField(
         label=_('Last date of payments'),

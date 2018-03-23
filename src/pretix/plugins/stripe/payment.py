@@ -74,24 +74,24 @@ class StripeSettingsHolder(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        return OrderedDict(
-            list(super().settings_form_fields.items()) + [
-                ('secret_key',
+        d = OrderedDict(
+            [
+                ('publishable_key',
                  forms.CharField(
-                     label=_('Secret key'),
+                     label=_('Publishable key'),
                      help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/stripe.html'
                      ),
                      validators=(
-                         StripeKeyValidator('sk_'),
+                         StripeKeyValidator('pk_'),
                      ),
                  )),
-                ('publishable_key',
+                ('secret_key',
                  forms.CharField(
-                     label=_('Publishable key'),
+                     label=_('Secret key'),
                      validators=(
-                         StripeKeyValidator('pk_'),
+                         StripeKeyValidator('sk_'),
                      ),
                  )),
                 ('ui',
@@ -144,8 +144,11 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'payments are not immediately confirmed but might take some time.'),
                      required=False,
                  )),
-            ]
+            ] + list(super().settings_form_fields.items())
         )
+
+        d.move_to_end('_enabled', last=False)
+        return d
 
 
 class StripeMethod(BasePaymentProvider):

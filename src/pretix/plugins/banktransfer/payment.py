@@ -32,9 +32,12 @@ class BankTransfer(BasePaymentProvider):
                 )
             }}
         )
-        return OrderedDict(
+        d = OrderedDict(
             list(super().settings_form_fields.items()) + [('bank_details', form_field)]
         )
+        d.move_to_end('bank_details', last=False)
+        d.move_to_end('_enabled', last=False)
+        return d
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')

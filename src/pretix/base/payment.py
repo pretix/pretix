@@ -169,6 +169,22 @@ class BasePaymentProvider:
                  label=_('Enable payment method'),
                  required=False,
              )),
+            ('_availability_date',
+             RelativeDateField(
+                 label=_('Available until'),
+                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
+                 required=False,
+             )),
+            ('_invoice_text',
+             I18nFormField(
+                 label=_('Text on invoices'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
+                             'This will only be used if the invoice is generated before the order is paid. If the '
+                             'invoice is generated later, it will show a text stating that it has already been paid.'),
+                 required=False,
+                 widget=I18nTextarea,
+                 widget_kwargs={'attrs': {'rows': '2'}}
+             )),
             ('_fee_abs',
              forms.DecimalField(
                  label=_('Additional fee'),
@@ -187,12 +203,6 @@ class BasePaymentProvider:
                  localize=True,
                  required=False,
              )),
-            ('_availability_date',
-             RelativeDateField(
-                 label=_('Available until'),
-                 help_text=_('Users will not be able to choose this payment provider after the given date.'),
-                 required=False,
-             )),
             ('_fee_reverse_calc',
              forms.BooleanField(
                  label=_('Calculate the fee from the total value including the fee.'),
@@ -202,16 +212,6 @@ class BasePaymentProvider:
                              'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
                  required=False
              )),
-            ('_invoice_text',
-             I18nFormField(
-                 label=_('Text on invoices'),
-                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
-                             'This will only be used if the invoice is generated before the order is paid. If the '
-                             'invoice is generated later, it will show a text stating that it has already been paid.'),
-                 required=False,
-                 widget=I18nTextarea,
-                 widget_kwargs={'attrs': {'rows': '2'}}
-             )),
         ])
 
     def settings_content_render(self, request: HttpRequest) -> str:
@@ -220,7 +220,7 @@ class BasePaymentProvider:
         page, this method is called. It may return HTML containing additional information
         that is displayed below the form fields configured in ``settings_form_fields``.
         """
-        pass
+        return ""
 
     def render_invoice_text(self, order: Order) -> str:
         """

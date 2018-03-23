@@ -237,89 +237,74 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         })
 
 
-class PaymentSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
     permission = 'can_change_event_settings'
-    template_name = 'pretixcontrol/event/payment.html'
-
-    def get_object(self, queryset=None) -> Event:
-        return self.request.event
-
-    @cached_property
-    def provider_forms(self) -> list:
-        providers = []
-        for provider in self.request.event.get_payment_providers().values():
-            provider.form = ProviderForm(
-                obj=self.request.event,
-                settingspref=provider.settings.get_prefix(),
-                data=(self.request.POST if self.request.method == 'POST' else None)
-            )
-            provider.form.fields = OrderedDict(
-                [
-                    ('%s%s' % (provider.settings.get_prefix(), k), v)
-                    for k, v in provider.settings_form_fields.items()
-                ]
-            )
-            provider.settings_content = provider.settings_content_render(self.request)
-            provider.form.prepare_fields()
-            if provider.settings_content or provider.form.fields:
-                # Exclude providers which do not provide any settings
-                providers.append(provider)
-        return providers
-
-    def get_context_data(self, *args, **kwargs) -> dict:
-        context = super().get_context_data(*args, **kwargs)
-        context['sform'] = self.sform
-        return context
-
-    @cached_property
-    def sform(self):
-        return PaymentSettingsForm(
-            obj=self.object,
-            prefix='settings',
-            data=self.request.POST if self.request.method == 'POST' else None
-        )
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        context['providers'] = self.provider_forms
-        return self.render_to_response(context)
-
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success = self.sform.is_valid()
-        if success:
-            self.sform.save()
-            if self.sform.has_changed():
-                self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
-                    k: self.request.event.settings.get(k) for k in self.sform.changed_data
-                })
-        for provider in self.provider_forms:
-            if provider.form.is_valid():
-                if provider.form.has_changed():
-                    self.request.event.log_action(
-                        'pretix.event.payment.provider.' + provider.identifier, user=self.request.user, data={
-                            k: provider.form.cleaned_data.get(k) for k in provider.form.changed_data
-                        }
-                    )
-                provider.form.save()
-            else:
-                success = False
-        if success:
-            messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
-        else:
-            messages.error(self.request, _('We could not save your changes. See below for details.'))
-            return self.get(request)
+    template_name = 'pretixcontrol/event/payment_provider.html'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.payment', kwargs={
             'organizer': self.get_object().organizer.slug,
             'event': self.get_object().slug,
         })
+
+    @cached_property
+    def object(self):
+        return self.request.event
+
+    def get_object(self, queryset=None):
+        return self.object
+
+    @cached_property
+    def provider(self):
+        provider = self.request.event.get_payment_providers()[self.kwargs['provider']]
+        if not provider:
+            raise Http404()
+        return provider
+
+    @cached_property
+    def form(self):
+        form = ProviderForm(
+            obj=self.request.event,
+            settingspref=self.provider.settings.get_prefix(),
+            data=(self.request.POST if self.request.method == 'POST' else None)
+        )
+        form.fields = OrderedDict(
+            [
+                ('%s%s' % (self.provider.settings.get_prefix(), k), v)
+                for k, v in self.provider.settings_form_fields.items()
+            ]
+        )
+        form.prepare_fields()
+        return form
+
+    @cached_property
+    def settings_content(self):
+        return self.provider.settings_content_render(self.request)
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['form'] = self.form
+        context['provider'] = self.provider
+        context['settings_content'] = self.settings_content
+        return context
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        if self.form.is_valid():
+            if self.form.has_changed():
+                self.request.event.log_action(
+                    'pretix.event.payment.provider.' + self.provider.identifier, user=self.request.user, data={
+                        k: self.form.cleaned_data.get(k) for k in self.form.changed_data
+                    }
+                )
+                self.form.save()
+            messages.success(self.request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.get(request)
 
 
 class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
@@ -366,6 +351,27 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
+    template_name = 'pretixcontrol/event/payment.html'
+    form_class = PaymentSettingsForm
+    permission = 'can_change_event_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.payment', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['providers'] = sorted(
+            [p for p in self.request.event.get_payment_providers().values()
+             if not p.is_implicit and (p.settings_form_fields or p.settings_content_render(self.request))],
+            key=lambda s: s.verbose_name
+        )
+        return context
 
 
 class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
