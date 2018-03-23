@@ -223,6 +223,7 @@ class ItemCreateForm(I18nModelForm):
             self.instance.min_per_order = self.cleaned_data['copy_from'].min_per_order
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
             self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
+            self.instance.free_price = self.cleaned_data['copy_from'].free_price
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)
