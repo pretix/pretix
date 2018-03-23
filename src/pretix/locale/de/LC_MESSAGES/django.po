@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 11:32+0000\n"
-"PO-Revision-Date: 2018-03-23 02:00+0000\n"
+"PO-Revision-Date: 2018-03-24 04:00+0000\n"
 "Last-Translator: Felix Rindt <felix@rindt.me>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -59,10 +59,6 @@ msgid "The subevent does not belong to this event."
 msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
 
 #: pretix/api/serializers/item.py:91
-#, fuzzy
-#| msgid ""
-#| "Updating variations via PATCH/PUT is not supported. Please use the "
-#| "dedicated nested endpoint."
 msgid ""
 "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
 "the dedicated nested endpoint."
@@ -71,10 +67,6 @@ msgstr ""
 "separate Ressource."
 
 #: pretix/api/serializers/item.py:171
-#, fuzzy
-#| msgid ""
-#| "Updating variations via PATCH/PUT is not supported. Please use the "
-#| "dedicated nested endpoint."
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
@@ -1437,10 +1429,8 @@ msgstr ""
 "oder pretixdesk 0.2 oder neuer abwickeln."
 
 #: pretix/base/models/items.py:727
-#, fuzzy
-#| msgid "This username is already taken. Please choose a different one."
 msgid "This identifier is already used for a different question."
-msgstr "Diese ID ist bereits in Verwendung, bitte wählen Sie einen anderen."
+msgstr "Diese ID ist bereits in Verwendung, bitte wählen Sie eine andere."
 
 #: pretix/base/models/items.py:751
 msgid "An answer to this question is required to proceed."
@@ -7401,10 +7391,9 @@ msgstr ""
 "Nur anwendbar, wenn Sie oben \"(Mehrfach)auswahl aus einer Liste\" auswählen."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:59
-#, fuzzy, python-format
-#| msgid "Answer options"
+#, python-format
 msgid "Answer option %(id)s"
-msgstr "Antwortoptionen"
+msgstr "Antwortoption %(id)s"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:90
 msgid "New answer option"
