@@ -9,8 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
-    logentry_display, register_payment_providers, requiredaction_display,
-    register_global_settings)
+    logentry_display, register_global_settings, register_payment_providers,
+    requiredaction_display,
+)
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head
 

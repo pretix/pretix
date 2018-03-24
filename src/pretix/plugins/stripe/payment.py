@@ -12,8 +12,9 @@ from django.core import signing
 from django.template.loader import get_template
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
+from pretix import __version__
 from pretix.base.models import Event, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
@@ -57,17 +58,19 @@ class StripeSettingsHolder(BasePaymentProvider):
                 if 'payment_stripe_oauth_token' not in request.session:
                     request.session['payment_stripe_oauth_token'] = get_random_string(32)
 
-                return "<a href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}" \
-                       "&scope=read_write&redirect_uri={}' class='btn btn-primary btn-lg'><span class='fa " \
-                       "fa-cc-stripe'></span> {}</a>".format(
+                return (
+                    "<a href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
+                    "&scope=read_write&redirect_uri={}' class='btn btn-primary btn-lg'><span class='fa "
+                    "fa-cc-stripe'></span> {}</a>"
+                ).format(
                     self.settings.connect_client_id,
                     request.session['payment_stripe_oauth_token'],
                     urlquote(build_global_uri('plugins:stripe:oauth.return')),
                     _('Connect with Stripe')
                 )
-
             else:
-                return "connected"
+                # TODO: disconnect?
+                return ""
         else:
             return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
@@ -79,9 +82,28 @@ class StripeSettingsHolder(BasePaymentProvider):
     @property
     def settings_form_fields(self):
         if self.settings.connect_client_id and not self.settings.secret_key:
-            return {}
-        d = OrderedDict(
-            [
+            # Stripe connect
+            if self.settings.connect_user_id:
+                fields = [
+                    ('connect_user_name',
+                     forms.CharField(
+                         label=_('Stripe account'),
+                         disabled=True
+                     )),
+                    ('endpoint',
+                     forms.ChoiceField(
+                         label=_('Endpoint'),
+                         initial='live',
+                         choices=(
+                             ('live', pgettext('stripe', 'Live')),
+                             ('test', pgettext('stripe', 'Testing')),
+                         ),
+                     )),
+                ]
+            else:
+                return {}
+        else:
+            fields = [
                 ('publishable_key',
                  forms.CharField(
                      label=_('Publishable key'),
@@ -100,6 +122,9 @@ class StripeSettingsHolder(BasePaymentProvider):
                          StripeKeyValidator('sk_'),
                      ),
                  )),
+            ]
+        d = OrderedDict(
+            fields + [
                 ('ui',
                  forms.ChoiceField(
                      label=_('User interface'),
@@ -152,7 +177,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                  )),
             ] + list(super().settings_form_fields.items())
         )
-
         d.move_to_end('_enabled', last=False)
         return d
 
@@ -181,9 +205,28 @@ class StripeMethod(BasePaymentProvider):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return int(order.total * 10 ** places)
 
+    @property
+    def api_kwargs(self):
+        if self.settings.connect_client_id and self.settings.connect_user_id:
+            if self.settings.get('endpoint', 'live') == 'live':
+                kwargs = {
+                    'api_key': self.settings.connect_secret_key,
+                    'stripe_account': self.settings.connect_user_id
+                }
+            else:
+                kwargs = {
+                    'api_key': self.settings.connect_test_secret_key,
+                    'stripe_account': self.settings.connect_user_id
+                }
+        else:
+            kwargs = {
+                'api_key': self.settings.secret_key,
+            }
+        return kwargs
+
     def _init_api(self):
-        stripe.api_version = '2017-06-05'
-        stripe.api_key = self.settings.get('secret_key')
+        stripe.api_version = '2018-02-28'
+        stripe.set_app_info("pretix", version=__version__, url="https://pretix.eu")
 
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_confirm.html')
@@ -205,7 +248,8 @@ class StripeMethod(BasePaymentProvider):
                     'code': order.code
                 },
                 # TODO: Is this sufficient?
-                idempotency_key=str(self.event.id) + order.code + source
+                idempotency_key=str(self.event.id) + order.code + source,
+                **self.api_kwargs
             )
         except stripe.error.CardError as e:
             if e.json_body:
@@ -336,7 +380,7 @@ class StripeMethod(BasePaymentProvider):
             return
 
         try:
-            ch = stripe.Charge.retrieve(payment_info['id'])
+            ch = stripe.Charge.retrieve(payment_info['id'], **self.api_kwargs)
             ch.refunds.create()
             ch.refresh()
         except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
@@ -432,7 +476,7 @@ class StripeCC(StripeMethod):
 
         if request.session['payment_stripe_token'].startswith('src_'):
             try:
-                src = stripe.Source.retrieve(request.session['payment_stripe_token'])
+                src = stripe.Source.retrieve(request.session['payment_stripe_token'], **self.api_kwargs)
                 if src.type == 'card' and src.card and src.card.three_d_secure == 'required':
                     request.session['payment_stripe_order_secret'] = order.secret
                     source = stripe.Source.create(
@@ -527,6 +571,7 @@ class StripeGiropay(StripeMethod):
                         'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                     })
                 },
+                **self.api_kwargs
             )
             return source
         finally:
@@ -583,6 +628,7 @@ class StripeIdeal(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 
@@ -624,6 +670,7 @@ class StripeAlipay(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 
@@ -682,6 +729,7 @@ class StripeBancontact(StripeMethod):
                         'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                     })
                 },
+                **self.api_kwargs
             )
             return source
         finally:
@@ -752,6 +800,7 @@ class StripeSofort(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 
