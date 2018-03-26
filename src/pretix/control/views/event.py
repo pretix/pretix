@@ -1182,7 +1182,7 @@ class QuickSetupView(FormView):
             self.request.event.settings.payment_banktransfer__enabled = True
             self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data['payment_banktransfer_bank_details']
 
-        if form.cleaned_data['payment_stripe__enabled']:
+        if form.cleaned_data.get('payment_stripe__enabled', None):
             if 'pretix.plugins.stripe' not in plugins_active:
                 self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                               data={'plugin': 'pretix.plugins.stripe'})
@@ -1215,18 +1215,19 @@ class QuickSetupView(FormView):
                 name=f.cleaned_data['name'],
                 category=category,
                 active=True,
-                default_price=f.cleaned_data['default_price'],
+                default_price=f.cleaned_data['default_price'] or 0,
                 tax_rule=tax_rule,
                 admission=True,
                 position=i,
             )
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
-            quota = self.request.event.quotas.create(
-                name=str(f.cleaned_data['name']),
-                size=f.cleaned_data['quota'],
-            )
-            quota.log_action('pretix.event.quota.added', user=self.request.user, data=dict(f.cleaned_data))
-            quota.items.add(item)
+            if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
+                quota = self.request.event.quotas.create(
+                    name=str(f.cleaned_data['name']),
+                    size=f.cleaned_data['quota'],
+                )
+                quota.log_action('pretix.event.quota.added', user=self.request.user, data=dict(f.cleaned_data))
+                quota.items.add(item)
             items.append(item)
 
         if form.cleaned_data['total_quota']:
@@ -1245,7 +1246,7 @@ class QuickSetupView(FormView):
         messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
                                          'or take your event live to start selling!'))
 
-        if form.cleaned_data['payment_stripe__enabled']:
+        if form.cleaned_data.get('payment_stripe__enabled', False):
             self.request.session['payment_stripe_oauth_enable'] = True
             return redirect(StripeSettingsHolder(self.request.event).get_connect_url(self.request))
 
@@ -1261,7 +1262,7 @@ class QuickSetupView(FormView):
             event=self.request.event,
             initial=[
                 {
-                    'name': LazyI18nString.from_gettext(ugettext('Normal ticket')),
+                    'name': LazyI18nString.from_gettext(ugettext('Regular ticket')),
                     'default_price': Decimal('35.00'),
                     'quota': 100,
                 },
