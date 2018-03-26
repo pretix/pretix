@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 20:16+0000\n"
-"PO-Revision-Date: 2018-03-26 13:16+0000\n"
+"PO-Revision-Date: 2018-03-26 20:28+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German "
+"<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3845,6 +3845,8 @@ msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Dies sollte bspw. ein Link zu einem Teil Ihrer Website sein, auf dem "
+"Kontaktdaten und rechtliche Informationen zu finden sind."
 
 #: pretix/control/forms/event.py:373
 msgid "Confirmation text"
@@ -3870,6 +3872,8 @@ msgstr "Kontakt-E-Mail"
 #: pretix/control/forms/event.py:383 pretix/control/forms/event.py:1082
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
+"Wir werden diese Adresse veröffentlichen um Teilnehmern zu ermöglichen, Sie "
+"zu kontaktieren."
 
 #: pretix/control/forms/event.py:386
 msgid "Allow users to cancel unpaid orders"
@@ -4519,34 +4523,28 @@ msgid "Event slug"
 msgstr "Kurzname der Veranstaltung"
 
 #: pretix/control/forms/event.py:1063
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket downloads"
-msgstr "Ticket-Download"
+msgstr "Ticket-Downloads"
 
 #: pretix/control/forms/event.py:1064
-#, fuzzy
-#| msgid "You will be able to download your tickets here starting on %(date)s."
 msgid "Your customers will be able to download their tickets in PDF format."
-msgstr "Sie können Ihre Tickets hier ab %(date)s herunterladen."
+msgstr "Ihre Teilnehmer werden ihre Tickets im PDF-Format herunterladen können."
 
 #: pretix/control/forms/event.py:1068
-#, fuzzy
-#| msgid "Require attendee names"
 msgid "Require all attendees to fill in their names"
-msgstr "Namen des Teilnehmer erfordern"
+msgstr "Erfordere, dass alle Teilnehmer ihre Namen ausfüllen"
 
 #: pretix/control/forms/event.py:1069
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"Standardmäßig werden die Namen erfragt, aber müssen nicht ausgefüllt werden. "
+"Sie können dies in den Einstellungen komplett abschalten."
 
 #: pretix/control/forms/event.py:1095
-#, fuzzy
-#| msgid "Alipay via Stripe"
 msgid "Payment via Stripe"
-msgstr "Alipay über Stripe"
+msgstr "Zahlung über Stripe"
 
 #: pretix/control/forms/event.py:1096
 msgid ""
@@ -4555,12 +4553,14 @@ msgid ""
 "up an account with them, which takes less than five minutes using their "
 "simple interface."
 msgstr ""
+"Stripe ist ein Online-Zahlungsanbieter, der Kreditkarten und viele andere "
+"Zahlungsmöglichkeiten unterstützt. Um Zahlungen mit Stripe zu akzeptieren, "
+"brauchen Sie ein Konto bei Stripe, das sich in unter fünf Minuten über das "
+"einfache Interface von Stripe erstellen lässt."
 
 #: pretix/control/forms/event.py:1102
-#, fuzzy
-#| msgid "Bank transfer"
 msgid "Payment by bank transfer"
-msgstr "Banküberweisung"
+msgstr "Zahlung per Banküberweisung"
 
 #: pretix/control/forms/event.py:1103
 msgid ""
@@ -4568,6 +4568,9 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
+"Ihre Teilnehmer werden angewiesen, das Geld direkt auf Ihr Bankkonto zu "
+"überweisen. Sie können dann Ihren Kontoauszug in pretix importieren, um "
+"Zahlungen zuzuweisen, oder die Bestellungen manuell als bezahlt markieren."
 
 #: pretix/control/forms/event.py:1122
 #: pretix/control/templates/pretixcontrol/items/index.html:33
@@ -4577,20 +4580,16 @@ msgstr "Produktbezeichnung"
 
 #: pretix/control/forms/event.py:1126
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:43
-#, fuzzy
-#| msgid "Prefix (optional)"
 msgid "Price (optional)"
-msgstr "Präfix (optional)"
+msgstr "Preis (optional)"
 
 #: pretix/control/forms/event.py:1131
 msgid "Free"
-msgstr ""
+msgstr "Kostenlos"
 
 #: pretix/control/forms/event.py:1136
-#, fuzzy
-#| msgid "Quota available"
 msgid "Quantity available"
-msgstr "Kontingent verfügbar"
+msgstr "Verfügbare Anzahl"
 
 #: pretix/control/forms/filter.py:81 pretix/control/forms/filter.py:83
 msgid "Search for…"
@@ -6763,42 +6762,37 @@ msgid ""
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
 msgstr ""
+"Sie können auf dieser Seite Ihre ersten Produkte einfach erstellen, oder die "
+"Navigation auf der linken Seite verwenden um Ihre Veranstaltung in allen "
+"Details anzupassen."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:34
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create ticket types"
-msgstr "Neues Team erstellen"
+msgstr "Ticketarten erstellen"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:40
-#, fuzzy
-#| msgid "Tickets on sale"
 msgid "Ticket name"
-msgstr "Verkauf läuft"
+msgstr "Ticket-Bezeichnung"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:46
-#, fuzzy
-#| msgid "(optional)"
 msgid "Capacity (optional)"
-msgstr "(optional)"
+msgstr "Kontingent (optional)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:99
-#, fuzzy
-#| msgid "Add a new device"
 msgid "Add a new ticket type"
-msgstr "Gerät hinzufügen"
+msgstr "Neue Ticketart hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:104
-#, fuzzy
-#| msgid "Total capacity"
 msgid "Total capacity:"
-msgstr "Gesamtanzahl"
+msgstr "Gesamtmenge Tickets:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:107
 msgid ""
 "You can set a limit on the total number of tickets sold for your event, "
 "regardless of the ticket type."
 msgstr ""
+"Sie können die Gesamtzahl der verkauften Tickets begrenzen, unabhängig von "
+"der Art der Tickets."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:116
 msgid ""
@@ -6807,12 +6801,14 @@ msgid ""
 "ticket types in more detail, you can later do so in the \"Products\" section "
 "in the navigation. Don't worry, you can change everything you input here."
 msgstr ""
+"Wenn Sie komplexere Funktionen wie zusätzliche Produkte, Produktvarianten "
+"oder freie Kontingentstrukturen nutzen wollen, können Sie dies später über "
+"den Konfigurationsbereich \"Produkte\" in der linken Navigationsleiste tun. "
+"Keine Sorge, alles was Sie hier eingeben, können Sie später noch ändern."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:130
-#, fuzzy
-#| msgid "Other features"
 msgid "Features"
-msgstr "Andere Funktionen"
+msgstr "Funktionen"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid ""
@@ -6820,6 +6816,9 @@ msgid ""
 "your event, but if you're in a hurry and want to get started quickly, here's "
 "a short version:"
 msgstr ""
+"Wir empfehlen, dass Sie sich die Zeit nehmen und die Einstellungen ihrer "
+"Veranstaltungen in Ruhe durchgehen, aber wenn Sie schnell loslegen wollen, "
+"ist hier die Kurzversion:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:149
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:40
@@ -6836,6 +6835,10 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
+"Pretix unterstützt <a href=\"https://pretix.eu/about/en/features/payment\" "
+"target=\"_blank\">eine breite Auswahl an Zahlungsanbietern</a>, aus denen "
+"Sie frei wählen können. Hier sind nur zwei Beispiele aufgeführt, weitere "
+"finden Sie unter dem Menüpunkt \"Einstellungen\" unter \"Zahlung\"."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:166
 msgid ""
@@ -6843,16 +6846,21 @@ msgid ""
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
 msgstr ""
+"Nachdem Sie auf dieser Seite gespeichert haben, leiten wir Sie direkt zu "
+"Stripe weiter um dort ein Konto zu erstellen oder zu verbinden. Danach "
+"werden Sie wieder zurück zu pretix geleitet."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:181
 msgid "Getting in touch with you"
-msgstr ""
+msgstr "Kontaktaufnahme zu Ihnen"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:183
 msgid ""
 "In case something goes wrong or is unclear, we strongly suggest that you "
 "provide ways for your attendees to contact you:"
 msgstr ""
+"Wenn irgendetwas schiefgeht oder unklar ist, empfehlen wir, dass Sie Ihren "
+"Teilnehmern die Möglichkeit geben, Sie zu benachrichtigen:"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:21
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
@@ -9300,19 +9308,19 @@ msgstr "Willkommen zu pretix!"
 
 #: pretix/control/views/dashboards.py:223
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "Jetzt loslegen"
 
 #: pretix/control/views/dashboards.py:224
 msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
+"Um Tickets zu verkaufen, müssen Sie Produkte und Kontingente anlegen. Der "
+"schnellste Weg ist unser Event-Setup-Tool."
 
 #: pretix/control/views/dashboards.py:226
-#, fuzzy
-#| msgid "Delete event"
 msgid "Set up event"
-msgstr "Veranstaltung löschen"
+msgstr "Veranstaltung einrichten"
 
 #: pretix/control/views/dashboards.py:342
 msgid "Action required"
@@ -9464,25 +9472,24 @@ msgstr "Die ausgewählte Steuer-Regel kann nicht gelöscht werden."
 
 #: pretix/control/views/event.py:1134
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "Ihre Veranstaltung ist nicht leer, Sie müssen sie manuell einrichten."
 
 #: pretix/control/views/event.py:1246
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
+"Ihre Änderungen wurden gespeichert. Sie können nun mit den Details Ihrer "
+"Einstellungen fortfahren oder Ihr Event veröffentlichen um den Verkauf zu "
+"starten!"
 
 #: pretix/control/views/event.py:1265
-#, fuzzy
-#| msgid "Buy tickets"
 msgid "Regular ticket"
-msgstr "Tickets kaufen"
+msgstr "Normales Ticket"
 
 #: pretix/control/views/event.py:1270
-#, fuzzy
-#| msgid "Buy tickets"
 msgid "Reduced ticket"
-msgstr "Tickets kaufen"
+msgstr "Ermäßigtes Ticket"
 
 #: pretix/control/views/global_settings.py:24
 #: pretix/control/views/global_settings.py:47
