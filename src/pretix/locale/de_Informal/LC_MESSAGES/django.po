@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 20:16+0000\n"
-"PO-Revision-Date: 2018-03-26 20:33+0000\n"
+"PO-Revision-Date: 2018-03-26 20:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) "
 "<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
@@ -10134,7 +10134,7 @@ msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:31
 msgid "Reference code"
-msgstr "Verwendungszweck:"
+msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/email/order_pending.txt:1
 #, python-format
