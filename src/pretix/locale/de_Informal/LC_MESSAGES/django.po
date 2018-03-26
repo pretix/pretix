@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 11:13+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
+"PO-Revision-Date: 2018-03-26 11:41+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German (informal) <https://translate.pretix.eu/projects/"
-"pretix/pretix/de_Informal/>\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1402,6 +1402,9 @@ msgid ""
 "You can enter any value here to make it easier to match the data with other "
 "sources. If you do not input one, we will generate one automatically."
 msgstr ""
+"Du kannst hier einen beliebigen Wert eintragen, der den Abgleich mit anderen "
+"Datenquellen vereinfacht. Wenn du nichts eingibst, wird ein automatischer "
+"Wert generiert."
 
 #: pretix/base/models/items.py:674
 msgid "Help text"
@@ -3920,6 +3923,11 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"Anzahl an Tagen, die ein Benutzer nach Abschicken der Bestellung hat, um die "
+"Zahlung abzuschließen. Wenn du langsame Zahlungsmethoden wie Banküberweisung "
+"nutzt, empfehlen wir 14 Tage. Wenn du nur Echtzeit-Zahlungsmethoden wie "
+"Kreditkarte nutzen, empfehlen wir zwei oder drei Tage einzustellen, damit "
+"Kunden eine fehlgeschlagene Zahlung erneut versuchen können."
 
 #: pretix/control/forms/event.py:420
 msgid "Last date of payments"
@@ -6596,6 +6604,8 @@ msgid ""
 "In simple terms, this means you need to pay any fees imposed by the payment "
 "providers and cannot pass it on to your customers."
 msgstr ""
+"Einfach gesagt heißt das, dass du für die meisten Zahlungsmethoden die "
+"Gebühren selbst zahlen musst und nicht an deine Kunden weitergeben darfst."
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:10
 msgid ""
@@ -10961,6 +10971,9 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Um Zahlungen mit Stripe zu akzeptieren, benötigst du ein Konto bei Stripe. "
+"Mit einem Klick auf diesen Button kannst du entweder ein neues Stripe-Konto "
+"erstellen, oder pretix mit einem bestehenden Stripe-Konto verknüpfen."
 
 #: pretix/plugins/stripe/payment.py:73
 #, fuzzy
@@ -10995,7 +11008,7 @@ msgstr "Stripe Checkout"
 #: pretix/plugins/stripe/payment.py:109
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 #: pretix/plugins/stripe/payment.py:110
 #, fuzzy
@@ -11224,11 +11237,11 @@ msgstr "Stripe meldete ein Ereignis: {}"
 
 #: pretix/plugins/stripe/signals.py:99
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Client-ID"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:113
 #, fuzzy
@@ -11238,11 +11251,11 @@ msgstr "Veröffentlichbarer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:120
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Geheimer Schlüssel (Testmodus)"
 
 #: pretix/plugins/stripe/signals.py:127
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Connect: Öffentlicher Schlüssel (Testmodus)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -11425,6 +11438,8 @@ msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ihr Stripe-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
+"die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/stripe/views.py:237
 #, fuzzy

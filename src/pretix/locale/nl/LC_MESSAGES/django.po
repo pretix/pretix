@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 11:13+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
+"POT-Creation-Date: 2018-03-16 11:32+0000\n"
+"PO-Revision-Date: 2018-03-20 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1377,13 +1377,16 @@ msgstr "Vraag"
 
 #: pretix/base/models/items.py:669
 msgid "Internal identifier"
-msgstr ""
+msgstr "Intern kenmerk"
 
 #: pretix/base/models/items.py:670
 msgid ""
 "You can enter any value here to make it easier to match the data with other "
 "sources. If you do not input one, we will generate one automatically."
 msgstr ""
+"U kunt hier een willekeurige waarde invoeren om het gemakkelijker te maken "
+"de data te koppelen aan andere bronnen. Als u niets invoert zal een kenmerk "
+"automatisch worden gegenereerd."
 
 #: pretix/base/models/items.py:674
 msgid "Help text"
@@ -1421,7 +1424,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:727
 msgid "This identifier is already used for a different question."
-msgstr ""
+msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
 
 #: pretix/base/models/items.py:751
 msgid "An answer to this question is required to proceed."
@@ -1454,7 +1457,7 @@ msgstr "Antwoord"
 
 #: pretix/base/models/items.py:838
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "Het kenmerk \"{}\" wordt al voor een andere optie gebruikt."
 
 #: pretix/base/models/items.py:841
 msgid "Question option"
@@ -2347,6 +2350,11 @@ msgid ""
 "\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"We raden aan om dit in te schakelen als u wilt dat uw gebruikers de "
+"betalingstoeslagen van uw betalingsprovider betalen. <a href=\"{docs_url}\" "
+"target=\"_blank\" rel=\"noopener\">Klik hier voor gedetailleerde informatie "
+"over wat dit doet.</a> Vergeet niet om hierboven de juiste toeslagen in te "
+"stellen!"
 
 #: pretix/base/payment.py:232
 msgctxt "invoice"
@@ -2419,7 +2427,7 @@ msgstr "Vaste datum:"
 
 #: pretix/base/reldate.py:150 pretix/base/reldate.py:239
 msgid "Relative date:"
-msgstr ""
+msgstr "Relatieve datum:"
 
 #: pretix/base/reldate.py:153 pretix/base/reldate.py:242
 msgid "Not set"
@@ -2430,10 +2438,12 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
+"We konden uw verzoek niet verwerken omdat de server overbelast was. Probeer "
+"het opnieuw."
 
 #: pretix/base/services/cart.py:37 pretix/presale/views/cart.py:142
 msgid "You did not select any products."
-msgstr ""
+msgstr "U heeft geen producten geselecteerd."
 
 #: pretix/base/services/cart.py:38
 msgid "Unknown cart position."
@@ -2442,119 +2452,131 @@ msgstr ""
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "Er werd geen datum opgegeven."
 
 #: pretix/base/services/cart.py:40
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "U koos een product dat niet te koop is."
 
 #: pretix/base/services/cart.py:41
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Sommige van de door u gekozen producten zijn niet meer beschikbaar. Zie "
+"hieronder voor de details."
 
 #: pretix/base/services/cart.py:43
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Sommige van de door u gekozen producten zijn niet meer beschikbaar in de "
+"door u gekozen hoeveelheid. Zie hieronder voor de details."
 
 #: pretix/base/services/cart.py:45
 #, python-format
 msgid "You cannot select more than %s items per order."
-msgstr ""
+msgstr "U kunt niet meer dan %s items per bestelling kiezen."
 
 #: pretix/base/services/cart.py:46
 #, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
-msgstr ""
+msgstr "U kunt niet meer dan %(max)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:47
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr ""
+msgstr "U moet ten minste %(min)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:48
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
+"We hebben %(product)s uit uw winkelwagen verwijderd, omdat u niet minder dan "
+"%(min)s ervan kunt kopen."
 
 #: pretix/base/services/cart.py:50 pretix/base/services/orders.py:62
 msgid "The presale period for this event has not yet started."
-msgstr ""
+msgstr "De voorverkoopperiode van dit evenement is nog niet begonnen."
 
 #: pretix/base/services/cart.py:51
 msgid "The presale period for this event has ended."
-msgstr ""
+msgstr "De voorverkoopperiode van dit evenement is afgelopen."
 
 #: pretix/base/services/cart.py:52
 msgid ""
 "The presale period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"De voorverkoopperiode van dit evenement is nog niet begonnen. De getroffen "
+"plaatsen zijn uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/cart.py:54 pretix/base/services/orders.py:75
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"De voorverkoopperiode voor een van de evenementen in uw winkelwagen is "
+"afgelopen. De getroffen plaatsen zijn verwijderd uit uw winkelwagen."
 
 #: pretix/base/services/cart.py:56
 msgid "The entered price is to high."
-msgstr ""
+msgstr "De ingevoerde prijs is te hoog."
 
 #: pretix/base/services/cart.py:57
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Deze vouchercode is niet bekend in onze database."
 
 #: pretix/base/services/cart.py:58
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "Deze vouchercode is al het maximale aantal keren gebruikt."
 
 #: pretix/base/services/cart.py:59
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Deze vouchercode kan nog %d keren worden gebruikt."
 
 #: pretix/base/services/cart.py:60
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"U heeft deze vouchercode al gebruikt. Verwijder het geassocieerde product "
+"uit uw winkelwagen als u de voucher voor een ander product wilt gebruiken."
 
 #: pretix/base/services/cart.py:62
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Deze voucher is verlopen."
 
 #: pretix/base/services/cart.py:63
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Deze voucher is niet geldig voor dit product."
 
 #: pretix/base/services/cart.py:65
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "Uw voucher is geldig voor een product dat momenteel niet te koop is."
 
 #: pretix/base/services/cart.py:66
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Deze voucher is niet geldig voor deze evenementsdatum."
 
 #: pretix/base/services/cart.py:67
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "U heeft een geldige vouchercode nodig om dit product te bestellen."
 
 #: pretix/base/services/cart.py:68
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "De gekozen evenementsdatum is niet actief."
 
 #: pretix/base/services/cart.py:69
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "U kunt geen add-on selecteren voor het gekozen product."
 
 #: pretix/base/services/cart.py:70
 msgid "You can not select two variations of the same add-on product."
@@ -7196,7 +7218,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:127
 #: pretix/presale/templates/pretixpresale/event/order.html:148
 msgid "Invoices"
-msgstr ""
+msgstr "Facturen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:135
@@ -10207,7 +10229,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
 msgid "Account holder"
-msgstr ""
+msgstr "Rekeninghouder"
 
 #: pretix/plugins/stripe/payment.py:571 pretix/plugins/stripe/payment.py:729
 msgid "unknown name"
