@@ -206,15 +206,19 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    $("input[data-display-dependency]").each(function () {
+    $("div[data-display-dependency], input[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var $toggling = dependent;
+                if (dependent.tagName === "input") {
+                    $toggling = dependent.closest('.form-group');
+                }
                 if (ev) {
-                    dependent.closest('.form-group').slideToggle(enabled);
+                    $toggling.stop().slideToggle(enabled);
                 } else {
-                    dependent.closest('.form-group').toggle(enabled);
+                    $toggling.stop().toggle(enabled);
                 }
             };
         update();

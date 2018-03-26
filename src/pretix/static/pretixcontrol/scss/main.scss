@@ -472,7 +472,33 @@ body.loading #wrapper {
         text-decoration: none;
     }
 }
+.quick-setup-step {
+    clear: both;
+    .quick-icon {
+        float: left;
+        width: 100px;
 
+        .fa-ticket, .fa-check-circle {
+            margin-top: -20px;
+        }
+        .fa-wrench {
+            margin-top: -30px;
+        }
+        .fa-money, .fa-envelope {
+            margin-top: -40px;
+        }
+    }
+    .quick-icon .fa {
+        font-size: 100px;
+        line-height: 170px;
+        display: block;
+    }
+    .quick-content {
+        margin-left: 160px;
+        padding-top: 5px;
+        overflow: hidden;
+    }
+}
 .thank-you {
     margin-bottom: 25px;
 
@@ -504,6 +530,16 @@ body.loading #wrapper {
 
         p {
             margin-left: 158px;
+        }
+    }
+}
+@media (max-width: $screen-md-max) {
+    .quick-setup-step {
+        .quick-icon {
+            display: none;
+        }
+        .quick-content {
+            margin-left: 0;
         }
     }
 }

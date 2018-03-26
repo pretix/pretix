@@ -51,25 +51,31 @@ class StripeSettingsHolder(BasePaymentProvider):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'stripe', event)
 
+    def get_connect_url(self, request):
+        request.session['payment_stripe_oauth_event'] = request.event.pk
+        if 'payment_stripe_oauth_token' not in request.session:
+            request.session['payment_stripe_oauth_token'] = get_random_string(32)
+        return (
+            "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
+            "&scope=read_write&redirect_uri={}"
+        ).format(
+            self.settings.connect_client_id,
+            request.session['payment_stripe_oauth_token'],
+            urlquote(build_global_uri('plugins:stripe:oauth.return')),
+        )
+
     def settings_content_render(self, request):
         if self.settings.connect_client_id and not self.settings.secret_key:
             # Use Stripe connect
             if not self.settings.connect_user_id:
-                request.session['payment_stripe_oauth_event'] = request.event.pk
-                if 'payment_stripe_oauth_token' not in request.session:
-                    request.session['payment_stripe_oauth_token'] = get_random_string(32)
-
                 return (
                     "<p>{}</p>"
-                    "<a href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
-                    "&scope=read_write&redirect_uri={}' class='btn btn-primary btn-lg'>{}</a>"
+                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
                 ).format(
                     _('To accept payments via Stripe, you will need an account at Stripe. By clicking on the '
                       'following button, you can either create a new Stripe account connect pretix to an existing '
                       'one.'),
-                    self.settings.connect_client_id,
-                    request.session['payment_stripe_oauth_token'],
-                    urlquote(build_global_uri('plugins:stripe:oauth.return')),
+                    self.get_connect_url(request),
                     _('Connect with Stripe')
                 )
             else:

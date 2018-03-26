@@ -49,6 +49,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
+from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from . import CreateView, PaginationMixin, UpdateView
@@ -1150,7 +1151,7 @@ class QuickSetupView(FormView):
     def get_initial(self):
         return {
             'waiting_list_enabled': True,
-            'ticket_downloads': True,
+            'ticket_download': True,
             'contact_mail': self.request.event.settings.contact_mail,
             'imprint_url': self.request.event.settings.imprint_url,
         }
@@ -1164,16 +1165,28 @@ class QuickSetupView(FormView):
 
     @transaction.atomic
     def form_valid(self, form):
+        plugins_active = self.request.event.get_plugins()
         if form.cleaned_data['ticket_download']:
-            plugins_active = self.request.event.get_plugins()
             if 'pretix.plugins.ticketoutputpdf' not in plugins_active:
                 self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                               data={'plugin': 'pretix.plugins.ticketoutputpdf'})
                 plugins_active.append('pretix.plugins.ticketoutputpdf')
-            self.request.event.plugins = ",".join(plugins_active)
-            self.request.event.save()
             self.request.event.settings.ticket_download = True
             self.request.event.settings.ticketoutput_pdf__enabled = True
+
+        if form.cleaned_data['payment_banktransfer__enabled']:
+            if 'pretix.plugins.banktransfer' not in plugins_active:
+                self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                              data={'plugin': 'pretix.plugins.banktransfer'})
+                plugins_active.append('pretix.plugins.banktransfer')
+            self.request.event.settings.payment_banktransfer__enabled = True
+            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data['payment_banktransfer_bank_details']
+
+        if form.cleaned_data['payment_stripe__enabled']:
+            if 'pretix.plugins.stripe' not in plugins_active:
+                self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                              data={'plugin': 'pretix.plugins.stripe'})
+                plugins_active.append('pretix.plugins.stripe')
 
         self.request.event.settings.show_quota_left = form.cleaned_data['show_quota_left']
         self.request.event.settings.waiting_list_enabled = form.cleaned_data['waiting_list_enabled']
@@ -1227,8 +1240,15 @@ class QuickSetupView(FormView):
             })
             quota.items.add(*items)
 
+        self.request.event.plugins = ",".join(plugins_active)
+        self.request.event.save()
         messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
                                          'or take your event live to start selling!'))
+
+        if form.cleaned_data['payment_stripe__enabled']:
+            self.request.session['payment_stripe_oauth_enable'] = True
+            return redirect(StripeSettingsHolder(self.request.event).get_connect_url(self.request))
+
         return redirect(reverse('control:event.index', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,

@@ -93,6 +93,10 @@ def oauth_return(request, *args, **kwargs):
             event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
             event.settings.payment_stripe_connect_user_name = account['business_name']
 
+            if request.session.get('payment_stripe_oauth_enable', False):
+                event.settings.payment_stripe__enabled = True
+                del request.session['payment_stripe_oauth_enable']
+
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
         'event': event.slug,

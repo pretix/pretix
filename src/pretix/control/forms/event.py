@@ -23,6 +23,7 @@ from pretix.control.forms import (
     SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.presale.style import get_fonts
 
 
@@ -1045,7 +1046,7 @@ class EventDeleteForm(forms.Form):
         return slug
 
 
-class QuickSetupForm(forms.Form):
+class QuickSetupForm(I18nForm):
     show_quota_left = forms.BooleanField(
         label=_("Show number of tickets left"),
         help_text=_("Publicly show how many tickets of a certain type are still available."),
@@ -1060,7 +1061,6 @@ class QuickSetupForm(forms.Form):
     )
     ticket_download = forms.BooleanField(
         label=_("Ticket downloads"),
-        # TODO: Wallet only if installed
         help_text=_("Your customers will be able to download their tickets in PDF format."),
         required=False
     )
@@ -1091,11 +1091,29 @@ class QuickSetupForm(forms.Form):
         ),
         required=False
     )
+    payment_stripe__enabled = forms.BooleanField(
+        label=_("Payment via Stripe"),
+        help_text=_("Stripe is an online payments processor supporting credit cards and lots of other payment options. "
+                    "To accept payments via Stripe, you will need to set up an account with them, which takes less "
+                    "than five minutes using their simple interface."),
+        required=False
+    )
+    payment_banktransfer__enabled = forms.BooleanField(
+        label=_("Payment by bank transfer"),
+        help_text=_("Your customers will be instructed to wire the money to your account. You can then import your "
+                    "bank statements to process the payments within pretix, or mark them as paid manually."),
+        required=False
+    )
+    payment_banktransfer_bank_details = BankTransfer.form_field(required=False)
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('event', None)
         self.locales = self.obj.settings.get('locales') if self.obj else kwargs.pop('locales', None)
+        kwargs['locales'] = self.locales
         super().__init__(*args, **kwargs)
+        if not self.obj.settings.payment_stripe_connect_client_id:
+            del self.fields['payment_stripe__enabled']
+        self.fields['payment_banktransfer_bank_details'].required = False
 
 
 class QuickSetupProductForm(I18nForm):
