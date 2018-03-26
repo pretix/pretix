@@ -176,11 +176,11 @@ class CartTest(CartTestMixin, TestCase):
         se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
         self.quota_tickets.subevent = se
         self.quota_tickets.save()
-        print(self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             '_voucher_code': v.code,
             'subevent': se.pk
-        }, follow=True).rendered_content)
+        }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
         self.assertEqual(objs[0].item, self.ticket)

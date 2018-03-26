@@ -658,7 +658,6 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-0-all_products': 'on',
             'item-%d-price' % self.ticket.pk: '12'
         })
-        print(doc)
         assert doc.select(".alert-success")
         self.subevent1.refresh_from_db()
         se = self.subevent1

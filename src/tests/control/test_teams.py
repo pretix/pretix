@@ -240,7 +240,6 @@ def test_invite_existing_team_member(event, admin_team, client):
     client.login(email='dummy2@dummy.dummy', password='dummy')
     i = admin_team.invites.create(email='foo@bar.com')
     resp = client.get('/control/invite/{}'.format(i.token), follow=True)
-    print(resp.content)
     assert b'alert-danger' in resp.content
     assert b'already are part of' in resp.content
 

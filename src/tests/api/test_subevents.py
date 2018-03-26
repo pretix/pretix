@@ -22,7 +22,6 @@ def test_subevent_list(token_client, organizer, event, subevent):
     res["id"] = subevent.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
-    print(dict(resp.data['results'][0]))
     assert [res] == resp.data['results']
 
     resp = token_client.get(
