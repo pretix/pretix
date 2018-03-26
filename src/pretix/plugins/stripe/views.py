@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 
+import requests
 import stripe
 from django.contrib import messages
 from django.core import signing
@@ -17,10 +18,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.models import Event, Order, Quota, RequiredAction
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
+from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
@@ -42,6 +44,60 @@ def redirect_view(request, *args, **kwargs):
     })
     r._csp_ignore = True
     return r
+
+
+def oauth_return(request, *args, **kwargs):
+    if 'payment_stripe_oauth_event' not in request.session:
+        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+        return redirect(reverse('control:index'))
+
+    event = get_object_or_404(Event, pk=request.session['payment_stripe_oauth_event'])
+
+    if request.GET.get('state') != request.session['payment_stripe_oauth_token']:
+        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+        return redirect(reverse('control:event.settings.payment.provider', kwargs={
+            'organizer': event.organizer.slug,
+            'event': event.slug,
+            'provider': 'stripe_settings'
+        }))
+
+    gs = GlobalSettingsObject()
+
+    try:
+        resp = requests.post('https://connect.stripe.com/oauth/token', data={
+            'grant_type': 'authorization_code',
+            'client_secret': (
+                gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
+            ),
+            'code': request.GET.get('code')
+        })
+        data = resp.json()
+
+        if 'error' not in data:
+            account = stripe.Account.retrieve(
+                data['stripe_user_id'],
+                api_key=gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
+            )
+    except:
+        logger.exception('Failed to obtain OAuth token')
+        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+    else:
+        if 'error' in data:
+            messages.error(request, _('Stripe returned an error: {}').format(data['error_description']))
+        else:
+            messages.success(request, _('Your Stripe account is now connected to pretix. You can change the settings in '
+                                        'detail below.'))
+            event.settings.payment_stripe_publishable_key = data['stripe_publishable_key']
+            # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
+            event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
+            event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
+            event.settings.payment_stripe_connect_user_name = account['business_name']
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': event.organizer.slug,
+        'event': event.slug,
+        'provider': 'stripe_settings'
+    }))
 
 
 @csrf_exempt
@@ -80,7 +136,7 @@ def charge_webhook(event, event_json, charge_id):
     prov = StripeCC(event)
     prov._init_api()
     try:
-        charge = stripe.Charge.retrieve(charge_id)
+        charge = stripe.Charge.retrieve(charge_id, **prov.api_kwargs)
     except stripe.error.StripeError:
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
@@ -135,7 +191,7 @@ def source_webhook(event, event_json, source_id):
     prov = StripeCC(event)
     prov._init_api()
     try:
-        src = stripe.Source.retrieve(source_id)
+        src = stripe.Source.retrieve(source_id, **prov.api_kwargs)
     except stripe.error.StripeError:
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
@@ -167,6 +223,24 @@ def source_webhook(event, event_json, source_id):
                 logger.exception('Webhook error')
 
     return HttpResponse(status=200)
+
+
+@event_permission_required('can_change_event_settings')
+@require_POST
+def oauth_disconnect(request, **kwargs):
+    del request.event.settings.payment_stripe_publishable_key
+    del request.event.settings.payment_stripe_connect_access_token
+    del request.event.settings.payment_stripe_connect_refresh_token
+    del request.event.settings.payment_stripe_connect_user_id
+    del request.event.settings.payment_stripe_connect_user_name
+    request.event.settings.payment_stripe__enabled = False
+    messages.success(request, _('Your Stripe account has been disconnected.'))
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+        'provider': 'stripe_settings'
+    }))
 
 
 @event_permission_required('can_view_orders')
@@ -219,7 +293,7 @@ class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
         prov = self.pprov
         prov._init_api()
-        src = stripe.Source.retrieve(request.GET.get('source'))
+        src = stripe.Source.retrieve(request.GET.get('source'), **prov.api_kwargs)
         if src.client_secret != request.GET.get('client_secret'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))

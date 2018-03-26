@@ -1,5 +1,7 @@
 import json
+from collections import OrderedDict
 
+from django import forms
 from django.core.urlresolvers import resolve
 from django.dispatch import receiver
 from django.template.loader import get_template
@@ -7,8 +9,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
-    logentry_display, register_payment_providers, requiredaction_display,
+    logentry_display, register_global_settings, register_payment_providers,
+    requiredaction_display,
 )
+from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head
 
 
@@ -86,3 +90,44 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
 
 
 settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
+
+
+@receiver(register_global_settings, dispatch_uid='stripe_global_settings')
+def register_global_settings(sender, **kwargs):
+    return OrderedDict([
+        ('payment_stripe_connect_client_id', forms.CharField(
+            label=_('Stripe Connect: Client ID'),
+            required=False,
+            validators=(
+                StripeKeyValidator('ca_'),
+            ),
+        )),
+        ('payment_stripe_connect_secret_key', forms.CharField(
+            label=_('Stripe Connect: Secret key'),
+            required=False,
+            validators=(
+                StripeKeyValidator('sk_live_'),
+            ),
+        )),
+        ('payment_stripe_connect_publishable_key', forms.CharField(
+            label=_('Stripe Connect: Publishable key'),
+            required=False,
+            validators=(
+                StripeKeyValidator('pk_live_'),
+            ),
+        )),
+        ('payment_stripe_connect_test_secret_key', forms.CharField(
+            label=_('Stripe Connect: Secret key (test)'),
+            required=False,
+            validators=(
+                StripeKeyValidator('sk_test_'),
+            ),
+        )),
+        ('payment_stripe_connect_test_publishable_key', forms.CharField(
+            label=_('Stripe Connect: Publishable key (test)'),
+            required=False,
+            validators=(
+                StripeKeyValidator('pk_test_'),
+            ),
+        )),
+    ])
