@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 12:49+0000\n"
-"PO-Revision-Date: 2018-03-26 11:41+0000\n"
+"PO-Revision-Date: 2018-03-26 13:16+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German (informal) <https://translate.pretix.eu/projects/"
-"pretix/pretix/de_Informal/>\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -61,27 +61,19 @@ msgid "The subevent does not belong to this event."
 msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
 
 #: pretix/api/serializers/item.py:91
-#, fuzzy
-#| msgid ""
-#| "Updating variations via PATCH/PUT is not supported. Please use the "
-#| "dedicated nested endpoint."
 msgid ""
 "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
 "the dedicated nested endpoint."
 msgstr ""
-"Varianten können nicht per PATCH/PUT geändert werden, bitte nutze die "
-"separate Ressource."
+"Zusatzprodukte oder Varianten können nicht per PATCH/PUT geändert werden, "
+"bitte nutze die separate Ressource."
 
 #: pretix/api/serializers/item.py:171
-#, fuzzy
-#| msgid ""
-#| "Updating variations via PATCH/PUT is not supported. Please use the "
-#| "dedicated nested endpoint."
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"Varianten können nicht per PATCH/PUT geändert werden, bitte nutze die "
+"Optionen können nicht per PATCH/PUT geändert werden, bitte nutze die "
 "separate Ressource."
 
 #: pretix/base/exporters/answers.py:18
@@ -1392,8 +1384,6 @@ msgid "Question"
 msgstr "Frage"
 
 #: pretix/base/models/items.py:669
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal identifier"
 msgstr "Interne Referenz"
 
@@ -1442,11 +1432,8 @@ msgstr ""
 "oder pretixdesk 0.2 oder neuer abwickelst."
 
 #: pretix/base/models/items.py:727
-#, fuzzy
-#| msgid "This username is already taken. Please choose a different one."
 msgid "This identifier is already used for a different question."
-msgstr ""
-"Dieser Benutzername ist bereits in Verwendung, bitte wähle einen anderen."
+msgstr "Diese Referenz ist bereits in Verwendung, bitte wähle eine andere."
 
 #: pretix/base/models/items.py:751
 msgid "An answer to this question is required to proceed."
@@ -1478,11 +1465,10 @@ msgid "Answer"
 msgstr "Antwort"
 
 #: pretix/base/models/items.py:838
-#, fuzzy
-#| msgid "This username is already taken. Please choose a different one."
 msgid "The identifier \"{}\" is already used for a different option."
 msgstr ""
-"Dieser Benutzername ist bereits in Verwendung, bitte wähle einen anderen."
+"Die Referenz {} wird bereits für eine andere Option verwendet, bitte wähle "
+"eine andere."
 
 #: pretix/base/models/items.py:841
 msgid "Question option"
@@ -2276,16 +2262,13 @@ msgid "Order {order.code} has been canceled."
 msgstr "Bestellung {order.code} wurde storniert."
 
 #: pretix/base/notifications.py:210
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Order expired"
-msgstr "Warenkorb abgelaufen"
+msgstr "Bestellung abgelaufen"
 
 #: pretix/base/notifications.py:211
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been marked as paid."
+#, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr "Bestellung {order.code} wurde als bezahlt markiert."
+msgstr "Bestellung {order.code} wurde als abgelaufen markiert."
 
 #: pretix/base/notifications.py:216
 msgid "Order information changed"
@@ -2698,10 +2681,8 @@ msgstr ""
 "12345 Musterdorf"
 
 #: pretix/base/services/invoices.py:272
-#, fuzzy
-#| msgid "Sample product A"
 msgid "Sample product {}"
-msgstr "Beispielprodukt A"
+msgstr "Beispielprodukt {}"
 
 #: pretix/base/services/invoices.py:278
 msgid "Sample product A"
@@ -6555,10 +6536,8 @@ msgstr ""
 "Einstellungen und aktiviere ein oder mehrere Zahlungsplugins."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:48
-#, fuzzy
-#| msgid "General settings"
 msgid "General payment settings"
-msgstr "Allgemeine Einstellungen"
+msgstr "Allgemeine Zahlungseinstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:12
 #: pretix/control/templates/pretixcontrol/events/create_base.html:23
@@ -6566,38 +6545,23 @@ msgid "Back"
 msgstr "Zurück"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:14
-#, fuzzy
-#| msgid "Payment provider"
 msgid "Payment provider:"
-msgstr "Zahlungsmethode"
+msgstr "Zahlungsmethode:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
 msgstr "Warnung:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:22
-#, fuzzy
-#| msgid ""
-#| "Please note that EU Directive 2015/2366 bans surcharging payment fees for "
-#| "most common payment methods within the European Union. Depending on the "
-#| "payment method, this might affect selling to consumers only or to "
-#| "business customers as well. Depending on your country, this legislation "
-#| "might already be in effect or become relevant from January 2018 at the "
-#| "latest. This is not legal advice. If in doubt, consult a lawyer or "
-#| "refrain from charging payment fees."
 msgid ""
 "Please note that EU Directive 2015/2366 bans surcharging payment fees for "
 "most common payment methods within the European Union. If in doubt, consult "
 "a lawyer or refrain from charging payment fees."
 msgstr ""
 "Durch EU-Richtlinie 2015/2366 wird das Erheben von Zahlungsmittelgebühren "
-"für übliche Zahlungsmethoden innerhalb der Europäischen Union verboten. "
-"Abhängig von der Zahlungsmethode kann dies nur für den Handel mit "
-"Verbrauchen oder auch für gewerbliche Kunden gelten. Abhängig von dem Staat, "
-"in dem du operierst, kann diese Gesetzgebung bereits in Kraft sein oder bis "
-"spätestens Januar 2018 in Kraft treten. Dieser Hinweis stellt keine "
-"Rechtsberatung dar. Im Zweifel kontaktiere bitte einen Anwalt oder verzichte "
-"auf die Erhebung von Zahlungsmittelgebühren."
+"für übliche Zahlungsmethoden innerhalb der Europäischen Union verboten. Im "
+"Zweifel kontaktiere bitte einen Anwalt oder verzichte auf die Erhebung von "
+"Zahlungsmittelgebühren."
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:28
 msgid ""
@@ -7401,16 +7365,13 @@ msgstr ""
 "Nur anwendbar, wenn du oben \"(Mehrfach)auswahl aus einer Liste\" auswählst."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:59
-#, fuzzy, python-format
-#| msgid "Answer options"
+#, python-format
 msgid "Answer option %(id)s"
-msgstr "Antwortoptionen"
+msgstr "Antwortoption %(id)s"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:90
-#, fuzzy
-#| msgid "Answer options"
 msgid "New answer option"
-msgstr "Antwortoptionen"
+msgstr "Neue Antwortoption"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:109
 msgid "Add a new option"
@@ -10976,16 +10937,12 @@ msgstr ""
 "erstellen, oder pretix mit einem bestehenden Stripe-Konto verknüpfen."
 
 #: pretix/plugins/stripe/payment.py:73
-#, fuzzy
-#| msgid "Connect with pretixdesk"
 msgid "Connect with Stripe"
-msgstr "Mit pretixdesk verbinden"
+msgstr "Mit Stripe verbinden"
 
 #: pretix/plugins/stripe/payment.py:83
-#, fuzzy
-#| msgid "Bancontact via Stripe"
 msgid "Disconnect from Stripe"
-msgstr "Bancontact über Stripe"
+msgstr "Verbindung mit Stripe trennen"
 
 #: pretix/plugins/stripe/payment.py:87
 msgid ""
@@ -11000,10 +10957,8 @@ msgstr ""
 "wird und zur Verarbeitung asynchroner Zahlungsmethoden wie SOFORT."
 
 #: pretix/plugins/stripe/payment.py:101
-#, fuzzy
-#| msgid "Stripe Checkout"
 msgid "Stripe account"
-msgstr "Stripe Checkout"
+msgstr "Stripe-Konto"
 
 #: pretix/plugins/stripe/payment.py:109
 msgctxt "stripe"
@@ -11011,11 +10966,9 @@ msgid "Live"
 msgstr "Live"
 
 #: pretix/plugins/stripe/payment.py:110
-#, fuzzy
-#| msgid "Question"
 msgctxt "stripe"
 msgid "Testing"
-msgstr "Frage"
+msgstr "Test-System"
 
 #: pretix/plugins/stripe/payment.py:120
 msgid "Publishable key"
@@ -11244,10 +11197,8 @@ msgid "Stripe Connect: Secret key"
 msgstr "Stripe Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:113
-#, fuzzy
-#| msgid "Publishable key"
 msgid "Stripe Connect: Publishable key"
-msgstr "Veröffentlichbarer Schlüssel"
+msgstr "Stripe Connect: Veröffentlichbarer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:120
 msgid "Stripe Connect: Secret key (test)"
@@ -11422,16 +11373,14 @@ msgstr "Unbekannter Grund"
 
 #: pretix/plugins/stripe/views.py:51 pretix/plugins/stripe/views.py:57
 #: pretix/plugins/stripe/views.py:83
-#, fuzzy
-#| msgid "An error occured during the HBCI transaction."
 msgid "An error occured during connecting with Stripe, please try again."
-msgstr "Während der HBCI-Transaktion trat ein Fehler auf."
+msgstr ""
+"Während der Verbindung mit Stripe ist ein Fehler aufgetreten, bitte versuche "
+"es erneut."
 
 #: pretix/plugins/stripe/views.py:86
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Stripe returned an error: {}"
-msgstr "Stripe meldete einen Fehler: %s"
+msgstr "Stripe meldete einen Fehler: {}"
 
 #: pretix/plugins/stripe/views.py:88
 msgid ""
@@ -11442,10 +11391,8 @@ msgstr ""
 "die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/stripe/views.py:237
-#, fuzzy
-#| msgid "Your account has been disabled."
 msgid "Your Stripe account has been disconnected."
-msgstr "Das Benutzerkonto wurde deaktiviert."
+msgstr "Das Stripe-Konto wurde getrennt."
 
 #: pretix/plugins/stripe/views.py:298 pretix/plugins/stripe/views.py:325
 msgid ""
@@ -12345,33 +12292,24 @@ msgid "We successfully received your payment. See below for details."
 msgstr "Wir haben deine Zahlung erfolgreich erhalten. Vielen Dank!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:25
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to "
-#| "download your ticket or change your details later. We also sent you an "
-#| "email containing the link to the address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Bitte speichere den Link zu genau dieser Seite, wenn du dein Ticket später "
-"herunterladen oder deine Angaben ändern willst. Wir haben dir außerdem "
-"soeben einen Link mit dieser Adresse an deine E-Mail-Adresse geschickt."
+"Bitte speichere den Link zu genau dieser Seite, wenn du später auf deine "
+"Bestellung zugreifen oder deine Angaben ändern willst. Wir haben dir "
+"außerdem soeben einen Link mit dieser Adresse an deine E-Mail-Adresse "
+"geschickt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to download your ticket or "
-#| "change your details later. We also sent you an email containing the link "
-#| "to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
-"Bitte speichere folgenden Link ab, wenn du dein Ticket später herunterladen "
-"oder deine Angaben ändern möchtest. Wir haben dir außerdem soeben einen Link "
-"mit dieser Adresse an deine E-Mail-Adresse geschickt."
+"Bitte speichere folgenden Link ab, wenn du später auf deine Bestellung "
+"zugreifen oder deine Angaben ändern möchtest. Wir haben dir außerdem soeben "
+"einen Link mit dieser Adresse an deine E-Mail-Adresse geschickt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "Use different payment method"
