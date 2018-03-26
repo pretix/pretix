@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 20:16+0000\n"
-"PO-Revision-Date: 2018-03-26 20:28+0000\n"
+"PO-Revision-Date: 2018-03-26 20:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -3528,7 +3528,7 @@ msgstr ""
 
 #: pretix/control/forms/__init__.py:94
 msgid "Filetype not allowed!"
-msgstr "Dateityp nicht erlaubt"
+msgstr "Dateityp nicht erlaubt!"
 
 #: pretix/control/forms/event.py:33 pretix/control/forms/organizer.py:160
 msgid "Use languages"
@@ -3638,7 +3638,7 @@ msgid ""
 "time of day."
 msgstr ""
 "Wenn diese Einstellung deaktiviert ist, werden Veranstaltungsbeginn und -"
-"ende ohne Uhrzeit angezeigt"
+"ende ohne Uhrzeit angezeigt."
 
 #: pretix/control/forms/event.py:257
 msgid "Show items outside presale period"
@@ -4050,7 +4050,7 @@ msgstr "Rechnungen mit aufsteigender Nummerierung erzeugen"
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
 "Wenn diese Option deaktiviert wird, wird die Bestellnummer in der "
-"Rechnungsnummer verwendet"
+"Rechnungsnummer verwendet."
 
 #: pretix/control/forms/event.py:545
 msgid "Invoice number prefix"
@@ -6816,7 +6816,7 @@ msgid ""
 "your event, but if you're in a hurry and want to get started quickly, here's "
 "a short version:"
 msgstr ""
-"Wir empfehlen, dass Sie sich die Zeit nehmen und die Einstellungen ihrer "
+"Wir empfehlen, dass Sie sich die Zeit nehmen und die Einstellungen Ihrer "
 "Veranstaltungen in Ruhe durchgehen, aber wenn Sie schnell loslegen wollen, "
 "ist hier die Kurzversion:"
 
@@ -6835,7 +6835,7 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
-"Pretix unterstützt <a href=\"https://pretix.eu/about/en/features/payment\" "
+"Pretix unterstützt <a href=\"https://pretix.eu/about/de/features/payment\" "
 "target=\"_blank\">eine breite Auswahl an Zahlungsanbietern</a>, aus denen "
 "Sie frei wählen können. Hier sind nur zwei Beispiele aufgeführt, weitere "
 "finden Sie unter dem Menüpunkt \"Einstellungen\" unter \"Zahlung\"."
@@ -9060,7 +9060,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
-msgstr "So viele Gutscheine wie möglich versenden."
+msgstr "So viele Gutscheine wie möglich versenden"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
@@ -9614,7 +9614,7 @@ msgstr "Es wurde keine USt-ID-Nr. angegeben."
 
 #: pretix/control/views/orders.py:306
 msgid "No country specified."
-msgstr "Es wurde kein Land angegeben,"
+msgstr "Es wurde kein Land angegeben."
 
 #: pretix/control/views/orders.py:310
 msgid "VAT ID could not be checked since a non-EU country has been specified."
@@ -10158,7 +10158,7 @@ msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:31
 msgid "Reference code"
-msgstr "Verwendungszweck:"
+msgstr "Verwendungszweck"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/email/order_pending.txt:1
 #, python-format
@@ -10608,7 +10608,7 @@ msgstr ""
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:17
 msgid "Yes, mark order as refunded"
-msgstr "Die Bestellung als zurückerstattet markieren."
+msgstr "Die Bestellung als zurückerstattet markieren"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:19
