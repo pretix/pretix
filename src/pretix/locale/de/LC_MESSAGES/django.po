@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-26 12:49+0000\n"
-"PO-Revision-Date: 2018-03-26 13:12+0000\n"
+"PO-Revision-Date: 2018-03-26 13:16+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -1464,7 +1464,9 @@ msgstr "Antwort"
 
 #: pretix/base/models/items.py:838
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr "Die ID \"{}\" wird bereits für eine andere Variante verwendet."
+msgstr ""
+"Die Referenz {} wird bereits für eine andere Option verwendet, bitte wählen "
+"Sie eine andere."
 
 #: pretix/base/models/items.py:841
 msgid "Question option"
