@@ -13,6 +13,9 @@
                 </a>
                 {% trans "Payment provider:" %} {{ provider.verbose_name }}
             </legend>
+            {% bootstrap_form form layout='control' %}
+            {% if settings_content %}{{ settings_content|safe }}{% endif %}
+            <p>&nbsp;</p>
             <div class="alert alert-warning">
                 <span class="fa fa-w fa-legal fa-2x pull-left"></span>
                 <strong>{% trans "Warning:" %}</strong>
@@ -27,8 +30,6 @@
                     pass it on to your customers.
                 {% endblocktrans %}
             </div>
-            {% bootstrap_form form layout='control' %}
-            {% if settings_content %}{{ settings_content|safe }}{% endif %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
