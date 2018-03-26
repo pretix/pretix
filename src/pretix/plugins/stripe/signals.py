@@ -106,7 +106,7 @@ def register_global_settings(sender, **kwargs):
             label=_('Stripe Connect: Secret key'),
             required=False,
             validators=(
-                StripeKeyValidator('sk_live_'),
+                StripeKeyValidator(['sk_live_', 'rk_live_']),
             ),
         )),
         ('payment_stripe_connect_publishable_key', forms.CharField(
@@ -120,7 +120,7 @@ def register_global_settings(sender, **kwargs):
             label=_('Stripe Connect: Secret key (test)'),
             required=False,
             validators=(
-                StripeKeyValidator('sk_test_'),
+                StripeKeyValidator(['sk_test_', 'rk_test_']),
             ),
         )),
         ('payment_stripe_connect_test_publishable_key', forms.CharField(

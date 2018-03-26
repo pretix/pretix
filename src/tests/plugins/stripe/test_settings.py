@@ -7,6 +7,7 @@ from pretix.base.models import Event, Organizer, Team, User
 valid_secret_key_values = [
     'sk_',
     'sk_foo',
+    'rk_bla',
 ]
 
 valid_publishable_key_values = [

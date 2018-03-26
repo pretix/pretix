@@ -136,7 +136,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.CharField(
                      label=_('Secret key'),
                      validators=(
-                         StripeKeyValidator('sk_'),
+                         StripeKeyValidator(['sk_', 'rk_']),
                      ),
                  )),
             ]
