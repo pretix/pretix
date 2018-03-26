@@ -125,6 +125,10 @@ class TaxRule(LoggedModel):
             s += ' ({})'.format(_('reverse charge enabled'))
         return str(s)
 
+    @property
+    def has_custom_rules(self):
+        return self.custom_rules and self.custom_rules != '[]'
+
     def tax(self, base_price, base_price_is='auto'):
         if self.rate == Decimal('0.00'):
             return TaxedPrice(
