@@ -514,6 +514,7 @@ class StripeCC(StripeMethod):
                                 'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                             })
                         },
+                        **self.api_kwargs
                     )
                     if source.status == "pending":
                         order.payment_info = str(source)
