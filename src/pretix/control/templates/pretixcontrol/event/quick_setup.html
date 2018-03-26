@@ -159,15 +159,17 @@
                 <div data-display-dependency="#id_payment_banktransfer__enabled">
                     {% bootstrap_field form.payment_banktransfer_bank_details layout="control" %}
                 </div>
-                {% bootstrap_field form.payment_stripe__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
-                <div data-display-dependency="#id_payment_stripe__enabled">
-                    <div class="alert alert-info">
-                        {% blocktrans trimmed %}
-                            After you saved this page, we will redirect you to Stripe to create or connect an account
-                            there. Once you completed this, you will be taken back to pretix.
-                        {% endblocktrans %}
+                {% if form.payment_stripe__enabled %}
+                    {% bootstrap_field form.payment_stripe__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
+                    <div data-display-dependency="#id_payment_stripe__enabled">
+                        <div class="alert alert-info">
+                            {% blocktrans trimmed %}
+                                After you saved this page, we will redirect you to Stripe to create or connect an account
+                                there. Once you completed this, you will be taken back to pretix.
+                            {% endblocktrans %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
                 <p>&nbsp;</p>
             </div>
         </fieldset>
