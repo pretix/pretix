@@ -62,6 +62,7 @@ def oauth_return(request, *args, **kwargs):
         }))
 
     gs = GlobalSettingsObject()
+    testdata = {}
 
     try:
         resp = requests.post('https://connect.stripe.com/oauth/token', data={
@@ -82,8 +83,27 @@ def oauth_return(request, *args, **kwargs):
         logger.exception('Failed to obtain OAuth token')
         messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
     else:
+        if data['livemode']:
+            try:
+                testresp = requests.post('https://connect.stripe.com/oauth/token', data={
+                    'grant_type': 'refresh_token',
+                    'client_secret': gs.settings.payment_stripe_connect_test_secret_key,
+                    'refresh_token': data['refresh_token']
+                })
+                testdata = testresp.json()
+            except:
+                logger.exception('Failed to obtain OAuth token')
+                messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+                return redirect(reverse('control:event.settings.payment.provider', kwargs={
+                    'organizer': event.organizer.slug,
+                    'event': event.slug,
+                    'provider': 'stripe_settings'
+                }))
+
         if 'error' in data:
             messages.error(request, _('Stripe returned an error: {}').format(data['error_description']))
+        elif data['livemode'] and 'error' in testdata:
+            messages.error(request, _('Stripe returned an error: {}').format(testdata['error_description']))
         else:
             messages.success(request, _('Your Stripe account is now connected to pretix. You can change the settings in '
                                         'detail below.'))
@@ -92,6 +112,11 @@ def oauth_return(request, *args, **kwargs):
             event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
             event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
             event.settings.payment_stripe_connect_user_name = account['business_name']
+
+            if data['livemode']:
+                event.settings.payment_stripe_publishable_test_key = testdata['stripe_publishable_key']
+            else:
+                event.settings.payment_stripe_publishable_test_key = event.settings.payment_stripe_publishable_key
 
             if request.session.get('payment_stripe_oauth_enable', False):
                 event.settings.payment_stripe__enabled = True
@@ -233,6 +258,7 @@ def source_webhook(event, event_json, source_id):
 @require_POST
 def oauth_disconnect(request, **kwargs):
     del request.event.settings.payment_stripe_publishable_key
+    del request.event.settings.payment_stripe_publishable_test_key
     del request.event.settings.payment_stripe_connect_access_token
     del request.event.settings.payment_stripe_connect_refresh_token
     del request.event.settings.payment_stripe_connect_user_id

@@ -5,5 +5,9 @@
 {% compress js %}
     <script type="text/javascript" src="{% static "pretixplugins/stripe/pretix-stripe.js" %}"></script>
 {% endcompress %}
-<script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
+{% if settings.endpoint == "test" and settings.publishable_test_key %}
+    <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_test_key }}</script>
+{% else %}
+    <script type="text/plain" id="stripe_pubkey">{{ settings.publishable_key }}</script>
+{% endif %}
 
