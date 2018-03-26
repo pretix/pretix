@@ -3,6 +3,10 @@
 Stripe
 ======
 
+.. note:: If you use the Hosted version of pretix at pretix.eu, you do not need to copy API keys and create webhooks
+          any more. Instead, you can just click "Connect with Stripe" in pretix and everything will connect
+          automatically.
+
 To integrate Stripe with pretix, you first need to have an active Stripe merchant account. If you do not already have a
 Stripe account, you can create one on `stripe.com`_. Then, click on "API" in the left navigation of the Stripe
 Dashboard. As you can see in the following screenshot, you will be presented with two sets of API keys, one for test
