@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core import signing
 from django.template.loader import get_template
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
@@ -59,18 +60,28 @@ class StripeSettingsHolder(BasePaymentProvider):
                     request.session['payment_stripe_oauth_token'] = get_random_string(32)
 
                 return (
+                    "<p>{}</p>"
                     "<a href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
-                    "&scope=read_write&redirect_uri={}' class='btn btn-primary btn-lg'><span class='fa "
-                    "fa-cc-stripe'></span> {}</a>"
+                    "&scope=read_write&redirect_uri={}' class='btn btn-primary btn-lg'>{}</a>"
                 ).format(
+                    _('To accept payments via Stripe, you will need an account at Stripe. By clicking on the '
+                      'following button, you can either create a new Stripe account connect pretix to an existing '
+                      'one.'),
                     self.settings.connect_client_id,
                     request.session['payment_stripe_oauth_token'],
                     urlquote(build_global_uri('plugins:stripe:oauth.return')),
                     _('Connect with Stripe')
                 )
             else:
-                # TODO: disconnect?
-                return ""
+                return (
+                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
+                ).format(
+                    reverse('plugins:stripe:oauth.disconnect', kwargs={
+                        'organizer': self.event.organizer.slug,
+                        'event': self.event.slug,
+                    }),
+                    _('Disconnect from Stripe')
+                )
         else:
             return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '

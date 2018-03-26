@@ -225,6 +225,24 @@ def source_webhook(event, event_json, source_id):
     return HttpResponse(status=200)
 
 
+@event_permission_required('can_change_event_settings')
+@require_POST
+def oauth_disconnect(request, **kwargs):
+    del request.event.settings.payment_stripe_publishable_key
+    del request.event.settings.payment_stripe_connect_access_token
+    del request.event.settings.payment_stripe_connect_refresh_token
+    del request.event.settings.payment_stripe_connect_user_id
+    del request.event.settings.payment_stripe_connect_user_name
+    request.event.settings.payment_stripe__enabled = False
+    messages.success(request, _('Your Stripe account has been disconnected.'))
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+        'provider': 'stripe_settings'
+    }))
+
+
 @event_permission_required('can_view_orders')
 @require_POST
 def refund(request, **kwargs):
