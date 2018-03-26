@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 11:32+0000\n"
-"PO-Revision-Date: 2018-03-26 11:25+0000\n"
+"PO-Revision-Date: 2018-03-26 11:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -3914,6 +3914,12 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"Anzahl an Tagen, die ein Benutzer nach Abschicken der Bestellung hat, um die "
+"Zahlung abzuschließen. Wenn Sie langsame Zahlungsmethoden wie "
+"Banküberweisung nutzen, empfehlen wir 14 Tage. Wenn Sie nur Echtzeit-"
+"Zahlungsmethoden wie Kreditkarte nutzen, empfehlen wir zwei oder drei Tage "
+"einzustellen, damit Kunden eine fehlgeschlagene Zahlung erneut versuchen "
+"können."
 
 #: pretix/control/forms/event.py:420
 msgid "Last date of payments"
@@ -6598,6 +6604,8 @@ msgid ""
 "In simple terms, this means you need to pay any fees imposed by the payment "
 "providers and cannot pass it on to your customers."
 msgstr ""
+"Einfach gesagt heißt das, dass Sie für die meisten Zahlungsmethoden die "
+"Gebühren selbst zahlen müssen und nicht an Ihre Kunden weitergeben dürfen."
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:10
 msgid ""
@@ -10970,6 +10978,9 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Um Zahlungen mit Stripe zu akzeptieren, benötigen Sie ein Konto bei Stripe. "
+"Mit einem Klick auf diesen Button können Sie entweder ein neues Stripe-Konto "
+"erstellen, oder pretix mit einem bestehenden Stripe-Konto verknüpfen."
 
 #: pretix/plugins/stripe/payment.py:73
 #, fuzzy
@@ -11004,7 +11015,7 @@ msgstr "Stripe Checkout"
 #: pretix/plugins/stripe/payment.py:109
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 #: pretix/plugins/stripe/payment.py:110
 #, fuzzy
@@ -11233,11 +11244,11 @@ msgstr "Stripe meldete ein Ereignis: {}"
 
 #: pretix/plugins/stripe/signals.py:99
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Client-ID"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:113
 #, fuzzy
@@ -11247,11 +11258,11 @@ msgstr "Veröffentlichbarer Schlüssel"
 
 #: pretix/plugins/stripe/signals.py:120
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Geheimer Schlüssel (Testmodus)"
 
 #: pretix/plugins/stripe/signals.py:127
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Connect: Öffentlicher Schlüssel (Testmodus)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -11437,6 +11448,8 @@ msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ihr Stripe-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
+"die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/stripe/views.py:237
 #, fuzzy
