@@ -11,7 +11,10 @@ class SoupTest(TestCase):
     def post_doc(self, *args, **kwargs):
         kwargs['follow'] = True
         response = self.client.post(*args, **kwargs)
-        return BeautifulSoup(response.rendered_content, "lxml")
+        try:
+            return BeautifulSoup(response.rendered_content, "lxml")
+        except AttributeError:
+            return BeautifulSoup(response.content, "lxml")
 
 
 def extract_form_fields(soup):
@@ -36,7 +39,7 @@ def extract_form_fields(soup):
 
     # textareas
     for textarea in soup.findAll('textarea'):
-        data[textarea['name']] = textarea.string or ''
+        data[textarea['name']] = textarea.text or ''
 
     # select fields
     for select in soup.find_all('select'):

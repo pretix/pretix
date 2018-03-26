@@ -1,0 +1,198 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% block title %}{{ request.event.name }}{% endblock %}
+{% block content %}
+    <div class="quick-setup-step">
+        <div class="quick-icon">
+            <span class="fa fa-fw fa-check-circle text-success"></span>
+        </div>
+        <div class="quick-content">
+
+            <h2>{% trans "Congratulations!" %}</h2>
+            <p>
+                <strong>{% trans "You just created an event!" %}</strong>
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    You can scroll down and create your first ticket products quickly, or you can use the navigation
+                    on the left to modify the settings of your event in much more detail.
+                {% endblocktrans %}
+            </p>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <fieldset class="quick-setup-step">
+            <div class="quick-icon">
+                <span class="fa fa-fw fa-ticket text-muted"></span>
+            </div>
+            <div class="quick-content">
+                <legend>{% trans "Create ticket types" %}</legend>
+                <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                    {{ formset.management_form }}
+                    {% bootstrap_formset_errors formset %}
+                    <div class="row hidden-sm hidden-xs" data-formset-form>
+                        <div class="col-md-6">
+                            <strong>{% trans "Ticket name" %}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>{% trans "Price (optional)" %}</strong>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>{% trans "Capacity (optional)" %}</strong>
+                        </div>
+                    </div>
+                    <div data-formset-body id="ticket-type-formset">
+                        {% for iform in formset %}
+                            <div class="row question-option-row" data-formset-form>
+                                <div class="sr-only">
+                                    {{ iform.id }}
+                                    {% bootstrap_field iform.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_form_errors iform %}
+                                    {% bootstrap_field iform.name layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-3">
+                                    {% bootstrap_field iform.default_price addon_after=request.event.currency layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-2">
+                                    {% bootstrap_field iform.quota layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <script type="form-template" data-formset-empty-form>
+                        {% escapescript %}
+                            <div class="row question-option-row" data-formset-form>
+                                <div class="sr-only">
+                                    {{ formset.empty_form.id }}
+                                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-3">
+                                    {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-2">
+                                    {% bootstrap_field formset.empty_form.quota layout='inline' form_group_class="" %}
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                        <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>
+                        {% endescapescript %}
+                    </script>
+                    <div class="row question-option-row helper-width-100">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new ticket type" %}</button>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-3 form-inline form-quicksetup-total-capacity">
+                            <strong>{% trans "Total capacity:" %}</strong>
+                            <span id="total-capacity"></span>
+                            {% bootstrap_field form.total_quota layout="inline" field_class="sr-only" %}
+                            <a href="#" data-toggle="tooltip" title="{% trans 'You can set a limit on the total number of tickets sold for your event, regardless of the ticket type.' %}" id="total-capacity-edit">
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <p>&nbsp;</p>
+                <p class="bigger">
+                    {% blocktrans trimmed %}
+                        If you want to use more advanced features like non-admission products, product variations, custom
+                        quotas, add-on products or want to modify your ticket types in more detail, you can later do so
+                        in the "Products" section in the navigation. Don't worry, you can change everything you input here.
+                    {% endblocktrans %}
+                </p>
+                <p>&nbsp;</p>
+            </div>
+        </fieldset>
+        <fieldset class="quick-setup-step">
+            <div class="quick-icon">
+                <span class="fa fa-fw fa-wrench text-muted"></span>
+            </div>
+            <div class="quick-content">
+                <legend>{% trans "Features" %}</legend>
+                <p class="bigger">
+                    {% blocktrans trimmed %}
+                        We recommend that you take some time to go through the "Settings" part of your event, but if
+                        you're in a hurry and want to get started quickly, here's a short version:
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.ticket_download layout="control" label_class="sr-only" field_class="col-md-12" %}
+                {% bootstrap_field form.waiting_list_enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
+                {% bootstrap_field form.show_quota_left layout="control" label_class="sr-only" field_class="col-md-12" %}
+                {% bootstrap_field form.attendee_names_required layout="control" label_class="sr-only" field_class="col-md-12" %}
+                <p>&nbsp;</p>
+            </div>
+        </fieldset>
+        <fieldset class="quick-setup-step" id="quick-setup-step-payment">
+            <div class="quick-icon">
+                <span class="fa fa-fw fa-money text-muted"></span>
+            </div>
+            <div class="quick-content">
+                <legend>{% trans "Payment" %}</legend>
+                <p class="bigger">
+                    {% blocktrans trimmed %}
+                        pretix supports a
+                        <a href="https://pretix.eu/about/en/features/payment" target="_blank">wide range of payment
+                            providers</a> allowing you to choose the payment methods that fit your workflow best.
+                        Here are just two of them as examples, you can add more in the "Settings" part of your event.
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.payment_banktransfer__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
+                <div data-display-dependency="#id_payment_banktransfer__enabled">
+                    {% bootstrap_field form.payment_banktransfer_bank_details layout="control" %}
+                </div>
+                {% if form.payment_stripe__enabled %}
+                    {% bootstrap_field form.payment_stripe__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
+                    <div data-display-dependency="#id_payment_stripe__enabled">
+                        <div class="alert alert-info">
+                            {% blocktrans trimmed %}
+                                After you saved this page, we will redirect you to Stripe to create or connect an account
+                                there. Once you completed this, you will be taken back to pretix.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                {% endif %}
+                <p>&nbsp;</p>
+            </div>
+        </fieldset>
+        <fieldset class="quick-setup-step">
+            <div class="quick-icon">
+                <span class="fa fa-fw fa-envelope text-muted"></span>
+            </div>
+            <div class="quick-content">
+                <legend>{% trans "Getting in touch with you" %}</legend>
+                <p class="bigger">
+                    {% blocktrans trimmed %}
+                        In case something goes wrong or is unclear, we strongly suggest that you provide ways for your
+                        attendees to contact you:
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.contact_mail layout="control" %}
+                {% bootstrap_field form.imprint_url layout="control" %}
+            </div>
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

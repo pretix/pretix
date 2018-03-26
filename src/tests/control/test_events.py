@@ -48,6 +48,151 @@ class EventsTest(SoupTest):
         self.assertNotIn("31C3", tabletext)
         self.assertNotIn("MRMCD14", tabletext)
 
+    def test_quick_setup_later(self):
+        self.event1.quotas.create(name='foo', size=2)
+        resp = self.client.get('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        self.assertRedirects(resp, '/control/event/%s/%s/' % (self.orga1.slug, self.event1.slug))
+
+    def test_quick_setup_total_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = "300"
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = ""
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = ""
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 1
+        q = self.event1.quotas.first()
+        assert q.name == 'Tickets'
+        assert q.size == 300
+        assert q.items.count() == 2
+
+    def test_quick_setup_single_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = ""
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = "100"
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = "50"
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 2
+        q = self.event1.quotas.first()
+        assert q.name == 'Normal ticket'
+        assert q.size == 100
+        assert q.items.count() == 1
+        q = self.event1.quotas.last()
+        assert q.name == 'Reduced ticket'
+        assert q.size == 50
+        assert q.items.count() == 1
+
+    def test_quick_setup_dual_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = "120"
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = "100"
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = "50"
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 3
+        q = self.event1.quotas.first()
+        assert q.name == 'Normal ticket'
+        assert q.size == 100
+        assert q.items.count() == 1
+        q = self.event1.quotas.last()
+        assert q.name == 'Tickets'
+        assert q.size == 120
+        assert q.items.count() == 2
+
     def test_settings(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
         doc.select("[name=date_to_0]")[0]['value'] = "2013-12-30"

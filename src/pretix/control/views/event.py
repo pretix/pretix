@@ -41,13 +41,15 @@ from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
     EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, TaxRuleForm, TaxRuleLineFormSet,
+    PaymentSettingsForm, ProviderForm, QuickSetupForm,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
+from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
 from . import CreateView, PaginationMixin, UpdateView
@@ -1120,3 +1122,154 @@ class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
                 domain = '%s:%d' % (domain, siteurlsplit.port)
             ctx['urlprefix'] = '%s://%s' % (siteurlsplit.scheme, domain)
         return ctx
+
+
+class QuickSetupView(FormView):
+    template_name = 'pretixcontrol/event/quick_setup.html'
+    permission = 'can_change_event_settings'
+    form_class = QuickSetupForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.event.items.exists() or request.event.quotas.exists():
+            messages.info(request, _('Your event is not empty, you need to set it up manually.'))
+            return redirect(reverse('control:event.index', kwargs={
+                'organizer': request.event.organizer.slug,
+                'event': request.event.slug
+            }))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['formset'] = self.formset
+        return ctx
+
+    def get_initial(self):
+        return {
+            'waiting_list_enabled': True,
+            'ticket_download': True,
+            'contact_mail': self.request.event.settings.contact_mail,
+            'imprint_url': self.request.event.settings.imprint_url,
+        }
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    @transaction.atomic
+    def form_valid(self, form):
+        plugins_active = self.request.event.get_plugins()
+        if form.cleaned_data['ticket_download']:
+            if 'pretix.plugins.ticketoutputpdf' not in plugins_active:
+                self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                              data={'plugin': 'pretix.plugins.ticketoutputpdf'})
+                plugins_active.append('pretix.plugins.ticketoutputpdf')
+            self.request.event.settings.ticket_download = True
+            self.request.event.settings.ticketoutput_pdf__enabled = True
+
+        if form.cleaned_data['payment_banktransfer__enabled']:
+            if 'pretix.plugins.banktransfer' not in plugins_active:
+                self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                              data={'plugin': 'pretix.plugins.banktransfer'})
+                plugins_active.append('pretix.plugins.banktransfer')
+            self.request.event.settings.payment_banktransfer__enabled = True
+            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data['payment_banktransfer_bank_details']
+
+        if form.cleaned_data.get('payment_stripe__enabled', None):
+            if 'pretix.plugins.stripe' not in plugins_active:
+                self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                              data={'plugin': 'pretix.plugins.stripe'})
+                plugins_active.append('pretix.plugins.stripe')
+
+        self.request.event.settings.show_quota_left = form.cleaned_data['show_quota_left']
+        self.request.event.settings.waiting_list_enabled = form.cleaned_data['waiting_list_enabled']
+        self.request.event.settings.attendee_names_required = form.cleaned_data['attendee_names_required']
+        self.request.event.settings.contact_mail = form.cleaned_data['contact_mail']
+        self.request.event.settings.imprint_url = form.cleaned_data['imprint_url']
+        self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
+            k: self.request.event.settings.get(k) for k in form.changed_data
+        })
+
+        items = []
+        category = None
+        tax_rule = self.request.event.tax_rules.first()
+        if any(f not in self.formset.deleted_forms for f in self.formset):
+            category = self.request.event.categories.create(
+                name=LazyI18nString.from_gettext(ugettext('Tickets'))
+            )
+            category.log_action('pretix.event.category.added', data={'name': ugettext('Tickets')},
+                                user=self.request.user)
+
+        for i, f in enumerate(self.formset):
+            if f in self.formset.deleted_forms:
+                continue
+
+            item = self.request.event.items.create(
+                name=f.cleaned_data['name'],
+                category=category,
+                active=True,
+                default_price=f.cleaned_data['default_price'] or 0,
+                tax_rule=tax_rule,
+                admission=True,
+                position=i,
+            )
+            item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
+            if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
+                quota = self.request.event.quotas.create(
+                    name=str(f.cleaned_data['name']),
+                    size=f.cleaned_data['quota'],
+                )
+                quota.log_action('pretix.event.quota.added', user=self.request.user, data=dict(f.cleaned_data))
+                quota.items.add(item)
+            items.append(item)
+
+        if form.cleaned_data['total_quota']:
+            quota = self.request.event.quotas.create(
+                name=ugettext('Tickets'),
+                size=form.cleaned_data['total_quota']
+            )
+            quota.log_action('pretix.event.quota.added', user=self.request.user, data={
+                'name': ugettext('Tickets'),
+                'size': quota.size
+            })
+            quota.items.add(*items)
+
+        self.request.event.plugins = ",".join(plugins_active)
+        self.request.event.save()
+        messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
+                                         'or take your event live to start selling!'))
+
+        if form.cleaned_data.get('payment_stripe__enabled', False):
+            self.request.session['payment_stripe_oauth_enable'] = True
+            return redirect(StripeSettingsHolder(self.request.event).get_connect_url(self.request))
+
+        return redirect(reverse('control:event.index', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        }))
+
+    @cached_property
+    def formset(self):
+        return QuickSetupProductFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            event=self.request.event,
+            initial=[
+                {
+                    'name': LazyI18nString.from_gettext(ugettext('Regular ticket')),
+                    'default_price': Decimal('35.00'),
+                    'quota': 100,
+                },
+                {
+                    'name': LazyI18nString.from_gettext(ugettext('Reduced ticket')),
+                    'default_price': Decimal('29.00'),
+                    'quota': 50,
+                },
+            ]
+        )

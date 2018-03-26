@@ -220,20 +220,11 @@ def welcome_wizard_widget(sender, **kwargs):
 
     if not sender.items.exists():
         ctx.update({
-            'subtitle': _('Get started by creating a product'),
-            'text': _('The first thing you need for selling tickets to your event is one or more "products" your '
-                      'participants can choose from. A product can be a ticket or anything else that you want to sell, '
-                      'e.g. additional merchandise in form of t-shirts.'),
-            'button_text': _('Create a first product'),
-            'button_url': reverse('control:event.items.add', kwargs=kwargs)
-        })
-    elif not sender.quotas.exists():
-        ctx.update({
-            'subtitle': _('Create quotas that apply to your products'),
-            'text': _('Your tickets will only be available for sale if you create a matching quota, i.e. if you tell '
-                      'pretix how many tickets it should sell for your event.'),
-            'button_text': _('Create a first quota'),
-            'button_url': reverse('control:event.items.quotas.add', kwargs=kwargs)
+            'subtitle': _('Get started with our setup tool'),
+            'text': _('To start selling tickets, you need to create products or quotas. The fastest way to create '
+                      'this is to use our setup tool.'),
+            'button_text': _('Set up event'),
+            'button_url': reverse('control:event.quick', kwargs=kwargs)
         })
     else:
         return []
