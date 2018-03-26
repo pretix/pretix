@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
@@ -113,7 +114,7 @@ class TaxRule(LoggedModel):
 
     def clean(self):
         if self.eu_reverse_charge and not self.home_country:
-            raise ValueError(_('You need to set your home country to use the reverse charge feature.'))
+            raise ValidationError(_('You need to set your home country to use the reverse charge feature.'))
 
     def __str__(self):
         if self.price_includes_tax:
