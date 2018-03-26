@@ -90,6 +90,7 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
 
 
 settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
+settings_hierarkey.add_default('payment_stripe_cc_3ds_mode', 'recommended', str)
 
 
 @receiver(register_global_settings, dispatch_uid='stripe_global_settings')
