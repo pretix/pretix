@@ -83,7 +83,7 @@ def oauth_return(request, *args, **kwargs):
         logger.exception('Failed to obtain OAuth token')
         messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
     else:
-        if data['livemode']:
+        if 'error' not in data and data['livemode']:
             try:
                 testresp = requests.post('https://connect.stripe.com/oauth/token', data={
                     'grant_type': 'refresh_token',
@@ -111,7 +111,8 @@ def oauth_return(request, *args, **kwargs):
             # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
             event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
             event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
-            event.settings.payment_stripe_connect_user_name = account['business_name']
+            if account.get('business_name'):
+                event.settings.payment_stripe_connect_user_name = account['business_name']
 
             if data['livemode']:
                 event.settings.payment_stripe_publishable_test_key = testdata['stripe_publishable_key']
