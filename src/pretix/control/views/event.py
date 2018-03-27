@@ -1207,6 +1207,7 @@ class QuickSetupView(FormView):
             category.log_action('pretix.event.category.added', data={'name': ugettext('Tickets')},
                                 user=self.request.user)
 
+        subevent = self.request.event.subevents.first()
         for i, f in enumerate(self.formset):
             if f in self.formset.deleted_forms:
                 continue
@@ -1224,6 +1225,7 @@ class QuickSetupView(FormView):
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
                 quota = self.request.event.quotas.create(
                     name=str(f.cleaned_data['name']),
+                    subevent=subevent,
                     size=f.cleaned_data['quota'],
                 )
                 quota.log_action('pretix.event.quota.added', user=self.request.user, data=dict(f.cleaned_data))
@@ -1233,7 +1235,8 @@ class QuickSetupView(FormView):
         if form.cleaned_data['total_quota']:
             quota = self.request.event.quotas.create(
                 name=ugettext('Tickets'),
-                size=form.cleaned_data['total_quota']
+                size=form.cleaned_data['total_quota'],
+                subevent=subevent,
             )
             quota.log_action('pretix.event.quota.added', user=self.request.user, data={
                 'name': ugettext('Tickets'),
