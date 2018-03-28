@@ -300,6 +300,10 @@ images_config = {
     'default_image_width': '250px'
 }
 
+linkcheck_ignore = [
+    r'http://localhost.*', r'.*yourdomain.*', r'https://en.wikipedia.org', 'https://pretix.eu/',
+]
+
 # -- Options for Spelling output ------------------------------------------
 if HAS_PYENCHANT:
     # String specifying the language, as understood by PyEnchant and enchant.
