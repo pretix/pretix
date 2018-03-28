@@ -14,13 +14,14 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import Quota, SubEventItem, SubEventItemVariation
+from pretix.base.reldate import RelativeDateWrapper, RelativeDate
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, SubEventForm, SubEventItemForm,
     SubEventItemVariationForm, SubEventMetaValueForm,
-)
+    SubEventBulkForm)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
@@ -92,7 +93,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
     def get(self, request, *args, **kwargs):
         if self.get_object().orderposition_set.count() > 0:
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
-                                                  'placed.'))
+                                                              'placed.'))
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
@@ -103,7 +104,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
 
         if self.object.orderposition_set.count() > 0:
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
-                                                  'placed.'))
+                                                              'placed.'))
             return HttpResponseRedirect(self.get_success_url())
         elif not self.object.allow_delete():  # checking if this is the last date in the event series
             messages.error(request, pgettext_lazy('subevent', 'The last date of an event series can not be deleted.'))
@@ -438,3 +439,99 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         self.object = form.instance
         self.save_meta()
         return ret
+
+    @cached_property
+    def meta_forms(self):
+        def clone(o):
+            o = copy.copy(o)
+            o.pk = None
+            return o
+
+        if self.copy_from:
+            val_instances = {
+                v.property_id: clone(v) for v in self.copy_from.meta_values.all()
+            }
+            print(val_instances)
+        else:
+            val_instances = {}
+
+        formlist = []
+
+        for p in self.request.organizer.meta_properties.all():
+            formlist.append(self._make_meta_form(p, val_instances))
+        return formlist
+
+
+class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):
+    model = SubEvent
+    template_name = 'pretixcontrol/subevents/bulk.html'
+    permission = 'can_change_settings'
+    context_object_name = 'subevent'
+    form_class = SubEventBulkForm
+
+    def post(self, request, *args, **kwargs):
+        self.object = SubEvent(event=self.request.event)
+        form = self.get_form()
+        if self.is_valid(form):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.subevents', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    @cached_property
+    def meta_forms(self):
+        def clone(o):
+            o = copy.copy(o)
+            o.pk = None
+            return o
+
+        if self.copy_from:
+            val_instances = {
+                v.property_id: clone(v) for v in self.copy_from.meta_values.all()
+            }
+            print(val_instances)
+        else:
+            val_instances = {}
+
+        formlist = []
+
+        for p in self.request.organizer.meta_properties.all():
+            formlist.append(self._make_meta_form(p, val_instances))
+        return formlist
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        initial = {}
+        kwargs['event'] = self.request.event
+        tz = self.request.event.timezone
+        if self.copy_from:
+            i = copy.copy(self.copy_from)
+            i.pk = None
+            kwargs['instance'] = i
+            initial['time_from'] = i.date_from.astimezone(tz).time()
+            initial['time_to'] = i.date_to.astimezone(tz).time() if i.date_to else None
+            initial['time_admission'] = i.date_admission.astimezone(tz).time() if i.date_admission else None
+            initial['presale_start'] = RelativeDateWrapper(RelativeDate(
+                days_before=(i.date_from.astimezone(tz).date() - i.presale_start.astimezone(tz).date()).days,
+                base_date_name='date_from',
+                time=i.presale_start.astimezone(tz).time()
+            )) if i.presale_start else None
+            initial['presale_end'] = RelativeDateWrapper(RelativeDate(
+                days_before=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
+                base_date_name='date_from',
+                time=i.presale_end.astimezone(tz).time()
+            )) if i.presale_start else None
+        else:
+            kwargs['instance'] = SubEvent(event=self.request.event)
+        kwargs['initial'] = initial
+        return kwargs
+
+    @transaction.atomic
+    def form_valid(self, form):
+        # TODO: bulk save
+        return

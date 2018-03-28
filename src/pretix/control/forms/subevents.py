@@ -1,10 +1,12 @@
 from django import forms
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
+from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
@@ -44,6 +46,42 @@ class SubEventForm(I18nModelForm):
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
         }
+
+
+class SubEventBulkForm(SubEventForm):
+    time_from = forms.TimeField(
+        label=_('Event start time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'})
+    )
+    time_to = forms.TimeField(
+        label=_('Event end time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+    time_admission = forms.TimeField(
+        label=_('Admission time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+    presale_start = RelativeDateTimeField(
+        label=_('Start of presale'),
+        help_text=_('Optional. No products will be sold before this date.'),
+        required=False
+    )
+    presale_end = RelativeDateTimeField(
+        label=_('End of presale'),
+        help_text=_('Optional. No products will be sold after this date. If you do not set this value, the presale '
+                    'will end after the end date of your event.'),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs['event']
+        super().__init__(*args, **kwargs)
+        self.fields['location'].widget.attrs['rows'] = '3'
+        del self.fields['date_from']
+        del self.fields['date_to']
+        del self.fields['date_admission']
 
 
 class SubEventItemOrVariationFormMixin:
