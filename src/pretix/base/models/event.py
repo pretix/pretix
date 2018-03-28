@@ -554,9 +554,7 @@ class Event(EventMixin, LoggedModel):
             Q(all_events=True) | Q(limit_events__pk=self.pk)
         )
 
-        return User.objects.annotate(twp=Exists(team_with_perm)).filter(
-            Q(is_superuser=True) | Q(twp=True)
-        )
+        return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
 
     def allow_delete(self):
         return not self.orders.exists() and not self.invoices.exists()

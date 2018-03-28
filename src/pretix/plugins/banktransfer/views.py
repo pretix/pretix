@@ -488,7 +488,7 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequired
     def order_qs(self):
         all = self.request.user.teams.filter(organizer=self.request.organizer, can_change_orders=True,
                                              can_view_orders=True, all_events=True).exists()
-        if self.request.user.is_superuser or all:
+        if self.request.user.has_active_staff_session(self.request.session.session_key) or all:
             return Order.objects.filter(event__organizer=self.request.organizer)
         else:
             return Order.objects.filter(

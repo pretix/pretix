@@ -18,7 +18,7 @@ def event_list(request):
         page = int(request.GET.get('page', '1'))
     except ValueError:
         page = 1
-    qs = request.user.get_events_with_any_permission().filter(
+    qs = request.user.get_events_with_any_permission(request).filter(
         Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) |
         Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
     ).annotate(
@@ -107,7 +107,7 @@ def organizer_select2(request):
     qs = Organizer.objects.all()
     if term:
         qs = qs.filter(Q(name__icontains=term) | Q(slug__icontains=term))
-    if not request.user.is_superuser:
+    if not request.user.has_active_staff_session(request.session.session_key):
         qs = qs.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
 
     total = qs.count()
@@ -130,7 +130,7 @@ def organizer_select2(request):
 
 
 def users_select2(request):
-    if not request.user.is_superuser:
+    if not request.user.has_active_staff_session(request.session.session_key):
         raise PermissionDenied()
 
     term = request.GET.get('query', '')

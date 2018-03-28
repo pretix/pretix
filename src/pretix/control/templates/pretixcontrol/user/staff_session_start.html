@@ -1,0 +1,22 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Admin mode" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Admin mode" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            To perform this action, you need to start an administrative session. Everything you do in that session
+            will be logged and you will later be asked to fill in a comment on what you did in your session for later
+            reference.
+        {% endblocktrans %}
+    </p>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Start session" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -65,6 +65,7 @@ def logged_in_client(client, event):
     )
     t.members.add(user)
     client.force_login(user)
+    user.staffsession_set.create(date_start=now(), session_key=client.session.session_key)
     return client
 
 

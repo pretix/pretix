@@ -8,7 +8,9 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
     GlobalSettingsForm, UpdateSettingsForm,
 )
-from pretix.control.permissions import AdministratorPermissionRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
+)
 
 
 class GlobalSettingsView(AdministratorPermissionRequiredMixin, FormView):
@@ -28,7 +30,7 @@ class GlobalSettingsView(AdministratorPermissionRequiredMixin, FormView):
         return reverse('control:global.settings')
 
 
-class UpdateCheckView(AdministratorPermissionRequiredMixin, FormView):
+class UpdateCheckView(StaffMemberRequiredMixin, FormView):
     template_name = 'pretixcontrol/global_update.html'
     form_class = UpdateSettingsForm
 

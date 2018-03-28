@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import (
 )
 from django.core import mail as djmail
 from django.test import TestCase, override_settings
+from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from u2flib_server.jsapi import JSONDict
@@ -607,3 +608,105 @@ class SessionTimeOutTest(TestCase):
         self.client.defaults['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) Something else'
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 302)
+
+
+@pytest.fixture
+def user():
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+    return user
+
+
+@pytest.mark.django_db
+def test_impersonate(user, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    user.is_staff = True
+    user.save()
+    ss = user.staffsession_set.create(date_start=now(), session_key=client.session.session_key)
+    t1 = int(time.time()) - 5
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = t1
+    session['pretix_auth_last_used'] = t1
+    session.save()
+    user2 = User.objects.create_user('dummy2@dummy.dummy', 'dummy')
+    response = client.post('/control/users/{user}/impersonate'.format(user=user2.pk), follow=True)
+    assert b'dummy2@' in response.content
+    response = client.get('/control/global/settings/')
+    assert response.status_code == 403
+    response = client.get('/control/')
+    response = client.post('/control/users/impersonate/stop', follow=True)
+    assert b'dummy@' in response.content
+    assert b'dummy2@' not in response.content
+    response = client.get('/control/global/settings/')
+    assert response.status_code == 200  # staff session is preserved
+    assert ss.logs.filter(url='/control/', impersonating=user2).exists()
+
+
+@pytest.mark.django_db
+def test_impersonate_require_recent_auth(user, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    user.is_staff = True
+    user.save()
+    user.staffsession_set.create(date_start=now(), session_key=client.session.session_key)
+    t1 = int(time.time()) - 5 * 3600
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = t1
+    session['pretix_auth_last_used'] = t1
+    session.save()
+    user2 = User.objects.create_user('dummy2@dummy.dummy', 'dummy')
+    response = client.post('/control/users/{user}/impersonate'.format(user=user2.pk), follow=True)
+    assert b'dummy2@' not in response.content
+
+
+@pytest.mark.django_db
+def test_staff_session(user, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    user.is_staff = True
+    user.save()
+    t1 = int(time.time()) - 5
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = t1
+    session['pretix_auth_last_used'] = t1
+    session.save()
+    response = client.get('/control/global/settings/')
+    assert response.status_code == 302
+    response = client.post('/control/sudo/')
+    assert response['Location'] == '/control/'
+    response = client.get('/control/global/settings/')
+    assert response.status_code == 200
+    client.post('/control/sudo/stop', follow=True)
+    response = client.get('/control/global/settings/')
+    assert response.status_code == 302
+    assert user.staffsession_set.last().logs.filter(url='/control/global/settings/').exists()
+
+
+@pytest.mark.django_db
+def test_staff_session_require_recent_auth(user, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    user.is_staff = True
+    user.save()
+    t1 = int(time.time()) - 5 * 3600
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = t1
+    session['pretix_auth_last_used'] = t1
+    session.save()
+    response = client.post('/control/sudo/')
+    assert response['Location'].startswith('/control/reauth/')
+
+
+@pytest.mark.django_db
+def test_staff_session_require_staff(user, client):
+    user.is_staff = False
+    user.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    t1 = int(time.time()) - 5
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = t1
+    session['pretix_auth_last_used'] = t1
+    session.save()
+    response = client.post('/control/sudo/')
+    assert response.status_code == 403

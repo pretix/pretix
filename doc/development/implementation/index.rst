@@ -16,4 +16,5 @@ Contents:
    settings
    background
    email
+   permissions
    logging

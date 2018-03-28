@@ -70,6 +70,10 @@ Example::
     that are used to print tax amounts in the customer currency on invoices for some currencies. Set to ``off`` to
     disable this feature. Defaults to ``on``.
 
+``audit_comments``
+    Enables or disables nagging staff users for leaving comments on their sessions for auditability.
+    Defaults to ``off``.
+
 
 Locale settings
 ---------------

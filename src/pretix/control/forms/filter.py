@@ -234,7 +234,7 @@ class OrderSearchFilterForm(OrderFilterForm):
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
-        if request.user.is_superuser:
+        if request.user.has_active_staff_session(request.session.session_key):
             self.fields['organizer'].queryset = Organizer.objects.all()
         else:
             self.fields['organizer'].queryset = Organizer.objects.filter(
@@ -393,7 +393,7 @@ class EventFilterForm(FilterForm):
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
-        if request.user.is_superuser:
+        if request.user.has_active_staff_session(request.session.session_key):
             self.fields['organizer'].queryset = Organizer.objects.all()
         else:
             self.fields['organizer'].queryset = Organizer.objects.filter(
@@ -583,9 +583,9 @@ class UserFilterForm(FilterForm):
             qs = qs.filter(is_active=False)
 
         if fdata.get('superuser') == 'yes':
-            qs = qs.filter(is_superuser=True)
+            qs = qs.filter(is_staff=True)
         elif fdata.get('superuser') == 'no':
-            qs = qs.filter(is_superuser=False)
+            qs = qs.filter(is_staff=False)
 
         if fdata.get('query'):
             qs = qs.filter(

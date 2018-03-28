@@ -38,7 +38,7 @@ class OrganizerList(PaginationMixin, ListView):
         qs = Organizer.objects.all()
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
-        if self.request.user.is_superuser:
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
             return qs
         else:
             return qs.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
@@ -219,7 +219,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        if self.request.user.is_superuser:
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
             kwargs['domain'] = True
         return kwargs
 
@@ -271,7 +271,7 @@ class OrganizerCreate(CreateView):
     context_object_name = 'organizer'
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_superuser:
+        if not request.user.has_active_staff_session(self.request.session.session_key):
             raise PermissionDenied()  # TODO
         return super().dispatch(request, *args, **kwargs)
 

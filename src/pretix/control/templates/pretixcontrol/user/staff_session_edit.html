@@ -1,0 +1,47 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Staff session" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Session notes" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.comment layout='horizontal' %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+    <h1>{% trans "Audit log" %}</h1>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Start date" %}</dt>
+        <dd>{{ session.date_start|date:"SHORT_DATETIME_FORMAT" }}</dd>
+        <dt>{% trans "End date" %}</dt>
+        <dd>{{ session.date_end|date:"SHORT_DATETIME_FORMAT" }}</dd>
+        <dt>{% trans "User" %}</dt>
+        <dd>{{ session.user.email }}</dd>
+    </dl>
+    <table class="table table-condensed">
+    <thead>
+    <tr>
+        <th>{% trans "Timestamp" %}</th>
+        <th>{% trans "Method" %}</th>
+        <th>{% trans "URL" %}</th>
+        <th>{% trans "On behalf of" %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for log in logs %}
+        <tr>
+        <td>{{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+        <td>{{ log.method }}</td>
+        <td>{{ log.url }}</td>
+        <td>{{ log.impersonating|default:"" }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+    </table>
+{% endblock %}

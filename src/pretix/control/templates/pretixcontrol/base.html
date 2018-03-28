@@ -151,6 +151,22 @@
                         </li>
                     {% endfor %}
 
+                    {% if request.user.is_staff and not staff_session %}
+                        <li>
+                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link" id="button-sudo">
+                                    <i class="fa fa-id-card"></i> {% trans "Admin mode" %}
+                                </button>
+                            </form>
+                        </li>
+                    {% elif request.user.is_staff and staff_session %}
+                        <li>
+                            <a href="{% url 'control:user.sudo.stop' %}" class="danger">
+                                <i class="fa fa-id-card"></i> {% trans "End admin session" %}
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if warning_update_available %}
                         <li>
                             <a href="{% url 'control:global.update' %}" class="danger">
@@ -191,7 +207,7 @@
                                         {% trans "Dashboard" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:global.settings' %}"
                                                 {% if "global.settings" in url_name %}class="active"{% endif %}>
@@ -219,12 +235,19 @@
                                         {% trans "Order search" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:users' %}"
-                                                {% if "users" in url_name %}class="active"{% endif %}>
+                                           {% if "users" in url_name %}class="active"{% endif %}>
                                             <i class="fa fa-user fa-fw"></i>
                                             {% trans "Users" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'control:user.sudo.list' %}"
+                                                {% if "sudo" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-id-card fa-fw"></i>
+                                            {% trans "Admin sessions" %}
                                         </a>
                                     </li>
                                 {% endif %}
@@ -260,6 +283,21 @@
                     </div>
                 </div>
             </nav>
+            {% if staff_need_to_explain %}
+                <div class="impersonate-warning">
+                    <span class="fa fa-id-card"></span>
+                    {% blocktrans trimmed %}
+                        Please leave a short comment on what you did in the following admin sessions:
+                    {% endblocktrans %}
+                    <ul>
+                        {% for s in staff_need_to_explain %}
+                            <li>
+                                <a href="{% url "control:user.sudo.edit" id=s.pk %}">#{{ s.pk }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
             {% if request|is_hijacked %}
                 <div class="impersonate-warning">
                     <span class="fa fa-user-secret"></span>

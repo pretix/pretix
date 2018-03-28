@@ -8,6 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.models import User
+from pretix.base.models.auth import StaffSession
+
+
+class StaffSessionForm(forms.ModelForm):
+    class Meta:
+        model = StaffSession
+        fields = ['comment']
 
 
 class UserEditForm(forms.ModelForm):
@@ -41,7 +48,7 @@ class UserEditForm(forms.ModelForm):
             'email',
             'require_2fa',
             'is_active',
-            'is_superuser'
+            'is_staff'
         ]
 
     def __init__(self, *args, **kwargs):

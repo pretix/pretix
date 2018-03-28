@@ -248,12 +248,13 @@ def event_index(request, organizer, event):
     for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent):
         widgets.extend(result)
 
-    can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders')
+    can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
+                                                          request=request)
     qs = request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders'):
+    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders', request=request):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers'):
+    if not request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers', request=request):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
 
     a_qs = request.event.requiredaction_set.filter(done=False)
@@ -271,7 +272,7 @@ def event_index(request, organizer, event):
     return render(request, 'pretixcontrol/event/index.html', ctx)
 
 
-def annotated_event_query(user):
+def annotated_event_query(request):
     active_orders = Order.objects.filter(
         event=OuterRef('pk'),
         status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
@@ -285,7 +286,7 @@ def annotated_event_query(user):
         event=OuterRef('pk'),
         done=False
     )
-    qs = user.get_events_with_any_permission().annotate(
+    qs = request.user.get_events_with_any_permission(request).annotate(
         order_count=Subquery(active_orders, output_field=IntegerField()),
         has_ra=Exists(required_actions)
     ).annotate(
@@ -299,7 +300,7 @@ def annotated_event_query(user):
     return qs
 
 
-def widgets_for_event_qs(qs, user, nmax):
+def widgets_for_event_qs(request, qs, user, nmax):
     widgets = []
 
     # Get set of events where we have the permission to show the # of orders
@@ -370,7 +371,7 @@ def widgets_for_event_qs(qs, user, nmax):
                         orders_text=ungettext('{num} order', '{num} orders', event.order_count or 0).format(
                             num=event.order_count or 0
                         )
-                    ) if user.is_superuser or event.pk in events_with_orders else ''
+                    ) if user.has_active_staff_session(request.session.session_key) or event.pk in events_with_orders else ''
                 ),
                 daterange=dr,
                 status=status[1],
@@ -402,7 +403,8 @@ def user_index(request):
     ctx = {
         'widgets': rearrange(widgets),
         'upcoming': widgets_for_event_qs(
-            annotated_event_query(request.user).filter(
+            request,
+            annotated_event_query(request).filter(
                 Q(has_subevents=False) &
                 Q(
                     Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
@@ -413,7 +415,8 @@ def user_index(request):
             7
         ),
         'past': widgets_for_event_qs(
-            annotated_event_query(request.user).filter(
+            request,
+            annotated_event_query(request).filter(
                 Q(has_subevents=False) &
                 Q(
                     Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
@@ -424,7 +427,8 @@ def user_index(request):
             8
         ),
         'series': widgets_for_event_qs(
-            annotated_event_query(request.user).filter(
+            request,
+            annotated_event_query(request).filter(
                 has_subevents=True
             ).order_by('-order_to'),
             request.user,
