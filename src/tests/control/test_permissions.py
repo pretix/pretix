@@ -157,7 +157,10 @@ def test_superuser_required(perf_patch, client, env, url):
     env[1].is_staff = True
     env[1].save()
     response = client.get('/control/' + url)
-    assert response.status_code == 403
+    if response.status_code == 302:
+        assert '/sudo/' in response['Location']
+    else:
+        assert response.status_code == 403
     env[1].staffsession_set.create(date_start=now(), session_key=client.session.session_key)
     response = client.get('/control/' + url)
     assert response.status_code in (200, 302, 404)

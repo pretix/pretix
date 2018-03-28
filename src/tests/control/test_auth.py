@@ -671,14 +671,14 @@ def test_staff_session(user, client):
     session['pretix_auth_last_used'] = t1
     session.save()
     response = client.get('/control/global/settings/')
-    assert response.status_code == 403
+    assert response.status_code == 302
     response = client.post('/control/sudo/')
     assert response['Location'] == '/control/'
     response = client.get('/control/global/settings/')
     assert response.status_code == 200
     client.post('/control/sudo/stop', follow=True)
     response = client.get('/control/global/settings/')
-    assert response.status_code == 403
+    assert response.status_code == 302
     assert user.staffsession_set.last().logs.filter(url='/control/global/settings/').exists()
 
 
