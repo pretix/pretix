@@ -163,7 +163,7 @@ Within a view on the ``/control`` subpath, the results of these two methods are 
         …
     {% endif %}
 
-You can also do the reverse lookup to get any events a user has access to::
+You can also do the reverse to get any events a user has access to::
 
     >>> user.get_events_with_permission('can_change_event_settings', request=request)
     <QuerySet: …>
@@ -189,6 +189,6 @@ staff mode is active. You can check if a user is in staff mode using their sessi
     >>> user.has_active_staff_session(request.session.session_key)
     False
 
-Staff mode has a hard time limited and during staff mode, a middleware will log all requests made by that user. Later,
+Staff mode has a hard time limit and during staff mode, a middleware will log all requests made by that user. Later,
 the user is able to also save a message to comment on what they did in their administrative session. This feature is
 intended to help compliance with data protection rules as imposed e.g. by GDPR.
