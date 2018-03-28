@@ -248,7 +248,7 @@ class Item(LoggedModel):
     )
     picture = models.ImageField(
         verbose_name=_("Product picture"),
-        null=True, blank=True,
+        null=True, blank=True, max_length=255,
         upload_to=itempicture_upload_to
     )
     available_from = models.DateTimeField(
