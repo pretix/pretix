@@ -13,7 +13,7 @@ def set_is_staff(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0085_auto_20180312_1119'),
+        ('pretixbase', '0086_auto_20180320_1219'),
     ]
 
     operations = [
