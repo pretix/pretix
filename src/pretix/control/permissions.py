@@ -1,4 +1,7 @@
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 
@@ -89,6 +92,8 @@ def administrator_permission_required():
                 # just a double check, should not ever happen
                 raise PermissionDenied()
             if not request.user.has_active_staff_session(request.session.session_key):
+                if request.user.is_staff:
+                    return redirect(reverse('control:user.sudo') + '?next=' + urlquote(request.path))
                 raise PermissionDenied(_('You do not have permission to view this content.'))
             return function(request, *args, **kw)
         return wrapper

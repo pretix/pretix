@@ -71,7 +71,7 @@ Example::
     disable this feature. Defaults to ``on``.
 
 ``audit_comments``
-    Enables or disables nagging admin users for leaving comments on their sessions for auditability.
+    Enables or disables nagging staff users for leaving comments on their sessions for auditability.
     Defaults to ``off``.
 
 

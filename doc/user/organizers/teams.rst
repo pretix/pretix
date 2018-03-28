@@ -1,3 +1,5 @@
+.. _user-teams:
+
 Teams
 =====
 

@@ -31,6 +31,9 @@ Organizers and events
 .. autoclass:: pretix.base.models.Team
    :members:
 
+.. autoclass:: pretix.base.models.TeamAPIToken
+   :members:
+
 .. autoclass:: pretix.base.models.RequiredAction
    :members:
 

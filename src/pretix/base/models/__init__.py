@@ -19,7 +19,9 @@ from .orders import (
     cachedcombinedticket_name, cachedticket_name, generate_position_secret,
     generate_secret,
 )
-from .organizer import Organizer, Organizer_SettingsStore, Team, TeamInvite
+from .organizer import (
+    Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,
+)
 from .tax import TaxRule
 from .vouchers import Voucher
 from .waitinglist import WaitingListEntry
