@@ -21,7 +21,7 @@ from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, SubEventForm, SubEventItemForm,
     SubEventItemVariationForm, SubEventMetaValueForm,
-    SubEventBulkForm)
+    SubEventBulkForm, RRuleFormSet)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
@@ -484,6 +484,17 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         })
 
     @cached_property
+    def rrule_formset(self):
+        return RRuleFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['rrule_formset'] = self.rrule_formset
+        return ctx
+
+    @cached_property
     def meta_forms(self):
         def clone(o):
             o = copy.copy(o)
@@ -494,7 +505,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             val_instances = {
                 v.property_id: clone(v) for v in self.copy_from.meta_values.all()
             }
-            print(val_instances)
         else:
             val_instances = {}
 

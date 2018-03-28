@@ -1,12 +1,13 @@
 from django import forms
+from django.forms import formset_factory
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
-from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.reldate import RelativeDateTimeField
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
@@ -193,3 +194,139 @@ class CheckinListFormSet(I18nInlineFormSet):
         )
         self.add_fields(form, None)
         return form
+
+
+class RRuleForm(forms.Form):
+    # TODO: calendar.setfirstweekday
+    exclude = forms.BooleanField(
+        label=_('Exclude these dates instead of adding them.'),
+        required=False
+    )
+    freq = forms.ChoiceField(
+        choices=[
+            ('yearly', _('years')),
+            ('monthly', _('months')),
+            ('weekly', _('weekly')),
+            ('daily', _('daily')),
+        ]
+    )
+    interval = forms.IntegerField(
+        label=_('Interval'),
+        initial=1
+    )
+    dtstart = forms.DateField(
+        label=_('Start date'),
+        required=False,
+        widget=forms.DateInput(
+            attrs={
+                'class': 'datepickerfield'
+            }
+        )
+    )
+
+    count = forms.IntegerField(
+        label=_('Number of repititions'),
+        required=False
+    )
+    until = forms.DateField(
+        label=_('Last date')
+    )
+
+    yearly_bysetpos = forms.ChoiceField(
+        choices=[
+            ('1', pgettext_lazy('rrule', 'first')),
+            ('2', pgettext_lazy('rrule', 'second')),
+            ('3', pgettext_lazy('rrule', 'third')),
+            ('-1', pgettext_lazy('rrule', 'last')),
+        ],
+        required=False
+    )
+    yearly_same = forms.ChoiceField(
+        choices=[
+            ('on', 'on'),
+            ('off', 'off'),
+        ]
+    )
+    yearly_byweekday = forms.ChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+            ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
+            ('MO,TU,WE,TH,FR', _('Weekday')),
+            ('SA,SU', _('Weekend day')),
+        ],
+        required=False
+    )
+    yearly_bymonth = forms.ChoiceField(
+        choices=[
+            ('1', _('January')),
+            ('2', _('February')),
+            ('3', _('March')),
+            ('4', _('April')),
+            ('5', _('May')),
+            ('6', _('June')),
+            ('7', _('July')),
+            ('8', _('August')),
+            ('9', _('September')),
+            ('10', _('October')),
+            ('11', _('November')),
+            ('12', _('December')),
+        ],
+        required=False
+    )
+
+    monthly_same = forms.ChoiceField(
+        choices=[
+            ('on', 'on'),
+            ('off', 'off'),
+        ]
+    )
+    monthly_bysetpos = forms.ChoiceField(
+        choices=[
+            ('1', pgettext_lazy('rrule', 'first')),
+            ('2', pgettext_lazy('rrule', 'second')),
+            ('3', pgettext_lazy('rrule', 'third')),
+            ('-1', pgettext_lazy('rrule', 'last')),
+        ],
+        required=False
+    )
+    monthly_byweekday = forms.ChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+            ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
+            ('MO,TU,WE,TH,FR', _('Weekday')),
+            ('SA,SU', _('Weekend day')),
+        ],
+        required=False
+    )
+
+    weekly_byweekday = forms.MultipleChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+        ],
+        required=False,
+        widget=forms.CheckboxSelectMultiple
+    )
+
+
+RRuleFormSet = formset_factory(
+    RRuleForm,
+    can_order=False, can_delete=True, extra=1
+)

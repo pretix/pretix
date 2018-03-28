@@ -296,3 +296,10 @@ table td > .checkbox input[type="checkbox"] {
   width: 100px;
   display: inline;
 }
+.form-horizontal [data-formset] .rrule-form .form-group {
+  margin: 0;
+  width: auto;
+}
+.rrule-form .form-control {
+  display: inline;
+}
