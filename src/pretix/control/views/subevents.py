@@ -1,7 +1,7 @@
 import copy
-from datetime import datetime, time
+from datetime import datetime
 
-from dateutil.rrule import rruleset, YEARLY, WEEKLY, DAILY, MONTHLY, rrule
+from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -15,20 +15,21 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
-from i18nfield.strings import LazyI18nString
 
-from pretix.base.i18n import language
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
-from pretix.base.models.items import Quota, SubEventItem, SubEventItemVariation, ItemVariation
-from pretix.base.reldate import RelativeDateWrapper, RelativeDate
+from pretix.base.models.items import (
+    ItemVariation, Quota, SubEventItem, SubEventItemVariation,
+)
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
-    CheckinListFormSet, QuotaFormSet, SubEventForm, SubEventItemForm,
-    SubEventItemVariationForm, SubEventMetaValueForm,
-    SubEventBulkForm, RRuleFormSet)
+    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkForm,
+    SubEventForm, SubEventItemForm, SubEventItemVariationForm,
+    SubEventMetaValueForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
@@ -150,7 +151,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         extra = 0
         kwargs = {}
 
-        if self.copy_from:
+        if self.copy_from and self.request.method != "POST":
             kwargs['initial'] = [
                 {
                     'name': cl.name,
@@ -160,7 +161,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                 } for cl in self.copy_from.checkinlist_set.prefetch_related('limit_products')
             ]
             extra = len(kwargs['initial'])
-        elif not self.object:
+        elif not self.object and self.request.method != "POST":
             kwargs['initial'] = [
                 {
                     'name': '',
@@ -187,7 +188,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         extra = 0
         kwargs = {}
 
-        if self.copy_from:
+        if self.copy_from and self.request.method != "POST":
             kwargs['initial'] = [
                 {
                     'size': q.size,
@@ -438,6 +439,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         form.instance.event = self.request.event
         messages.success(self.request, pgettext_lazy('subevent', 'The new date has been created.'))
         ret = super().form_valid(form)
+        self.object = form.instance
         form.instance.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
 
         self.save_formset(form.instance)
@@ -445,7 +447,8 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         for f in self.itemvar_forms:
             f.instance.subevent = form.instance
             f.save()
-        self.object = form.instance
+        for f in self.meta_forms:
+            f.instance.subevent = form.instance
         self.save_meta()
         return ret
 
@@ -618,6 +621,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 if form.cleaned_data.get('rel_presale_end')
                 else None
             )
+            """
             d = copy.copy(se.name.data)
             for l, v in d.items():
                 with language(l):
@@ -626,6 +630,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                         date_format(rdate, 'SHORT_DATE_FORMAT')
                     )
             se.name = LazyI18nString(d)
+            """
             se.save()
             se.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
 
@@ -683,7 +688,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
             cnt += 1
 
-        #a = b
         messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(cnt))
         return redirect(reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -692,7 +696,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        self.object = None
+        self.object = SubEvent(event=self.request.event)
         if self.is_valid(form):
             return self.form_valid(form)
         else:

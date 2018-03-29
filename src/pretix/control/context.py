@@ -9,7 +9,9 @@ from django.utils.translation import get_language
 from pretix.base.models.auth import StaffSession
 from pretix.base.settings import GlobalSettingsObject
 
-from ..helpers.i18n import get_javascript_format, get_moment_locale, get_javascript_output_format
+from ..helpers.i18n import (
+    get_javascript_format, get_javascript_output_format, get_moment_locale,
+)
 from .signals import html_head, nav_event, nav_global, nav_topbar
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore

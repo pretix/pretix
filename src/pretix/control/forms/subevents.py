@@ -4,7 +4,7 @@ from django import forms
 from django.forms import formset_factory
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, pgettext_lazy
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm

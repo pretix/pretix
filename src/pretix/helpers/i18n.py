@@ -62,7 +62,7 @@ out_date_conversion_to_moment = {
     'P': 'h:mm a',
     'r': 'ddd, D MMM YYYY HH:mm:ss Z',
     's': 'ss',
-    'S': 'Do', # fuzzy
+    'S': 'Do',  # fuzzy
     't': '',
     'T': 'z',
     'u': 'SSSSSS',

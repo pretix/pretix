@@ -100,7 +100,7 @@
                         </td>
                         <td class="text-right">
                             <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                            <div class="btn-group">
+                            <div class="btn-group {% if forloop.revcounter0 < 2 %}dropup{% endif %}">
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle"
                                         data-toggle="dropdown">
                                     <span class="fa fa-copy"></span>
