@@ -67,16 +67,18 @@ class SubEventBulkForm(SubEventForm):
         widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
         required=False
     )
-    presale_start = RelativeDateTimeField(
+    rel_presale_start = RelativeDateTimeField(
         label=_('Start of presale'),
         help_text=_('Optional. No products will be sold before this date.'),
-        required=False
+        required=False,
+        limit_choices=('date_from', 'date_to'),
     )
-    presale_end = RelativeDateTimeField(
+    rel_presale_end = RelativeDateTimeField(
         label=_('End of presale'),
         help_text=_('Optional. No products will be sold after this date. If you do not set this value, the presale '
                     'will end after the end date of your event.'),
-        required=False
+        required=False,
+        limit_choices=('date_from', 'date_to'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -138,6 +140,7 @@ class QuotaFormSet(I18nInlineFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs['locales'] = self.locales
         kwargs['event'] = self.event
+        kwargs['items'] = self.items
         kwargs['items'] = self.items
         return super()._construct_form(i, **kwargs)
 
@@ -348,6 +351,21 @@ class RRuleForm(forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple
     )
+
+    def parse_weekdays(self, value):
+        m = {
+            'MO': 0,
+            'TU': 1,
+            'WE': 2,
+            'TH': 3,
+            'FR': 4,
+            'SA': 5,
+            'SU': 6
+        }
+        if ',' in value:
+            return [m.get(a) for a in value.split(',')]
+        else:
+            return m.get(value)
 
 
 RRuleFormSet = formset_factory(

@@ -79,7 +79,7 @@ $(function () {
 
             var end = $form.find("input[name*=end]:checked").val();
             if (end === "count") {
-                rule_args.count = parseInt($form.find("input[name*=count]").val());
+                rule_args.count = parseInt($form.find("input[name*=count]").val()) || 1;
             } else {
                 var date = $form.find("input[name*=until]").data("DateTimePicker").date();
                 if (date !== null) {
