@@ -1,4 +1,7 @@
 /*!
+ * Changes by Raphael Michel starting line 112!!
+ * See also: https://github.com/jakubroztocil/rrule/issues/157
+ *
  * rrule.js - Library for working with recurrence rules for calendar dates.
  * https://github.com/jakubroztocil/rrule
  *
@@ -11,7 +14,6 @@
  * Copyright (c) 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
  * Copyright (c) 2012 - Tomi Pieviläinen <tomi.pievilainen@iki.fi>
  * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
- *
  */
 /* global module, define */
 
@@ -111,10 +113,8 @@
      */
     fromOrdinal: function (ordinal) {
       var millisecsFromBase = ordinal * dateutil.ONE_DAY
-      return new Date(dateutil.ORDINAL_BASE.getTime() -
-        dateutil.tzOffset(dateutil.ORDINAL_BASE) +
-        millisecsFromBase +
-        dateutil.tzOffset(new Date(millisecsFromBase)))
+      return new Date(dateutil.ORDINAL_BASE.getTime() +
+        millisecsFromBase);
     },
 
     /**

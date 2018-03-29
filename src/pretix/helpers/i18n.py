@@ -34,6 +34,48 @@ date_conversion_to_moment = {
     '%X': ''
 }
 
+out_date_conversion_to_moment = {
+    'a': 'a',
+    'A': 'A',
+    'b': 'MMM',
+    'c': 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+    'd': 'DD',
+    'e': 'zz',
+    'E': 'MMMM',
+    'f': 'h:mm',
+    'F': 'MMMM',
+    'g': 'h',
+    'G': 'H',
+    'h': 'hh',
+    'H': 'HH',
+    'i': 'mm',
+    'I': '',
+    'j': 'D',
+    'l': 'dddd',
+    'L': '',
+    'm': 'MM',
+    'M': 'MMM',
+    'n': 'M',
+    'N': 'MMM',  # fuzzy
+    'o': 'GGGG',
+    'O': 'ZZ',
+    'P': 'h:mm a',
+    'r': 'ddd, D MMM YYYY HH:mm:ss Z',
+    's': 'ss',
+    'S': 'Do', # fuzzy
+    't': '',
+    'T': 'z',
+    'u': 'SSSSSS',
+    'U': 'X',
+    'w': 'd',
+    'W': 'W',
+    'y': 'YY',
+    'Y': 'YYYY',
+    'z': 'DDD',
+    'Z': ''
+
+}
+
 moment_locales = {
     'af', 'az', 'bs', 'de-at', 'en-gb', 'et', 'fr-ch', 'hi', 'it', 'ko', 'me', 'ms-my', 'pa-in', 'se', 'sr', 'th',
     'tzm-latn', 'zh-hk', 'ar', 'be', 'ca', 'de', 'en-ie', 'eu', 'fr', 'hr', 'ja', 'ky', 'mi', 'my', 'pl', 'si', 'ss',
@@ -45,10 +87,23 @@ moment_locales = {
 }
 
 toJavascript_re = re.compile(r'(?<!\w)(' + '|'.join(date_conversion_to_moment.keys()) + r')\b')
+toJavascriptOut_re = re.compile(r'(?<!\w)(' + '|'.join(out_date_conversion_to_moment.keys()) + r')\b')
+
+
+def get_javascript_output_format(format_name):
+    f = get_format(format_name)
+    if not isinstance(f, str):
+        f = f[0]
+    return toJavascriptOut_re.sub(
+        lambda x: out_date_conversion_to_moment[x.group()],
+        f
+    )
 
 
 def get_javascript_format(format_name):
-    f = get_format(format_name)[0]
+    f = get_format(format_name)
+    if not isinstance(f, str):
+        f = f[0]
     return toJavascript_re.sub(
         lambda x: date_conversion_to_moment[x.group()],
         f

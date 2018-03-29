@@ -469,6 +469,9 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     context_object_name = 'subevent'
     form_class = SubEventBulkForm
 
+    def is_valid(self, form):
+        return False and super().is_valid(form)
+
     def post(self, request, *args, **kwargs):
         self.object = SubEvent(event=self.request.event)
         form = self.get_form()
@@ -487,6 +490,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     def rrule_formset(self):
         return RRuleFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
+            prefix='rruleformset'
         )
 
     def get_context_data(self, **kwargs):

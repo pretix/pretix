@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django import forms
 from django.forms import formset_factory
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
@@ -204,10 +207,10 @@ class RRuleForm(forms.Form):
     )
     freq = forms.ChoiceField(
         choices=[
-            ('yearly', _('years')),
-            ('monthly', _('months')),
-            ('weekly', _('weekly')),
-            ('daily', _('daily')),
+            ('yearly', _('year(s)')),
+            ('monthly', _('month(s)')),
+            ('weekly', _('week(s)')),
+            ('daily', _('day(s)')),
         ]
     )
     interval = forms.IntegerField(
@@ -216,20 +219,37 @@ class RRuleForm(forms.Form):
     )
     dtstart = forms.DateField(
         label=_('Start date'),
-        required=False,
         widget=forms.DateInput(
             attrs={
-                'class': 'datepickerfield'
+                'class': 'datepickerfield',
+                'required': 'required'
             }
-        )
+        ),
+        initial=lambda: now().date()
     )
 
+    end = forms.ChoiceField(
+        choices=[
+            ('count', ''),
+            ('until', ''),
+        ],
+        initial='count',
+        widget=forms.RadioSelect
+    )
     count = forms.IntegerField(
         label=_('Number of repititions'),
-        required=False
+        initial=10
     )
     until = forms.DateField(
-        label=_('Last date')
+        widget=forms.DateInput(
+            attrs={
+                'class': 'datepickerfield',
+                'required': 'required'
+            }
+        ),
+        label=_('Last date'),
+        required=True,
+        initial=lambda: now() + timedelta(days=365)
     )
 
     yearly_bysetpos = forms.ChoiceField(
@@ -243,9 +263,11 @@ class RRuleForm(forms.Form):
     )
     yearly_same = forms.ChoiceField(
         choices=[
-            ('on', 'on'),
-            ('off', 'off'),
-        ]
+            ('on', ''),
+            ('off', ''),
+        ],
+        initial='on',
+        widget=forms.RadioSelect
     )
     yearly_byweekday = forms.ChoiceField(
         choices=[
@@ -282,9 +304,11 @@ class RRuleForm(forms.Form):
 
     monthly_same = forms.ChoiceField(
         choices=[
-            ('on', 'on'),
-            ('off', 'off'),
-        ]
+            ('on', ''),
+            ('off', ''),
+        ],
+        initial='on',
+        widget=forms.RadioSelect
     )
     monthly_bysetpos = forms.ChoiceField(
         choices=[
