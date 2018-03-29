@@ -1211,7 +1211,7 @@ class QuickSetupView(FormView):
 
         subevent = self.request.event.subevents.first()
         for i, f in enumerate(self.formset):
-            if f in self.formset.deleted_forms:
+            if f in self.formset.deleted_forms or not f.has_changed():
                 continue
 
             item = self.request.event.items.create(
@@ -1276,5 +1276,5 @@ class QuickSetupView(FormView):
                     'default_price': Decimal('29.00'),
                     'quota': 50,
                 },
-            ]
+            ] if self.request.method != "POST" else []
         )
