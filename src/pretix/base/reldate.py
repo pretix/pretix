@@ -71,6 +71,7 @@ class RelativeDateWrapper:
             else:
                 base_date = getattr(event, self.data.base_date_name) or event.date_from
 
+            oldoffset = base_date.utcoffset()
             new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
             if self.data.time:
                 new_date = new_date.replace(
@@ -78,6 +79,10 @@ class RelativeDateWrapper:
                     minute=self.data.time.minute,
                     second=self.data.time.second
                 )
+            new_date = new_date.astimezone(tz)
+            newoffset = new_date.utcoffset()
+            new_date += oldoffset - newoffset
+
             return new_date
 
     def to_string(self) -> str:
