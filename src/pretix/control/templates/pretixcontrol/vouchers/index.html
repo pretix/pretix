@@ -11,6 +11,15 @@
         {% endblocktrans %}
     </p>
     <div class="row filter-form">
+        <form class="col-md-2 col-xs-6"
+              action="{% url "control:event.vouchers.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+            <div class="input-group">
+                <input type="text" name="code" class="form-control" placeholder="{% trans "Voucher code" %}" autofocus>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
+                </span>
+            </div>
+        </form>
         <form class="" action="" method="get">
             <div class="col-md-2 col-xs-6">
                 {% bootstrap_field filter_form.search layout='inline' %}

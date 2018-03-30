@@ -10,6 +10,7 @@ from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
 )
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
@@ -223,6 +224,23 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         # TODO: Transform this into an asynchronous call?
         with request.event.lock():
             return super().post(request, *args, **kwargs)
+
+
+class VoucherGo(EventPermissionRequiredMixin, View):
+    permission = 'can_view_vouchers'
+
+    def get_voucher(self, code):
+        return Voucher.objects.get(code=code, event=self.request.event)
+
+    def get(self, request, *args, **kwargs):
+        code = request.GET.get("code", "").upper().strip()
+        try:
+            voucher = self.get_voucher(code)
+            return redirect('control:event.voucher', event=request.event.slug, organizer=request.event.organizer.slug,
+                            voucher=voucher.id)
+        except Voucher.DoesNotExist:
+            messages.error(request, _('There is no voucher with the given voucher code.'))
+            return redirect('control:event.vouchers', event=request.event.slug, organizer=request.event.organizer.slug)
 
 
 class VoucherBulkCreate(EventPermissionRequiredMixin, CreateView):
