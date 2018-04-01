@@ -1,0 +1,221 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Color scheme" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Headline" %}</h1>
+    <div class="row text-center">
+        <div class="col-md-2">
+            <button class="btn btn-default">Button</button>
+            <button class="btn btn-default btn-lg">Button</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary ">Button</button>
+            <button class="btn btn-primary btn-lg">Button</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success ">Button</button>
+            <button class="btn btn-success btn-lg">Button</button>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-warning ">Button</button>
+            <button class="btn btn-warning btn-lg">Button</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger ">Button</button>
+            <button class="btn btn-danger btn-lg">Button</button>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-md-2">
+            Text<br>
+            <span class="text-muted">Very secondary text</span>
+        </div>
+        <div class="col-md-2">
+            <a href="#">Link</a>
+        </div>
+        <div class="col-md-2">
+            <span class="text-success">
+                <span class="fa fa-check"></span>
+                Enabled
+            </span>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <span class="text-danger">
+                <span class="fa fa-times"></span>
+                Disabled
+            </span>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <span class="label label-success {{ class }}">Paid</span>
+            <br><br>
+            <div class="quotabox">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-50">
+                    </div>
+                </div>
+                <div class="numbers">
+                    50 / 100
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <span class="label label-warning {{ class }}">Pending</span>
+
+            <br><br>
+            <div class="quotabox">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning progress-bar-100">
+                    </div>
+                </div>
+                <div class="numbers">
+                    100 / 100
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <span class="label label-danger {{ class }}">Canceled</span>
+
+            <br><br>
+            <div class="quotabox">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-danger progress-bar-100">
+                    </div>
+                </div>
+                <div class="numbers">
+                    100 / 100
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <ul class="nav nav-pills">
+                <li class="">
+                    <a href="#">
+                        Tab 1
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#">
+                        Tab 2
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="alert alert-success">Alert message</div>
+        </div>
+        <div class="col-md-2">
+            <div class="alert alert-info">Alert message</div>
+        </div>
+        <div class="col-md-2">
+            <div class="alert alert-warning">Alert message</div>
+        </div>
+        <div class="col-md-2">
+            <div class="alert alert-danger">Alert message</div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-md-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Panel
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    Content
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Panel
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    Content
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Panel
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    Content
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Panel
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    Content
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Panel
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    Content
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+            <span class="fa fa-cog big-rotating-icon"></span>
+        </div>
+        <div class="col-md-2">
+            <div class="thank-you">
+                <span class="fa fa-check-circle"></span>
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+{% endblock %}

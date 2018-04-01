@@ -47,27 +47,27 @@
     }
 
     &.step-done .checkout-step-icon {
-      border: 1px solid $brand-success;
-      background: $brand-success;
+      border: 1px solid $brand-primary;
+      background: $brand-primary;
       color: white;
     }
     &.step-done .checkout-step-label {
-      color: $brand-success;
+      color: $brand-primary;
     }
     &.step-done .checkout-step-bar-left, &.step-done .checkout-step-bar-right {
-      background: $brand-success;
+      background: $brand-primary;
     }
 
     &.step-current .checkout-step-icon {
-      border: 1px solid darken($brand-info, 20%);
-      background: darken($brand-info, 20%);
+      border: 1px solid $brand-primary;
+      background: $brand-primary;
       color: white;
     }
     &.step-current .checkout-step-label {
-      color: darken($brand-info, 20%);
+      color: $brand-primary;
     }
     &.step-current .checkout-step-bar-left {
-      background: $brand-success;
+      background: $brand-primary;
     }
     &:last-child .checkout-step-bar-right,
     &:first-child .checkout-step-bar-left {

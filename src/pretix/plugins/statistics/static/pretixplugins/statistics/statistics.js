@@ -7,7 +7,7 @@ $(function () {
         xkey: 'date',
         ykeys: ['ordered', 'paid'],
         labels: [gettext('Placed orders'), gettext('Paid orders')],
-        lineColors: ['#000099', '#009900'],
+        lineColors: ['#3b1c4a', '#50a167'],
         smooth: false,
         resize: true,
         fillOpacity: 0.3,
@@ -21,6 +21,7 @@ $(function () {
         labels: [gettext('Total revenue')],
         smooth: false,
         resize: true,
+        lineColors: ['#3b1c4a'],
         fillOpacity: 0.3,
         preUnits: $.trim($("#currency").html()) + ' '
     });
@@ -30,7 +31,7 @@ $(function () {
         xkey: 'item',
         ykeys: ['ordered', 'paid'],
         labels: [gettext('Placed orders'), gettext('Paid orders')],
-        barColors: ['#000099', '#009900'],
+        barColors: ['#3b1c4a', '#50a167'],
         resize: true,
         xLabelAngle: 30
     });

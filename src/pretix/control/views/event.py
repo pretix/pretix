@@ -738,6 +738,10 @@ class EventPermissions(EventSettingsViewMixin, EventPermissionRequiredMixin, Tem
     template_name = 'pretixcontrol/event/permissions.html'
 
 
+class EventColorScheme(EventPermissionRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/event/color_scheme.html'
+
+
 class EventLive(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/live.html'

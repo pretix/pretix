@@ -16,8 +16,7 @@
             {% bootstrap_form form layout='control' %}
             {% if settings_content %}{{ settings_content|safe }}{% endif %}
             <p>&nbsp;</p>
-            <div class="alert alert-warning">
-                <span class="fa fa-w fa-legal fa-2x pull-left"></span>
+            <div class="alert alert-legal">
                 <strong>{% trans "Warning:" %}</strong>
                 {% blocktrans trimmed %}
                     Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
