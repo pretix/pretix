@@ -192,6 +192,7 @@ urlpatterns = [
             name='event.orders.waitinglist.delete'),
         url(r'^checkinlists/$', checkin.CheckinListList.as_view(), name='event.orders.checkinlists'),
         url(r'^checkinlists/add$', checkin.CheckinListCreate.as_view(), name='event.orders.checkinlists.add'),
+        url(r'^checkinlists/select2$', typeahead.checkinlist_select2, name='event.orders.checkinlists.select2'),
         url(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckInListShow.as_view(), name='event.orders.checkinlists.show'),
         url(r'^checkinlists/(?P<list>\d+)/change$', checkin.CheckinListUpdate.as_view(),
             name='event.orders.checkinlists.edit'),

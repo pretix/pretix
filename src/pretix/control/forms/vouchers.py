@@ -3,11 +3,13 @@ import copy
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower
-from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, ItemVariation, Quota, Voucher
 from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms.widgets import Select2
 from pretix.control.signals import voucher_form_validation
 
 
@@ -54,6 +56,18 @@ class VoucherForm(I18nModelForm):
 
         if instance.event.has_subevents:
             self.fields['subevent'].queryset = instance.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': instance.event.slug,
+                        'organizer': instance.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = True
         elif 'subevent':
             del self.fields['subevent']
 
