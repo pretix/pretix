@@ -18,7 +18,8 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
-    permission_classes = (EventCRUDPermission,)
+    permission = 'can_change_event_settings'
+    write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
         return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
@@ -69,7 +70,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     http_method_names = ['post']
-    write_permission = 'can_create_events'
+    write_permission = 'can_change_event_settings'
 
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.organizer)
@@ -95,7 +96,7 @@ class SubEventFilter(FilterSet):
         fields = ['active']
 
 
-class SubEventViewSet(viewsets.ModelViewSet):
+class SubEventViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SubEventSerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
