@@ -1,10 +1,16 @@
+from datetime import timedelta
+
 from django import forms
+from django.forms import formset_factory
 from django.utils.functional import cached_property
+from django.utils.timezone import now
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
+from pretix.base.reldate import RelativeDateTimeField
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
@@ -44,6 +50,44 @@ class SubEventForm(I18nModelForm):
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
         }
+
+
+class SubEventBulkForm(SubEventForm):
+    time_from = forms.TimeField(
+        label=_('Event start time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'})
+    )
+    time_to = forms.TimeField(
+        label=_('Event end time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+    time_admission = forms.TimeField(
+        label=_('Admission time'),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        required=False
+    )
+    rel_presale_start = RelativeDateTimeField(
+        label=_('Start of presale'),
+        help_text=_('Optional. No products will be sold before this date.'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+    rel_presale_end = RelativeDateTimeField(
+        label=_('End of presale'),
+        help_text=_('Optional. No products will be sold after this date. If you do not set this value, the presale '
+                    'will end after the end date of your event.'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs['event']
+        super().__init__(*args, **kwargs)
+        self.fields['location'].widget.attrs['rows'] = '3'
+        del self.fields['date_from']
+        del self.fields['date_to']
+        del self.fields['date_admission']
 
 
 class SubEventItemOrVariationFormMixin:
@@ -96,6 +140,7 @@ class QuotaFormSet(I18nInlineFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs['locales'] = self.locales
         kwargs['event'] = self.event
+        kwargs['items'] = self.items
         kwargs['items'] = self.items
         return super()._construct_form(i, **kwargs)
 
@@ -155,3 +200,175 @@ class CheckinListFormSet(I18nInlineFormSet):
         )
         self.add_fields(form, None)
         return form
+
+
+class RRuleForm(forms.Form):
+    # TODO: calendar.setfirstweekday
+    exclude = forms.BooleanField(
+        label=_('Exclude these dates instead of adding them.'),
+        required=False
+    )
+    freq = forms.ChoiceField(
+        choices=[
+            ('yearly', _('year(s)')),
+            ('monthly', _('month(s)')),
+            ('weekly', _('week(s)')),
+            ('daily', _('day(s)')),
+        ]
+    )
+    interval = forms.IntegerField(
+        label=_('Interval'),
+        initial=1
+    )
+    dtstart = forms.DateField(
+        label=_('Start date'),
+        widget=forms.DateInput(
+            attrs={
+                'class': 'datepickerfield',
+                'required': 'required'
+            }
+        ),
+        initial=lambda: now().date()
+    )
+
+    end = forms.ChoiceField(
+        choices=[
+            ('count', ''),
+            ('until', ''),
+        ],
+        initial='count',
+        widget=forms.RadioSelect
+    )
+    count = forms.IntegerField(
+        label=_('Number of repititions'),
+        initial=10
+    )
+    until = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'datepickerfield',
+                'required': 'required'
+            }
+        ),
+        label=_('Last date'),
+        required=True,
+        initial=lambda: now() + timedelta(days=365)
+    )
+
+    yearly_bysetpos = forms.ChoiceField(
+        choices=[
+            ('1', pgettext_lazy('rrule', 'first')),
+            ('2', pgettext_lazy('rrule', 'second')),
+            ('3', pgettext_lazy('rrule', 'third')),
+            ('-1', pgettext_lazy('rrule', 'last')),
+        ],
+        required=False
+    )
+    yearly_same = forms.ChoiceField(
+        choices=[
+            ('on', ''),
+            ('off', ''),
+        ],
+        initial='on',
+        widget=forms.RadioSelect
+    )
+    yearly_byweekday = forms.ChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+            ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
+            ('MO,TU,WE,TH,FR', _('Weekday')),
+            ('SA,SU', _('Weekend day')),
+        ],
+        required=False
+    )
+    yearly_bymonth = forms.ChoiceField(
+        choices=[
+            ('1', _('January')),
+            ('2', _('February')),
+            ('3', _('March')),
+            ('4', _('April')),
+            ('5', _('May')),
+            ('6', _('June')),
+            ('7', _('July')),
+            ('8', _('August')),
+            ('9', _('September')),
+            ('10', _('October')),
+            ('11', _('November')),
+            ('12', _('December')),
+        ],
+        required=False
+    )
+
+    monthly_same = forms.ChoiceField(
+        choices=[
+            ('on', ''),
+            ('off', ''),
+        ],
+        initial='on',
+        widget=forms.RadioSelect
+    )
+    monthly_bysetpos = forms.ChoiceField(
+        choices=[
+            ('1', pgettext_lazy('rrule', 'first')),
+            ('2', pgettext_lazy('rrule', 'second')),
+            ('3', pgettext_lazy('rrule', 'third')),
+            ('-1', pgettext_lazy('rrule', 'last')),
+        ],
+        required=False
+    )
+    monthly_byweekday = forms.ChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+            ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
+            ('MO,TU,WE,TH,FR', _('Weekday')),
+            ('SA,SU', _('Weekend day')),
+        ],
+        required=False
+    )
+
+    weekly_byweekday = forms.MultipleChoiceField(
+        choices=[
+            ('MO', _('Monday')),
+            ('TU', _('Tuesday')),
+            ('WE', _('Wednesday')),
+            ('TH', _('Thursday')),
+            ('FR', _('Friday')),
+            ('SA', _('Saturday')),
+            ('SU', _('Sunday')),
+        ],
+        required=False,
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    def parse_weekdays(self, value):
+        m = {
+            'MO': 0,
+            'TU': 1,
+            'WE': 2,
+            'TH': 3,
+            'FR': 4,
+            'SA': 5,
+            'SU': 6
+        }
+        if ',' in value:
+            return [m.get(a) for a in value.split(',')]
+        else:
+            return m.get(value)
+
+
+RRuleFormSet = formset_factory(
+    RRuleForm,
+    can_order=False, can_delete=True, extra=1
+)

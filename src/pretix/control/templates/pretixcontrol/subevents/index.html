@@ -38,6 +38,9 @@
             <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i>
                 {% trans "Create a new date" context "subevent" %}</a>
+            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i>
+                {% trans "Create many new dates" context "subevent" %}</a>
         </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">
@@ -97,7 +100,24 @@
                         </td>
                         <td class="text-right">
                             <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}" class="btn btn-default btn-sm"><i class="fa fa-copy"></i></a>
+                            <div class="btn-group {% if forloop.revcounter0 < 2 %}dropup{% endif %}">
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    <span class="fa fa-copy"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}">
+                                            {% trans "Use as a template for a new date" context "subevent" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}">
+                                            {% trans "Use as a template for many new dates" context "subevent" %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
