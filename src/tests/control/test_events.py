@@ -852,6 +852,88 @@ class SubEventsTest(SoupTest):
         assert doc.select(".alert-danger")
         assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
 
+    def test_create_bulk(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'yearly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'count',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'location_0': 'Loc',
+            'time_admission': '',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-id': '',
+            'quotas-0-name': 'Bar',
+            'quotas-0-size': '12',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'item-%d-price' % self.ticket.pk: '16',
+            'checkinlist_set-TOTAL_FORMS': '1',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-0-id': '',
+            'checkinlist_set-0-name': 'Foo',
+            'checkinlist_set-0-limit_products': str(self.ticket.pk),
+        })
+        assert doc.select(".alert-success")
+        ses = self.event1.subevents.order_by('date_from')
+        assert len(ses) == 10
+
+        assert str(ses[0].name) == "Foo"
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[0].date_to.isoformat() == "2018-04-03T13:29:31+00:00"
+        assert not ses[0].presale_start
+        assert ses[0].presale_end.isoformat() == "2018-04-02T11:29:31+00:00"
+        assert ses[0].quotas.count() == 1
+        assert list(ses[0].quotas.first().items.all()) == [self.ticket]
+        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+        assert ses[0].checkinlist_set.count() == 1
+
+        assert str(ses[1].name) == "Foo"
+        assert ses[1].date_from.isoformat() == "2019-04-03T11:29:31+00:00"
+        assert ses[1].date_to.isoformat() == "2019-04-03T13:29:31+00:00"
+        assert not ses[1].presale_start
+        assert ses[1].presale_end.isoformat() == "2019-04-02T11:29:31+00:00"
+        assert ses[1].quotas.count() == 1
+        assert list(ses[1].quotas.first().items.all()) == [self.ticket]
+        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+        assert ses[1].checkinlist_set.count() == 1
+
 
 class EventDeletionTest(SoupTest):
     def setUp(self):

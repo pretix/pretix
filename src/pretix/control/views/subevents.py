@@ -621,16 +621,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 if form.cleaned_data.get('rel_presale_end')
                 else None
             )
-            """
-            d = copy.copy(se.name.data)
-            for l, v in d.items():
-                with language(l):
-                    d[l] = '{} – {}'.format(
-                        se.name.localize(l),
-                        date_format(rdate, 'SHORT_DATE_FORMAT')
-                    )
-            se.name = LazyI18nString(d)
-            """
             se.save()
             se.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
 
@@ -665,10 +655,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 if self.cl_formset._should_delete_form(f):
                     continue
                 i = copy.copy(f.instance)
-                i.name = '{} – {}'.format(
-                    i.name,
-                    date_format(rdate, 'SHORT_DATE_FORMAT')
-                )
                 i.subevent = se
                 i.event = se.event
                 i.save()
