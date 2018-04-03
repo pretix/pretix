@@ -1,9 +1,13 @@
+from datetime import datetime, time
+
 import pytz
+from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.urls import reverse
+from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _
 
 from pretix.base.models import Organizer, User
@@ -74,8 +78,21 @@ def subevent_select2(request, **kwargs):
     except ValueError:
         page = 1
 
+    qf = Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+    tz = request.event.timezone
+
+    try:
+        dt = parse(query)
+    except ValueError:
+        pass
+    else:
+        if dt:
+            dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
+            dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
+            qf |= Q(date_from__gte=dt_start) & Q(date_from__lte=dt_end)
+
     qs = request.event.subevents.filter(
-        Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+        qf
     ).order_by('-date_from')
 
     total = qs.count()
