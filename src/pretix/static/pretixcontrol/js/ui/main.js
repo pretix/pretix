@@ -281,7 +281,23 @@ var form_handlers = function (el) {
                         page: params.page || 1
                     }
                 }
-            }
+            },
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("primary").append($("<div>").text(res.text).html())
+                );
+                if (res.event) {
+                    $ret.append(
+                        $("<span>").addClass("secondary").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append($("<div>").text(res.event).html())
+                    );
+                }
+                return $ret;
+            },
         }).on("select2:select", function () {
             // Allow continuing to select
             if ($s.hasAttribute("multiple")) {

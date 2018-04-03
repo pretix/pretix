@@ -322,16 +322,17 @@ body.loading #wrapper {
     width: 300px;
 }
 .event-dropdown, .mobile-event-dropdown, .select2-results {
-    .event-name-full {
+    .event-name-full, .primary {
         display: block;
     }
-    .event-daterange, .event-organizer {
+    .event-daterange, .event-organizer, .secondary {
         display: block;
         font-size: $font-size-small;
         color: $text-muted;
     }
     .active .event-daterange, .active .event-organizer, .active a,
     .select2-results__option--highlighted .event-daterange,
+    .select2-results__option--highlighted .secondary,
     .select2-results__option--highlighted .event-organizer {
         color: white;
     }
