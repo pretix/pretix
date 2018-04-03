@@ -911,7 +911,7 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-0-limit_products': str(self.ticket.pk),
         })
         assert doc.select(".alert-success")
-        ses = self.event1.subevents.order_by('date_from')
+        ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 10
 
         assert str(ses[0].name) == "Foo"
@@ -933,6 +933,245 @@ class SubEventsTest(SoupTest):
         assert list(ses[1].quotas.first().items.all()) == [self.ticket]
         assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
         assert ses[1].checkinlist_set.count() == 1
+
+        assert ses[-1].date_from.isoformat() == "2027-04-03T11:29:31+00:00"
+
+    def test_create_bulk_daily_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '2',
+            'rruleformset-0-freq': 'daily',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 183
+
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[110].date_from.isoformat() == "2018-11-09T12:29:31+00:00"  # DST :)
+        assert ses[-1].date_from.isoformat() == "2019-04-02T11:29:31+00:00"
+
+    def test_create_bulk_exclude(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '2',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'daily',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'rruleformset-1-interval': '1',
+            'rruleformset-1-freq': 'weekly',
+            'rruleformset-1-dtstart': '2018-04-03',
+            'rruleformset-1-yearly_same': 'on',
+            'rruleformset-1-yearly_bysetpos': '1',
+            'rruleformset-1-yearly_byweekday': 'MO',
+            'rruleformset-1-yearly_bymonth': '1',
+            'rruleformset-1-monthly_same': 'on',
+            'rruleformset-1-monthly_bysetpos': '1',
+            'rruleformset-1-monthly_byweekday': 'MO',
+            'rruleformset-1-weekly_byweekday': 'MO',
+            'rruleformset-1-end': 'until',
+            'rruleformset-1-count': '10',
+            'rruleformset-1-until': '2019-04-03',
+            'rruleformset-1-exclude': 'on',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 314
+
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[5].date_from.isoformat() == "2018-04-08T11:29:31+00:00"
+        assert ses[6].date_from.isoformat() == "2018-04-10T11:29:31+00:00"
+
+    def test_create_bulk_monthly_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'monthly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'off',
+            'rruleformset-0-monthly_bysetpos': '-1',
+            'rruleformset-0-monthly_byweekday': 'MO,TU,WE,TH,FR',
+            'rruleformset-0-weekly_byweekday': 'TH',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_0': 'unset',
+            'rel_presale_end_1': '',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 12
+
+        assert ses[0].date_from.isoformat() == "2018-04-30T11:29:31+00:00"
+        assert ses[1].date_from.isoformat() == "2018-05-31T11:29:31+00:00"
+        assert ses[-1].date_from.isoformat() == "2019-03-29T12:29:31+00:00"
+
+    def test_create_bulk_weekly_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'weekly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '-1',
+            'rruleformset-0-monthly_byweekday': 'MO,TU,WE,TH,FR',
+            'rruleformset-0-weekly_byweekday': 'TH',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_0': 'unset',
+            'rel_presale_end_1': '',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 52
+
+        assert ses[0].date_from.isoformat() == "2018-04-05T11:29:31+00:00"
+        assert ses[1].date_from.isoformat() == "2018-04-12T11:29:31+00:00"
+        assert ses[-1].date_from.isoformat() == "2019-03-28T12:29:31+00:00"
 
 
 class EventDeletionTest(SoupTest):

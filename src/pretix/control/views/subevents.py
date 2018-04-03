@@ -10,7 +10,6 @@ from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -561,15 +560,15 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             if f.cleaned_data['freq'] == 'yearly':
                 freq = YEARLY
                 if f.cleaned_data['yearly_same'] == "off":
-                    rule_kwargs['bysetpos'] = f.cleaned_data['yearly_bysetpos']
+                    rule_kwargs['bysetpos'] = int(f.cleaned_data['yearly_bysetpos'])
                     rule_kwargs['byweekday'] = f.parse_weekdays(f.cleaned_data['yearly_byweekday'])
-                    rule_kwargs['bymonth'] = f.cleaned_data['yearly_bymonth']
+                    rule_kwargs['bymonth'] = int(f.cleaned_data['yearly_bymonth'])
 
             elif f.cleaned_data['freq'] == 'monthly':
                 freq = MONTHLY
 
                 if f.cleaned_data['monthly_same'] == "off":
-                    rule_kwargs['bysetpos'] = f.cleaned_data['monthly_bysetpos']
+                    rule_kwargs['bysetpos'] = int(f.cleaned_data['monthly_bysetpos'])
                     rule_kwargs['byweekday'] = f.parse_weekdays(f.cleaned_data['monthly_byweekday'])
             elif f.cleaned_data['freq'] == 'weekly':
                 freq = WEEKLY
