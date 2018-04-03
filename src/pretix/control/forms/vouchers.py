@@ -72,7 +72,7 @@ class VoucherForm(I18nModelForm):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            self.fields['subevent'].required = True
+            self.fields['subevent'].required = False
         elif 'subevent':
             del self.fields['subevent']
 
