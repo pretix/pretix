@@ -219,6 +219,8 @@ Endpoints
 
    Creates a new event with properties as set in the request body and settings and items copied from the exiting event.
 
+   Please note that you can only copy from events under the same organizer.
+
    **Example request**:
 
    .. sourcecode:: http
