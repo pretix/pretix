@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
@@ -11,6 +12,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
+from pretix.control.forms.widgets import Select2
 from pretix.helpers.money import change_decimal_field
 
 
@@ -164,6 +166,18 @@ class OrderPositionAddForm(forms.Form):
 
         if order.event.has_subevents:
             self.fields['subevent'].queryset = order.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': order.event.slug,
+                        'organizer': order.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)
