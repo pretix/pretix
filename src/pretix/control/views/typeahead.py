@@ -136,7 +136,7 @@ def checkinlist_select2(request, **kwargs):
             dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
             qf |= Q(subevent__date_from__gte=dt_start) & Q(subevent__date_from__lte=dt_end)
 
-    qs = request.event.checkin_lists.filter(
+    qs = request.event.checkin_lists.select_related('subevent').filter(
         qf
     ).order_by('name')
 
@@ -148,6 +148,7 @@ def checkinlist_select2(request, **kwargs):
             {
                 'id': e.pk,
                 'text': str(e.name),
+                'event': str(e.subevent) if request.event.has_subevents and e.subevent else None,
             }
             for e in qs[offset:offset + pagesize]
         ],
