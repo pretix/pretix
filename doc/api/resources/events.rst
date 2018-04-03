@@ -27,10 +27,10 @@ location                              multi-lingual string       The event locat
 has_subevents                         boolean                    ``True`` if the event series feature is active for this
                                                                  event
 meta_data                             dict                       Values set for organizer-specific meta data parameters.
-plugins                               list                       Enabled plugins for the event.
+plugins                               list                       A list of package names of the enabled plugins for this
+                                                                 event.
 ===================================== ========================== =======================================================
 
-Note that events with orders cannot be deleted to ensure data integrity.
 
 .. versionchanged:: 1.7
 
@@ -39,7 +39,7 @@ Note that events with orders cannot be deleted to ensure data integrity.
 .. versionchanged:: 1.14
 
    The ``plugins`` field has been added.
-   The write operations POST, PATCH, AND PUT have been added.
+   The operations POST, PATCH, PUT and DELETE have been added.
 
 Endpoints
 ---------
@@ -94,10 +94,10 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
-       :param organizer: The ``slug`` field of a valid organizer
+   :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
-       :statuscode 401: Authentication failure
-       :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/
 
@@ -144,8 +144,8 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
-       :statuscode 401: Authentication failure
-       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/
 
@@ -339,14 +339,14 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer of the event to update
    :param event: The ``slug`` field of the event to update
    :statuscode 201: no error
-       :statuscode 400: The event could not be created due to invalid submitted data.
-       :statuscode 401: Authentication failure
-       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
 
-   Delete an event.
+   Delete an event. Note that events with orders cannot be deleted to ensure data integrity.
 
    **Example request**:
 
@@ -366,5 +366,5 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to delete
    :statuscode 204: no error
-       :statuscode 401: Authentication failure
-       :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
