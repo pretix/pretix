@@ -56,8 +56,7 @@ class EventViewSet(viewsets.ModelViewSet):
                         'logentries': list(instance.logentry_set.values_list('pk', flat=True))
                     }
                 )
-                instance.items.all().delete()
-                instance.subevents.all().delete()
+                instance.delete_sub_objects()
                 super().perform_destroy(instance)
         except ProtectedError:
             raise PermissionDenied('The event could not be deleted as some constraints (e.g. data created by plug-ins) '

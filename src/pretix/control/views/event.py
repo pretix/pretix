@@ -810,8 +810,7 @@ class EventDelete(EventPermissionRequiredMixin, FormView):
                         'logentries': list(self.request.event.logentry_set.values_list('pk', flat=True))
                     }
                 )
-                self.request.event.items.all().delete()
-                self.request.event.subevents.all().delete()
+                self.request.event.delete_sub_objects()
                 self.request.event.delete()
             messages.success(self.request, _('The event has been deleted.'))
             return redirect(self.get_success_url())

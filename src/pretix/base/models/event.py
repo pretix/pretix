@@ -589,6 +589,10 @@ class Event(EventMixin, LoggedModel):
     def allow_delete(self):
         return not self.orders.exists() and not self.invoices.exists()
 
+    def delete_sub_objects(self):
+        self.items.all().delete()
+        self.subevents.all().delete()
+
     @staticmethod
     def clean_slug(organizer, event, slug):
         if event is not None and event.slug is not None:
