@@ -53,6 +53,7 @@ class PluginsField(Field):
 
 
 class EventSerializer(I18nAwareModelSerializer):
+    meta_data = MetaDataField(source='*')
     plugins = PluginsField(required=False, source='*')
 
     class Meta:
@@ -79,7 +80,7 @@ class EventSerializer(I18nAwareModelSerializer):
     def validate_live(self, value):
         if value:
             if self.instance is None:
-                raise ValidationError(_('Events cannot be create as \'live\'. Quotas and payment must be added to the '
+                raise ValidationError(_('Events cannot be created as \'live\'. Quotas and payment must be added to the '
                                         'event before sales can go live.'))
             else:
                 self.instance.clean_live()
