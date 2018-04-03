@@ -89,13 +89,15 @@ $(function () {
 
             if ($form.find("input[name*=exclude]").prop("checked")) {
                 ruleset.exrule(new RRule(rule_args));
+                $form.closest(".panel").addClass("panel-danger").removeClass("panel-default");
             } else {
                 ruleset.rrule(new RRule(rule_args));
+                $form.closest(".panel").addClass("panel-default").removeClass("panel-danger");
             }
         });
 
         var all_dates = ruleset.all();
-        var format = $("body").attr("data-longdateformat");
+        var format = $("body").attr("data-longdateformat") + " (dddd)";
         $("#rrule-preview").html("");
         if (all_dates.length > 20) {
             $("#rrule-preview").html("");

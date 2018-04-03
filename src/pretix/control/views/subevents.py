@@ -646,10 +646,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 i = copy.copy(f.instance)
                 i.subevent = se
                 i.event = se.event
-                i.name = '{} – {}'.format(
-                    i.name,
-                    date_format(rdate, 'SHORT_DATE_FORMAT')
-                )
                 i.save()
                 selected_items = set(list(self.request.event.items.filter(id__in=[
                     i.split('-')[0] for i in f.cleaned_data.get('itemvars', [])
