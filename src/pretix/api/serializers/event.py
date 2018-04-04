@@ -53,7 +53,7 @@ class PluginsField(Field):
 
 
 class EventSerializer(I18nAwareModelSerializer):
-    meta_data = MetaDataField(source='*')
+    meta_data = MetaDataField(read_only=True, required=False, source='*')
     plugins = PluginsField(required=False, source='*')
 
     class Meta:
