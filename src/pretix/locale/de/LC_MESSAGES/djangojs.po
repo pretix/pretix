@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-26 20:16+0000\n"
+"POT-Creation-Date: 2018-04-04 11:02+0000\n"
 "PO-Revision-Date: 2018-02-03 16:56+0100\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: \n"
@@ -193,6 +193,12 @@ msgstr "Sonstige"
 #: pretix/static/pretixcontrol/js/ui/question.js:70
 msgid "Count"
 msgstr "Anzahl"
+
+#: pretix/static/pretixcontrol/js/ui/subevent.js:108
+msgid "(one more date)"
+msgid_plural "({num} more dates)"
+msgstr[0] ""
+msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
