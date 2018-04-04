@@ -983,6 +983,11 @@ class WidgetCodeForm(forms.Form):
                     "bought via the widget, this voucher will be used. This can for example be used to provide "
                     "widgets that give discounts or unlock secret products.")
     )
+    compatibility_mode = forms.BooleanField(
+        label=_("Compatibility mode"),
+        help_text=_("Our regular widget doesn't work in all website builders. If you run into trouble, try using "
+                    "this compatibility mode.")
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')

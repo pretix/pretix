@@ -39,7 +39,7 @@ def redirect_view(request, *args, **kwargs):
     except signing.BadSignature:
         return HttpResponseBadRequest('Invalid parameter')
 
-    r = render(request, 'pretixplugins/paypal/redirect.html', {
+    r = render(request, 'pretixplugins/stripe/redirect.html', {
         'url': url,
     })
     r._csp_ignore = True
