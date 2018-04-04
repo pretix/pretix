@@ -177,7 +177,7 @@ def webhook(request, *args, **kwargs):
     return HttpResponse(status=200)
 
 
-@event_permission_required('can_view_orders')
+@event_permission_required('can_change_orders')
 @require_POST
 def refund(request, **kwargs):
     with transaction.atomic():
