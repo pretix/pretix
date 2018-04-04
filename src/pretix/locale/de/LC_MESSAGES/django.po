@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-04 11:02+0000\n"
-"PO-Revision-Date: 2018-03-26 21:06+0000\n"
+"PO-Revision-Date: 2018-04-04 11:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German "
+"<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4524,16 +4524,16 @@ msgstr ""
 "verwendet werden oder um nur versteckte Produkte im Widget anzuzeigen."
 
 #: pretix/control/forms/event.py:987
-#, fuzzy
-#| msgid "Incompatible"
 msgid "Compatibility mode"
-msgstr "Nicht kompatibel"
+msgstr "Kompatibilitäts-Modus"
 
 #: pretix/control/forms/event.py:988
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"Das reguläre Widget funktioniert mit manchen Website-Baukästen nicht. Wenn "
+"Probleme auftreten können Sie es mit diesem Kompatibilitätsmodus versuchen."
 
 #: pretix/control/forms/event.py:1009
 msgid "The given voucher code does not exist."
@@ -5175,176 +5175,158 @@ msgstr "Optional"
 
 #: pretix/control/forms/subevents.py:208
 msgid "Exclude these dates instead of adding them."
-msgstr ""
+msgstr "Schließe diese Daten aus, statt sie hinzuzufügen."
 
 #: pretix/control/forms/subevents.py:213
 msgid "year(s)"
-msgstr ""
+msgstr "Jahr(e)"
 
 #: pretix/control/forms/subevents.py:214
-#, fuzzy
-#| msgid "Month"
 msgid "month(s)"
-msgstr "Monat"
+msgstr "Monat(e)"
 
 #: pretix/control/forms/subevents.py:215
 msgid "week(s)"
-msgstr ""
+msgstr "Woche(n)"
 
 #: pretix/control/forms/subevents.py:216
 msgid "day(s)"
-msgstr ""
+msgstr "Tag(e)"
 
 #: pretix/control/forms/subevents.py:220
 msgid "Interval"
-msgstr ""
+msgstr "Intervall"
 
 #: pretix/control/forms/subevents.py:243
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "Number of repititions"
-msgstr "Anzahl Tickets"
+msgstr "Anzahl Wiederholungen"
 
 #: pretix/control/forms/subevents.py:253
-#, fuzzy
-#| msgid "Last update"
 msgid "Last date"
-msgstr "Letzte Änderung"
+msgstr "Letztes Datum"
 
 #: pretix/control/forms/subevents.py:260 pretix/control/forms/subevents.py:318
 msgctxt "rrule"
 msgid "first"
-msgstr ""
+msgstr "ersten"
 
 #: pretix/control/forms/subevents.py:261 pretix/control/forms/subevents.py:319
 msgctxt "rrule"
 msgid "second"
-msgstr ""
+msgstr "zweiten"
 
 #: pretix/control/forms/subevents.py:262 pretix/control/forms/subevents.py:320
 msgctxt "rrule"
 msgid "third"
-msgstr ""
+msgstr "dritten"
 
 #: pretix/control/forms/subevents.py:263 pretix/control/forms/subevents.py:321
 msgctxt "rrule"
 msgid "last"
-msgstr ""
+msgstr "letzten"
 
 #: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:327
 #: pretix/control/forms/subevents.py:343
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: pretix/control/forms/subevents.py:278 pretix/control/forms/subevents.py:328
 #: pretix/control/forms/subevents.py:344
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: pretix/control/forms/subevents.py:279 pretix/control/forms/subevents.py:329
 #: pretix/control/forms/subevents.py:345
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: pretix/control/forms/subevents.py:280 pretix/control/forms/subevents.py:330
 #: pretix/control/forms/subevents.py:346
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: pretix/control/forms/subevents.py:281 pretix/control/forms/subevents.py:331
 #: pretix/control/forms/subevents.py:347
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: pretix/control/forms/subevents.py:282 pretix/control/forms/subevents.py:332
 #: pretix/control/forms/subevents.py:348
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: pretix/control/forms/subevents.py:283 pretix/control/forms/subevents.py:333
 #: pretix/control/forms/subevents.py:349
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: pretix/control/forms/subevents.py:284 pretix/control/forms/subevents.py:334
-#, fuzzy
-#| msgid "Display"
 msgid "Day"
-msgstr "Anzeige"
+msgstr "Tag"
 
 #: pretix/control/forms/subevents.py:285 pretix/control/forms/subevents.py:335
 msgid "Weekday"
-msgstr ""
+msgstr "Werktag"
 
 #: pretix/control/forms/subevents.py:286 pretix/control/forms/subevents.py:336
 msgid "Weekend day"
-msgstr ""
+msgstr "Wochenendtag"
 
 #: pretix/control/forms/subevents.py:292
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: pretix/control/forms/subevents.py:293
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: pretix/control/forms/subevents.py:294
-#, fuzzy
-#| msgid "Search"
 msgid "March"
-msgstr "Suchen"
+msgstr "März"
 
 #: pretix/control/forms/subevents.py:295
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: pretix/control/forms/subevents.py:296
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: pretix/control/forms/subevents.py:297
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: pretix/control/forms/subevents.py:298
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: pretix/control/forms/subevents.py:299
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: pretix/control/forms/subevents.py:300
-#, fuzzy
-#| msgid "Member"
 msgid "September"
-msgstr "Mitglieder"
+msgstr "September"
 
 #: pretix/control/forms/subevents.py:301
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: pretix/control/forms/subevents.py:302
-#, fuzzy
-#| msgid "Member"
 msgid "November"
-msgstr "Mitglieder"
+msgstr "November"
 
 #: pretix/control/forms/subevents.py:303
-#, fuzzy
-#| msgid "Member"
 msgid "December"
-msgstr "Mitglieder"
+msgstr "Dezember"
 
 #: pretix/control/forms/users.py:94 pretix/control/views/user.py:80
 msgid "Your changes could not be saved. See below for details."
 msgstr "Die Änderungen konnten nicht gespeichert werden."
 
 #: pretix/control/forms/vouchers.py:121
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Invalid product selected."
-msgstr "Ungültige Option ausgewählt."
+msgstr "Ungültiges Produkt ausgewählt."
 
 #: pretix/control/forms/vouchers.py:162
 msgid "Codes"
@@ -6114,16 +6096,12 @@ msgstr "Shop aufrufen"
 #: pretix/control/templates/pretixcontrol/base.html:160
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
-#, fuzzy
-#| msgid "Admission time"
 msgid "Admin mode"
-msgstr "Einlass"
+msgstr "Admin-Modus"
 
 #: pretix/control/templates/pretixcontrol/base.html:167
-#, fuzzy
-#| msgid "Event admission"
 msgid "End admin session"
-msgstr "Einlass"
+msgstr "Admin-Modus beenden"
 
 #: pretix/control/templates/pretixcontrol/base.html:179
 msgid "Account Settings"
@@ -6155,15 +6133,15 @@ msgstr "Bestellungen durchsuchen"
 #: pretix/control/templates/pretixcontrol/base.html:251
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
-#, fuzzy
-#| msgid "Admission time"
 msgid "Admin sessions"
-msgstr "Einlass"
+msgstr "Admin-Sitzungen"
 
 #: pretix/control/templates/pretixcontrol/base.html:290
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
+"Bitte hinterlassen Sie einen kurzen Kommentar, was Sie in diesen Admin-"
+"Sitzungen gemacht haben:"
 
 #: pretix/control/templates/pretixcontrol/base.html:305
 #, python-format
@@ -8678,62 +8656,56 @@ msgid "Please enable JavaScript in your browser."
 msgstr "Bitte aktivieren Sie JavaScript in Ihrem Browser."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
-#, fuzzy
-#| msgid "Create multiple voucher"
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr "Mehrere Gutscheine erstellen"
+msgstr "Mehrere Termine erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
-#, fuzzy
-#| msgid "Restriction"
 msgid "Repetition rule"
-msgstr "Beschränkung"
+msgstr "Regel zur Wiederholung"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:80
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "Wiederhole alle %(interval)s %(freq)s mit Beginn am %(start)s."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:88
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:199
 msgid "At the same date every year"
-msgstr ""
+msgstr "Am gleichen Tag jedes Jahr"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:92
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:203
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "Am %(setpos)s %(weekday)s im %(month)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:102
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:213
 msgid "At the same date every month"
-msgstr ""
+msgstr "Am gleichen Tag jeden Monat"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "Am %(setpos)s %(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "Wiederhole %(count)s mal"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:125
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:236
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "Wiederhole bis zum %(until)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
-#, fuzzy
-#| msgid "Preview"
 msgctxt "subevent"
 msgid "Preview"
 msgstr "Vorschau"
@@ -8785,29 +8757,23 @@ msgid "Create a new date"
 msgstr "Neuen Termin erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:43
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Create many new dates"
-msgstr "Neuen Termin erstellen"
+msgstr "Mehrere neue Termine erstellen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:53
 msgid "Begin"
 msgstr "Beginn"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr "Neuen Termin erstellen"
+msgstr "Als Vorlage für neuen Termin verwenden"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:116
 msgctxt "subevent"
 msgid "Use as a template for many new dates"
-msgstr ""
+msgstr "Als Vorlage für viele neue Termine verwenden"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -9145,29 +9111,27 @@ msgstr "Account-Protokoll anzeigen"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
-msgstr ""
+msgstr "Admin-Sitzung"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
-#, fuzzy
-#| msgid "Session key"
 msgid "Session notes"
-msgstr "Sitzung"
+msgstr "Sitzungsnotizen"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "Protokoll"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "Methode"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "Im Namen von"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
@@ -9175,12 +9139,13 @@ msgid ""
 "Everything you do in that session will be logged and you will later be asked "
 "to fill in a comment on what you did in your session for later reference."
 msgstr ""
+"Um diese Aktion durchzuführen, müssen Sie eine Admin-Sitzung starten. In "
+"dieser Sitzung wird jede Aktivität aufgezeichnet und Sie werden später "
+"gebeten, einen Kommentar zu Ihrer Arbeit zu hinterlassen."
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
-#, fuzzy
-#| msgid "Start editing"
 msgid "Start session"
-msgstr "Editor starten"
+msgstr "Sitzung starten"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
@@ -10224,12 +10189,9 @@ msgid "The new date has been created."
 msgstr "Eine neuer Termin wurde erstellt."
 
 #: pretix/control/views/subevents.py:672
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "Eine neuer Termin wurde erstellt."
+msgstr "{} neue Termine wurden erstellt."
 
 #: pretix/control/views/typeahead.py:42
 msgid "Series:"
@@ -10319,10 +10281,8 @@ msgid "Your notification settings have been saved."
 msgstr "Die Benachrichtigungs-Einstellungen wurden geändert."
 
 #: pretix/control/views/user.py:538
-#, fuzzy
-#| msgid "Your account has been disabled."
 msgid "Your comment has been saved."
-msgstr "Das Benutzerkonto wurde deaktiviert."
+msgstr "Ihr Kommentar wurde gespeichert."
 
 #: pretix/control/views/users.py:95
 msgid "We sent out an e-mail containing further instructions."
@@ -11615,7 +11575,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:197
 msgid "3D Secure mode"
-msgstr ""
+msgstr "3D-Secure-Behandlung"
 
 #: pretix/plugins/stripe/payment.py:198
 msgid ""
@@ -11624,21 +11584,24 @@ msgid ""
 "SecureCode) reduces the risk of fraud but makes the payment process a bit "
 "longer."
 msgstr ""
+"Dies legt fest, wann wir die 3D-Secure-Methode nutzen werden. 3D-Secure, "
+"auch bekannt als Verified by VISA oder MasterCard SecureCode, reduziert das "
+"Betrugsrisiko aber verlängert den Zahlungsvorgang."
 
 #: pretix/plugins/stripe/payment.py:202
 msgctxt "stripe 3dsecure"
 msgid "Only when required by the card"
-msgstr ""
+msgstr "Nur wenn von der Karte erfordert"
 
 #: pretix/plugins/stripe/payment.py:203
 msgctxt "stripe 3dsecure"
 msgid "Always when recommended by Stripe"
-msgstr ""
+msgstr "Immer wenn von Stripe empfohlen"
 
 #: pretix/plugins/stripe/payment.py:204
 msgctxt "stripe 3dsecure"
 msgid "Always when supported by the card"
-msgstr ""
+msgstr "Immer wenn von der Karte unterstützt"
 
 #: pretix/plugins/stripe/payment.py:296
 #, python-format
