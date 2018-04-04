@@ -64,15 +64,15 @@ event_permission_sub_urls = [
     ('put', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('delete', 'can_change_event_settings', 'checkinlists/1/', 404),
-    ('post', 'can_create_events', 'clone/', 400),
+    ('post', 'can_change_event_settings', 'clone/', 400),
 ]
 
 
 event_permission_root_urls = [
-    ('post', 'can_create_events', 400),
+    ('post', 'can_change_event_settings', 400),
     ('put', 'can_change_event_settings', 400),
     ('patch', 'can_change_event_settings', 200),
-    ('delete', 'can_create_events', 204),
+    ('delete', 'can_change_event_settings', 204),
 ]
 
 

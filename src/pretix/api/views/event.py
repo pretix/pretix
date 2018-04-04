@@ -4,7 +4,6 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 from rest_framework.exceptions import PermissionDenied
 
-from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.serializers.event import (
     EventSerializer, SubEventSerializer, TaxRuleSerializer,
 )
@@ -18,7 +17,6 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
-    permission = 'can_change_event_settings'
     write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
