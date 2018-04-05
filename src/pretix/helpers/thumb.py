@@ -58,7 +58,7 @@ def create_thumbnail(sourcename, size):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.png'
     buffer = BytesIO()
-    if image.mode not in ("1", "L", "RGB"):
+    if image.mode not in ("1", "L", "RGB", "RGBA"):
         image = image.convert('RGB')
     image.save(fp=buffer, format='PNG')
     imgfile = ContentFile(buffer.getvalue())
