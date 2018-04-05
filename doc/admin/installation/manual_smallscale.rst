@@ -114,7 +114,7 @@ python installation::
 
     $ virtualenv -p python3 /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip3 install -U pip setuptools wheel
+    (venv)$ pip3 install -U pip setuptools wheel typing
 
 We now install pretix, its direct dependencies and gunicorn. Replace ``mysql`` with ``postgres`` in the following
 command if you're running PostgreSQL::
