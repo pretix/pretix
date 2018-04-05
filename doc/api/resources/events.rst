@@ -36,7 +36,7 @@ plugins                               list                       A list of packa
 
    The ``meta_data`` field has been added.
 
-.. versionchanged:: 1.14
+.. versionchanged:: 1.15
 
    The ``plugins`` field has been added.
    The operations POST, PATCH, PUT and DELETE have been added.
