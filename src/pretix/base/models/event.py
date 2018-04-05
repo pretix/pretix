@@ -540,6 +540,24 @@ class Event(EventMixin, LoggedModel):
         return Item.objects.filter(event=self, default_price__gt=0).exists()\
             or ItemVariation.objects.filter(item__event=self, default_price__gt=0).exists()
 
+    @cached_property
+    def live_issues(self):
+        from pretix.base.signals import event_live_issues
+        issues = []
+
+        if self.has_paid_things and not self.has_payment_provider:
+            issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
+
+        if not self.quotas.exists():
+            issues.append(_('You need to configure at least one quota to sell anything.'))
+
+        responses = event_live_issues.send(self)
+        for receiver, response in sorted(responses, key=lambda r: str(r[0])):
+            if response:
+                issues.append(response)
+
+        return issues
+
     def get_users_with_any_permission(self):
         """
         Returns a queryset of users who have any permission to this event.
@@ -585,6 +603,10 @@ class Event(EventMixin, LoggedModel):
     def clean_live(self):
         self.clean_payment_methods()
         self.clean_quotas()
+
+        for receiver, response in self.live_issues:
+            if response:
+                raise ValidationError(response)
 
     def allow_delete(self):
         return not self.orders.exists() and not self.invoices.exists()

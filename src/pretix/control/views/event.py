@@ -36,7 +36,7 @@ from pretix.base.models import (
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
-from pretix.base.signals import event_live_issues, register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
@@ -738,28 +738,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['issues'] = self.issues
+        ctx['issues'] = self.request.event.live_issues
         return ctx
 
-    @cached_property
-    def issues(self):
-        issues = []
-
-        if self.request.event.has_paid_things and not self.request.event.has_payment_provider:
-            issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
-
-        if not self.request.event.quotas.exists():
-            issues.append(_('You need to configure at least one quota to sell anything.'))
-
-        responses = event_live_issues.send(self.request.event)
-        for receiver, response in sorted(responses, key=lambda r: str(r[0])):
-            if response:
-                issues.append(response)
-
-        return issues
-
     def post(self, request, *args, **kwargs):
-        if request.POST.get("live") == "true" and not self.issues:
+        if request.POST.get("live") == "true" and not self.request.event.live_issues:
             request.event.live = True
             request.event.save()
             self.request.event.log_action(
