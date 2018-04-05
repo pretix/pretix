@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-04 11:02+0000\n"
-"PO-Revision-Date: 2018-03-20 12:46+0000\n"
+"PO-Revision-Date: 2018-04-05 11:58+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2167,16 +2167,13 @@ msgid "Order {order.code} has been canceled."
 msgstr ""
 
 #: pretix/base/notifications.py:210
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Order expired"
-msgstr "Kurv udløbet"
+msgstr "Bestiiling udløbet"
 
 #: pretix/base/notifications.py:211
-#, fuzzy, python-brace-format
-#| msgid "The order has been marked as expired."
+#, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr "Bestillingen er blevet markeret som udløbet."
+msgstr "Bestilling {order.code} er blevet markeret som udløbet."
 
 #: pretix/base/notifications.py:216
 msgid "Order information changed"
@@ -2568,10 +2565,8 @@ msgstr ""
 "111 Andeby"
 
 #: pretix/base/services/invoices.py:272
-#, fuzzy
-#| msgid "Sample product A"
 msgid "Sample product {}"
-msgstr "Eksempelprodukt A"
+msgstr "Eksempelprodukt {}"
 
 #: pretix/base/services/invoices.py:278
 msgid "Sample product A"
@@ -4201,10 +4196,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:987
-#, fuzzy
-#| msgid "Incompatible"
 msgid "Compatibility mode"
-msgstr "Ikke kompatibel"
+msgstr "Kompatibilitetstilstand"
 
 #: pretix/control/forms/event.py:988
 msgid ""
@@ -4229,20 +4222,16 @@ msgid "Event slug"
 msgstr ""
 
 #: pretix/control/forms/event.py:1068
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket downloads"
-msgstr "Billetdownload"
+msgstr "Billetdownloads"
 
 #: pretix/control/forms/event.py:1069
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr ""
 
 #: pretix/control/forms/event.py:1073
-#, fuzzy
-#| msgid "Require attendee names"
 msgid "Require all attendees to fill in their names"
-msgstr "Påkræv deltagernavne"
+msgstr "Kræv navne på alle deltagere"
 
 #: pretix/control/forms/event.py:1074
 msgid ""
@@ -4251,10 +4240,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:1100
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment via Stripe"
-msgstr "Betalingsdato"
+msgstr "Betaling via Stripe"
 
 #: pretix/control/forms/event.py:1101
 msgid ""
@@ -4265,10 +4252,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:1107
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment by bank transfer"
-msgstr "Betalingsdato"
+msgstr "Betaling ved bankoverførsel"
 
 #: pretix/control/forms/event.py:1108
 msgid ""
@@ -4285,20 +4270,16 @@ msgstr "Produktnavn"
 
 #: pretix/control/forms/event.py:1131
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:43
-#, fuzzy
-#| msgid "Prefix (optional)"
 msgid "Price (optional)"
-msgstr "Præfiks (valgfrit)"
+msgstr "Pris (valgfri)"
 
 #: pretix/control/forms/event.py:1136
 msgid "Free"
 msgstr ""
 
 #: pretix/control/forms/event.py:1141
-#, fuzzy
-#| msgid "Currently unavailable"
 msgid "Quantity available"
-msgstr "Pt. ikke tilgængelig"
+msgstr "Tilgængeligt antal"
 
 #: pretix/control/forms/filter.py:81 pretix/control/forms/filter.py:83
 msgid "Search for…"
@@ -4834,10 +4815,8 @@ msgid "Interval"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:243
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "Number of repititions"
-msgstr "Antal billetter"
+msgstr "Antal gentagelser"
 
 #: pretix/control/forms/subevents.py:253
 #, fuzzy
@@ -4901,10 +4880,8 @@ msgid "Sunday"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:284 pretix/control/forms/subevents.py:334
-#, fuzzy
-#| msgid "Display"
 msgid "Day"
-msgstr "Vis"
+msgstr "Dag"
 
 #: pretix/control/forms/subevents.py:285 pretix/control/forms/subevents.py:335
 msgid "Weekday"
@@ -4923,10 +4900,8 @@ msgid "February"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:294
-#, fuzzy
-#| msgid "Search"
 msgid "March"
-msgstr "Søg"
+msgstr "Marts"
 
 #: pretix/control/forms/subevents.py:295
 msgid "April"
@@ -4949,36 +4924,28 @@ msgid "August"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:300
-#, fuzzy
-#| msgid "Member"
 msgid "September"
-msgstr "Medlem"
+msgstr "September"
 
 #: pretix/control/forms/subevents.py:301
 msgid "October"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:302
-#, fuzzy
-#| msgid "Member"
 msgid "November"
-msgstr "Medlem"
+msgstr "November"
 
 #: pretix/control/forms/subevents.py:303
-#, fuzzy
-#| msgid "Member"
 msgid "December"
-msgstr "Medlem"
+msgstr "December"
 
 #: pretix/control/forms/users.py:94 pretix/control/views/user.py:80
 msgid "Your changes could not be saved. See below for details."
 msgstr ""
 
 #: pretix/control/forms/vouchers.py:121
-#, fuzzy
-#| msgid "Invalid token selected."
 msgid "Invalid product selected."
-msgstr "Ugyldigt token valgt."
+msgstr "Ugyldigt produkt valgt."
 
 #: pretix/control/forms/vouchers.py:162
 msgid "Codes"
@@ -5727,16 +5694,12 @@ msgstr "Vis butik"
 #: pretix/control/templates/pretixcontrol/base.html:160
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
-#, fuzzy
-#| msgid "Admission time"
 msgid "Admin mode"
-msgstr "Dørene åbnes"
+msgstr "Administratortilstand"
 
 #: pretix/control/templates/pretixcontrol/base.html:167
-#, fuzzy
-#| msgid "Event admission time"
 msgid "End admin session"
-msgstr "Indgangstidspunkt"
+msgstr "Afslut administration"
 
 #: pretix/control/templates/pretixcontrol/base.html:179
 msgid "Account Settings"
@@ -6383,10 +6346,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:48
-#, fuzzy
-#| msgid "General settings"
 msgid "General payment settings"
-msgstr "Generelle indstillinger"
+msgstr "Generelle betalingsindstillinger"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:12
 #: pretix/control/templates/pretixcontrol/events/create_base.html:23
@@ -6394,10 +6355,8 @@ msgid "Back"
 msgstr "Tilbage"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:14
-#, fuzzy
-#| msgid "Payment provider"
 msgid "Payment provider:"
-msgstr "Betalingsudbyder"
+msgstr "Betalingsudbyder:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
@@ -6511,34 +6470,24 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:34
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create ticket types"
-msgstr "Opret gruppe"
+msgstr "Opret billettyper"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:40
-#, fuzzy
-#| msgid "Token name"
 msgid "Ticket name"
-msgstr "Navn"
+msgstr "Billetnavn"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:46
-#, fuzzy
-#| msgid "(optional)"
 msgid "Capacity (optional)"
-msgstr "(valgfri)"
+msgstr "Kapacitet (valgfri)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:99
-#, fuzzy
-#| msgid "Add a new device"
 msgid "Add a new ticket type"
-msgstr "Tilføj ny enhed"
+msgstr "Tilføj ny billettype"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:104
-#, fuzzy
-#| msgid "Total capacity"
 msgid "Total capacity:"
-msgstr "Samlet kapacitet"
+msgstr "Samlet kapacitet:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:107
 msgid ""
@@ -8046,10 +7995,8 @@ msgstr "Opret vouchere"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
-#, fuzzy
-#| msgid "Delete tax rule"
 msgid "Repetition rule"
-msgstr "Slet momsregel"
+msgstr "Regel for gentagelse"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:80
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
@@ -8092,8 +8039,6 @@ msgid "Repeat until %(until)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
-#, fuzzy
-#| msgid "Preview"
 msgctxt "subevent"
 msgid "Preview"
 msgstr "Gennemse"
@@ -8145,24 +8090,18 @@ msgid "Create a new date"
 msgstr "Opret ny dato"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:43
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Create many new dates"
-msgstr "Opret ny dato"
+msgstr "Opret mange datoer"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:53
 msgid "Begin"
 msgstr "Start"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr "Opret ny dato"
+msgstr "Brug som skabelon for ny dato"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:116
 msgctxt "subevent"
@@ -8484,10 +8423,8 @@ msgid "Staff session"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
-#, fuzzy
-#| msgid "Question type"
 msgid "Session notes"
-msgstr "Spørgsmålstype"
+msgstr "Sessionsnoter"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
@@ -8513,10 +8450,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
-#, fuzzy
-#| msgid "Start editing"
 msgid "Start session"
-msgstr "Start redigering"
+msgstr "Start session"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
@@ -9142,10 +9077,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/event.py:1270
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Regular ticket"
-msgstr "Hent billet"
+msgstr "Almindelig billet"
 
 #: pretix/control/views/event.py:1275
 msgid "Reduced ticket"
@@ -9496,12 +9429,9 @@ msgid "The new date has been created."
 msgstr "Den nye dato er blevet oprettet."
 
 #: pretix/control/views/subevents.py:672
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "Den nye dato er blevet oprettet."
+msgstr "{} nye datoer er blevet oprettet."
 
 #: pretix/control/views/typeahead.py:42
 msgid "Series:"
@@ -9577,10 +9507,8 @@ msgid "Your notification settings have been saved."
 msgstr ""
 
 #: pretix/control/views/user.py:538
-#, fuzzy
-#| msgid "The comment has been updated."
 msgid "Your comment has been saved."
-msgstr "Kommentar opdateret."
+msgstr "Din kommentar er blevet gemt."
 
 #: pretix/control/views/users.py:95
 msgid "We sent out an e-mail containing further instructions."
@@ -10933,10 +10861,8 @@ msgid "Stripe Connect: Secret key"
 msgstr ""
 
 #: pretix/plugins/stripe/signals.py:114
-#, fuzzy
-#| msgid "Publishable key"
 msgid "Stripe Connect: Publishable key"
-msgstr "Offentlig nøgle"
+msgstr "Stripe Connect: Offentlig nøgle"
 
 #: pretix/plugins/stripe/signals.py:121
 msgid "Stripe Connect: Secret key (test)"
