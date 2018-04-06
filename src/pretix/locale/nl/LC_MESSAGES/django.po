@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-04 11:02+0000\n"
-"PO-Revision-Date: 2018-03-20 02:00+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2018-04-06 22:00+0000\n"
+"Last-Translator: Pieter Roziers <pieter@trippeltwiejenul.be>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1762,7 +1762,6 @@ msgid "Cart position"
 msgstr "Winkelwagen positie"
 
 #: pretix/base/models/orders.py:901
-#, fuzzy
 msgid "Cart positions"
 msgstr "Winkelwagen posities"
 
@@ -2809,6 +2808,8 @@ msgstr "U moet een variant van het product selecteren."
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr ""
+"Het quotum {name} heeft niet genoeg beschikbare capaciteit om deze opdracht "
+"uit te voeren."
 
 #: pretix/base/services/orders.py:700
 msgid "There is no quota defined that allows this operation."
@@ -5916,7 +5917,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:52
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
@@ -5932,7 +5933,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:152
 msgid "Delete"
-msgstr ""
+msgstr "Verwijderen"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:8
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:15
@@ -6442,7 +6443,7 @@ msgstr ""
 #: pretix/control/views/user.py:84 pretix/control/views/users.py:59
 #: pretix/control/views/vouchers.py:174
 msgid "Your changes have been saved."
-msgstr ""
+msgstr "Jouw bewerkingen werden opgeslagen."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
@@ -10571,7 +10572,7 @@ msgstr "Deze plug-in toont u verschillende statistieken."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:17
 msgid "Orders by day"
-msgstr ""
+msgstr "Bestellingen per dag"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid "Revenue over time"
