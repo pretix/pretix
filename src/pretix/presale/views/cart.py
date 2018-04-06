@@ -306,6 +306,7 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
         if CartPosition.objects.filter(cart_id=get_or_create_cart_id(self.request)).exists():
             return _('Your cart has been updated.')
         else:
+            create_empty_cart_id(self.request)
             return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
@@ -326,6 +327,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
     known_errortypes = ['CartError']
 
     def get_success_message(self, value):
+        create_empty_cart_id(self.request)
         return _('Your cart is now empty.')
 
     def post(self, request, *args, **kwargs):
