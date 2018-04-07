@@ -347,6 +347,8 @@ class OrderInvoiceRegenerate(OrderView):
         else:
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
+            elif inv.shredded:
+                messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
                 inv = regenerate_invoice(inv)
                 self.order.log_action('pretix.event.order.invoice.regenerated', user=self.request.user, data={
@@ -370,6 +372,8 @@ class OrderInvoiceReissue(OrderView):
         else:
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
+            elif inv.shredded:
+                messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
                 c = generate_cancellation(inv)
                 if self.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
@@ -446,6 +450,10 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
         if not self.invoice.file:
             invoice_pdf(self.invoice.pk)
             self.invoice = Invoice.objects.get(pk=self.invoice.pk)
+
+        if self.invoice.shredded:
+            messages.error(request, _('The invoice file is no longer stored on the server.'))
+            return redirect(self.get_order_url())
 
         if not self.invoice.file:
             # This happens if we have celery installed and the file will be generated in the background

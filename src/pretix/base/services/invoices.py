@@ -180,6 +180,8 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
 
 
 def regenerate_invoice(invoice: Invoice):
+    if invoice.shredded:
+        return invoice
     if invoice.is_cancellation:
         invoice = build_cancellation(invoice)
     else:
@@ -214,6 +216,10 @@ def generate_invoice(order: Order, trigger_pdf=True):
 @app.task(base=TransactionAwareTask)
 def invoice_pdf_task(invoice: int):
     i = Invoice.objects.get(pk=invoice)
+    if i.shredded:
+        return None
+    if i.file:
+        i.file.delete()
     with language(i.locale):
         fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
         i.file.save(fname, ContentFile(fcontent))

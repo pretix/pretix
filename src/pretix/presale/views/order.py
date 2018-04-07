@@ -663,6 +663,10 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
             invoice_pdf(invoice.pk)
             invoice = Invoice.objects.get(pk=invoice.pk)
 
+        if invoice.shredded:
+            messages.error(request, _('The invoice file is no longer stored on the server.'))
+            return redirect(self.get_order_url())
+
         if not invoice.file:
             # This happens if we have celery installed and the file will be generated in the background
             messages.warning(request, _('The invoice file has not yet been generated, we will generate it for you '

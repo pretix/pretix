@@ -8,12 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0085_auto_20180312_1119'),
+        ('pretixbase', '0088_auto_20180328_1217'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='logentry',
+            name='shredded',
+            field=models.BooleanField(default=False),
+        ),
+        migrations.AddField(
+            model_name='invoice',
             name='shredded',
             field=models.BooleanField(default=False),
         ),

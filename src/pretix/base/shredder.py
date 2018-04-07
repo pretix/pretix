@@ -3,6 +3,8 @@ from datetime import timedelta
 from typing import List, Tuple
 
 from django.db import transaction
+from django.db.models import Max
+from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -12,8 +14,10 @@ from pretix.api.serializers.order import (
 )
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
-    Event, InvoiceAddress, OrderPosition, QuestionAnswer,
+    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPosition,
+    QuestionAnswer,
 )
+from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
 
 
@@ -22,8 +26,18 @@ class ShredError(LazyLocaleException):
 
 
 def shred_constraints(event: Event):
-    if (event.date_to or event.date_from) > now() - timedelta(days=60):
-        return _('Your event needs to be over for at least 60 days to use this feature.')
+    if event.has_subevents:
+        max_date = event.subevents.aggregate(
+            max_from=Max('date_from'),
+            max_to=Max('date_to'),
+            max_fromto=Greatest(Max('date_to'), Max('date_from'))
+        )
+        max_date = max_date['max_fromto'] or max_date['max_to'] or max_date['max_From']
+        if max_date > now() - timedelta(days=60):
+            return _('Your event needs to be over for at least 60 days to use this feature.')
+    else:
+        if (event.date_to or event.date_from) > now() - timedelta(days=60):
+            return _('Your event needs to be over for at least 60 days to use this feature.')
     if event.live:
         return _('Your ticket shop needs to be offline to use this feature.')
     return None
@@ -209,11 +223,56 @@ class QuestionAnswerShredder(BaseDataShredder):
                 le.save(update_fields=['data', 'shredded'])
 
 
+class InvoiceShredder(BaseDataShredder):
+    verbose_name = _('Invoices')
+    identifier = 'invoices'
+    description = _('This will remove all invoice PDFs, as well as any of their text content that might contain '
+                    'personal data from the database. Invoice numbers and totals will be conserved.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        for i in self.event.invoices.filter(shredded=False):
+            if not i.file:
+                invoice_pdf_task.apply(args=(i.pk,))
+                i.refresh_from_db()
+            i.file.open('rb')
+            yield 'invoices/{}.pdf'.format(i.number), 'application/pdf', i.file.read()
+            i.file.close()
+
+    @transaction.atomic
+    def shred_data(self):
+        for i in self.event.invoices.filter(shredded=False):
+            if i.file:
+                i.file.delete()
+                i.shredded = True
+                i.introductory_text = "█"
+                i.additional_text = "█"
+                i.invoice_to = "█"
+                i.payment_provider_text = "█"
+                i.save()
+                i.lines.update(description="█")
+
+
+class CachedTicketShredder(BaseDataShredder):
+    verbose_name = _('Cached ticket files')
+    identifier = 'cachedtickets'
+    description = _('This will remove all cached ticket files. No download will be offered.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        pass
+
+    @transaction.atomic
+    def shred_data(self):
+        CachedTicket.objects.filter(order_position__order__event=self.event).delete()
+        CachedCombinedTicket.objects.filter(order__event=self.event).delete()
+
+
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")
 def register_payment_provider(sender, **kwargs):
     return [
         EmailAddressShredder,
         AttendeeNameShredder,
         InvoiceAddressShredder,
-        QuestionAnswerShredder
+        QuestionAnswerShredder,
+        InvoiceShredder,
+        CachedTicketShredder,
     ]
