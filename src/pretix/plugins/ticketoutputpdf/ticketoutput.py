@@ -61,16 +61,16 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("item_description", {
         "label": _("Product description"),
+        "editor_sample": _("Sample product description"),
+        "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
+    }),
+    ("itemvar", {
+        "label": _("Product name and variation"),
         "editor_sample": _("Sample product – sample variation"),
         "evaluate": lambda orderposition, order, event: (
             '{} - {}'.format(orderposition.item, orderposition.variation)
             if orderposition.variation else str(orderposition.item)
         )
-    }),
-    ("itemvar", {
-        "label": _("Product name and variation"),
-        "editor_sample": _("Sample product description"),
-        "evaluate": lambda orderposition, order, event: str(orderposition.item.description)
     }),
     ("item_category", {
         "label": _("Product category"),
