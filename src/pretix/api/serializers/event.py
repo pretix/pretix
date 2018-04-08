@@ -1,4 +1,6 @@
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
 from rest_framework.fields import Field
@@ -14,6 +16,11 @@ class MetaDataField(Field):
     def to_representation(self, value):
         return {
             v.property.name: v.value for v in value.meta_values.all()
+        }
+
+    def to_internal_value(self, data):
+        return {
+            'meta_data': data
         }
 
 
@@ -53,7 +60,7 @@ class PluginsField(Field):
 
 
 class EventSerializer(I18nAwareModelSerializer):
-    meta_data = MetaDataField(read_only=True, required=False, source='*')
+    meta_data = MetaDataField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
 
     class Meta:
@@ -85,6 +92,56 @@ class EventSerializer(I18nAwareModelSerializer):
             else:
                 self.instance.clean_live()
         return value
+
+    @cached_property
+    def meta_properties(self):
+        return {
+            p.name: p for p in self.context['request'].organizer.meta_properties.all()
+        }
+
+    def validate_meta_data(self, value):
+        for key in value['meta_data'].keys():
+            if key not in self.meta_properties:
+                raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        meta_data = validated_data.pop('meta_data')
+        event = super().create(validated_data)
+
+        # Meta data
+        for key, value in meta_data.items():
+            event.meta_values.create(
+                property=self.meta_properties.get(key),
+                value=value
+            )
+        return event
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        meta_data = validated_data.pop('meta_data', None)
+        event = super().update(instance, validated_data)
+
+        # Meta data
+        if meta_data is not None:
+            current = {mv.property: mv for mv in event.meta_values.select_related('property')}
+            for key, value in meta_data.items():
+                prop = self.meta_properties.get(key)
+                if prop in current:
+                    current[prop].value = value
+                    current[prop].save()
+                else:
+                    event.meta_values.create(
+                        property=self.meta_properties.get(key),
+                        value=value
+                    )
+
+            for prop, current_object in current.items():
+                if prop.name not in meta_data:
+                    current_object.delete()
+
+        return event
 
 
 class SubEventItemSerializer(I18nAwareModelSerializer):
