@@ -938,6 +938,7 @@ class Quota(LoggedModel):
     class Meta:
         verbose_name = _("Quota")
         verbose_name_plural = _("Quotas")
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
