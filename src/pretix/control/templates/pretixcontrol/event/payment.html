@@ -5,49 +5,53 @@
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
         <fieldset>
-            <legend>{% trans "Payment settings" %}</legend>
-            {% bootstrap_field sform.payment_term_days layout="control" %}
-            {% bootstrap_field sform.payment_term_last layout="control" %}
-            {% bootstrap_field sform.payment_term_weekdays layout="control" %}
-            {% bootstrap_field sform.payment_term_expire_automatically layout="control" %}
-            {% bootstrap_field sform.payment_term_accept_late layout="control" %}
-            {% bootstrap_field sform.tax_rate_default layout="control" %}
+            <legend>{% trans "Payment providers" %}</legend>
+            <table class="table table-payment-providers">
+                <tbody>
+                {% for provider in providers %}
+                    <tr>
+                        <td>
+                            <strong>{{ provider.verbose_name }}</strong>
+                        </td>
+                        <td>
+                            {% if provider.is_enabled %}
+                                <span class="text-success">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Enabled" %}
+                                </span>
+                            {% else %}
+                                <span class="text-danger">
+                                    <span class="fa fa-times"></span>
+                                    {% trans "Disabled" %}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
+                                    class="btn btn-default">
+                                <span class="fa fa-cog"></span>
+                                {% trans "Settings" %}
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            {% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </fieldset>
         <fieldset>
-            <legend>{% trans "Payment providers" %}</legend>
-            <div class="alert alert-warning">
-                <span class="fa fa-w fa-legal fa-4x pull-left"></span>
-                <strong>{% trans "Warning:" %}</strong>
-                {% blocktrans trimmed %}
-                    Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
-                    methods within the European Union. Depending on the payment method, this might affect
-                    selling to consumers only or to business customers as well. Depending on your country, this
-                    legislation might already be in effect or become relevant from January 2018 at the latest. This
-                    is not legal advice. If in doubt, consult a lawyer or refrain from charging payment fees.
-                {% endblocktrans %}
-            </div>
-            {% for provider in providers %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            <a class="collapsed" data-toggle="collapse" href="#{{ provider.identifier }}">
-                                {{ provider.verbose_name }}  
-                                <i class="fa fa-angle-down collapse-indicator"></i>
-                            </a>
-                        </h3>
-                    </div>
-                    <div id="{{ provider.identifier }}" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            {% bootstrap_form provider.form layout='control' %}
-                            {% with c=provider.settings_content %}
-                                {% if c %}{{ c|safe }}{% endif %}
-                            {% endwith %}
-                        </div>
-                    </div>
-                </div>
-            {% empty %}
-                <em>{% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}</em>
-            {% endfor %}
+            <legend>{% trans "General payment settings" %}</legend>
+            {% bootstrap_field form.payment_term_days layout="control" %}
+            {% bootstrap_field form.payment_term_last layout="control" %}
+            {% bootstrap_field form.payment_term_weekdays layout="control" %}
+            {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
+            {% bootstrap_field form.payment_term_accept_late layout="control" %}
+            {% bootstrap_field form.tax_rate_default layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

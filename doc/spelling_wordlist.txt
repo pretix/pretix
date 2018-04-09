@@ -1,6 +1,7 @@
 addon
 addons
 api
+auditability
 auth
 autobuild
 backend
@@ -36,6 +37,7 @@ hostname
 inofficial
 invalidations
 iterable
+Jimdo
 libsass
 linters
 memcached

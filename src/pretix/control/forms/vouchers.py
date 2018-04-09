@@ -1,17 +1,25 @@
 import copy
 
 from django import forms
-from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models.functions import Lower
+from django.urls import reverse
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import Item, ItemVariation, Quota, Voucher
+from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import voucher_form_validation
 
 
+class FakeChoiceField(forms.ChoiceField):
+    def valid_value(self, value):
+        return True
+
+
 class VoucherForm(I18nModelForm):
-    itemvar = forms.ChoiceField(
+    itemvar = FakeChoiceField(
         label=_("Product"),
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
@@ -53,47 +61,64 @@ class VoucherForm(I18nModelForm):
 
         if instance.event.has_subevents:
             self.fields['subevent'].queryset = instance.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': instance.event.slug,
+                        'organizer': instance.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            self.fields['subevent'].required = False
         elif 'subevent':
             del self.fields['subevent']
 
         choices = []
-        for i in self.instance.event.items.prefetch_related('variations').all():
-            variations = list(i.variations.all())
-            if variations:
-                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
-                for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
-            else:
-                choices.append((str(i.pk), i.name))
-        for q in self.instance.event.quotas.all():
-            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
         self.fields['itemvar'].choices = choices
+        self.fields['itemvar'].widget = Select2ItemVarQuota(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.vouchers.itemselect2', kwargs={
+                    'event': instance.event.slug,
+                    'organizer': instance.event.organizer.slug,
+                }),
+                'data-placeholder': ''
+            }
+        )
+        self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
+        self.fields['itemvar'].required = True
 
     def clean(self):
         data = super().clean()
 
         if not self._errors:
-            itemid = quotaid = None
-            iv = self.data.get('itemvar', '')
-            if iv.startswith('q-'):
-                quotaid = iv[2:]
-            elif '-' in iv:
-                itemid, varid = iv.split('-')
-            else:
-                itemid, varid = iv, None
-
-            if itemid:
-                self.instance.item = Item.objects.get(pk=itemid, event=self.instance.event)
-                if varid:
-                    self.instance.variation = ItemVariation.objects.get(pk=varid, item=self.instance.item)
+            try:
+                itemid = quotaid = None
+                iv = self.data.get('itemvar', '')
+                if iv.startswith('q-'):
+                    quotaid = iv[2:]
+                elif '-' in iv:
+                    itemid, varid = iv.split('-')
                 else:
-                    self.instance.variation = None
-                self.instance.quota = None
+                    itemid, varid = iv, None
 
-            else:
-                self.instance.quota = Quota.objects.get(pk=quotaid, event=self.instance.event)
-                self.instance.item = None
-                self.instance.variation = None
+                if itemid:
+                    self.instance.item = self.instance.event.items.get(pk=itemid)
+                    if varid:
+                        self.instance.variation = self.instance.item.variations.get(pk=varid)
+                    else:
+                        self.instance.variation = None
+                    self.instance.quota = None
+
+                else:
+                    self.instance.quota = self.instance.event.quotas.get(pk=quotaid)
+                    self.instance.item = None
+                    self.instance.variation = None
+            except ObjectDoesNotExist:
+                raise ValidationError(_("Invalid product selected."))
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
@@ -164,7 +189,10 @@ class VoucherBulkForm(VoucherForm):
     def clean(self):
         data = super().clean()
 
-        if Voucher.objects.filter(code__in=data['codes'], event=self.instance.event).exists():
+        vouchers = self.instance.event.vouchers.annotate(
+            code_lower=Lower('code')
+        ).filter(code_lower__in=[c.lower() for c in data['codes']])
+        if vouchers.exists():
             raise ValidationError(_('A voucher with one of these codes already exists.'))
 
         return data

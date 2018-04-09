@@ -34,7 +34,7 @@ def test_update_notice_displayed(client, user):
     r = client.get('/control/')
     assert 'pretix automatically checks for updates in the background' not in r.content.decode()
 
-    user.is_superuser = True
+    user.is_staff = True
     user.save()
     r = client.get('/control/')
     assert 'pretix automatically checks for updates in the background' in r.content.decode()
@@ -46,7 +46,7 @@ def test_update_notice_displayed(client, user):
 
 @pytest.mark.django_db
 def test_settings(client, user):
-    user.is_superuser = True
+    user.is_staff = True
     user.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
 
@@ -71,7 +71,7 @@ def test_trigger(client, user):
         content_type='application/json',
     )
 
-    user.is_superuser = True
+    user.is_staff = True
     user.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
 

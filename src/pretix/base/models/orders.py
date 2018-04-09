@@ -471,7 +471,8 @@ class QuestionAnswer(models.Model):
     )
     answer = models.TextField()
     file = models.FileField(
-        null=True, blank=True, upload_to=answerfile_name
+        null=True, blank=True, upload_to=answerfile_name,
+        max_length=255
     )
 
     @property
@@ -670,11 +671,13 @@ class OrderFee(models.Model):
     FEE_TYPE_SHIPPING = "shipping"
     FEE_TYPE_SERVICE = "service"
     FEE_TYPE_OTHER = "other"
+    FEE_TYPE_GIFTCARD = "giftcard"
     FEE_TYPES = (
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
         (FEE_TYPE_SERVICE, _("Service fee")),
         (FEE_TYPE_OTHER, _("Other fees")),
+        (FEE_TYPE_GIFTCARD, _("Gift card")),
     )
 
     value = models.DecimalField(
@@ -969,7 +972,7 @@ class CachedTicket(models.Model):
     provider = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     extension = models.CharField(max_length=255)
-    file = models.FileField(null=True, blank=True, upload_to=cachedticket_name)
+    file = models.FileField(null=True, blank=True, upload_to=cachedticket_name, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 
 
@@ -978,7 +981,7 @@ class CachedCombinedTicket(models.Model):
     provider = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
     extension = models.CharField(max_length=255)
-    file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name)
+    file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 
 

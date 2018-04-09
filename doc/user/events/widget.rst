@@ -36,6 +36,12 @@ The second snippet should be embedded at the position where the widget should sh
     You can of course embed multiple widgets of multiple events on your page. In this case, please add the first
     snippet only *once* and the second snippets once *for each event*.
 
+.. note::
+
+    Some website builders like Jimdo have trouble with our custom HTML tag. In that case, you can use
+    ``<div class="pretix-widget-compat" …></div>`` instead of ``<pretix-widget …></pretix-widget>`` starting with
+    pretix 1.14.
+
 Example
 -------
 

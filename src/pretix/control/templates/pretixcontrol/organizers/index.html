@@ -20,7 +20,7 @@
             </button>
         </div>
     </form>
-    {% if request.user.is_superuser %}
+    {% if staff_session %}
         <p>
             <a href="{% url "control:organizers.add" %}" class="btn btn-default">
                 <span class="fa fa-plus"></span>

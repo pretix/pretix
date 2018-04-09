@@ -295,7 +295,7 @@ class CartManager:
 
             if i.get('voucher'):
                 try:
-                    voucher = self.event.vouchers.get(code=i.get('voucher').strip())
+                    voucher = self.event.vouchers.get(code__iexact=i.get('voucher').strip())
                 except Voucher.DoesNotExist:
                     raise CartError(error_messages['voucher_invalid'])
                 else:

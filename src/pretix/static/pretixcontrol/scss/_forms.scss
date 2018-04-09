@@ -281,3 +281,59 @@ table td > .checkbox input[type="checkbox"] {
 .panel-title .radio {
   margin-left: 20px;
 }
+
+.form-quicksetup-total-capacity {
+  height: 34px;
+  strong {
+    line-height: 34px;
+  }
+}
+.form-horizontal [data-formset] .form-quicksetup-total-capacity .form-group {
+  margin: 0;
+  width: auto;
+}
+.form-quicksetup-total-capacity .form-control {
+  width: 100px;
+  display: inline;
+}
+.form-horizontal [data-formset] .rrule-form .form-group {
+  margin: 0;
+  width: auto;
+}
+.rrule-form {
+  .form-control {
+    display: inline;
+  }
+  input[type=number] {
+    width: 100px;
+  }
+  .repeat-yearly, .repeat-monthly, .repeat-weekly {
+    line-height: 35px;
+    padding: 0 0 15px 0;
+    margin: 10px 0;
+    border-top: 1px solid $panel-default-border;
+    border-bottom: 1px solid $panel-default-border;
+
+    input[type="radio"], input[type="checkbox"] {
+      top: 2px;
+    }
+  }
+  .repeat-weekly > div.form-group {
+    display: block;
+    line-height: 1;
+    padding-top: 5px;
+
+    & > div {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-content: space-between;
+      div.checkbox {
+        flex-grow: 1;
+      }
+    }
+  }
+  .repeat-until {
+    line-height: 40px;
+  }
+}

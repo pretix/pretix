@@ -1,7 +1,9 @@
 import pytest
+from django.test import RequestFactory
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer, Team, User
+from pretix.multidomain.middlewares import SessionMiddleware
 
 
 @pytest.fixture
@@ -25,7 +27,19 @@ def user():
 
 @pytest.fixture
 def admin():
-    return User.objects.create_user('admin@dummy.dummy', 'dummy', is_superuser=True)
+    u = User.objects.create_user('admin@dummy.dummy', 'dummy', is_staff=True)
+    return u
+
+
+@pytest.fixture
+def admin_request(admin, client):
+    factory = RequestFactory()
+    r = factory.get('/')
+    SessionMiddleware().process_request(r)
+    r.session.save()
+    admin.staffsession_set.create(date_start=now(), session_key=r.session.session_key)
+    admin.staffsession_set.create(date_start=now(), session_key=client.session.session_key)
+    return r
 
 
 @pytest.mark.django_db
@@ -193,23 +207,20 @@ def test_organizer_permissions_multiple_teams(event, user):
 
 
 @pytest.mark.django_db
-def test_superuser(event, user):
-    user.is_superuser = True
-    user.save()
+def test_superuser(event, admin, admin_request):
+    assert admin.has_organizer_permission(event.organizer, request=admin_request)
+    assert admin.has_organizer_permission(event.organizer, 'can_create_events', request=admin_request)
+    assert admin.has_event_permission(event.organizer, event, request=admin_request)
+    assert admin.has_event_permission(event.organizer, event, 'can_change_event_settings', request=admin_request)
 
-    assert user.has_organizer_permission(event.organizer)
-    assert user.has_organizer_permission(event.organizer, 'can_create_events')
-    assert user.has_event_permission(event.organizer, event)
-    assert user.has_event_permission(event.organizer, event, 'can_change_event_settings')
+    assert 'arbitrary' not in admin.get_event_permission_set(event.organizer, event)
+    assert 'arbitrary' not in admin.get_organizer_permission_set(event.organizer)
 
-    assert 'arbitrary' in user.get_event_permission_set(event.organizer, event)
-    assert 'arbitrary' in user.get_organizer_permission_set(event.organizer)
-
-    assert event in user.get_events_with_any_permission()
+    assert event in admin.get_events_with_any_permission(request=admin_request)
 
 
 @pytest.mark.django_db
-def test_list_of_events(event, user, admin):
+def test_list_of_events(event, user, admin, admin_request):
     orga2 = Organizer.objects.create(slug='d2', name='d2')
     event2 = Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
@@ -236,25 +247,25 @@ def test_list_of_events(event, user, admin):
     team2.limit_events.add(event)
     team3.limit_events.add(event3)
 
-    events = list(user.get_events_with_any_permission())
+    events = list(user.get_events_with_any_permission(request=admin_request))
     assert event in events
     assert event2 in events
     assert event3 in events
     assert event4 not in events
 
-    events = list(user.get_events_with_permission('can_change_event_settings'))
+    events = list(user.get_events_with_permission('can_change_event_settings', request=admin_request))
     assert event not in events
     assert event2 not in events
     assert event3 in events
     assert event4 not in events
 
-    assert set(event.get_users_with_any_permission()) == {user, admin}
-    assert set(event2.get_users_with_any_permission()) == {user, admin}
-    assert set(event3.get_users_with_any_permission()) == {user, admin}
-    assert set(event4.get_users_with_any_permission()) == {admin}
+    assert set(event.get_users_with_any_permission()) == {user}
+    assert set(event2.get_users_with_any_permission()) == {user}
+    assert set(event3.get_users_with_any_permission()) == {user}
+    assert set(event4.get_users_with_any_permission()) == set()
 
-    assert set(event.get_users_with_permission('can_change_event_settings')) == {admin}
-    assert set(event2.get_users_with_permission('can_change_event_settings')) == {admin}
-    assert set(event3.get_users_with_permission('can_change_event_settings')) == {user, admin}
-    assert set(event4.get_users_with_permission('can_change_event_settings')) == {admin}
-    assert set(event.get_users_with_permission('can_change_orders')) == {admin, user}
+    assert set(event.get_users_with_permission('can_change_event_settings')) == set()
+    assert set(event2.get_users_with_permission('can_change_event_settings')) == set()
+    assert set(event3.get_users_with_permission('can_change_event_settings')) == {user}
+    assert set(event4.get_users_with_permission('can_change_event_settings')) == set()
+    assert set(event.get_users_with_permission('can_change_orders')) == {user}

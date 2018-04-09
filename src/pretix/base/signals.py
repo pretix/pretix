@@ -338,3 +338,22 @@ The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 """
+
+
+layout_text_variables = EventPluginSignal()
+"""
+This signal is sent out to collect variables that can be used to display text in ticket-related PDF layouts.
+Receivers are expected to return a dictionary with globally unique identifiers as keys and more
+dictionaries as values that contain keys like in the following example::
+
+    return {
+        "product": {
+            "label": _("Product name"),
+            "editor_sample": _("Sample product"),
+            "evaluate": lambda orderposition, order, event: str(orderposition.item)
+        }
+    }
+
+The evaluate member will be called with the order position, order and event as arguments. The event might
+also be a subevent, if applicable.
+"""

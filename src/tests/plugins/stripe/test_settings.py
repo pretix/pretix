@@ -7,6 +7,7 @@ from pretix.base.models import Event, Organizer, Team, User
 valid_secret_key_values = [
     'sk_',
     'sk_foo',
+    'rk_bla',
 ]
 
 valid_publishable_key_values = [
@@ -43,7 +44,7 @@ def env(client):
     t.members.add(user)
     t.limit_events.add(event)
     client.force_login(user)
-    url = '/control/event/%s/%s/settings/payment' % (event.organizer.slug, event.slug)
+    url = '/control/event/%s/%s/settings/payment/stripe_settings' % (event.organizer.slug, event.slug)
     return client, event, url
 
 
@@ -57,8 +58,8 @@ def test_settings(env):
 
 def _stripe_key_test(env, field, value, is_valid):
     client, event, url = env
-    data = {'payment_stripe_' + field: value}
-    response = client.post(url, data)
+    data = {'payment_stripe_' + field: value, 'payment_stripe__enabled': 'on'}
+    response = client.post(url, data, follow=True)
 
     if not is_valid:
         assert 'does not look valid' in response.rendered_content

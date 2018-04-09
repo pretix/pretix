@@ -50,7 +50,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
             'positions', 'positions__checkins', 'positions__item', 'positions__answers', 'positions__answers__options',
-            'positions__answers__questions', 'fees'
+            'positions__answers__question', 'fees'
         ).select_related(
             'invoice_address'
         )

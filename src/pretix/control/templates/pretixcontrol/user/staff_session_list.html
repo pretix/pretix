@@ -1,0 +1,58 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% block title %}{% trans "Admin sessions" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Admin sessions" %}</h1>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                {% trans "User" %}
+            </th>
+            <th>
+                {% trans "Start date" %}
+            </th>
+            <th>{% trans "End date" %}</th>
+            <th>{% trans "Comment" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in sessions %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:user.sudo.edit" id=s.pk %}">{{ s.pk }}</a>
+                </strong></td>
+                <td><strong>
+                    <a href="{% url "control:users.edit" id=s.user.pk %}">{{ s.user.email }}</a>
+                </strong></td>
+                <td>
+                    {{ s.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                </td>
+                <td>
+                    {% if s.date_end %}
+                        {{ s.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if s.comment %}
+                        <span class="fa fa-check"></span>
+                    {% else %}
+                        <span class="fa fa-times text-danger"></span>
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    <a href="{% url "control:user.sudo.edit" id=s.id %}" class="btn btn-default btn-sm"><i
+                            class="fa fa-edit"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

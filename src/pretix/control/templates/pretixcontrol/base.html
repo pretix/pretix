@@ -30,6 +30,7 @@
             <script type="text/javascript" src="{% static "charts/raphael-min.js" %}"></script>
             <script type="text/javascript" src="{% static "charts/morris.js" %}"></script>
             <script type="text/javascript" src="{% static "clipboard/clipboard.js" %}"></script>
+            <script type="text/javascript" src="{% static "rrule/rrule.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/menu.js" %}"></script>
@@ -40,6 +41,7 @@
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/question.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/mail.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/ui/typeahead.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixcontrol/js/ui/quicksetup.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
             <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
@@ -51,7 +53,7 @@
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
         {% block custom_header %}{% endblock %}
 	</head>
-	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}" data-select2-locale="{{ select2locale }}">
+	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}" data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}">
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
@@ -150,6 +152,22 @@
                         </li>
                     {% endfor %}
 
+                    {% if request.user.is_staff and not staff_session %}
+                        <li>
+                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link" id="button-sudo">
+                                    <i class="fa fa-id-card"></i> {% trans "Admin mode" %}
+                                </button>
+                            </form>
+                        </li>
+                    {% elif request.user.is_staff and staff_session %}
+                        <li>
+                            <a href="{% url 'control:user.sudo.stop' %}" class="danger">
+                                <i class="fa fa-id-card"></i> {% trans "End admin session" %}
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if warning_update_available %}
                         <li>
                             <a href="{% url 'control:global.update' %}" class="danger">
@@ -190,7 +208,7 @@
                                         {% trans "Dashboard" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:global.settings' %}"
                                                 {% if "global.settings" in url_name %}class="active"{% endif %}>
@@ -218,12 +236,19 @@
                                         {% trans "Order search" %}
                                     </a>
                                 </li>
-                                {% if request.user.is_superuser %}
+                                {% if staff_session %}
                                     <li>
                                         <a href="{% url 'control:users' %}"
-                                                {% if "users" in url_name %}class="active"{% endif %}>
+                                           {% if "users" in url_name %}class="active"{% endif %}>
                                             <i class="fa fa-user fa-fw"></i>
                                             {% trans "Users" %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'control:user.sudo.list' %}"
+                                                {% if "sudo" in url_name %}class="active"{% endif %}>
+                                            <i class="fa fa-id-card fa-fw"></i>
+                                            {% trans "Admin sessions" %}
                                         </a>
                                     </li>
                                 {% endif %}
@@ -259,6 +284,21 @@
                     </div>
                 </div>
             </nav>
+            {% if staff_need_to_explain %}
+                <div class="impersonate-warning">
+                    <span class="fa fa-id-card"></span>
+                    {% blocktrans trimmed %}
+                        Please leave a short comment on what you did in the following admin sessions:
+                    {% endblocktrans %}
+                    <ul>
+                        {% for s in staff_need_to_explain %}
+                            <li>
+                                <a href="{% url "control:user.sudo.edit" id=s.pk %}">#{{ s.pk }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
             {% if request|is_hijacked %}
                 <div class="impersonate-warning">
                     <span class="fa fa-user-secret"></span>

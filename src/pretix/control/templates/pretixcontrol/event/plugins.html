@@ -23,7 +23,7 @@
                                     <div class="col-sm-4">
                                         {% if plugin.app.compatibility_errors %}
                                             <button class="btn disabled btn-block btn-default" disabled="disabled">{% trans "Incompatible" %}</button>
-                                        {% elif plugin.restricted and not request.user.is_superuser %}
+                                        {% elif plugin.restricted and not staff_session %}
                                             <button class="btn disabled btn-block btn-default" disabled="disabled">{% trans "Not available" %}</button>
                                         {% elif plugin.module in plugins_active %}
                                             <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}" value="disable">{% trans "Disable" %}</button>
@@ -44,7 +44,7 @@
                                     {% endblocktrans %}</p>
                                 {% endif %}
                                 <p>{{ plugin.description }}</p>
-                                {% if plugin.restricted and not request.user.is_superuser %}
+                                {% if plugin.restricted and not request.user.is_staff %}
                                     <div class="alert alert-warning">
                                         {% trans "This plugin needs to be enabled by a system administrator for your event." %}
                                     </div>

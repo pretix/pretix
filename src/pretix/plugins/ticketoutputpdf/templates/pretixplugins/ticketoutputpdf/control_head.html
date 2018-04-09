@@ -1,7 +1,0 @@
-{% load staticfiles %}
-{% load compress %}
-
-{% compress css %}
-    <link type="text/css" rel="stylesheet" href="{% static "pretixplugins/ticketoutputpdf/editor.css" %}">
-{% endcompress %}
-<link type="text/css" rel="stylesheet" href="{% url "plugins:ticketoutputpdf:css" organizer=request.organizer.slug event=request.event.slug %}">

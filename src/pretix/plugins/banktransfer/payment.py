@@ -14,9 +14,9 @@ class BankTransfer(BasePaymentProvider):
     identifier = 'banktransfer'
     verbose_name = _('Bank transfer')
 
-    @property
-    def settings_form_fields(self):
-        form_field = I18nFormField(
+    @staticmethod
+    def form_field(**kwargs):
+        return I18nFormField(
             label=_('Bank account details'),
             widget=I18nTextarea,
             help_text=_('Include everything that your customers need to send you a bank transfer payment. Within SEPA '
@@ -30,11 +30,18 @@ class BankTransfer(BasePaymentProvider):
                     'Account owner: John Doe\n'
                     'Name of Bank: Professional Banking Institute Ltd., London'
                 )
-            }}
+            }},
+            **kwargs
         )
-        return OrderedDict(
-            list(super().settings_form_fields.items()) + [('bank_details', form_field)]
+
+    @property
+    def settings_form_fields(self):
+        d = OrderedDict(
+            list(super().settings_form_fields.items()) + [('bank_details', self.form_field())]
         )
+        d.move_to_end('bank_details', last=False)
+        d.move_to_end('_enabled', last=False)
+        return d
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')

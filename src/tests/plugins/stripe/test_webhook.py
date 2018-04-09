@@ -101,7 +101,7 @@ def get_test_charge(order: Order):
 @pytest.mark.django_db
 def test_webhook_all_good(env, client, monkeypatch):
     charge = get_test_charge(env[1])
-    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
     client.post('/dummy/dummy/stripe/webhook/', json.dumps(
         {
@@ -135,7 +135,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
     order.save()
 
     charge = get_test_charge(env[1])
-    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
     client.post('/dummy/dummy/stripe/webhook/', json.dumps(
         {
@@ -183,7 +183,7 @@ def test_webhook_partial_refund(env, client, monkeypatch):
         ],
         "total_count": 1
     }
-    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
     client.post('/dummy/dummy/stripe/webhook/', json.dumps(
         {
@@ -225,7 +225,7 @@ def test_webhook_global(env, client, monkeypatch):
     order.save()
 
     charge = get_test_charge(env[1])
-    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args: charge)
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
     ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25")
 

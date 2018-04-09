@@ -60,7 +60,6 @@ class EventPermission(BasePermission):
 
 
 class EventCRUDPermission(EventPermission):
-
     def has_permission(self, request, view):
         if not super(EventCRUDPermission, self).has_permission(request, view):
             return False

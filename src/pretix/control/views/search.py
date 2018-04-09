@@ -24,7 +24,7 @@ class OrderSearch(PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = Order.objects.select_related('invoice_address')
-        if not self.request.user.is_superuser:
+        if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
                 Q(event__organizer_id__in=self.request.user.teams.filter(
                     all_events=True, can_view_orders=True).values_list('organizer', flat=True))

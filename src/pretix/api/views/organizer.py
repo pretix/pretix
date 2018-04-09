@@ -12,7 +12,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            if self.request.user.is_superuser:
+            if self.request.user.has_active_staff_session(self.request.session.session_key):
                 return Organizer.objects.all()
             else:
                 return Organizer.objects.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))

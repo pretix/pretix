@@ -1,0 +1,40 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal form-plugins">
+        {% csrf_token %}
+        <fieldset>
+            <legend>
+                <a href="{% url 'control:event.settings.payment' event=request.event.slug organizer=request.organizer.slug %}"
+                        class="btn btn-default btn-sm btn-link">
+                    <span class="fa fa-caret-left"></span>
+                    {% trans "Back" %}
+                </a>
+                {% trans "Payment provider:" %} {{ provider.verbose_name }}
+            </legend>
+            {% bootstrap_form form layout='control' %}
+            {% if settings_content %}{{ settings_content|safe }}{% endif %}
+            <p>&nbsp;</p>
+            <div class="alert alert-warning">
+                <span class="fa fa-w fa-legal fa-2x pull-left"></span>
+                <strong>{% trans "Warning:" %}</strong>
+                {% blocktrans trimmed %}
+                    Please note that EU Directive 2015/2366 bans surcharging payment fees for most common payment
+                    methods within the European Union. If in doubt, consult a lawyer or refrain from charging payment
+                    fees.
+                {% endblocktrans %}
+                <br>
+                {% blocktrans trimmed %}
+                    In simple terms, this means you need to pay any fees imposed by the payment providers and cannot
+                    pass it on to your customers.
+                {% endblocktrans %}
+            </div>
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

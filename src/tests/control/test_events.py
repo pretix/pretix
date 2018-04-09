@@ -48,6 +48,151 @@ class EventsTest(SoupTest):
         self.assertNotIn("31C3", tabletext)
         self.assertNotIn("MRMCD14", tabletext)
 
+    def test_quick_setup_later(self):
+        self.event1.quotas.create(name='foo', size=2)
+        resp = self.client.get('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        self.assertRedirects(resp, '/control/event/%s/%s/' % (self.orga1.slug, self.event1.slug))
+
+    def test_quick_setup_total_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = "300"
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = ""
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = ""
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 1
+        q = self.event1.quotas.first()
+        assert q.name == 'Tickets'
+        assert q.size == 300
+        assert q.items.count() == 2
+
+    def test_quick_setup_single_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = ""
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = "100"
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = "50"
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 2
+        q = self.event1.quotas.first()
+        assert q.name == 'Normal ticket'
+        assert q.size == 100
+        assert q.items.count() == 1
+        q = self.event1.quotas.last()
+        assert q.name == 'Reduced ticket'
+        assert q.size == 50
+        assert q.items.count() == 1
+
+    def test_quick_setup_dual_quota(self):
+        doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
+        doc.select("[name=show_quota_left]")[0]['checked'] = "checked"
+        doc.select("[name=ticket_download]")[0]['checked'] = "checked"
+        doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
+        doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
+        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=total_quota]")[0]['value'] = "120"
+        doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
+        doc.select("[name=form-MIN_NUM_FORMS]")[0]['value'] = "0"
+        doc.select("[name=form-MAX_NUM_FORMS]")[0]['value'] = "1000"
+        doc.select("[name=form-0-name_0]")[0]['value'] = "Normal ticket"
+        doc.select("[name=form-0-default_price]")[0]['value'] = "13.90"
+        doc.select("[name=form-0-quota]")[0]['value'] = "100"
+        doc.select("[name=form-1-name_0]")[0]['value'] = "Reduced ticket"
+        doc.select("[name=form-1-default_price]")[0]['value'] = "13.20"
+        doc.select("[name=form-1-quota]")[0]['value'] = "50"
+
+        doc = self.post_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug),
+                            extract_form_fields(doc.select('.container-fluid form')[0]))
+        assert len(doc.select(".alert-success")) > 0
+        self.event1.refresh_from_db()
+        self.event1.settings.flush()
+        assert self.event1.settings.show_quota_left
+        assert self.event1.settings.contact_mail == "test@example.org"
+        assert self.event1.settings.ticket_download
+        assert self.event1.settings.ticketoutput_pdf__enabled
+        assert self.event1.settings.payment_banktransfer__enabled
+        assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
+        assert 'pretix.plugins.banktransfer' in self.event1.plugins
+        assert self.event1.items.count() == 2
+        i = self.event1.items.first()
+        assert str(i.name) == "Normal ticket"
+        assert i.default_price == Decimal('13.90')
+        i = self.event1.items.last()
+        assert str(i.name) == "Reduced ticket"
+        assert i.default_price == Decimal('13.20')
+        assert self.event1.quotas.count() == 3
+        q = self.event1.quotas.first()
+        assert q.name == 'Normal ticket'
+        assert q.size == 100
+        assert q.items.count() == 1
+        q = self.event1.quotas.last()
+        assert q.name == 'Tickets'
+        assert q.size == 120
+        assert q.items.count() == 2
+
     def test_settings(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
         doc.select("[name=date_to_0]")[0]['value'] = "2013-12-30"
@@ -135,52 +280,38 @@ class EventsTest(SoupTest):
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
         assert len(doc.select(".btn-primary")) == 0
 
-    def test_payment_settings(self):
-        tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
-        self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
+    def test_payment_settings_provider(self):
+        self.get_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug))
+        self.post_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug), {
             'payment_banktransfer__enabled': 'true',
             'payment_banktransfer__fee_abs': '12.23',
             'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-tax_rate_default': tr19.pk,
         })
         self.event1.settings.flush()
         assert self.event1.settings.get('payment_banktransfer__enabled', as_type=bool)
         assert self.event1.settings.get('payment_banktransfer__fee_abs', as_type=Decimal) == Decimal('12.23')
 
-    def test_payment_settings_dont_require_fields_of_inactive_providers(self):
+    def test_payment_settings(self):
         tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'settings-tax_rate_default': tr19.pk,
-            'settings-payment_term_days': '2'
-        }, follow=True)
-        assert doc.select('.alert-success')
-
-    def test_payment_settings_require_fields_of_active_providers(self):
-        tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'settings-payment_term_days': '2',
-            'settings-tax_rate_default': tr19.pk,
+        self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
+        self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
+            'payment_term_days': '2',
+            'tax_rate_default': tr19.pk,
         })
-        assert doc.select('.alert-danger')
+        self.event1.settings.flush()
+        assert self.event1.settings.get('payment_term_days', as_type=int) == 2
 
     def test_payment_settings_last_date_payment_after_presale_end(self):
         tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
         self.event1.presale_end = datetime.datetime.now()
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-payment_term_last_0': 'absolute',
-            'settings-payment_term_last_1': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
-            'settings-payment_term_last_2': '0',
-            'settings-payment_term_last_3': 'date_from',
-            'settings-tax_rate_default': tr19.pk,
+            'payment_term_days': '2',
+            'payment_term_last_0': 'absolute',
+            'payment_term_last_1': (self.event1.presale_end - datetime.timedelta(1)).strftime('%Y-%m-%d'),
+            'payment_term_last_2': '0',
+            'payment_term_last_3': 'date_from',
+            'tax_rate_default': tr19.pk,
         })
         assert doc.select('.alert-danger')
         self.event1.presale_end = None
@@ -191,15 +322,12 @@ class EventsTest(SoupTest):
         self.event1.presale_end = self.event1.date_from - datetime.timedelta(days=5)
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
-            'payment_banktransfer__enabled': 'true',
-            'payment_banktransfer__fee_abs': '12.23',
-            'payment_banktransfer_bank_details_0': 'Test',
-            'settings-payment_term_days': '2',
-            'settings-payment_term_last_0': 'relative',
-            'settings-payment_term_last_1': '',
-            'settings-payment_term_last_2': '10',
-            'settings-payment_term_last_3': 'date_from',
-            'settings-tax_rate_default': tr19.pk,
+            'payment_term_days': '2',
+            'payment_term_last_0': 'relative',
+            'payment_term_last_1': '',
+            'payment_term_last_2': '10',
+            'payment_term_last_3': 'date_from',
+            'tax_rate_default': tr19.pk,
         })
         assert doc.select('.alert-danger')
         self.event1.presale_end = None
@@ -675,7 +803,6 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-0-all_products': 'on',
             'item-%d-price' % self.ticket.pk: '12'
         })
-        print(doc)
         assert doc.select(".alert-success")
         self.subevent1.refresh_from_db()
         se = self.subevent1
@@ -724,6 +851,327 @@ class SubEventsTest(SoupTest):
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {}, follow=True)
         assert doc.select(".alert-danger")
         assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
+
+    def test_create_bulk(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'yearly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'count',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'location_0': 'Loc',
+            'time_admission': '',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-id': '',
+            'quotas-0-name': 'Bar',
+            'quotas-0-size': '12',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'item-%d-price' % self.ticket.pk: '16',
+            'checkinlist_set-TOTAL_FORMS': '1',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-0-id': '',
+            'checkinlist_set-0-name': 'Foo',
+            'checkinlist_set-0-limit_products': str(self.ticket.pk),
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 10
+
+        assert str(ses[0].name) == "Foo"
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[0].date_to.isoformat() == "2018-04-03T13:29:31+00:00"
+        assert not ses[0].presale_start
+        assert ses[0].presale_end.isoformat() == "2018-04-02T11:29:31+00:00"
+        assert ses[0].quotas.count() == 1
+        assert list(ses[0].quotas.first().items.all()) == [self.ticket]
+        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+        assert ses[0].checkinlist_set.count() == 1
+
+        assert str(ses[1].name) == "Foo"
+        assert ses[1].date_from.isoformat() == "2019-04-03T11:29:31+00:00"
+        assert ses[1].date_to.isoformat() == "2019-04-03T13:29:31+00:00"
+        assert not ses[1].presale_start
+        assert ses[1].presale_end.isoformat() == "2019-04-02T11:29:31+00:00"
+        assert ses[1].quotas.count() == 1
+        assert list(ses[1].quotas.first().items.all()) == [self.ticket]
+        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+        assert ses[1].checkinlist_set.count() == 1
+
+        assert ses[-1].date_from.isoformat() == "2027-04-03T11:29:31+00:00"
+
+    def test_create_bulk_daily_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '2',
+            'rruleformset-0-freq': 'daily',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 183
+
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[110].date_from.isoformat() == "2018-11-09T12:29:31+00:00"  # DST :)
+        assert ses[-1].date_from.isoformat() == "2019-04-02T11:29:31+00:00"
+
+    def test_create_bulk_exclude(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '2',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'daily',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'rruleformset-1-interval': '1',
+            'rruleformset-1-freq': 'weekly',
+            'rruleformset-1-dtstart': '2018-04-03',
+            'rruleformset-1-yearly_same': 'on',
+            'rruleformset-1-yearly_bysetpos': '1',
+            'rruleformset-1-yearly_byweekday': 'MO',
+            'rruleformset-1-yearly_bymonth': '1',
+            'rruleformset-1-monthly_same': 'on',
+            'rruleformset-1-monthly_bysetpos': '1',
+            'rruleformset-1-monthly_byweekday': 'MO',
+            'rruleformset-1-weekly_byweekday': 'MO',
+            'rruleformset-1-end': 'until',
+            'rruleformset-1-count': '10',
+            'rruleformset-1-until': '2019-04-03',
+            'rruleformset-1-exclude': 'on',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 314
+
+        assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
+        assert ses[5].date_from.isoformat() == "2018-04-08T11:29:31+00:00"
+        assert ses[6].date_from.isoformat() == "2018-04-10T11:29:31+00:00"
+
+    def test_create_bulk_monthly_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'monthly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'off',
+            'rruleformset-0-monthly_bysetpos': '-1',
+            'rruleformset-0-monthly_byweekday': 'MO,TU,WE,TH,FR',
+            'rruleformset-0-weekly_byweekday': 'TH',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_0': 'unset',
+            'rel_presale_end_1': '',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 12
+
+        assert ses[0].date_from.isoformat() == "2018-04-30T11:29:31+00:00"
+        assert ses[1].date_from.isoformat() == "2018-05-31T11:29:31+00:00"
+        assert ses[-1].date_from.isoformat() == "2019-03-29T12:29:31+00:00"
+
+    def test_create_bulk_weekly_interval(self):
+        self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'weekly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '-1',
+            'rruleformset-0-monthly_byweekday': 'MO,TU,WE,TH,FR',
+            'rruleformset-0-weekly_byweekday': 'TH',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2019-04-03',
+            'name_0': 'Foo',
+            'active': 'on',
+            'time_from': '13:29:31',
+            'time_to': '15:29:31',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_0': 'unset',
+            'rel_presale_end_1': '',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '13:29:31',
+            'quotas-TOTAL_FORMS': '0',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        ses = list(self.event1.subevents.order_by('date_from'))
+        assert len(ses) == 52
+
+        assert ses[0].date_from.isoformat() == "2018-04-05T11:29:31+00:00"
+        assert ses[1].date_from.isoformat() == "2018-04-12T11:29:31+00:00"
+        assert ses[-1].date_from.isoformat() == "2019-03-28T12:29:31+00:00"
 
 
 class EventDeletionTest(SoupTest):

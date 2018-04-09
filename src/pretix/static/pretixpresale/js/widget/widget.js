@@ -406,7 +406,12 @@ var shared_methods = {
             if (data.redirect.substr(0, 1) === '/') {
                 data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
             }
-            var url = data.redirect + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            var url = data.redirect;
+            if (url.indexOf('?')) {
+                url = url + '&iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            } else {
+                url = url + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+            }
             if (data.success === false) {
                 url = url.replace(/checkout\/start/g, "");
                 this.$root.error_message = data.message;
@@ -648,6 +653,10 @@ var create_widget = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
 
+    if (element.tagName !== "pretix-widget") {
+        element.innerHTML = "<pretix-widget></pretix-widget>";
+    }
+
     var app = new Vue({
         el: element,
         data: function () {
@@ -722,6 +731,10 @@ var create_button = function (element) {
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var button_text = element.innerHTML;
 
+    if (element.tagName !== "pretix-button") {
+        element.innerHTML = "<pretix-button>" + element.innerHTML + "</pretix-button>";
+    }
+
     var itemsplit = raw_items.split(",");
     var items = [];
     for (var i = 0; i < itemsplit.length; i++) {
@@ -763,14 +776,14 @@ buttonlist = [];
 document.createElement("pretix-widget");
 document.createElement("pretix-button");
 docReady(function () {
-    var widgets = document.querySelectorAll("pretix-widget");
+    var widgets = document.querySelectorAll("pretix-widget, div.pretix-widget-compat");
     var wlength = widgets.length;
     for (var i = 0; i < wlength; i++) {
         var widget = widgets[i];
         widgetlist.push(create_widget(widget));
     }
 
-    var buttons = document.querySelectorAll("pretix-button");
+    var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
     var blength = buttons.length;
     for (var i = 0; i < blength; i++) {
         var button = buttons[i];

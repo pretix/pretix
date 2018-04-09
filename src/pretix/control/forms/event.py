@@ -9,7 +9,9 @@ from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.forms import (
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+)
 from pytz import common_timezones, timezone
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
@@ -21,6 +23,7 @@ from pretix.control.forms import (
     SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.presale.style import get_fonts
 
 
@@ -145,7 +148,7 @@ class EventWizardBasicsForm(I18nModelForm):
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
-        if Event.objects.filter(slug=slug, organizer=self.organizer).exists():
+        if Event.objects.filter(slug__iexact=slug, organizer=self.organizer).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_slug'],
                 code='duplicate_slug'
@@ -362,6 +365,8 @@ class EventSettingsForm(SettingsForm):
     )
     imprint_url = forms.URLField(
         label=_("Imprint URL"),
+        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
+                    "information."),
         required=False,
     )
     confirm_text = I18nFormField(
@@ -375,7 +380,7 @@ class EventSettingsForm(SettingsForm):
     contact_mail = forms.EmailField(
         label=_("Contact address"),
         required=False,
-        help_text=_("Public email address for contacting the organizer")
+        help_text=_("We'll show this publicly to allow attendees to contact you.")
     )
     cancel_allow_user = forms.BooleanField(
         label=_("Allow users to cancel unpaid orders"),
@@ -411,7 +416,10 @@ class EventSettingsForm(SettingsForm):
 class PaymentSettingsForm(SettingsForm):
     payment_term_days = forms.IntegerField(
         label=_('Payment term in days'),
-        help_text=_("The number of days after placing an order the user has to pay to preserve his reservation."),
+        help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
+                    "you use slow payment methods like bank transfer, we recommend 14 days. If you only use real-time "
+                    "payment methods, we recommend still setting two or three days to allow people to retry failed "
+                    "payments."),
     )
     payment_term_last = RelativeDateField(
         label=_('Last date of payments'),
@@ -975,6 +983,11 @@ class WidgetCodeForm(forms.Form):
                     "bought via the widget, this voucher will be used. This can for example be used to provide "
                     "widgets that give discounts or unlock secret products.")
     )
+    compatibility_mode = forms.BooleanField(
+        label=_("Compatibility mode"),
+        help_text=_("Our regular widget doesn't work in all website builders. If you run into trouble, try using "
+                    "this compatibility mode.")
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -1036,3 +1049,118 @@ class EventDeleteForm(forms.Form):
                 code='slug_wrong',
             )
         return slug
+
+
+class QuickSetupForm(I18nForm):
+    show_quota_left = forms.BooleanField(
+        label=_("Show number of tickets left"),
+        help_text=_("Publicly show how many tickets of a certain type are still available."),
+        required=False
+    )
+    waiting_list_enabled = forms.BooleanField(
+        label=_("Waiting list"),
+        help_text=_("Once a ticket is sold out, people can add themselves to a waiting list. As soon as a ticket "
+                    "becomes available again, it will be reserved for the first person on the waiting list and this "
+                    "person will receive an email notification with a voucher that can be used to buy a ticket."),
+        required=False
+    )
+    ticket_download = forms.BooleanField(
+        label=_("Ticket downloads"),
+        help_text=_("Your customers will be able to download their tickets in PDF format."),
+        required=False
+    )
+    attendee_names_required = forms.BooleanField(
+        label=_("Require all attendees to fill in their names"),
+        help_text=_("By default, we will ask for names but not require them. You can turn this off completely in the "
+                    "settings."),
+        required=False
+    )
+    imprint_url = forms.URLField(
+        label=_("Imprint URL"),
+        help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
+                    "information."),
+        required=False,
+    )
+    contact_mail = forms.EmailField(
+        label=_("Contact address"),
+        required=False,
+        help_text=_("We'll show this publicly to allow attendees to contact you.")
+    )
+    total_quota = forms.IntegerField(
+        label=_("Total capacity"),
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={
+                'placeholder': '∞'
+            }
+        ),
+        required=False
+    )
+    payment_stripe__enabled = forms.BooleanField(
+        label=_("Payment via Stripe"),
+        help_text=_("Stripe is an online payments processor supporting credit cards and lots of other payment options. "
+                    "To accept payments via Stripe, you will need to set up an account with them, which takes less "
+                    "than five minutes using their simple interface."),
+        required=False
+    )
+    payment_banktransfer__enabled = forms.BooleanField(
+        label=_("Payment by bank transfer"),
+        help_text=_("Your customers will be instructed to wire the money to your account. You can then import your "
+                    "bank statements to process the payments within pretix, or mark them as paid manually."),
+        required=False
+    )
+    payment_banktransfer_bank_details = BankTransfer.form_field(required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.obj = kwargs.pop('event', None)
+        self.locales = self.obj.settings.get('locales') if self.obj else kwargs.pop('locales', None)
+        kwargs['locales'] = self.locales
+        super().__init__(*args, **kwargs)
+        if not self.obj.settings.payment_stripe_connect_client_id:
+            del self.fields['payment_stripe__enabled']
+        self.fields['payment_banktransfer_bank_details'].required = False
+
+
+class QuickSetupProductForm(I18nForm):
+    name = I18nFormField(
+        max_length=255,
+        label=_("Product name"),
+        widget=I18nTextInput
+    )
+    default_price = forms.DecimalField(
+        label=_("Price (optional)"),
+        max_digits=7, decimal_places=2, required=False,
+        localize=True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': _('Free')
+            }
+        ),
+    )
+    quota = forms.IntegerField(
+        label=_("Quantity available"),
+        min_value=0,
+        widget=forms.NumberInput(
+            attrs={
+                'placeholder': '∞'
+            }
+        ),
+        initial=100,
+        required=False
+    )
+
+
+class BaseQuickSetupProductFormSet(I18nFormSetMixin, forms.BaseFormSet):
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)
+        if event:
+            kwargs['locales'] = event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+QuickSetupProductFormSet = formset_factory(
+    QuickSetupProductForm,
+    formset=BaseQuickSetupProductFormSet,
+    can_order=False, can_delete=True, extra=0
+)

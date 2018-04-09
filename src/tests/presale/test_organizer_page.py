@@ -149,7 +149,6 @@ def test_attributes_in_calendar(env, client):
     e.meta_values.create(value='HD', property=prop)
 
     r = client.get('/mrmcd/?attr[loc]=HD&style=calendar')
-    print(r.rendered_content)
     assert 'MRMCD2017' in r.rendered_content
     r = client.get('/mrmcd/?attr[loc]=MA&style=calendar')
     assert 'MRMCD2017' not in r.rendered_content

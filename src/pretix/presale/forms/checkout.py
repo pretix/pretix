@@ -39,7 +39,7 @@ class ContactForm(forms.Form):
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.')
             )
 
-        if self.request.session.get('iframe_session', False):
+        if not self.request.session.get('iframe_session', False):
             # There is a browser quirk in Chrome that leads to incorrect initial scrolling in iframes if there
             # is an autofocus field. Who would have thought… See e.g. here:
             # https://floatboxjs.com/forum/topic.php?post=8440&usebb_sid=2e116486a9ec6b7070e045aea8cded5b#post8440

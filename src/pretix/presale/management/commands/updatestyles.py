@@ -29,7 +29,7 @@ class Command(BaseCommand):
             fname = gs.settings.get('widget_file_{}'.format(lc))
             if not fname or gs.settings.get('widget_checksum_{}'.format(lc), '') != checksum:
                 newname = default_storage.save(
-                    'widget/widget.{}.{}.js'.format(lc, checksum),
+                    'pub/widget/widget.{}.{}.js'.format(lc, checksum),
                     ContentFile(data)
                 )
                 gs.settings.set('widget_file_{}'.format(lc), 'file://' + newname)

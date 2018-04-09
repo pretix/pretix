@@ -1,6 +1,6 @@
 import hashlib
 import json
-from urllib.parse import urljoin
+import logging
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -19,7 +19,6 @@ from django.views.decorators.http import condition
 from django.views.i18n import (
     get_formats, get_javascript_catalog, js_catalog_template,
 )
-from easy_thumbnails.files import get_thumbnailer
 from lxml import etree
 
 from pretix.base.i18n import language
@@ -27,10 +26,13 @@ from pretix.base.models import CartPosition, Voucher
 from pretix.base.services.cart import error_messages
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.helpers.thumb import get_thumbnail
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def indent(s):
@@ -108,11 +110,17 @@ def widget_js(request, lang, **kwargs):
 
     gs = GlobalSettingsObject()
     fname = gs.settings.get('widget_file_{}'.format(lang))
-    print(fname, settings.DEBUG)
-    if not fname or settings.DEBUG:
+    resp = None
+    if fname and not settings.DEBUG:
+        try:
+            resp = HttpResponse(default_storage.open(fname).read(), content_type='text/javascript')
+        except:
+            logger.exception('Failed to open widget.js')
+
+    if not resp:
         data = generate_widget_js(lang).encode()
         checksum = hashlib.sha1(data).hexdigest()
-        if not fname:
+        if not settings.DEBUG:
             newname = default_storage.save(
                 'widget/widget.{}.{}.js'.format(lang, checksum),
                 ContentFile(data)
@@ -120,8 +128,6 @@ def widget_js(request, lang, **kwargs):
             gs.settings.set('widget_file_{}'.format(lang), 'file://' + newname)
             gs.settings.set('widget_checksum_{}'.format(lang), checksum)
         resp = HttpResponse(data, content_type='text/javascript')
-    else:
-        resp = FileResponse(default_storage.open(fname), content_type='text/javascript')
     return resp
 
 
@@ -136,8 +142,7 @@ def price_dict(price):
 
 
 def get_picture(picture):
-    thumb = get_thumbnailer(picture)['productlist']
-    return urljoin(settings.SITE_URL, thumb.url)
+    return get_thumbnail(picture.name, '60x60^').thumb.url
 
 
 class WidgetAPIProductList(View):
@@ -238,7 +243,7 @@ class WidgetAPIProductList(View):
         self.voucher = None
         if 'voucher' in request.GET:
             try:
-                self.voucher = request.event.vouchers.get(code=request.GET.get('voucher').strip())
+                self.voucher = request.event.vouchers.get(code__iexact=request.GET.get('voucher').strip())
                 if self.voucher.redeemed >= self.voucher.max_usages:
                     data['error'] = error_messages['voucher_redeemed']
                     fail = True

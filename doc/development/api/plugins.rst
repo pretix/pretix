@@ -142,5 +142,5 @@ your Django app label.
 .. _Django app: https://docs.djangoproject.com/en/1.7/ref/applications/
 .. _signal dispatcher: https://docs.djangoproject.com/en/1.7/topics/signals/
 .. _namespace packages: http://legacy.python.org/dev/peps/pep-0420/
-.. _entry point: https://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services-and-plugins
+.. _entry point: https://setuptools.readthedocs.io/en/latest/pkg_resources.html#locating-plugins
 .. _cookiecutter: https://cookiecutter.readthedocs.io/en/latest/

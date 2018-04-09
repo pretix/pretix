@@ -12,8 +12,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, TemplateView, UpdateView
+from django.views import View
+from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from u2flib_server import u2f
@@ -21,7 +23,12 @@ from u2flib_server.jsapi import DeviceRegistration
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import Event, NotificationSetting, U2FDevice, User
+from pretix.base.models.auth import StaffSession
 from pretix.base.notifications import get_all_notification_types
+from pretix.control.forms.users import StaffSessionForm
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
+)
 from pretix.control.views.auth import get_u2f_appid
 
 REAL_DEVICE_TYPES = (TOTPDevice, U2FDevice)
@@ -472,3 +479,67 @@ class UserNotificationsEditView(TemplateView):
         if self.event:
             ctx['permset'] = self.request.user.get_event_permission_set(self.event.organizer, self.event)
         return ctx
+
+
+class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/user/staff_session_start.html'
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_active_staff_session(request.session.session_key):
+            StaffSession.objects.create(
+                user=request.user,
+                session_key=request.session.session_key
+            )
+
+        if "next" in request.GET and is_safe_url(request.GET.get("next")):
+            return redirect(request.GET.get("next"))
+        else:
+            return redirect(reverse("control:index"))
+
+
+class StopStaffSession(StaffMemberRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        session = StaffSession.objects.filter(
+            date_end__isnull=True, session_key=request.session.session_key, user=request.user,
+        ).first()
+        if not session:
+            return redirect(reverse("control:index"))
+
+        session.date_end = now()
+        session.save()
+        return redirect(reverse("control:user.sudo.edit", kwargs={'id': session.pk}))
+
+
+class StaffSessionList(AdministratorPermissionRequiredMixin, ListView):
+    context_object_name = 'sessions'
+    template_name = 'pretixcontrol/user/staff_session_list.html'
+    paginate_by = 25
+    model = StaffSession
+
+    def get_queryset(self):
+        return StaffSession.objects.select_related('user').order_by('-date_start')
+
+
+class EditStaffSession(StaffMemberRequiredMixin, UpdateView):
+    context_object_name = 'session'
+    template_name = 'pretixcontrol/user/staff_session_edit.html'
+    form_class = StaffSessionForm
+
+    def get_success_url(self):
+        return reverse("control:user.sudo.edit", kwargs={'id': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['logs'] = self.object.logs.select_related('impersonating')
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your comment has been saved.'))
+        return super().form_valid(form)
+
+    def get_object(self, queryset=None):
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            return get_object_or_404(StaffSession, pk=self.kwargs['id'])
+        else:
+            return get_object_or_404(StaffSession, pk=self.kwargs['id'], user=self.request.user)

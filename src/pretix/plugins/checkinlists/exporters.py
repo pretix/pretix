@@ -6,6 +6,7 @@ from defusedcsv import csv
 from django import forms
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
+from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
@@ -16,6 +17,7 @@ from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Checkin, Order, OrderPosition, Question
 from pretix.base.templatetags.money import money_filter
+from pretix.control.forms.widgets import Select2
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
 
@@ -60,6 +62,21 @@ class BaseCheckinList(BaseExporter):
                  )),
             ]
         )
+
+        d['list'].queryset = self.event.checkin_lists.all()
+        d['list'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.orders.checkinlists.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('Check-in list')
+            }
+        )
+        d['list'].widget.choices = d['list'].choices
+        d['list'].required = True
+
         return d
 
 

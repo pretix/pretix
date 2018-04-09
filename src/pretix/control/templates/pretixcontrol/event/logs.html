@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-lg-2 col-sm-6 col-xs-12">
                         {% if log.user %}
-                            {% if log.user.is_superuser %}
+                            {% if log.user.is_staff %}
                                 <span class="fa fa-id-card fa-danger fa-fw"
                                      data-toggle="tooltip"
                                      title="{% trans "This change was performed by a pretix administrator." %}">

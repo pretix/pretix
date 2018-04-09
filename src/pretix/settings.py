@@ -87,6 +87,7 @@ PRETIX_INSTANCE_NAME = config.get('pretix', 'instance_name', fallback='pretix.de
 PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=True)
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 PRETIX_LONG_SESSIONS = config.getboolean('pretix', 'long_sessions', fallback=True)
+PRETIX_ADMIN_AUDIT_COMMENTS = config.getboolean('pretix', 'audit_comments', fallback=False)
 PRETIX_SESSION_TIMEOUT_RELATIVE = 3600 * 3
 PRETIX_SESSION_TIMEOUT_ABSOLUTE = 3600 * 12
 
@@ -225,6 +226,7 @@ INSTALLED_APPS = [
     'pretix.presale',
     'pretix.multidomain',
     'pretix.api',
+    'pretix.helpers',
     'rest_framework',
     'django_filters',
     'compressor',
@@ -239,7 +241,6 @@ INSTALLED_APPS = [
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
-    'easy_thumbnails',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
@@ -260,6 +261,8 @@ PLUGINS = []
 for entry_point in iter_entry_points(group='pretix.plugin', name=None):
     PLUGINS.append(entry_point.module_name)
     INSTALLED_APPS.append(entry_point.module_name)
+
+HIJACK_AUTHORIZE_STAFF = True
 
 
 REST_FRAMEWORK = {
@@ -297,6 +300,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pretix.control.middleware.PermissionMiddleware',
+    'pretix.control.middleware.AuditLogMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
     'pretix.presale.middleware.EventMiddleware',
@@ -462,13 +466,6 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
 }
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
-THUMBNAIL_ALIASES = {
-    '': {
-        'productlist': {'size': (60, 60), 'crop': True},
-        'logo': {'size': (5000, 120), 'crop': False},
-    },
-}
 
 loglevel = 'DEBUG' if DEBUG else 'INFO'
 

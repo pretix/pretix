@@ -265,11 +265,20 @@ def build_preview_invoice_pdf(event):
         invoice.save()
         invoice.lines.all().delete()
 
-        InvoiceLine.objects.create(
-            invoice=invoice, description=_("Sample product A"),
-            gross_value=119, tax_value=19,
-            tax_rate=19
-        )
+        if event.tax_rules.exists():
+            for i, tr in enumerate(event.tax_rules.all()):
+                tax = tr.tax(Decimal('100.00'))
+                InvoiceLine.objects.create(
+                    invoice=invoice, description=_("Sample product {}").format(i + 1),
+                    gross_value=tax.gross, tax_value=tax.tax,
+                    tax_rate=tax.rate
+                )
+        else:
+            InvoiceLine.objects.create(
+                invoice=invoice, description=_("Sample product A"),
+                gross_value=100, tax_value=0, tax_rate=0
+            )
+
         return event.invoice_renderer.generate(invoice)
 
 

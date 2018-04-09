@@ -48,7 +48,8 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         if 'assign' in request.POST:
-            if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders'):
+            if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
+                                                     request=request):
                 messages.error(request, _('You do not have permission to do this'))
                 return redirect(reverse('control:event.orders.waitinglist', kwargs={
                     'event': request.event.slug,

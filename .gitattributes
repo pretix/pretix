@@ -1,16 +1,17 @@
-src/static/fontawesome/* linguist-vendored
-src/static/lightbox/* linguist-vendored
-src/static/typeahead/* linguist-vendored
-src/static/moment/* linguist-vendored
-src/static/datetimepicker/* linguist-vendored
-src/static/colorpicker/* linguist-vendored
-src/static/fileupload/* linguist-vendored
-src/static/vuejs/* linguist-vendored
-src/static/select2/* linguist-vendored
-src/static/charts/* linguist-vendored
-src/static/iframeresizer/* linguist-vendored
-src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/fabric.* linguist-vendored
-src/pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/pdf.* linguist-vendored
+src/pretix/static/fontawesome/* linguist-vendored
+src/pretix/static/lightbox/* linguist-vendored
+src/pretix/static/typeahead/* linguist-vendored
+src/pretix/static/moment/* linguist-vendored
+src/pretix/static/datetimepicker/* linguist-vendored
+src/pretix/static/colorpicker/* linguist-vendored
+src/pretix/static/fileupload/* linguist-vendored
+src/pretix/static/vuejs/* linguist-vendored
+src/pretix/static/select2/* linguist-vendored
+src/pretix/static/charts/* linguist-vendored
+src/pretix/static/rrule/* linguist-vendored
+src/pretix/static/iframeresizer/* linguist-vendored
+src/pretix/static/pdfjs/* linguist-vendored
+src/pretix/static/fabric/* linguist-vendored
 
 # Denote all files that are truly binary and should not be modified.
 *.eot binary

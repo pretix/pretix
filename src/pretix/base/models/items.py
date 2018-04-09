@@ -86,7 +86,7 @@ class ItemCategory(LoggedModel):
 
 
 def itempicture_upload_to(instance, filename: str) -> str:
-    return '%s/%s/item-%s-%s.%s' % (
+    return 'pub/%s/%s/item-%s-%s.%s' % (
         instance.event.organizer.slug, instance.event.slug, instance.id,
         str(uuid.uuid4()), filename.split('.')[-1]
     )
@@ -248,7 +248,7 @@ class Item(LoggedModel):
     )
     picture = models.ImageField(
         verbose_name=_("Product picture"),
-        null=True, blank=True,
+        null=True, blank=True, max_length=255,
         upload_to=itempicture_upload_to
     )
     available_from = models.DateTimeField(
@@ -938,6 +938,7 @@ class Quota(LoggedModel):
     class Meta:
         verbose_name = _("Quota")
         verbose_name_plural = _("Quotas")
+        ordering = ('name',)
 
     def __str__(self):
         return self.name

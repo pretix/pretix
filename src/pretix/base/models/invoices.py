@@ -84,7 +84,7 @@ class Invoice(models.Model):
     foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
     foreign_currency_rate_date = models.DateField(null=True, blank=True)
 
-    file = models.FileField(null=True, blank=True, upload_to=invoice_filename)
+    file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
     internal_reference = models.TextField(blank=True)
 
     @staticmethod

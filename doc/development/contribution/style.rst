@@ -24,7 +24,7 @@ Coding style and quality
   ``Fix #123 -- Problems with order creation`` or ``Refs #123 -- Fix this part of that bug``.
 
 
-.. _PEP 8: http://legacy.python.org/dev/peps/pep-0008/
+.. _PEP 8: https://legacy.python.org/dev/peps/pep-0008/
 .. _flake8: https://pypi.python.org/pypi/flake8
 .. _Django Coding Style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
 .. _translation: https://docs.djangoproject.com/en/1.11/topics/i18n/translation/

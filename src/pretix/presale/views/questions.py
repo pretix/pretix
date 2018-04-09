@@ -9,9 +9,13 @@ from pretix.presale.views import get_cart
 
 class QuestionsViewMixin(BaseQuestionsViewMixin):
     form_class = QuestionsForm
+    only_user_visible = True
 
     @cached_property
     def _positions_for_questions(self):
+        qqs = Question.objects.all()
+        if self.only_user_visible:
+            qqs = qqs.filter(ask_during_checkin=False)
         cart = get_cart(self.request).select_related(
             'addon_to'
         ).prefetch_related(
@@ -20,7 +24,7 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
             Prefetch('item__questions',
-                     Question.objects.filter(ask_during_checkin=False).prefetch_related(
+                     qqs.prefetch_related(
                          Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                              # This prefetch statement is utter bullshit, but it actually prevents Django from doing
                              # a lot of queries since ModelChoiceIterator stops trying to be clever once we have

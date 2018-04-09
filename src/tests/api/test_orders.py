@@ -28,6 +28,14 @@ def taxrule(event):
 
 
 @pytest.fixture
+def question(event, item):
+    q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q.items.add(item)
+    q.options.create(answer="XL", identifier="LVETRWVU")
+    return q
+
+
+@pytest.fixture
 def quota(event, item):
     q = event.quotas.create(name="Budget Quota", size=200)
     q.items.add(item)
@@ -35,7 +43,7 @@ def quota(event, item):
 
 
 @pytest.fixture
-def order(event, item, taxrule):
+def order(event, item, taxrule, question):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
@@ -50,7 +58,7 @@ def order(event, item, taxrule):
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
-        OrderPosition.objects.create(
+        op = OrderPosition.objects.create(
             order=o,
             item=item,
             variation=None,
@@ -58,6 +66,7 @@ def order(event, item, taxrule):
             attendee_name="Peter",
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
         )
+        op.answers.create(question=question, answer='S')
         return o
 
 
@@ -78,7 +87,15 @@ TEST_ORDERPOSITION_RES = {
     "addon_to": None,
     "checkins": [],
     "downloads": [],
-    "answers": [],
+    "answers": [
+        {
+            "question": 1,
+            "answer": "S",
+            "question_identifier": "ABC",
+            "options": [],
+            "option_identifiers": []
+        }
+    ],
     "subevent": None
 }
 TEST_ORDER_RES = {
@@ -130,10 +147,11 @@ TEST_ORDER_RES = {
     LooseVersion(__version__) >= LooseVersion("1.9.0.dev0"),
     reason="Deprecated attributes payment_fee_* should be removed by now",
 )
-def test_order_list(token_client, organizer, event, order, item, taxrule):
+def test_order_list(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
     res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
+    res["positions"][0]["answers"][0]["question"] = question.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(organizer.slug, event.slug))
@@ -164,11 +182,12 @@ def test_order_list(token_client, organizer, event, order, item, taxrule):
 
 
 @pytest.mark.django_db
-def test_order_detail(token_client, organizer, event, order, item, taxrule):
+def test_order_detail(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
     res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
+    res["positions"][0]["answers"][0]["question"] = question.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
     assert resp.status_code == 200
@@ -184,7 +203,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule):
 
 
 @pytest.mark.django_db
-def test_orderposition_list(token_client, organizer, event, order, item, subevent):
+def test_orderposition_list(token_client, organizer, event, order, item, subevent, question):
     var = item.variations.create(value="Children")
     res = dict(TEST_ORDERPOSITION_RES)
     op = order.positions.first()
@@ -193,6 +212,7 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     res["id"] = op.pk
     res["item"] = item.pk
     res["variation"] = var.pk
+    res["answers"][0]["question"] = question.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -269,11 +289,12 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
 
 @pytest.mark.django_db
-def test_orderposition_detail(token_client, organizer, event, order, item):
+def test_orderposition_detail(token_client, organizer, event, order, item, question):
     res = dict(TEST_ORDERPOSITION_RES)
     op = order.positions.first()
     res["id"] = op.pk
     res["item"] = item.pk
+    res["answers"][0]["question"] = question.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         op.pk))
     assert resp.status_code == 200

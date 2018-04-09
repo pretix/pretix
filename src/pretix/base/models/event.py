@@ -437,7 +437,8 @@ class Event(EventMixin, LoggedModel):
             if s.value.startswith('file://'):
                 fi = default_storage.open(s.value[7:], 'rb')
                 nonce = get_random_string(length=8)
-                fname = '%s/%s/%s.%s.%s' % (
+                # TODO: make sure pub is always correct
+                fname = 'pub/%s/%s/%s.%s.%s' % (
                     self.organizer.slug, self.slug, s.key, nonce, s.value.split('.')[-1]
                 )
                 newname = default_storage.save(fname, fi)
@@ -587,9 +588,7 @@ class Event(EventMixin, LoggedModel):
             Q(all_events=True) | Q(limit_events__pk=self.pk)
         )
 
-        return User.objects.annotate(twp=Exists(team_with_perm)).filter(
-            Q(is_superuser=True) | Q(twp=True)
-        )
+        return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
 
     def clean_payment_methods(self):
         if self.has_paid_things and not self.has_payment_provider:

@@ -1,16 +1,13 @@
 from functools import partial
 
 from django.dispatch import receiver
-from django.template.loader import get_template
-from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import QuestionAnswer
-from pretix.base.signals import (
-    EventPluginSignal, event_copy_data, register_data_exporters,
+from pretix.base.signals import (  # NOQA: legacy import
+    event_copy_data, layout_text_variables, register_data_exporters,
     register_ticket_outputs,
 )
-from pretix.control.signals import html_head
 from pretix.presale.style import (  # NOQA: legacy import
     get_fonts, register_fonts,
 )
@@ -26,37 +23,6 @@ def register_ticket_outputs(sender, **kwargs):
 def register_data(sender, **kwargs):
     from .exporters import AllTicketsPDF
     return AllTicketsPDF
-
-
-@receiver(html_head, dispatch_uid="ticketoutputpdf_html_head")
-def html_head_presale(sender, request=None, **kwargs):
-    url = resolve(request.path_info)
-    if url.namespace == 'plugins:ticketoutputpdf' and getattr(request, 'organizer', None):
-        template = get_template('pretixplugins/ticketoutputpdf/control_head.html')
-        return template.render({
-            'request': request
-        })
-    else:
-        return ""
-
-
-layout_text_variables = EventPluginSignal()
-"""
-This signal is sent out to collect variables that can be used to display text in PDF ticket layouts.
-Receivers are expected to return a dictionary with globally unique identifiers as keys and more
-dictionaries as values that contain keys like in the following example::
-
-    return {
-        "product": {
-            "label": _("Product name"),
-            "editor_sample": _("Sample product"),
-            "evaluate": lambda orderposition, order, event: str(orderposition.item)
-        }
-    }
-
-The evaluate member will be called with the order position, order and event as arguments. The event might
-also be a subevent, if applicable.
-"""
 
 
 def get_answer(op, order, event, question_id):

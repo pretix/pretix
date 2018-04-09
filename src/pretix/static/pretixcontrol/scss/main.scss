@@ -53,7 +53,7 @@ nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
     margin-bottom: 10px;
 }
 
-#button-shop {
+#button-shop, #button-sudo {
     padding: 15px;
     min-height: 50px;
     border: none;
@@ -126,6 +126,10 @@ h1 .btn-sm {
 
 .organizer-tabs .tab-inner {
     padding-top: 20px;
+}
+
+p.bigger {
+    font-size: 16px;
 }
 
 .helper-display-block {
@@ -318,16 +322,17 @@ body.loading #wrapper {
     width: 300px;
 }
 .event-dropdown, .mobile-event-dropdown, .select2-results {
-    .event-name-full {
+    .event-name-full, .primary {
         display: block;
     }
-    .event-daterange, .event-organizer {
+    .event-daterange, .event-organizer, .secondary {
         display: block;
         font-size: $font-size-small;
         color: $text-muted;
     }
     .active .event-daterange, .active .event-organizer, .active a,
     .select2-results__option--highlighted .event-daterange,
+    .select2-results__option--highlighted .secondary,
     .select2-results__option--highlighted .event-organizer {
         color: white;
     }
@@ -468,7 +473,33 @@ body.loading #wrapper {
         text-decoration: none;
     }
 }
+.quick-setup-step {
+    clear: both;
+    .quick-icon {
+        float: left;
+        width: 100px;
 
+        .fa-ticket, .fa-check-circle {
+            margin-top: -20px;
+        }
+        .fa-wrench {
+            margin-top: -30px;
+        }
+        .fa-money, .fa-envelope {
+            margin-top: -40px;
+        }
+    }
+    .quick-icon .fa {
+        font-size: 100px;
+        line-height: 170px;
+        display: block;
+    }
+    .quick-content {
+        margin-left: 160px;
+        padding-top: 5px;
+        overflow: hidden;
+    }
+}
 .thank-you {
     margin-bottom: 25px;
 
@@ -503,6 +534,16 @@ body.loading #wrapper {
         }
     }
 }
+@media (max-width: $screen-md-max) {
+    .quick-setup-step {
+        .quick-icon {
+            display: none;
+        }
+        .quick-content {
+            margin-left: 0;
+        }
+    }
+}
 @media (max-width: $screen-sm-max) {
     .thank-you {
         text-align: center;
@@ -520,4 +561,8 @@ ul.pagination {
 }
 .pagination-container {
     margin-bottom: 20px;
+}
+
+.table-payment-providers > tbody > tr > td {
+    vertical-align: middle;
 }

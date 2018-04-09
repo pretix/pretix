@@ -264,7 +264,7 @@ class TeamAPIToken(models.Model):
         """
         return self.team.permission_set() if self.team.organizer == organizer else set()
 
-    def has_event_permission(self, organizer, event, perm_name=None) -> bool:
+    def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
         """
         Checks if this token is part of a team that grants access of type ``perm_name``
         to the event ``event``.
@@ -272,6 +272,7 @@ class TeamAPIToken(models.Model):
         :param organizer: The organizer of the event
         :param event: The event to check
         :param perm_name: The permission, e.g. ``can_change_teams``
+        :param request: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
@@ -279,13 +280,14 @@ class TeamAPIToken(models.Model):
         )
         return has_event_access and (not perm_name or self.team.has_permission(perm_name))
 
-    def has_organizer_permission(self, organizer, perm_name=None):
+    def has_organizer_permission(self, organizer, perm_name=None, request=None):
         """
         Checks if this token is part of a team that grants access of type ``perm_name``
         to the organizer ``organizer``.
 
         :param organizer: The organizer to check
         :param perm_name: The permission, e.g. ``can_change_teams``
+        :param request: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
         return organizer == self.team.organizer and (not perm_name or self.team.has_permission(perm_name))

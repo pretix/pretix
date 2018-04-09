@@ -31,7 +31,7 @@ class EventList(PaginationMixin, ListView):
     template_name = 'pretixcontrol/events/index.html'
 
     def get_queryset(self):
-        qs = self.request.user.get_events_with_any_permission().select_related('organizer').prefetch_related(
+        qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
             '_settings_objects', 'organizer___settings_objects'
         ).order_by('-date_from')
 
@@ -208,10 +208,16 @@ class EventWizard(SessionWizardView):
             event.settings.set('locale', basics_data['locale'])
             event.settings.set('locales', foundation_data['locales'])
 
-        return redirect(reverse('control:event.settings', kwargs={
-            'organizer': event.organizer.slug,
-            'event': event.slug,
-        }) + '?congratulations=1')
+        if (copy_data and copy_data['copy_from_event']) or event.has_subevents:
+            return redirect(reverse('control:event.settings', kwargs={
+                'organizer': event.organizer.slug,
+                'event': event.slug,
+            }) + '?congratulations=1')
+        else:
+            return redirect(reverse('control:event.quick', kwargs={
+                'organizer': event.organizer.slug,
+                'event': event.slug,
+            }) + '?congratulations=1')
 
 
 class SlugRNG(OrganizerPermissionRequiredMixin, View):

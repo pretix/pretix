@@ -25,7 +25,7 @@ def _generate_random_code(prefix=None):
 def generate_code(prefix=None):
     while True:
         code = _generate_random_code(prefix=prefix)
-        if not Voucher.objects.filter(code=code).exists():
+        if not Voucher.objects.filter(code__iexact=code).exists():
             return code
 
 
@@ -278,11 +278,9 @@ class Voucher(LoggedModel):
             if old_instance.quota:
                 quotas.add(old_instance.quota)
             elif old_instance.variation:
-                quotas |= set(old_instance.variation.quotas.filter(
-                    subevent=old_instance.subevent))
+                quotas |= set(old_instance.variation.quotas.filter(subevent=old_instance.subevent))
             elif old_instance.item:
-                quotas |= set(old_instance.item.quotas.filter(
-                    subevent=old_instance.subevent))
+                quotas |= set(old_instance.item.quotas.filter(subevent=old_instance.subevent))
         return quotas
 
     @staticmethod
@@ -313,7 +311,7 @@ class Voucher(LoggedModel):
 
     @staticmethod
     def clean_voucher_code(data, event, pk):
-        if 'code' in data and Voucher.objects.filter(Q(code=data['code']) & Q(event=event) & ~Q(pk=pk)).exists():
+        if 'code' in data and Voucher.objects.filter(Q(code__iexact=data['code']) & Q(event=event) & ~Q(pk=pk)).exists():
             raise ValidationError(_('A voucher with this code already exists.'))
 
     def save(self, *args, **kwargs):

@@ -3,7 +3,7 @@
 {% load l10n %}
 {% load eventurl %}
 {% load money %}
-{% load thumbnail %}
+{% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
 {% block title %}{% trans "Presale" %}{% endblock %}
@@ -225,7 +225,7 @@
                                                         data-title="{{ item.name|force_escape|force_escape }}"
                                                         {# Yes, double-escape to prevent XSS in lightbox #}
                                                         data-lightbox="{{ item.id }}">
-                                                    <img src="{{ item.picture|thumbnail_url:'productlist' }}"
+                                                    <img src="{{ item.picture|thumb:'60x60^' }}"
                                                             alt="{{ item.name }}"/>
                                                 </a>
                                             {% endif %}
@@ -348,7 +348,7 @@
                                                     data-title="{{ item.name|force_escape|force_escape }}"
                                                     {# Yes, double-escape to prevent XSS in lightbox #}
                                                     data-lightbox="{{ item.id }}">
-                                                <img src="{{ item.picture|thumbnail_url:'productlist' }}"
+                                                <img src="{{ item.picture|thumb:'60x60^' }}"
                                                         alt="{{ item.name }}"/>
                                             </a>
                                         {% endif %}

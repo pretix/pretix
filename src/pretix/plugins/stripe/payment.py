@@ -1,15 +1,21 @@
 import hashlib
 import json
 import logging
+import urllib.parse
 from collections import OrderedDict
 
 import stripe
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core import signing
 from django.template.loader import get_template
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.urls import reverse
+from django.utils.crypto import get_random_string
+from django.utils.http import urlquote
+from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
+from pretix import __version__
 from pretix.base.models import Event, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
@@ -17,6 +23,7 @@ from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.plugins.stripe.models import ReferencedStripeObject
 
 logger = logging.getLogger('pretix.plugins.stripe')
@@ -34,24 +41,6 @@ class RefundForm(forms.Form):
     )
 
 
-class StripeKeyValidator():
-    def __init__(self, prefix):
-        assert isinstance(prefix, str)
-        assert len(prefix) > 0
-        self._prefix = prefix
-
-    def __call__(self, value):
-        if not value.startswith(self._prefix):
-            raise forms.ValidationError(
-                _('The provided key "%(value)s" does not look valid. It should start with "%(prefix)s".'),
-                code='invalid-stripe-secret-key',
-                params={
-                    'value': value,
-                    'prefix': self._prefix,
-                },
-            )
-
-
 class StripeSettingsHolder(BasePaymentProvider):
     identifier = 'stripe_settings'
     verbose_name = _('Stripe')
@@ -62,36 +51,97 @@ class StripeSettingsHolder(BasePaymentProvider):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'stripe', event)
 
-    def settings_content_render(self, request):
-        return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
-            _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
-              'the following endpoint in order to automatically cancel orders when charges are refunded externally '
-              'and to process asynchronous payment methods like SOFORT.'),
-            build_global_uri('plugins:stripe:webhook')
+    def get_connect_url(self, request):
+        request.session['payment_stripe_oauth_event'] = request.event.pk
+        if 'payment_stripe_oauth_token' not in request.session:
+            request.session['payment_stripe_oauth_token'] = get_random_string(32)
+        return (
+            "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={}&state={}"
+            "&scope=read_write&redirect_uri={}"
+        ).format(
+            self.settings.connect_client_id,
+            request.session['payment_stripe_oauth_token'],
+            urlquote(build_global_uri('plugins:stripe:oauth.return')),
         )
+
+    def settings_content_render(self, request):
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            # Use Stripe connect
+            if not self.settings.connect_user_id:
+                return (
+                    "<p>{}</p>"
+                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
+                ).format(
+                    _('To accept payments via Stripe, you will need an account at Stripe. By clicking on the '
+                      'following button, you can either create a new Stripe account connect pretix to an existing '
+                      'one.'),
+                    self.get_connect_url(request),
+                    _('Connect with Stripe')
+                )
+            else:
+                return (
+                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
+                ).format(
+                    reverse('plugins:stripe:oauth.disconnect', kwargs={
+                        'organizer': self.event.organizer.slug,
+                        'event': self.event.slug,
+                    }),
+                    _('Disconnect from Stripe')
+                )
+        else:
+            return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+                _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
+                  'the following endpoint in order to automatically cancel orders when charges are refunded externally '
+                  'and to process asynchronous payment methods like SOFORT.'),
+                build_global_uri('plugins:stripe:webhook')
+            )
 
     @property
     def settings_form_fields(self):
-        return OrderedDict(
-            list(super().settings_form_fields.items()) + [
-                ('secret_key',
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            # Stripe connect
+            if self.settings.connect_user_id:
+                fields = [
+                    ('connect_user_name',
+                     forms.CharField(
+                         label=_('Stripe account'),
+                         disabled=True
+                     )),
+                    ('endpoint',
+                     forms.ChoiceField(
+                         label=_('Endpoint'),
+                         initial='live',
+                         choices=(
+                             ('live', pgettext('stripe', 'Live')),
+                             ('test', pgettext('stripe', 'Testing')),
+                         ),
+                     )),
+                ]
+            else:
+                return {}
+        else:
+            fields = [
+                ('publishable_key',
                  forms.CharField(
-                     label=_('Secret key'),
+                     label=_('Publishable key'),
                      help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/stripe.html'
                      ),
                      validators=(
-                         StripeKeyValidator('sk_'),
-                     ),
-                 )),
-                ('publishable_key',
-                 forms.CharField(
-                     label=_('Publishable key'),
-                     validators=(
                          StripeKeyValidator('pk_'),
                      ),
                  )),
+                ('secret_key',
+                 forms.CharField(
+                     label=_('Secret key'),
+                     validators=(
+                         StripeKeyValidator(['sk_', 'rk_']),
+                     ),
+                 )),
+            ]
+        d = OrderedDict(
+            fields + [
                 ('ui',
                  forms.ChoiceField(
                      label=_('User interface'),
@@ -142,8 +192,22 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'payments are not immediately confirmed but might take some time.'),
                      required=False,
                  )),
-            ]
+                ('cc_3ds_mode',
+                 forms.ChoiceField(
+                     label=_('3D Secure mode'),
+                     help_text=_('This determines when we will use the 3D Secure methods for credit card payments. '
+                                 'Using 3D Secure (also known as Verified by VISA or MasterCard SecureCode) reduces '
+                                 'the risk of fraud but makes the payment process a bit longer.'),
+                     choices=(
+                         ('required', pgettext('stripe 3dsecure', 'Only when required by the card')),
+                         ('recommended', pgettext('stripe 3dsecure', 'Always when recommended by Stripe')),
+                         ('optional', pgettext('stripe 3dsecure', 'Always when supported by the card')),
+                     ),
+                 )),
+            ] + list(super().settings_form_fields.items())
         )
+        d.move_to_end('_enabled', last=False)
+        return d
 
 
 class StripeMethod(BasePaymentProvider):
@@ -170,9 +234,28 @@ class StripeMethod(BasePaymentProvider):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return int(order.total * 10 ** places)
 
+    @property
+    def api_kwargs(self):
+        if self.settings.connect_client_id and self.settings.connect_user_id:
+            if self.settings.get('endpoint', 'live') == 'live':
+                kwargs = {
+                    'api_key': self.settings.connect_secret_key,
+                    'stripe_account': self.settings.connect_user_id
+                }
+            else:
+                kwargs = {
+                    'api_key': self.settings.connect_test_secret_key,
+                    'stripe_account': self.settings.connect_user_id
+                }
+        else:
+            kwargs = {
+                'api_key': self.settings.secret_key,
+            }
+        return kwargs
+
     def _init_api(self):
-        stripe.api_version = '2017-06-05'
-        stripe.api_key = self.settings.get('secret_key')
+        stripe.api_version = '2018-02-28'
+        stripe.set_app_info("pretix", version=__version__, url="https://pretix.eu")
 
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_confirm.html')
@@ -194,7 +277,8 @@ class StripeMethod(BasePaymentProvider):
                     'code': order.code
                 },
                 # TODO: Is this sufficient?
-                idempotency_key=str(self.event.id) + order.code + source
+                idempotency_key=str(self.event.id) + order.code + source,
+                **self.api_kwargs
             )
         except stripe.error.CardError as e:
             if e.json_body:
@@ -325,7 +409,7 @@ class StripeMethod(BasePaymentProvider):
             return
 
         try:
-            ch = stripe.Charge.retrieve(payment_info['id'])
+            ch = stripe.Charge.retrieve(payment_info['id'], **self.api_kwargs)
             ch.refunds.create()
             ch.refresh()
         except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
@@ -371,7 +455,17 @@ class StripeMethod(BasePaymentProvider):
         order.payment_info = str(source)
         order.save(update_fields=['payment_info'])
         request.session['payment_stripe_order_secret'] = order.secret
-        return source.redirect.url
+        return self.redirect(request, source.redirect.url)
+
+    def redirect(self, request, url):
+        if request.session.get('iframe_session', False):
+            signer = signing.Signer(salt='safe-redirect')
+            return (
+                build_absolute_uri(request.event, 'plugins:stripe:redirect') + '?url=' +
+                urllib.parse.quote(signer.sign(url))
+            )
+        else:
+            return str(url)
 
 
 class StripeCC(StripeMethod):
@@ -406,13 +500,21 @@ class StripeCC(StripeMethod):
             return False
         return True
 
+    def _use_3ds(self, card):
+        if self.settings.cc_3ds_mode == 'recommended':
+            return card.three_d_secure in ('required', 'recommended')
+        elif self.settings.cc_3ds_mode == 'optional':
+            return card.three_d_secure in ('required', 'recommended', 'optional')
+        else:
+            return card.three_d_secure == 'required'
+
     def payment_perform(self, request, order) -> str:
         self._init_api()
 
         if request.session['payment_stripe_token'].startswith('src_'):
             try:
-                src = stripe.Source.retrieve(request.session['payment_stripe_token'])
-                if src.type == 'card' and src.card and src.card.three_d_secure == 'required':
+                src = stripe.Source.retrieve(request.session['payment_stripe_token'], **self.api_kwargs)
+                if src.type == 'card' and src.card and self._use_3ds(src.card):
                     request.session['payment_stripe_order_secret'] = order.secret
                     source = stripe.Source.create(
                         type='three_d_secure',
@@ -432,11 +534,12 @@ class StripeCC(StripeMethod):
                                 'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                             })
                         },
+                        **self.api_kwargs
                     )
                     if source.status == "pending":
                         order.payment_info = str(source)
                         order.save(update_fields=['payment_info'])
-                        return source.redirect.url
+                        return self.redirect(request, source.redirect.url)
             except stripe.error.StripeError as e:
                 if e.json_body:
                     err = e.json_body['error']
@@ -506,6 +609,7 @@ class StripeGiropay(StripeMethod):
                         'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                     })
                 },
+                **self.api_kwargs
             )
             return source
         finally:
@@ -562,6 +666,7 @@ class StripeIdeal(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 
@@ -603,6 +708,7 @@ class StripeAlipay(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 
@@ -661,6 +767,7 @@ class StripeBancontact(StripeMethod):
                         'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                     })
                 },
+                **self.api_kwargs
             )
             return source
         finally:
@@ -731,6 +838,7 @@ class StripeSofort(StripeMethod):
                     'hash': hashlib.sha1(order.secret.lower().encode()).hexdigest(),
                 })
             },
+            **self.api_kwargs
         )
         return source
 

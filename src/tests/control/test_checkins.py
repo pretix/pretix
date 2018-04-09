@@ -228,7 +228,6 @@ def test_checkins_list_filter(client, checkin_list_env, query, expected):
     response = client.get('/control/event/dummy/dummy/checkinlists/{}/?'.format(checkin_list_env[6].pk) + query)
     qs = response.context['entries']
     item_keys = [q.order.code + str(q.item.name) for q in qs]
-    print([str(item.name) + '-' + str(item.id) for item in Item.objects.all()])
     assert item_keys == expected
 
 
