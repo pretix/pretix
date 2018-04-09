@@ -1,9 +1,22 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load compress %}
 {% block title %}{% trans "PDF Ticket Editor" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    {% compress css %}
+        <link type="text/css" rel="stylesheet" href="{% static "pretixcontrol/scss/pdfeditor.css" %}">
+    {% endcompress %}
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" organizer=request.organizer.slug event=request.event.slug %}">
+{% endblock %}
 {% block content %}
-    <h1>{% trans "PDF Ticket Editor" %}</h1>
+    <h1>
+        {% trans "PDF Editor" %}
+        {% if title %}
+            <small>{{ title }}</small>
+        {% endif %}
+    </h1>
 
     <script type="application/json" id="editor-data">
         {{ layout|safe }}

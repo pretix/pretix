@@ -68,5 +68,5 @@ Dashboards
 Ticket designs
 """"""""""""""
 
-.. automodule:: pretix.plugins.ticketoutputpdf.signals
+.. automodule:: pretix.base.signals
    :members: layout_text_variables

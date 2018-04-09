@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, search, subevents, typeahead, user, users, vouchers,
+    organizer, pdf, search, subevents, typeahead, user, users, vouchers,
     waitinglist,
 )
 
@@ -97,6 +97,8 @@ urlpatterns = [
         url(r'^settings/tax/add$', event.TaxCreate.as_view(), name='event.settings.tax.add'),
         url(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
         url(r'^settings/widget$', event.WidgetSettings.as_view(), name='event.settings.widget'),
+        url(r'^pdf/editor/webfonts.css', pdf.FontsCSSView.as_view(), name='pdf.css'),
+        url(r'^pdf/editor/(?P<filename>[^/]+).pdf$', pdf.PdfView.as_view(), name='pdf.background'),
         url(r'^subevents/$', subevents.SubEventList.as_view(), name='event.subevents'),
         url(r'^subevents/select2$', typeahead.subevent_select2, name='event.subevents.select2'),
         url(r'^subevents/(?P<subevent>\d+)/$', subevents.SubEventUpdate.as_view(), name='event.subevent'),
