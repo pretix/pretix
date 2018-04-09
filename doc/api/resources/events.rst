@@ -151,6 +151,9 @@ Endpoints
 
    Creates a new event
 
+   Please note that events cannot be created as 'live' using this endpoint. Quotas and payment must be added to the
+   event before sales can go live.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -217,7 +220,11 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/clone/
 
-   Creates a new event with properties as set in the request body and settings and items copied from the exiting event.
+   Creates a new event with properties as set in the request body. The properties that are copied are: 'is_public',
+   settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
+
+   If the 'plugins' and/or 'is_public' fields are present in the post body this will determine their value. Otherwise
+   their value will be copied from the existing event.
 
    Please note that you can only copy from events under the same organizer.
 
