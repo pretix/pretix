@@ -20,6 +20,7 @@ from pretix.base.services.stats import order_overview
 
 
 class ReportlabExportMixin:
+    multiBuild = False
 
     @property
     def pagesize(self):
@@ -44,21 +45,29 @@ class ReportlabExportMixin:
         pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
         pdfmetrics.registerFont(TTFont('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf')))
 
+    def get_doc_template(self):
+        from reportlab.platypus import BaseDocTemplate
+
+        return BaseDocTemplate
+
     def create(self, form_data):
-        from reportlab.platypus import BaseDocTemplate, PageTemplate
+        from reportlab.platypus import PageTemplate
         from reportlab.lib.units import mm
 
         with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
             Report.register_fonts()
-            doc = BaseDocTemplate(f.name, pagesize=self.pagesize,
-                                  leftMargin=15 * mm,
-                                  rightMargin=15 * mm,
-                                  topMargin=20 * mm,
-                                  bottomMargin=15 * mm)
+            doc = self.get_doc_template()(f.name, pagesize=self.pagesize,
+                                          leftMargin=15 * mm,
+                                          rightMargin=15 * mm,
+                                          topMargin=20 * mm,
+                                          bottomMargin=15 * mm)
             doc.addPageTemplates([
                 PageTemplate(id='All', frames=self.get_frames(doc), onPage=self.on_page, pagesize=self.pagesize)
             ])
-            doc.build(self.get_story(doc, form_data))
+            if self.multiBuild:
+                doc.multiBuild(self.get_story(doc, form_data))
+            else:
+                doc.build(self.get_story(doc, form_data))
             f.seek(0)
             return f.read()
 
