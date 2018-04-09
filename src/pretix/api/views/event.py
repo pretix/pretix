@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 from rest_framework.exceptions import PermissionDenied
 
+from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.serializers.event import (
     EventSerializer, SubEventSerializer, TaxRuleSerializer,
 )
@@ -17,7 +18,7 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
-    write_permission = 'can_change_event_settings'
+    permission_classes = (EventCRUDPermission,)
 
     def get_queryset(self):
         return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
@@ -67,7 +68,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     http_method_names = ['post']
-    write_permission = 'can_change_event_settings'
+    write_permission = 'can_create_events'
 
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.organizer)
