@@ -174,6 +174,7 @@ class ParametrizedOrderNotificationType(NotificationType):
             title=self._title.format(order=order, event=logentry.event),
             url=order_url
         )
+        n.add_attribute(_('Event'), order.event.name)
         n.add_attribute(_('Order code'), order.code)
         n.add_attribute(_('Order total'), money_filter(order.total, logentry.event.currency))
         n.add_attribute(_('Order date'), date_format(order.datetime, 'SHORT_DATETIME_FORMAT'))
