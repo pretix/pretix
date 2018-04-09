@@ -243,9 +243,18 @@ class User2FADeviceConfirmU2FView(RecentAuthenticationRequiredMixin, TemplateVie
                 'devicetype': 'u2f',
                 'name': self.device.name,
             })
-            self.request.user.send_security_notice([
+            notices = [
                 _('A new two-factor authentication device has been added to your account.')
-            ])
+            ]
+            activate = request.POST.get('activate', '')
+            if activate == 'on' and not self.request.user.require_2fa:
+                self.request.user.require_2fa = True
+                self.request.user.save()
+                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
+                notices.append(
+                    _('Two-factor authentication has been enabled.')
+                )
+            self.request.user.send_security_notice(notices)
 
             note = ''
             if not self.request.user.require_2fa:
@@ -284,6 +293,7 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
 
     def post(self, request, *args, **kwargs):
         token = request.POST.get('token', '')
+        activate = request.POST.get('activate', '')
         if self.device.verify_token(token):
             self.device.confirmed = True
             self.device.save()
@@ -292,9 +302,17 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
                 'name': self.device.name,
                 'devicetype': 'totp'
             })
-            self.request.user.send_security_notice([
+            notices = [
                 _('A new two-factor authentication device has been added to your account.')
-            ])
+            ]
+            if activate == 'on' and not self.request.user.require_2fa:
+                self.request.user.require_2fa = True
+                self.request.user.save()
+                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
+                notices.append(
+                    _('Two-factor authentication has been enabled.')
+                )
+            self.request.user.send_security_notice(notices)
 
             note = ''
             if not self.request.user.require_2fa:
