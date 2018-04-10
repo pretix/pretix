@@ -880,3 +880,24 @@ class StripeSofort(StripeMethod):
         except ValueError:
             pass
         return self._is_still_available(order=order)
+
+    def shred_payment_info(self, order: Order):
+        d = json.loads(order.payment_info)
+        new = {}
+        if 'source' in d:
+            new['source'] = {
+                'id': d['source'].get('id'),
+                'type': d['source'].get('type'),
+                'brand': d['source'].get('brand'),
+                'last4': d['source'].get('last4'),
+                'bank_name': d['source'].get('bank_name'),
+                'bank': d['source'].get('bank'),
+                'bic': d['source'].get('bic'),
+            }
+            new['amount'] = d['amount']
+            new['currency'] = d['currency']
+            new['status'] = d['status']
+            new['id'] = d['id']
+            new['_shredded'] = True
+            order.payment_info = json.dumps(new)
+            order.save(update_fields=['payment_info'])

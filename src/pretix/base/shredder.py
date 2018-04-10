@@ -266,6 +266,24 @@ class CachedTicketShredder(BaseDataShredder):
         CachedCombinedTicket.objects.filter(order__event=self.event).delete()
 
 
+class PaymentInfoShredder(BaseDataShredder):
+    verbose_name = _('Payment information')
+    identifier = 'payment_info'
+    description = _('This will remove payment-related information. Depending on the payment method, all data will be '
+                    'removed or personal data only. No download will be offered.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        pass
+
+    @transaction.atomic
+    def shred_data(self):
+        provs = self.event.get_payment_providers()
+        for o in self.event.orders.all():
+            pprov = provs.get(o.payment_provider)
+            if pprov:
+                pprov.shred_payment_info(o)
+
+
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")
 def register_payment_provider(sender, **kwargs):
     return [
@@ -275,4 +293,5 @@ def register_payment_provider(sender, **kwargs):
         QuestionAnswerShredder,
         InvoiceShredder,
         CachedTicketShredder,
+        PaymentInfoShredder,
     ]
