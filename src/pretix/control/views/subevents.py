@@ -541,7 +541,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 days_before=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
                 base_date_name='date_from',
                 time=i.presale_end.astimezone(tz).time()
-            )) if i.presale_start else None
+            )) if i.presale_end else None
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)
         kwargs['initial'] = initial
