@@ -42,15 +42,13 @@ class UserTestCase(TestCase):
 
 
 class BaseQuotaTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
+
+    def setUp(self):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
+        self.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-
-    def setUp(self):
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                          admission=True)
