@@ -590,22 +590,10 @@ class Event(EventMixin, LoggedModel):
 
         return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
 
-    def clean_payment_methods(self):
-        if self.has_paid_things and not self.has_payment_provider:
-            raise ValidationError(_('You have configured at least one paid product but have not enabled any payment '
-                                    'methods.'))
-
-    def clean_quotas(self):
-        if not self.quotas.exists():
-            raise ValidationError(_('You need to configure at least one quota to sell anything.'))
-
     def clean_live(self):
-        self.clean_payment_methods()
-        self.clean_quotas()
-
-        for receiver, response in self.live_issues:
-            if response:
-                raise ValidationError(response)
+        for issue in self.live_issues:
+            if issue:
+                raise ValidationError(issue)
 
     def allow_delete(self):
         return not self.orders.exists() and not self.invoices.exists()
