@@ -111,15 +111,16 @@ class EventSerializer(I18nAwareModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        meta_data = validated_data.pop('meta_data') if 'meta_data' in validated_data else {}
+        meta_data = validated_data.pop('meta_data', None)
         event = super().create(validated_data)
 
         # Meta data
-        for key, value in meta_data.items():
-            event.meta_values.create(
-                property=self.meta_properties.get(key),
-                value=value
-            )
+        if meta_data is not None:
+            for key, value in meta_data.items():
+                event.meta_values.create(
+                    property=self.meta_properties.get(key),
+                    value=value
+                )
         return event
 
     @transaction.atomic
