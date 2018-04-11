@@ -80,7 +80,7 @@ TEST_EVENT_RES = {
     "date_from": "2017-12-27T10:00:00Z",
     "date_to": None,
     "date_admission": None,
-    "is_public": False,
+    "is_public": True,
     "presale_start": None,
     "presale_end": None,
     "location": None,
@@ -251,7 +251,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
             "date_from": "2018-12-27T10:00:00Z",
             "date_to": "2018-12-28T10:00:00Z",
             "date_admission": None,
-            "is_public": True,
+            "is_public": False,
             "presale_start": None,
             "presale_end": None,
             "location": None,
@@ -269,7 +269,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     assert resp.status_code == 201
     cloned_event = Event.objects.get(organizer=organizer.pk, slug='2030')
     assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
-    assert cloned_event.is_public is True
+    assert cloned_event.is_public is False
     assert organizer.events.get(slug="2030").meta_values.filter(
         property__name=meta_prop.name, value="Conference"
     ).exists()
@@ -298,12 +298,37 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     )
 
     assert resp.status_code == 201
-    event = Event.objects.get(organizer=organizer.pk, slug='2031')
-    assert event.plugins == "pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf"
-    assert event.is_public is False
+    cloned_event = Event.objects.get(organizer=organizer.pk, slug='2031')
+    assert cloned_event.plugins == "pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf"
+    assert cloned_event.is_public is True
     assert organizer.events.get(slug="2031").meta_values.filter(
         property__name=meta_prop.name, value="Conference"
     ).exists()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2032",
+            "plugins": []
+        },
+        format='json'
+    )
+
+    assert resp.status_code == 201
+    cloned_event = Event.objects.get(organizer=organizer.pk, slug='2032')
+    assert cloned_event.plugins == ""
 
 
 @pytest.mark.django_db

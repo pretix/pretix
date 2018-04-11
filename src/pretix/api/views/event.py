@@ -78,9 +78,9 @@ class CloneEventViewSet(viewsets.ModelViewSet):
         event = Event.objects.filter(slug=self.kwargs['event'], organizer=self.request.organizer.pk).first()
         serializer.instance.copy_data_from(event)
 
-        if plugins:
+        if 'plugins' in serializer.initial_data:
             serializer.instance.plugins = plugins
-        if is_public:
+        if 'is_public' in serializer.initial_data:
             serializer.instance.is_public = is_public
         serializer.instance.save()
 

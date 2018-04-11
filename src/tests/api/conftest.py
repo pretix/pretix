@@ -27,7 +27,8 @@ def event(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
         date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
-        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf',
+        is_public=True
     )
     e.meta_values.create(property=meta_prop, value="Conference")
     return e
