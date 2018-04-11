@@ -48,6 +48,8 @@ Endpoints
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
 
+   Permission required: "Can change event settings"
+
    **Example request**:
 
    .. sourcecode:: http
@@ -103,6 +105,8 @@ Endpoints
 
    Returns information on one event, identified by its slug.
 
+   Permission required: "Can change event settings"
+
    **Example request**:
 
    .. sourcecode:: http
@@ -153,6 +157,8 @@ Endpoints
 
    Please note that events cannot be created as 'live' using this endpoint. Quotas and payment must be added to the
    event before sales can go live.
+
+   Permission required: "Can create events"
 
    **Example request**:
 
@@ -228,6 +234,8 @@ Endpoints
 
    Please note that you can only copy from events under the same organizer.
 
+   Permission required: "Can create events"
+
    **Example request**:
 
    .. sourcecode:: http
@@ -297,6 +305,8 @@ Endpoints
 
    Updates an event
 
+   Permission required: "Can change event settings"
+
    **Example request**:
 
    .. sourcecode:: http
@@ -356,6 +366,8 @@ Endpoints
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/items/(id)/
 
    Delete an event. Note that events with orders cannot be deleted to ensure data integrity.
+
+   Permission required: "Can change event settings"
 
    **Example request**:
 

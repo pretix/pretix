@@ -44,6 +44,25 @@ like the following:
           adding OAuth2 support in the future for user-level authentication. If you want
           to use session authentication, be sure to comply with Django's `CSRF policies`_.
 
+Permissions
+-----------
+
+The API follows Pretix team based permissions model. Each organizer can have several teams
+each with it's own set of permissions. Each team can have any number of API keys attached.
+
+To access a given endpoint the team the API key belongs to needs to have the corresponding
+permission for the organizer/event being accessed.
+
+Possible permissions are:
+
+* Can create events
+* Can change event settings
+* Can change product settings
+* Can view orders
+* Can change orders
+* Can view vouchers
+* Can change vouchers
+
 Compatibility
 -------------
 
