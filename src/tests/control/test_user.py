@@ -222,11 +222,14 @@ class UserSettings2FATest(SoupTest):
         totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
         totp.time = time.time()
         r = self.client.post('/control/settings/2fa/totp/{}/confirm'.format(d.pk), {
-            'token': str(totp.token())
+            'token': str(totp.token()),
+            'activate': 'on'
         }, follow=True)
         d.refresh_from_db()
         assert d.confirmed
         assert 'alert-success' in r.rendered_content
+        self.user.refresh_from_db()
+        assert self.user.require_2fa
 
     def test_confirm_totp_failed(self):
         self.client.post('/control/settings/2fa/add', {
@@ -271,11 +274,14 @@ class UserSettings2FATest(SoupTest):
 
         d = U2FDevice.objects.first()
         r = self.client.post('/control/settings/2fa/u2f/{}/confirm'.format(d.pk), {
-            'token': 'FOO'
+            'token': 'FOO',
+            'activate': 'on'
         }, follow=True)
         d.refresh_from_db()
         assert d.confirmed
         assert 'alert-success' in r.rendered_content
+        self.user.refresh_from_db()
+        assert self.user.require_2fa
 
         m.undo()
 

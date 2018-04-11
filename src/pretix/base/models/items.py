@@ -1068,9 +1068,10 @@ class Quota(LoggedModel):
         return CartPosition.objects.filter(
             Q(event=self.event) & Q(subevent=self.subevent) &
             Q(expires__gte=now_dt) &
-            ~Q(
-                Q(voucher__isnull=False) & Q(voucher__block_quota=True)
-                & Q(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now_dt))
+            Q(
+                Q(voucher__isnull=True)
+                | Q(voucher__block_quota=False)
+                | Q(voucher__valid_until__lt=now_dt)
             ) &
             self._position_lookup
         ).count()
