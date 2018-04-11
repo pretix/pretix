@@ -24,13 +24,27 @@ class EventViewSet(viewsets.ModelViewSet):
         return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
 
     def perform_update(self, serializer):
+        current_live_value = serializer.instance.live
+        updated_live_value = serializer.validated_data.get('live', None)
+
         super().perform_update(serializer)
-        serializer.instance.log_action(
-            'pretix.event.changed',
-            user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
-            data=self.request.data
-        )
+
+        if updated_live_value is not None and updated_live_value != current_live_value:
+            log_action = 'pretix.event.live.activated' if updated_live_value else 'pretix.event.live.deactivated'
+            serializer.instance.log_action(
+                log_action,
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                data=self.request.data
+            )
+
+        if updated_live_value is None or len(serializer.validated_data) > 1:
+            serializer.instance.log_action(
+                'pretix.event.changed',
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                data=self.request.data
+            )
 
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.organizer)
@@ -78,9 +92,9 @@ class CloneEventViewSet(viewsets.ModelViewSet):
         event = Event.objects.filter(slug=self.kwargs['event'], organizer=self.request.organizer.pk).first()
         serializer.instance.copy_data_from(event)
 
-        if 'plugins' in serializer.initial_data:
+        if 'plugins' in serializer.validated_data:
             serializer.instance.plugins = plugins
-        if 'is_public' in serializer.initial_data:
+        if 'is_public' in serializer.validated_data:
             serializer.instance.is_public = is_public
         serializer.instance.save()
 
