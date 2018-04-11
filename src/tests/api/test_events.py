@@ -359,6 +359,17 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
+            "has_subevents": True
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"has_subevents":["Once created an event cannot change between an series and a ' \
+                                    'single event."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
             "meta_data": {
                 meta_prop.name: "Workshop"
             }

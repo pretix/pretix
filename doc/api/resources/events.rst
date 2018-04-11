@@ -25,7 +25,7 @@ presale_start                         datetime                   The date at whi
 presale_end                           datetime                   The date at which the ticket shop closes (or ``null``)
 location                              multi-lingual string       The event location (or ``null``)
 has_subevents                         boolean                    ``True`` if the event series feature is active for this
-                                                                 event
+                                                                 event. Cannot change after event is created.
 meta_data                             dict                       Values set for organizer-specific meta data parameters.
 plugins                               list                       A list of package names of the enabled plugins for this
                                                                  event.

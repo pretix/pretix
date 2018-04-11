@@ -80,6 +80,10 @@ class EventSerializer(I18nAwareModelSerializer):
 
         return data
 
+    def validate_has_subevents(self, value):
+        Event.clean_has_subevents(self.instance, value)
+        return value
+
     def validate_slug(self, value):
         Event.clean_slug(self.context['request'].organizer, self.instance, value)
         return value

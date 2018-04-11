@@ -615,6 +615,12 @@ class Event(EventMixin, LoggedModel):
         self.subevents.all().delete()
 
     @staticmethod
+    def clean_has_subevents(event, has_subevents):
+        if event is not None and event.has_subevents is not None:
+            if event.has_subevents != has_subevents:
+                raise ValidationError(_('Once created an event cannot change between an series and a single event.'))
+
+    @staticmethod
     def clean_slug(organizer, event, slug):
         if event is not None and event.slug is not None:
             if event.slug != slug:
