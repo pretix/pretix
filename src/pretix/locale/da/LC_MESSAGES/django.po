@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-04 11:02+0000\n"
-"PO-Revision-Date: 2018-03-20 12:46+0000\n"
+"PO-Revision-Date: 2018-04-06 21:00+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -269,17 +269,17 @@ msgstr "Gebyrer"
 #: pretix/base/exporters/orderlist.py:71
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Brutto ved {rate} % moms"
 
 #: pretix/base/exporters/orderlist.py:72
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Netto ved {rate} % moms"
 
 #: pretix/base/exporters/orderlist.py:73
 #, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "Momsværdi ved {rate} % moms"
 
 #: pretix/base/exporters/orderlist.py:76
 msgid "Invoice numbers"
@@ -503,6 +503,7 @@ msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
+"Ugyldig pladsholdersyntaks: Du har ikke brugt samme antal \"{\" og \"}\"."
 
 #: pretix/base/forms/validators.py:39
 #, python-format
@@ -618,7 +619,7 @@ msgstr "Beskrivelse"
 #: pretix/base/invoice.py:361 pretix/base/invoice.py:369
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Antal"
 
 #: pretix/base/invoice.py:362 pretix/base/invoice.py:425
 msgctxt "invoice"
@@ -1093,14 +1094,14 @@ msgstr "Dette produkt vil ikke blive solgt efter denne dato."
 
 #: pretix/base/models/items.py:265
 msgid "This product can only be bought using a voucher."
-msgstr "Dette produkt kan kun købes med en voucher."
+msgstr "Dette produkt kan kun købes med en rabatkode."
 
 #: pretix/base/models/items.py:267
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"For at købe dette produkt skal brugeren have en voucher der er knyttet til "
+"For at købe dette produkt skal brugeren have en rabatkode der er knyttet til "
 "produktet, enten direkte eller via en kvote."
 
 #: pretix/base/models/items.py:271
@@ -1108,7 +1109,7 @@ msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Dette produkt vil kun blive vist hvis en voucher der er knyttet til "
+"Dette produkt vil kun blive vist hvis en rabatkode der er knyttet til "
 "produktet bliver indløst."
 
 #: pretix/base/models/items.py:273
@@ -1260,15 +1261,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:593
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Minimumsantallet skal være lig med eller større end nul."
 
 #: pretix/base/models/items.py:598
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Maksimumsantallet skal være lig med eller større end nul."
 
 #: pretix/base/models/items.py:603
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "Maksimumsantallet skal være større end minimumsantallet."
 
 #: pretix/base/models/items.py:648
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
@@ -1313,7 +1314,7 @@ msgstr "Tid"
 
 #: pretix/base/models/items.py:657
 msgid "Date and time"
-msgstr ""
+msgstr "Dato og tidspunkt"
 
 #: pretix/base/models/items.py:665 pretix/base/models/items.py:706
 #: pretix/control/forms/item.py:36
@@ -1325,7 +1326,7 @@ msgstr "Spørgsmål"
 
 #: pretix/base/models/items.py:669
 msgid "Internal identifier"
-msgstr ""
+msgstr "Internt id"
 
 #: pretix/base/models/items.py:670
 msgid ""
@@ -1366,7 +1367,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:727
 msgid "This identifier is already used for a different question."
-msgstr ""
+msgstr "Dette id bruges allerede af et andet spørgsmål."
 
 #: pretix/base/models/items.py:751
 msgid "An answer to this question is required to proceed."
@@ -1374,7 +1375,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:761 pretix/base/models/items.py:769
 msgid "Invalid option selected."
-msgstr ""
+msgstr "Ugyldig valgmulighed valgt."
 
 #: pretix/base/models/items.py:778
 msgid "Invalid number input."
@@ -1382,11 +1383,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:785
 msgid "Invalid date input."
-msgstr ""
+msgstr "Ugyldig datoindtastning."
 
 #: pretix/base/models/items.py:792
 msgid "Invalid time input."
-msgstr ""
+msgstr "Ugyldig tidsindtastning."
 
 #: pretix/base/models/items.py:802
 msgid "Invalid datetime input."
@@ -1399,7 +1400,7 @@ msgstr "Svar"
 
 #: pretix/base/models/items.py:838
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "Id'et \"{}\" bruges allerede af en anden valgmulighed."
 
 #: pretix/base/models/items.py:841
 msgid "Question option"
@@ -1463,7 +1464,7 @@ msgstr "Bestilling {val}"
 #: pretix/base/models/log.py:85
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "Voucher {val}…"
+msgstr "Rabatkode {val}…"
 
 #: pretix/base/models/log.py:95
 #, python-brace-format
@@ -1909,8 +1910,8 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"Hvis sat, vil denne voucher blive trukket fra de tilknyttede produkters "
-"kvoter så det garanteres at en bruger med denne voucher kan få en billet."
+"Hvis sat, vil denne rabatkode blive trukket fra de tilknyttede produkters "
+"kvoter så det garanteres at en bruger med denne rabatkode kan få en billet."
 
 #: pretix/base/models/vouchers.py:122
 msgid "Allow to bypass quota"
@@ -1921,7 +1922,7 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"Hvis sat, kan en bruger med denne voucher købe billetter selv hvis der er "
+"Hvis sat, kan en bruger med denne rabatkode købe billetter selv hvis der er "
 "udsolgt."
 
 #: pretix/base/models/vouchers.py:128
@@ -1969,7 +1970,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:7
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:124
 msgid "Voucher"
-msgstr "Voucher"
+msgstr "Rabatkode"
 
 #: pretix/base/models/vouchers.py:177
 #: pretix/control/templates/pretixcontrol/event/base.html:112
@@ -2026,15 +2027,15 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Denne voucher er allerede blevet indløst %(redeemed)s gange. Du kan ikke "
+"Denne rabatkode er allerede blevet indløst %(redeemed)s gange. Du kan ikke "
 "sætte maksimalt antal anvendelser lavere end dette antal."
 
 #: pretix/base/models/vouchers.py:235 pretix/base/models/vouchers.py:291
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
-"Du skal angive en specifik dato hvis du ønsker at denne voucher skal blokere "
-"en kvote."
+"Du skal angive en specifik dato hvis du ønsker at denne rabatkode skal "
+"blokere en kvote."
 
 #: pretix/base/models/vouchers.py:237
 msgid "You can not select a subevent if your event is not an event series."
@@ -2047,12 +2048,12 @@ msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"Du kan ikke oprette en voucher der blokerer en kvote idet det valgte produkt "
-"eller kvote pt. er udsolgt eller fuldt reserveret."
+"Du kan ikke oprette en rabatkode der blokerer en kvote idet det valgte "
+"produkt eller kvote pt. er udsolgt eller fuldt reserveret."
 
 #: pretix/base/models/vouchers.py:315
 msgid "A voucher with this code already exists."
-msgstr "En voucher med denne kode findes allerede."
+msgstr "En rabatkode med denne kode findes allerede."
 
 #: pretix/base/models/waitinglist.py:36
 msgid "On waiting list since"
@@ -2066,7 +2067,7 @@ msgstr "E-mailadresse"
 
 #: pretix/base/models/waitinglist.py:44
 msgid "Assigned voucher"
-msgstr "Tilknyttet voucher"
+msgstr "Tilknyttet rabatkode"
 
 #: pretix/base/models/waitinglist.py:51
 msgid "The product the user waits for."
@@ -2102,7 +2103,7 @@ msgstr "Dette produkt er pt. ikke tilgængeligt."
 
 #: pretix/base/models/waitinglist.py:93
 msgid "A voucher has already been sent to this person."
-msgstr "An voucher er allerede sendt til denne person."
+msgstr "En rabatkode er allerede sendt til denne person."
 
 #: pretix/base/models/waitinglist.py:103
 #, python-brace-format
@@ -2127,7 +2128,7 @@ msgstr ""
 
 #: pretix/base/notifications.py:139
 msgid "View all unresolved problems"
-msgstr ""
+msgstr "Vis alle uløste problemer"
 
 #: pretix/base/notifications.py:180 pretix/control/forms/filter.py:96
 msgid "Order status"
@@ -2140,21 +2141,21 @@ msgstr "Vis bestillingsdetaljer"
 
 #: pretix/base/notifications.py:192
 msgid "New order placed"
-msgstr ""
+msgstr "Ny bestilling afgivet"
 
 #: pretix/base/notifications.py:193
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "En ny bestilling er blevet afgivet: {order.code}"
 
 #: pretix/base/notifications.py:198
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Bestilling markeret som betalt"
 
 #: pretix/base/notifications.py:199
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "Bestilling {order.code} er blevet markeret som betalt."
 
 #: pretix/base/notifications.py:204
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
@@ -2164,19 +2165,16 @@ msgstr "Bestilling annulleret"
 #: pretix/base/notifications.py:205
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "Bestilling {order.code} er blevet annulleret."
 
 #: pretix/base/notifications.py:210
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Order expired"
-msgstr "Kurv udløbet"
+msgstr "Bestiiling udløbet"
 
 #: pretix/base/notifications.py:211
-#, fuzzy, python-brace-format
-#| msgid "The order has been marked as expired."
+#, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr "Bestillingen er blevet markeret som udløbet."
+msgstr "Bestilling {order.code} er blevet markeret som udløbet."
 
 #: pretix/base/notifications.py:216
 msgid "Order information changed"
@@ -2449,7 +2447,7 @@ msgstr ""
 #: pretix/base/services/cart.py:59
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Denne voucher kan kun indløses %d gange mere."
+msgstr "Denne rabatkode kan kun indløses %d gange mere."
 
 #: pretix/base/services/cart.py:60
 msgid ""
@@ -2461,7 +2459,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:62
 msgid "This voucher is expired."
-msgstr "Denne voucher er uløbet."
+msgstr "Denne rabatkode er uløbet."
 
 #: pretix/base/services/cart.py:63
 msgid "This voucher is not valid for this product."
@@ -2469,7 +2467,7 @@ msgstr "Voucheren er ikke gyldig for dette produkt."
 
 #: pretix/base/services/cart.py:65
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "Denne voucher er gyldig for et produkt der pt. ikke er til salg."
+msgstr "Denne rabatkode er gyldig for et produkt der pt. ikke er til salg."
 
 #: pretix/base/services/cart.py:66
 msgctxt "subevent"
@@ -2568,10 +2566,8 @@ msgstr ""
 "111 Andeby"
 
 #: pretix/base/services/invoices.py:272
-#, fuzzy
-#| msgid "Sample product A"
 msgid "Sample product {}"
-msgstr "Eksempelprodukt A"
+msgstr "Eksempelprodukt {}"
 
 #: pretix/base/services/invoices.py:278
 msgid "Sample product A"
@@ -3061,10 +3057,10 @@ msgstr ""
 "Hej\n"
 "\n"
 "Du har tilmeldt dig ventelisten til {event} \n"
-"for pruduktet {product}.\n"
+"for produktet {product}.\n"
 "\n"
 "Vi har en billet klar til dig! Du kan bestille den i vores billetbutik inden "
-"for de næste {hours} timer ved at indtaste følgende voucherkode:\n"
+"for de næste {hours} timer ved at indtaste følgende rabatkode:\n"
 "\n"
 "{code}\n"
 "\n"
@@ -3075,7 +3071,6 @@ msgstr ""
 "Bemærk at dette link kun er gyldigt inden for de næste {hours} timer!\n"
 "Vi tilbyder billetten til den næste på ventelisten hvis du ikke indløser "
 "voucherkoden inden for tidsfristen.\n"
-"redeem the voucher within that timeframe.\n"
 "\n"
 "Venlig hilsen\n"
 "Arrangøren af {event}"
@@ -4190,7 +4185,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:980
 msgid "Pre-selected voucher"
-msgstr "Forudvalgt voucher"
+msgstr "Forudvalgt rabatkode"
 
 #: pretix/control/forms/event.py:982
 msgid ""
@@ -4201,10 +4196,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:987
-#, fuzzy
-#| msgid "Incompatible"
 msgid "Compatibility mode"
-msgstr "Ikke kompatibel"
+msgstr "Kompatibilitetstilstand"
 
 #: pretix/control/forms/event.py:988
 msgid ""
@@ -4214,11 +4207,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1009
 msgid "The given voucher code does not exist."
-msgstr "Den angivne voucher eksisterer ikke."
+msgstr "Den angivne rabatkode eksisterer ikke."
 
 #: pretix/control/forms/event.py:1016
 msgid "The password you entered was not correct."
-msgstr ""
+msgstr "Den indtastede adgangskode er ikke korrekt."
 
 #: pretix/control/forms/event.py:1017
 msgid "The slug you entered was not correct."
@@ -4229,32 +4222,28 @@ msgid "Event slug"
 msgstr ""
 
 #: pretix/control/forms/event.py:1068
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket downloads"
-msgstr "Billetdownload"
+msgstr "Billetdownloads"
 
 #: pretix/control/forms/event.py:1069
 msgid "Your customers will be able to download their tickets in PDF format."
-msgstr ""
+msgstr "Dine kunder vil kunne downloade deres billetter som PDF."
 
 #: pretix/control/forms/event.py:1073
-#, fuzzy
-#| msgid "Require attendee names"
 msgid "Require all attendees to fill in their names"
-msgstr "Påkræv deltagernavne"
+msgstr "Kræv navne på alle deltagere"
 
 #: pretix/control/forms/event.py:1074
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"Som standard, vil vi spørge om navne, men ikke kræve dem. Du kan slå dette "
+"helt fra i indstillingerne."
 
 #: pretix/control/forms/event.py:1100
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment via Stripe"
-msgstr "Betalingsdato"
+msgstr "Betaling via Stripe"
 
 #: pretix/control/forms/event.py:1101
 msgid ""
@@ -4265,10 +4254,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:1107
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment by bank transfer"
-msgstr "Betalingsdato"
+msgstr "Betaling ved bankoverførsel"
 
 #: pretix/control/forms/event.py:1108
 msgid ""
@@ -4285,20 +4272,16 @@ msgstr "Produktnavn"
 
 #: pretix/control/forms/event.py:1131
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:43
-#, fuzzy
-#| msgid "Prefix (optional)"
 msgid "Price (optional)"
-msgstr "Præfiks (valgfrit)"
+msgstr "Pris (valgfri)"
 
 #: pretix/control/forms/event.py:1136
 msgid "Free"
 msgstr ""
 
 #: pretix/control/forms/event.py:1141
-#, fuzzy
-#| msgid "Currently unavailable"
 msgid "Quantity available"
-msgstr "Pt. ikke tilgængelig"
+msgstr "Tilgængeligt antal"
 
 #: pretix/control/forms/filter.py:81 pretix/control/forms/filter.py:83
 msgid "Search for…"
@@ -4501,7 +4484,7 @@ msgstr "Filtrer efter tag"
 
 #: pretix/control/forms/filter.py:635 pretix/control/forms/filter.py:637
 msgid "Search voucher"
-msgstr "Find voucher"
+msgstr "Find rabatkode"
 
 #: pretix/control/forms/filter.py:677 pretix/control/views/typeahead.py:211
 #, python-brace-format
@@ -4834,10 +4817,8 @@ msgid "Interval"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:243
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "Number of repititions"
-msgstr "Antal billetter"
+msgstr "Antal gentagelser"
 
 #: pretix/control/forms/subevents.py:253
 #, fuzzy
@@ -4901,10 +4882,8 @@ msgid "Sunday"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:284 pretix/control/forms/subevents.py:334
-#, fuzzy
-#| msgid "Display"
 msgid "Day"
-msgstr "Vis"
+msgstr "Dag"
 
 #: pretix/control/forms/subevents.py:285 pretix/control/forms/subevents.py:335
 msgid "Weekday"
@@ -4923,10 +4902,8 @@ msgid "February"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:294
-#, fuzzy
-#| msgid "Search"
 msgid "March"
-msgstr "Søg"
+msgstr "Marts"
 
 #: pretix/control/forms/subevents.py:295
 msgid "April"
@@ -4949,36 +4926,28 @@ msgid "August"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:300
-#, fuzzy
-#| msgid "Member"
 msgid "September"
-msgstr "Medlem"
+msgstr "September"
 
 #: pretix/control/forms/subevents.py:301
 msgid "October"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:302
-#, fuzzy
-#| msgid "Member"
 msgid "November"
-msgstr "Medlem"
+msgstr "November"
 
 #: pretix/control/forms/subevents.py:303
-#, fuzzy
-#| msgid "Member"
 msgid "December"
-msgstr "Medlem"
+msgstr "December"
 
 #: pretix/control/forms/users.py:94 pretix/control/views/user.py:80
 msgid "Your changes could not be saved. See below for details."
 msgstr ""
 
 #: pretix/control/forms/vouchers.py:121
-#, fuzzy
-#| msgid "Invalid token selected."
 msgid "Invalid product selected."
-msgstr "Ugyldigt token valgt."
+msgstr "Ugyldigt produkt valgt."
 
 #: pretix/control/forms/vouchers.py:162
 msgid "Codes"
@@ -4994,7 +4963,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:183
 msgid "Maximum usages per voucher"
-msgstr "Maksimalt antal anvendelser pr. voucher"
+msgstr "Maksimalt antal anvendelser pr. rabatkode"
 
 #: pretix/control/forms/vouchers.py:186
 msgid "Number of times times EACH of these vouchers can be redeemed."
@@ -5421,7 +5390,7 @@ msgstr "En bruger er blevet fjernet fra gruppen."
 
 #: pretix/control/logdisplay.py:191
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr "En voucher er blevet sendt til en person på ventelisten."
+msgstr "En rabatkode er blevet sendt til en person på ventelisten."
 
 #: pretix/control/logdisplay.py:192
 msgid "The team has been created."
@@ -5727,16 +5696,12 @@ msgstr "Vis butik"
 #: pretix/control/templates/pretixcontrol/base.html:160
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
-#, fuzzy
-#| msgid "Admission time"
 msgid "Admin mode"
-msgstr "Dørene åbnes"
+msgstr "Administratortilstand"
 
 #: pretix/control/templates/pretixcontrol/base.html:167
-#, fuzzy
-#| msgid "Event admission time"
 msgid "End admin session"
-msgstr "Indgangstidspunkt"
+msgstr "Afslut administration"
 
 #: pretix/control/templates/pretixcontrol/base.html:179
 msgid "Account Settings"
@@ -6383,10 +6348,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:48
-#, fuzzy
-#| msgid "General settings"
 msgid "General payment settings"
-msgstr "Generelle indstillinger"
+msgstr "Generelle betalingsindstillinger"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:12
 #: pretix/control/templates/pretixcontrol/events/create_base.html:23
@@ -6394,10 +6357,8 @@ msgid "Back"
 msgstr "Tilbage"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:14
-#, fuzzy
-#| msgid "Payment provider"
 msgid "Payment provider:"
-msgstr "Betalingsudbyder"
+msgstr "Betalingsudbyder:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
@@ -6511,34 +6472,24 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:34
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create ticket types"
-msgstr "Opret gruppe"
+msgstr "Opret billettyper"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:40
-#, fuzzy
-#| msgid "Token name"
 msgid "Ticket name"
-msgstr "Navn"
+msgstr "Billetnavn"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:46
-#, fuzzy
-#| msgid "(optional)"
 msgid "Capacity (optional)"
-msgstr "(valgfri)"
+msgstr "Kapacitet (valgfri)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:99
-#, fuzzy
-#| msgid "Add a new device"
 msgid "Add a new ticket type"
-msgstr "Tilføj ny enhed"
+msgstr "Tilføj ny billettype"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:104
-#, fuzzy
-#| msgid "Total capacity"
 msgid "Total capacity:"
-msgstr "Samlet kapacitet"
+msgstr "Samlet kapacitet:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:107
 msgid ""
@@ -6609,7 +6560,7 @@ msgstr "Metadata"
 #: pretix/control/templates/pretixcontrol/event/settings.html:40
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:39
 msgid "Display settings"
-msgstr "VisningsIndstillinger"
+msgstr "Visningsindstillinger"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:53
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:45
@@ -6636,7 +6587,7 @@ msgstr "Generelt"
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:50
 #: pretix/control/templates/pretixcontrol/organizers/base.html:32
 msgid "Display"
-msgstr "Vis"
+msgstr "Visning"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:55
 #: pretix/control/views/event.py:1207 pretix/control/views/event.py:1209
@@ -7145,11 +7096,11 @@ msgstr "Produkt med varianter"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:73
 msgid "Only visible with a voucher"
-msgstr "Kun synlig med en voucher"
+msgstr "Kun synlig med en rabatkode"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:75
 msgid "Can only bought using a voucher"
-msgstr "Kan kun købes med en voucher"
+msgstr "Kan kun købes med en rabatkode"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -7744,6 +7695,7 @@ msgid "Valid EU VAT ID"
 msgstr "Gyldigt CVR-nr."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:413
+#, fuzzy
 msgid "Check"
 msgstr "Check"
 
@@ -8046,10 +7998,8 @@ msgstr "Opret vouchere"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
-#, fuzzy
-#| msgid "Delete tax rule"
 msgid "Repetition rule"
-msgstr "Slet momsregel"
+msgstr "Regel for gentagelse"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:80
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
@@ -8092,8 +8042,6 @@ msgid "Repeat until %(until)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
-#, fuzzy
-#| msgid "Preview"
 msgctxt "subevent"
 msgid "Preview"
 msgstr "Gennemse"
@@ -8145,24 +8093,18 @@ msgid "Create a new date"
 msgstr "Opret ny dato"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:43
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Create many new dates"
-msgstr "Opret ny dato"
+msgstr "Opret mange datoer"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:53
 msgid "Begin"
 msgstr "Start"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:111
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create a new date"
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr "Opret ny dato"
+msgstr "Brug som skabelon for ny dato"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:116
 msgctxt "subevent"
@@ -8484,10 +8426,8 @@ msgid "Staff session"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
-#, fuzzy
-#| msgid "Question type"
 msgid "Session notes"
-msgstr "Spørgsmålstype"
+msgstr "Sessionsnoter"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
@@ -8513,10 +8453,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
-#, fuzzy
-#| msgid "Start editing"
 msgid "Start session"
-msgstr "Start redigering"
+msgstr "Start session"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
@@ -8609,26 +8547,27 @@ msgid ""
 "voucher holder if another quota associated with the product is sold out!"
 msgstr ""
 "Hvis du vælger \"vilkårligt produkt\" for en specifik kvote og vælger at "
-"reservere plads for denne voucher ovenfor, kan produktet stadig være "
-"utilgængeligt for brugeren med voucheren hvis en anden kvote for produktet "
+"reservere plads for denne rabatkode ovenfor, kan produktet stadig være "
+"utilgængeligt for brugeren med rabatkoden hvis en anden kvote for produktet "
 "er udsolgt!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr "Slet voucher"
+msgstr "Slet rabatkode"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
 msgstr ""
-"Er du sikker på at du vil slette voucheren <strong>%(voucher)s</strong>?"
+"Er du sikker på at du vil slette rabatkoden <strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:10
 msgid "This voucher already has been used. It is not recommended to modify it."
 msgstr ""
-"Denne voucher er allerede blevet brugt. Det kan ikke anbefales at ændre den."
+"Denne rabatkode er allerede blevet brugt. Det kan ikke anbefales at ændre "
+"den."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:14
 #, python-format
@@ -8658,7 +8597,7 @@ msgstr "Du har endnu ikke oprettet nogen vouchere."
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:62
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:69
 msgid "Create a new voucher"
-msgstr "Opret voucher"
+msgstr "Opret rabatkode"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:64
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:72
@@ -8686,7 +8625,7 @@ msgstr "Et vilkårligt produkt i kvoten %(quota)s"
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
-msgstr "Hvis du tagger en voucher kan du se statistik over deres anvendelse."
+msgstr "Hvis du tagger en rabatkode kan du se statistik over deres anvendelse."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:12
 msgid "You haven't added any tags to vouchers yet."
@@ -8721,7 +8660,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr "Send voucher"
+msgstr "Send rabatkoder"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -8776,7 +8715,7 @@ msgstr "Afventer"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:86
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:144
 msgid "Voucher assigned"
-msgstr "Voucher tildelt"
+msgstr "Rabatkode tildelt"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:122
 msgid "On the list since"
@@ -8796,7 +8735,7 @@ msgstr "Venter, produkt ikke tilgængeligt"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:162
 msgid "Send a voucher"
-msgstr "Send en voucher"
+msgstr "Send en rabatkode"
 
 #: pretix/control/templatetags/hierarkey_form.py:42
 msgid "Organizer-level settings"
@@ -9142,10 +9081,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/event.py:1270
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Regular ticket"
-msgstr "Hent billet"
+msgstr "Almindelig billet"
 
 #: pretix/control/views/event.py:1275
 msgid "Reduced ticket"
@@ -9496,12 +9433,9 @@ msgid "The new date has been created."
 msgstr "Den nye dato er blevet oprettet."
 
 #: pretix/control/views/subevents.py:672
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "Den nye dato er blevet oprettet."
+msgstr "{} nye datoer er blevet oprettet."
 
 #: pretix/control/views/typeahead.py:42
 msgid "Series:"
@@ -9577,10 +9511,8 @@ msgid "Your notification settings have been saved."
 msgstr ""
 
 #: pretix/control/views/user.py:538
-#, fuzzy
-#| msgid "The comment has been updated."
 msgid "Your comment has been saved."
-msgstr "Kommentar opdateret."
+msgstr "Din kommentar er blevet gemt."
 
 #: pretix/control/views/users.py:95
 msgid "We sent out an e-mail containing further instructions."
@@ -9608,12 +9540,12 @@ msgstr ""
 
 #: pretix/control/views/vouchers.py:140
 msgid "The selected voucher has been deleted."
-msgstr "Den valgte voucher er blevet slettet."
+msgstr "Den valgte rabatkode er blevet slettet."
 
 #: pretix/control/views/vouchers.py:217
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr "Den nye voucher er blevet oprettet: {code}"
+msgstr "Den nye rabatkode er blevet oprettet: {code}"
 
 #: pretix/control/views/vouchers.py:256
 msgid "The new vouchers have been created."
@@ -10933,10 +10865,8 @@ msgid "Stripe Connect: Secret key"
 msgstr ""
 
 #: pretix/plugins/stripe/signals.py:114
-#, fuzzy
-#| msgid "Publishable key"
 msgid "Stripe Connect: Publishable key"
-msgstr "Offentlig nøgle"
+msgstr "Stripe Connect: Offentlig nøgle"
 
 #: pretix/plugins/stripe/signals.py:121
 msgid "Stripe Connect: Secret key (test)"
@@ -11759,6 +11689,7 @@ msgstr "Afventer betaling"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
+#, fuzzy
 msgid "Go"
 msgstr "Skift"
 
@@ -11900,11 +11831,11 @@ msgstr "Læg i kurv"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:448
 msgid "Redeem a voucher"
-msgstr "Brug en voucher"
+msgstr "Brug en rabatkode"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:461
 msgid "Redeem voucher"
-msgstr "Brug voucher"
+msgstr "Brug rabatkode"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:472
 msgid "If you already ordered a ticket"
@@ -12363,11 +12294,11 @@ msgstr ""
 
 #: pretix/settings.py:355
 msgid "Danish"
-msgstr ""
+msgstr "Dansk"
 
 #: pretix/settings.py:356
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugisisk (Brasilien)"
 
 #~ msgid "Public email address for contacting the organizer"
 #~ msgstr "Offentligt e-mailadresse der kan bruges til at kontakte arrangøren"
