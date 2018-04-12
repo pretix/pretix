@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-04 11:02+0000\n"
+"POT-Creation-Date: 2018-04-12 10:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -44,46 +44,6 @@ msgstr ""
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
 msgid "Contacting Stripe …"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
-msgid "QR Code"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:210
-msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:359
-msgid "Group of objects"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:365
-msgid "Text object"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:367
-msgid "Barcode area"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:369
-msgid "Object"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:373
-msgid "Ticket design"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:609
-msgid "Saving failed."
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:656
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
-msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
@@ -150,6 +110,46 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:21
+msgid "QR Code"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:210
+msgid "The PDF background file could not be loaded for the following reason:"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:359
+msgid "Group of objects"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:365
+msgid "Text object"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:367
+msgid "Barcode area"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:369
+msgid "Object"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:373
+msgid "Ticket design"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:609
+msgid "Saving failed."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
+msgid "Do you really want to leave the editor without saving your changes?"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:670
+msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
