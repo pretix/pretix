@@ -91,7 +91,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
-* link (str, optional, if the full widget should be a link)
+* url (str, optional, if the full widget should be a link)
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 An additional keyword argument ``subevent`` *can* contain a sub-event.
@@ -108,7 +108,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
-* link (str, optional, if the full widget should be a link)
+* url (str, optional, if the full widget should be a link)
 
 This is a regular django signal (no pretix event signal).
 """
