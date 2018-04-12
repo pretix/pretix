@@ -523,9 +523,11 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
 
-        ctx['contact_info'] = [
-            (_('E-mail'), self.cart_session.get('contact_form_data', {}).get('email')),
-        ]
+        email = self.cart_session.get('contact_form_data', {}).get('email')
+        if email != settings.PRETIX_EMAIL_NONE_VALUE:
+            ctx['contact_info'] = [
+                (_('E-mail'), email),
+            ]
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
