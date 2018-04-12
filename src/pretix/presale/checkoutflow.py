@@ -528,6 +528,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             ctx['contact_info'] = [
                 (_('E-mail'), email),
             ]
+        else:
+            ctx['contact_info'] = []
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():
