@@ -52,7 +52,7 @@ def get_grouped_items(event, subevent=None, voucher=None):
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-        & ~Q(category__is_addon=True)
+        & Q(Q(category__isnull=True) | Q(category__is_addon=False))
     )
 
     vouchq = Q(hide_without_voucher=False)
