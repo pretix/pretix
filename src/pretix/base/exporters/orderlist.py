@@ -63,7 +63,7 @@ class OrderListExporter(BaseExporter):
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
             _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
-            _('Payment date'), _('Payment type'), _('Fees'),
+            _('Payment date'), _('Payment type'), _('Fees'), _('Order locale')
         ]
 
         for tr in tax_rates:
@@ -123,7 +123,8 @@ class OrderListExporter(BaseExporter):
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
                 provider_names.get(order.payment_provider, order.payment_provider),
-                localize(full_fee_sum_cache.get(order.id) or Decimal('0.00'))
+                localize(full_fee_sum_cache.get(order.id) or Decimal('0.00')),
+                order.locale,
             ]
 
             for tr in tax_rates:
