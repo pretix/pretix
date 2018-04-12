@@ -161,6 +161,14 @@ def webhook(request, *args, **kwargs):
                 'sale': sale['id']
             })
         )
+    elif order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and sale['state'] == 'completed' and \
+            order.payment_provider != "paypal":
+        RequiredAction.objects.create(
+            event=event, action_type='pretix.plugins.paypal.double', data=json.dumps({
+                'order': order.code,
+                'payment': sale['parent_payment']
+            })
+        )
     elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and sale['state'] == 'completed':
         try:
             mark_order_paid(order, user=None)

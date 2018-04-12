@@ -84,6 +84,8 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
         template = get_template('pretixplugins/stripe/action_refund.html')
     elif action.action_type == 'pretix.plugins.stripe.overpaid':
         template = get_template('pretixplugins/stripe/action_overpaid.html')
+    elif action.action_type == 'pretix.plugins.stripe.double':
+        template = get_template('pretixplugins/stripe/action_double.html')
 
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)

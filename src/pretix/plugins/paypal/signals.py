@@ -48,6 +48,8 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
         template = get_template('pretixplugins/paypal/action_refund.html')
     elif action.action_type == 'pretix.plugins.paypal.overpaid':
         template = get_template('pretixplugins/paypal/action_overpaid.html')
+    elif action.action_type == 'pretix.plugins.paypal.double':
+        template = get_template('pretixplugins/paypal/action_double.html')
 
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)
