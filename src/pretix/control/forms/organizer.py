@@ -156,7 +156,8 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         )
     )
     organizer_link_back = forms.BooleanField(
-        label=_('Link back to organizer overview on all event pages')
+        label=_('Link back to organizer overview on all event pages'),
+        required=False
     )
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
