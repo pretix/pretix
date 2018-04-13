@@ -829,8 +829,8 @@ class SubEventsTest(SoupTest):
         assert doc.select(".alert-success")
         # deleting the second event
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
-        assert doc.select(".alert-danger")
-        assert SubEvent.objects.filter(pk=self.subevent2.pk).exists()
+        assert doc.select(".alert-success")
+        assert not SubEvent.objects.filter(pk=self.subevent2.pk).exists()
         assert not SubEvent.objects.filter(pk=self.subevent1.pk).exists()
 
     def test_delete_with_orders(self):

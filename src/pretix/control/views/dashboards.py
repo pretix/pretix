@@ -14,7 +14,7 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, ungettext, pgettext
+from django.utils.translation import pgettext, ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
     Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
