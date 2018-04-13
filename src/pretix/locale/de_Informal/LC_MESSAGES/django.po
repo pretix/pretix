@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-12 10:41+0000\n"
-"PO-Revision-Date: 2018-04-04 12:12+0000\n"
+"PO-Revision-Date: 2018-04-12 10:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German (informal) <https://translate.pretix.eu/projects/"
-"pretix/pretix/de_Informal/>\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1746,10 +1746,8 @@ msgid "Other fees"
 msgstr "Andere Gebühren"
 
 #: pretix/base/models/orders.py:680
-#, fuzzy
-#| msgid "Credit card"
 msgid "Gift card"
-msgstr "Kreditkarte"
+msgstr "Geschenkgutschein"
 
 #: pretix/base/models/orders.py:685 pretix/control/views/vouchers.py:61
 msgid "Value"
@@ -2532,10 +2530,8 @@ msgid "20:00"
 msgstr "20:00"
 
 #: pretix/base/pdf.py:88
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Event end date and time"
-msgstr "Veranstaltungsdatum und Uhrzeit"
+msgstr "Veranstaltungsende und Uhrzeit"
 
 #: pretix/base/pdf.py:89 pretix/base/pdf.py:105
 msgid "2017-05-31 19:00"
@@ -8756,10 +8752,8 @@ msgid "PDF Ticket Editor"
 msgstr "PDF-Ticket-Editor"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
-#, fuzzy
-#| msgid "Editor"
 msgid "PDF Editor"
-msgstr "Editor"
+msgstr "PDF-Editor"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 msgid "Code"
@@ -9131,7 +9125,7 @@ msgstr "Gib den angezeigten Code hier ein:"
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr ""
+msgstr "Zeiten Faktor für zukünftige Anmeldungen erfordern"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
@@ -12327,10 +12321,8 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: pretix/plugins/ticketoutputpdf/views.py:16
-#, fuzzy
-#| msgid "Default timezone"
 msgid "Default ticket layout"
-msgstr "Standardzeitzone"
+msgstr "Standard-Ticketlayout"
 
 #: pretix/presale/checkoutflow.py:48
 msgctxt "checkoutflow"
