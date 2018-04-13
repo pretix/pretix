@@ -8,7 +8,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.timezone import make_aware
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, pgettext
 
 from pretix.base.models import Organizer, User
 from pretix.control.permissions import event_permission_required
@@ -38,11 +38,14 @@ def event_list(request):
 
         dr = e.get_date_range_display()
         if e.has_subevents:
-            tz = pytz.timezone(e.settings.timezone)
-            dr = _('Series:') + ' ' + daterange(
-                e.min_from.astimezone(tz),
-                (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
-            )
+            if e.min_from is None:
+                dr = pgettext('subevent', 'No dates')
+            else:
+                tz = pytz.timezone(e.settings.timezone)
+                dr = _('Series:') + ' ' + daterange(
+                    e.min_from.astimezone(tz),
+                    (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
+                )
         return {
             'id': e.pk,
             'slug': e.slug,
