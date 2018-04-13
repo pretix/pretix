@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-12 10:41+0000\n"
+"POT-Creation-Date: 2018-04-13 07:55+0000\n"
 "PO-Revision-Date: 2018-04-12 11:58+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish "
-"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
+">\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1606,7 +1606,7 @@ msgstr "Produktet \"{item}\" er ikke længere tilgængeligt."
 #: pretix/plugins/checkinlists/exporters.py:319
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:82
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
-#: pretix/presale/checkoutflow.py:537
+#: pretix/presale/checkoutflow.py:539
 msgid "Yes"
 msgstr "Ja"
 
@@ -1618,7 +1618,7 @@ msgstr "Ja"
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:82
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:14
-#: pretix/presale/checkoutflow.py:539
+#: pretix/presale/checkoutflow.py:541
 msgid "No"
 msgstr "Nej"
 
@@ -2412,21 +2412,29 @@ msgstr ""
 msgid "Event end date and time"
 msgstr "Arrangements startdato og -tidspunkt"
 
-#: pretix/base/pdf.py:89 pretix/base/pdf.py:105
-msgid "2017-05-31 19:00"
+#: pretix/base/pdf.py:89
+msgid "2017-05-31 22:00"
 msgstr ""
 
-#: pretix/base/pdf.py:97 pretix/base/pdf.py:113
-msgid "19:00"
-msgstr "19:00"
+#: pretix/base/pdf.py:97
+msgid "22:00"
+msgstr ""
 
 #: pretix/base/pdf.py:104
 msgid "Event admission date and time"
 msgstr "Arrangements indgangsstartdato og -tidspunkt"
 
+#: pretix/base/pdf.py:105
+msgid "2017-05-31 19:00"
+msgstr ""
+
 #: pretix/base/pdf.py:112
 msgid "Event admission time"
 msgstr "Indgangstidspunkt"
+
+#: pretix/base/pdf.py:113
+msgid "19:00"
+msgstr "19:00"
 
 #: pretix/base/pdf.py:120
 msgid "Event location"
@@ -3467,7 +3475,7 @@ msgstr ""
 msgid "Filetype not allowed!"
 msgstr "Filtype ikke tilladt!"
 
-#: pretix/control/forms/event.py:33 pretix/control/forms/organizer.py:160
+#: pretix/control/forms/event.py:33 pretix/control/forms/organizer.py:164
 msgid "Use languages"
 msgstr "Sprog"
 
@@ -4244,12 +4252,12 @@ msgid ""
 "120 pixels."
 msgstr ""
 
-#: pretix/control/forms/event.py:843 pretix/control/forms/organizer.py:165
+#: pretix/control/forms/event.py:843 pretix/control/forms/organizer.py:169
 #: pretix/control/templates/pretixcontrol/pdf/index.html:275
 msgid "Font"
 msgstr "Skrift"
 
-#: pretix/control/forms/event.py:847 pretix/control/forms/organizer.py:169
+#: pretix/control/forms/event.py:847 pretix/control/forms/organizer.py:173
 msgid "Only respected by modern browsers."
 msgstr "Virker kun i moderne browsere."
 
@@ -4908,7 +4916,11 @@ msgstr "Vis"
 msgid "Calendar"
 msgstr "Kalender"
 
-#: pretix/control/forms/organizer.py:162
+#: pretix/control/forms/organizer.py:159
+msgid "Link back to organizer overview on all event pages"
+msgstr ""
+
+#: pretix/control/forms/organizer.py:166
 msgid ""
 "Choose all languages that your organizer homepage should be available in."
 msgstr "Vælg alle sprog som din arrangørside skal kunne vises på."
@@ -5781,7 +5793,7 @@ msgstr "Angiv ny adgangskode"
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:73
 #: pretix/control/templates/pretixcontrol/order/extend.html:28
 #: pretix/control/templates/pretixcontrol/organizers/create.html:17
-#: pretix/control/templates/pretixcontrol/organizers/display.html:28
+#: pretix/control/templates/pretixcontrol/organizers/display.html:29
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:85
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:42
 #: pretix/control/templates/pretixcontrol/pdf/index.html:337
@@ -6305,7 +6317,7 @@ msgid "Event page"
 msgstr "Arrangementsside"
 
 #: pretix/control/templates/pretixcontrol/event/display.html:16
-#: pretix/control/templates/pretixcontrol/organizers/display.html:16
+#: pretix/control/templates/pretixcontrol/organizers/display.html:17
 msgid "Shop design"
 msgstr "Butiksdesign"
 
@@ -7951,7 +7963,7 @@ msgstr "Arrangør: %(name)s"
 msgid "Organizer page"
 msgstr "Arrangørside"
 
-#: pretix/control/templates/pretixcontrol/organizers/display.html:18
+#: pretix/control/templates/pretixcontrol/organizers/display.html:19
 msgid ""
 "These settings will be used for the organizer page as well as for the "
 "default settings for all events in this account that do not have their own "
@@ -10380,6 +10392,23 @@ msgstr "Betaling tilbageført."
 msgid "PayPal reported an event: {}"
 msgstr "PayPal rapporterede en hændelse: {}"
 
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
+#, fuzzy, python-format
+#| msgid ""
+#| "The PayPal transaction %(payment)s has succeeded, but the order %(order)s "
+#| "is expired and the product was sold out in the meantime. Therefore, the "
+#| "payment could not be accepted. Please contact the user and refund the "
+#| "money via PayPal's interface."
+msgid ""
+"The PayPal transaction %(payment)s has succeeded, but the order %(order)s "
+"has already been paid by other means. Please double check and refund the "
+"money via PayPal's interface."
+msgstr ""
+"PayPal-transaktionen %(payment)s blev gennemført, men bestillingen %(order)s "
+"er udløbet og produktet blev udsolgt i mellemtiden. Derfor kunne betalingen "
+"ikke godkendes. Kontakt kunden og refunder pengene via PayPals "
+"brugergrænseflade."
+
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_overpaid.html:5
 #, python-format
 msgid ""
@@ -10493,11 +10522,11 @@ msgstr ""
 msgid "It looks like you canceled the PayPal payment"
 msgstr ""
 
-#: pretix/plugins/paypal/views.py:192 pretix/plugins/stripe/views.py:291
+#: pretix/plugins/paypal/views.py:200 pretix/plugins/stripe/views.py:300
 msgid "The order cannot be marked as refunded as it is not marked as paid!"
 msgstr ""
 
-#: pretix/plugins/paypal/views.py:196 pretix/plugins/stripe/views.py:295
+#: pretix/plugins/paypal/views.py:204 pretix/plugins/stripe/views.py:304
 msgid ""
 "The order has been marked as refunded and the issue has been marked as "
 "resolved!"
@@ -11153,25 +11182,42 @@ msgstr ""
 msgid "Stripe reported an event: {}"
 msgstr "Stripe rapporterede en hændelse: {}"
 
-#: pretix/plugins/stripe/signals.py:100
+#: pretix/plugins/stripe/signals.py:102
 msgid "Stripe Connect: Client ID"
 msgstr ""
 
-#: pretix/plugins/stripe/signals.py:107
+#: pretix/plugins/stripe/signals.py:109
 msgid "Stripe Connect: Secret key"
 msgstr ""
 
-#: pretix/plugins/stripe/signals.py:114
+#: pretix/plugins/stripe/signals.py:116
 msgid "Stripe Connect: Publishable key"
 msgstr "Stripe Connect: Offentlig nøgle"
 
-#: pretix/plugins/stripe/signals.py:121
+#: pretix/plugins/stripe/signals.py:123
 msgid "Stripe Connect: Secret key (test)"
 msgstr ""
 
-#: pretix/plugins/stripe/signals.py:128
+#: pretix/plugins/stripe/signals.py:130
 msgid "Stripe Connect: Publishable key (test)"
 msgstr ""
+
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
+#, fuzzy, python-format
+#| msgid ""
+#| "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, "
+#| "but the order %(order)s is expired and the product was sold out in the "
+#| "meantime. Therefore, the payment could not be accepted. Please contact "
+#| "the user and refund the money via Stripe's interface."
+msgid ""
+"The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, but "
+"the order %(order)s has already been paid by other means. Please double-"
+"check and refund the money via Stripe's interface."
+msgstr ""
+"Stripe-transaktionen <a %(stripe_href)s>%(charge)s</a> blev gennemført, men "
+"bestillingen %(order)s er udløbet og produktet blev udsolgt i mellemtiden. "
+"Derfor kunne betalingen ikke godkendes. Kontakt venligt brugeren og "
+"tilbagebetal beløbet via Stripes brugergrænseflade."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -11335,19 +11381,19 @@ msgid ""
 "in detail below."
 msgstr ""
 
-#: pretix/plugins/stripe/views.py:270
+#: pretix/plugins/stripe/views.py:279
 #, fuzzy
 #| msgid "Your cart has been updated."
 msgid "Your Stripe account has been disconnected."
 msgstr "Din kurv er blevet opdateret."
 
-#: pretix/plugins/stripe/views.py:331 pretix/plugins/stripe/views.py:358
+#: pretix/plugins/stripe/views.py:340 pretix/plugins/stripe/views.py:367
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
 
-#: pretix/plugins/stripe/views.py:352
+#: pretix/plugins/stripe/views.py:361
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
@@ -11458,11 +11504,11 @@ msgctxt "checkoutflow"
 msgid "Review order"
 msgstr "Gennemse bestilling"
 
-#: pretix/presale/checkoutflow.py:568
+#: pretix/presale/checkoutflow.py:570
 msgid "You need to check all checkboxes on the bottom of the page."
 msgstr ""
 
-#: pretix/presale/checkoutflow.py:598
+#: pretix/presale/checkoutflow.py:600
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
@@ -11550,11 +11596,17 @@ msgstr ""
 msgid "Take it live now"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/base.html:66
+#: pretix/presale/templates/pretixpresale/event/base.html:29
+#, fuzzy, python-format
+#| msgid "Sample event name"
+msgid "Show all events of %(name)s"
+msgstr "Eksempelarrangementsnavn"
+
+#: pretix/presale/templates/pretixpresale/event/base.html:75
 msgid "Contact event organizer"
 msgstr "Kontakt arrangør"
 
-#: pretix/presale/templates/pretixpresale/event/base.html:69
+#: pretix/presale/templates/pretixpresale/event/base.html:78
 msgid "Imprint"
 msgstr ""
 
