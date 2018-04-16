@@ -25,7 +25,7 @@ class BadgeLayout(LoggedModel):
     )
     default = models.BooleanField(
         verbose_name=_('Default'),
-        default=True,
+        default=False,
     )
     name = models.CharField(
         max_length=190,
@@ -35,7 +35,10 @@ class BadgeLayout(LoggedModel):
     background = models.FileField(null=True, blank=True, upload_to=bg_name, max_length=255)
 
     class Meta:
-        ordering = ("-default", "name",)
+        ordering = ("name",)
+
+    def __str__(self):
+        return self.name
 
 
 class BadgeItem(models.Model):

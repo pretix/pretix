@@ -4,7 +4,7 @@
 {% block title %}{% trans "Badges" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Badges" %}</h1>
-    {% if methods|length == 0 %}
+    {% if layouts|length == 0 %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
@@ -50,8 +50,17 @@
                             {% if l.default %}
                                 <span class="text-success">
                                     <span class="fa fa-check"></span>
-                                    {% trans "Enabled" %}
+                                    {% trans "Default" %}
                                 </span>
+                                {% elif "can_change_event_settings" in request.eventpermset %}
+                                <form class="form-inline" method="post"
+                                 action="{% url "plugins:badges:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
+                                >
+                                    {% csrf_token %}
+                                    <button class="btn btn-default btn-sm">
+                                        {% trans "Make default" %}
+                                    </button>
+                                </form>
                             {% endif %}
                         </td>
                         <td class="text-right">

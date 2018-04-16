@@ -12,7 +12,7 @@
     {% if layout %}
         <h1>{% blocktrans with name=layout.name %}Badge layout: {{ name }}{% endblocktrans %}</h1>
     {% else %}
-        <h1>{% trans "Shipping method" %}</h1>
+        <h1>{% trans "Badge layout" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
