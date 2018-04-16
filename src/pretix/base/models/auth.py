@@ -248,6 +248,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         teams = self._get_teams_for_event(organizer, event)
         if teams:
             self._teamcache['e{}'.format(event.pk)] = teams
+            if isinstance(perm_name, (tuple, list)):
+                return any([any(team.has_permission(p) for team in teams) for p in perm_name])
             if not perm_name or any([team.has_permission(perm_name) for team in teams]):
                 return True
         return False
@@ -266,6 +268,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             return True
         teams = self._get_teams_for_organizer(organizer)
         if teams:
+            if isinstance(perm_name, (tuple, list)):
+                return any([any(team.has_permission(p) for team in teams) for p in perm_name])
             if not perm_name or any([team.has_permission(perm_name) for team in teams]):
                 return True
         return False
