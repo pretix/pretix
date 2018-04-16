@@ -381,7 +381,7 @@ django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 
 AUTH_USER_MODEL = 'pretixbase.User'
-LOGIN_URL = '/login'  # global login does not yet exist
+LOGIN_URL = 'control:auth.login'
 LOGIN_URL_CONTROL = 'control:auth.login'
 CSRF_FAILURE_VIEW = 'pretix.base.views.errors.csrf_failure'
 
