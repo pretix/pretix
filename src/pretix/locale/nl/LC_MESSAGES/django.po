@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-13 07:55+0000\n"
-"PO-Revision-Date: 2018-04-16 10:38+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2018-04-16 13:26+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -2344,6 +2344,10 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Wordt afgedrukt net onder de betalingscijfers en boven de afsluitende tekst "
+"op facturen. Dit wordt alleen gebruikt als de factuur gegenereerd is voordat "
+"de bestelling is betaald. Als de factuur later wordt gegenereerd wordt er "
+"een tekst weergegeven die aangeeft dat de bestelling al is betaald."
 
 #: pretix/base/payment.py:190 pretix/base/payment.py:199
 msgid "Additional fee"
@@ -2367,7 +2371,7 @@ msgstr ""
 
 #: pretix/base/payment.py:208
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Bereken de toeslag op basis van de totale waarde inclusief toeslag."
 
 #: pretix/base/payment.py:209
 #, python-brace-format
@@ -2427,7 +2431,7 @@ msgstr "De bestelling is gemarkeerd als terugbetaald."
 
 #: pretix/base/pdf.py:13
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Ticket code (waarde van QR-code)"
 
 #: pretix/base/pdf.py:23 pretix/control/forms/event.py:1127
 #: pretix/control/templates/pretixcontrol/items/index.html:33
@@ -2437,7 +2441,7 @@ msgstr "Productnaam"
 #: pretix/base/pdf.py:24 pretix/base/services/tickets.py:77
 #: pretix/control/views/pdf.py:58
 msgid "Sample product"
-msgstr ""
+msgstr "Voorbeeldproduct"
 
 #: pretix/base/pdf.py:28
 msgid "Variation name"
@@ -2450,28 +2454,28 @@ msgstr "Voorbeeldvariant"
 
 #: pretix/base/pdf.py:33
 msgid "Product description"
-msgstr ""
+msgstr "Productomschrijving"
 
 #: pretix/base/pdf.py:34 pretix/base/services/tickets.py:78
 #: pretix/control/views/pdf.py:59
 msgid "Sample product description"
-msgstr ""
+msgstr "Voorbeeld productomschrijving"
 
 #: pretix/base/pdf.py:38
 msgid "Product name and variation"
-msgstr ""
+msgstr "Productnaam en variant"
 
 #: pretix/base/pdf.py:39
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Voorbeeldproduct – voorbeeldvariant"
 
 #: pretix/base/pdf.py:47
 msgid "Ticket category"
-msgstr ""
+msgstr "Productcategorie"
 
 #: pretix/base/pdf.py:54
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:59 pretix/base/pdf.py:126
 #: pretix/base/services/tickets.py:87 pretix/base/services/tickets.py:88
@@ -2480,19 +2484,19 @@ msgstr ""
 #: pretix/control/views/pdf.py:69 pretix/control/views/pdf.py:70
 #: pretix/control/views/pdf.py:72 pretix/plugins/sendmail/views.py:92
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/pdf.py:64
 msgid "Sample event name"
-msgstr ""
+msgstr "Voorbeeld evenementnaam"
 
 #: pretix/base/pdf.py:68
 msgid "Event date"
-msgstr ""
+msgstr "Evenementdatum"
 
 #: pretix/base/pdf.py:69
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31 mei 2017"
 
 #: pretix/base/pdf.py:73
 msgid "Event date range"
