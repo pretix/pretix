@@ -1,21 +1,14 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Shipping methods" %}{% endblock %}
-{% block inside %}
-    <legend>{% trans "Shipping methods" %}</legend>
+{% block title %}{% trans "Badges" %}{% endblock %}
+{% block content %}
+    <legend>{% trans "Badges" %}</legend>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-        {% if possible %}
-            <p>{% blocktrans %}Are you sure you want to delete the shipping method <strong>{{ method }}</strong>?{% endblocktrans %}</p>
-        {% else %}
-            <p>{% blocktrans trimmed %}
-                You can not delete the shipping method <strong>{{ method }}</strong> as it is in use by some of your
-                orders.
-            {% endblocktrans %}</p>
-        {% endif %}
+        <p>{% blocktrans %}Are you sure you want to delete the badge layout <strong>{{ layout }}</strong>?{% endblocktrans %}</p>
         <div class="form-group submit-group">
-            <a href="{% url "plugins:pretix_shipping:settings.index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn
+            <a href="{% url "plugins:badges:index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn
 btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>

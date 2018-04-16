@@ -5,10 +5,10 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
-from django.views.generic import DeleteView, ListView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.views import CreateView, UpdateView
+from pretix.plugins.badges.forms import BadgeLayoutForm
 
 from .models import BadgeLayout
 
@@ -25,10 +25,10 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
 
 class LayoutCreate(EventPermissionRequiredMixin, CreateView):
     model = BadgeLayout
-    # form_class = ShippingMethodForm
+    form_class = BadgeLayoutForm
     template_name = 'pretixplugins/badges/edit.html'
     permission = 'can_change_event_settings'
-    context_object_name = 'method'
+    context_object_name = 'layout'
 
     def get_success_url(self) -> str:
         return reverse('plugins:badges:index', kwargs={
@@ -48,13 +48,16 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
 
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
+
 
 class LayoutUpdate(EventPermissionRequiredMixin, UpdateView):
     model = BadgeLayout
-    # form_class = ShippingMethodForm
+    form_class = BadgeLayoutForm
     template_name = 'pretixplugins/badges/edit.html'
     permission = 'can_change_event_settings'
-    context_object_name = 'method'
+    context_object_name = 'layout'
 
     def get_object(self, queryset=None) -> BadgeLayout:
         try:
@@ -90,7 +93,7 @@ class LayoutDelete(EventPermissionRequiredMixin, DeleteView):
     model = BadgeLayout
     template_name = 'pretixplugins/badges/delete.html'
     permission = 'can_change_event_settings'
-    context_object_name = 'method'
+    context_object_name = 'layout'
 
     def get_object(self, queryset=None) -> BadgeLayout:
         try:
