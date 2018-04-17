@@ -21,7 +21,7 @@ def control_nav_import(sender, request=None, **kwargs):
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
-            'active': (url.namespace == 'plugins:badges' and url.url_name == 'index'),
+            'active': url.namespace == 'plugins:badges',
             'icon': 'id-card',
         }
     ]

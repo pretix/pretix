@@ -31,7 +31,11 @@ class BadgeLayout(LoggedModel):
         max_length=190,
         verbose_name=_('Name')
     )
-    layout = models.TextField()
+    layout = models.TextField(
+        default='[{"type":"textarea","left":"13.09","bottom":"49.73","fontsize":"23.6","color":[0,0,0,1],'
+                '"fontfamily":"Open Sans","bold":true,"italic":false,"width":"121.83","content":"attendee_name",'
+                '"text":"Max Mustermann","align":"center"}]'
+    )
     background = models.FileField(null=True, blank=True, upload_to=bg_name, max_length=255)
 
     class Meta:
