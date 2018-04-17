@@ -21,6 +21,5 @@ Disallow: /control/
 Disallow: /download/
 Disallow: /redirect/
 Disallow: /api/
-Disallow: /download/
 """, content_type='text/plain'
     )
