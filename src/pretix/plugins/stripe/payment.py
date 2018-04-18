@@ -271,6 +271,10 @@ class StripeMethod(BasePaymentProvider):
                 amount=self._get_amount(order),
                 currency=self.event.currency.lower(),
                 source=source,
+                statement_descriptor=ugettext('{event}-{code}').format(
+                    event=self.event.slug.upper(),
+                    code=order.code
+                ),
                 metadata={
                     'order': str(order.id),
                     'event': self.event.id,
@@ -523,6 +527,10 @@ class StripeCC(StripeMethod):
                         three_d_secure={
                             'card': src.id
                         },
+                        statement_descriptor=ugettext('{event}-{code}').format(
+                            event=self.event.slug.upper(),
+                            code=order.code
+                        ),
                         metadata={
                             'order': str(order.id),
                             'event': self.event.id,
