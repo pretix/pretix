@@ -188,8 +188,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('SOFORT'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first. Note that, despite the name, '
-                                 'payments are not immediately confirmed but might take some time.'),
+                     help_text=(
+                         _('Needs to be enabled in your Stripe account first.') +
+                         '<div class="alert alert-warning">%s</div>' % _(
+                             'Despite the name, Sofort payments via Stripe are <strong>not</strong> processed '
+                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
+                             'Please only activate this payment method if your payment term allows for this lag.'
+                         )
+                     ),
                      required=False,
                  )),
                 ('cc_3ds_mode',
