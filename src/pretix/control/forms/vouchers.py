@@ -77,6 +77,23 @@ class VoucherForm(I18nModelForm):
             del self.fields['subevent']
 
         choices = []
+        if 'itemvar' in initial:
+            iv = initial.get('itemvar', '')
+            if iv.startswith('q-'):
+                q = self.instance.event.quotas.get(pk=iv[2:])
+                choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
+            elif '-' in iv:
+                itemid, varid = iv.split('-')
+                i = self.instance.event.items.get(pk=itemid)
+                v = i.variations.get(pk=varid)
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+            else:
+                i = self.instance.event.items.get(pk=iv)
+                if i.variations.exists():
+                    choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                else:
+                    choices.append((str(i.pk), str(i.name)))
+
         self.fields['itemvar'].choices = choices
         self.fields['itemvar'].widget = Select2ItemVarQuota(
             attrs={
