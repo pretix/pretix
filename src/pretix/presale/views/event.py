@@ -222,6 +222,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
+            context['itemnum'] = len(items)
 
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
