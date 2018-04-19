@@ -16,14 +16,14 @@
 
         <h1>{% trans "Hello!" %}</h1>
         <p>
-            {% with "href='http://pretix.eu'" as a_attr %}
-                {% blocktrans trimmed %}
-                    This is a ticket presale system powered by <a {{ a_attr }}>pretix</a>.
-                {% endblocktrans %}
-            {% endwith %}
+            {% trans "There is nothing to see here yet." %}
         </p>
         <p>
-            {% trans "There is nothing to see here yet." %}
+            {% with "href='http://pretix.eu'" as a_attr %}
+                {% blocktrans trimmed %}
+                    <a {{ a_attr }}>pretix – your free and open source ticket sales software</a>.
+                {% endblocktrans %}
+            {% endwith %}
         </p>
     </div>
 </body>

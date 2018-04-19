@@ -23,7 +23,8 @@ var strings = {
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
         ' products, they will be added to your existing cart. Click on this message to continue checkout with your' +
         ' cart.'),
-    'poweredby': django.pgettext('widget', 'ticketing powered by <a href="https://pretix.eu" target="_blank" rel="noopener">pretix</a>'),
+    'poweredby': django.pgettext('widget', '<a href="https://pretix.eu" target="_blank" rel="noopener">event' +
+        ' ticketing powered by pretix</a>'),
     'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
     'redeem': django.pgettext('widget', 'Redeem'),
     'voucher_code': django.pgettext('widget', 'Voucher code'),
