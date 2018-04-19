@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-19 16:10+0000\n"
-"PO-Revision-Date: 2018-04-13 07:59+0000\n"
+"PO-Revision-Date: 2018-04-19 16:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German "
+"<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9963,12 +9963,9 @@ msgid "Set up event"
 msgstr "Veranstaltung einrichten"
 
 #: pretix/control/views/dashboards.py:333 pretix/control/views/typeahead.py:43
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "New date"
 msgctxt "subevent"
 msgid "No dates"
-msgstr "Neuer Termin"
+msgstr "Keine Termine"
 
 #: pretix/control/views/dashboards.py:346
 msgid "Action required"
@@ -11912,6 +11909,11 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"Trotz des Namens werden Sofortüberweisungen von Stripe <strong>nicht</strong>"
+" sofort verarbeitet, sondern können in einigen Fällen <strong>bis zu 14 "
+"Tage</strong> zur Verarbeitung in Anspruch nehmen. Bitte aktiviere diese "
+"Zahlungsmethode nur, wenn die gesetzte Zahlungsfrist für so eine Verzögerung "
+"ausreichend ist."
 
 #: pretix/plugins/stripe/payment.py:203
 msgid "3D Secure mode"
@@ -12537,7 +12539,7 @@ msgstr "Veranstalter: {organizer}"
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
 msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s 1>Event-Ticketing-Software von pretix</a>"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:16
 msgid "This shop is currently only visible to you and your team."
@@ -13144,7 +13146,7 @@ msgstr "Hier gibt es zur Zeit nichts zu sehen."
 #, python-format
 msgid ""
 "<a %(a_attr)s>pretix – your free and open source ticket sales software</a>."
-msgstr ""
+msgstr "<a %(a_attr)s>pretix – Open Source Ticket-Shop</a>."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
