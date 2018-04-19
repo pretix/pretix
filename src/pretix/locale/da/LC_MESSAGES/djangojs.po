@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-13 07:56+0000\n"
+"POT-Creation-Date: 2018-04-19 16:10+0000\n"
 "PO-Revision-Date: 2018-04-06 11:49+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -295,40 +295,45 @@ msgstr ""
 "at gå mod kassen med din kurv."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+#| "\"noopener\">pretix</a>"
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
-"\"noopener\">pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+"ticketing powered by pretix</a>"
 msgstr ""
 "billetsystem drevet af <a href=\"https://pretix.eu\" target=\"_blank\" rel="
 "\"noopener\">pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Indløs voucher"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Indløs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Voucherkode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
 msgstr "Luk"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
 msgstr "Fortsæt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
 msgstr "Vis varianter"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-13 07:56+0000\n"
+"POT-Creation-Date: 2018-04-19 16:10+0000\n"
 "PO-Revision-Date: 2018-03-22 17:35+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -300,40 +300,45 @@ msgstr ""
 "sur ce message pour continuer votre commande avec votre panier."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+#| "\"noopener\">pretix</a>"
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
-"\"noopener\">pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+"ticketing powered by pretix</a>"
 msgstr ""
 "généré par <a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
 "\">pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Utiliser un bon d'achat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Echanger"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Code de réduction"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
 msgstr "Fermer"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
 msgstr "Continuer"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
 msgstr "Voir les variations"

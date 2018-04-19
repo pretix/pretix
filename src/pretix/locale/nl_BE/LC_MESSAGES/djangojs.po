@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-13 07:56+0000\n"
+"POT-Creation-Date: 2018-04-19 16:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -282,36 +282,36 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
-"\"noopener\">pretix</a>"
-msgstr ""
-
-#: pretix/static/pretixpresale/js/widget/widget.js:27
-msgctxt "widget"
-msgid "Redeem a voucher"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+"ticketing powered by pretix</a>"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
-msgid "Redeem"
+msgid "Redeem a voucher"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
-msgid "Voucher code"
+msgid "Redeem"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
-msgid "Close"
+msgid "Voucher code"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
-msgid "Continue"
+msgid "Close"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
+msgctxt "widget"
+msgid "Continue"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
 msgstr ""
