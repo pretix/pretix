@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-13 07:55+0000\n"
-"PO-Revision-Date: 2018-04-07 19:00+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2018-04-16 13:26+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -280,7 +280,7 @@ msgstr "Toeslagen"
 #: pretix/base/exporters/orderlist.py:66
 #: pretix/control/templates/pretixcontrol/order/index.html:81
 msgid "Order locale"
-msgstr ""
+msgstr "Locale van bestelling"
 
 #: pretix/base/exporters/orderlist.py:71
 #, python-brace-format
@@ -1915,6 +1915,13 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Niet aangeraden. De meeste evenementen worden NIET gekwalificeerd voor "
+"verleggingskosten omdat de plaats van belastingheffing hetzelfde is als de "
+"evenementlocatie. Met deze optie wordt belastingheffing uitgeschakeld voor "
+"alle klanten buiten de EU en voor zakelijke klanten in verschillende EU-"
+"landen die een geldig EU-btw-nummer hebben ingevoerd. Schakel deze optie "
+"alleen in na overleg met een belastingadviseur. Er wordt geen garantie "
+"gegeven voor juiste belastingberekening. GEBRUIK OP EIGEN RISICO."
 
 #: pretix/base/models/tax.py:88
 msgid "Merchant country"
@@ -2049,6 +2056,9 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"U kunt dit veld gebruiken om meerdere vouchers te groeperen. Als dezelfde "
+"waarde bij meerdere vouchers wordt ingevoerd kan u statistieken bekijken "
+"over hoe veel er zijn ingewisseld etc."
 
 #: pretix/base/models/vouchers.py:176
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2334,6 +2344,10 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Wordt afgedrukt net onder de betalingscijfers en boven de afsluitende tekst "
+"op facturen. Dit wordt alleen gebruikt als de factuur gegenereerd is voordat "
+"de bestelling is betaald. Als de factuur later wordt gegenereerd wordt er "
+"een tekst weergegeven die aangeeft dat de bestelling al is betaald."
 
 #: pretix/base/payment.py:190 pretix/base/payment.py:199
 msgid "Additional fee"
@@ -2357,7 +2371,7 @@ msgstr ""
 
 #: pretix/base/payment.py:208
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Bereken de toeslag op basis van de totale waarde inclusief toeslag."
 
 #: pretix/base/payment.py:209
 #, python-brace-format
@@ -2417,17 +2431,17 @@ msgstr "De bestelling is gemarkeerd als terugbetaald."
 
 #: pretix/base/pdf.py:13
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Ticket code (waarde van QR-code)"
 
 #: pretix/base/pdf.py:23 pretix/control/forms/event.py:1127
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
-msgstr ""
+msgstr "Productnaam"
 
 #: pretix/base/pdf.py:24 pretix/base/services/tickets.py:77
 #: pretix/control/views/pdf.py:58
 msgid "Sample product"
-msgstr ""
+msgstr "Voorbeeldproduct"
 
 #: pretix/base/pdf.py:28
 msgid "Variation name"
@@ -2440,28 +2454,28 @@ msgstr "Voorbeeldvariant"
 
 #: pretix/base/pdf.py:33
 msgid "Product description"
-msgstr ""
+msgstr "Productomschrijving"
 
 #: pretix/base/pdf.py:34 pretix/base/services/tickets.py:78
 #: pretix/control/views/pdf.py:59
 msgid "Sample product description"
-msgstr ""
+msgstr "Voorbeeld productomschrijving"
 
 #: pretix/base/pdf.py:38
 msgid "Product name and variation"
-msgstr ""
+msgstr "Productnaam en variant"
 
 #: pretix/base/pdf.py:39
 msgid "Sample product – sample variation"
-msgstr ""
+msgstr "Voorbeeldproduct – voorbeeldvariant"
 
 #: pretix/base/pdf.py:47
 msgid "Ticket category"
-msgstr ""
+msgstr "Productcategorie"
 
 #: pretix/base/pdf.py:54
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:59 pretix/base/pdf.py:126
 #: pretix/base/services/tickets.py:87 pretix/base/services/tickets.py:88
@@ -2470,19 +2484,19 @@ msgstr ""
 #: pretix/control/views/pdf.py:69 pretix/control/views/pdf.py:70
 #: pretix/control/views/pdf.py:72 pretix/plugins/sendmail/views.py:92
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/pdf.py:64
 msgid "Sample event name"
-msgstr ""
+msgstr "Voorbeeld evenementnaam"
 
 #: pretix/base/pdf.py:68
 msgid "Event date"
-msgstr ""
+msgstr "Evenementdatum"
 
 #: pretix/base/pdf.py:69
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31 mei 2017"
 
 #: pretix/base/pdf.py:73
 msgid "Event date range"
@@ -4896,7 +4910,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:310 pretix/plugins/sendmail/forms.py:14
 #: pretix/plugins/sendmail/forms.py:41
 msgid "Message"
-msgstr ""
+msgstr "Bericht"
 
 #: pretix/control/forms/organizer.py:17
 msgid "This slug is already in use. Please choose a different one."
@@ -5028,37 +5042,37 @@ msgstr ""
 #: pretix/control/forms/subevents.py:277 pretix/control/forms/subevents.py:327
 #: pretix/control/forms/subevents.py:343
 msgid "Monday"
-msgstr ""
+msgstr "Maandag"
 
 #: pretix/control/forms/subevents.py:278 pretix/control/forms/subevents.py:328
 #: pretix/control/forms/subevents.py:344
 msgid "Tuesday"
-msgstr ""
+msgstr "Dinsdag"
 
 #: pretix/control/forms/subevents.py:279 pretix/control/forms/subevents.py:329
 #: pretix/control/forms/subevents.py:345
 msgid "Wednesday"
-msgstr ""
+msgstr "Woensdag"
 
 #: pretix/control/forms/subevents.py:280 pretix/control/forms/subevents.py:330
 #: pretix/control/forms/subevents.py:346
 msgid "Thursday"
-msgstr ""
+msgstr "Donderdag"
 
 #: pretix/control/forms/subevents.py:281 pretix/control/forms/subevents.py:331
 #: pretix/control/forms/subevents.py:347
 msgid "Friday"
-msgstr ""
+msgstr "Vrijdag"
 
 #: pretix/control/forms/subevents.py:282 pretix/control/forms/subevents.py:332
 #: pretix/control/forms/subevents.py:348
 msgid "Saturday"
-msgstr ""
+msgstr "Zaterdag"
 
 #: pretix/control/forms/subevents.py:283 pretix/control/forms/subevents.py:333
 #: pretix/control/forms/subevents.py:349
 msgid "Sunday"
-msgstr ""
+msgstr "Zondag"
 
 #: pretix/control/forms/subevents.py:284 pretix/control/forms/subevents.py:334
 #, fuzzy
@@ -6095,7 +6109,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:264
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:22
 msgid "General information"
-msgstr ""
+msgstr "Algemene informatie"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:29
 msgid "Please select the products that should be part of this check-in list."
@@ -10074,7 +10088,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:20
 msgid "Payer"
-msgstr ""
+msgstr "Betaler"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
@@ -10106,7 +10120,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "Bedrag"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:63
 msgid ""
@@ -10365,12 +10379,12 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:289
 #: pretix/plugins/paypal/payment.py:68
 msgid "Secret"
-msgstr ""
+msgstr "Geheim"
 
 #: pretix/plugins/paypal/__init__.py:10 pretix/plugins/paypal/__init__.py:13
 #: pretix/plugins/paypal/payment.py:39
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/__init__.py:16
 msgid "This plugin allows you to receive payments via PayPal"
@@ -10378,7 +10392,7 @@ msgstr "Deze plug-in staat u toe om betalingen te ontvangen via PayPal"
 
 #: pretix/plugins/paypal/payment.py:28 pretix/plugins/stripe/payment.py:35
 msgid "Refund automatically?"
-msgstr ""
+msgstr "Automatisch terugbetalen?"
 
 #: pretix/plugins/paypal/payment.py:30
 msgid "Automatically refund charge with PayPal"
@@ -10436,7 +10450,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:324 pretix/plugins/stripe/payment.py:392
 msgid "Your input was invalid, please try again."
-msgstr ""
+msgstr "Uw invoer was ongeldig, probeer het opnieuw."
 
 #: pretix/plugins/paypal/payment.py:341 pretix/plugins/paypal/payment.py:354
 #: pretix/plugins/stripe/payment.py:407 pretix/plugins/stripe/payment.py:428
@@ -10444,6 +10458,8 @@ msgid ""
 "We were unable to transfer the money back automatically. Please get in touch "
 "with the customer and transfer it back manually."
 msgstr ""
+"We konden het geld niet automatisch terugbetalen. Neem contact op met de "
+"klant en maak het handmatig over."
 
 #: pretix/plugins/paypal/signals.py:27
 msgid "Payment completed."
@@ -11048,7 +11064,7 @@ msgstr "Creditcardbetalingen"
 
 #: pretix/plugins/stripe/payment.py:161 pretix/plugins/stripe/payment.py:567
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:163 pretix/plugins/stripe/payment.py:170
 #: pretix/plugins/stripe/payment.py:177 pretix/plugins/stripe/payment.py:184
@@ -11057,7 +11073,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:168 pretix/plugins/stripe/payment.py:635
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:175 pretix/plugins/stripe/payment.py:683
 msgid "Alipay"
@@ -11065,11 +11081,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:182 pretix/plugins/stripe/payment.py:725
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:189 pretix/plugins/stripe/payment.py:793
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:191
 msgid ""
@@ -11207,7 +11223,7 @@ msgstr "Spanje"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Betaling geslaagd."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Charge refunded."
@@ -11325,7 +11341,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:16
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:24
 msgid "Card number"
-msgstr ""
+msgstr "Kaartnummer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
@@ -11462,6 +11478,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Sorry, er trad een fout op in het betalingsproces. Klik op de link in uw "
+"email om door te gaan."
 
 #: pretix/plugins/stripe/views.py:361
 msgid ""
