@@ -150,6 +150,8 @@ class LayoutEditorView(BaseEditorView):
     def save_layout(self):
         self.layout.layout = self.request.POST.get("data")
         self.layout.save(update_fields=['layout'])
+        self.layout.log_action(action='pretix.plugins.badges.layout.changed', user=self.request.user,
+                               data={'layout': self.request.POST.get("data")})
 
     def get_default_background(self):
         return static('pretixplugins/badges/badge_default_a6l.pdf')
