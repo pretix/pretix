@@ -43,6 +43,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='badgeitem',
             name='layout',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='badges.BadgeLayout'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE(), to='badges.BadgeLayout'),
         ),
     ]

@@ -9,6 +9,7 @@ import bleach
 from django.contrib.staticfiles import finders
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
+from PyPDF2 import PdfFileReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
@@ -188,6 +189,7 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
+        self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
 
     @classmethod
     def _register_fonts(cls):
@@ -277,10 +279,9 @@ class Renderer:
         buffer.seek(0)
         new_pdf = PdfFileReader(buffer)
         output = PdfFileWriter()
-        bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
 
         for page in new_pdf.pages:
-            bg_page = copy.copy(bg_pdf.getPage(0))
+            bg_page = copy.copy(self.bg_pdf.getPage(0))
             bg_page.mergePage(page)
             output.addPage(bg_page)
 

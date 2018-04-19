@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 from io import BytesIO
 
 from django.contrib import messages
@@ -7,20 +8,24 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db import transaction
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
 
 from pretix.base.models import CachedFile, OrderPosition
 from pretix.base.pdf import Renderer
+from pretix.base.views.async import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.pdf import BaseEditorView
 from pretix.plugins.badges.forms import BadgeLayoutForm
+from pretix.plugins.badges.tasks import badges_create_pdf
 
 from .models import BadgeLayout
 
@@ -32,7 +37,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
     context_object_name = 'layouts'
 
     def get_queryset(self):
-        return self.request.event.badge_layouts.all()
+        return self.request.event.badge_layouts.prefetch_related('item_assignments')
 
 
 class LayoutCreate(EventPermissionRequiredMixin, CreateView):
@@ -155,7 +160,7 @@ class LayoutEditorView(BaseEditorView):
         buffer = BytesIO()
         if override_background:
             bgf = default_storage.open(override_background.name, "rb")
-        elif isinstance(self.layout.background, File):
+        elif isinstance(self.layout.background, File) and self.layout.background.name:
             bgf = default_storage.open(self.layout.background.name, "rb")
         else:
             bgf = open(finders.find('pretixplugins/badges/badge_default_a6l.pdf'), "rb")
@@ -180,3 +185,38 @@ class LayoutEditorView(BaseEditorView):
         if self.layout.background:
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
+
+
+class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
+    task = badges_create_pdf
+    permission = 'can_view_orders'
+
+    def get_success_message(self, value):
+        return None
+
+    def get_success_url(self, value):
+        return reverse('cachedfile.download', kwargs={'id': str(value)})
+
+    def get_error_url(self):
+        return reverse('control:event.index', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_message(self, exception):
+        if isinstance(exception, str):
+            return exception
+        return super().get_error_message(exception)
+
+    def post(self, request, *args, **kwargs):
+        order = get_object_or_404(self.request.event.orders, code=request.GET.get("code"))
+        cf = CachedFile()
+        cf.date = now()
+        cf.type = 'application/pdf'
+        cf.expires = now() + timedelta(days=3)
+        cf.save()
+        return self.do(
+            str(cf.id),
+            self.request.event.pk,
+            [order.pk],
+        )

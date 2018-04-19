@@ -9,7 +9,7 @@ from pretix.base.models import LoggedModel
 
 def bg_name(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)
-    return 'pub/{org}/{ev}/bdages/{id}-{secret}.pdf'.format(
+    return 'pub/{org}/{ev}/badges/{id}-{secret}.pdf'.format(
         org=instance.event.organizer.slug,
         ev=instance.event.slug,
         id=instance.pk,
@@ -48,4 +48,4 @@ class BadgeLayout(LoggedModel):
 class BadgeItem(models.Model):
     item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='badge_assignment',
                                 on_delete=models.CASCADE)
-    layout = models.ForeignKey('BadgeLayout', on_delete=models.PROTECT)
+    layout = models.ForeignKey('BadgeLayout', on_delete=models.CASCADE, related_name='item_assignments')

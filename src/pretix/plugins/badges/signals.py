@@ -1,11 +1,15 @@
 import copy
 
 from django.dispatch import receiver
+from django.template.loader import get_template
 from django.urls import resolve, reverse
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.signals import event_copy_data, item_copy_data
-from pretix.control.signals import item_forms, nav_event
+from pretix.base.models import Event, Order
+from pretix.base.signals import (
+    event_copy_data, item_copy_data, register_data_exporters,
+)
+from pretix.control.signals import item_forms, nav_event, order_info
 from pretix.plugins.badges.forms import BadgeItemForm
 from pretix.plugins.badges.models import BadgeItem
 
@@ -68,3 +72,22 @@ def event_copy_data_receiver(sender, other, item_map, **kwargs):
 
     for bi in BadgeItem.objects.filter(item__event=other):
         BadgeItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id))
+
+
+@receiver(register_data_exporters, dispatch_uid="badges_export_all")
+def register_pdf(sender, **kwargs):
+    from .exporters import BadgeExporter
+    return BadgeExporter
+
+
+@receiver(order_info, dispatch_uid="badges_control_order_info")
+def control_order_info(sender: Event, request, order: Order, **kwargs):
+
+    template = get_template('pretixplugins/badges/control_order_info.html')
+
+    ctx = {
+        'order': order,
+        'request': request,
+        'event': sender,
+    }
+    return template.render(ctx, request=request)

@@ -19,12 +19,14 @@
             {% endif %}
         </div>
     {% else %}
-        {% if "can_change_event_settings" in request.eventpermset %}
-            <p>
+        <p>
+            {% if "can_change_event_settings" in request.eventpermset %}
                 <a href="{% url "plugins:badges:add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new badge layout" %}
                 </a>
-            </p>
-        {% endif %}
+            {% endif %}
+            <a href="{% url "control:event.orders.export" organizer=request.event.organizer.slug event=request.event.slug %}?identifier=badges" class="btn btn-primary"><i class="fa fa-print"></i> {% trans "Print badges" %}
+            </a>
+        </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">
                 <thead>
@@ -52,9 +54,9 @@
                                     <span class="fa fa-check"></span>
                                     {% trans "Default" %}
                                 </span>
-                                {% elif "can_change_event_settings" in request.eventpermset %}
+                            {% elif "can_change_event_settings" in request.eventpermset %}
                                 <form class="form-inline" method="post"
-                                 action="{% url "plugins:badges:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
+                                        action="{% url "plugins:badges:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
                                 >
                                     {% csrf_token %}
                                     <button class="btn btn-default btn-sm">
