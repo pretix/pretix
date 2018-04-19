@@ -77,8 +77,8 @@ class VoucherForm(I18nModelForm):
             del self.fields['subevent']
 
         choices = []
-        if 'itemvar' in initial:
-            iv = initial.get('itemvar', '')
+        if 'itemvar' in initial or (self.data and 'itemvar' in self.data):
+            iv = self.data.get('itemvar') or initial.get('itemvar', '')
             if iv.startswith('q-'):
                 q = self.instance.event.quotas.get(pk=iv[2:])
                 choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
@@ -87,7 +87,7 @@ class VoucherForm(I18nModelForm):
                 i = self.instance.event.items.get(pk=itemid)
                 v = i.variations.get(pk=varid)
                 choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
-            else:
+            elif iv:
                 i = self.instance.event.items.get(pk=iv)
                 if i.variations.exists():
                     choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
