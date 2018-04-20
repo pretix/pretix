@@ -189,7 +189,10 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
-        self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
+        if self.background_file:
+            self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
+        else:
+            self.bg_pdf = None
 
     @classmethod
     def _register_fonts(cls):
