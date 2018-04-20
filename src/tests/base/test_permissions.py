@@ -190,6 +190,7 @@ def test_specific_organizer_permission(event, user):
     team.members.add(user)
     user._teamcache = {}
     assert user.has_organizer_permission(event.organizer, 'can_create_events')
+    assert user.has_organizer_permission(event.organizer, ('can_create_events', 'can_change_organizer_settings'))
 
 
 @pytest.mark.django_db
