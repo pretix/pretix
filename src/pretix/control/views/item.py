@@ -31,6 +31,7 @@ from pretix.control.forms.item import (
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
 )
+from pretix.control.signals import item_forms
 
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -332,7 +333,6 @@ class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
 
 
 class QuestionMixin:
-
     @cached_property
     def formset(self):
         formsetclass = inlineformset_factory(
@@ -420,8 +420,8 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                 }
             ]
         elif self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
-            qs = qs.order_by('options').values('options', 'options__answer')\
-                   .annotate(count=Count('id')).order_by('-count')
+            qs = qs.order_by('options').values('options', 'options__answer') \
+                .annotate(count=Count('id')).order_by('-count')
             for a in qs:
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
@@ -684,8 +684,8 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
-            if ((form.initial.get('subevent') and not form.instance.subevent)
-                    or (form.instance.subevent and form.initial.get('subevent') != form.instance.subevent.pk)):
+            if ((form.initial.get('subevent') and not form.instance.subevent) or
+                    (form.instance.subevent and form.initial.get('subevent') != form.instance.subevent.pk)):
 
                 if form.initial.get('subevent'):
                     se = SubEvent.objects.get(event=self.request.event, pk=form.initial.get('subevent'))
@@ -817,6 +817,13 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     template_name = 'pretixcontrol/item/index.html'
     permission = 'can_change_items'
 
+    @cached_property
+    def plugin_forms(self):
+        forms = []
+        for rec, resp in item_forms.send(sender=self.request.event, item=self.item, request=self.request):
+            forms.append(resp)
+        return forms
+
     def get_success_url(self) -> str:
         return reverse('control:event.item', kwargs={
             'organizer': self.request.event.organizer.slug,
@@ -824,24 +831,47 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             'item': self.get_object().id,
         })
 
+    def post(self, request, *args, **kwargs):
+        self.get_object()
+        form = self.get_form()
+        if form.is_valid() and all(f.is_valid() for f in self.plugin_forms):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     @transaction.atomic
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.has_changed():
+        if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
+            data = {
+                k: (form.cleaned_data.get(k).name
+                    if isinstance(form.cleaned_data.get(k), File)
+                    else form.cleaned_data.get(k))
+                for k in form.changed_data
+            }
+            for f in self.plugin_forms:
+                data.update({
+                    k: (f.cleaned_data.get(k).name
+                        if isinstance(f.cleaned_data.get(k), File)
+                        else f.cleaned_data.get(k))
+                    for k in f.changed_data
+                })
             self.object.log_action(
-                'pretix.event.item.changed', user=self.request.user, data={
-                    k: (form.cleaned_data.get(k).name
-                        if isinstance(form.cleaned_data.get(k), File)
-                        else form.cleaned_data.get(k))
-                    for k in form.changed_data
-                }
+                'pretix.event.item.changed', user=self.request.user, data=data
             )
             CachedTicket.objects.filter(order_position__item=self.item).delete()
+        for f in self.plugin_forms:
+            f.save()
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['plugin_forms'] = self.plugin_forms
+        return ctx
 
 
 class ItemVariations(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):

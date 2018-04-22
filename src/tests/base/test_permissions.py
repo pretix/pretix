@@ -108,6 +108,9 @@ def test_specific_event_permission_limited(event, user):
     assert user.has_event_permission(event.organizer, event, 'can_change_orders')
     assert not user.has_event_permission(event.organizer, event, 'can_change_event_settings')
 
+    assert user.has_event_permission(event.organizer, event, ('can_change_orders', 'can_change_event_settings'))
+    assert not user.has_event_permission(event.organizer, event, ('can_change_teams', 'can_change_event_settings'))
+
     team.can_change_orders = False
     team.save()
     user._teamcache = {}
@@ -187,6 +190,7 @@ def test_specific_organizer_permission(event, user):
     team.members.add(user)
     user._teamcache = {}
     assert user.has_organizer_permission(event.organizer, 'can_create_events')
+    assert user.has_organizer_permission(event.organizer, ('can_create_events', 'can_change_organizer_settings'))
 
 
 @pytest.mark.django_db

@@ -1,0 +1,39 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% if layout %}
+        {% blocktrans with name=layout.name %}Badge layout: {{ name }}{% endblocktrans %}
+    {% else %}
+        {% trans "Badge layout" %}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if layout %}
+        <h1>{% blocktrans with name=layout.name %}Badge layout: {{ name }}{% endblocktrans %}</h1>
+    {% else %}
+        <h1>{% trans "Badge layout" %}</h1>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.name layout="control" %}
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                {% trans "Badge design" %}
+            </label>
+            <div class="col-md-9">
+                <p>
+                    {% blocktrans trimmed %}
+                        You can modify the design after you saved this page.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

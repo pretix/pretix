@@ -241,6 +241,7 @@ INSTALLED_APPS = [
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
+    'pretix.plugins.badges',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
