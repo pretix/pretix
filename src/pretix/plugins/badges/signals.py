@@ -20,8 +20,8 @@ from pretix.plugins.badges.models import BadgeItem, BadgeLayout
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     p = (
-        request.user.has_event_permission(request.organizer, request.event, 'can_change_settings')
-        or request.user.has_event_permission(request.organizer, request.event, 'can_view_orders')
+        request.user.has_event_permission(request.organizer, request.event, 'can_change_settings', request)
+        or request.user.has_event_permission(request.organizer, request.event, 'can_view_orders', request)
     )
     if not p:
         return []
