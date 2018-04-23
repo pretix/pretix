@@ -72,6 +72,18 @@
                 </div>
             </form>
         </div>
+        {% if filter_form.is_valid and filter_form.cleaned_data.question %}
+            <p class="text-muted">
+                <span class="fa fa-filter"></span>
+                {% blocktrans trimmed with question=filter_form.cleaned_data.question.question %}
+                    List filtered by answers to question "{{ question }}".
+                {% endblocktrans %}
+                <a href="?{% url_replace request 'question' '' 'answer' ''%}" class="text-muted">
+                    <span class="fa fa-times"></span>
+                    {% trans "Remove filter" %}
+                </a>
+            </p>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>

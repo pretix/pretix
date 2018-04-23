@@ -7,7 +7,8 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import (
-    Checkin, Event, Invoice, Item, Order, OrderPosition, Organizer, SubEvent,
+    Checkin, Event, Invoice, Item, Order, OrderPosition, Organizer, Question,
+    QuestionAnswer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -99,6 +100,7 @@ class OrderFilterForm(FilterForm):
             ('p', _('Paid')),
             ('n', _('Pending')),
             ('o', _('Pending (overdue)')),
+            ('np', _('Pending or paid')),
             ('e', _('Expired')),
             ('ne', _('Pending or expired')),
             ('c', _('Canceled')),
@@ -145,6 +147,8 @@ class OrderFilterForm(FilterForm):
             s = fdata.get('status')
             if s == 'o':
                 qs = qs.filter(status=Order.STATUS_PENDING, expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
@@ -175,11 +179,19 @@ class EventOrderFilterForm(OrderFilterForm):
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
+    question = forms.ModelChoiceField(
+        queryset=Question.objects.none(),
+        required=False,
+    )
+    answer = forms.CharField(
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['item'].queryset = self.event.items.all()
+        self.fields['question'].queryset = self.event.questions.all()
         self.fields['provider'].choices += [(k, v.verbose_name) for k, v
                                             in self.event.get_payment_providers().items()]
 
@@ -208,6 +220,31 @@ class EventOrderFilterForm(OrderFilterForm):
 
         if fdata.get('subevent'):
             qs = qs.filter(positions__subevent=fdata.get('subevent'))
+
+        if fdata.get('question') and fdata.get('answer') is not None:
+            q = fdata.get('question')
+
+            if q.type == Question.TYPE_FILE:
+                answers = QuestionAnswer.objects.filter(
+                    orderposition__order_id=OuterRef('pk'),
+                    question_id=q.pk,
+                    file__isnull=False
+                )
+                qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
+            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                answers = QuestionAnswer.objects.filter(
+                    question_id=q.pk,
+                    orderposition__order_id=OuterRef('pk'),
+                    options__pk=fdata.get('answer')
+                )
+                qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
+            else:
+                answers = QuestionAnswer.objects.filter(
+                    question_id=q.pk,
+                    orderposition__order_id=OuterRef('pk'),
+                    answer__iexact=fdata.get('answer')
+                )
+                qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
 
         return qs
 

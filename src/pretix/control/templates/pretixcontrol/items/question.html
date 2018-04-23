@@ -74,7 +74,9 @@
                     {% for stat in stats %}
                         <tr>
                             <td>
-                                {{ stat.answer }}
+                                <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status={{ request.GET.status|default:"np" }}&item={{ request.GET.item }}&question={{ question.pk }}&answer={{ stat.alink|default:stat.answer|urlencode }}">
+                                    {{ stat.answer }}
+                                </a>
                             </td>
                             <td>{{ stat.count }}</td>
                         </tr>

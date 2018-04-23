@@ -416,13 +416,14 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             qs = [
                 {
                     'answer': ugettext('File uploaded'),
-                    'count': qs.filter(file__isnull=False).count()
+                    'count': qs.filter(file__isnull=False).count(),
                 }
             ]
         elif self.object.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             qs = qs.order_by('options').values('options', 'options__answer') \
                 .annotate(count=Count('id')).order_by('-count')
             for a in qs:
+                a['alink'] = a['options']
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
         elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
@@ -430,12 +431,14 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
             qs_model = qs
             qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
             for a, a_model in zip(qs, qs_model):
+                a['alink'] = a['answer']
                 a['answer'] = str(a_model)
         else:
             qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
 
             if self.object.type == Question.TYPE_BOOLEAN:
                 for a in qs:
+                    a['alink'] = a['answer']
                     a['answer'] = ugettext('Yes') if a['answer'] == 'True' else ugettext('No')
                     a['answer_bool'] = a['answer'] == 'True'
 
