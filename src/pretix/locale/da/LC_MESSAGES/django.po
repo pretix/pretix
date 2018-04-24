@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-24 14:03+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
+"PO-Revision-Date: 2018-04-24 14:06+0000\n"
+"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
@@ -11827,7 +11827,7 @@ msgstr "Gå tilbage"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:42
 msgid "Checkout"
-msgstr ""
+msgstr "Din bestilling"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
