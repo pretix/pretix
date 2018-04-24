@@ -1,5 +1,4 @@
-import django_filters
-from django.db.models import F, Max, OuterRef, Prefetch, Q, Subquery
+from django.db.models import F, Max, OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -9,6 +8,7 @@ from rest_framework import viewsets
 from pretix.api.serializers.checkin import CheckinListSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
+from pretix.api.views.order import OrderPositionFilter
 from pretix.base.models import Checkin, CheckinList, Order, OrderPosition
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.database import FixedOrderBy
@@ -67,20 +67,10 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
-class OrderPositionFilter(FilterSet):
-    order = django_filters.CharFilter(name='order', lookup_expr='code')
-    has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
-    attendee_name = django_filters.CharFilter(method='attendee_name_qs')
+class CheckinOrderPositionFilter(OrderPositionFilter):
 
     def has_checkin_qs(self, queryset, name, value):
         return queryset.filter(last_checked_in__isnull=not value)
-
-    def attendee_name_qs(self, queryset, name, value):
-        return queryset.filter(Q(attendee_name=value) | Q(addon_to__attendee_name=value))
-
-    class Meta:
-        model = OrderPosition
-        fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'has_checkin', 'addon_to', 'subevent']
 
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -109,7 +99,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         },
     }
 
-    filter_class = OrderPositionFilter
+    filter_class = CheckinOrderPositionFilter
     permission = 'can_view_orders'
 
     @cached_property

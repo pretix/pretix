@@ -31,6 +31,10 @@ from pretix.base.signals import register_ticket_outputs
 
 
 class OrderFilter(FilterSet):
+    email = django_filters.CharFilter(name='email', lookup_expr='iexact')
+    code = django_filters.CharFilter(name='code', lookup_expr='iexact')
+    status = django_filters.CharFilter(name='status', lookup_expr='iexact')
+
     class Meta:
         model = Order
         fields = ['code', 'status', 'email', 'locale']
@@ -207,7 +211,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class OrderPositionFilter(FilterSet):
-    order = django_filters.CharFilter(name='order', lookup_expr='code')
+    order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
     attendee_name = django_filters.CharFilter(method='attendee_name_qs')
 
@@ -215,12 +219,18 @@ class OrderPositionFilter(FilterSet):
         return queryset.filter(checkins__isnull=not value)
 
     def attendee_name_qs(self, queryset, name, value):
-        return queryset.filter(Q(attendee_name=value) | Q(addon_to__attendee_name=value))
+        return queryset.filter(Q(attendee_name__iexact=value) | Q(addon_to__attendee_name__iexact=value))
 
     class Meta:
         model = OrderPosition
-        fields = ['item', 'variation', 'attendee_name', 'secret', 'order', 'order__status', 'has_checkin',
-                  'addon_to', 'subevent']
+        fields = {
+            'item': ['exact', 'in'],
+            'variation': ['exact', 'in'],
+            'secret': ['exact'],
+            'order__status': ['exact', 'in'],
+            'addon_to': ['exact', 'in'],
+            'subevent': ['exact', 'in']
+        }
 
 
 class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):

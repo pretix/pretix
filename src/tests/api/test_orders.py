@@ -1,3 +1,4 @@
+import copy
 import datetime
 from decimal import Decimal
 from distutils.version import LooseVersion
@@ -203,7 +204,10 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
 
 
 @pytest.mark.django_db
-def test_orderposition_list(token_client, organizer, event, order, item, subevent, question):
+def test_orderposition_list(token_client, organizer, event, order, item, subevent, subevent2, question):
+    i2 = copy.copy(item)
+    i2.pk = None
+    i2.save()
     var = item.variations.create(value="Children")
     res = dict(TEST_ORDERPOSITION_RES)
     op = order.positions.first()
@@ -229,6 +233,11 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
         '/api/v1/organizers/{}/events/{}/orderpositions/?item={}'.format(organizer.slug, event.slug, item.pk))
     assert [res] == resp.data['results']
     resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?item__in={},{}'.format(
+            organizer.slug, event.slug, item.pk, i2.pk
+        ))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?item={}'.format(organizer.slug, event.slug, item.pk + 1))
     assert [] == resp.data['results']
 
@@ -241,6 +250,9 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?attendee_name=Peter'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?attendee_name=peter'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?attendee_name=Mark'.format(organizer.slug, event.slug))
@@ -281,6 +293,10 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?subevent__in={},{}'.format(organizer.slug, event.slug,
+                                                                                    subevent.pk, subevent2.pk))
     assert [res] == resp.data['results']
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?subevent={}'.format(organizer.slug, event.slug,

@@ -150,6 +150,10 @@ answers                               list of objects            Answers to user
 Order endpoints
 ---------------
 
+.. versionchanged:: 1.15
+
+   Filtering for emails or order codes is now case-insensitive.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/
 
    Returns a list of all orders within a given event.
@@ -609,6 +613,12 @@ Order endpoints
 Order position endpoints
 ------------------------
 
+.. versionchanged:: 1.15
+
+   The order positions endpoint has been extended by the filter queries ``item__in``, ``variation__in``,
+   ``order__status__in``, ``subevent__in``, and ``addon_to__in``. The search for attendee names and order codes is now
+   case-insensitive.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
    Returns a list of all order positions within a given event.
@@ -681,15 +691,22 @@ Order position endpoints
                            ``order__datetime,positionid``
    :query string order: Only return positions of the order with the given order code
    :query integer item: Only return positions with the purchased item matching the given ID.
+   :query integer item__in: Only return positions with the purchased item matching one of the given comma-separated IDs.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.
+   :query integer variation__in: Only return positions with one of the purchased item variation matching the given
+                                 comma-separated IDs.
    :query string attendee_name: Only return positions with the given value in the attendee_name field. Also, add-on
                                 products positions are shown if they refer to an attendee with the given name.
    :query string secret: Only return positions with the given ticket secret.
    :query string order__status: Only return positions with the given order status.
-   :query bollean has_checkin: If set to ``true`` or ``false``, only return positions that have or have not been
+   :query string order__status__in: Only return positions with one the given comma-separated order status.
+   :query boolean has_checkin: If set to ``true`` or ``false``, only return positions that have or have not been
                                checked in already.
    :query integer subevent: Only return positions of the sub-event with the given ID
+   :query integer subevent__in: Only return positions of one of the sub-events with the given comma-separated IDs
    :query integer addon_to: Only return positions that are add-ons to the position with the given ID.
+   :query integer addon_to__in: Only return positions that are add-ons to one of the positions with the given
+                                comma-separated IDs.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
