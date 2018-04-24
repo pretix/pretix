@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-17 21:00+0000\n"
+"PO-Revision-Date: 2018-04-24 14:03+0000\n"
 "Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3648,6 +3648,10 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Når en billet bliver udsolgt kan kunder tilføje sig til en venteliste. Så "
+"snart en billet igen bliver tilgængelig, vil den blive reserveret for den "
+"første kunde på ventelisten, og kunden vil modtage en e-mail med en voucher "
+"der kan bruges til at købe en billet."
 
 #: pretix/control/forms/event.py:307
 msgid "Waiting list response time"
@@ -3659,6 +3663,9 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Hvis en voucher sendes til en kunde på ventelisten, skal voucheren indløses "
+"inden for dette antal timer før den udløber og kan sendes til den næste "
+"kunde på listen."
 
 #: pretix/control/forms/event.py:315
 msgid "Automatic waiting list assignments"
@@ -11895,12 +11902,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:5
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "For vi går videre, skal du svare på nogle spørgsmål."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:7
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Du skal udfylde alle felter markeret med <span>*</span> for at gå videre."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 msgid "Copy answers from above"
@@ -11989,7 +11997,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:137
 #: pretix/presale/views/widget.py:234
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "Forsalget for dette arrangement er slut."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:141
 #: pretix/presale/views/widget.py:236
@@ -12284,6 +12292,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Hvis billetter igen bliver tilgængelige, vil vi informere den første kunde "
+"på ventelisten. Hvis du får besked, har du %(hours)s timer til at købe en "
+"billet før vil tildeler den til næste kunde på ventelisten."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
@@ -12510,12 +12521,15 @@ msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Du kan ikke føje dig til ventelisten idet denne vare allerede er tilgængelig."
 
 #: pretix/presale/views/waiting.py:87
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Vi har føjet dig til ventelisten. Du vil modtage en e-mail så snart "
+"billetter bliver tilgængelige igen."
 
 #: pretix/settings.py:352
 msgid "English"
