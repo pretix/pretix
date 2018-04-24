@@ -602,6 +602,37 @@ class Event(EventMixin, LoggedModel):
         self.items.all().delete()
         self.subevents.all().delete()
 
+    def set_active_plugins(self, modules):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins_active = self.get_plugins()
+        plugins_available = {
+            p.module: p for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+        enable = [m for m in modules if m not in plugins_active and m in plugins_available]
+
+        for module in enable:
+            if hasattr(plugins_available[module].app, 'installed'):
+                getattr(plugins_available[module].app, 'installed')(self)
+
+        self.plugins = ",".join(modules)
+
+    def enable_plugin(self, module):
+        plugins_active = self.get_plugins()
+
+        if module not in plugins_active:
+            plugins_active.append(module)
+            self.set_active_plugins(plugins_active)
+
+    def disable_plugin(self, module):
+        plugins_active = self.get_plugins()
+
+        if module in plugins_active:
+            plugins_active.remove(module)
+            self.set_active_plugins(plugins_active)
+
     @staticmethod
     def clean_has_subevents(event, has_subevents):
         if event is not None and event.has_subevents is not None:

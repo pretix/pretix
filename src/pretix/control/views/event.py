@@ -200,7 +200,6 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
 
         self.object = self.get_object()
 
-        plugins_active = self.object.get_plugins()
         plugins_available = {
             p.module: p for p in get_all_plugins()
             if not p.name.startswith('.') and getattr(p, 'visible', True)
@@ -215,19 +214,13 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                             if not request.user.has_active_staff_session(request.session.session_key):
                                 continue
 
-                        if hasattr(plugins_available[module].app, 'installed'):
-                            getattr(plugins_available[module].app, 'installed')(self.request.event)
-
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        if module not in plugins_active:
-                            plugins_active.append(module)
+                        self.object.enable_plugin(module)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
-                        if module in plugins_active:
-                            plugins_active.remove(module)
-            self.object.plugins = ",".join(plugins_active)
+                        self.object.disable_plugin(module)
             self.object.save()
         messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())

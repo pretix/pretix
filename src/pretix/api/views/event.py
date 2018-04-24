@@ -6,11 +6,13 @@ from rest_framework.exceptions import PermissionDenied
 
 from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.serializers.event import (
-    EventSerializer, SubEventSerializer, TaxRuleSerializer,
+    CloneEventSerializer, EventSerializer, SubEventSerializer,
+    TaxRuleSerializer,
 )
 from pretix.base.models import Event, ItemCategory, TaxRule
 from pretix.base.models.event import SubEvent
 from pretix.base.models.organizer import TeamAPIToken
+from pretix.helpers.dicts import merge_dicts
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -26,6 +28,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         current_live_value = serializer.instance.live
         updated_live_value = serializer.validated_data.get('live', None)
+        current_plugins_value = serializer.instance.get_plugins()
+        updated_plugins_value = serializer.validated_data.get('plugins', None)
 
         super().perform_update(serializer)
 
@@ -38,7 +42,21 @@ class EventViewSet(viewsets.ModelViewSet):
                 data=self.request.data
             )
 
-        if updated_live_value is None or len(serializer.validated_data) > 1:
+        if updated_plugins_value is not None and set(updated_plugins_value) != set(current_plugins_value):
+            enabled = {m: 'enabled' for m in updated_plugins_value if m not in current_plugins_value}
+            disabled = {m: 'disabled' for m in current_plugins_value if m not in updated_plugins_value}
+            changed = merge_dicts(enabled, disabled)
+
+            for module, action in changed.items():
+                serializer.instance.log_action(
+                    'pretix.event.plugins.' + action,
+                    user=self.request.user,
+                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    data={'plugin': module}
+                )
+
+        other_keys = {k: v for k, v in serializer.validated_data.items() if k not in ['plugins', 'live']}
+        if other_keys:
             serializer.instance.log_action(
                 'pretix.event.changed',
                 user=self.request.user,
@@ -77,26 +95,21 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 class CloneEventViewSet(viewsets.ModelViewSet):
-    serializer_class = EventSerializer
+    serializer_class = CloneEventSerializer
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     http_method_names = ['post']
     write_permission = 'can_create_events'
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.kwargs['event']
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.organizer)
-        plugins = serializer.instance.plugins
-        is_public = serializer.instance.is_public
-
-        event = Event.objects.filter(slug=self.kwargs['event'], organizer=self.request.organizer.pk).first()
-        serializer.instance.copy_data_from(event)
-
-        if 'plugins' in serializer.validated_data:
-            serializer.instance.plugins = plugins
-        if 'is_public' in serializer.validated_data:
-            serializer.instance.is_public = is_public
-        serializer.instance.save()
 
         serializer.instance.log_action(
             'pretix.event.added',

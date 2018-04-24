@@ -29,33 +29,14 @@ class PluginsField(Field):
     def to_representation(self, obj):
         from pretix.base.plugins import get_all_plugins
 
-        plugins = {
+        return {
             p.module for p in get_all_plugins()
             if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
         }
 
-        return plugins
-
     def to_internal_value(self, data):
-        from pretix.base.plugins import get_all_plugins
-
-        plugins_available = {
-            p.module for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
-        }
-
-        for plugin in data:
-            if plugin not in plugins_available:
-                raise ValidationError(
-                    message=_("Unknown plugin: '%s'."),
-                    params=(plugin,)
-                )
-                break
-
-        plugins = {plugin_name for plugin_name in data}
-
         return {
-            'plugins': ",".join(plugins)
+            'plugins': data
         }
 
 
@@ -109,9 +90,24 @@ class EventSerializer(I18nAwareModelSerializer):
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
         return value
 
+    def validate_plugins(self, value):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins_available = {
+            p.module for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+        for plugin in value.get('plugins'):
+            if plugin not in plugins_available:
+                raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
+
+        return value
+
     @transaction.atomic
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        plugins = validated_data.pop('plugins', None)
         event = super().create(validated_data)
 
         # Meta data
@@ -121,11 +117,17 @@ class EventSerializer(I18nAwareModelSerializer):
                     property=self.meta_properties.get(key),
                     value=value
                 )
+
+        # Plugins
+        if plugins is not None:
+            event.set_active_plugins(plugins)
+
         return event
 
     @transaction.atomic
     def update(self, instance, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        plugins = validated_data.pop('plugins', None)
         event = super().update(instance, validated_data)
 
         # Meta data
@@ -146,7 +148,31 @@ class EventSerializer(I18nAwareModelSerializer):
                 if prop.name not in meta_data:
                     current_object.delete()
 
+        # Plugins
+        if plugins is not None:
+            event.set_active_plugins(plugins)
+            event.save()
+
         return event
+
+
+class CloneEventSerializer(EventSerializer):
+    @transaction.atomic
+    def create(self, validated_data):
+        plugins = validated_data.pop('plugins', None)
+        is_public = validated_data.pop('is_public', None)
+        new_event = super().create(validated_data)
+
+        event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
+        new_event.copy_data_from(event)
+
+        if plugins is not None:
+            new_event.set_active_plugins(plugins)
+        if is_public is not None:
+            new_event.is_public = is_public
+        new_event.save()
+
+        return new_event
 
 
 class SubEventItemSerializer(I18nAwareModelSerializer):
