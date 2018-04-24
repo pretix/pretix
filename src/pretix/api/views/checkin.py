@@ -1,9 +1,11 @@
-from django.db.models import F, Max, OuterRef, Prefetch, Subquery
+from django.db.models import Count, F, Max, OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import CheckinListSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
@@ -65,6 +67,74 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
         )
         super().perform_destroy(instance)
+
+    @detail_route(methods=['GET'])
+    def status(self, *args, **kwargs):
+        clist = self.get_object()
+        cqs = Checkin.objects.filter(
+            position__order__event=clist.event,
+            position__order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
+            list=clist
+        )
+        pqs = OrderPosition.objects.filter(
+            order__event=clist.event,
+            order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if clist.include_pending else []),
+            subevent=clist.subevent,
+        )
+        if not clist.all_products:
+            pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
+
+        ev = clist.subevent or clist.event
+        response = {
+            'event': {
+                'name': str(ev.name),
+            },
+            'checkin_count': cqs.count(),
+            'position_count': pqs.count()
+        }
+
+        op_by_item = {
+            p['item']: p['cnt']
+            for p in pqs.order_by().values('item').annotate(cnt=Count('id'))
+        }
+        op_by_variation = {
+            p['variation']: p['cnt']
+            for p in pqs.order_by().values('variation').annotate(cnt=Count('id'))
+        }
+        c_by_item = {
+            p['position__item']: p['cnt']
+            for p in cqs.order_by().values('position__item').annotate(cnt=Count('id'))
+        }
+        c_by_variation = {
+            p['position__variation']: p['cnt']
+            for p in cqs.order_by().values('position__variation').annotate(cnt=Count('id'))
+        }
+
+        if not clist.all_products:
+            items = clist.limit_products
+        else:
+            items = clist.event.items
+
+        response['items'] = []
+        for item in items.order_by('category__position', 'position', 'pk').prefetch_related('variations'):
+            i = {
+                'id': item.pk,
+                'name': str(item),
+                'admission': item.admission,
+                'checkin_count': c_by_item.get(item.pk, 0),
+                'position_count': op_by_item.get(item.pk, 0),
+                'variations': []
+            }
+            for var in item.variations.all():
+                i['variations'].append({
+                    'id': var.pk,
+                    'value': str(var),
+                    'checkin_count': c_by_variation.get(var.pk, 0),
+                    'position_count': op_by_variation.get(var.pk, 0),
+                })
+            response['items'].append(i)
+
+        return Response(response)
 
 
 class CheckinOrderPositionFilter(OrderPositionFilter):

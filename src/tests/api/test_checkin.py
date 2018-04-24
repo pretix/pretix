@@ -8,7 +8,7 @@ from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import (
-    CheckinList, InvoiceAddress, Order, OrderPosition,
+    Checkin, CheckinList, InvoiceAddress, Order, OrderPosition,
 )
 
 
@@ -82,7 +82,6 @@ TEST_ORDERPOSITION1_RES = {
     "answers": [],
     "subevent": None
 }
-
 
 TEST_ORDERPOSITION2_RES = {
     "id": 2,
@@ -313,14 +312,16 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     assert [p2] == resp.data['results']
 
     # Order by checkin
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in'.format(
-        organizer.slug, event.slug, clist_all.pk
-    ))
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in'.format(
+            organizer.slug, event.slug, clist_all.pk
+        ))
     assert resp.status_code == 200
     assert [p1, p2] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=last_checked_in'.format(
-        organizer.slug, event.slug, clist_all.pk
-    ))
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=last_checked_in'.format(
+            organizer.slug, event.slug, clist_all.pk
+        ))
     assert resp.status_code == 200
     assert [p2, p1] == resp.data['results']
 
@@ -333,9 +334,10 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z')
         }
     ]
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in'.format(
-        organizer.slug, event.slug, clist_all.pk
-    ))
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in'.format(
+            organizer.slug, event.slug, clist_all.pk
+        ))
     assert resp.status_code == 200
     assert [p2, p1] == resp.data['results']
 
@@ -387,3 +389,50 @@ def test_list_limited_items_position_detail(token_client, organizer, event, clis
     ))
     assert resp.status_code == 200
     assert p1 == resp.data
+
+
+@pytest.mark.django_db
+def test_status(token_client, organizer, event, clist_all, item, other_item, order):
+    op = order.positions.first()
+    var1 = item.variations.create(value="XS")
+    var2 = item.variations.create(value="S")
+    op.variation = var1
+    op.save()
+    Checkin.objects.create(position=op, list=clist_all)
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/status/'.format(
+        organizer.slug, event.slug, clist_all.pk,
+    ))
+    assert resp.status_code == 200
+    assert resp.data['checkin_count'] == 1
+    assert resp.data['position_count'] == 2
+    assert resp.data['items'] == [
+        {
+            'name': str(item.name),
+            'id': item.pk,
+            'checkin_count': 1,
+            'admission': False,
+            'position_count': 1,
+            'variations': [
+                {
+                    'id': var1.pk,
+                    'value': 'XS',
+                    'checkin_count': 1,
+                    'position_count': 1,
+                },
+                {
+                    'id': var2.pk,
+                    'value': 'S',
+                    'checkin_count': 0,
+                    'position_count': 0,
+                },
+            ]
+        },
+        {
+            'name': other_item.name,
+            'id': other_item.pk,
+            'checkin_count': 0,
+            'admission': False,
+            'position_count': 1,
+            'variations': []
+        }
+    ]

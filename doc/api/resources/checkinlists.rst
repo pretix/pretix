@@ -44,6 +44,10 @@ include_pending                       boolean                    If ``true``, th
 Endpoints
 ---------
 
+.. versionchanged:: 1.15
+
+   The ``../status/`` detail endpoint has been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/
 
    Returns a list of all check-in lists within a given event.
@@ -119,6 +123,72 @@ Endpoints
         "limit_products": [],
         "include_pending": false,
         "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the check-in list to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(id)/status/
+
+   Returns detailed status information on a check-in list, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/checkinlists/1/status/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "checkin_count": 17,
+        "position_count": 42,
+        "event": {
+          "name": "Demo Converence",
+        },
+        "items": [
+          {
+            "name": "T-Shirt",
+            "id": 1,
+            "checkin_count": 1,
+            "admission": False,
+            "position_count": 1,
+            "variations": [
+              {
+                "value": "Red",
+                "id": 1,
+                "checkin_count": 1,
+                "position_count": 12
+              },
+              {
+                "value": "Blue",
+                "id": 2,
+                "checkin_count": 4,
+                "position_count": 8
+              }
+            ]
+          },
+          {
+            "name": "Ticket",
+            "id": 2,
+            "checkin_count": 15,
+            "admission": True,
+            "position_count": 22,
+            "variations": []
+          }
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
