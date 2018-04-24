@@ -144,7 +144,7 @@ var form_handlers = function (el) {
         earlier_field.on("dp.change", update);
     });
 
-    el.find(".datetimepicker[data-date-default]").each(function() {
+    el.find(".datetimepicker[data-date-default], .datepickerfield[data-date-default]").each(function() {
         var fill_field = $(this),
             default_field = $($(this).attr("data-date-default")),
             show = function () {
