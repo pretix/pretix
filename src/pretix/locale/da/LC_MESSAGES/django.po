@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-24 14:09+0000\n"
+"PO-Revision-Date: 2018-04-24 14:10+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
@@ -3250,6 +3250,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Din bestilling {code} til {event} er blevet annulleret.\n"
+"\n"
+"Du kan se detaljerne for din bestilling på\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/settings.py:370
 #, python-brace-format
@@ -7858,9 +7867,8 @@ msgid "Valid EU VAT ID"
 msgstr "Gyldigt CVR-nr."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:413
-#, fuzzy
 msgid "Check"
-msgstr "Check"
+msgstr "check"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:453
 msgid "Order history"
@@ -7951,10 +7959,8 @@ msgid "List filtered by answers to question \"%(question)s\"."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
-#, fuzzy
-#| msgid "Remove from order"
 msgid "Remove filter"
-msgstr "Fjern fra bestilling"
+msgstr "Fjern filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
@@ -8158,10 +8164,8 @@ msgid "PDF Ticket Editor"
 msgstr "PDF-billet-redigeringsværktøj"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
-#, fuzzy
-#| msgid "Editor"
 msgid "PDF Editor"
-msgstr "Editor"
+msgstr "PDF Editor"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 msgid "Code"
