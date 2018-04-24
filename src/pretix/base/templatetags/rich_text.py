@@ -58,6 +58,8 @@ ALLOWED_ATTRIBUTES = {
     # Update doc/user/markdown.rst if you change this!
 }
 
+ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
+
 
 def safelink_callback(attrs, new=False):
     url = attrs.get((None, 'href'), '/')
@@ -86,7 +88,8 @@ def markdown_compile(source):
             ]
         ),
         tags=ALLOWED_TAGS,
-        attributes=ALLOWED_ATTRIBUTES
+        attributes=ALLOWED_ATTRIBUTES,
+        protocols=ALLOWED_PROTOCOLS,
     )
 
 
