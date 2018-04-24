@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-24 14:06+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
+"PO-Revision-Date: 2018-04-24 14:09+0000\n"
+"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
@@ -1659,10 +1659,8 @@ msgid "Other fees"
 msgstr "Andre gebyrer"
 
 #: pretix/base/models/orders.py:680
-#, fuzzy
-#| msgid "Credit card"
 msgid "Gift card"
-msgstr "Kreditkort"
+msgstr "Gavekort"
 
 #: pretix/base/models/orders.py:685 pretix/control/views/vouchers.py:61
 msgid "Value"
@@ -2409,10 +2407,8 @@ msgid "20:00"
 msgstr ""
 
 #: pretix/base/pdf.py:112
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Event end date and time"
-msgstr "Arrangements startdato og -tidspunkt"
+msgstr "Arrangements slutdato og -tidspunkt"
 
 #: pretix/base/pdf.py:113
 msgid "2017-05-31 22:00"
@@ -4992,10 +4988,8 @@ msgid "Number of repititions"
 msgstr "Antal gentagelser"
 
 #: pretix/control/forms/subevents.py:253
-#, fuzzy
-#| msgid "Last update"
 msgid "Last date"
-msgstr "Seneste opdatering"
+msgstr "Seneste dato"
 
 #: pretix/control/forms/subevents.py:260 pretix/control/forms/subevents.py:318
 msgctxt "rrule"
@@ -6681,10 +6675,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:130
-#, fuzzy
-#| msgid "Use feature"
 msgid "Features"
-msgstr "Brug funktion"
+msgstr "Funktioner"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid ""
@@ -7184,10 +7176,8 @@ msgid "Check-in"
 msgstr "Tjek-ind"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:40
-#, fuzzy
-#| msgid "Additional text"
 msgid "Additional settings"
-msgstr "Tekst"
+msgstr "Yderligere indstillinger"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:51
 msgid "Product history"
