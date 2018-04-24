@@ -10,11 +10,18 @@
                         <span class="fa fa-id-card fa-danger fa-fw"
                                 data-toggle="tooltip"
                                 title="{% trans "This change was performed by a pretix administrator." %}">
-                            </span>
+                        </span>
                     {% else %}
                         <span class="fa fa-user fa-fw"></span>
                     {% endif %}
                     {{ log.user.get_full_name }}
+                {% endif %}
+                {% if log.shredded %}
+                    <span class="fa fa-eraser fa-danger fa-fw"
+                          data-toggle="tooltip"
+                          title="{% trans "Personal data was cleared from this log entry." %}">
+
+                    </span>
                 {% endif %}
             </p>
 
