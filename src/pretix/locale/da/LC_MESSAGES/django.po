@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-24 14:12+0000\n"
+"PO-Revision-Date: 2018-04-24 14:15+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
@@ -3292,6 +3292,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Du har købt en billet til {event}.\n"
+"\n"
+"Hvis du ikke allerede har gjort det, så kan du hente din billet her:\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/templates/400.html:3 pretix/base/templates/400.html:6
 msgid "Bad Request"
@@ -9972,10 +9981,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/badges/exporters.py:66
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee badges"
-msgstr "Navn på deltager"
+msgstr "Navneskilte"
 
 #: pretix/plugins/badges/exporters.py:83
 #, fuzzy
@@ -9995,10 +10002,8 @@ msgid "Badge layout created."
 msgstr ""
 
 #: pretix/plugins/badges/signals.py:105
-#, fuzzy
-#| msgid "Invalid product selected."
 msgid "Badge layout deleted."
-msgstr "Ugyldigt produkt valgt."
+msgstr "Skiltelayout slettet."
 
 #: pretix/plugins/badges/signals.py:106
 msgid "Badge layout changed."
@@ -10015,35 +10020,29 @@ msgid "Print badges"
 msgstr ""
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
-msgstr "Er du sikker på du vil slette datoen <strong>%(subevent)s</strong>?"
+msgstr ""
+"Er du sikker på du vil slette skiltelayout for <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
-#, fuzzy, python-format
-#| msgid "Tax rule: %(name)s"
+#, python-format
 msgid "Badge layout: %(name)s"
-msgstr "Momsregel: %(name)s"
+msgstr "Skiltelayout: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Badge design"
-msgstr "Billetdesign"
+msgstr "Skiltedesign"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 msgid "You can modify the design after you saved this page."
 msgstr ""
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
-#, fuzzy
-#| msgid "You haven't created any products yet."
 msgid "You haven't created any badge layouts yet."
-msgstr "Du har endnu ikke oprettet nogen produkter."
+msgstr "Du har endnu ikke oprettet nogen skilte."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
