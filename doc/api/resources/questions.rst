@@ -59,6 +59,11 @@ options                               list of objects            In case of ques
 Endpoints
 ---------
 
+.. versionchanged:: 1.15
+
+   The questions endpoint has been extended by the filter queries ``ask_during_checkin``, ``requred``, and
+   ``identifier``.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/questions/
 
    Returns a list of all questions within a given event.
@@ -120,6 +125,9 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
                            Default: ``position``
+   :query string identifier: Only return questions with the given identifier string
+   :query boolean ask_during_checkin: Only return questions that are or are not to be asked during check-in
+   :query boolean required: Only return questions that are or are not required to fill in
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error

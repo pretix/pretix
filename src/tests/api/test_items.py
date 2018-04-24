@@ -1296,6 +1296,31 @@ def test_question_list(token_client, organizer, event, question, item):
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=false'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?ask_during_checkin=false'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?identifier=ABC'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?ask_during_checkin=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?identifier=DEF'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+
 
 @pytest.mark.django_db
 def test_question_detail(token_client, organizer, event, question, item):

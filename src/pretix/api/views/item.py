@@ -251,10 +251,17 @@ class ItemCategoryViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
+class QuestionFilter(FilterSet):
+    class Meta:
+        model = Question
+        fields = ['ask_during_checkin', 'required', 'identifier']
+
+
 class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
-    filter_backends = (OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_class = QuestionFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = 'can_change_items'
