@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-24 14:15+0000\n"
-"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
+"PO-Revision-Date: 2018-04-24 14:22+0000\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
@@ -6213,7 +6213,7 @@ msgid "Other features"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6225,6 +6225,15 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hej\n"
+"\n"
+"du har bedt om en ny adgangskode. Gå venligt til følgende side for at "
+"nulstille din adgangskode:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Venlig hilsen\n"
+"Your pretix team\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
