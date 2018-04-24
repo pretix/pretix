@@ -2,8 +2,8 @@ from django.conf.urls import include, url
 
 from pretix.control.views import (
     auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, pdf, search, shredder, subevents, typeahead, user, users, vouchers,
-    waitinglist,
+    organizer, pdf, search, shredder, subevents, typeahead, user, users,
+    vouchers, waitinglist,
 )
 
 urlpatterns = [

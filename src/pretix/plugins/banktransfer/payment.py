@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.models import Order
 from pretix.base.payment import BasePaymentProvider
 
 
@@ -88,3 +89,11 @@ class BankTransfer(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event,
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
+
+    def shred_payment_info(self, order: Order):
+        d = json.loads(order.payment_info)
+        d['reference'] = '█'
+        d['payer'] = '█'
+        d['_shredded'] = True
+        order.payment_info = json.dumps(d)
+        order.save(update_fields=['payment_info'])

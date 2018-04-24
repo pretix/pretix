@@ -398,3 +398,23 @@ class Paypal(BasePaymentProvider):
         })
         request.session['payment_paypal_order'] = order.pk
         return self._create_payment(request, payment)
+
+    def shred_payment_info(self, order: Order):
+        d = json.loads(order.payment_info)
+        new = {
+            'id': d.get('id'),
+            'payer': {
+                'payer_info': {
+                    'email': '█'
+                }
+            },
+            'update_time': d.get('update_time'),
+            'transactions': [
+                {
+                    'amount': t.get('amount')
+                } for t in d.get('transactions', [])
+            ],
+            '_shredded': True
+        }
+        order.payment_info = json.dumps(new)
+        order.save(update_fields=['payment_info'])

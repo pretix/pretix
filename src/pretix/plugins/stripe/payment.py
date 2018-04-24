@@ -16,7 +16,7 @@ from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
 from pretix import __version__
-from pretix.base.models import Event, Quota, RequiredAction
+from pretix.base.models import Event, Order, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
