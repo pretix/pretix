@@ -91,7 +91,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
-* link (str, optional, if the full widget should be a link)
+* url (str, optional, if the full widget should be a link)
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 An additional keyword argument ``subevent`` *can* contain a sub-event.
@@ -108,7 +108,7 @@ should return a list of dictionaries, where each dictionary can have the keys:
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
-* link (str, optional, if the full widget should be a link)
+* url (str, optional, if the full widget should be a link)
 
 This is a regular django signal (no pretix event signal).
 """
@@ -163,7 +163,6 @@ Deprecated signal, no longer works. We just keep the definition so old plugins d
 break the installation.
 """
 
-
 nav_organizer = Signal(
     providing_args=['organizer', 'request']
 )
@@ -192,7 +191,6 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 Additionally, the argument ``order`` and ``request`` are available.
 """
 
-
 nav_event_settings = EventPluginSignal(
     providing_args=['request']
 )
@@ -220,4 +218,17 @@ that allows generating a pretix Widget code.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 A second keyword argument ``request`` will contain the request object.
+"""
+
+item_forms = EventPluginSignal(
+    providing_args=['request', 'item']
+)
+"""
+This signal allows you to return additional forms that should be rendered on the product
+modification page. You are passed ``request`` and ``item`` arguments and are expected to return
+an instance of a form class that you bind yourself when appropriate. Your form will be executed
+as part of the standard validation and rendering cycle and rendered using default bootstrap
+styles. It is advisable to set a prefix for your form to avoid clashes with other plugins.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

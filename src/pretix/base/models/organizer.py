@@ -278,6 +278,8 @@ class TeamAPIToken(models.Model):
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
             event in self.team.limit_events.all()
         )
+        if isinstance(perm_name, (tuple, list)):
+            return has_event_access and any(self.team.has_permission(p) for p in perm_name)
         return has_event_access and (not perm_name or self.team.has_permission(perm_name))
 
     def has_organizer_permission(self, organizer, perm_name=None, request=None):
@@ -290,6 +292,8 @@ class TeamAPIToken(models.Model):
         :param request: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
+        if isinstance(perm_name, (tuple, list)):
+            return organizer == self.team.organizer and any(self.team.has_permission(p) for p in perm_name)
         return organizer == self.team.organizer and (not perm_name or self.team.has_permission(perm_name))
 
     def get_events_with_any_permission(self):

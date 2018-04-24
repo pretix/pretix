@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-04 11:02+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
-"Last-Translator: Ture Gjørup <ture@ignatz.dk>\n"
+"POT-Creation-Date: 2018-04-23 09:53+0000\n"
+"PO-Revision-Date: 2018-04-06 11:49+0000\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "da/>\n"
 "Language: da\n"
@@ -45,47 +45,6 @@ msgstr "Omsætning i alt"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
 msgid "Contacting Stripe …"
 msgstr "Kontakter Stripe …"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
-msgid "QR Code"
-msgstr "QR-kode"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:210
-msgid "The PDF background file could not be loaded for the following reason:"
-msgstr "Baggrunds-pdf'en kunne ikke hentes af følgende grund:"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:359
-msgid "Group of objects"
-msgstr "Gruppe af objekter"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:365
-msgid "Text object"
-msgstr "Tekstobjekt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:367
-msgid "Barcode area"
-msgstr "QR-kode-område"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:369
-msgid "Object"
-msgstr "Objekt"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:373
-msgid "Ticket design"
-msgstr "Billetdesign"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:609
-msgid "Saving failed."
-msgstr "Gem fejlede."
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:656
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
-"Er du sikker på at du vil forlade editoren uden at gemme dine ændringer?"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
-msgid "Error while uploading your PDF file, please try again."
-msgstr "Fejl under upload af pdf. Prøv venligt igen."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
@@ -163,6 +122,47 @@ msgstr "Kopieret!"
 msgid "Press Ctrl-C to copy!"
 msgstr "Tryk Ctrl-C eller ⌘-C for at kopiere!"
 
+#: pretix/static/pretixcontrol/js/ui/editor.js:21
+msgid "QR Code"
+msgstr "QR-kode"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:210
+msgid "The PDF background file could not be loaded for the following reason:"
+msgstr "Baggrunds-pdf'en kunne ikke hentes af følgende grund:"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:359
+msgid "Group of objects"
+msgstr "Gruppe af objekter"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:365
+msgid "Text object"
+msgstr "Tekstobjekt"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:367
+msgid "Barcode area"
+msgstr "QR-kode-område"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:369
+msgid "Object"
+msgstr "Objekt"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:373
+msgid "Ticket design"
+msgstr "Billetdesign"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:609
+msgid "Saving failed."
+msgstr "Gem fejlede."
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
+msgid "Do you really want to leave the editor without saving your changes?"
+msgstr ""
+"Er du sikker på at du vil forlade editoren uden at gemme dine ændringer?"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:670
+msgid "Error while uploading your PDF file, please try again."
+msgstr "Fejl under upload af pdf. Prøv venligt igen."
+
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
 msgstr "Der er sket en fejl."
@@ -194,8 +194,8 @@ msgstr "Antal"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(en dato mere)"
+msgstr[1] "({num} datoer mere)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
@@ -295,40 +295,45 @@ msgstr ""
 "at gå mod kassen med din kurv."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+#| "\"noopener\">pretix</a>"
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
-"\"noopener\">pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+"ticketing powered by pretix</a>"
 msgstr ""
 "billetsystem drevet af <a href=\"https://pretix.eu\" target=\"_blank\" rel="
 "\"noopener\">pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Indløs voucher"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Indløs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Voucherkode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
 msgstr "Luk"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
 msgstr "Fortsæt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
 msgstr "Vis varianter"

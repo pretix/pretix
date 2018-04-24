@@ -120,12 +120,6 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        {% if "email" not in contact_info.keys %}
-                            <dl class="dl-horizontal">
-                                <dt>{% trans "E-mail address" %}</dt>
-                                <dd>{{ cart_session.email }}</dd>
-                            </dl>
-                        {% endif %}
                         {% for l, v in contact_info %}
                             <dl class="dl-horizontal">
                                 <dt>{{ l }}</dt>

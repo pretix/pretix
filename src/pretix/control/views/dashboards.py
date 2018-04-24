@@ -14,7 +14,7 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, ungettext
+from django.utils.translation import pgettext, ugettext_lazy as _, ungettext
 
 from pretix.base.models import (
     Item, Order, OrderPosition, RequiredAction, SubEvent, Voucher,
@@ -329,10 +329,13 @@ def widgets_for_event_qs(request, qs, user, nmax):
     for event in events:
         tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
         if event.has_subevents:
-            dr = daterange(
-                (event.min_from).astimezone(tz),
-                (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
-            )
+            if event.min_from is None:
+                dr = pgettext("subevent", "No dates")
+            else:
+                dr = daterange(
+                    (event.min_from).astimezone(tz),
+                    (event.max_fromto or event.max_to or event.max_from).astimezone(tz)
+                )
         else:
             if event.date_to:
                 dr = daterange(event.date_from.astimezone(tz), event.date_to.astimezone(tz))

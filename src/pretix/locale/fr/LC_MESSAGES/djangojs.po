@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-04 11:02+0000\n"
+"POT-Creation-Date: 2018-04-23 09:53+0000\n"
 "PO-Revision-Date: 2018-03-22 17:35+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -45,50 +45,6 @@ msgstr "Revenu total"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
 msgid "Contacting Stripe …"
 msgstr "Contacter Stripe …"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:21
-msgid "QR Code"
-msgstr "QR Code"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:210
-msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
-"Le fichier d'arrière-plan PDF n' a pas pu être chargé pour la raison "
-"suivante:"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:359
-msgid "Group of objects"
-msgstr "Groupe d'objets"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:365
-msgid "Text object"
-msgstr "Objet texte"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:367
-msgid "Barcode area"
-msgstr "Zone de code-barres"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:369
-msgid "Object"
-msgstr "Objet"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:373
-msgid "Ticket design"
-msgstr "Conception des billets"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:609
-msgid "Saving failed."
-msgstr "L'enregistrement a échoué."
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:656
-msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
-"Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
-
-#: pretix/plugins/ticketoutputpdf/static/pretixplugins/ticketoutputpdf/editor.js:670
-msgid "Error while uploading your PDF file, please try again."
-msgstr ""
-"Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
@@ -167,6 +123,50 @@ msgstr "Copié !"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Appuyez sur Ctrl-C pour copier !"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:21
+msgid "QR Code"
+msgstr "QR Code"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:210
+msgid "The PDF background file could not be loaded for the following reason:"
+msgstr ""
+"Le fichier d'arrière-plan PDF n' a pas pu être chargé pour la raison "
+"suivante:"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:359
+msgid "Group of objects"
+msgstr "Groupe d'objets"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:365
+msgid "Text object"
+msgstr "Objet texte"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:367
+msgid "Barcode area"
+msgstr "Zone de code-barres"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:369
+msgid "Object"
+msgstr "Objet"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:373
+msgid "Ticket design"
+msgstr "Conception des billets"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:609
+msgid "Saving failed."
+msgstr "L'enregistrement a échoué."
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
+msgid "Do you really want to leave the editor without saving your changes?"
+msgstr ""
+"Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:670
+msgid "Error while uploading your PDF file, please try again."
+msgstr ""
+"Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
@@ -300,40 +300,45 @@ msgstr ""
 "sur ce message pour continuer votre commande avec votre panier."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
+#| "\"noopener\">pretix</a>"
 msgctxt "widget"
 msgid ""
-"ticketing powered by <a href=\"https://pretix.eu\" target=\"_blank\" rel="
-"\"noopener\">pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
+"ticketing powered by pretix</a>"
 msgstr ""
 "généré par <a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
 "\">pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Utiliser un bon d'achat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Echanger"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Code de réduction"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
 msgstr "Fermer"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
 msgstr "Continuer"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
 msgstr "Voir les variations"

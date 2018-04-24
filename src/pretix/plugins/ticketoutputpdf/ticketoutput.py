@@ -1,34 +1,18 @@
-import copy
 import logging
-import re
-import uuid
 from io import BytesIO
 
-import bleach
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from reportlab.graphics import renderPDF
-from reportlab.graphics.barcode.qr import QrCodeWidget
-from reportlab.graphics.shapes import Drawing
-from reportlab.lib.colors import Color
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.units import mm
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.pdfmetrics import getAscentDescent
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
-from pretix.base.pdf import get_variables
+from pretix.base.pdf import Renderer
 from pretix.base.ticketoutput import BaseTicketOutput
-from pretix.plugins.ticketoutputpdf.signals import get_fonts
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
@@ -41,92 +25,14 @@ class PdfTicketOutput(BaseTicketOutput):
     def __init__(self, event, override_layout=None, override_background=None):
         self.override_layout = override_layout
         self.override_background = override_background
-        self.variables = get_variables(event)
         super().__init__(event)
 
     def _register_fonts(self):
-        pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
-
-        for family, styles in get_fonts().items():
-            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
-            if 'italic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
-            if 'bold' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
-            if 'bolditalic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
-
-    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
-        reqs = float(o['size']) * mm
-        qrw = QrCodeWidget(op.secret, barLevel='H', barHeight=reqs, barWidth=reqs)
-        d = Drawing(reqs, reqs)
-        d.add(qrw)
-        qr_x = float(o['left']) * mm
-        qr_y = float(o['bottom']) * mm
-        renderPDF.draw(d, canvas, qr_x, qr_y)
-
-    def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
-        ev = op.subevent or order.event
-        if not o['content']:
-            return '(error)'
-        if o['content'] == 'other':
-            return o['text'].replace("\n", "<br/>\n")
-        elif o['content'].startswith('meta:'):
-            return ev.meta_data.get(o['content'][5:]) or ''
-        elif o['content'] in self.variables:
-            try:
-                return self.variables[o['content']]['evaluate'](op, order, ev)
-            except:
-                logger.exception('Failed to process variable.')
-                return '(error)'
-        return ''
-
-    def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
-        font = o['fontfamily']
-        if o['bold']:
-            font += ' B'
-        if o['italic']:
-            font += ' I'
-
-        align_map = {
-            'left': TA_LEFT,
-            'center': TA_CENTER,
-            'right': TA_RIGHT
-        }
-        style = ParagraphStyle(
-            name=uuid.uuid4().hex,
-            fontName=font,
-            fontSize=float(o['fontsize']),
-            leading=float(o['fontsize']),
-            autoLeading="max",
-            textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
-            alignment=align_map[o['align']]
-        )
-        text = re.sub(
-            "<br[^>]*>", "<br/>",
-            bleach.clean(
-                self._get_text_content(op, order, o) or "",
-                tags=["br"], attributes={}, styles=[], strip=True
-            )
-        )
-        p = Paragraph(text, style=style)
-        p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
-        # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
-        ad = getAscentDescent(font, float(o['fontsize']))
-        p.drawOn(canvas, float(o['left']) * mm, float(o['bottom']) * mm - ad[1])
+        Renderer._register_fonts()
 
     def _draw_page(self, canvas: Canvas, op: OrderPosition, order: Order):
         objs = self.override_layout or self.settings.get('layout', as_type=list) or self._legacy_layout()
-        for o in objs:
-            if o['type'] == "barcodearea":
-                self._draw_barcodearea(canvas, op, o)
-            elif o['type'] == "textarea":
-                self._draw_textarea(canvas, op, order, o)
-
-        canvas.showPage()
+        Renderer(self.event, objs, None).draw_page(canvas, order, op)
 
     def generate_order(self, order: Order):
         buffer = BytesIO()
@@ -166,10 +72,6 @@ class PdfTicketOutput(BaseTicketOutput):
         return open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
 
     def _render_with_background(self, buffer, title=_('Ticket')):
-        from PyPDF2 import PdfFileWriter, PdfFileReader
-        buffer.seek(0)
-        new_pdf = PdfFileReader(buffer)
-        output = PdfFileWriter()
         bg_file = self.settings.get('background', as_type=File)
         if self.override_background:
             bgf = default_storage.open(self.override_background.name, "rb")
@@ -177,21 +79,7 @@ class PdfTicketOutput(BaseTicketOutput):
             bgf = default_storage.open(bg_file.name, "rb")
         else:
             bgf = self._get_default_background()
-        bg_pdf = PdfFileReader(BytesIO(bgf.read()))
-
-        for page in new_pdf.pages:
-            bg_page = copy.copy(bg_pdf.getPage(0))
-            bg_page.mergePage(page)
-            output.addPage(bg_page)
-
-        output.addMetadata({
-            '/Title': str(title),
-            '/Creator': 'pretix',
-        })
-        outbuffer = BytesIO()
-        output.write(outbuffer)
-        outbuffer.seek(0)
-        return outbuffer
+        return Renderer(self.event, None, bgf).render_background(buffer, title)
 
     def settings_content_render(self, request: HttpRequest) -> str:
         """

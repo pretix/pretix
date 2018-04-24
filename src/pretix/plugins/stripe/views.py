@@ -199,6 +199,15 @@ def charge_webhook(event, event_json, charge_id):
                 'charge': charge_id
             })
         )
+    elif order.status == Order.STATUS_PAID and not order.payment_provider.startswith('stripe') and charge['status'] == 'succeeded' and not is_refund:
+        RequiredAction.objects.create(
+            event=event,
+            action_type='pretix.plugins.stripe.double',
+            data=json.dumps({
+                'order': order.code,
+                'charge': charge.id
+            })
+        )
     elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and charge['status'] == 'succeeded' and not is_refund:
         try:
             mark_order_paid(order, user=None)

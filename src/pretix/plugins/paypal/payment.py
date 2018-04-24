@@ -10,6 +10,7 @@ from django.core import signing
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import Order, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
@@ -117,14 +118,14 @@ class Paypal(BasePaymentProvider):
                             {
                                 "name": __('Order for %s') % str(request.event),
                                 "quantity": 1,
-                                "price": str(cart['total']),
+                                "price": self.format_price(cart['total']),
                                 "currency": request.event.currency
                             }
                         ]
                     },
                     "amount": {
                         "currency": request.event.currency,
-                        "total": str(cart['total'])
+                        "total": self.format_price(cart['total'])
                     },
                     "description": __('Event tickets for {event}').format(event=request.event.name)
                 }
@@ -132,6 +133,34 @@ class Paypal(BasePaymentProvider):
         })
         request.session['payment_paypal_order'] = None
         return self._create_payment(request, payment)
+
+    def format_price(self, value):
+        return str(round_decimal(value, self.event.currency, {
+            # PayPal behaves differently than Stripe in deciding what currencies have decimal places
+            # Source https://developer.paypal.com/docs/classic/api/currency_codes/
+            'HUF': 0,
+            'JPY': 0,
+            'MYR': 0,
+            'TWD': 0,
+            # However, CLPs are not listed there while PayPal requires us not to send decimal places there. WTF.
+            'CLP': 0,
+            # Let's just guess that the ones listed here are 0-based as well
+            # https://developers.braintreepayments.com/reference/general/currencies
+            'BIF': 0,
+            'DJF': 0,
+            'GNF': 0,
+            'KMF': 0,
+            'KRW': 0,
+            'LAK': 0,
+            'PYG': 0,
+            'RWF': 0,
+            'UGX': 0,
+            'VND': 0,
+            'VUV': 0,
+            'XAF': 0,
+            'XOF': 0,
+            'XPF': 0,
+        }))
 
     def _create_payment(self, request, payment):
         try:
@@ -207,7 +236,7 @@ class Paypal(BasePaymentProvider):
                             {
                                 "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
                                 "quantity": 1,
-                                "price": str(order.total),
+                                "price": self.format_price(order.total),
                                 "currency": order.event.currency
                             }
                         ]
@@ -351,14 +380,14 @@ class Paypal(BasePaymentProvider):
                             {
                                 "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
                                 "quantity": 1,
-                                "price": str(order.total),
+                                "price": self.format_price(order.total),
                                 "currency": order.event.currency
                             }
                         ]
                     },
                     "amount": {
                         "currency": request.event.currency,
-                        "total": str(order.total)
+                        "total": self.format_price(order.total)
                     },
                     "description": __('Order {order} for {event}').format(
                         event=request.event.name,

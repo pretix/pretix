@@ -730,7 +730,7 @@ class SubEvent(EventMixin, LoggedModel):
         return self.event.currency
 
     def allow_delete(self):
-        return self.event.subevents.count() > 1
+        return not self.orderposition_set.exists()
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

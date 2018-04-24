@@ -45,7 +45,7 @@ class Select2ItemVarQuotaMixin(Select2Mixin):
             yield self.create_option(
                 None,
                 value[0],
-                value[0],
+                dict(self.choices)[value[0]],
                 True,
                 0,
                 subindex=None,

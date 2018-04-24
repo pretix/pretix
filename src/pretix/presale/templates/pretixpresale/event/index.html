@@ -410,12 +410,12 @@
                                         <div class="col-md-2 col-xs-6 availability-box available">
                                             {% if item.max_per_order == 1 %}
                                                 <label class="item-checkbox-label">
-                                                    <input type="checkbox" value="1"
+                                                    <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                                             name="item_{{ item.id }}">
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                        pattern="\d*"
+                                                        pattern="\d*" {% if itemnum == 1 %}value="1"{% endif %}
                                                         max="{{ item.order_max }}" name="item_{{ item.id }}">
                                             {% endif %}
                                         </div>

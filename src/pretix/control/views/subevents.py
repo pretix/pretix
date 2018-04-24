@@ -98,7 +98,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
             raise Http404(pgettext_lazy("subevent", "The requested date does not exist."))
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().orderposition_set.count() > 0:
+        if not self.get_object().allow_delete():
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
                                                               'placed.'))
             return HttpResponseRedirect(self.get_success_url())
@@ -109,12 +109,9 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if self.object.orderposition_set.count() > 0:
+        if not self.object.allow_delete():
             messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
                                                               'placed.'))
-            return HttpResponseRedirect(self.get_success_url())
-        elif not self.object.allow_delete():  # checking if this is the last date in the event series
-            messages.error(request, pgettext_lazy('subevent', 'The last date of an event series can not be deleted.'))
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)

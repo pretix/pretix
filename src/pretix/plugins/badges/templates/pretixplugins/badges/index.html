@@ -1,0 +1,81 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% block title %}{% trans "Badges" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Badges" %}</h1>
+    {% if layouts|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any badge layouts yet.
+                {% endblocktrans %}
+            </p>
+
+            {% if "can_change_event_settings" in request.eventpermset %}
+                <a href="{% url "plugins:badges:add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new badge layout" %}
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>
+            {% if "can_change_event_settings" in request.eventpermset %}
+                <a href="{% url "plugins:badges:add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new badge layout" %}
+                </a>
+            {% endif %}
+            <a href="{% url "control:event.orders.export" organizer=request.event.organizer.slug event=request.event.slug %}?identifier=badges" class="btn btn-primary"><i class="fa fa-print"></i> {% trans "Print badges" %}
+            </a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Default" %}</th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for l in layouts %}
+                    <tr>
+                        <td>
+                            {% if "can_change_event_settings" in request.eventpermset %}
+                                <strong><a href="{% url "plugins:badges:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
+                                    {{ l.name }}
+                                </a></strong>
+                            {% else %}
+                                <strong>{{ l.name }}</strong>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if l.default %}
+                                <span class="text-success">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Default" %}
+                                </span>
+                            {% elif "can_change_event_settings" in request.eventpermset %}
+                                <form class="form-inline" method="post"
+                                        action="{% url "plugins:badges:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
+                                >
+                                    {% csrf_token %}
+                                    <button class="btn btn-default btn-sm">
+                                        {% trans "Make default" %}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            {% if "can_change_event_settings" in request.eventpermset %}
+                                <a href="{% url "plugins:badges:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "plugins:badges:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

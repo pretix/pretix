@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "Badges" %}
+        </h3>
+    </div>
+    <div class="panel-body">
+        <form action="{% url "plugins:badges:print" event=event.slug organizer=event.organizer.slug %}?code={{ order.code }}"
+                method="post" data-asynctask data-asynctask-download data-asynctask-long class="form-inline">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">
+                <span class="fa fa-print"></span>
+                    {% trans "Print badges" %}
+            </button> &nbsp;
+        </form>
+    </div>
+</div>

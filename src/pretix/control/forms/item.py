@@ -15,6 +15,7 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn
+from pretix.base.signals import item_copy_data
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.money import change_decimal_field
@@ -254,6 +255,8 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('copy_from'):
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
+
+            item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 
         return instance
 

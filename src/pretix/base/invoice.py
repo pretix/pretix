@@ -282,16 +282,19 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                              preserveAspectRatio=True, anchor='n',
                              mask='auto')
 
-        if self.invoice.event.settings.show_date_to:
-            p_str = (
-                str(self.invoice.event.name) + '\n' + pgettext('invoice', '{from_date}\nuntil {to_date}').format(
-                    from_date=self.invoice.event.get_date_from_display(),
-                    to_date=self.invoice.event.get_date_to_display())
-            )
+        if not self.invoice.event.has_subevents:
+            if self.invoice.event.settings.show_date_to:
+                p_str = (
+                    str(self.invoice.event.name) + '\n' + pgettext('invoice', '{from_date}\nuntil {to_date}').format(
+                        from_date=self.invoice.event.get_date_from_display(),
+                        to_date=self.invoice.event.get_date_to_display())
+                )
+            else:
+                p_str = (
+                    str(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display()
+                )
         else:
-            p_str = (
-                str(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display()
-            )
+            p_str = str(self.invoice.event.name)
 
         p = Paragraph(p_str.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
         p.wrapOn(canvas, 65 * mm, 50 * mm)

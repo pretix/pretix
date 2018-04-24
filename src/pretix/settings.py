@@ -241,6 +241,7 @@ INSTALLED_APPS = [
     'pretix.plugins.reports',
     'pretix.plugins.checkinlists',
     'pretix.plugins.pretixdroid',
+    'pretix.plugins.badges',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
@@ -381,7 +382,7 @@ django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 
 AUTH_USER_MODEL = 'pretixbase.User'
-LOGIN_URL = '/login'  # global login does not yet exist
+LOGIN_URL = 'control:auth.login'
 LOGIN_URL_CONTROL = 'control:auth.login'
 CSRF_FAILURE_VIEW = 'pretix.base.views.errors.csrf_failure'
 

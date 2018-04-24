@@ -7,8 +7,9 @@ from django.db.models import Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.urls import reverse
+from django.utils.formats import get_format
 from django.utils.timezone import make_aware
-from django.utils.translation import ugettext as _
+from django.utils.translation import pgettext, ugettext as _
 
 from pretix.base.models import Organizer, User
 from pretix.control.permissions import event_permission_required
@@ -38,11 +39,14 @@ def event_list(request):
 
         dr = e.get_date_range_display()
         if e.has_subevents:
-            tz = pytz.timezone(e.settings.timezone)
-            dr = _('Series:') + ' ' + daterange(
-                e.min_from.astimezone(tz),
-                (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
-            )
+            if e.min_from is None:
+                dr = pgettext('subevent', 'No dates')
+            else:
+                tz = pytz.timezone(e.settings.timezone)
+                dr = _('Series:') + ' ' + daterange(
+                    e.min_from.astimezone(tz),
+                    (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
+                )
         return {
             'id': e.pk,
             'slug': e.slug,
@@ -81,15 +85,18 @@ def subevent_select2(request, **kwargs):
     qf = Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
     tz = request.event.timezone
 
-    try:
-        dt = parse(query)
-    except ValueError:
-        pass
-    else:
-        if dt:
-            dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
-            dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
-            qf |= Q(date_from__gte=dt_start) & Q(date_from__lte=dt_end)
+    dt = None
+    for f in get_format('DATE_INPUT_FORMATS'):
+        try:
+            dt = datetime.strptime(query, f)
+            break
+        except (ValueError, TypeError):
+            continue
+
+    if dt:
+        dt_start = make_aware(datetime.combine(dt.date(), time(hour=0, minute=0, second=0)), tz)
+        dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
+        qf |= Q(date_from__gte=dt_start) & Q(date_from__lte=dt_end)
 
     qs = request.event.subevents.filter(
         qf

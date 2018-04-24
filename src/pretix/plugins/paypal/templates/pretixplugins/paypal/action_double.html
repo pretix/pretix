@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<p>
+    {% url "control:event.order" organizer=event.organizer.slug event=event.slug code=data.order as ourl %}
+    {% blocktrans trimmed with payment=data.payment order="<a href='"|add:ourl|add:"'>"|add:data.order|add:"</a>"|safe %}
+        The PayPal transaction {{ payment }} has succeeded, but the order {{ order }} has already been paid by other
+        means. Please double check and refund the money via PayPal's interface.
+    {% endblocktrans %}
+</p>

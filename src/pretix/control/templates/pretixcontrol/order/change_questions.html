@@ -15,7 +15,7 @@
         </a>
     </h1>
 
-    <form method="post" class="form-horizontal" href="">
+    <form method="post" class="form-horizontal" href="" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
             {% if request.event.settings.invoice_address_asked %}

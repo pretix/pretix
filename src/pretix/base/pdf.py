@@ -1,12 +1,36 @@
 import copy
+import logging
+import re
+import uuid
 from collections import OrderedDict
+from io import BytesIO
 
+import bleach
+from django.contrib.staticfiles import finders
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
+from PyPDF2 import PdfFileReader
 from pytz import timezone
+from reportlab.graphics import renderPDF
+from reportlab.graphics.barcode.qr import QrCodeWidget
+from reportlab.graphics.shapes import Drawing
+from reportlab.lib.colors import Color
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.pdfmetrics import getAscentDescent
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.platypus import Paragraph
 
+from pretix.base.models import Order, OrderPosition
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
+from pretix.presale.style import get_fonts
+
+logger = logging.getLogger(__name__)
+
 
 DEFAULT_VARIABLES = OrderedDict((
     ("secret", {
@@ -84,6 +108,22 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("20:00"),
         "evaluate": lambda op, order, ev: ev.get_time_from_display()
     }),
+    ("event_end", {
+        "label": _("Event end date and time"),
+        "editor_sample": _("2017-05-31 22:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATETIME_FORMAT"
+        ) if ev.date_to else ""
+    }),
+    ("event_end_time", {
+        "label": _("Event end time"),
+        "editor_sample": _("22:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            "TIME_FORMAT"
+        ) if ev.date_to else ""
+    }),
     ("event_admission", {
         "label": _("Event admission date and time"),
         "editor_sample": _("2017-05-31 19:00"),
@@ -141,3 +181,118 @@ def get_variables(event):
     for recv, res in layout_text_variables.send(sender=event):
         v.update(res)
     return v
+
+
+class Renderer:
+
+    def __init__(self, event, layout, background_file):
+        self.layout = layout
+        self.background_file = background_file
+        self.variables = get_variables(event)
+        if self.background_file:
+            self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
+        else:
+            self.bg_pdf = None
+
+    @classmethod
+    def _register_fonts(cls):
+        pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
+        pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
+        pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
+        pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
+
+        for family, styles in get_fonts().items():
+            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
+            if 'italic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+            if 'bold' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+            if 'bolditalic' in styles:
+                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+
+    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
+        reqs = float(o['size']) * mm
+        qrw = QrCodeWidget(op.secret, barLevel='H', barHeight=reqs, barWidth=reqs)
+        d = Drawing(reqs, reqs)
+        d.add(qrw)
+        qr_x = float(o['left']) * mm
+        qr_y = float(o['bottom']) * mm
+        renderPDF.draw(d, canvas, qr_x, qr_y)
+
+    def _get_text_content(self, op: OrderPosition, order: Order, o: dict):
+        ev = op.subevent or order.event
+        if not o['content']:
+            return '(error)'
+        if o['content'] == 'other':
+            return o['text'].replace("\n", "<br/>\n")
+        elif o['content'].startswith('meta:'):
+            return ev.meta_data.get(o['content'][5:]) or ''
+        elif o['content'] in self.variables:
+            try:
+                return self.variables[o['content']]['evaluate'](op, order, ev)
+            except:
+                logger.exception('Failed to process variable.')
+                return '(error)'
+        return ''
+
+    def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+        font = o['fontfamily']
+        if o['bold']:
+            font += ' B'
+        if o['italic']:
+            font += ' I'
+
+        align_map = {
+            'left': TA_LEFT,
+            'center': TA_CENTER,
+            'right': TA_RIGHT
+        }
+        style = ParagraphStyle(
+            name=uuid.uuid4().hex,
+            fontName=font,
+            fontSize=float(o['fontsize']),
+            leading=float(o['fontsize']),
+            autoLeading="max",
+            textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
+            alignment=align_map[o['align']]
+        )
+        text = re.sub(
+            "<br[^>]*>", "<br/>",
+            bleach.clean(
+                self._get_text_content(op, order, o) or "",
+                tags=["br"], attributes={}, styles=[], strip=True
+            )
+        )
+        p = Paragraph(text, style=style)
+        p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
+        # p_size = p.wrap(float(o['width']) * mm, 1000 * mm)
+        ad = getAscentDescent(font, float(o['fontsize']))
+        p.drawOn(canvas, float(o['left']) * mm, float(o['bottom']) * mm - ad[1])
+
+    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition):
+        for o in self.layout:
+            if o['type'] == "barcodearea":
+                self._draw_barcodearea(canvas, op, o)
+            elif o['type'] == "textarea":
+                self._draw_textarea(canvas, op, order, o)
+        canvas.showPage()
+
+    def render_background(self, buffer, title=_('Ticket')):
+        from PyPDF2 import PdfFileWriter, PdfFileReader
+        buffer.seek(0)
+        new_pdf = PdfFileReader(buffer)
+        output = PdfFileWriter()
+
+        for page in new_pdf.pages:
+            bg_page = copy.copy(self.bg_pdf.getPage(0))
+            bg_page.mergePage(page)
+            output.addPage(bg_page)
+
+        output.addMetadata({
+            '/Title': str(title),
+            '/Creator': 'pretix',
+        })
+        outbuffer = BytesIO()
+        output.write(outbuffer)
+        outbuffer.seek(0)
+        return outbuffer

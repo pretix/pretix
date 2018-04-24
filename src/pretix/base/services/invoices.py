@@ -92,7 +92,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.lines.all().delete()
 
         positions = list(
-            invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'variation').annotate(
+            invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'subevent', 'variation').annotate(
                 addon_c=Count('addons')
             )
         )
@@ -111,6 +111,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc = "  + " + desc
             if invoice.event.settings.invoice_attendee_name and p.attendee_name:
                 desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
+            if invoice.event.has_subevents:
+                desc += "<br />" + pgettext("subevent", "Date: {}").format(p.subevent)
             InvoiceLine.objects.create(
                 position=i, invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,

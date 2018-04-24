@@ -9,8 +9,8 @@ from django_countries.fields import Country
 from tests.base import SoupTest
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, Organizer, Quota, Team,
-    User,
+    Event, InvoiceAddress, Item, Order, OrderPosition, Organizer, Question,
+    QuestionAnswer, Quota, Team, User,
 )
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -85,6 +85,25 @@ def test_order_list(client, env):
     env[2].save()
     response = client.get('/control/event/dummy/dummy/orders/?status=o')
     assert 'FOO' in response.rendered_content
+
+    q = Question.objects.create(event=env[0], question="Q", type="N", required=True)
+    q.items.add(env[3])
+    op = env[2].positions.first()
+    qa = QuestionAnswer.objects.create(question=q, orderposition=op, answer="12")
+    response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=12' % q.pk)
+    assert 'FOO' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=13' % q.pk)
+    assert 'FOO' not in response.rendered_content
+
+    q.type = "C"
+    q.save()
+    qo1 = q.options.create(answer="Foo")
+    qo2 = q.options.create(answer="Bar")
+    qa.options.add(qo1)
+    response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=%d' % (q.pk, qo1.pk))
+    assert 'FOO' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=%d' % (q.pk, qo2.pk))
+    assert 'FOO' not in response.rendered_content
 
 
 @pytest.mark.django_db

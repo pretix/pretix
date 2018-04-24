@@ -155,6 +155,10 @@ class OrganizerDisplaySettingsForm(SettingsForm):
             ('calendar', _('Calendar'))
         )
     )
+    organizer_link_back = forms.BooleanField(
+        label=_('Link back to organizer overview on all event pages'),
+        required=False
+    )
     locales = forms.MultipleChoiceField(
         choices=settings.LANGUAGES,
         label=_("Use languages"),
