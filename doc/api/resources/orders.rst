@@ -616,8 +616,8 @@ Order position endpoints
 .. versionchanged:: 1.15
 
    The order positions endpoint has been extended by the filter queries ``item__in``, ``variation__in``,
-   ``order__status__in``, ``subevent__in``, and ``addon_to__in``. The search for attendee names and order codes is now
-   case-insensitive.
+   ``order__status__in``, ``subevent__in``, ``addon_to__in`` and ``search``. The search for attendee names and order
+   codes is now case-insensitive.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
@@ -690,6 +690,7 @@ Order position endpoints
                            ``order__datetime``, ``positionid``, ``attendee_name``, and ``order__status``. Default:
                            ``order__datetime,positionid``
    :query string order: Only return positions of the order with the given order code
+   :query string search: Fuzzy search matching the attendee name, order code, invoice address name as well as to the beginning of the secret.
    :query integer item: Only return positions with the purchased item matching the given ID.
    :query integer item__in: Only return positions with the purchased item matching one of the given comma-separated IDs.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.

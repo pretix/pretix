@@ -214,6 +214,16 @@ class OrderPositionFilter(FilterSet):
     order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
     attendee_name = django_filters.CharFilter(method='attendee_name_qs')
+    search = django_filters.CharFilter(method='search_qs')
+
+    def search_qs(self, queryset, name, value):
+        return queryset.filter(
+            Q(secret__istartswith=value)
+            | Q(attendee_name__icontains=value)
+            | Q(addon_to__attendee_name__icontains=value)
+            | Q(order__code__istartswith=value)
+            | Q(order__invoice_address__name__icontains=value)
+        )
 
     def has_checkin_qs(self, queryset, name, value):
         return queryset.filter(checkins__isnull=not value)
