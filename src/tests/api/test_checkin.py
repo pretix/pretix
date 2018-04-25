@@ -4,9 +4,12 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.utils.timezone import now
 from django_countries.fields import Country
+from i18nfield.strings import LazyI18nString
 from pytz import UTC
 
+from pretix.api.serializers.item import QuestionSerializer
 from pretix.base.models import (
     Checkin, CheckinList, InvoiceAddress, Order, OrderPosition,
 )
@@ -436,3 +439,219 @@ def test_status(token_client, organizer, event, clist_all, item, other_item, ord
             'variations': []
         }
     ]
+
+
+@pytest.mark.django_db
+def test_custom_datetime(token_client, organizer, clist, event, order):
+    dt = now() - datetime.timedelta(days=1)
+    dt = dt.replace(microsecond=0)
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {
+        'datetime': dt.isoformat()
+    }, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert Checkin.objects.last().datetime == dt
+
+
+@pytest.mark.django_db
+def test_only_once(token_client, organizer, clist, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'already_redeemed'
+
+
+@pytest.mark.django_db
+def test_reupload_same_nonce(token_client, organizer, clist, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_multiple_different_list(token_client, organizer, clist, clist_all, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'nonce': 'foobar'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist_all.pk, order.positions.first().pk
+    ), {'nonce': 'baz'}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_forced_multiple(token_client, organizer, clist, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'force': True}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_require_paid(token_client, organizer, clist, event, order):
+    order.status = Order.STATUS_PENDING
+    order.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 404
+
+    clist.include_pending = True
+    clist.save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'unpaid'
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'ignore_unpaid': True}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.fixture
+def question(event, item):
+    q = event.questions.create(question=LazyI18nString('Size'), type='C', required=True, ask_during_checkin=True)
+    a1 = q.options.create(answer=LazyI18nString("M"))
+    a2 = q.options.create(answer=LazyI18nString("L"))
+    q.items.add(item)
+    return q, a1, a2
+
+
+@pytest.mark.django_db
+def test_question_number(token_client, organizer, clist, event, order, question):
+    question[0].options.all().delete()
+    question[0].type = 'N'
+    question[0].save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: "3.24"}}, format='json')
+    print(resp.data)
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert order.positions.first().answers.get(question=question[0]).answer == '3.24'
+
+
+@pytest.mark.django_db
+def test_question_choice(token_client, organizer, clist, event, order, question):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: str(question[1].pk)}}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert order.positions.first().answers.get(question=question[0]).answer == 'M'
+    assert list(order.positions.first().answers.get(question=question[0]).options.all()) == [question[1]]
+
+
+@pytest.mark.django_db
+def test_question_invalid(token_client, organizer, clist, event, order, question):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: "A"}}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+
+@pytest.mark.django_db
+def test_question_required(token_client, organizer, clist, event, order, question):
+    question[0].required = True
+    question[0].save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: ""}}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+
+@pytest.mark.django_db
+def test_question_optional(token_client, organizer, clist, event, order, question):
+    question[0].required = False
+    question[0].save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: ""}}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_question_multiple_choice(token_client, organizer, clist, event, order, question):
+    question[0].type = 'M'
+    question[0].save()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'answers': {question[0].pk: "{},{}".format(question[1].pk, question[2].pk)}}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert order.positions.first().answers.get(question=question[0]).answer == 'M, L'
+    assert set(order.positions.first().answers.get(question=question[0]).options.all()) == {question[1], question[2]}

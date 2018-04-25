@@ -330,6 +330,8 @@ Order position endpoints
    ``order__status__in``, ``subevent__in``, ``addon_to__in``, and ``search``. The search for attendee names and order
    codes is now case-insensitive.
 
+   The ``.../redeem/`` endpoint has been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/
 
    Returns a list of all order positions within a given event. The result is the same as
@@ -427,7 +429,7 @@ Order position endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested check-in list does not exist.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)/
 
    Returns information on one order position, identified by its internal ID.
    The result format is the same as the :ref:`order-position-resource`, with one important difference: the
@@ -437,7 +439,7 @@ Order position endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/checkinlists/1/positions/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/checkinlists/1/positions/23442/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -491,6 +493,130 @@ Order position endpoints
    :param list: The ID of the check-in list to look for
    :param id: The ``id`` field of the order position to fetch
    :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position or check-in list does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)/redeem/
+
+   Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint
+   accepts a number of optional requests in the body.
+
+   :<json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
+                                       you do not implement question handling in your user interface, you **must**
+                                       set this to ``false``. In that case, questions will just be ignored. Defaults
+                                       to ``true``.
+   :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
+   :<json boolean force: Specifies that the check-in should succeed regardless of previous check-ins or required
+                         questions that have not been filled. Defaults to ``false``.
+   :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
+                                 Defaults to ``false``.
+   :<json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
+                        this request twice with the same nonce, the second request will also succeed but will always
+                        create only one check-in object even when the previous request was successful as well. This
+                        allows for a certain level of idempotency and enables you to re-try after a connection failure.
+   :<json object answers: If questions are supported/required, you may/must supply a mapping of question IDs to their
+                          respective answers. The answers should always be strings. In case of (multiple-)choice-type
+                          answers, the string should contain the (comma-separated) IDs of the selected options.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/checkinlists/1/positions/234/redeem/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "force": false,
+        "ignore_unpaid": false,
+        "nonce": "Pvrk50vUzQd0DhdpNRL4I4OcXsvg70uA",
+        "datetime": null,
+        "questions_supported": true,
+        "answers": {
+          "4": "XS"
+        }
+      }
+
+   **Example successful response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "status": "ok"
+      }
+
+   **Example response with required questions**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 400 Bad Request
+      Content-Type: text/json
+
+      {
+        "status": "incomplete"
+        "questions": [
+          {
+            "id": 1,
+            "question": {"en": "T-Shirt size"},
+            "type": "C",
+            "required": false,
+            "items": [1, 2],
+            "position": 1,
+            "identifier": "WY3TP9SL",
+            "ask_during_checkin": true,
+            "options": [
+              {
+                "id": 1,
+                "identifier": "LVETRWVU",
+                "position": 0,
+                "answer": {"en": "S"}
+              },
+              {
+                "id": 2,
+                "identifier": "DFEMJWMJ",
+                "position": 1,
+                "answer": {"en": "M"}
+              },
+              {
+                "id": 3,
+                "identifier": "W9AH7RDE",
+                "position": 2,
+                "answer": {"en": "L"}
+              }
+            ]
+          }
+        ]
+      }
+
+   **Example error response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: text/json
+
+      {
+        "status": "error",
+        "reason": "unpaid",
+      }
+
+   Possible error reasons:
+
+   * ``unpaid`` - Ticket is not paid for or has been refunded
+   * ``already_redeemed`` - Ticket already has been redeemed
+   * ``product`` - Tickets with this product may not be scanned at this device
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param list: The ID of the check-in list to look for
+   :param id: The ``id`` field of the order position to fetch
+   :statuscode 201: no error
+   :statuscode 400: Invalid or incomplete request, see above
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position or check-in list does not exist.

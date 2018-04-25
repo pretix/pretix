@@ -4,10 +4,10 @@ pretixdroid HTTP API
 The pretixdroid plugin provides a HTTP API that the `pretixdroid Android app`_
 uses to communicate with the pretix server.
 
-.. warning:: This API is intended **only** to serve the pretixdroid Android app. There are no backwards compatibility
-             guarantees on this API. We will not add features that are not required for the Android App. There is a
-             general-purpose :ref:`rest-api` that not yet provides all features that this API provides, but will do
-             so in the future.
+.. warning:: This API is **DEPRECATED** and will probably go away soon. It is used **only** to serve the pretixdroid
+             Android app. There are no backwards compatibility guarantees on this API. We will not add features that
+             are not required for the  Android App. There is a general-purpose :ref:`rest-api` that provides all
+             features that you need to check in.
 
 .. versionchanged:: 1.12
 
