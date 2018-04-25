@@ -278,7 +278,7 @@ class StripeMethod(BasePaymentProvider):
                 params['statement_descriptor'] = ugettext('{event}-{code}').format(
                     event=self.event.slug.upper(),
                     code=order.code
-                ),
+                )[:22],
             params.update(self.api_kwargs)
             charge = stripe.Charge.create(
                 amount=self._get_amount(order),
@@ -539,7 +539,7 @@ class StripeCC(StripeMethod):
                         statement_descriptor=ugettext('{event}-{code}').format(
                             event=self.event.slug.upper(),
                             code=order.code
-                        ),
+                        )[:22],
                         metadata={
                             'order': str(order.id),
                             'event': self.event.id,
@@ -675,7 +675,7 @@ class StripeIdeal(StripeMethod):
                 'statement_descriptor': ugettext('{event}-{code}').format(
                     event=self.event.slug.upper(),
                     code=order.code
-                )
+                )[:22]
             },
             redirect={
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
