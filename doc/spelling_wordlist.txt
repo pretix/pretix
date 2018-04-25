@@ -34,6 +34,7 @@ gettext
 gunicorn
 hardcoded
 hostname
+idempotency
 inofficial
 invalidations
 iterable

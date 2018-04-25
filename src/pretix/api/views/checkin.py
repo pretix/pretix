@@ -1,18 +1,25 @@
+from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Max, OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
+from rest_framework.fields import DateTimeField
 from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import CheckinListSerializer
+from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.models import Checkin, CheckinList, Order, OrderPosition
 from pretix.base.models.organizer import TeamAPIToken
+from pretix.base.services.checkin import (
+    CheckInError, RequiredQuestionsError, perform_checkin,
+)
 from pretix.helpers.database import FixedOrderBy
 
 
@@ -201,3 +208,53 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
 
         return qs
+
+    @detail_route(methods=['POST'])
+    def redeem(self, *args, **kwargs):
+        force = bool(self.request.data.get('force', False))
+        ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
+        nonce = self.request.data.get('nonce')
+        op = self.get_object()
+
+        if 'datetime' in self.request.data:
+            dt = DateTimeField().to_internal_value(self.request.data.get('datetime'))
+        else:
+            dt = now()
+
+        given_answers = {}
+        if 'answers' in self.request.data:
+            aws = self.request.data.get('answers')
+            for q in op.item.questions.filter(ask_during_checkin=True):
+                if str(q.pk) in aws:
+                    try:
+                        given_answers[q] = q.clean_answer(aws[str(q.pk)])
+                    except ValidationError:
+                        pass
+
+        try:
+            perform_checkin(
+                op=op,
+                clist=self.checkinlist,
+                given_answers=given_answers,
+                force=force,
+                ignore_unpaid=ignore_unpaid,
+                nonce=nonce,
+                datetime=dt,
+                questions_supported=self.request.data.get('questions_supported', True)
+            )
+        except RequiredQuestionsError as e:
+            return Response({
+                'status': 'incomplete',
+                'questions': [
+                    QuestionSerializer(q).data for q in e.questions
+                ]
+            }, status=400)
+        except CheckInError as e:
+            return Response({
+                'status': 'error',
+                'reason': e.code
+            }, status=400)
+        else:
+            return Response({
+                'status': 'ok',
+            }, status=201)
