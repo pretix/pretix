@@ -206,17 +206,19 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         }
 
         with transaction.atomic():
+            allow_restricted = request.user.has_active_staff_session(request.session.session_key)
+
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         if getattr(plugins_available[module], 'restricted', False):
-                            if not request.user.has_active_staff_session(request.session.session_key):
+                            if not allow_restricted:
                                 continue
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        self.object.enable_plugin(module)
+                        self.object.enable_plugin(module, allow_restricted=allow_restricted)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})

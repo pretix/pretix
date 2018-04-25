@@ -602,7 +602,7 @@ class Event(EventMixin, LoggedModel):
         self.items.all().delete()
         self.subevents.all().delete()
 
-    def set_active_plugins(self, modules):
+    def set_active_plugins(self, modules, allow_restricted=False):
         from pretix.base.plugins import get_all_plugins
 
         plugins_active = self.get_plugins()
@@ -614,17 +614,19 @@ class Event(EventMixin, LoggedModel):
         enable = [m for m in modules if m not in plugins_active and m in plugins_available]
 
         for module in enable:
-            if hasattr(plugins_available[module].app, 'installed'):
+            if getattr(plugins_available[module].app, 'restricted', False) and not allow_restricted:
+                modules.remove(module)
+            elif hasattr(plugins_available[module].app, 'installed'):
                 getattr(plugins_available[module].app, 'installed')(self)
 
         self.plugins = ",".join(modules)
 
-    def enable_plugin(self, module):
+    def enable_plugin(self, module, allow_restricted=False):
         plugins_active = self.get_plugins()
 
         if module not in plugins_active:
             plugins_active.append(module)
-            self.set_active_plugins(plugins_active)
+            self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
 
     def disable_plugin(self, module):
         plugins_active = self.get_plugins()
