@@ -273,14 +273,17 @@ class StripeMethod(BasePaymentProvider):
 
     def _charge_source(self, request, source, order):
         try:
+            params = {}
+            if not source.startswith('src_'):
+                params['statement_descriptor'] = ugettext('{event}-{code}').format(
+                    event=self.event.slug.upper(),
+                    code=order.code
+                ),
+            params.update(self.api_kwargs)
             charge = stripe.Charge.create(
                 amount=self._get_amount(order),
                 currency=self.event.currency.lower(),
                 source=source,
-                statement_descriptor=ugettext('{event}-{code}').format(
-                    event=self.event.slug.upper(),
-                    code=order.code
-                ),
                 metadata={
                     'order': str(order.id),
                     'event': self.event.id,
@@ -288,7 +291,7 @@ class StripeMethod(BasePaymentProvider):
                 },
                 # TODO: Is this sufficient?
                 idempotency_key=str(self.event.id) + order.code + source,
-                **self.api_kwargs
+                **params
             )
         except stripe.error.CardError as e:
             if e.json_body:
