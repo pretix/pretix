@@ -140,15 +140,12 @@ class OrderSerializer(I18nAwareModelSerializer):
     positions = OrderPositionSerializer(many=True)
     fees = OrderFeeSerializer(many=True)
     downloads = OrderDownloadsField(source='*')
-    payment_fee = PaymentFeeLegacyField(source='*', attribute='value')  # TODO: Remove in 1.9
-    payment_fee_tax_rate = PaymentFeeLegacyField(source='*', attribute='tax_rate')  # TODO: Remove in 1.9
-    payment_fee_tax_value = PaymentFeeLegacyField(source='*', attribute='tax_value')  # TODO: Remove in 1.9
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'payment_fee', 'payment_fee_tax_rate', 'payment_fee_tax_value', 'checkin_attention')
+                  'checkin_attention')
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):

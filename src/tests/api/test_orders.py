@@ -1,7 +1,6 @@
 import copy
 import datetime
 from decimal import Decimal
-from distutils.version import LooseVersion
 from unittest import mock
 
 import pytest
@@ -10,7 +9,6 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from pytz import UTC
 
-from pretix import __version__
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
@@ -119,9 +117,6 @@ TEST_ORDER_RES = {
         }
     ],
     "payment_provider": "banktransfer",
-    "payment_fee": "0.25",
-    "payment_fee_tax_rate": "19.00",
-    "payment_fee_tax_value": "0.05",
     "total": "23.00",
     "comment": "",
     "checkin_attention": False,
@@ -144,10 +139,6 @@ TEST_ORDER_RES = {
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail(
-    LooseVersion(__version__) >= LooseVersion("1.9.0.dev0"),
-    reason="Deprecated attributes payment_fee_* should be removed by now",
-)
 def test_order_list(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
     res["positions"][0]["id"] = order.positions.first().pk
