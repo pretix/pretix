@@ -144,12 +144,16 @@ class CartActionMixin:
         return items
 
 
-def generate_cart_id(prefix=''):
+def generate_cart_id(request=None, prefix=''):
     """
     Generates a random new cart ID that is not currently in use, with an optional pretix.
     """
     while True:
-        new_id = prefix + get_random_string(length=32 - len(prefix))
+        new_id = prefix + get_random_string(length=48 - len(prefix))
+        if request:
+            if not request.session.session_key:
+                request.session.create()
+            new_id += "@" + request.session.session_key
         if not CartPosition.objects.filter(cart_id=new_id).exists():
             return new_id
 
@@ -172,7 +176,7 @@ def create_empty_cart_id(request, replace_current=True):
     if 'carts' not in request.session:
         request.session['carts'] = {}
 
-    new_id = generate_cart_id(prefix=prefix)
+    new_id = generate_cart_id(request, prefix=prefix)
     request.session['carts'][new_id] = {}
 
     if replace_current:
@@ -258,7 +262,7 @@ def get_or_create_cart_id(request, create=True):
         else:
             if not create:
                 return None
-            new_id = generate_cart_id(prefix=prefix)
+            new_id = generate_cart_id(request, prefix=prefix)
 
         # Migrate legacy data
         # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
