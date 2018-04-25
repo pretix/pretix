@@ -332,6 +332,39 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
 
 
 @pytest.mark.django_db
+def test_event_put_with_clone(token_client, organizer, event, meta_prop):
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        {},
+        format='json'
+    )
+
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_event_patch_with_clone(token_client, organizer, event, meta_prop):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        {},
+        format='json'
+    )
+
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_event_delete_with_clone(token_client, organizer, event, meta_prop):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        {},
+        format='json'
+    )
+
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
 def test_event_update(token_client, organizer, event, item, meta_prop):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -418,6 +451,18 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
     assert not organizer.events.get(slug=resp.data['slug']).meta_values.filter(
         property__name=meta_prop.name
     ).exists()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
+                "test": "test"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"meta_data":["Meta data property \'test\' does not exist."]}'
 
 
 @pytest.mark.django_db
@@ -524,6 +569,8 @@ def test_event_delete(token_client, organizer, event):
 def test_event_with_order_position_not_delete(token_client, organizer, event, item, order_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"The event can not be deleted as it already contains orders. Please ' \
+                                    'set \'live\' to false to hide the event and take the shop offline instead."}'
     assert organizer.events.filter(pk=event.id).exists()
 
 
@@ -531,4 +578,6 @@ def test_event_with_order_position_not_delete(token_client, organizer, event, it
 def test_event_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 403
+    assert resp.content.decode() == '{"detail":"The event could not be deleted as some constraints (e.g. data ' \
+                                    'created by plug-ins) do not allow it."}'
     assert organizer.events.filter(pk=event.id).exists()
