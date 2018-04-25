@@ -264,20 +264,6 @@ def get_or_create_cart_id(request, create=True):
                 return None
             new_id = generate_cart_id(request, prefix=prefix)
 
-        # Migrate legacy data
-        # TODO: This is for the upgrade 1.7→1.8. We should remove this around April 2018
-        legacy_pos = CartPosition.objects.filter(cart_id=request.session.session_key, event=request.event)
-        if legacy_pos.exists():
-            legacy_pos.update(cart_id=new_id)
-            if 'invoice_address_{}'.format(request.event.pk) in request.session:
-                cart_data['invoice_address'] = request.session['invoice_address_{}'.format(request.event.pk)]
-            if 'email' in request.session:
-                cart_data['email'] = request.session['email']
-            if 'contact_form_data' in request.session:
-                cart_data['contact_form_data'] = request.session['contact_form_data']
-            if 'payment' in request.session:
-                cart_data['payment'] = request.session['payment']
-
         if 'carts' not in request.session:
             request.session['carts'] = {}
         if new_id not in request.session['carts']:
