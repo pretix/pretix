@@ -5,8 +5,7 @@ import urllib.parse
 import dateutil.parser
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.db import transaction
-from django.db.models import Count, Max, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Count, Max, OuterRef, Q, Subquery
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, JsonResponse,
 )
@@ -19,10 +18,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import (
-    Checkin, Event, Order, OrderPosition, Question, QuestionOption,
-)
+from pretix.base.models import Checkin, Event, Order, OrderPosition
 from pretix.base.models.event import SubEvent
+from pretix.base.services.checkin import (
+    CheckInError, RequiredQuestionsError, perform_checkin,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import (
@@ -155,39 +155,6 @@ class ApiView(View):
 
 
 class ApiRedeemView(ApiView):
-    def _save_answers(self, op, answers, given_answers):
-        for q, a in given_answers.items():
-            if not a:
-                if q in answers:
-                    answers[q].delete()
-                else:
-                    continue
-            if isinstance(a, QuestionOption):
-                if q in answers:
-                    qa = answers[q]
-                    qa.answer = str(a.answer)
-                    qa.save()
-                    qa.options.clear()
-                else:
-                    qa = op.answers.create(question=q, answer=str(a.answer))
-                qa.options.add(a)
-            elif isinstance(a, list):
-                if q in answers:
-                    qa = answers[q]
-                    qa.answer = ", ".join([str(o) for o in a])
-                    qa.save()
-                    qa.options.clear()
-                else:
-                    qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
-                qa.options.add(*a)
-            else:
-                if q in answers:
-                    qa = answers[q]
-                    qa.answer = str(a)
-                    qa.save()
-                else:
-                    op.answers.create(question=q, answer=str(a))
-
     def post(self, request, **kwargs):
         secret = request.POST.get('secret', '!INVALID!')
         force = request.POST.get('force', 'false') in ('true', 'True')
@@ -203,93 +170,43 @@ class ApiRedeemView(ApiView):
             dt = now()
 
         try:
-            with transaction.atomic():
-                created = False
-                op = OrderPosition.objects.select_related(
-                    'item', 'variation', 'order', 'addon_to'
-                ).prefetch_related(
-                    'item__questions',
-                    Prefetch(
-                        'item__questions',
-                        queryset=Question.objects.filter(ask_during_checkin=True),
-                        to_attr='checkin_questions'
-                    ),
-                    'answers'
-                ).get(
-                    order__event=self.event, secret=secret, subevent=self.subevent
-                )
-                answers = {a.question: a for a in op.answers.all()}
-                require_answers = []
-                given_answers = {}
-                for q in op.item.checkin_questions:
-                    if 'answer_{}'.format(q.pk) in request.POST:
-                        try:
-                            given_answers[q] = q.clean_answer(request.POST.get('answer_{}'.format(q.pk)))
-                            continue
-                        except ValidationError:
-                            pass
-
-                    if q in answers:
-                        continue
-
-                    require_answers.append(serialize_question(q))
-
-                self._save_answers(op, answers, given_answers)
-
-                if not self.config.list.all_products and op.item_id not in [i.pk for i in
-                                                                            self.config.list.limit_products.all()]:
-                    response['status'] = 'error'
-                    response['reason'] = 'product'
-                elif not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
-                    response['status'] = 'error'
-                    response['reason'] = 'product'
-                elif op.order.status != Order.STATUS_PAID and not force and not (
-                    ignore_unpaid and self.config.list.include_pending and op.order.status == Order.STATUS_PENDING
-                ):
-                    response['status'] = 'error'
-                    response['reason'] = 'unpaid'
-                elif require_answers and not force and request.POST.get('questions_supported'):
-                    response['status'] = 'incomplete'
-                    response['questions'] = require_answers
-                else:
-                    ci, created = Checkin.objects.get_or_create(position=op, list=self.config.list, defaults={
-                        'datetime': dt,
-                        'nonce': nonce,
-                    })
-
-            if 'status' not in response:
-                if created or (nonce and nonce == ci.nonce):
-                    response['status'] = 'ok'
-                    if created:
-                        op.order.log_action('pretix.plugins.pretixdroid.scan', data={
-                            'position': op.id,
-                            'positionid': op.positionid,
-                            'first': True,
-                            'forced': op.order.status != Order.STATUS_PAID,
-                            'datetime': dt,
-                            'list': self.config.list.pk
-                        })
-                else:
-                    if force:
-                        response['status'] = 'ok'
-                    else:
-                        response['status'] = 'error'
-                        response['reason'] = 'already_redeemed'
-                    op.order.log_action('pretix.plugins.pretixdroid.scan', data={
-                        'position': op.id,
-                        'positionid': op.positionid,
-                        'first': False,
-                        'forced': force,
-                        'datetime': dt,
-                        'list': self.config.list.pk
-                    })
-
-            response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force,
-                                            clist=self.config.list)
-
+            op = OrderPosition.objects.get(order__event=self.event, secret=secret, subevent=self.subevent)
         except OrderPosition.DoesNotExist:
             response['status'] = 'error'
             response['reason'] = 'unknown_ticket'
+        else:
+            given_answers = {}
+            for q in op.item.questions.filter(ask_during_checkin=True):
+                if 'answer_{}'.format(q.pk) in request.POST:
+                    try:
+                        given_answers[q] = q.clean_answer(request.POST.get('answer_{}'.format(q.pk)))
+                    except ValidationError:
+                        pass
+
+            try:
+                if not self.config.all_items and op.item_id not in [i.pk for i in self.config.items.all()]:
+                    raise CheckInError('', 'product')
+                perform_checkin(
+                    op=op,
+                    clist=self.config.list,
+                    given_answers=given_answers,
+                    force=force,
+                    ignore_unpaid=ignore_unpaid,
+                    nonce=nonce,
+                    datetime=dt,
+                    questions_supported=bool(request.POST.get('questions_supported'))
+                )
+            except RequiredQuestionsError as e:
+                response['status'] = 'incomplete'
+                response['questions'] = [serialize_question(q) for q in e.questions]
+            except CheckInError as e:
+                response['status'] = 'error'
+                response['reason'] = e.code
+            else:
+                response['status'] = 'ok'
+
+            response['data'] = serialize_op(op, redeemed=op.order.status == Order.STATUS_PAID or force,
+                                            clist=self.config.list)
 
         return JsonResponse(response)
 

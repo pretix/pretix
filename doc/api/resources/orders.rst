@@ -28,10 +28,6 @@ datetime                              datetime                   Time of order c
 expires                               datetime                   The order will expire, if it is still pending by this time
 payment_date                          date                       Date of payment receipt
 payment_provider                      string                     Payment provider used for this order
-payment_fee                           money (string)             Payment fee included in this order's total
-payment_fee_tax_rate                  decimal (string)           Tax rate applied to the payment fee
-payment_fee_tax_value                 money (string)             Tax value included in the payment fee
-payment_fee_tax_rule                  integer                    The ID of the used tax rule (or ``null``)
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
 checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
@@ -94,6 +90,11 @@ downloads                             list of objects            List of ticket 
 .. versionchanged:: 1.13
 
    The field ``checkin_attention`` has been added.
+
+.. versionchanged:: 1.15
+
+   The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate``, ``order.payment_fee_tax_value`` and
+   ``order.payment_fee_tax_rule`` have finally been removed.
 
 .. _order-position-resource:
 

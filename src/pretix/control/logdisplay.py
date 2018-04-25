@@ -97,6 +97,55 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         )
 
 
+def _display_checkin(event, logentry):
+    data = logentry.parsed_data
+
+    show_dt = False
+    if 'datetime' in data:
+        dt = dateutil.parser.parse(data.get('datetime'))
+        show_dt = abs((logentry.datetime - dt).total_seconds()) > 60 or 'forced' in data
+        tz = pytz.timezone(event.settings.timezone)
+        dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
+
+    if 'list' in data:
+        try:
+            checkin_list = event.checkin_lists.get(pk=data.get('list')).name
+        except CheckinList.DoesNotExist:
+            checkin_list = _("(unknown)")
+    else:
+        checkin_list = _("(unknown)")
+
+    if data.get('first'):
+        if show_dt:
+            return _('Position #{posid} has been scanned at {datetime} for list "{list}".').format(
+                posid=data.get('positionid'),
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _('Position #{posid} has been scanned for list "{list}".').format(
+                posid=data.get('positionid'),
+                list=checkin_list
+            )
+    else:
+        if data.get('forced'):
+            return _(
+                'A scan for position #{posid} at {datetime} for list "{list}" has been uploaded even though it has '
+                'been scanned already.'.format(
+                    posid=data.get('positionid'),
+                    datetime=dt_formatted,
+                    list=checkin_list
+                )
+            )
+        return _(
+            'Position #{posid} has been scanned and rejected because it has already been scanned before '
+            'on list "{list}".'.format(
+                posid=data.get('positionid'),
+                list=checkin_list
+            )
+        )
+
+
 @receiver(signal=logentry_display, dispatch_uid="pretixcontrol_logentry_display")
 def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     plains = {
@@ -224,6 +273,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.tickets.provider.'):
         return _('The settings of a ticket output provider have been changed.')
+
+    if logentry.action_type == 'pretix.event.checkin':
+        return _display_checkin(sender, logentry)
 
     if logentry.action_type == 'pretix.control.views.checkin':
         dt = dateutil.parser.parse(data.get('datetime'))
