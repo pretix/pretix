@@ -525,6 +525,40 @@ class Event(EventMixin, LoggedModel):
         data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
+    @property
+    def has_payment_provider(self):
+        result = False
+        for provider in self.get_payment_providers().values():
+            if provider.is_enabled and provider.identifier != 'free':
+                result = True
+                break
+        return result
+
+    @property
+    def has_paid_things(self):
+        from .items import Item, ItemVariation
+
+        return Item.objects.filter(event=self, default_price__gt=0).exists()\
+            or ItemVariation.objects.filter(item__event=self, default_price__gt=0).exists()
+
+    @cached_property
+    def live_issues(self):
+        from pretix.base.signals import event_live_issues
+        issues = []
+
+        if self.has_paid_things and not self.has_payment_provider:
+            issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
+
+        if not self.quotas.exists():
+            issues.append(_('You need to configure at least one quota to sell anything.'))
+
+        responses = event_live_issues.send(self)
+        for receiver, response in sorted(responses, key=lambda r: str(r[0])):
+            if response:
+                issues.append(response)
+
+        return issues
+
     def get_users_with_any_permission(self):
         """
         Returns a queryset of users who have any permission to this event.
@@ -556,8 +590,77 @@ class Event(EventMixin, LoggedModel):
 
         return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
 
+    def clean_live(self):
+        for issue in self.live_issues:
+            if issue:
+                raise ValidationError(issue)
+
     def allow_delete(self):
         return not self.orders.exists() and not self.invoices.exists()
+
+    def delete_sub_objects(self):
+        self.items.all().delete()
+        self.subevents.all().delete()
+
+    def set_active_plugins(self, modules, allow_restricted=False):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins_active = self.get_plugins()
+        plugins_available = {
+            p.module: p for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+
+        enable = [m for m in modules if m not in plugins_active and m in plugins_available]
+
+        for module in enable:
+            if getattr(plugins_available[module].app, 'restricted', False) and not allow_restricted:
+                modules.remove(module)
+            elif hasattr(plugins_available[module].app, 'installed'):
+                getattr(plugins_available[module].app, 'installed')(self)
+
+        self.plugins = ",".join(modules)
+
+    def enable_plugin(self, module, allow_restricted=False):
+        plugins_active = self.get_plugins()
+
+        if module not in plugins_active:
+            plugins_active.append(module)
+            self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
+
+    def disable_plugin(self, module):
+        plugins_active = self.get_plugins()
+
+        if module in plugins_active:
+            plugins_active.remove(module)
+            self.set_active_plugins(plugins_active)
+
+    @staticmethod
+    def clean_has_subevents(event, has_subevents):
+        if event is not None and event.has_subevents is not None:
+            if event.has_subevents != has_subevents:
+                raise ValidationError(_('Once created an event cannot change between an series and a single event.'))
+
+    @staticmethod
+    def clean_slug(organizer, event, slug):
+        if event is not None and event.slug is not None:
+            if event.slug != slug:
+                raise ValidationError(_('The event slug cannot be changed.'))
+        else:
+            if Event.objects.filter(slug=slug, organizer=organizer).exists():
+                raise ValidationError(_('This slug has already been used for a different event.'))
+
+    @staticmethod
+    def clean_dates(date_from, date_to):
+        if date_from is not None and date_to is not None:
+            if date_from > date_to:
+                raise ValidationError(_('The event cannot end before it starts.'))
+
+    @staticmethod
+    def clean_presale(presale_start, presale_end):
+        if presale_start is not None and presale_end is not None:
+            if presale_start > presale_end:
+                raise ValidationError(_('The event\'s presale cannot end before it starts.'))
 
 
 class SubEvent(EventMixin, LoggedModel):

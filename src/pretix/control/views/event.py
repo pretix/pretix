@@ -30,13 +30,13 @@ from pytz import timezone
 
 from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, Item, ItemVariation, LogEntry,
-    Order, RequiredAction, TaxRule, Voucher,
+    CachedCombinedTicket, CachedTicket, Event, LogEntry, Order, RequiredAction,
+    TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
-from pretix.base.signals import event_live_issues, register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.event import (
     CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
@@ -200,34 +200,29 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
 
         self.object = self.get_object()
 
-        plugins_active = self.object.get_plugins()
         plugins_available = {
             p.module: p for p in get_all_plugins()
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
         with transaction.atomic():
+            allow_restricted = request.user.has_active_staff_session(request.session.session_key)
+
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         if getattr(plugins_available[module], 'restricted', False):
-                            if not request.user.has_active_staff_session(request.session.session_key):
+                            if not allow_restricted:
                                 continue
-
-                        if hasattr(plugins_available[module].app, 'installed'):
-                            getattr(plugins_available[module].app, 'installed')(self.request.event)
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        if module not in plugins_active:
-                            plugins_active.append(module)
+                        self.object.enable_plugin(module, allow_restricted=allow_restricted)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
-                        if module in plugins_active:
-                            plugins_active.remove(module)
-            self.object.plugins = ",".join(plugins_active)
+                        self.object.disable_plugin(module)
             self.object.save()
         messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
@@ -749,38 +744,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['issues'] = self.issues
+        ctx['issues'] = self.request.event.live_issues
         return ctx
 
-    @cached_property
-    def issues(self):
-        issues = []
-        has_paid_things = (
-            Item.objects.filter(event=self.request.event, default_price__gt=0).exists()
-            or ItemVariation.objects.filter(item__event=self.request.event, default_price__gt=0).exists()
-        )
-
-        has_payment_provider = False
-        for provider in self.request.event.get_payment_providers().values():
-            if provider.is_enabled and provider.identifier != 'free':
-                has_payment_provider = True
-                break
-
-        if has_paid_things and not has_payment_provider:
-            issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
-
-        if not self.request.event.quotas.exists():
-            issues.append(_('You need to configure at least one quota to sell anything.'))
-
-        responses = event_live_issues.send(self.request.event)
-        for receiver, response in sorted(responses, key=lambda r: str(r[0])):
-            if response:
-                issues.append(response)
-
-        return issues
-
     def post(self, request, *args, **kwargs):
-        if request.POST.get("live") == "true" and not self.issues:
+        if request.POST.get("live") == "true" and not self.request.event.live_issues:
             request.event.live = True
             request.event.save()
             self.request.event.log_action(
@@ -831,8 +799,7 @@ class EventDelete(EventPermissionRequiredMixin, FormView):
                         'logentries': list(self.request.event.logentry_set.values_list('pk', flat=True))
                     }
                 )
-                self.request.event.items.all().delete()
-                self.request.event.subevents.all().delete()
+                self.request.event.delete_sub_objects()
                 self.request.event.delete()
             messages.success(self.request, _('The event has been deleted.'))
             return redirect(self.get_success_url())
