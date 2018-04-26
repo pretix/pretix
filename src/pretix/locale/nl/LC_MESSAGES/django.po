@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-16 13:26+0000\n"
+"PO-Revision-Date: 2018-04-26 12:18+0000\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2502,27 +2502,27 @@ msgstr "31 mei 2017"
 
 #: pretix/base/pdf.py:97
 msgid "Event date range"
-msgstr ""
+msgstr "Evenement datumbereik"
 
 #: pretix/base/pdf.py:98
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "31 mei – 4 juni 2017"
 
 #: pretix/base/pdf.py:102
 msgid "Event begin date and time"
-msgstr ""
+msgstr "Begindatum en tijd van evenement"
 
 #: pretix/base/pdf.py:103
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "31-05-2017 20:00"
 
 #: pretix/base/pdf.py:107
 msgid "Event begin time"
-msgstr ""
+msgstr "Begintijd van evenement"
 
 #: pretix/base/pdf.py:108
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:112
 #, fuzzy
@@ -2532,31 +2532,31 @@ msgstr "Eindtijd van het evenement"
 
 #: pretix/base/pdf.py:113
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "31-05-2017 22:00"
 
 #: pretix/base/pdf.py:121
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:128
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Toegangsdatum en tijd van evenement"
 
 #: pretix/base/pdf.py:129
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "31-05-2017 19:00"
 
 #: pretix/base/pdf.py:136
 msgid "Event admission time"
-msgstr ""
+msgstr "Toegangstijd van evenement"
 
 #: pretix/base/pdf.py:137
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:144
 msgid "Event location"
-msgstr ""
+msgstr "Evenement locatie"
 
 #: pretix/base/pdf.py:145
 msgid "Random City"
@@ -2564,20 +2564,20 @@ msgstr ""
 
 #: pretix/base/pdf.py:149
 msgid "Invoice address: name"
-msgstr ""
+msgstr "Factuuradres: naam"
 
 #: pretix/base/pdf.py:154
 msgid "Invoice address: company"
-msgstr ""
+msgstr "Factuuradres: bedrijf"
 
 #: pretix/base/pdf.py:155 pretix/base/services/tickets.py:91
 #: pretix/control/views/pdf.py:72
 msgid "Sample company"
-msgstr ""
+msgstr "Voorbeeldbedrijf"
 
 #: pretix/base/pdf.py:159
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Lijst met add-ons"
 
 #: pretix/base/pdf.py:160
 msgid ""
@@ -2589,15 +2589,15 @@ msgstr ""
 #: pretix/control/forms/filter.py:359
 #: pretix/control/templates/pretixcontrol/organizers/index.html:35
 msgid "Organizer name"
-msgstr ""
+msgstr "Naam van de organisator"
 
 #: pretix/base/pdf.py:168
 msgid "Event organizer company"
-msgstr ""
+msgstr "Bedrijf die het evenement organiseert"
 
 #: pretix/base/pdf.py:172
 msgid "Organizer info text"
-msgstr ""
+msgstr "Informatietekst organisator"
 
 #: pretix/base/pdf.py:173
 msgid "Event organizer info text"
