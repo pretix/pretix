@@ -61,7 +61,7 @@
                 {% if not line.addon_to or event.settings.ticket_download_addons %}
                     {% for b in download_buttons %}
                         <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                                class="btn btn-default btn-sm {% if b.identifier == "pdf" %}btn-primary{% endif %}"
+                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
                                 data-asyncdownload>
                             <span class="fa fa-download"></span> {{ b.text }}
                         </a>
@@ -148,7 +148,7 @@
                 {% if not line.addon_to or event.settings.ticket_download_addons %}
                     {% for b in download_buttons %}
                         <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                           class="btn btn-default btn-sm {% if b.identifier == "pdf" %}btn-primary{% endif %}"
+                           class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
                                 data-asyncdownload>
                             <span class="fa fa-download"></span> {{ b.text }}
                         </a>
