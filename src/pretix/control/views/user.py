@@ -20,6 +20,7 @@ from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from u2flib_server import u2f
 from u2flib_server.jsapi import DeviceRegistration
+from u2flib_server.utils import rand_bytes
 
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
 from pretix.base.models import Event, NotificationSetting, U2FDevice, User
@@ -48,9 +49,27 @@ class RecentAuthenticationRequiredMixin:
 class ReauthView(TemplateView):
     template_name = 'pretixcontrol/user/reauth.html'
 
+    @property
+    def app_id(self):
+        return get_u2f_appid(self.request)
+
     def post(self, request, *args, **kwargs):
         password = request.POST.get("password", "")
-        if request.user.check_password(password):
+        valid = False
+
+        if '_u2f_challenge' in self.request.session and password.startswith('{'):
+            devices = [DeviceRegistration.wrap(device.json_data)
+                       for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
+            challenge = self.request.session.pop('_u2f_challenge')
+            try:
+                u2f.verify_authenticate(devices, challenge, password, [self.app_id])
+                valid = True
+            except Exception:
+                logger.exception('U2F login failed')
+
+        valid = valid or request.user.check_password(password)
+
+        if valid:
             t = int(time.time())
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
@@ -60,6 +79,22 @@ class ReauthView(TemplateView):
         else:
             messages.error(request, _('The password you entered was invalid, please try again.'))
             return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        devices = [DeviceRegistration.wrap(device.json_data)
+                   for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)]
+        if devices:
+            challenge = u2f.start_authenticate(devices, challenge=rand_bytes(32))
+            self.request.session['_u2f_challenge'] = challenge.json
+            ctx['jsondata'] = challenge.json
+        else:
+            if '_u2f_challenge' in self.request.session:
+                del self.request.session['_u2f_challenge']
+            ctx['jsondata'] = None
+
+        return ctx
 
 
 class UserSettings(UpdateView):

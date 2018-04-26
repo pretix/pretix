@@ -104,6 +104,9 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+.sr-only.alert::before {
+  background: none !important;
+}
 .alert-success::before {
   background: $state-success-border;
   content: "\f00c";

@@ -31,7 +31,7 @@ $(function () {
                 if (data.errorCode && data.errorCode != 5) {
                     $("#u2f-error").removeClass("sr-only");
                 } else {
-                    $('#u2f-response').val(JSON.stringify(data));
+                    $('#u2f-response, #id_password').val(JSON.stringify(data));
                     $('#u2f-form').submit();
                 }
             }, 300);
