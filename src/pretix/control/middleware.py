@@ -75,7 +75,7 @@ class PermissionMiddleware(MiddlewareMixin):
             logout(request)
             return self._login_redirect(request)
         except SessionReauthRequired:
-            if url_name != 'user.reauth':
+            if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
