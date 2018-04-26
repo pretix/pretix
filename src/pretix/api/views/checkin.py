@@ -178,6 +178,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
     filter_class = CheckinOrderPositionFilter
     permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
 
     @cached_property
     def checkinlist(self):
