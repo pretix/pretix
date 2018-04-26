@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-26 12:18+0000\n"
+"PO-Revision-Date: 2018-04-27 06:00+0000\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2560,7 +2560,7 @@ msgstr "Evenement locatie"
 
 #: pretix/base/pdf.py:145
 msgid "Random City"
-msgstr ""
+msgstr "Voorbeeldstad"
 
 #: pretix/base/pdf.py:149
 msgid "Invoice address: name"
@@ -2584,6 +2584,8 @@ msgid ""
 "Addon 1\n"
 "Addon 2"
 msgstr ""
+"Toevoeging 1\n"
+"Toevoeging 2"
 
 #: pretix/base/pdf.py:167 pretix/control/forms/filter.py:357
 #: pretix/control/forms/filter.py:359
@@ -2601,11 +2603,11 @@ msgstr "Informatietekst organisator"
 
 #: pretix/base/pdf.py:173
 msgid "Event organizer info text"
-msgstr ""
+msgstr "Informatietekst van de evenementorganisator"
 
 #: pretix/base/pdf.py:280 pretix/plugins/ticketoutputpdf/ticketoutput.py:74
 msgid "Ticket"
-msgstr ""
+msgstr "Ticket"
 
 #: pretix/base/reldate.py:13
 #, fuzzy
@@ -2656,7 +2658,7 @@ msgstr "U heeft geen producten geselecteerd."
 
 #: pretix/base/services/cart.py:38
 msgid "Unknown cart position."
-msgstr ""
+msgstr "Onbekende winkelwagenpositie."
 
 #: pretix/base/services/cart.py:39
 msgctxt "subevent"
@@ -2789,7 +2791,7 @@ msgstr "U kunt geen add-on selecteren voor het gekozen product."
 
 #: pretix/base/services/cart.py:70
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "U kunt niet twee varianten van hetzelfde add-on-product selecteren."
 
 #: pretix/base/services/cart.py:71
 #, python-format
@@ -2797,6 +2799,8 @@ msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
+"U kunt maximaal %(max)s add-ons van de categorie %(cat)s selecteren voor het "
+"product %(base)s."
 
 #: pretix/base/services/cart.py:72
 #, python-format
@@ -2804,15 +2808,19 @@ msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
+"U moet minimaal %(min)s add-ons van de categorie %(cat)s selecteren voor het "
+"product %(base)s."
 
 #: pretix/base/services/cart.py:74
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
 msgstr ""
+"Een van de producten die u geselecteerd heeft kan alleen gekocht worden als "
+"add-on bij een ander product."
 
 #: pretix/base/services/invoices.py:51
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -2821,23 +2829,28 @@ msgid ""
 "{i.zipcode} {i.city}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:62
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "Btw-nummer: %s"
 
 #: pretix/base/services/invoices.py:113
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "Aanwezige: {name}"
 
 #: pretix/base/services/invoices.py:115 pretix/plugins/reports/exporters.py:185
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "Datum: {}"
 
 #: pretix/base/services/invoices.py:130
 msgctxt "invoice"
@@ -2845,10 +2858,13 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Btw-verlegging: volgens artikel 194, 196 van Richtlijn 2006/112/EG berust de "
+"btw-verplichting bij de ontvanger van de dienst."
 
 #: pretix/base/services/invoices.py:259
 msgid "A payment provider specific text might appear here."
 msgstr ""
+"Hier kan een tekst verschijnen die specifiek is aan de betalingsprovider."
 
 #: pretix/base/services/invoices.py:265
 msgid ""
@@ -2856,21 +2872,24 @@ msgid ""
 "214th Example Street\n"
 "012345 Somecity"
 msgstr ""
+"John Doe\n"
+"Voorbeeldstraat 214\n"
+"1234 AB Voorbeeldstad"
 
 #: pretix/base/services/invoices.py:274
-#, fuzzy
-#| msgid "All products"
 msgid "Sample product {}"
-msgstr "Alle producten"
+msgstr "Voorbeeldproduct {}"
 
 #: pretix/base/services/invoices.py:280
 msgid "Sample product A"
-msgstr ""
+msgstr "Voorbeeldproduct A"
 
 #: pretix/base/services/mail.py:133
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr ""
+"U ontvangt deze e-mail omdat u een bestelling geplaatst heeft voor het "
+"evenement {event}."
 
 #: pretix/base/services/mail.py:138
 #, python-brace-format
@@ -2878,12 +2897,16 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"U kunt uw bestellingsgegevens bekijken op de volgende URL:\n"
+"{orderurl}."
 
 #: pretix/base/services/orders.py:50
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
+"Enkele producten die u geselecteerd had zijn niet meer beschikbaar. Zie "
+"hieronder voor de details."
 
 #: pretix/base/services/orders.py:52
 msgid ""
@@ -5877,7 +5900,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:81
 #: pretix/control/templates/pretixcontrol/base.html:118
 msgid "Go to Shop"
-msgstr ""
+msgstr "Ga naar de winkel"
 
 #: pretix/control/templates/pretixcontrol/base.html:102
 #: pretix/control/templates/pretixcontrol/base.html:196
@@ -5887,7 +5910,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:114
 #: pretix/control/templates/pretixcontrol/base.html:119
 msgid "Go to shop"
-msgstr ""
+msgstr "Ga naar de winkel"
 
 #: pretix/control/templates/pretixcontrol/base.html:160
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
@@ -6182,7 +6205,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Uw aankomende evenementen"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:19
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -6195,7 +6218,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:33
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Bekijk alle aankomende evenementen"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:38
 msgid "Your most recent events"
@@ -7911,22 +7934,22 @@ msgstr "Postcode en stad"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:407
 msgid "Valid EU VAT ID"
-msgstr ""
+msgstr "Geldig EU btw-nummer"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:413
 msgid "Check"
-msgstr ""
+msgstr "Controleren"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:453
 msgid "Order history"
-msgstr ""
+msgstr "Bestelgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:4
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:7
 #: pretix/plugins/sendmail/signals.py:33
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr ""
+msgstr "E-mailgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:30
 msgid ""
@@ -7952,12 +7975,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
 #: pretix/plugins/sendmail/signals.py:25
 msgid "Send email"
-msgstr ""
+msgstr "Stuur e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:23
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:19
 msgid "E-mail preview"
-msgstr ""
+msgstr "E-mailvoorbeeld"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:37
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:33
@@ -7967,7 +7990,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:36
 msgid "Send"
-msgstr ""
+msgstr "Versturen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -8010,7 +8033,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
-msgstr ""
+msgstr "Posities"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
@@ -12444,7 +12467,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:16
 msgid "Upcoming events"
-msgstr ""
+msgstr "Aankomende evenementen"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:37
 msgid "Show upcoming"
