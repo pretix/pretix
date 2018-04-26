@@ -1408,6 +1408,32 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp2.item == self.workshop1
         assert cp2.price == 0
 
+    def test_cart_addon_remove_parent(self):
+        self.addon1.price_included = True
+        self.addon1.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+
+        self.cm.set_addons([
+            {
+                'addon_to': cp1.pk,
+                'item': self.workshop1.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        cp2 = cp1.addons.first()
+        assert cp2.price == 0
+
+        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'id': cp1.pk
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('empty', doc.select('.alert-success')[0].text)
+        self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+
     def test_cart_set_simple_addon(self):
         cp1 = CartPosition.objects.create(
             expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
