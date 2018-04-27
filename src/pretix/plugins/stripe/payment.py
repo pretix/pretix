@@ -278,7 +278,7 @@ class StripeMethod(BasePaymentProvider):
                 params['statement_descriptor'] = ugettext('{event}-{code}').format(
                     event=self.event.slug.upper(),
                     code=order.code
-                )[:22],
+                )[:22]
             params.update(self.api_kwargs)
             charge = stripe.Charge.create(
                 amount=self._get_amount(order),
