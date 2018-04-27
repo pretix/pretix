@@ -129,7 +129,7 @@ def test_delete_wle(token_client, organizer, event, wle, item):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/{}/'.format(organizer.slug, event.slug, wle.pk),
     )
     assert resp.status_code == 204
-    assert not event.vouchers.filter(pk=wle.id).exists()
+    assert not event.waitinglistentries.filter(pk=wle.id).exists()
 
 
 @pytest.mark.django_db
@@ -141,7 +141,7 @@ def test_delete_wle_assigned(token_client, organizer, event, wle, item):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/{}/'.format(organizer.slug, event.slug, wle.pk),
     )
     assert resp.status_code == 403
-    assert event.vouchers.filter(pk=wle.id).exists()
+    assert event.waitinglistentries.filter(pk=wle.id).exists()
 
 
 def create_wle(token_client, organizer, event, data, expected_failure=False):
