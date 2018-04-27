@@ -9,7 +9,9 @@ from django.utils.timezone import make_aware
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import detail_route
-from rest_framework.exceptions import APIException, NotFound, PermissionDenied
+from rest_framework.exceptions import (
+    APIException, NotFound, PermissionDenied, ValidationError,
+)
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
@@ -18,7 +20,9 @@ from pretix.api.serializers.order import (
 )
 from pretix.base.models import Invoice, Order, OrderPosition, Quota
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.services.invoices import invoice_pdf
+from pretix.base.services.invoices import (
+    generate_cancellation, generate_invoice, invoice_pdf, regenerate_invoice,
+)
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderError, cancel_order, extend_order, mark_order_expired,
@@ -326,6 +330,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     permission = 'can_view_orders'
     lookup_url_kwarg = 'number'
     lookup_field = 'nr'
+    write_permission = 'can_change_orders'
 
     def get_queryset(self):
         return self.request.event.invoices.prefetch_related('lines').select_related('order', 'refers').annotate(
@@ -346,3 +351,41 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         resp = FileResponse(invoice.file.file, content_type='application/pdf')
         resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
         return resp
+
+    @detail_route(methods=['POST'])
+    def regenerate(self, request, **kwarts):
+        inv = self.get_object()
+        if inv.canceled:
+            raise ValidationError('The invoice has already been canceled.')
+        else:
+            inv = regenerate_invoice(inv)
+            inv.order.log_action(
+                'pretix.event.order.invoice.regenerated',
+                data={
+                    'invoice': inv.pk
+                },
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            )
+            return Response(status=204)
+
+    @detail_route(methods=['POST'])
+    def reissue(self, request, **kwarts):
+        inv = self.get_object()
+        if inv.canceled:
+            raise ValidationError('The invoice has already been canceled.')
+        else:
+            c = generate_cancellation(inv)
+            if inv.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
+                inv = generate_invoice(inv.order)
+            else:
+                inv = c
+            inv.order.log_action(
+                'pretix.event.order.invoice.reissued',
+                data={
+                    'invoice': inv.pk
+                },
+                user=self.request.user,
+                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            )
+            return Response(status=204)

@@ -431,6 +431,33 @@ def test_invoice_detail(token_client, organizer, event, invoice):
 
 
 @pytest.mark.django_db
+def test_invoice_regenerate(token_client, organizer, event, invoice):
+    InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/regenerate/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 204
+    invoice.refresh_from_db()
+    assert "ACME Ltd" in invoice.invoice_to
+
+
+@pytest.mark.django_db
+def test_invoice_reissue(token_client, organizer, event, invoice):
+    InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/reissue/'.format(
+        organizer.slug, event.slug, invoice.number
+    ))
+    assert resp.status_code == 204
+    invoice.refresh_from_db()
+    assert "ACME Ltd" not in invoice.invoice_to
+    assert invoice.order.invoices.count() == 3
+    invoice = invoice.order.invoices.last()
+    assert "ACME Ltd" in invoice.invoice_to
+
+
+@pytest.mark.django_db
 def test_order_mark_paid_pending(token_client, organizer, event, order):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/'.format(
