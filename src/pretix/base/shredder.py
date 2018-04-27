@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.api.serializers.order import (
     AnswerSerializer, InvoiceAdddressSerializer,
 )
+from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPosition,
@@ -142,6 +143,34 @@ class EmailAddressShredder(BaseDataShredder):
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])
+
+
+class WaitingListShredder(BaseDataShredder):
+    verbose_name = _('Waiting list')
+    identifier = 'waiting_list'
+    description = _('This will remove all email addresses from the waiting list.')
+
+    def generate_files(self) -> List[Tuple[str, str, str]]:
+        yield 'waiting-list.json', 'application/json', json.dumps([
+            WaitingListSerializer(wle).data
+            for wle in self.event.waitinglistentries.all()
+        ], indent=4)
+
+    @transaction.atomic
+    def shred_data(self):
+        self.event.waitinglistentries.update(email='█')
+
+        for wle in self.event.waitinglistentries.select_related('voucher').filter(voucher__isnull=False):
+            if '@' in wle.voucher.comment:
+                wle.voucher.comment = '█'
+                wle.voucher.save(update_fields=['comment'])
+
+        for le in self.event.logentry_set.filter(action_type="pretix.voucher.added.waitinglist").exclude(data=""):
+            d = le.parsed_data
+            d['email'] = '█'
+            le.data = json.dumps(d)
+            le.shredded = True
+            le.save(update_fields=['data', 'shredded'])
 
 
 class AttendeeNameShredder(BaseDataShredder):
@@ -294,4 +323,5 @@ def register_payment_provider(sender, **kwargs):
         InvoiceShredder,
         CachedTicketShredder,
         PaymentInfoShredder,
+        WaitingListShredder
     ]
