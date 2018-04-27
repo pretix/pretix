@@ -157,7 +157,7 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        self.object.log_action('pretix.event.orders.waitinglist.delete', user=self.request.user)
+        self.object.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
         self.object.delete()
         messages.success(self.request, _('The selected entry has been deleted.'))
         return HttpResponseRedirect(success_url)

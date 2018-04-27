@@ -27,6 +27,12 @@ subevent                              integer                    ID of the date 
 ===================================== ========================== =======================================================
 
 
+.. versionchanged:: 1.15
+
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added as well as a method to send out
+   vouchers.
+
+
 Endpoints
 ---------
 
@@ -121,3 +127,161 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/waitinglistentries/
+
+   Create a new entry.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/waitinglistentries/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 408
+
+      {
+        "email": "waiting@example.org",
+        "item": 3,
+        "variation": null,
+        "locale": "de",
+        "subevent": null
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "created": "2017-12-01T10:00:00Z",
+        "email": "waiting@example.org",
+        "voucher": null,
+        "item": 3,
+        "variation": null,
+        "locale": "de",
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to create an entry for
+   :param event: The ``slug`` field of the event to create an entry for
+   :statuscode 201: no error
+   :statuscode 400: The voucher could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
+                    resource **or** entries cannot be created for this item at this time.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/waitinglistentries/(id)/
+
+   Update an entry. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   You can change all fields of the resource except the ``id``, ``voucher`` and ``created`` fields. You can only change
+   an entry as long as no ``voucher`` is set.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/waitinglistentries/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 408
+
+      {
+        "item": 4
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "created": "2017-12-01T10:00:00Z",
+        "email": "waiting@example.org",
+        "voucher": null,
+        "item": 4,
+        "variation": null,
+        "locale": "de",
+        "subevent": null
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the entry to modify
+   :statuscode 200: no error
+   :statuscode 400: The entry could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
+                    resource **or** entries cannot be created for this item at this time **or** this entry already
+                    has a voucher assigned
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/waitinglistentries/(id)/send_voucher/
+
+   Manually sends a voucher to someone on the waiting list
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/waitinglistentries/1/send_voucher/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 0
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the entry to modify
+   :statuscode 204: no error
+   :statuscode 400: The voucher could not be sent out, see body for details (e.g. voucher has already been sent or
+                    item is not available).
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to do this
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/waitinglistentries/(id)/
+
+   Delete an entry. Note that you cannot delete an entry once it is assigned a voucher.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/waitinglistentries/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the entry to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this
+                    resource **or** this entry already has a voucher assigned.
