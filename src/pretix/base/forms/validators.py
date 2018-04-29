@@ -29,7 +29,7 @@ class PlaceholderValidator(BaseValidator):
                 code='invalid',
             )
 
-        data_placeholders = list(re.findall(r'({[\w\s]*})', value, re.X))
+        data_placeholders = list(re.findall(r'({[^}]*})', value, re.X))
         invalid_placeholders = []
         for placeholder in data_placeholders:
             if placeholder not in self.limit_value:
