@@ -73,15 +73,11 @@ class WaitingListEntry(LoggedModel):
         return '%s waits for %s' % (str(self.email), str(self.item))
 
     def clean(self):
-        if WaitingListEntry.objects.filter(
-            item=self.item, variation=self.variation, email=self.email, voucher__isnull=True
-        ).exclude(pk=self.pk).exists():
-            raise ValidationError(_('You are already on this waiting list! We will notify '
-                                    'you as soon as we have a ticket available for you.'))
-        if not self.variation and self.item.has_variations:
-            raise ValidationError(_('Please select a specific variation of this product.'))
+        WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
+        WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
+        WaitingListEntry.clean_subevent(self.event, self.subevent)
 
-    def send_voucher(self, quota_cache=None, user=None):
+    def send_voucher(self, quota_cache=None, user=None, api_token=None):
         availability = (
             self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
             if self.variation
@@ -116,8 +112,8 @@ class WaitingListEntry(LoggedModel):
                 'email': self.email,
                 'waitinglistentry': self.pk,
                 'subevent': self.subevent.pk if self.subevent else None,
-            }, user=user)
-            self.log_action('pretix.waitinglist.voucher', user=user)
+            }, user=user, api_token=api_token)
+            self.log_action('pretix.waitinglist.voucher', user=user, api_token=api_token)
             self.voucher = v
             self.save()
 
@@ -136,3 +132,29 @@ class WaitingListEntry(LoggedModel):
                 self.event,
                 locale=self.locale
             )
+
+    @staticmethod
+    def clean_itemvar(event, item, variation):
+        if event != item.event:
+            raise ValidationError(_('The selected item does not belong to this event.'))
+        if item.has_variations and (not variation or variation.item != item):
+            raise ValidationError(_('Please select a specific variation of this product.'))
+
+    @staticmethod
+    def clean_subevent(event, subevent):
+        if event.has_subevents:
+            if not subevent:
+                raise ValidationError(_('Subevent cannot be null for event series.'))
+            if event != subevent.event:
+                raise ValidationError(_('The subevent does not belong to this event.'))
+        else:
+            if subevent:
+                raise ValidationError(_('The subevent does not belong to this event.'))
+
+    @staticmethod
+    def clean_duplicate(email, item, variation, subevent, pk):
+        if WaitingListEntry.objects.filter(
+                item=item, variation=variation, email=email, voucher__isnull=True, subevent=subevent
+        ).exclude(pk=pk).exists():
+            raise ValidationError(_('You are already on this waiting list! We will notify '
+                                    'you as soon as we have a ticket available for you.'))

@@ -251,7 +251,7 @@ Endpoints
 
       {
         "price_mode": "set",
-        "value": "24.00",
+        "value": "24.00"
       }
 
    **Example response**:
