@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -27,6 +28,7 @@ from pretix.base.services.cart import error_messages
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.thumb import get_thumbnail
+from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -141,8 +143,8 @@ def price_dict(price):
     }
 
 
-def get_picture(picture):
-    return get_thumbnail(picture.name, '60x60^').thumb.url
+def get_picture(event, picture):
+    return urljoin(build_absolute_uri(event, 'presale:event.index'), get_thumbnail(picture.name, '60x60^').thumb.url)
 
 
 class WidgetAPIProductList(View):
@@ -161,7 +163,7 @@ class WidgetAPIProductList(View):
                     {
                         'id': item.pk,
                         'name': str(item.name),
-                        'picture': get_picture(item.picture) if item.picture else None,
+                        'picture': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
                         'has_variations': item.has_variations,
                         'require_voucher': item.require_voucher,
