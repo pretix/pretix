@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-27 06:00+0000\n"
+"PO-Revision-Date: 2018-05-01 05:00+0000\n"
 "Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -6489,11 +6489,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:10
 msgid "E-mail settings"
-msgstr ""
+msgstr "E-mailinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:16
 msgid "E-mail content"
-msgstr ""
+msgstr "E-mailinhoud"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:18
 msgid "Placed order"
@@ -9220,12 +9220,12 @@ msgstr "We hebben u in de afgelopen 24 uur al een email verstuurd."
 #: pretix/control/views/users.py:90
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
-"Er is een fout opgetreden bij het verzenden van de mail. Probeer het later "
+"Er is een fout opgetreden bij het verzenden van de e-mail. Probeer het later "
 "opnieuw."
 
 #: pretix/control/views/auth.py:211
 msgid "We sent you an e-mail containing further instructions."
-msgstr "We hebben u een email verstuurd met verdere instructies."
+msgstr "We hebben u een e-mail verstuurd met verdere instructies."
 
 #: pretix/control/views/auth.py:230
 msgid ""
@@ -11544,6 +11544,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Na het bevestigen van de bestelling sturen we u door naar de "
+"betalingsprovider om de betaling te voldoen. Hierna wordt u teruggeleid en "
+"kunt u de tickets downloaden."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
@@ -12076,11 +12079,11 @@ msgstr "Afrekenen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:88
 msgid "View other date"
-msgstr ""
+msgstr "Bekijk andere datum"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:91
 msgid "Choose date to buy a ticket"
-msgstr ""
+msgstr "Kies een datum om een ticket te kopen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:114
 msgid ""
