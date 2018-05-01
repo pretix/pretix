@@ -91,6 +91,8 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def shred_payment_info(self, order: Order):
+        if not order.payment_info:
+            return
         d = json.loads(order.payment_info)
         d['reference'] = '█'
         d['payer'] = '█'

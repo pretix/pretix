@@ -51,12 +51,18 @@
             <p>
                 {% trans "You can instead take your shop offline. This will hide it from everyone except from the organizer teams you configured to have access to the event." %}
             </p>
-            <form action="" method="post">
+            <form action="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}"
+                    method="post">
                 {% csrf_token %}
                 <input type="hidden" name="live" value="false">
 
                 <div class="form-group submit-group">
+                    <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-save">
+                        <span class="fa fa-eraser"></span>
+                        {% trans "Delete personal data" %}
+                    </a>
                     <button type="submit" class="btn btn-primary btn-save">
+                        <span class="fa fa-power-off"></span>
                         {% trans "Go offline" %}
                     </button>
                 </div>
@@ -64,6 +70,12 @@
         {% else %}
             <p>
                 {% trans "However, since your shop is offline, it is only visible to the organizing team according to the permissions you configured." %}
+                <div class="form-group submit-group">
+                    <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-save">
+                        <span class="fa fa-eraser"></span>
+                        {% trans "Delete personal data" %}
+                    </a>
+                </div>
             </p>
         {% endif %}
     {% endif %}
