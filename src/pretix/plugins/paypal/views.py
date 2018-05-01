@@ -18,8 +18,8 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.plugins.paypal.payment import Paypal
-from pretix.plugins.stripe.models import ReferencedStripeObject
 
 logger = logging.getLogger('pretix.plugins.paypal')
 
@@ -119,11 +119,11 @@ def webhook(request, *args, **kwargs):
         if event_json['resource'].get('parent_payment'):
             refs.append(event_json['resource'].get('parent_payment'))
 
-        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+        rso = ReferencedPayPalObject.objects.select_related('order', 'order__event').get(
             reference__in=refs
         )
         event = rso.order.event
-    except ReferencedStripeObject.DoesNotExist:
+    except ReferencedPayPalObject.DoesNotExist:
         if hasattr(request, 'event'):
             event = request.event
         else:
