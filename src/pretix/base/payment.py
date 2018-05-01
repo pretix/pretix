@@ -570,7 +570,7 @@ class BasePaymentProvider:
         """
         When personal data is removed from an event, this method is called to scrub payment-related data
         from an order. By default, it removes all info from the ``payment_info`` attribute. You can override
-        this behaviour if you want to retain attributes that are not personal data on their own, i.e. a
+        this behavior if you want to retain attributes that are not personal data on their own, i.e. a
         reference to a transaction in an external system. You can also override this to scrub more data, e.g.
         data from external sources that is saved in LogEntry objects or other places.
 
