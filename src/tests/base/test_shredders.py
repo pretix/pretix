@@ -1,13 +1,22 @@
 import json
+import os
 from datetime import timedelta
 
 import pytest
 from _decimal import Decimal
+from django.core.files.base import ContentFile
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
+    OrderPosition, Organizer, QuestionAnswer,
+)
+from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
+from pretix.base.services.tickets import generate, generate_order
 from pretix.base.shredder import (
-    AttendeeNameShredder, EmailAddressShredder, WaitingListShredder,
+    AttendeeNameShredder, CachedTicketShredder, EmailAddressShredder,
+    InvoiceAddressShredder, InvoiceShredder, PaymentInfoShredder,
+    QuestionAnswerShredder, WaitingListShredder,
 )
 
 
@@ -16,7 +25,7 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now()
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
     )
     return event
 
@@ -51,6 +60,14 @@ def order(event, item):
     return o
 
 
+@pytest.fixture
+def question(event, item):
+    q = event.questions.create(question="T-Shirt size", type="C", identifier="ABC")
+    q.items.add(item)
+    q.options.create(answer="XL", identifier="LVETRWVU")
+    return q
+
+
 @pytest.mark.django_db
 def test_email_shredder(event, order):
     l1 = order.log_action(
@@ -83,10 +100,9 @@ def test_email_shredder(event, order):
     assert order.positions.first().attendee_email is None
     l1.refresh_from_db()
     assert '@' not in l1.data
-    assert 'Foo' in l1.data
+    assert 'Foo' not in l1.data
     l2.refresh_from_db()
     assert '@' not in l2.data
-    # TODO: attendee_name change logs
 
 
 @pytest.mark.django_db
@@ -123,6 +139,14 @@ def test_waitinglist_shredder(event, item):
 
 @pytest.mark.django_db
 def test_attendee_name_shredder(event, order):
+    l1 = order.log_action(
+        'pretix.event.order.modified',
+        data={
+            "data": [{"attendee_name": "Hans", "question_1": "Test"}],
+            "invoice_data": {"name": "Foo"}
+        }
+    )
+
     s = AttendeeNameShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == {
@@ -131,12 +155,166 @@ def test_attendee_name_shredder(event, order):
     s.shred_data()
     order.refresh_from_db()
     assert order.positions.first().attendee_name is None
-    # TODO: Logs of name changes
+    l1.refresh_from_db()
+    assert 'Hans' not in l1.data
+    assert 'Foo' in l1.data
+    assert 'Test' in l1.data
 
-# TODO: invoice addresses
-# TODO: question answers
-# TODO: invoices
-# TODO: cached tickets
-# TODO: payment info
-# TODO: order meta
-# TODO: log entries
+
+@pytest.mark.django_db
+def test_invoice_address_shredder(event, order):
+    l1 = order.log_action(
+        'pretix.event.order.modified',
+        data={
+            "data": [{"attendee_name": "Hans", "question_1": "Test"}],
+            "invoice_data": {"name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
+                             "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345"}
+        }
+    )
+    ia = InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                       zipcode='12345', city='London', country='UK',
+                                       order=order)
+    s = InvoiceAddressShredder(event)
+    f = list(s.generate_files())
+    assert json.loads(f[0][2]) == {
+        order.code: {
+            'city': 'London',
+            'company': 'Acme Company',
+            'country': 'UK',
+            'internal_reference': '',
+            'is_business': False,
+            'last_modified': ia.last_modified.isoformat().replace('+00:00', 'Z'),
+            'name': '',
+            'street': '221B Baker Street',
+            'vat_id': '',
+            'vat_id_validated': False,
+            'zipcode': '12345'
+        }
+    }
+    s.shred_data()
+    order.refresh_from_db()
+    assert not InvoiceAddress.objects.filter(order=order).exists()
+    l1.refresh_from_db()
+    assert l1.parsed_data == {
+        "data": [{"attendee_name": "Hans", "question_1": "Test"}],
+        "invoice_data": {"name": "█", "country": "█", "is_business": False, "internal_reference": "", "company": "█",
+                         "street": "█", "city": "█", "zipcode": "█"}
+    }
+
+
+@pytest.mark.django_db
+def test_question_answer_shredder(event, order, question):
+    opt = question.options.first()
+    l1 = order.log_action(
+        'pretix.event.order.modified',
+        data={
+            "data": [
+                {
+                    "attendee_name": "Hans",
+                    "question_%d" % question.pk: [{"id": opt.pk, "type": "QuestionOption"}]
+                }
+            ],
+        }
+    )
+    qa = QuestionAnswer.objects.create(
+        orderposition=order.positions.first(),
+        question=question,
+        answer='S'
+    )
+    qa.file.save('foo.pdf', ContentFile('foo'))
+    fname = qa.file.path
+    assert os.path.exists(fname)
+    qa.options.add(opt)
+    s = QuestionAnswerShredder(event)
+    f = list(s.generate_files())
+    assert json.loads(f[0][2]) == {
+        '{}-1'.format(order.code): [{
+            'question': question.pk,
+            'answer': 'S',
+            'question_identifier': question.identifier,
+            'options': [opt.pk],
+            'option_identifiers': [opt.identifier],
+        }]
+    }
+    s.shred_data()
+    order.refresh_from_db()
+    assert not os.path.exists(fname)
+    assert not QuestionAnswer.objects.filter(pk=qa.pk).exists()
+    l1.refresh_from_db()
+    assert l1.parsed_data == {
+        "data": [{"attendee_name": "Hans", "question_%d" % question.pk: "█"}],
+    }
+
+
+@pytest.mark.django_db
+def test_invoice_shredder(event, order):
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
+                                  zipcode='12345', city='London', country='UK',
+                                  order=order)
+    inv = generate_invoice(order)
+    invoice_pdf_task.apply(args=(inv.pk,))
+    inv.refresh_from_db()
+    assert inv.invoice_to == "Acme Company\n\n221B Baker Street\n12345 London"
+    assert inv.file
+    fname = inv.file.path
+    assert os.path.exists(fname)
+    s = InvoiceShredder(event)
+    f = list(s.generate_files())
+    assert len(f) == 1
+    s.shred_data()
+    inv.refresh_from_db()
+
+    assert inv.introductory_text == "█"
+    assert inv.additional_text == "█"
+    assert inv.invoice_to == "█"
+    assert inv.payment_provider_text == "█"
+    assert inv.lines.first().description == "█"
+    assert not inv.file
+    assert not os.path.exists(fname)
+
+
+@pytest.mark.django_db
+def test_cached_tickets(event, order):
+    generate(order.positions.first().pk, 'pdf')
+    generate_order(order.pk, 'pdf')
+
+    ct = CachedTicket.objects.get(order_position=order.positions.first(), provider='pdf')
+    cct = CachedCombinedTicket.objects.get(order=order, provider='pdf')
+    assert ct.file
+    assert cct.file
+    ct_fname = ct.file.path
+    cct_fname = cct.file.path
+    assert os.path.exists(ct_fname)
+    assert os.path.exists(cct_fname)
+    s = CachedTicketShredder(event)
+    assert s.generate_files() is None
+    s.shred_data()
+
+    assert not CachedTicket.objects.filter(order_position=order.positions.first(), provider='pdf').exists()
+    assert not CachedCombinedTicket.objects.filter(order=order, provider='pdf').exists()
+    assert not os.path.exists(ct_fname)
+    assert not os.path.exists(cct_fname)
+
+
+@pytest.mark.django_db
+def test_payment_info_shredder(event, order):
+    order.payment_info = json.dumps({
+        'reference': 'Verwendungszweck 1',
+        'date': '2018-05-01',
+        'payer': 'Hans',
+        'trans_id': 12
+    })
+    order.save()
+
+    s = PaymentInfoShredder(event)
+    assert s.generate_files() is None
+    s.shred_data()
+
+    order.refresh_from_db()
+    assert json.loads(order.payment_info) == {
+        '_shredded': True,
+        'reference': '█',
+        'date': '2018-05-01',
+        'payer': '█',
+        'trans_id': 12
+    }

@@ -129,7 +129,7 @@ class EmailAddressShredder(BaseDataShredder):
         self.event.orders.filter(email__isnull=False).update(email=None)
 
         for le in self.event.logentry_set.filter(action_type__contains="order.email"):
-            shred_log_fields(le, blacklist=['recipient', 'message'])
+            shred_log_fields(le, blacklist=['recipient', 'message', 'subject'])
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
             shred_log_fields(le, blacklist=['old_email', 'new_email'])
