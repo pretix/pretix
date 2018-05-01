@@ -1,9 +1,9 @@
 import json
 import os
 from datetime import timedelta
+from decimal import Decimal
 
 import pytest
-from _decimal import Decimal
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 
@@ -16,7 +16,7 @@ from pretix.base.services.tickets import generate, generate_order
 from pretix.base.shredder import (
     AttendeeNameShredder, CachedTicketShredder, EmailAddressShredder,
     InvoiceAddressShredder, InvoiceShredder, PaymentInfoShredder,
-    QuestionAnswerShredder, WaitingListShredder,
+    QuestionAnswerShredder, WaitingListShredder, shred_constraints,
 )
 
 
@@ -318,3 +318,41 @@ def test_payment_info_shredder(event, order):
         'payer': '█',
         'trans_id': 12
     }
+
+
+@pytest.mark.django_db
+def test_shred_constraint_offline(event):
+    event.live = True
+    event.date_from = now() - timedelta(days=365)
+    assert shred_constraints(event)
+
+
+@pytest.mark.django_db
+def test_shred_constraint_60_days(event):
+    event.live = False
+    event.date_from = now() - timedelta(days=62)
+    event.date_to = now() - timedelta(days=62)
+    assert shred_constraints(event) is None
+    event.date_from = now() - timedelta(days=52)
+    event.date_to = now() - timedelta(days=52)
+    assert shred_constraints(event)
+    event.date_from = now() - timedelta(days=62)
+    event.date_to = now() - timedelta(days=52)
+    assert shred_constraints(event)
+
+
+@pytest.mark.django_db
+def test_shred_constraint_60_days_subevents(event):
+    event.has_subevents = True
+    event.live = False
+
+    event.subevents.create(
+        date_from=now() - timedelta(days=62),
+        date_to=now() - timedelta(days=62)
+    )
+    assert shred_constraints(event) is None
+    event.subevents.create(
+        date_from=now() - timedelta(days=62),
+        date_to=now() - timedelta(days=52)
+    )
+    assert shred_constraints(event)

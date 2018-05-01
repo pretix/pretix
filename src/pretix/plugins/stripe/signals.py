@@ -149,9 +149,9 @@ class PaymentLogsShredder(BaseDataShredder):
         for le in self.event.logentry_set.filter(action_type="pretix.plugins.stripe.event").exclude(data=""):
             d = le.parsed_data
             if 'data' in d:
-                for k, v in d['data']['object'].items():
+                for k, v in list(d['data']['object'].items()):
                     if v not in ('reason', 'status', 'failure_message', 'object', 'id'):
-                        d['data']['object'][v] = '█'
+                        d['data']['object'][k] = '█'
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])

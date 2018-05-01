@@ -68,7 +68,12 @@ class PaymentLogsShredder(BaseDataShredder):
     def shred_data(self):
         for le in self.event.logentry_set.filter(action_type="pretix.plugins.paypal.event").exclude(data=""):
             d = le.parsed_data
-            del d['resource']
+            if 'resource' in d:
+                d['resource'] = {
+                    'id': d['resource'].get('id'),
+                    'sale_id': d['resource'].get('sale_id'),
+                    'parent_payment': d['resource'].get('parent_payment'),
+                }
             le.data = json.dumps(d)
             le.shredded = True
             le.save(update_fields=['data', 'shredded'])
