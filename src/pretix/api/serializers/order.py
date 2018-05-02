@@ -20,7 +20,7 @@ class CompatibleCountryField(serializers.Field):
             return instance.country_old
 
 
-class InvoiceAdddressSerializer(I18nAwareModelSerializer):
+class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
 
     class Meta:
@@ -136,7 +136,7 @@ class PaymentFeeLegacyField(serializers.Field):
 
 
 class OrderSerializer(I18nAwareModelSerializer):
-    invoice_address = InvoiceAdddressSerializer()
+    invoice_address = InvoiceAddressSerializer()
     positions = OrderPositionSerializer(many=True)
     fees = OrderFeeSerializer(many=True)
     downloads = OrderDownloadsField(source='*')
