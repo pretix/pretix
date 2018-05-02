@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from pretix.base.models import (
     Event, Order, Organizer, RequiredAction, Team, User,
 )
-from pretix.plugins.stripe.models import ReferencedStripeObject
+from pretix.plugins.paypal.models import ReferencedPayPalObject
 
 
 @pytest.fixture
@@ -195,7 +195,7 @@ def test_webhook_global(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
     monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
-    ReferencedStripeObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
+    ReferencedPayPalObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
 
     client.post('/_paypal/webhook/', json.dumps(
         {
