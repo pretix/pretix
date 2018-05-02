@@ -1,5 +1,6 @@
 addon
 addons
+anonymize
 api
 auditability
 auth
@@ -18,6 +19,7 @@ contenttypes
 contextmanager
 cron
 cronjob
+cryptographic
 debian
 deduplication
 discoverable
@@ -57,6 +59,7 @@ nginx
 NotificationType
 ons
 optimizations
+overpayment
 param
 percental
 positionid
@@ -72,6 +75,7 @@ pretixpresale
 prometheus
 proxied
 proxying
+pseudonymize
 queryset
 redemptions
 redis

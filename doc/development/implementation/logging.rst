@@ -4,6 +4,8 @@ Logging and notifications
 As pretix is handling monetary transactions, we are very careful to make it possible to review all changes
 in the system that lead to the current state.
 
+.. _`logging`:
+
 Logging changes
 ---------------
 

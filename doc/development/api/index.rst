@@ -11,5 +11,7 @@ Contents:
    ticketoutput
    payment
    invoice
+   shredder
    customview
    general
+   quality

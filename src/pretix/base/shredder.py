@@ -57,22 +57,28 @@ class BaseDataShredder:
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         """
-        Export the data that is about to be shred and return a list of tuples consisting of a filename,
-        a file type and file content.
+        This method is called to export the data that is about to be shred and return a list of tuples consisting of a
+        filename, a file type and file content.
+
+        You can also implement this as a generator and ``yield`` those tuples instead of returning a list of them.
         """
         raise NotImplementedError()  # NOQA
 
     def shred_data(self):
         """
-        Actually remove the data.
+        This method is called to actually remove the data from the system. You should remove any database objects
+        here.
+
+        You should never delete ``LogEntry`` objects, but you might modify them to remove personal data. In this
+        case, set the ``LogEntry.shredded`` attribute to ``True`` to show that this is no longer original log data.
         """
         raise NotImplementedError()  # NOQA
 
     @property
     def verbose_name(self) -> str:
         """
-        A human-readable name for this renderer. This should be short but
-        self-explanatory. Good examples include 'German DIN 5008' or 'Italian invoice'.
+        A human-readable name for what this shredder removes. This should be short but self-explanatory.
+        Good examples include 'E-Mail addresses' or 'Invoices'.
         """
         raise NotImplementedError()  # NOQA
 
@@ -88,7 +94,7 @@ class BaseDataShredder:
     @property
     def description(self) -> str:
         """
-        A description of what this shredder does. Can contain HTML.
+        A more detailed description of what this shredder does. Can contain HTML.
         """
         raise NotImplementedError()  # NOQA
 
