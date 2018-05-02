@@ -10,7 +10,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.api.serializers.order import (
-    AnswerSerializer, InvoiceAdddressSerializer,
+    AnswerSerializer, InvoiceAddressSerializer,
 )
 from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
@@ -132,7 +132,15 @@ class EmailAddressShredder(BaseDataShredder):
     @transaction.atomic
     def shred_data(self):
         OrderPosition.objects.filter(order__event=self.event, attendee_email__isnull=False).update(attendee_email=None)
-        self.event.orders.filter(email__isnull=False).update(email=None)
+
+        for o in self.event.orders.all():
+            o.email = None
+            d = o.meta_info_data
+            if d:
+                if 'contact_form_data' in d and 'email' in d['contact_form_data']:
+                    del d['contact_form_data']['email']
+                o.meta_info = json.dumps(d)
+            o.save(update_fields=['meta_info', 'email'])
 
         for le in self.event.logentry_set.filter(action_type__contains="order.email"):
             shred_log_fields(le, blacklist=['recipient', 'message', 'subject'])
@@ -212,7 +220,7 @@ class InvoiceAddressShredder(BaseDataShredder):
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'invoice-addresses.json', 'application/json', json.dumps({
-            ia.order.code: InvoiceAdddressSerializer(ia).data
+            ia.order.code: InvoiceAddressSerializer(ia).data
             for ia in InvoiceAddress.objects.filter(order__event=self.event)
         }, indent=4)
 

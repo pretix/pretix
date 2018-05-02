@@ -17,6 +17,7 @@ checksum
 config
 contenttypes
 contextmanager
+cookiecutter
 cron
 cronjob
 cryptographic
@@ -103,6 +104,7 @@ subpath
 systemd
 testutils
 timestamp
+tuples
 un
 unconfigured
 unix
@@ -111,6 +113,7 @@ untrusted
 username
 url
 versa
+versioning
 viewset
 viewsets
 webhook

@@ -191,7 +191,10 @@ class Order(LoggedModel):
 
     @cached_property
     def meta_info_data(self):
-        return json.loads(self.meta_info)
+        try:
+            return json.loads(self.meta_info)
+        except TypeError:
+            return None
 
     @property
     def full_code(self):
