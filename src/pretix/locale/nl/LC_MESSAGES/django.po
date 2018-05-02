@@ -3191,12 +3191,12 @@ msgstr ""
 
 #: pretix/base/services/orders.py:710
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "U moet een subevenement kiezen voor het nieuwe ticket."
 
 #: pretix/base/services/orders.py:1109
 #, python-format
 msgid "Your order has been changed: %(code)s"
-msgstr ""
+msgstr "Uw bestelling is aangepast: %(code)s"
 
 #: pretix/base/services/shredder.py:73
 msgid ""

@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-04-24 04:00+0000\n"
-"Last-Translator: Felix Rindt <felix@rindt.me>\n"
-"Language-Team: German (informal) <https://translate.pretix.eu/projects/"
-"pretix/pretix/de_Informal/>\n"
+"PO-Revision-Date: 2018-05-02 15:37+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,18 +67,18 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Veranstaltungen können nicht als 'veröffentlicht' erstellt werden, da vorher "
+"Kontingente und Zahlungseinstellungen angelegt werden müssen."
 
 #: pretix/api/serializers/event.py:90
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The requested date does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "Der ausgewählte Termin existiert nicht."
+msgstr "Die Meta-Eigenschaft '{name}' existiert nicht."
 
 #: pretix/api/serializers/event.py:103
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Unbekannte Erweiterung: '{name}'."
 
 #: pretix/api/serializers/item.py:91
 msgid ""
@@ -1011,32 +1011,25 @@ msgstr "Du musst mindestens ein Kontingent anlegen, um etwas zu verkaufen."
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Eine bestehende Veranstaltung kann nicht zwischen Einzelveranstaltung und "
+"Veranstaltungsreihe umgestellt werden."
 
 #: pretix/base/models/event.py:664
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "The event slug cannot be changed."
-msgstr "Die Veranstaltungs-Einstellungen wurden geändert."
+msgstr "Die Kurzform einer Veranstaltung kann nicht geändert werden."
 
 #: pretix/base/models/event.py:667
-#, fuzzy
-#| msgid "This slug is already in use. Please choose a different one."
 msgid "This slug has already been used for a different event."
 msgstr "Diese Kurzform ist bereits in Verwendung, bitte wähle eine andere."
 
 #: pretix/base/models/event.py:673
-#, fuzzy
-#| msgid "The item's availability cannot end before it starts."
 msgid "The event cannot end before it starts."
 msgstr ""
-"Das Ende der Verfügbarkeit muss nach dem Beginn der Verfügbarkeit liegen."
+"Das Ende der Veranstaltung muss nach dem Beginn der Veranstaltung liegen."
 
 #: pretix/base/models/event.py:679
-#, fuzzy
-#| msgid "The item's availability cannot end before it starts."
 msgid "The event's presale cannot end before it starts."
-msgstr ""
-"Das Ende der Verfügbarkeit muss nach dem Beginn der Verfügbarkeit liegen."
+msgstr "Das Ende des Vorverkaufs muss nach dem Beginn des Vorverkaufs liegen."
 
 #: pretix/base/models/event.py:705 pretix/base/models/items.py:210
 #: pretix/base/models/items.py:438 pretix/control/forms/filter.py:302
@@ -2271,10 +2264,8 @@ msgid "A voucher has already been sent to this person."
 msgstr "An diese Person wurde bereits ein Gutschein gesendet."
 
 #: pretix/base/models/waitinglist.py:91
-#, fuzzy
-#| msgid "The device has been verified and can now be used."
 msgid "This entry is anonymized and can no longer be used."
-msgstr "Das Gerät wurde bestätigt und kann nun verwendet werden."
+msgstr "Dieser Eintrag wurde anonymisiert und kann nicht mehr verwendet werden."
 
 #: pretix/base/models/waitinglist.py:101
 #, python-brace-format
@@ -2287,8 +2278,6 @@ msgid "You have been selected from the waitinglist for {event}"
 msgstr "Du wurdest von der Warteliste für {event} ausgewählt"
 
 #: pretix/base/models/waitinglist.py:141
-#, fuzzy
-#| msgid "The subevent does not belong to this event."
 msgid "The selected item does not belong to this event."
 msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
 
@@ -2905,31 +2894,20 @@ msgstr ""
 "erworben werden."
 
 #: pretix/base/services/checkin.py:102
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This order position has an invalid product for this check-in list."
-msgstr "Dieser Gutschein ist für diesen Termin nicht gültig."
+msgstr "Diese Bestellposition hat ein für diese Liste ungültiges Produkt."
 
 #: pretix/base/services/checkin.py:109
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "This order is not marked as paid."
-msgstr "Die Bestellung wurde als bezahlt markiert."
+msgstr "Die Bestellung ist nicht als bezahlt markiert."
 
 #: pretix/base/services/checkin.py:114
-#, fuzzy
-#| msgid "You need to assign the question to a product to collect answers."
 msgid "You need to answer questions to complete this check-in."
-msgstr ""
-"Du musst diese Frage zu einem Produkt zuweisen, damit Antworten gesammelt "
-"werden."
+msgstr "Du musst Fragen beantworten, um den Check-In abzuschließen."
 
 #: pretix/base/services/checkin.py:137
-#, fuzzy
-#| msgid "The order has already been refunded."
 msgid "This ticket has already been redeemed."
-msgstr "Die Bestellung wurde bereits zurückerstattet."
+msgstr "Das Ticket wurde bereits eingelöst."
 
 #: pretix/base/services/invoices.py:51
 #, python-brace-format
@@ -3232,22 +3210,22 @@ msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
 msgstr ""
+"Die Download-Datei konnte nicht mehr auf dem Server gefunden werden, bitte "
+"versuche es erneut."
 
 #: pretix/base/services/shredder.py:77
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This file is from a different event."
-msgstr "Diese Referenz ist bereits in Verwendung, bitte wähle eine andere."
+msgstr "Diese Datei gehört zu einer anderen Veranstaltung."
 
 #: pretix/base/services/shredder.py:79
-#, fuzzy
-#| msgid "The password you entered was not correct."
 msgid "The confirm code you entered was incorrect."
-msgstr "Das eingegebene Passwort war nicht korrekt."
+msgstr "Der eingegebene Bestätigungscode war nicht korrekt."
 
 #: pretix/base/services/shredder.py:81
 msgid "Something happened in your event after the export, please try again."
 msgstr ""
+"Nach dem Start des Exports haben sich in der Veranstaltung Dinge verändert, "
+"bitte erneut versuchen."
 
 #: pretix/base/services/stats.py:138
 msgid "Uncategorized"
@@ -3601,61 +3579,64 @@ msgstr ""
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
 msgid "Your event needs to be over for at least 60 days to use this feature."
 msgstr ""
+"Die Veranstaltung muss mindestens 60 Tage vorüber sein, damit diese Funktion "
+"bereitsteht."
 
 #: pretix/base/shredder.py:43
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr ""
+"Der Ticketshop muss abgeschaltet sein, damit diese Funktion bereit steht."
 
 #: pretix/base/shredder.py:118
-#, fuzzy
-#| msgid "E-mail"
 msgid "E-mails"
-msgstr "E-Mail"
+msgstr "E-Mails"
 
 #: pretix/base/shredder.py:120
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents."
 msgstr ""
+"Dies entfernt alle E-Mail-Adressen und gespeicherte E-Mail-Inhalte von "
+"Bestellungen und Teilnehmern."
 
 #: pretix/base/shredder.py:165
 msgid "This will remove all email addresses from the waiting list."
-msgstr ""
+msgstr "Dies entfernt alle E-Mail-Adressen von der Warteliste."
 
 #: pretix/base/shredder.py:191
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee names"
-msgstr "Name des Teilnehmers"
+msgstr "Teilnehmernamen"
 
 #: pretix/base/shredder.py:193
 msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
+"Dies entfernt alle Teilnehmernamen von Bestellungen, sowie Änderungen an "
+"diesen."
 
 #: pretix/base/shredder.py:217
-#, fuzzy
-#| msgid "Invoice address: name"
 msgid "Invoice addresses"
-msgstr "Rechnungsadresse: Name"
+msgstr "Rechnungsadressen"
 
 #: pretix/base/shredder.py:219
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Dies entfernt alle Rechnungsadressen von Bestellungen sowie deren "
+"Änderungshistorie."
 
 #: pretix/base/shredder.py:243
-#, fuzzy
-#| msgid "Questions"
 msgid "Question answers"
-msgstr "Fragen"
+msgstr "Antworten auf Fragen"
 
 #: pretix/base/shredder.py:245
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Dies entfernt alle Antworten auf Fragen sowie die dazu gespeicherte "
+"Änderungshistorie."
 
 #: pretix/base/shredder.py:270
 #: pretix/control/templates/pretixcontrol/order/index.html:117
@@ -3671,16 +3652,18 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
+"Dies entfernt alle PDF-Dateien zu Rechnungen sowie die Texte von den "
+"Rechnungen die persönliche Daten enthalten könnten. Rechnungsnummern und "
+"Beträge bleiben erhalten."
 
 #: pretix/base/shredder.py:299
-#, fuzzy
-#| msgid "Create ticket types"
 msgid "Cached ticket files"
-msgstr "Ticketarten erstellen"
+msgstr "Zwischengespeicherte Tickets"
 
 #: pretix/base/shredder.py:301
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
+"Dies löscht alle generierten Ticket-Dateien. Es wird kein Download angeboten."
 
 #: pretix/base/shredder.py:315
 msgid ""
@@ -3688,6 +3671,9 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
+"Dies löscht alle Zahlungsdaten. Abhängig von der Zahlungsart bleiben manche "
+"Daten erhalten und nur die personenbezogenen Daten werden gelöscht. Es wird "
+"kein Download angeboten."
 
 #: pretix/base/templates/400.html:3 pretix/base/templates/400.html:6
 msgid "Bad Request"
@@ -6143,11 +6129,8 @@ msgid "The shop has been taken offline."
 msgstr "Der Shop wurde abgeschaltet."
 
 #: pretix/control/logdisplay.py:232
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been created."
 msgid "The event has been created."
-msgstr "Der Termin wurde erstellt."
+msgstr "Die Veranstaltung wurde erstellt."
 
 #: pretix/control/logdisplay.py:234
 msgid "An answer option has been added to the question."
@@ -6182,22 +6165,16 @@ msgid "A voucher has been sent to a person on the waiting list."
 msgstr "Ein Gutschein wurde verschickt."
 
 #: pretix/control/logdisplay.py:242
-#, fuzzy
-#| msgid "A user has been removed from the event team."
 msgid "An entry has been removed from the waiting list."
-msgstr "Ein Benutzer wurde aus dem Team entfernt."
+msgstr "Ein Eintrag wurde von der Warteliste entfernt."
 
 #: pretix/control/logdisplay.py:243
-#, fuzzy
-#| msgid "A voucher has been sent to a person on the waiting list."
 msgid "An entry has been changed on the waiting list."
-msgstr "Ein Gutschein wurde verschickt."
+msgstr "Ein Eintrag auf der Warteliste wurde geändert."
 
 #: pretix/control/logdisplay.py:244
-#, fuzzy
-#| msgid "A user has been added to the event team."
 msgid "An entry has been added to the waiting list."
-msgstr "Ein Benutzer wurde zum Team hinzugefügt."
+msgstr "Ein Eintrag wurde zur Warteliste hinzugefügt."
 
 #: pretix/control/logdisplay.py:245
 msgid "The team has been created."
@@ -7063,10 +7040,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:62
 #: pretix/control/templates/pretixcontrol/event/delete.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:90
-#, fuzzy
-#| msgid "Delete product"
 msgid "Delete personal data"
-msgstr "Produkt löschen"
+msgstr "Personenbezogene Daten löschen"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
 #: pretix/control/templates/pretixcontrol/event/live.html:16
@@ -7113,7 +7088,7 @@ msgstr "Veranstaltungs-Protokoll"
 #: pretix/control/templates/pretixcontrol/event/logs.html:37
 #: pretix/control/templates/pretixcontrol/includes/logs.html:22
 msgid "Personal data was cleared from this log entry."
-msgstr ""
+msgstr "Personenbezogene Daten wurden von diesem Eintrag entfernt."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:121
 #: pretix/control/templates/pretixcontrol/event/logs.html:46
@@ -9257,13 +9232,11 @@ msgstr "Bitte aktiviere JavaScript in deinem Browser."
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "Datenvernichter"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:14
-#, fuzzy
-#| msgid "Download date"
 msgid "Step 1: Download data"
-msgstr "Download-Datum"
+msgstr "Schritt 1: Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
@@ -9271,16 +9244,18 @@ msgid ""
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
+"Du bist dabei, Daten unwiderruflich vom Server zu löschen, auch wenn du "
+"manche dieser Daten ggf. aus gesetzlichen Gründen noch aufheben musst. Wir "
+"empfehlen daher, die folgende Datei herunterzuladen und sie sicher "
+"aufzubewahren:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:25
-#, fuzzy
-#| msgid "Download date"
 msgid "Download data"
-msgstr "Download-Datum"
+msgstr "Daten herunterladen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:30
 msgid "Step 2: Confirm download"
-msgstr ""
+msgstr "Schritt 2: Download bestätigen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:32
 msgid ""
@@ -9288,16 +9263,17 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
+"In der heruntergeladenen Datei befindet sich eine Textdatei namens \""
+"CONFIRM_CODE.txt\" mit einem sechsstelligen Code. Bitte gib diesen Code hier "
+"ein um zu bestätigen, dass der Download der Datei geklappt hat."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:37
-#, fuzzy
-#| msgid "Confirmation text"
 msgid "Confirmation code"
-msgstr "Bestätigungs-Text"
+msgstr "Bestätigungs-Code"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Step 3: Confirm deletion"
-msgstr ""
+msgstr "Schritt 3: Löschung bestätigen"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:43
 #, python-format
@@ -9306,12 +9282,13 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"Bitte prüfe erneut, dass du wirklich die ausgewählten Daten von der "
+"Veranstaltung <strong>%(event)s</strong> entfernen willst. Wenn dies der "
+"Fall ist, gib bitte hier dein Passwort ein:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
-#, fuzzy
-#| msgid "Your current password"
 msgid "Your password"
-msgstr "Aktuelles Passwort"
+msgstr "Ihr Passwort"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -9321,18 +9298,29 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"Diese Funktion erlaubt es dir, personenbezogene Daten von einer "
+"Veranstaltung zu entfernen. Du kannst zuerst auswählen, welche Daten du "
+"vernichten willst. Danach wird dir eine Kopie der Daten zum Download "
+"angeboten und nachdem du den Download bestätigt hast, werden die Daten aus "
+"der Datenbank des Servers gelöscht. Die Daten können für einen beschränkten "
+"Zeitraum weiterhin in Backups existieren."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
 msgstr ""
+"Die Nutzung dieser Funktion löscht keine Bestellungen, sie entfernt nur "
+"solche Daten von den Bestellungen, die einzelnen Personen zugeordnet werden "
+"können."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
 msgid ""
 "It is within your own responsibility to check if you are allowed to delete "
 "the affected data in your legislation, e.g. for reasons of taxation."
 msgstr ""
+"Es liegt in deiner Verantwortung zu prüfen, ob du die ausgewählten Daten "
+"löschen darfst oder z.B. aus steuerrechtlichen Gründen aufbewahren musst."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:31
 msgid ""
@@ -9340,12 +9328,14 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
+"Für die meisten Arten personenbezogener Daten kannst du die Daten vorher "
+"teilweise herunterladen um sie offline aufzubewahren. Für manche Daten wie "
+"z.B. Zahlungsdaten oder historische Daten steht im Moment kein Download zur "
+"Verfügung."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:45
-#, fuzzy
-#| msgid "no selection"
 msgid "Data selection"
-msgstr "Keine Auswahl"
+msgstr "Datenauswahl"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 msgctxt "subevent"
@@ -9773,7 +9763,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "Alternativ kannst du dein U2F-Gerät verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -10667,10 +10657,8 @@ msgid "The invoice has already been canceled."
 msgstr "Die Rechnung wurde bereits storniert."
 
 #: pretix/control/views/orders.py:351 pretix/control/views/orders.py:376
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The invoice has been cleaned of personal data."
-msgstr "Die Rechnung wurde erstellt."
+msgstr "Die Rechnung wurde von persönlichen Daten bereinigt."
 
 #: pretix/control/views/orders.py:424
 msgid "The email has been queued to be sent."
@@ -10682,7 +10670,7 @@ msgstr "Diese Rechnung wurde nicht gefunden"
 
 #: pretix/control/views/orders.py:455 pretix/presale/views/order.py:667
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Die Rechungsdatei liegt auf dem Server nicht mehr vor."
 
 #: pretix/control/views/orders.py:460 pretix/presale/views/order.py:672
 msgid ""
@@ -10876,11 +10864,8 @@ msgid "Please only upload PDF files."
 msgstr "Bitte nur PDF-Dateien hochladen."
 
 #: pretix/control/views/shredder.py:92
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
 msgid "The selected data was deleted successfully."
-msgstr "Der ausgewählte Termin wurde gelöscht."
+msgstr "Der ausgewählten Daten wurden gelöscht."
 
 #: pretix/control/views/subevents.py:98 pretix/control/views/subevents.py:368
 msgctxt "subevent"
@@ -11736,16 +11721,16 @@ msgid "PayPal reported an event: {}"
 msgstr "PayPal meldete ein Ereignis: {}"
 
 #: pretix/plugins/paypal/signals.py:61
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "PayPal payment history"
-msgstr "Aktiviere Zahlungsmethode"
+msgstr "PayPal-Zahlungsverlauf"
 
 #: pretix/plugins/paypal/signals.py:63 pretix/plugins/stripe/signals.py:143
 msgid ""
 "This will remove payment-related history information. No download will be "
 "offered."
 msgstr ""
+"Dies entfernt persönliche Daten aus eingegangenen Zahlungsmitteilungen. Es "
+"wird kein Download angeboten."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -12596,10 +12581,8 @@ msgid "Stripe Connect: Publishable key (test)"
 msgstr "Stripe Connect: Öffentlicher Schlüssel (Testmodus)"
 
 #: pretix/plugins/stripe/signals.py:141
-#, fuzzy
-#| msgid "Team history"
 msgid "Stripe payment history"
-msgstr "Team-Verlauf"
+msgstr "Stripe-Zahlungsverlauf"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
