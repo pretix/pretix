@@ -125,7 +125,7 @@ for example, to check for any errors in any staged files when committing::
     for file in $(git diff --cached --name-only | grep -E '\.py$')
     do
       git show ":$file" | flake8 - --stdin-display-name="$file" || exit 1 # we only want to lint the staged changes, not any un-staged changes
-      git show ":$file" | isort -df --check-only - | grep ERROR && exit 1
+      git show ":$file" | isort -df --check-only - | grep ERROR && exit 1 || true
     done
 
 
