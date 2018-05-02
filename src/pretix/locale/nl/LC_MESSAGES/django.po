@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-02 14:00+0000\n"
+"PO-Revision-Date: 2018-05-02 15:38+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1808,7 +1808,6 @@ msgid "Tax value"
 msgstr "Belastingwaarde"
 
 #: pretix/base/models/orders.py:789
-#, fuzzy
 msgid "Order position"
 msgstr "Bestelling positie"
 
@@ -1821,7 +1820,6 @@ msgid "Cart ID (e.g. session key)"
 msgstr "Winkelwagen ID (bijv. sessiesleutel)"
 
 #: pretix/base/models/orders.py:905
-#, fuzzy
 msgid "Cart position"
 msgstr "Winkelwagen positie"
 
@@ -3222,15 +3220,15 @@ msgstr ""
 
 #: pretix/base/services/stats.py:138
 msgid "Uncategorized"
-msgstr ""
+msgstr "Ongecategoriseerd"
 
 #: pretix/base/services/tickets.py:79 pretix/control/views/pdf.py:60
 msgid "Sample workshop"
-msgstr ""
+msgstr "Voorbeeldworkshop"
 
 #: pretix/base/services/update_check.py:89
 msgid "pretix update available"
-msgstr ""
+msgstr "pretix-update beschikbaar"
 
 #: pretix/base/services/update_check.py:92
 #, python-brace-format
@@ -3252,6 +3250,22 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"Hoi!\n"
+"\n"
+"Een update is beschikbaar voor pretix, of voor een van de plugins die u "
+"heeft geïnstalleerd in uw pretix-installatie. Klik op de volgende link voor "
+"meer informatie:\n"
+"\n"
+"{url}\n"
+"\n"
+"U kunt altijd informatie over de nieuwste updates vinden op de pretix.eu-"
+"blog:\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"Met vriendelijke groet,\n"
+"\n"
+"de pretix-ontwikkelaars"
 
 #: pretix/base/services/update_check.py:121
 #: pretix/base/services/update_check.py:123
@@ -3430,6 +3444,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hallo,\n"
+"\n"
+"We hebben nog geen betaling ontvangen voor uw bestelling voor {event}.\n"
+"We kunnen uw bestelling alleen garanderen als we uw betaling ontvangen\n"
+"voor {expire_date}.\n"
+"\n"
+"U kunt de betalingsinformatie en de status van uw bestelling inzien op\n"
+"{url}.\n"
+"\n"
+"Met vriendelijke groet,\n"
+"De organisatoren van {event}"
 
 #: pretix/base/settings.py:335
 #, python-brace-format
@@ -3639,7 +3664,7 @@ msgstr "Foutief verzoek"
 
 #: pretix/base/templates/400.html:7
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "We konden uw verzoek niet verwerken."
 
 #: pretix/base/templates/400.html:10 pretix/base/templates/403.html:10
 #: pretix/base/templates/404.html:10 pretix/base/templates/500.html:20
@@ -4747,7 +4772,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/base.html:83
 #: pretix/control/templates/pretixcontrol/items/question.html:19
 msgid "All orders"
-msgstr ""
+msgstr "Alle bestellingen"
 
 #: pretix/control/forms/filter.py:100
 #: pretix/control/templates/pretixcontrol/items/question.html:20
@@ -9217,7 +9242,7 @@ msgstr "Auditlogboek"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "Methode"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
