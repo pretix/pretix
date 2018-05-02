@@ -18,7 +18,7 @@ class InvoiceExporter(BaseExporter):
     verbose_name = _('All invoices')
 
     def render(self, form_data: dict):
-        qs = self.event.invoices.all()
+        qs = self.event.invoices.filter(shredded=False)
 
         if form_data.get('payment_provider'):
             qs = qs.filter(order__payment_provider=form_data.get('payment_provider'))
