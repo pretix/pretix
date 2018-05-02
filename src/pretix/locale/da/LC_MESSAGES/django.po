@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-17 21:00+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"PO-Revision-Date: 2018-05-02 11:28+0000\n"
+"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1659,10 +1659,8 @@ msgid "Other fees"
 msgstr "Andre gebyrer"
 
 #: pretix/base/models/orders.py:680
-#, fuzzy
-#| msgid "Credit card"
 msgid "Gift card"
-msgstr "Kreditkort"
+msgstr "Gavekort"
 
 #: pretix/base/models/orders.py:685 pretix/control/views/vouchers.py:61
 msgid "Value"
@@ -2409,10 +2407,8 @@ msgid "20:00"
 msgstr ""
 
 #: pretix/base/pdf.py:112
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Event end date and time"
-msgstr "Arrangements startdato og -tidspunkt"
+msgstr "Arrangements slutdato og -tidspunkt"
 
 #: pretix/base/pdf.py:113
 msgid "2017-05-31 22:00"
@@ -3134,6 +3130,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Din bestilling til {event} er blevet ændret.\n"
+"\n"
+"Du kan se status for din bestilling på\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/settings.py:303
 #, python-brace-format
@@ -3245,6 +3250,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Din bestilling {code} til {event} er blevet annulleret.\n"
+"\n"
+"Du kan se detaljerne for din bestilling på\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/settings.py:370
 #, python-brace-format
@@ -3257,6 +3271,13 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Du kan ændre din bestilling og se dens status på\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/settings.py:384
 #, python-brace-format
@@ -3271,6 +3292,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Hej\n"
+"\n"
+"Du har købt en billet til {event}.\n"
+"\n"
+"Hvis du ikke allerede har gjort det, så kan du hente din billet her:\n"
+"{url}\n"
+"\n"
+"Venlig hilsen\n"
+"Arrangøren af {event}"
 
 #: pretix/base/templates/400.html:3 pretix/base/templates/400.html:6
 msgid "Bad Request"
@@ -3648,6 +3678,10 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Når en billet bliver udsolgt kan kunder tilføje sig til en venteliste. Så "
+"snart en billet igen bliver tilgængelig, vil den blive reserveret for den "
+"første kunde på ventelisten, og kunden vil modtage en e-mail med en voucher "
+"der kan bruges til at købe en billet."
 
 #: pretix/control/forms/event.py:307
 msgid "Waiting list response time"
@@ -3659,6 +3693,9 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Hvis en voucher sendes til en kunde på ventelisten, skal voucheren indløses "
+"inden for dette antal timer før den udløber og kan sendes til den næste "
+"kunde på listen."
 
 #: pretix/control/forms/event.py:315
 msgid "Automatic waiting list assignments"
@@ -4976,10 +5013,8 @@ msgid "Number of repititions"
 msgstr "Antal gentagelser"
 
 #: pretix/control/forms/subevents.py:253
-#, fuzzy
-#| msgid "Last update"
 msgid "Last date"
-msgstr "Seneste opdatering"
+msgstr "Seneste dato"
 
 #: pretix/control/forms/subevents.py:260 pretix/control/forms/subevents.py:318
 msgctxt "rrule"
@@ -6178,7 +6213,7 @@ msgid "Other features"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6190,6 +6225,15 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hej\n"
+"\n"
+"du har bedt om en ny adgangskode. Gå venligt til følgende side for at "
+"nulstille din adgangskode:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Venlig hilsen\n"
+"Your pretix team\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -6665,10 +6709,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:130
-#, fuzzy
-#| msgid "Use feature"
 msgid "Features"
-msgstr "Brug funktion"
+msgstr "Funktioner"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid ""
@@ -7168,10 +7210,8 @@ msgid "Check-in"
 msgstr "Tjek-ind"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:40
-#, fuzzy
-#| msgid "Additional text"
 msgid "Additional settings"
-msgstr "Tekst"
+msgstr "Yderligere indstillinger"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:51
 msgid "Product history"
@@ -7852,9 +7892,8 @@ msgid "Valid EU VAT ID"
 msgstr "Gyldigt CVR-nr."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:413
-#, fuzzy
 msgid "Check"
-msgstr "Check"
+msgstr "check"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:453
 msgid "Order history"
@@ -7945,10 +7984,8 @@ msgid "List filtered by answers to question \"%(question)s\"."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
-#, fuzzy
-#| msgid "Remove from order"
 msgid "Remove filter"
-msgstr "Fjern fra bestilling"
+msgstr "Fjern filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
@@ -8152,10 +8189,8 @@ msgid "PDF Ticket Editor"
 msgstr "PDF-billet-redigeringsværktøj"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
-#, fuzzy
-#| msgid "Editor"
 msgid "PDF Editor"
-msgstr "Editor"
+msgstr "PDF Editor"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 msgid "Code"
@@ -8315,11 +8350,9 @@ msgid "Please enable JavaScript in your browser."
 msgstr "Aktiver venligst JavaScript i din browser."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
-#, fuzzy
-#| msgid "Create multiple voucher"
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr "Opret vouchere"
+msgstr "Opret eventserie"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
@@ -9262,18 +9295,13 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/dashboards.py:226
-#, fuzzy
-#| msgid "Show past events"
 msgid "Set up event"
-msgstr "Vis tidligere arrangementer"
+msgstr "Opret arrangement"
 
 #: pretix/control/views/dashboards.py:333 pretix/control/views/typeahead.py:43
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "New date"
 msgctxt "subevent"
 msgid "No dates"
-msgstr "Ny dato"
+msgstr "Ingen dato"
 
 #: pretix/control/views/dashboards.py:346
 msgid "Action required"
@@ -9962,10 +9990,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/badges/exporters.py:66
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee badges"
-msgstr "Navn på deltager"
+msgstr "Navneskilte"
 
 #: pretix/plugins/badges/exporters.py:83
 #, fuzzy
@@ -9985,10 +10011,8 @@ msgid "Badge layout created."
 msgstr ""
 
 #: pretix/plugins/badges/signals.py:105
-#, fuzzy
-#| msgid "Invalid product selected."
 msgid "Badge layout deleted."
-msgstr "Ugyldigt produkt valgt."
+msgstr "Skiltelayout slettet."
 
 #: pretix/plugins/badges/signals.py:106
 msgid "Badge layout changed."
@@ -10005,35 +10029,29 @@ msgid "Print badges"
 msgstr ""
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
-msgstr "Er du sikker på du vil slette datoen <strong>%(subevent)s</strong>?"
+msgstr ""
+"Er du sikker på du vil slette skiltelayout for <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
-#, fuzzy, python-format
-#| msgid "Tax rule: %(name)s"
+#, python-format
 msgid "Badge layout: %(name)s"
-msgstr "Momsregel: %(name)s"
+msgstr "Skiltelayout: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Badge design"
-msgstr "Billetdesign"
+msgstr "Skiltedesign"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 msgid "You can modify the design after you saved this page."
 msgstr ""
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
-#, fuzzy
-#| msgid "You haven't created any products yet."
 msgid "You haven't created any badge layouts yet."
-msgstr "Du har endnu ikke oprettet nogen produkter."
+msgstr "Du har endnu ikke oprettet nogen skilte."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
@@ -11820,7 +11838,7 @@ msgstr "Gå tilbage"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:42
 msgid "Checkout"
-msgstr ""
+msgstr "Din bestilling"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
@@ -11895,12 +11913,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:5
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "For vi går videre, skal du svare på nogle spørgsmål."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:7
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Du skal udfylde alle felter markeret med <span>*</span> for at gå videre."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 msgid "Copy answers from above"
@@ -11989,7 +12008,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:137
 #: pretix/presale/views/widget.py:234
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "Forsalget for dette arrangement er slut."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:141
 #: pretix/presale/views/widget.py:236
@@ -12284,6 +12303,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Hvis billetter igen bliver tilgængelige, vil vi informere den første kunde "
+"på ventelisten. Hvis du får besked, har du %(hours)s timer til at købe en "
+"billet før vil tildeler den til næste kunde på ventelisten."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
@@ -12349,7 +12371,7 @@ msgstr "Vis tidligere arrangementer"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:60
 msgid "Buy tickets"
-msgstr ""
+msgstr "Køb billetter"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "More info"
@@ -12510,12 +12532,15 @@ msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Du kan ikke føje dig til ventelisten idet denne vare allerede er tilgængelig."
 
 #: pretix/presale/views/waiting.py:87
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Vi har føjet dig til ventelisten. Du vil modtage en e-mail så snart "
+"billetter bliver tilgængelige igen."
 
 #: pretix/settings.py:352
 msgid "English"

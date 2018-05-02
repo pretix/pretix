@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-04-08 02:00+0000\n"
-"Last-Translator: Claude <superoxyde@laposte.net>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"PO-Revision-Date: 2018-04-26 12:18+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"Language-Team: French "
+"<https://translate.pretix.eu/projects/pretix/pretix/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2510,7 +2510,7 @@ msgstr "Date et heure de début de l'événement"
 
 #: pretix/base/pdf.py:103
 msgid "2017-05-31 20:00"
-msgstr "31.05.2016 20:00"
+msgstr "31.05.2017 20:00"
 
 #: pretix/base/pdf.py:107
 msgid "Event begin time"
