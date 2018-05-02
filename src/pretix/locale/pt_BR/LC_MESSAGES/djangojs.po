@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-23 09:53+0000\n"
+"POT-Creation-Date: 2018-05-02 14:01+0000\n"
 "PO-Revision-Date: 2018-03-10 13:20+0000\n"
 "Last-Translator: Matheus Nunes <matheus@integrate.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -30,12 +30,12 @@ msgid "Comment:"
 msgstr "Comentário:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
 msgid "Placed orders"
 msgstr "Ordens colocadas"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:32
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
 msgid "Paid orders"
 msgstr "Ordens pagas"
 
