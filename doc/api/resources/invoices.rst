@@ -232,34 +232,6 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/regenerate/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 204 No Content
-      Vary: Accept
-      Content-Type: application/pdf
-
-   :param organizer: The ``slug`` field of the organizer to fetch
-   :param event: The ``slug`` field of the event to fetch
-   :param invoice_no: The ``invoice_no`` field of the invoice to regenerate
-   :statuscode 200: no error
-   :statuscode 400: The invoice has already been canceled
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/reissue/
-
-   Re-generates the invoice from order data.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
       GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/reissue/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
@@ -275,6 +247,34 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param invoice_no: The ``invoice_no`` field of the invoice to reissue
+   :statuscode 200: no error
+   :statuscode 400: The invoice has already been canceled
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/regenerate/
+
+   Re-generates the invoice from order data.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/regenerate/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/pdf
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param invoice_no: The ``invoice_no`` field of the invoice to regenerate
    :statuscode 200: no error
    :statuscode 400: The invoice has already been canceled
    :statuscode 401: Authentication failure
