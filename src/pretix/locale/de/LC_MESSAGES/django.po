@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-02 15:15+0000\n"
+"PO-Revision-Date: 2018-05-02 15:38+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -7102,7 +7102,7 @@ msgstr "Veranstaltungs-Protokoll"
 #: pretix/control/templates/pretixcontrol/event/logs.html:37
 #: pretix/control/templates/pretixcontrol/includes/logs.html:22
 msgid "Personal data was cleared from this log entry."
-msgstr "Personenbezogene Daten wurde von diesem Eintrag entfernt."
+msgstr "Personenbezogene Daten wurden von diesem Eintrag entfernt."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:121
 #: pretix/control/templates/pretixcontrol/event/logs.html:46
@@ -9249,7 +9249,7 @@ msgstr "Bitte aktivieren Sie JavaScript in Ihrem Browser."
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr "Daten-Vernichter"
+msgstr "Datenvernichter"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:14
 msgid "Step 1: Download data"
