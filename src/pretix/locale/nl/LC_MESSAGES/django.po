@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-04-23 09:53+0000\n"
-"PO-Revision-Date: 2018-05-01 05:00+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-05-02 14:00+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1733,10 +1733,8 @@ msgid "Other fees"
 msgstr "Overige kosten"
 
 #: pretix/base/models/orders.py:680
-#, fuzzy
-#| msgid "Credit card"
 msgid "Gift card"
-msgstr "Creditcard"
+msgstr "Cadeaubon"
 
 #: pretix/base/models/orders.py:685 pretix/control/views/vouchers.py:61
 msgid "Value"
@@ -1757,7 +1755,6 @@ msgid "Order position"
 msgstr "Bestelling positie"
 
 #: pretix/base/models/orders.py:787 pretix/base/notifications.py:182
-#, fuzzy
 msgid "Order positions"
 msgstr "Bestelling posities"
 
@@ -2088,7 +2085,6 @@ msgid "You cannot select a quota and a specific product at the same time."
 msgstr "U kunt niet tegelijk een quotum en een specifiek product selecteren."
 
 #: pretix/base/models/vouchers.py:207
-#, fuzzy
 msgid "You cannot select an item that belongs to a different event."
 msgstr "U kunt geen item kiezen dat bij een ander evenement hoort."
 
@@ -2132,7 +2128,6 @@ msgstr ""
 "keren dat de voucher te gebruiken is niet kleiner maken dan dit getal."
 
 #: pretix/base/models/vouchers.py:235 pretix/base/models/vouchers.py:291
-#, fuzzy
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
@@ -2146,12 +2141,11 @@ msgstr ""
 "is."
 
 #: pretix/base/models/vouchers.py:309
-#, fuzzy
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"U kunt geen voucher maken die quotum blokkeert omdat het gekozen product of "
+"U kunt geen voucher maken die quotum blokkeert, omdat het gekozen product of "
 "quotum op dit moment uitverkocht of volledig gereserveerd is."
 
 #: pretix/base/models/vouchers.py:315
@@ -2360,7 +2354,6 @@ msgid "Absolute value"
 msgstr "Absolute waarde"
 
 #: pretix/base/payment.py:200
-#, fuzzy
 msgid ""
 "Percentage of the order total. Note that this percentage will currently only "
 "be calculated on the summed price of sold tickets, not on other fees like e."
@@ -2450,7 +2443,6 @@ msgid "Variation name"
 msgstr "Variantnaam"
 
 #: pretix/base/pdf.py:53
-#, fuzzy
 msgid "Sample variation"
 msgstr "Voorbeeldvariant"
 
@@ -2525,10 +2517,8 @@ msgid "20:00"
 msgstr "20:00"
 
 #: pretix/base/pdf.py:112
-#, fuzzy
-#| msgid "Event end time"
 msgid "Event end date and time"
-msgstr "Eindtijd van het evenement"
+msgstr "Einddatum en -tijd van het evenement"
 
 #: pretix/base/pdf.py:113
 msgid "2017-05-31 22:00"
@@ -2610,19 +2600,16 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: pretix/base/reldate.py:13
-#, fuzzy
 msgid "Event start"
 msgstr "Start van het evenement"
 
 #: pretix/base/reldate.py:14
-#, fuzzy
 msgid "Event end"
 msgstr "Einde van het evenement"
 
 #: pretix/base/reldate.py:15
-#, fuzzy
 msgid "Event admission"
-msgstr "Evenement toegang"
+msgstr "Toegangstijd evenement"
 
 #: pretix/base/reldate.py:16
 msgid "Presale start"
@@ -2701,7 +2688,7 @@ msgid "You need to select at least %(min)s items of the product %(product)s."
 msgstr "U moet ten minste %(min)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:48
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
@@ -2820,7 +2807,7 @@ msgstr ""
 "add-on bij een ander product."
 
 #: pretix/base/services/invoices.py:51
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -2913,16 +2900,20 @@ msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Sommige van de producten die u koos zijn niet langer beschikbaar in de "
+"hoeveelheid die u koos. Zie hieronder voor details."
 
 #: pretix/base/services/orders.py:54
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"De prijs van sommige producten in uw winkelwagen is veranderd. Zie hieronder "
+"voor details."
 
 #: pretix/base/services/orders.py:56
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "Een interne fout is opgetreden, probeer het opnieuw."
 
 #: pretix/base/services/orders.py:57
 msgid "Your cart is empty."
@@ -2934,16 +2925,20 @@ msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
+"U kunt niet meer dan %(max)s kopieën van het product %(product)s kiezen. We "
+"hebben het overschot uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:63
 msgid "The presale period has ended."
-msgstr ""
+msgstr "De voorverkoopperiode is afgelopen."
 
 #: pretix/base/services/orders.py:64
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"De vouchercode die voor een van de items in uw winkelwagen is gebruikt is "
+"niet bekend in onze database."
 
 #: pretix/base/services/orders.py:65
 msgid ""
@@ -2951,44 +2946,55 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"De vouchercode die is gebruikt voor een van de items in uw winkelwagen is al "
+"het maximale aantal keren gebruikt. We hebben dit item uit uw winkelwagen "
+"verwijderd."
 
 #: pretix/base/services/orders.py:67
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"De vouchercode die is gebruikt voor een van de items in uw winkelwagen is "
+"verlopen. We hebben dit item uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:69
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"De vouchercode die is gebruikt voor een van de items in uw winkelwagen is "
+"niet geldig voor dit item. We hebben dit item uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:71
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
+"U heeft een geldige vouchercode nodig om een van de producten in uw "
+"winkelwagen te bestellen. We hebben dit item uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:73
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"De voorverkoopperiode voor een van de evenementen in uw winkelwagen is nog "
+"niet begonnen. De bijbehorende kaartjes zijn uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:164
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Betaling ontvangen voor uw bestelling: %(code)s"
 
 #: pretix/base/services/orders.py:184 pretix/control/forms/orders.py:46
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "De nieuwe verloopdatum moet in de toekomst zijn."
 
 #: pretix/base/services/orders.py:281 pretix/presale/views/order.py:484
 #: pretix/presale/views/order.py:512
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "U kunt deze bestelling niet annuleren."
 
 #: pretix/base/services/orders.py:304
 #, python-format
@@ -3004,21 +3010,22 @@ msgstr "Uw bestelling: %(code)s"
 #: pretix/base/services/orders.py:645
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr ""
+msgstr "Uw bestelling staat op het punt om te verlopen: %(code)s"
 
 #: pretix/base/services/orders.py:647
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr ""
+msgstr "Uw bestelling is in afwachting van betaling: %(code)s"
 
 #: pretix/base/services/orders.py:685
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr ""
+msgstr "Uw ticket staat klaar om te downloaden: %(code)s"
 
 #: pretix/base/services/orders.py:697
 msgid "You cannot change a free order to a paid order."
 msgstr ""
+"U kunt een gratis bestelling niet in een betaalde bestelling veranderen."
 
 #: pretix/base/services/orders.py:698
 msgid "You need to select a variation of the product."
@@ -3034,27 +3041,33 @@ msgstr ""
 
 #: pretix/base/services/orders.py:700
 msgid "There is no quota defined that allows this operation."
-msgstr ""
+msgstr "Er is geen quotum gedefinieerd dat deze handeling toelaat."
 
 #: pretix/base/services/orders.py:701
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "Het gekozen product is niet actief of heeft geen ingestelde prijs."
 
 #: pretix/base/services/orders.py:702
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr ""
+"Deze handeling zou de bestelling leeg maken. Annuleer in plaats hiervan de "
+"bestelling."
 
 #: pretix/base/services/orders.py:703
 msgid "Only pending or paid orders can be changed."
 msgstr ""
+"Alleen bestellingen in afwachting of betaalde bestellingen kunnen worden "
+"veranderd."
 
 #: pretix/base/services/orders.py:704
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
+"Deze handeling zou de bestelling gratis maken en daardoor ook direct "
+"betaald, maar er is geen quotum beschikbaar."
 
 #: pretix/base/services/orders.py:706
 msgid ""
@@ -3062,18 +3075,25 @@ msgid ""
 "total price of the order as partial payments or refunds are not yet "
 "supported."
 msgstr ""
+"Op dit moment kunnen betaalde bestellingen alleen worden veranderd op een "
+"manier die de totaalprijs van de bestelling niet verandert, omdat "
+"gedeeltelijke betalingen of terugbetalingen nog niet worden ondersteund."
 
 #: pretix/base/services/orders.py:708
 msgid ""
 "This is an addon product, please select the base position it should be added "
 "to."
 msgstr ""
+"Dit is een add-onproduct, kies het basisproduct waaraan het moet worden "
+"toegevoegd."
 
 #: pretix/base/services/orders.py:709
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
+"Het gekozen basisproduct staat u niet toe om dit product als een add-on toe "
+"te voegen."
 
 #: pretix/base/services/orders.py:710
 msgid "You need to choose a subevent for the new position."
