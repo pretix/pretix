@@ -115,12 +115,19 @@ Execute the following command to run pretix' test suite (might take a couple of 
           ``NUM`` being the number of threads you want to use.
 
 It is a good idea to put this command into your git hook ``.git/hooks/pre-commit``,
-for example::
+for example, to check for any errors in any staged files when committing::
 
-    #!/bin/sh
+    #!/bin/bash
     cd $GIT_DIR/../src
-    flake8 . || exit 1
-    isort -q -rc -c . || exit 1
+    export GIT_WORK_TREE=../
+    export GIT_DIR=../.git
+    source ../env/bin/activate  # Adjust to however you activate your virtual environment
+    for file in $(git diff --cached --name-only | grep -E '\.py$')
+    do
+      git show ":$file" | flake8 - --stdin-display-name="$file" || exit 1 # we only want to lint the staged changes, not any un-staged changes
+      git show ":$file" | isort -df --check-only - | grep ERROR && exit 1
+    done
+
 
 This keeps you from accidentally creating commits violating the style guide.
 
