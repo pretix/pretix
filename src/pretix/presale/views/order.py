@@ -447,7 +447,10 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
         self.invoice_form.save()
-        self.order.log_action('pretix.event.order.modified')
+        self.order.log_action('pretix.event.order.modified', {
+            'invoice_data': self.invoice_form.cleaned_data,
+            'data': [f.cleaned_data for f in self.forms]
+        })
         if self.invoice_form.has_changed():
             success_message = ('Your invoice address has been updated. Please contact us if you need us '
                                'to regenerate your invoice.')
@@ -659,6 +662,10 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         if not invoice.file:
             invoice_pdf(invoice.pk)
             invoice = Invoice.objects.get(pk=invoice.pk)
+
+        if invoice.shredded:
+            messages.error(request, _('The invoice file is no longer stored on the server.'))
+            return redirect(self.get_order_url())
 
         if not invoice.file:
             # This happens if we have celery installed and the file will be generated in the background

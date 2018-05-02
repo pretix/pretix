@@ -87,6 +87,8 @@ class WaitingListEntry(LoggedModel):
             raise WaitingListException(_('This product is currently not available.'))
         if self.voucher:
             raise WaitingListException(_('A voucher has already been sent to this person.'))
+        if '@' not in self.email:
+            raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
             v = Voucher.objects.create(

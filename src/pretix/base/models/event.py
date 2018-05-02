@@ -495,6 +495,22 @@ class Event(EventMixin, LoggedModel):
                 renderers[pp.identifier] = pp
         return renderers
 
+    def get_data_shredders(self) -> dict:
+        """
+        Returns a dictionary of initialized data shredders mapped by their identifiers.
+        """
+        from ..signals import register_data_shredders
+
+        responses = register_data_shredders.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                renderers[pp.identifier] = pp
+        return renderers
+
     @property
     def invoice_renderer(self):
         """

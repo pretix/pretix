@@ -16,7 +16,7 @@ from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
 from pretix import __version__
-from pretix.base.models import Event, Quota, RequiredAction
+from pretix.base.models import Event, Order, Quota, RequiredAction
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import mark_order_paid, mark_order_refunded
@@ -479,6 +479,34 @@ class StripeMethod(BasePaymentProvider):
             )
         else:
             return str(url)
+
+    def shred_payment_info(self, order: Order):
+        if not order.payment_info:
+            return
+        d = json.loads(order.payment_info)
+        new = {}
+        if 'source' in d:
+            new['source'] = {
+                'id': d['source'].get('id'),
+                'type': d['source'].get('type'),
+                'brand': d['source'].get('brand'),
+                'last4': d['source'].get('last4'),
+                'bank_name': d['source'].get('bank_name'),
+                'bank': d['source'].get('bank'),
+                'bic': d['source'].get('bic'),
+                'card': {
+                    'brand': d['source'].get('card', {}).get('brand'),
+                    'country': d['source'].get('card', {}).get('cuntry'),
+                    'last4': d['source'].get('card', {}).get('last4'),
+                }
+            }
+            new['amount'] = d['amount']
+            new['currency'] = d['currency']
+            new['status'] = d['status']
+            new['id'] = d['id']
+            new['_shredded'] = True
+        order.payment_info = json.dumps(new)
+        order.save(update_fields=['payment_info'])
 
 
 class StripeCC(StripeMethod):

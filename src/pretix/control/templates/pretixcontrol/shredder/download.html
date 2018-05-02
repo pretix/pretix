@@ -1,0 +1,57 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load order_overview %}
+{% block title %}{% trans "Data shredder" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Data shredder" %}
+    </h1>
+    <form action="{% url "control:event.shredder.shred" event=request.event.slug organizer=request.organizer.slug %}"
+          method="post" class="form-horizontal" data-asynctask>
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Step 1: Download data" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    You are about to permamanently delete data from the server, even though you might be required to
+                    keep
+                    some of this data on file. You should therefore download the following file and store it in a safe
+                    place:
+                {% endblocktrans %}
+            </p>
+            <p>
+                <a href="{% url "cachedfile.download" id=file.pk %}" class="btn btn-primary btn-lg">
+                    {% trans "Download data" %}
+                </a>
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Step 2: Confirm download" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    In the downloaded file, there is a text file named "CONFIRM_CODE.txt" with a six-character code.
+                    Please enter this code here to confirm that you successfully downloaded the file.
+                {% endblocktrans %}
+            </p>
+            <input type="text" class="form-control" name="confirm_code" required placeholder="{% trans "Confirmation code" %}">
+            <br>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Step 3: Confirm deletion" %}</legend>
+            <p>
+                {% blocktrans trimmed with event=request.event.name %}
+                Please re-check that you are fully certain that you want to delete the selected categories of data from the event <strong>{{ event }}</strong>.
+                    In this case, please enter your user password here:
+                {% endblocktrans %}
+            </p>
+            <input type="password" class="form-control" name="password" required placeholder="{% trans "Your password" %}">
+        </fieldset>
+        <input type="hidden" name="file" value="{{ file.pk }}">
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

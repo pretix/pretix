@@ -104,6 +104,8 @@ The provider class
 
    .. automethod:: is_implicit
 
+   .. automethod:: shred_payment_info
+
 
 Additional views
 ----------------

@@ -369,8 +369,9 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
             key=lambda s: s.verbose_name
         )
         for p in context['providers']:
-            if not p.is_enabled and p.is_meta and p.settings._enabled:
-                p.is_enabled = True
+            p.show_enabled = p.is_enabled
+            if p.is_meta:
+                p.show_enabled = p.settings._enabled in (True, 'True')
         return context
 
 

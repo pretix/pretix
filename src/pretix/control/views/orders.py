@@ -347,6 +347,8 @@ class OrderInvoiceRegenerate(OrderView):
         else:
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
+            elif inv.shredded:
+                messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
                 inv = regenerate_invoice(inv)
                 self.order.log_action('pretix.event.order.invoice.regenerated', user=self.request.user, data={
@@ -370,6 +372,8 @@ class OrderInvoiceReissue(OrderView):
         else:
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
+            elif inv.shredded:
+                messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
                 c = generate_cancellation(inv)
                 if self.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
@@ -446,6 +450,10 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
         if not self.invoice.file:
             invoice_pdf(self.invoice.pk)
             self.invoice = Invoice.objects.get(pk=self.invoice.pk)
+
+        if self.invoice.shredded:
+            messages.error(request, _('The invoice file is no longer stored on the server.'))
+            return redirect(self.get_order_url())
 
         if not self.invoice.file:
             # This happens if we have celery installed and the file will be generated in the background
@@ -648,7 +656,10 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
         self.invoice_form.save()
-        self.order.log_action('pretix.event.order.modified', user=request.user)
+        self.order.log_action('pretix.event.order.modified', {
+            'invoice_data': self.invoice_form.cleaned_data,
+            'data': [f.cleaned_data for f in self.forms]
+        }, user=request.user)
         if self.invoice_form.has_changed():
             success_message = ('The invoice address has been updated. If you want to generate a new invoice, '
                                'you need to do this manually.')

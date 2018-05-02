@@ -24,6 +24,9 @@
                         {% if log.display %}
                             <br/><span class="fa fa-fw fa-comment-o"></span> {{ log.display }}
                         {% endif %}
+                        {% if log.parsed_data.recipient %}
+                            <br/><span class="fa fa-fw fa-envelope-o"></span> {{ log.parsed_data.recipient }}
+                        {% endif %}
                     </p>
                     {% if log.parsed_data.subject.items %}
                         <div class="alert alert-info">

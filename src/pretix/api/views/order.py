@@ -345,6 +345,9 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             invoice_pdf(invoice.pk)
             invoice.refresh_from_db()
 
+        if invoice.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
+
         if not invoice.file:
             raise RetryException()
 
@@ -357,6 +360,8 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
+        elif inv.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
             inv = regenerate_invoice(inv)
             inv.order.log_action(
@@ -374,6 +379,8 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
+        elif inv.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
             c = generate_cancellation(inv)
             if inv.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):

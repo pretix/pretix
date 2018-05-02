@@ -78,10 +78,18 @@
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
-            <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
-                    class="btn {% if request.event.allow_delete %}{% endif %} btn-danger btn-lg pull-left">
-                {% trans "Delete event" %}
-            </a>
+            <div class="pull-left">
+                <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
+                        class="btn {% if request.event.allow_delete %}{% endif %} btn-danger btn-lg">
+                    <span class="fa fa-trash"></span>
+                    {% trans "Delete event" %}
+                </a>
+                <a href="{% url "control:event.shredder.start" organizer=request.organizer.slug event=request.event.slug %}"
+                        class="btn btn-danger btn-lg">
+                    <span class="fa fa-eraser"></span>
+                    {% trans "Delete personal data" %}
+                </a>
+            </div>
         </div>
     </form>
 {% endblock %}

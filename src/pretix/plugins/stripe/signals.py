@@ -8,9 +8,10 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey
+from pretix.base.shredder import BaseDataShredder
 from pretix.base.signals import (
-    logentry_display, register_global_settings, register_payment_providers,
-    requiredaction_display,
+    logentry_display, register_data_shredders, register_global_settings,
+    register_payment_providers, requiredaction_display,
 )
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head
@@ -134,3 +135,30 @@ def register_global_settings(sender, **kwargs):
             ),
         )),
     ])
+
+
+class PaymentLogsShredder(BaseDataShredder):
+    verbose_name = _('Stripe payment history')
+    identifier = 'stripe_logs'
+    description = _('This will remove payment-related history information. No download will be offered.')
+
+    def generate_files(self):
+        pass
+
+    def shred_data(self):
+        for le in self.event.logentry_set.filter(action_type="pretix.plugins.stripe.event").exclude(data=""):
+            d = le.parsed_data
+            if 'data' in d:
+                for k, v in list(d['data']['object'].items()):
+                    if v not in ('reason', 'status', 'failure_message', 'object', 'id'):
+                        d['data']['object'][k] = '█'
+                le.data = json.dumps(d)
+                le.shredded = True
+                le.save(update_fields=['data', 'shredded'])
+
+
+@receiver(register_data_shredders, dispatch_uid="stripe_shredders")
+def register_shredder(sender, **kwargs):
+    return [
+        PaymentLogsShredder,
+    ]

@@ -1,5 +1,6 @@
 addon
 addons
+anonymize
 api
 auditability
 auth
@@ -16,8 +17,10 @@ checksum
 config
 contenttypes
 contextmanager
+cookiecutter
 cron
 cronjob
+cryptographic
 debian
 deduplication
 discoverable
@@ -57,6 +60,7 @@ nginx
 NotificationType
 ons
 optimizations
+overpayment
 param
 percental
 positionid
@@ -72,6 +76,7 @@ pretixpresale
 prometheus
 proxied
 proxying
+pseudonymize
 queryset
 redemptions
 redis
@@ -99,6 +104,7 @@ subpath
 systemd
 testutils
 timestamp
+tuples
 un
 unconfigured
 unix
@@ -107,6 +113,7 @@ untrusted
 username
 url
 versa
+versioning
 viewset
 viewsets
 webhook

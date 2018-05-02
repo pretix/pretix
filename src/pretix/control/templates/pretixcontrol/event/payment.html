@@ -14,7 +14,7 @@
                             <strong>{{ provider.verbose_name }}</strong>
                         </td>
                         <td>
-                            {% if provider.is_enabled %}
+                            {% if provider.show_enabled %}
                                 <span class="text-success">
                                     <span class="fa fa-check"></span>
                                     {% trans "Enabled" %}

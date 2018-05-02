@@ -1,0 +1,73 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load order_overview %}
+{% block title %}{% trans "Data shredder" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Data shredder" %}
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            This feature allows you to remove personal data from this event. You will first select what kind of data
+            you want to shred, then you are able to download the affected data and after you confirmed the download,
+            the data will be removed from the server's database. The data might still exist in backups for a limited
+            period of time.
+        {% endblocktrans %}
+        <strong>
+            {% blocktrans trimmed %}
+                Using this will not remove the orders for your event, it just scrubs them of data that can be linked
+                to individual persons.
+            {% endblocktrans %}
+        </strong>
+    </p>
+    <div class="alert alert-legal">
+        <strong>
+            {% blocktrans trimmed %}
+                It is within your own responsibility to check if you are allowed to delete the affected data in your
+                legislation, e.g. for reasons of taxation.
+            {% endblocktrans %}
+        </strong>
+        {% blocktrans trimmed %}
+            For most categories of data, you will be able to partially download the data to store it offline. Some
+            kinds of data (such as some payment information) as well as historical log data cannot be downloaded at
+            the moment.
+        {% endblocktrans %}
+        <div class="clear"></div>
+    </div>
+    {% if constraints %}
+        <div class="alert alert-danger">
+            {{ constraints }}
+        </div>
+    {% else %}
+        <form action="{% url "control:event.shredder.export" event=request.event.slug organizer=request.organizer.slug %}"
+                method="post" class="form-horizontal" data-asynctask>
+            <legend>{% trans "Data selection" %}</legend>
+            {% csrf_token %}
+            <div class="panel-group" id="payment_accordion">
+                {% for ident, shredder in shredders.items %}
+                    <div class="panel panel-default">
+                        <label class="accordion-radio">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <input type="checkbox" name="shredder" value="{{ shredder.identifier }}">
+                                    <strong>{{ shredder.verbose_name }}</strong>
+                                </h4>
+                            </div>
+                        </label>
+                        <div id="payment_{{ p.provider.identifier }}" class="panel-collapse in">
+                            <div class="panel-body">
+                                {{ shredder.description|safe }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Continue" %}
+                </button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
