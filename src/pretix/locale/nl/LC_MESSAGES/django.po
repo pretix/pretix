@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-03 09:25+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2018-05-03 20:00+0000\n"
+"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -5618,7 +5618,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:171
 msgid "The payment method has been changed."
-msgstr ""
+msgstr "De betaalmethode is veranderd."
 
 #: pretix/control/logdisplay.py:172
 msgid "An unidentified type email has been sent."
@@ -11145,6 +11145,9 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Als u verdergaat sturen we u door naar PayPal om de betalingsgegevens in te "
+"vullen. Daarna wordt u hier teruggeleid om de bestelling te controleren en "
+"te bevestigen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "This order has been paid via PayPal."
@@ -11954,7 +11957,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
-msgstr ""
+msgstr "Betalingsmethode"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
@@ -12290,7 +12293,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:75
 msgid "Contact event organizer"
-msgstr "Contact opnemen met de organisatie van het evenement"
+msgstr "Neem contact op met organisatie"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 msgid "Imprint"
@@ -12673,7 +12676,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "Use different payment method"
-msgstr ""
+msgstr "Gebruik een andere betaalmethode"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:61
 msgid "Complete payment"
@@ -12787,10 +12790,13 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Als u de link naar uw bestelling bent kwijtgeraakt, voer het e-mailadres in "
+"dat bij uw bestelling gebruikt is. We sturen u dan een e-mail met de links "
+"naar alle bestellingen die met dit e-mailadres geplaatst zijn."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
-msgstr ""
+msgstr "Verstuur links"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
