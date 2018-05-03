@@ -5744,7 +5744,7 @@ msgstr ""
 #: pretix/control/permissions.py:27 pretix/control/permissions.py:67
 #: pretix/control/permissions.py:96
 msgid "You do not have permission to view this content."
-msgstr "Du has keine Berechtigung, diese Inhalte aufzurufen."
+msgstr "Du hast keine Berechtigung, diese Inhalte aufzurufen."
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
@@ -10681,7 +10681,7 @@ msgstr "Hier klicken um das Fenster zu öffnen."
 
 #: pretix/plugins/paypal/views.py:70
 msgid "Invalid response from PayPal received."
-msgstr "Paypal hat uns eine ungültige Antwort geschickt."
+msgstr "PayPal hat uns eine ungültige Antwort geschickt."
 
 #: pretix/plugins/paypal/views.py:86
 msgid "It looks like you canceled the PayPal payment"
@@ -11908,15 +11908,15 @@ msgstr "Rechnungsadresse: Firma"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:149
 msgid "List of Add-Ons"
-msgstr "Liste der Zusatz-Produkte"
+msgstr "Liste der Zusatzprodukte"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:150
 msgid ""
 "Addon 1\n"
 "Addon 2"
 msgstr ""
-"Workshop 1\n"
-"Workshop 2"
+"Zusatzprodukt 1\n"
+"Zusatzprodukt 2"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:158
 msgid "Event organizer company"
