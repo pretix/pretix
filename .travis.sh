@@ -34,7 +34,7 @@ if [ "$1" == "doc-spelling" ]; then
 	fi
 fi
 if [ "$1" == "translation-spelling" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur requirements/dev.txt
+	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements/dev.txt
 	cd src
 	potypo
 fi
