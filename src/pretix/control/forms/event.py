@@ -1018,7 +1018,7 @@ class EventDeleteForm(forms.Form):
     }
     user_pw = forms.CharField(
         max_length=255,
-        label=_("New password"),
+        label=_("Your password"),
         widget=forms.PasswordInput()
     )
     slug = forms.CharField(
