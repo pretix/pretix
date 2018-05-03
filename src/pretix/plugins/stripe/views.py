@@ -48,13 +48,13 @@ def redirect_view(request, *args, **kwargs):
 
 def oauth_return(request, *args, **kwargs):
     if 'payment_stripe_oauth_event' not in request.session:
-        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+        messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
         return redirect(reverse('control:index'))
 
     event = get_object_or_404(Event, pk=request.session['payment_stripe_oauth_event'])
 
     if request.GET.get('state') != request.session['payment_stripe_oauth_token']:
-        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+        messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
         return redirect(reverse('control:event.settings.payment.provider', kwargs={
             'organizer': event.organizer.slug,
             'event': event.slug,
@@ -81,7 +81,7 @@ def oauth_return(request, *args, **kwargs):
             )
     except:
         logger.exception('Failed to obtain OAuth token')
-        messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+        messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
     else:
         if 'error' not in data and data['livemode']:
             try:
@@ -93,7 +93,7 @@ def oauth_return(request, *args, **kwargs):
                 testdata = testresp.json()
             except:
                 logger.exception('Failed to obtain OAuth token')
-                messages.error(request, _('An error occured during connecting with Stripe, please try again.'))
+                messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
                 return redirect(reverse('control:event.settings.payment.provider', kwargs={
                     'organizer': event.organizer.slug,
                     'event': event.slug,
