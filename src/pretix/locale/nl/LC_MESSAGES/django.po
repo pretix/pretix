@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-03 07:57+0000\n"
+"PO-Revision-Date: 2018-05-03 09:25+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -6951,7 +6951,7 @@ msgstr ""
 #: pretix/control/views/user.py:119 pretix/control/views/users.py:59
 #: pretix/control/views/vouchers.py:174 pretix/plugins/badges/views.py:88
 msgid "Your changes have been saved."
-msgstr "Jouw bewerkingen werden opgeslagen."
+msgstr "Uw bewerkingen zijn opgeslagen."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
@@ -7766,7 +7766,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:33
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -8233,7 +8233,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:382
 msgid "Change"
-msgstr ""
+msgstr "Veranderen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:398
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:94
@@ -12123,7 +12123,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Open the PDF editor in a new tab"
-msgstr ""
+msgstr "Open de PDF-editor in een nieuw tabblad"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:22
 msgid "PDF output"
@@ -12976,7 +12976,7 @@ msgstr ""
 #: pretix/presale/views/order.py:513 pretix/presale/views/order.py:591
 #: pretix/presale/views/order.py:651
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
+msgstr "Onbekende bestelcode of niet gemachtigd om deze bestelling te bekijken."
 
 #: pretix/presale/views/order.py:168 pretix/presale/views/order.py:221
 msgid "The payment for this order cannot be continued."
