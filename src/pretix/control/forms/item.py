@@ -340,7 +340,7 @@ class ItemVariationsFormSet(I18nFormSet):
                 f.fields['DELETE'].disabled = True
                 raise ValidationError(
                     message=_('The variation "%s" cannot be deleted because it has already been ordered by a user or '
-                              'currently is in a users\'s cart. Please set the variation as "inactive" instead.'),
+                              'currently is in a user\'s cart. Please set the variation as "inactive" instead.'),
                     params=(str(f.instance),)
                 )
 

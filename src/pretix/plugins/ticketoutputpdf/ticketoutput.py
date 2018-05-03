@@ -147,7 +147,7 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
-        "editor_sample": _("Addon 1\nAddon 2"),
+        "editor_sample": _("Add-On 1\nAdd-On 2"),
         "evaluate": lambda op, order, ev: "<br/>".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
             for p in op.addons.select_related('item', 'variation')

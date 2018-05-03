@@ -734,7 +734,7 @@ msgid "Timezone"
 msgstr "Timezone"
 
 #: pretix/base/models/auth.py:91
-msgid "Two-factor authentification is required to log in"
+msgid "Two-factor authentication is required to log in"
 msgstr ""
 
 #: pretix/base/models/auth.py:95
@@ -2880,7 +2880,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:708
 msgid ""
-"This is an addon product, please select the base position it should be added "
+"This is an add-on product, please select the base position it should be added "
 "to."
 msgstr ""
 "Il s'agit d'un produit addon, veuillez sélectionner la position de base à "
@@ -3914,8 +3914,8 @@ msgstr "Finaliser les conditions de paiement uniquement en jour de semaine"
 
 #: pretix/control/forms/event.py:433
 msgid ""
-"If this is activated and the payment term of any order ends on a saturday or "
-"sunday, it will be moved to the next monday instead. This is required in "
+"If this is activated and the payment term of any order ends on a Saturday or "
+"Sunday, it will be moved to the next Monday instead. This is required in "
 "some countries by civil law. This will not effect the last date of payments "
 "configured above."
 msgstr ""
@@ -4918,7 +4918,7 @@ msgstr ""
 #, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
-"by a user or currently is in a users's cart. Please set the variation as "
+"by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
 "La variante \"%s\" ne peut pas être supprimée car elle a déjà été commandée "
@@ -5778,7 +5778,7 @@ msgstr "Bon retour parmi nous!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
-"You configured your account to require authentification with a second "
+"You configured your account to require authentication with a second "
 "medium, e.g. your phone. Please enter your verification code here:"
 msgstr ""
 "Vous avez configuré votre compte de manière à ce qu'il nécessite une "
@@ -7631,7 +7631,7 @@ msgid ""
 "define, how many instances of your product pretix will sell. This way, you "
 "can configure whether your event can take an unlimited number of attendees "
 "or the number of attendees is limited. You can assign a product to multiple "
-"quotas to fulfil more complex requirements, e.g. if you want to limit the "
+"quotas to fulfill more complex requirements, e.g. if you want to limit the "
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
@@ -7683,7 +7683,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
 #, fuzzy
-msgid "Inofficial translation"
+msgid "Unofficial translation"
 msgstr "Transactions non résolues"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:4
@@ -8274,7 +8274,7 @@ msgstr "Supprimer l'équipe:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
-"You cannot delete the team because there would be noone left who could "
+"You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
 msgstr ""
 "Vous ne pouvez pas supprimer l'équipe parce qu'il ne resterait plus personne "
@@ -9526,7 +9526,7 @@ msgstr "L'élément demandé n'existe pas."
 
 #: pretix/control/views/item.py:976
 msgid ""
-"You cannot add addons to a product that is only available as an add-on "
+"You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
 "Vous ne pouvez ajouter d'addons à un produit qui n'est disponible que comme "
@@ -9745,7 +9745,7 @@ msgstr "invitation de compte pretix"
 
 #: pretix/control/views/organizer.py:477
 msgid ""
-"You cannot remove the last member from this team as noone would be left with "
+"You cannot remove the last member from this team as no one would be left with "
 "the permission to change teams."
 msgstr ""
 "Vous ne pouvez pas retirer le dernier membre de cette équipe car personne ne "
@@ -10890,7 +10890,7 @@ msgstr "Connectez-vous avec pretixdesk"
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:56
 msgid ""
 "If this link does not open the pretixdesk application or if you want to set "
-"the application up on a seperate device, copy the following code and paste "
+"the application up on a separate device, copy the following code and paste "
 "it into the application:"
 msgstr ""
 "Si ce lien n'ouvre pas l'application pretixdesk ou si vous souhaitez "
@@ -11547,7 +11547,7 @@ msgstr "Raison inconnue"
 #: pretix/plugins/stripe/views.py:83
 #, fuzzy
 #| msgid "An internal error occurred, please try again."
-msgid "An error occured during connecting with Stripe, please try again."
+msgid "An error occurred during connecting with Stripe, please try again."
 msgstr "Une erreur interne s'est produite, veuillez réessayer."
 
 #: pretix/plugins/stripe/views.py:86
@@ -11906,8 +11906,8 @@ msgstr "Liste des Addons"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:150
 msgid ""
-"Addon 1\n"
-"Addon 2"
+"Add-On 1\n"
+"Add-On 2"
 msgstr ""
 "Addon 1\n"
 "Addon 2"

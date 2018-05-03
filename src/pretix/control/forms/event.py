@@ -430,8 +430,8 @@ class PaymentSettingsForm(SettingsForm):
     )
     payment_term_weekdays = forms.BooleanField(
         label=_('Only end payment terms on weekdays'),
-        help_text=_("If this is activated and the payment term of any order ends on a saturday or sunday, it will be "
-                    "moved to the next monday instead. This is required in some countries by civil law. This will "
+        help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
+                    "moved to the next Monday instead. This is required in some countries by civil law. This will "
                     "not effect the last date of payments configured above."),
         required=False,
     )
