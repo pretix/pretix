@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-02 15:38+0000\n"
+"PO-Revision-Date: 2018-05-03 07:57+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -6345,7 +6345,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:108
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:65
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
 msgid "No attendee record was found."
@@ -6856,7 +6856,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/base.html:12
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:10
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:32
 #: pretix/control/templates/pretixcontrol/event/tickets.html:28
@@ -10845,7 +10845,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr ""
+msgstr "Resultaat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
