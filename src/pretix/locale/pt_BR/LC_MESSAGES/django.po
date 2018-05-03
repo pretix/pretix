@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-03-10 13:20+0000\n"
-"Last-Translator: Matheus Nunes <matheus@integrate.com.br>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
-"pretix/pretix/pt_BR/>\n"
+"PO-Revision-Date: 2018-05-03 22:00+0000\n"
+"Last-Translator: etiontdn <etiontdn@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) "
+"<https://translate.pretix.eu/projects/pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,16 +67,18 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Eventos não podem ser criados ao 'vivo'. Cotas e pagamentos devem ser "
+"adicionados ao evento antes que as vendas possam ser ativadas."
 
 #: pretix/api/serializers/event.py:90
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Propriedade Meta Data '{name}' não existe."
 
 #: pretix/api/serializers/event.py:103
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Plugin desconhecido: '{name}'."
 
 #: pretix/api/serializers/item.py:91
 #, fuzzy
@@ -302,7 +304,7 @@ msgstr "Impostos"
 #: pretix/base/exporters/orderlist.py:66
 #: pretix/control/templates/pretixcontrol/order/index.html:81
 msgid "Order locale"
-msgstr ""
+msgstr "Local da encomenda"
 
 #: pretix/base/exporters/orderlist.py:71
 #, python-brace-format
@@ -722,6 +724,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
+"Usando a taxa de conversão de 1: {rate} como publicado pelo Banco Central "
+"Europeu na {date}, isto corresponde á:"
 
 #: pretix/base/invoice.py:501
 #, python-brace-format
@@ -730,6 +734,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
+"Usando a taxa de conversão de 1: {rate} como publicado pelo Banco Central "
+"Europeu na {date}, a conta total corresponde á: {total}."
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 msgid "Default list"
@@ -989,15 +995,18 @@ msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
+"Você configurou pelo menos um produto pago mas não habilitou nenhum meio de "
+"pagamento."
 
 #: pretix/base/models/event.py:569
 msgid "You need to configure at least one quota to sell anything."
-msgstr ""
+msgstr "Você precisa configurar pelo menos uma cota para vender qualquer coisa."
 
 #: pretix/base/models/event.py:658
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Depois de criar um evento não pode mudar entre as series e um único evento."
 
 #: pretix/base/models/event.py:664
 #, fuzzy
@@ -1007,19 +1016,15 @@ msgstr "O método de pagamento para este pedido não pode ser alterado."
 
 #: pretix/base/models/event.py:667
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "O metodo de pagamento já está sendo usado por um evento diferente."
 
 #: pretix/base/models/event.py:673
-#, fuzzy
-#| msgid "Subevent cannot be null for event series."
 msgid "The event cannot end before it starts."
-msgstr "Esta atração não pertence ao evento."
+msgstr "O evento não pode acabar antes que ele comece."
 
 #: pretix/base/models/event.py:679
-#, fuzzy
-#| msgid "The end of the presale period has to be later than its start."
 msgid "The event's presale cannot end before it starts."
-msgstr "O final do período de pré-vendas deve ser posterior ao início."
+msgstr "O final do período de pré-vendas não pode acabar antes de começar."
 
 #: pretix/base/models/event.py:705 pretix/base/models/items.py:210
 #: pretix/base/models/items.py:438 pretix/control/forms/filter.py:302
@@ -1139,7 +1144,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:226
 msgid "Free price input"
-msgstr ""
+msgstr "Entrada de preço livre"
 
 #: pretix/base/models/items.py:227
 msgid ""
