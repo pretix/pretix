@@ -990,7 +990,7 @@ msgstr "Description de la catégorie"
 
 #: pretix/base/models/items.py:54
 msgid "Products in this category are add-on products"
-msgstr "Les produits de cette catégorie sont des Add-Ons"
+msgstr "Les produits de cette catégorie sont des Add-ons"
 
 #: pretix/base/models/items.py:55
 msgid ""
@@ -1018,7 +1018,7 @@ msgstr "Catégories de produits"
 
 #: pretix/base/models/items.py:67
 #, python-brace-format
-msgid "{category} (Add-On products)"
+msgid "{category} (Add-on products)"
 msgstr "{category} (Add-On products)"
 
 #: pretix/base/models/items.py:201 pretix/base/models/items.py:550
@@ -1282,7 +1282,7 @@ msgid "Maximum number"
 msgstr "Nombre maximum"
 
 #: pretix/base/models/items.py:562
-msgid "Add-Ons are included in the price"
+msgid "Add-ons are included in the price"
 msgstr "Les Add-Ons sont inclus dans le prix"
 
 #: pretix/base/models/items.py:563
@@ -7255,7 +7255,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:33
 #: pretix/control/templates/pretixcontrol/item/addons.html:66
-msgid "Add-On"
+msgid "Add-on"
 msgstr "Add-On"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:89
@@ -7267,7 +7267,7 @@ msgid "Modify product:"
 msgstr "Modifier le produit:"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:22
-msgid "Add-Ons"
+msgid "Add-ons"
 msgstr "Add-Ons"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
@@ -7790,7 +7790,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:66
 #, python-format
-msgid "Add-On to position #%(posid)s"
+msgid "Add-on to position #%(posid)s"
 msgstr "Add-On à la position #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:85
@@ -11901,13 +11901,13 @@ msgid "Invoice address: company"
 msgstr "Adresse de facturation: société"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:149
-msgid "List of Add-Ons"
+msgid "List of Add-ons"
 msgstr "Liste des Addons"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:150
 msgid ""
-"Add-On 1\n"
-"Add-On 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
 "Addon 1\n"
 "Addon 2"

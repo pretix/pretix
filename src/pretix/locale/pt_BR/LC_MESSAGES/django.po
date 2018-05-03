@@ -1019,7 +1019,7 @@ msgstr "Categorias de produtos"
 
 #: pretix/base/models/items.py:67
 #, python-brace-format
-msgid "{category} (Add-On products)"
+msgid "{category} (Add-on products)"
 msgstr "{category} (Produtos complementares)"
 
 #: pretix/base/models/items.py:201 pretix/base/models/items.py:550
@@ -1259,7 +1259,7 @@ msgid "Maximum number"
 msgstr ""
 
 #: pretix/base/models/items.py:562
-msgid "Add-Ons are included in the price"
+msgid "Add-ons are included in the price"
 msgstr ""
 
 #: pretix/base/models/items.py:563
@@ -6478,7 +6478,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:33
 #: pretix/control/templates/pretixcontrol/item/addons.html:66
-msgid "Add-On"
+msgid "Add-on"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:89
@@ -6490,7 +6490,7 @@ msgid "Modify product:"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/base.html:22
-msgid "Add-Ons"
+msgid "Add-ons"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
@@ -6947,7 +6947,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:66
 #, python-format
-msgid "Add-On to position #%(posid)s"
+msgid "Add-on to position #%(posid)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:85
@@ -10687,13 +10687,13 @@ msgid "Invoice address: company"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:149
-msgid "List of Add-Ons"
+msgid "List of Add-ons"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:150
 msgid ""
-"Add-On 1\n"
-"Add-On 2"
+"Add-on 1\n"
+"Add-on 2"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:158

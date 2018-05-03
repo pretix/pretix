@@ -19,7 +19,7 @@
             {% endif %}
             <li {% if "event.item.addons" == url_name %}class="active"{% endif %}>
                 <a href="{% url 'control:event.item.addons' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
-                    {% trans "Add-Ons" %}
+                    {% trans "Add-ons" %}
                 </a>
             </li>
         </ul>

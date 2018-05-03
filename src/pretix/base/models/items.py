@@ -64,7 +64,7 @@ class ItemCategory(LoggedModel):
 
     def __str__(self):
         if self.is_addon:
-            return _('{category} (Add-On products)').format(category=str(self.name))
+            return _('{category} (Add-on products)').format(category=str(self.name))
         return str(self.name)
 
     def delete(self, *args, **kwargs):
@@ -559,7 +559,7 @@ class ItemAddOn(models.Model):
     )
     price_included = models.BooleanField(
         default=False,
-        verbose_name=_('Add-Ons are included in the price'),
+        verbose_name=_('Add-ons are included in the price'),
         help_text=_('If selected, adding add-ons to this ticket is free, even if the add-ons would normally cost '
                     'money individually.')
     )

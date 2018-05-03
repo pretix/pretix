@@ -53,7 +53,7 @@
                         <div class="panel-body">
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
-                                    {# Add-Ons #}
+                                    {# Add-ons #}
                                     <legend>+ {{ form.pos.item }}</legend>
                                 {% endif %}
                                 {% bootstrap_form form layout="horizontal" %}

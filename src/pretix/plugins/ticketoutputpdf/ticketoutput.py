@@ -146,8 +146,8 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address') else ''
     }),
     ("addons", {
-        "label": _("List of Add-Ons"),
-        "editor_sample": _("Add-On 1\nAdd-On 2"),
+        "label": _("List of Add-ons"),
+        "editor_sample": _("Add-on 1\nAdd-on 2"),
         "evaluate": lambda op, order, ev: "<br/>".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
             for p in op.addons.select_related('item', 'variation')
