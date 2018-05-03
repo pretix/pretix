@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
+"Last-Translator: etiontdn <etiontdn@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -3858,8 +3858,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1218
 msgid "You need to configure at least one quota to sell anything."
-msgstr ""
-"Você precisa configurar pelo menos uma cota para vender qualquer coisa."
+msgstr "Você precisa configurar pelo menos uma cota para vender qualquer coisa."
 
 #: pretix/base/models/event.py:1223
 #, python-brace-format
