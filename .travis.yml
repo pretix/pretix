@@ -45,6 +45,8 @@ addons:
   apt:
       packages:
           - enchant
+          - aspell-de
+          - aspell-en
 branches:
   except:
   - /^weblate-.*/
