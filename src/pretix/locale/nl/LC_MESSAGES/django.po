@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-04 13:57+0000\n"
+"PO-Revision-Date: 2018-05-04 14:20+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -1058,7 +1058,7 @@ msgstr "Data in evenementenreeks"
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
 "Mag geen spaties of speciale tekens bevatten, met uitzondering van "
-"onderstrepingstekens."
+"onderstrepingstekens"
 
 #: pretix/base/models/event.py:880
 msgid "The property name may only contain letters, numbers and underscores."
@@ -1774,7 +1774,7 @@ msgstr "Prijs"
 
 #: pretix/base/models/orders.py:603 pretix/base/models/orders.py:608
 msgid "Empty, if this product is not an admission ticket"
-msgstr "Empty, if this product is not an admission ticket"
+msgstr "Leeg, als dit product geen toegangsbewijs is"
 
 #: pretix/base/models/orders.py:679
 msgid "Payment fee"
@@ -3705,11 +3705,11 @@ msgstr "We hadden moeite met het verwerken van uw verzoek."
 
 #: pretix/base/templates/500.html:8
 msgid "If this problem persists, please contact us."
-msgstr "Als dit probleem aanhoudt, neem dan contact met ons op."
+msgstr "Neem contact met ons op als dit probleem aanhoudt."
 
 #: pretix/base/templates/500.html:11
 msgid "If you contact us, please send us the following code:"
-msgstr "Als u contact met ons opneemt, stuur dan de volgende code mee:"
+msgstr "Stuur de volgende code mee als u contact met ons opneemt:"
 
 #: pretix/base/templates/csrffail.html:3 pretix/base/templates/csrffail.html:6
 msgid "Verification failed"
@@ -3831,7 +3831,7 @@ msgstr "Download ticket"
 #: pretix/base/validators.py:15
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr "Dit veld heeft een ongeldige waarde: %(value)s"
+msgstr "Dit veld heeft een ongeldige waarde: %(value)s."
 
 #: pretix/base/views/async.py:136
 msgid "An unexpected error has occurred."
@@ -7624,7 +7624,7 @@ msgstr "Belasting"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 msgid "Ticket download"
-msgstr "Ticket download"
+msgstr "Ticketdownload"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:11
 msgid ""
@@ -7907,7 +7907,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/addons.html:33
 #: pretix/control/templates/pretixcontrol/item/addons.html:66
 msgid "Add-On"
-msgstr "Add-On"
+msgstr "Add-on"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:89
 msgid "Add a new add-on"
@@ -11422,7 +11422,7 @@ msgstr "Bedrag:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:12
 msgid "Reference code (important):"
-msgstr "Betalingskenmerk (belangrijk)"
+msgstr "Betalingskenmerk (belangrijk):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
