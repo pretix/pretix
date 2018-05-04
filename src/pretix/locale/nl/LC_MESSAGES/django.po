@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-04 14:21+0000\n"
-"Last-Translator: Pieter Roziers <pieter@trippeltwiejenul.be>\n"
+"PO-Revision-Date: 2018-05-04 14:22+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -544,7 +544,7 @@ msgstr "Smartphone met de Authenticator-applicatie"
 
 #: pretix/base/forms/user.py:118
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F ondersteund hardware-token (bijvoorbeeld Yubikey)"
+msgstr "U2F ondersteunend hardware-token (bijvoorbeeld Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
