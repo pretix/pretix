@@ -510,6 +510,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
         OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
+        for msg in meta_info.get('confirm_messages', []):
+            order.log_action('pretix.event.order.consent', data={'msg': msg})
 
     order_placed.send(event, order=order)
     return order

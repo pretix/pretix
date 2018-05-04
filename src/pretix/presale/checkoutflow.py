@@ -578,7 +578,10 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                     return redirect(self.get_error_url())
 
         meta_info = {
-            'contact_form_data': self.cart_session.get('contact_form_data', {})
+            'contact_form_data': self.cart_session.get('contact_form_data', {}),
+            'confirm_messages': [
+                str(m) for m in self.confirm_messages.values()
+            ]
         }
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)

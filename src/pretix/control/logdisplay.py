@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+import bleach
 import dateutil.parser
 import pytz
 from django.dispatch import receiver
@@ -277,6 +278,11 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type.startswith('pretix.event.tickets.provider.'):
         return _('The settings of a ticket output provider have been changed.')
+
+    if logentry.action_type == 'pretix.event.order.consent':
+        return _('The user confirmed the following message: "{}"').format(
+            bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
+        )
 
     if logentry.action_type == 'pretix.event.checkin':
         return _display_checkin(sender, logentry)
