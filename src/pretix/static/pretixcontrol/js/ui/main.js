@@ -358,6 +358,10 @@ var form_handlers = function (el) {
     el.find(".simple-subevent-choice").change(function () {
         $(this).closest("form").submit();
     });
+
+    el.find("input[name=basics-slug]").bind("keyup keydown change", function () {
+        $(this).closest(".form-group").find(".slug-length").toggle($(this).val().length > 16);
+    });
 };
 
 $(function () {

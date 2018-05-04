@@ -27,6 +27,11 @@
                         references as an abbreviation to reference this event.
                     {% endblocktrans %}
                 </div>
+                <div class="slug-length alert alert-warning helper-display-none-soft">
+                    {% blocktrans trimmed %}
+                        We strongly recommend against using short forms of more then 16 characters.
+                    {% endblocktrans %}
+                </div>
             </div>
         </div>
         {% bootstrap_field form.date_from layout="control" %}
