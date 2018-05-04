@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-02 14:01+0000\n"
-"PO-Revision-Date: 2018-05-04 14:23+0000\n"
-"Last-Translator: Maarten Visscher <mail@maartenvisscher.nl>\n"
+"PO-Revision-Date: 2018-05-04 23:00+0000\n"
+"Last-Translator: Pieter Roziers <pieter@trippeltwiejenul.be>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -8683,7 +8683,7 @@ msgstr "incl. %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:322
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
 msgid "Net total"
-msgstr "Totaal netto"
+msgstr "Netto totaal"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:331
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:205
