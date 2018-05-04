@@ -137,7 +137,9 @@ class Team(LoggedModel):
     )
     can_change_organizer_settings = models.BooleanField(
         default=False,
-        verbose_name=_("Can change organizer settings")
+        verbose_name=_("Can change organizer settings"),
+        help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
+                    'reports, so be careful who you add to this team!')
     )
 
     can_change_event_settings = models.BooleanField(
