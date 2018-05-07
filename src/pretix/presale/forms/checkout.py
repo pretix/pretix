@@ -23,8 +23,7 @@ class ContactForm(forms.Form):
     required_css_class = 'required'
     email = forms.EmailField(label=_('E-mail'),
                              help_text=_('Make sure to enter a valid email address. We will send you an order '
-                                         'confirmation including a link that you need in case you want to make '
-                                         'modifications to your order or download your ticket later.'),
+                                         'confirmation including a link that you need to access your order later.'),
                              validators=[EmailBlacklistValidator()],
                              )
 
