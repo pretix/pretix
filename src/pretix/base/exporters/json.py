@@ -24,13 +24,15 @@ class JSONExporter(BaseExporter):
                 'categories': [
                     {
                         'id': category.id,
-                        'name': str(category.name)
+                        'name': str(category.name),
+                        'internal_name': category.internal_name
                     } for category in self.event.categories.all()
                 ],
                 'items': [
                     {
                         'id': item.id,
                         'name': str(item.name),
+                        'internal_name': str(item.internal_name),
                         'category': item.category_id,
                         'price': item.default_price,
                         'tax_rate': item.tax_rule.rate if item.tax_rule else Decimal('0.00'),

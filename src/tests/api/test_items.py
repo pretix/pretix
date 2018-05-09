@@ -87,6 +87,7 @@ def cart_position(event, item, variations):
 TEST_CATEGORY_RES = {
     "name": {"en": "Tickets"},
     "description": {"en": ""},
+    "internal_name": None,
     "position": 0,
     "is_addon": False
 }
@@ -192,6 +193,7 @@ def item3(event):
 
 TEST_ITEM_RES = {
     "name": {"en": "Budget Ticket"},
+    "internal_name": None,
     "default_price": "23.00",
     "category": None,
     "active": True,

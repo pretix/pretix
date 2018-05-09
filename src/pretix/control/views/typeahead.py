@@ -197,12 +197,16 @@ def itemvarquota_select2(request, **kwargs):
                     dt_end = make_aware(datetime.combine(dt.date(), time(hour=23, minute=59, second=59)), tz)
                     quotaf |= Q(subevent__date_from__gte=dt_start) & Q(subevent__date_from__lte=dt_end)
 
-            itemqs = request.event.items.prefetch_related('variations').filter(name__icontains=i18ncomp(query))
+            itemqs = request.event.items.prefetch_related('variations').filter(
+                Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query)
+            )
             quotaqs = request.event.quotas.filter(quotaf).select_related('subevent')
             more = False
         else:
             if page == 1:
-                itemqs = request.event.items.prefetch_related('variations').filter(name__icontains=i18ncomp(query))
+                itemqs = request.event.items.prefetch_related('variations').filter(
+                    Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query)
+                )
             else:
                 itemqs = request.event.items.none()
             quotaqs = request.event.quotas.filter(name__icontains=query).select_related('subevent')
@@ -215,11 +219,11 @@ def itemvarquota_select2(request, **kwargs):
     for i in itemqs:
         variations = list(i.variations.all())
         if variations:
-            choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name), ''))
+            choices.append((str(i.pk), _('{product} – Any variation').format(product=i), ''))
             for v in variations:
-                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value), ''))
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), ''))
         else:
-            choices.append((str(i.pk), i.name, ''))
+            choices.append((str(i.pk), str(i), ''))
     for q in quotaqs:
         if request.event.has_subevents:
             choices.append(('q-%d' % q.pk,

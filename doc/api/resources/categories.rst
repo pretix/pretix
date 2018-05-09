@@ -14,6 +14,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the category
 name                                  multi-lingual string       The category's visible name
+internal_name                         string                     An optional name that is only used in the backend
 description                           multi-lingual string       A public description (might include markdown, can
                                                                  be ``null``)
 position                              integer                    An integer, used for sorting the categories
@@ -25,6 +26,10 @@ is_addon                              boolean                    If ``True``, it
 .. versionchanged:: 1.14
 
    The operations POST, PATCH, PUT and DELETE have been added.
+
+.. versionchanged:: 1.16
+
+   The field ``internal_name`` has been added.
 
 
 Endpoints
@@ -58,6 +63,7 @@ Endpoints
           {
             "id": 1,
             "name": {"en": "Tickets"},
+            "internal_name": "",
             "description": {"en": "Tickets are what you need to get in."},
             "position": 1,
             "is_addon": false
@@ -99,6 +105,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Tickets"},
+        "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
         "is_addon": false
@@ -126,6 +133,7 @@ Endpoints
 
       {
         "name": {"en": "Tickets"},
+        "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
         "is_addon": false
@@ -142,6 +150,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Tickets"},
+        "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
         "is_addon": false
@@ -187,6 +196,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Tickets"},
+        "internal_name": "",
         "description": {"en": "Tickets are what you need to get in."},
         "position": 1,
         "is_addon": true

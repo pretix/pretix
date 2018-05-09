@@ -217,7 +217,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 name,
-                str(op.item.name) + (" – " + str(op.variation.value) if op.variation else "") + "\n" +
+                str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "\n" +
                 money_filter(op.price, self.event.currency),
             ]
             acache = {}
@@ -310,7 +310,7 @@ class CSVCheckinList(BaseCheckinList):
             row = [
                 op.order.code,
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
-                str(op.item.name) + (" – " + str(op.variation.value) if op.variation else ""),
+                str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 if last_checked_in else ''

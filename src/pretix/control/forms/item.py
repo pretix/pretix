@@ -27,6 +27,7 @@ class CategoryForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'name',
+            'internal_name',
             'description',
             'is_addon'
         ]
@@ -90,9 +91,9 @@ class QuotaForm(I18nModelForm):
         for item in items:
             if len(item.variations.all()) > 0:
                 for v in item.variations.all():
-                    choices.append(('{}-{}'.format(item.pk, v.pk), '{} – {}'.format(item.name, v.value)))
+                    choices.append(('{}-{}'.format(item.pk, v.pk), '{} – {}'.format(item, v.value)))
             else:
-                choices.append(('{}'.format(item.pk), item.name))
+                choices.append(('{}'.format(item.pk), str(item)))
 
         self.fields['itemvars'] = forms.MultipleChoiceField(
             label=_('Products'),
@@ -282,6 +283,7 @@ class ItemCreateForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'name',
+            'internal_name',
             'category',
             'admission',
             'default_price',
@@ -308,6 +310,7 @@ class ItemUpdateForm(I18nModelForm):
         fields = [
             'category',
             'name',
+            'internal_name',
             'active',
             'admission',
             'description',

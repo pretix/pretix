@@ -48,7 +48,7 @@
                             <td><strong>
                                 {% if not i.active %}<strike>{% endif %}
                                 <a href="
-                        {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i.name }}</a>
+                        {% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i }}</a>
                                 {% if not i.active %}</strike>{% endif %}
                             </strong>
                             </td>

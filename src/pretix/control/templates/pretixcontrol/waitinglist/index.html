@@ -90,7 +90,7 @@
             {% for item in items %}
                 <option value="{{ item.id }}"
                         {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
-                    {{ item.name }}
+                    {{ item }}
                 </option>
             {% endfor %}
         </select>
