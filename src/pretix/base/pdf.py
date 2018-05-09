@@ -63,7 +63,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Sample product – sample variation"),
         "evaluate": lambda orderposition, order, event: (
             '{} - {}'.format(orderposition.item.name, orderposition.variation)
-            if orderposition.variation else str(orderposition.item)
+            if orderposition.variation else str(orderposition.item.name)
         )
     }),
     ("item_category", {
