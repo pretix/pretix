@@ -50,6 +50,9 @@
             margin: 0;
         }
     }
+    &.variation label {
+        font-weight: normal;
+    }
 }
 .radio .variation-description {
     padding-left: 20px;
