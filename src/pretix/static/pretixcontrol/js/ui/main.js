@@ -482,7 +482,35 @@ $(function () {
         $box.find(".propagated-settings-form").removeClass("blurred");
         ev.preventDefault();
         return true;
-    })
+    });
+
+    $("input[data-toggle-table]").each(function (ev) {
+        var $toggle = $(this);
+
+        var update = function () {
+            var all_true = true;
+            var all_false = true;
+            $toggle.closest("table").find("td:first-child input[type=checkbox]").each(function () {
+                if ($(this).prop("checked")) {
+                    all_false = false;
+                } else {
+                    all_true = false;
+                }
+            });
+            if (all_true) {
+                $toggle.prop("checked", true).prop("indeterminate", false);
+            } else if (all_false) {
+                $toggle.prop("checked", false).prop("indeterminate", false);
+            } else {
+                $toggle.prop("checked", false).prop("indeterminate", true);
+            }
+        };
+
+        $(this).closest("table").find("td:first-child input[type=checkbox]").change(update);
+        $(this).change(function (ev) {
+            $(this).closest("table").find("td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
+        });
+    });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));

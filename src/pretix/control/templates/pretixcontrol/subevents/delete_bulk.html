@@ -1,0 +1,41 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete dates" context "subevent" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Delete dates" context "subevent" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if allowed %}
+            <p>{% blocktrans %}Are you sure you want to delete the following dates?{% endblocktrans %}</p>
+            <ul>
+                {% for s in allowed %}
+                    <li>
+                        {{ s }}
+                        <input type="hidden" name="subevent" value="{{ s.pk }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if forbidden %}
+            <p>{% blocktrans trimmed %}The following dates can't be deleted as they already have orders, but
+                will be disabled instead.{% endblocktrans %}</p>
+            <ul>
+                {% for s in forbidden %}
+                    <li>
+                        {{ s }}
+                        <input type="hidden" name="subevent" value="{{ s.pk }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.subevents" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save" value="delete_confirm" name="action">
+                {% trans "Delete" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

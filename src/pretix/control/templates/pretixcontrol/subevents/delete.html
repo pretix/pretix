@@ -8,7 +8,7 @@
         {% csrf_token %}
         <p>{% blocktrans %}Are you sure you want to delete the date <strong>{{ subevent }}</strong>?{% endblocktrans %}</p>
         <div class="form-group submit-group">
-            <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+            <a href="{% url "control:event.subevents" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">

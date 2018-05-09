@@ -106,6 +106,7 @@ urlpatterns = [
             name='event.subevent.delete'),
         url(r'^subevents/add$', subevents.SubEventCreate.as_view(), name='event.subevents.add'),
         url(r'^subevents/bulk_add$', subevents.SubEventBulkCreate.as_view(), name='event.subevents.bulk'),
+        url(r'^subevents/bulk_action$', subevents.SubEventBulkAction.as_view(), name='event.subevents.bulkaction'),
         url(r'^items/$', item.ItemList.as_view(), name='event.items'),
         url(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
         url(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),

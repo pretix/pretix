@@ -9,10 +9,11 @@ from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from pretix.base.models.checkin import CheckinList
@@ -467,6 +468,65 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         for p in self.request.organizer.meta_properties.all():
             formlist.append(self._make_meta_form(p, val_instances))
         return formlist
+
+
+class SubEventBulkAction(EventPermissionRequiredMixin, View):
+    permission = 'can_change_settings'
+
+    @cached_property
+    def objects(self):
+        return self.request.event.subevents.filter(
+            id__in=self.request.POST.getlist('subevent')
+        )
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('action') == 'disable':
+            for obj in self.objects:
+                obj.log_action(
+                    'pretix.subevent.changed', user=self.request.user, data={
+                        'active': False
+                    }
+                )
+                obj.active = False
+                obj.save(update_fields=['active'])
+            messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
+        elif request.POST.get('action') == 'enable':
+            for obj in self.objects:
+                obj.log_action(
+                    'pretix.subevent.changed', user=self.request.user, data={
+                        'active': True
+                    }
+                )
+                obj.active = True
+                obj.save(update_fields=['active'])
+            messages.success(request, pgettext_lazy('subevent', 'The selected dates have been disabled.'))
+        elif request.POST.get('action') == 'delete':
+            return render(request, 'pretixcontrol/subevents/delete_bulk.html', {
+                'allowed': self.objects.filter(orderposition__isnull=True),
+                'forbidden': self.objects.filter(orderposition__isnull=False),
+            })
+        elif request.POST.get('action') == 'delete_confirm':
+            for obj in self.objects:
+                if obj.allow_delete():
+                    obj.log_action('pretix.subevent.deleted', user=self.request.user)
+                    obj.delete()
+                else:
+                    obj.log_action(
+                        'pretix.subevent.changed', user=self.request.user, data={
+                            'active': False
+                        }
+                    )
+                    obj.active = False
+                    obj.save(update_fields=['active'])
+            messages.success(request, pgettext_lazy('subevent', 'The selected dates have been deleted or disabled.'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.subevents', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
 
 
 class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):

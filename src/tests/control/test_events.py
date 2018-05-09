@@ -1173,6 +1173,49 @@ class SubEventsTest(SoupTest):
         assert ses[1].date_from.isoformat() == "2018-04-12T11:29:31+00:00"
         assert ses[-1].date_from.isoformat() == "2019-03-28T12:29:31+00:00"
 
+    def test_delete_bulk(self):
+        self.subevent2.active = True
+        self.subevent2.save()
+        o = Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, payment_provider='banktransfer', locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=self.ticket,
+            subevent=self.subevent1,
+            price=Decimal("14"),
+        )
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_action', {
+            'subevent': [str(self.subevent1.pk), str(self.subevent2.pk)],
+            'action': 'delete_confirm'
+        }, follow=True)
+        assert doc.select(".alert-success")
+        assert not self.event1.subevents.filter(pk=self.subevent2.pk).exists()
+        assert self.event1.subevents.get(pk=self.subevent1.pk).active is False
+
+    def test_disable_bulk(self):
+        self.subevent2.active = True
+        self.subevent2.save()
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_action', {
+            'subevent': str(self.subevent2.pk),
+            'action': 'disable'
+        }, follow=True)
+        assert doc.select(".alert-success")
+        assert self.event1.subevents.get(pk=self.subevent2.pk).active is False
+
+    def test_enable_bulk(self):
+        self.subevent2.active = False
+        self.subevent2.save()
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_action', {
+            'subevent': str(self.subevent2.pk),
+            'action': 'enable'
+        }, follow=True)
+        assert doc.select(".alert-success")
+        assert self.event1.subevents.get(pk=self.subevent2.pk).active is True
+
 
 class EventDeletionTest(SoupTest):
     def setUp(self):
