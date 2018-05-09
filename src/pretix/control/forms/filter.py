@@ -1,7 +1,7 @@
 from django import forms
 from django.apps import apps
 from django.db.models import Exists, F, OuterRef, Q
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -307,6 +307,20 @@ class SubEventFilterForm(FilterForm):
         ),
         required=False
     )
+    weekday = forms.ChoiceField(
+        label=_('Weekday'),
+        choices=(
+            ('', _('All days')),
+            ('2', _('Monday')),
+            ('3', _('Tuesday')),
+            ('4', _('Wednesday')),
+            ('5', _('Thursday')),
+            ('6', _('Friday')),
+            ('7', _('Saturday')),
+            ('1', _('Sunday')),
+        ),
+        required=False
+    )
     query = forms.CharField(
         label=_('Event name'),
         widget=forms.TextInput(attrs={
@@ -335,6 +349,9 @@ class SubEventFilterForm(FilterForm):
             qs = qs.filter(presale_start__gte=now())
         elif fdata.get('status') == 'past':
             qs = qs.filter(presale_end__lte=now())
+
+        if fdata.get('weekday'):
+            qs = qs.annotate(wday=ExtractWeekDay('date_from')).filter(wday=fdata.get('weekday'))
 
         if fdata.get('query'):
             query = fdata.get('query')
