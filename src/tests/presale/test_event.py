@@ -550,8 +550,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
             self.orga.slug, self.event.slug, self.v.code, se1.pk
         ))
         assert "SE1" in html.rendered_content
-        assert "variation_%d_%d" % (self.item.pk, var1.pk) not in html.rendered_content
-        assert "variation_%d_%d" % (self.item.pk, var2.pk) not in html.rendered_content
+        assert 'name="variation_%d_%d' % (self.item.pk, var1.pk) not in html.rendered_content
+        assert 'name="variation_%d_%d' % (self.item.pk, var2.pk) not in html.rendered_content
 
 
 class WaitingListTest(EventTestMixin, SoupTest):
