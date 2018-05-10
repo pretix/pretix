@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-02 15:37+0000\n"
+"PO-Revision-Date: 2018-05-10 10:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German (informal) <https://translate.pretix.eu/projects/"
-"pretix/pretix/de_Informal/>\n"
+"Language-Team: German (informal) "
+"<https://translate.pretix.eu/projects/pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1925,6 +1925,9 @@ msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Mit dieser Berechtigung kann jemand z.B. über Datenschutzberichte die "
+"meisten Daten deiner Veranstaltungen einsehen, daher vergib sie bitte nur an "
+"vertrauenswürdige Kollegen!"
 
 #: pretix/base/models/organizer.py:147
 msgid "Can change event settings"
@@ -5090,11 +5093,8 @@ msgid "Weekday"
 msgstr "Werktag"
 
 #: pretix/control/forms/filter.py:313
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "All days"
-msgstr "Alle Termine"
+msgstr "Alle Tage"
 
 #: pretix/control/forms/filter.py:314 pretix/control/forms/subevents.py:277
 #: pretix/control/forms/subevents.py:327 pretix/control/forms/subevents.py:343
@@ -6246,10 +6246,8 @@ msgid "The settings of a ticket output provider have been changed."
 msgstr "Die Einstellungen einer Ticket-Download-Methode wurden geändert."
 
 #: pretix/control/logdisplay.py:283
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "The user confirmed the following message: \"{}\""
-msgstr "Bitte bestätige die folgenden Zahlungsdetails."
+msgstr "Der Nutzer hat diesen Text bestätigt: \"{}\""
 
 #: pretix/control/logdisplay.py:303
 #, python-brace-format
@@ -7776,6 +7774,7 @@ msgstr ""
 msgid ""
 "We strongly recommend against using short forms of more then 16 characters."
 msgstr ""
+"Wir raten dringend davon ab, Kurzformen mit mehr als 16 Zeichen zu verwenden."
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html:6
 msgid ""
@@ -9343,18 +9342,15 @@ msgstr ""
 "können."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
-#, fuzzy
-#| msgid ""
-#| "It is within your own responsibility to check if you are allowed to "
-#| "delete the affected data in your legislation, e.g. for reasons of "
-#| "taxation."
 msgid ""
 "It is within your own responsibility to check if you are allowed to delete "
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
 "Es liegt in deiner Verantwortung zu prüfen, ob du die ausgewählten Daten "
-"löschen darfst oder z.B. aus steuerrechtlichen Gründen aufbewahren musst."
+"löschen darfst oder z.B. aus steuerrechtlichen Gründen aufbewahren musst. In "
+"vielen Ländern musst du einige dieser Daten für den Fall einer "
+"Betriebsprüfung im Produktivsystem aufbewahren."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -9376,6 +9372,8 @@ msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
 msgstr ""
+"Wir empfehlen, diese Daten nicht zu entfernen, das du sie im Fall einer "
+"Steuerprüfung vermutlich vorzeigen musst."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 msgctxt "subevent"
@@ -9460,24 +9458,21 @@ msgstr "Möchtest du den Termin <strong>%(subevent)s</strong> wirklich löschen?
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Delete date"
 msgctxt "subevent"
 msgid "Delete dates"
-msgstr "Termin löschen"
+msgstr "Termine löschen"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the team?"
 msgid "Are you sure you want to delete the following dates?"
-msgstr "Möchtest du das Team wirklich löschen?"
+msgstr "Möchtest du die folgenden Termine wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
 msgstr ""
+"Die folgenden Termine können nicht gelöscht werden, da bereits Bestellungen "
+"vorliegen, aber werden stattdessen deaktiviert."
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 msgctxt "subevent"
@@ -9519,23 +9514,16 @@ msgid "Use as a template for many new dates"
 msgstr "Als Vorlage für viele neue Termine verwenden"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:145
-#, fuzzy
-#| msgid "Delete event"
 msgid "Delete selected"
-msgstr "Veranstaltung löschen"
+msgstr "Ausgewählte löschen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:148
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Enable selected"
-msgstr "Kein Termin ausgewählt."
+msgstr "Ausgewählte aktivieren"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:151
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disable selected"
-msgstr "Deaktiviert"
+msgstr "Ausgewählte deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -10969,20 +10957,14 @@ msgid "The new date has been created."
 msgstr "Eine neuer Termin wurde erstellt."
 
 #: pretix/control/views/subevents.py:493 pretix/control/views/subevents.py:503
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr "Der ausgewählte Termin wurde gelöscht."
+msgstr "Die ausgewählten Termine wurden gelöscht."
 
 #: pretix/control/views/subevents.py:522
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr "Der ausgewählte Termin wurde gelöscht."
+msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
 
 #: pretix/control/views/subevents.py:729
 msgctxt "subevent"
@@ -13010,19 +12992,13 @@ msgstr ""
 "versuchen."
 
 #: pretix/presale/forms/checkout.py:25
-#, fuzzy
-#| msgid ""
-#| "Make sure to enter a valid email address. We will send you an order "
-#| "confirmation including a link that you need in case you want to make "
-#| "modifications to your order or download your ticket later."
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
 "Gib eine gültige E-Mail-Adresse ein. Wir werden dir an diese Adresse eine "
 "Bestellbestätigung schicken. Diese enthält einen Link, den du brauchst, "
-"falls du deine Bestellung später ändern oder dein Ticket herunterladen "
-"möchtest."
+"falls du später auf deine Bestellung zugreifen möchtest."
 
 #: pretix/presale/forms/checkout.py:37
 msgid "E-mail address (repeated)"
@@ -13271,16 +13247,12 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove one"
-msgstr "Entfernen"
+msgstr "Eins entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:109
-#, fuzzy
-#| msgid "Add a new rule"
 msgid "Add one more"
-msgstr "Neue Regel hinzufügen"
+msgstr "Eins mehr hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
@@ -13428,10 +13400,9 @@ msgstr "Varianten zeigen"
 #: pretix/presale/templates/pretixpresale/event/index.html:392
 #: pretix/presale/templates/pretixpresale/event/voucher.html:98
 #: pretix/presale/templates/pretixpresale/event/voucher.html:174
-#, fuzzy, python-format
-#| msgid "Modify order: %(code)s"
+#, python-format
 msgid "Modify price for %(item)s"
-msgstr "Bestellung bearbeiten: %(code)s"
+msgstr "Preis von %(item)s verändern"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/index.html:408
