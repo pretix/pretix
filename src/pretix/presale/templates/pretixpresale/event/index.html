@@ -230,9 +230,11 @@
                                                 </a>
                                             {% endif %}
                                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                                <a href="#" data-toggle="variations">
-                                                    <strong>{{ item.name }}</strong>
-                                                </a>
+                                                <h4>
+                                                    <a href="#" data-toggle="variations">
+                                                        {{ item.name }}
+                                                    </a>
+                                                </h4>
                                                 {% if item.description %}
                                                     <div class="product-description">
                                                         {{ item.description|localize|rich_text }}
@@ -273,9 +275,11 @@
                                         {% for var in item.available_variations %}
                                             <div class="row-fluid product-row variation">
                                                 <div class="col-md-8 col-xs-12">
-                                                    <label for="variation_{{ item.pk }}_{{ var.pk }}">
-                                                        {{ var }}
-                                                    </label>
+                                                    <h5>
+                                                        <label for="variation_{{ item.pk }}_{{ var.pk }}">
+                                                            {{ var }}
+                                                        </label>
+                                                    </h5>
                                                     {% if var.description %}
                                                         <div class="variation-description">
                                                             {{ var.description|localize|rich_text }}
@@ -358,7 +362,9 @@
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                            <label for="item_{{ item.pk }}"><strong>{{ item.name }}</strong></label>
+                                            <h4>
+                                                <label for="item_{{ item.pk }}">{{ item.name }}</label>
+                                            </h4>
                                             {% if item.description %}
                                                 <div class="product-description">
                                                     {{ item.description|localize|rich_text }}

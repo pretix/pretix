@@ -53,6 +53,17 @@
     &.variation label {
         font-weight: normal;
     }
+    h4 {
+        font-size: inherit;
+        margin: 0;
+        line-height: inherit;
+    }
+    h5 {
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+        line-height: inherit;
+    }
 }
 .radio .variation-description {
     padding-left: 20px;
