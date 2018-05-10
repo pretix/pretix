@@ -13247,16 +13247,12 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove one"
-msgstr "Entfernen"
+msgstr "Eins entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:109
-#, fuzzy
-#| msgid "Add a new rule"
 msgid "Add one more"
-msgstr "Neue Regel hinzufügen"
+msgstr "Eins mehr hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
@@ -13404,10 +13400,9 @@ msgstr "Varianten zeigen"
 #: pretix/presale/templates/pretixpresale/event/index.html:392
 #: pretix/presale/templates/pretixpresale/event/voucher.html:98
 #: pretix/presale/templates/pretixpresale/event/voucher.html:174
-#, fuzzy, python-format
-#| msgid "Modify order: %(code)s"
+#, python-format
 msgid "Modify price for %(item)s"
-msgstr "Bestellung bearbeiten: %(code)s"
+msgstr "Preis von %(item)s verändern"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/index.html:408
