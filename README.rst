@@ -65,20 +65,21 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 
 ## 한국어 번역
 
-프리 틱스
+pretix
 ======
 
 .. image:: https://img.shields.io/pypi/v/pretix.svg
-   :target: https://pypi.python.org/pypi/pretix
+   :target: https://pypi.python.org/pypi/pretix
 
 .. image:: https://readthedocs.org/projects/pretix/badge/?version=latest
-   :target: https://docs.pretix.eu/en/latest/
+   :target: https://docs.pretix.eu/en/latest/
 
 .. image:: https://travis-ci.org/pretix/pretix.svg?branch=master
-   :target: https://travis-ci.org/pretix/pretix
+   :target: https://travis-ci.org/pretix/pretix
 
 .. image:: https://codecov.io/gh/pretix/pretix/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/pretix/pretix
+   :target: https://codecov.io/gh/pretix/pretix
+
 
 
 
@@ -112,8 +113,8 @@ AUTHORS file for a list of all the awesome folks who contributed to this project
 
 이 프로젝트는 Raphael Michel <mail@raphaelmichel.de>에 의해 관리됩니다. 이 프로젝트에 기여한 모든 훌륭한 분들의 목록을 보려면 AUTHORS 파일을 참조하십시오.
 
-.. 설치 가이드 : https://docs.pretix.eu/en/latest/admin/installation/index.html
-.. 개발자 설명서 : https://docs.pretix.eu/en/latest/development/index.html
-.. 행동 규약 : https://docs.pretix.eu/en/latest/development/contribution/codeofconduct.html
-.. _pretix.eu : https://pretix.eu
-.. _blog : https://pretix.eu/about/en/blog/
+.. 설치 가이드: https://docs.pretix.eu/en/latest/admin/installation/index.html
+.. 개발자 설명서: https://docs.pretix.eu/en/latest/development/index.html
+.. 행동 규약: https://docs.pretix.eu/en/latest/development/contribution/codeofconduct.html
+.. _pretix.eu: https://pretix.eu
+.. _blog: https://pretix.eu/about/en/blog/
