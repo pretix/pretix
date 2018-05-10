@@ -75,6 +75,13 @@ class BaseDataShredder:
         raise NotImplementedError()  # NOQA
 
     @property
+    def tax_relevant(self):
+        """
+        Indicates whether this removes potentially tax-relevant data.
+        """
+        return False
+
+    @property
     def verbose_name(self) -> str:
         """
         A human-readable name for what this shredder removes. This should be short but self-explanatory.
@@ -216,6 +223,7 @@ class AttendeeNameShredder(BaseDataShredder):
 class InvoiceAddressShredder(BaseDataShredder):
     verbose_name = _('Invoice addresses')
     identifier = 'invoice_addresses'
+    tax_relevant = True
     description = _('This will remove all invoice addresses from orders, as well as logged changes to them.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
@@ -269,6 +277,7 @@ class QuestionAnswerShredder(BaseDataShredder):
 class InvoiceShredder(BaseDataShredder):
     verbose_name = _('Invoices')
     identifier = 'invoices'
+    tax_relevant = True
     description = _('This will remove all invoice PDFs, as well as any of their text content that might contain '
                     'personal data from the database. Invoice numbers and totals will be conserved.')
 
@@ -312,6 +321,7 @@ class CachedTicketShredder(BaseDataShredder):
 class PaymentInfoShredder(BaseDataShredder):
     verbose_name = _('Payment information')
     identifier = 'payment_info'
+    tax_relevant = True
     description = _('This will remove payment-related information. Depending on the payment method, all data will be '
                     'removed or personal data only. No download will be offered.')
 

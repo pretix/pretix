@@ -25,7 +25,8 @@
         <strong>
             {% blocktrans trimmed %}
                 It is within your own responsibility to check if you are allowed to delete the affected data in your
-                legislation, e.g. for reasons of taxation.
+                legislation, e.g. for reasons of taxation. In many countries, you need to keep some data in the live
+                system in case of an audit.
             {% endblocktrans %}
         </strong>
         {% blocktrans trimmed %}
@@ -57,6 +58,15 @@
                         </label>
                         <div id="payment_{{ p.provider.identifier }}" class="panel-collapse in">
                             <div class="panel-body">
+                                {% if shredder.tax_relevant %}
+                                    <div class="alert alert-legal">
+                                        {% blocktrans trimmed %}
+                                            We recommend not to remove this data because you might need it in case
+                                            of a tax audit.
+                                        {% endblocktrans %}
+                                        <div class="clear"></div>
+                                    </div>
+                                {% endif %}
                                 {{ shredder.description|safe }}
                             </div>
                         </div>
