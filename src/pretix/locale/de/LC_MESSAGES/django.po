@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-10 10:11+0000\n"
+"PO-Revision-Date: 2018-05-10 10:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -6257,7 +6257,7 @@ msgstr "Die Einstellungen einer Ticket-Download-Methode wurden geändert."
 
 #: pretix/control/logdisplay.py:283
 msgid "The user confirmed the following message: \"{}\""
-msgstr "Der Nutzer hat diesen Text bestätigt: \"{}"
+msgstr "Der Nutzer hat diesen Text bestätigt: \"{}\""
 
 #: pretix/control/logdisplay.py:303
 #, python-brace-format
