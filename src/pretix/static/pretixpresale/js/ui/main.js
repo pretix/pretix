@@ -103,11 +103,7 @@ $(function () {
     });
     $(".js-only").removeClass("js-only");
     $(".js-hidden").hide();
-    $(".variations-collapsed").hide();
-    $("a[data-toggle=variations]").click(function (e) {
-        $(this).closest(".item-with-variations").find(".variations").slideToggle();
-        e.preventDefault();
-    });
+
     $("div.collapsed").removeClass("collapsed").addClass("collapse");
     $(".has-error, .alert-danger").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
