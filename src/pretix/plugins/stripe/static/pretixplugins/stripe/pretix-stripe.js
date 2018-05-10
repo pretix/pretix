@@ -5,6 +5,8 @@ var pretixstripe = {
     stripe: null,
     elements: null,
     card: null,
+    paymentRequest: null,
+    paymentRequestButton: null,
 
     'cc_request': function () {
         waitingDialog.show(gettext("Contacting Stripe …"));
@@ -39,6 +41,18 @@ var pretixstripe = {
                 success: function () {
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     pretixstripe.elements = pretixstripe.stripe.elements();
+                    pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
+                      country: 'DE', // This obviously needs to be pulled from the backend
+                      currency: $("#stripe_currency").val().toLowerCase(),
+                      total: {
+                        label: 'Total',
+                        amount: Math.round(
+                            parseFloat(
+                                $("#payment_stripe").parents("[data-total]").attr("data-total").replace(",", ".")
+                            ) * 100
+                        ),
+                      },
+                    });
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
                             'style': {
@@ -62,6 +76,25 @@ var pretixstripe = {
                             }
                         });
                         pretixstripe.card.mount("#stripe-card");
+                    }
+                    if ($("#stripe-payment-request-button").length) {
+                      pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
+                        paymentRequest: pretixstripe.paymentRequest,
+                      });
+
+                      pretixstripe.paymentRequest.canMakePayment().then(function(result) {
+                        if (result) {
+                          pretixstripe.paymentRequestButton.mount('#stripe-payment-request-button');
+                          $('#stripe-payment-request-button').parent().hide();
+                          $('#stripe-payment-request-button').parent().next("div").hide();
+                          $('#stripe-payment-request-button').parent().removeClass("hidden");
+                          $('#stripe-payment-request-button').parent().next("div").removeClass("hidden");
+                          $('#stripe-payment-request-button').parent().show(500);
+                          $('#stripe-payment-request-button').parent().next("div").show(500);
+                        } else {
+                          document.getElementById('stripe-payment-request-button').style.display = 'none';
+                        }
+                      });
                     }
                     $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
                 }
