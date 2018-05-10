@@ -45,13 +45,18 @@ var pretixstripe = {
                       country: 'DE', // This obviously needs to be pulled from the backend
                       currency: $("#stripe_currency").val().toLowerCase(),
                       total: {
-                        label: 'Total',
+                        label: gettext('Total'),
                         amount: Math.round(
                             parseFloat(
                                 $("#payment_stripe").parents("[data-total]").attr("data-total").replace(",", ".")
                             ) * 100
                         ),
                       },
+                      displayItems: [], // In theory, we could provide an itemised breakdown of all billed items
+                      requestPayerName: false,
+                      requestPayerEmail: false,
+                      requestPayerPhone: false,
+                      requestShipping: false,
                     });
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
