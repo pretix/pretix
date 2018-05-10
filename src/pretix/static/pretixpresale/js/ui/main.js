@@ -97,6 +97,8 @@ var form_handlers = function (el) {
 $(function () {
     "use strict";
 
+    $("body").removeClass("nojs");
+
     $("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');

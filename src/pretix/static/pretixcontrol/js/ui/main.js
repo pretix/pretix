@@ -367,6 +367,8 @@ var form_handlers = function (el) {
 $(function () {
     "use strict";
 
+    $("body").removeClass("nojs");
+
     $("[data-formset]").formset(
         {
             animateForms: true,

@@ -14,12 +14,14 @@ $(function () {
             return false;
         }
         if (isOpen) {
+            $details.removeClass("details-open");
             $detailsNotSummary.stop().show().slideUp(500, function () {
                 $details.prop("open", false);
             });
         } else {
             $detailsNotSummary.stop().hide();
             $details.prop("open", true);
+            $details.addClass("details-open");
             $detailsNotSummary.slideDown();
         }
         e.preventDefault();
@@ -40,6 +42,8 @@ $(function () {
         $details.prop('open', typeof $details.attr('open') == 'string');
         if (!$details.prop('open')) {
             $detailsNotSummary.hide();
+        } else {
+            $details.addClass("details-open");
         }
         $detailsSummary.attr({
             'role': 'button',

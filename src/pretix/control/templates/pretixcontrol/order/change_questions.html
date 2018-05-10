@@ -19,38 +19,33 @@
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
             {% if request.event.settings.invoice_address_asked %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#invoice" data-parent="#questions_accordion">
-                                <strong>{% trans "Invoice information" %} {% if not request.event.settings.invoice_address_required %}
-                                    {% trans "(optional)" %}
-                                {% endif %}</strong>
-                                <i class="fa fa-angle-down collapse-indicator"></i>
-                            </a>
+                            <strong>{% trans "Invoice information" %} {% if not request.event.settings.invoice_address_required %}
+                                {% trans "(optional)" %}
+                            {% endif %}</strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
-                    </div>
-                    <div id="invoice" class="panel-collapse collapsed in">
+                    </summary>
+                    <div id="invoice">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
                     </div>
-                </div>
+                </details>
             {% endif %}
             {% for pos, forms in formgroups %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ pos.id }}">
-                                <strong>{{ pos.item.name }}{% if pos.variation %}
-                                    – {{ pos.variation }}
-                                {% endif %}</strong>
-                                <i class="fa fa-angle-down collapse-indicator"></i>
-                            </a>
+                            <strong>{{ pos.item.name }}{% if pos.variation %}
+                                – {{ pos.variation }}
+                            {% endif %}</strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
-                    </div>
-                    <div id="cp{{ pos.id }}"
-                            class="panel-collapse collapsed in">
+                    </summary>
+                    <div id="cp{{ pos.id }}">
                         <div class="panel-body">
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
@@ -61,7 +56,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                </div>
+                </details>
             {% endfor %}
         </div>
         <div class="form-group submit-group">

@@ -65,19 +65,6 @@
         line-height: inherit;
     }
 }
-details.item-with-variations {
-    list-style: none;
-}
-details.item-with-variations > summary::-webkit-details-marker {
-  display: none;
-}
-
-details summary {
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
 
 .radio .variation-description {
     padding-left: 20px;

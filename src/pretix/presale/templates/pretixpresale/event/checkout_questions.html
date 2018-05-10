@@ -11,64 +11,57 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <details class="panel panel-default" open>
+                <summary class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#contact">
-                            <strong>{% trans "Contact information" %}</strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
-                        </a>
+                        <strong>{% trans "Contact information" %}</strong>
+                        <i class="fa fa-angle-down collapse-indicator"></i>
                     </h4>
-                </div>
-                <div id="contact" class="panel-collapse collapse in">
+                </summary>
+                <div id="contact">
                     <div class="panel-body">
                         {% bootstrap_form contact_form layout="horizontal" %}
                     </div>
                 </div>
-            </div>
+            </details>
             {% if event.settings.invoice_address_asked %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <details class="panel panel-default" {% if event.settings.invoice_address_required or event.settings.invoice_name_required %}open{% endif %}>
+                    <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <a class="{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %} collapsed{% endif %}" data-toggle="collapse" href="#invoice">
-                                <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
-                                    {% trans "(optional)" %}
-                                {% endif %}</strong>
-                                
-                                <i class="fa fa-angle-down collapse-indicator"></i>
-                            </a>
+                            <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
+                                {% trans "(optional)" %}
+                            {% endif %}</strong>
+
+                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
-                    </div>
-                    <div id="invoice" class="panel-collapse collapse {% if event.settings.invoice_address_required or event.settings.invoice_name_required or "invoice" in request.GET %} in{% endif %}">
+                    </summary>
+                    <div id="invoice">
                         <div class="panel-body">
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
                     </div>
-                </div>
+                </details>
             {% endif %}
 
             {% for pos, forms in formgroups %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ pos.id }}">
-                                <strong>{{ pos.item.name }}</strong>
-                                {% if pos.variation %}
-                                    – {{ pos.variation }}
-                                {% endif %}
-                                {% if forloop.counter > 1 %}
-                                    <span class="text-right">
-                                        <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
-                                        <i class="fa fa-angle-down collapse-indicator"></i>
-                                    </span>
-                                {% else %}
+                            <strong>{{ pos.item.name }}</strong>
+                            {% if pos.variation %}
+                                – {{ pos.variation }}
+                            {% endif %}
+                            {% if forloop.counter > 1 %}
+                                <span class="text-right">
+                                    <input type="button" data-id="{{ forloop.counter0 }}" name="copy" class="js-copy-answers btn btn-default btn-xs" value='{% trans "Copy answers from above" %}'>
                                     <i class="fa fa-angle-down collapse-indicator"></i>
-                                {% endif %}
-                            </a>
+                                </span>
+                            {% else %}
+                                <i class="fa fa-angle-down collapse-indicator"></i>
+                            {% endif %}
                         </h4>
-                    </div>
-                    <div id="cp{{ pos.id }}"
-                            class="panel-collapse collapse in">
+                    </summary>
+                    <div>
                         <div class="panel-body" data-idx="{{ forloop.counter0 }}">
                             {% if pos.addons.all %}
                                 <div class="form-group">
@@ -93,7 +86,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                </div>
+                </details>
             {% endfor %}
         </div>
         <div class="row checkout-button-row">

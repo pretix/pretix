@@ -1,16 +1,14 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load mail_settings_preview %}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<details class="panel panel-default">
+    <summary class="panel-heading">
         <h4 class="panel-title">
-            <a class="collapsed" data-toggle="collapse" href="#{{ pid }}">
-                <strong>{% trans title %}</strong>
-                <i class="fa fa-angle-down collapse-indicator"></i>
-            </a>
+            <strong>{% trans title %}</strong>
+            <i class="fa fa-angle-down collapse-indicator"></i>
         </h4>
-    </div>
-    <div id="{{ pid }}" class="panel-collapse collapse">
+    </summary>
+    <div id="{{ pid }}">
         <div class="panel-body">
             {% with exclude|split as exclusion %}
             {% with items|split as item_list %}
@@ -51,4 +49,4 @@
             {% endwith %}
         </div>
     </div>
-</div>
+</details>
