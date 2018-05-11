@@ -118,20 +118,20 @@
                                             </div>
                                             {% if var.cached_availability.0 == 100 %}
                                                 <div class="col-md-2 col-xs-6 availability-box available radio-box">
-                                                    <label>
-                                                        {% if max_times > 1 %}
-                                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                    pattern="\d*"
-                                                                    max="{{ item.order_max }}"
-                                                                    id="variation_{{ item.id }}_{{ var.id }}"
-                                                                    name="variation_{{ item.id }}_{{ var.id }}">
-                                                        {% else %}
+                                                    {% if max_times > 1 %}
+                                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                pattern="\d*"
+                                                                max="{{ item.order_max }}"
+                                                                id="variation_{{ item.id }}_{{ var.id }}"
+                                                                name="variation_{{ item.id }}_{{ var.id }}">
+                                                    {% else %}
+                                                        <label>
                                                             <input type="radio" name="_voucher_item"
                                                                     {% if options == 1 %}checked="checked"{% endif %}
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     value="variation_{{ item.id }}_{{ var.id }}">
-                                                        {% endif %}
-                                                    </label>
+                                                        </label>
+                                                    {% endif %}
                                                 </div>
                                             {% else %}
                                                 {% include "pretixpresale/event/fragment_availability.html" with avail=var.cached_availability.0 %}
@@ -194,20 +194,20 @@
                                 </div>
                                 {% if item.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available radio-box">
-                                        <label>
-                                            {% if max_times > 1 %}
-                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                        pattern="\d*"
-                                                        max="{{ item.order_max }}"
-                                                        id="item_{{ item.id }}"
-                                                        name="item_{{ item.id }}">
-                                            {% else %}
+                                        {% if max_times > 1 %}
+                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                    pattern="\d*"
+                                                    max="{{ item.order_max }}"
+                                                    id="item_{{ item.id }}"
+                                                    name="item_{{ item.id }}">
+                                        {% else %}
+                                            <label>
                                                 <input type="radio" name="_voucher_item"
                                                         {% if options == 1 %}checked="checked"{% endif %}
                                                         id="item_{{ item.id }}"
                                                         value="item_{{ item.id }}">
-                                            {% endif %}
-                                        </label>
+                                            </label>
+                                        {% endif %}
                                     </div>
                                 {% else %}
                                     {% include "pretixpresale/event/fragment_availability.html" with avail=item.cached_availability.0 %}
