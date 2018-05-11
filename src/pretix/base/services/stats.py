@@ -10,6 +10,11 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.signals import order_fee_type_name
 
 
+class DummyObject:
+    def __str__(self):
+        return str(self.name)
+
+
 class Dontsum:
     def __init__(self, value: Any):
         self.value = value
@@ -154,7 +159,8 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         c[0].num_paid = tuplesum(item.num_paid for item in c[1])
 
     # Payment fees
-    payment_cat_obj = _('Fees')
+    payment_cat_obj = DummyObject()
+    payment_cat_obj.name = _('Fees')
     payment_items = []
 
     if not subevent:
@@ -193,8 +199,9 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         names = dict(OrderFee.FEE_TYPES)
 
         for pprov, total in sorted(num_total.items(), key=lambda i: i[0]):
+            ppobj = DummyObject()
             if pprov[0] == OrderFee.FEE_TYPE_PAYMENT:
-                ppobj = '{} - {}'.format(names[pprov[0]], provider_names.get(pprov[1], pprov[1]))
+                ppobj.name = '{} - {}'.format(names[pprov[0]], provider_names.get(pprov[1], pprov[1]))
             else:
                 name = pprov[1]
                 for r, resp in order_fee_type_name.send(sender=event, fee_type=pprov[0], internal_type=pprov[1]):
@@ -202,7 +209,7 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
                         name = resp
                         break
 
-                ppobj = '{} - {}'.format(names[pprov[0]], name)
+                ppobj.name = '{} - {}'.format(names[pprov[0]], name)
             ppobj.provider = pprov[1]
             ppobj.has_variations = False
             ppobj.num_total = total
