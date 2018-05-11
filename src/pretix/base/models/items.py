@@ -476,7 +476,7 @@ class ItemVariation(models.Model):
         return self.default_price if self.default_price is not None else self.item.default_price
 
     def tax(self, price=None):
-        price = price or self.price
+        price = price if price is not None else self.price
         if not self.item.tax_rule:
             return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
         return self.item.tax_rule.tax(price)
