@@ -17,7 +17,7 @@ from pretix.base.services.cart import (
 from pretix.base.services.orders import perform_order
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
-    AddOnsForm, ContactForm, InvoiceAddressForm,
+    AddOnsForm, ContactForm, InvoiceAddressForm, InvoiceNameForm,
 )
 from pretix.presale.signals import (
     checkout_confirm_messages, checkout_flow_steps, contact_form_fields,
@@ -322,6 +322,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     @cached_property
     def invoice_form(self):
+        if not self.request.event.settings.invoice_address_asked and self.request.event.settings.invoice_name_required:
+            return InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
+                                   event=self.request.event,
+                                   request=self.request,
+                                   instance=self.invoice_address,
+                                   validate_vat_id=False)
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
                                   request=self.request,
@@ -331,7 +337,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def post(self, request):
         self.request = request
         failed = not self.save() or not self.contact_form.is_valid()
-        if request.event.settings.invoice_address_asked:
+        if request.event.settings.invoice_address_asked or self.request.event.settings.invoice_name_required:
             failed = failed or not self.invoice_form.is_valid()
         if failed:
             messages.error(request,
@@ -339,7 +345,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             return self.render()
         self.cart_session['email'] = self.contact_form.cleaned_data['email']
         self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
-        if request.event.settings.invoice_address_asked:
+        if request.event.settings.invoice_address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
             self.cart_session['invoice_address'] = addr.pk
 
@@ -369,8 +375,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             messages.warning(request, _('Please enter your invoicing address.'))
             return False
 
-        if request.event.settings.invoice_address_asked and request.event.settings.invoice_name_required and (
-                not self.invoice_address or not self.invoice_address.name):
+        if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
             messages.warning(request, _('Please enter your name.'))
             return False
 

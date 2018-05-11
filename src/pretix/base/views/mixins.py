@@ -7,7 +7,7 @@ from django.db.models import Prefetch
 from django.utils.functional import cached_property
 
 from pretix.base.forms.questions import (
-    BaseInvoiceAddressForm, BaseQuestionsForm,
+    BaseInvoiceAddressForm, BaseInvoiceNameForm, BaseQuestionsForm,
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
@@ -144,6 +144,7 @@ class BaseQuestionsViewMixin:
 
 class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     invoice_form_class = BaseInvoiceAddressForm
+    invoice_name_form_class = BaseInvoiceNameForm
     only_user_visible = True
 
     @cached_property
@@ -184,6 +185,12 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def invoice_form(self):
+        if not self.request.event.settings.invoice_address_asked and self.request.event.settings.invoice_name_required:
+            return self.invoice_name_form_class(
+                data=self.request.POST if self.request.method == "POST" else None,
+                event=self.request.event,
+                instance=self.invoice_address, validate_vat_id=False
+            )
         return self.invoice_form_class(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,

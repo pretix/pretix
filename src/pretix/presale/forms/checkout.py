@@ -61,6 +61,15 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
     vat_warning = True
 
 
+class InvoiceNameForm(InvoiceAddressForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in list(self.fields.keys()):
+            if f != 'name':
+                del self.fields[f]
+
+
 class QuestionsForm(BaseQuestionsForm):
     """
     This form class is responsible for asking order-related questions. This includes

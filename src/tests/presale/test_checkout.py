@@ -582,6 +582,95 @@ class CheckoutTestCase(TestCase):
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertIsNone(cr1.attendee_name)
 
+    def test_invoice_address_required(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name=city]')), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+    def test_invoice_address_optional(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = False
+
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name=city]')), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+    def test_invoice_name_required(self):
+        self.event.settings.invoice_address_asked = False
+        self.event.settings.invoice_name_required = True
+
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name=name]')), 1)
+        self.assertEqual(len(doc.select('input[name=street]')), 0)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'name': 'Raphael',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
     def test_payment(self):
         # TODO: Test for correct payment method fees
         self.event.settings.set('payment_stripe__enabled', True)

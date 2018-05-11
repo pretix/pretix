@@ -520,8 +520,7 @@ class InvoiceSettingsForm(SettingsForm):
         label=_("Require customer name"),
         required=False,
         widget=forms.CheckboxInput(
-            attrs={'data-checkbox-dependency': '#id_invoice_address_asked',
-                   'data-inverse-dependency': '#id_invoice_address_required'}
+            attrs={'data-inverse-dependency': '#id_invoice_address_required'}
         ),
     )
     invoice_address_vatid = forms.BooleanField(

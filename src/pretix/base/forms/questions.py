@@ -242,3 +242,12 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                                                      'resolve this manually.'))
         else:
             self.instance.vat_id_validated = False
+
+
+class BaseInvoiceNameForm(BaseInvoiceAddressForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in list(self.fields.keys()):
+            if f != 'name':
+                del self.fields[f]

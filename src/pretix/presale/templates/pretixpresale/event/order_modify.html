@@ -11,19 +11,27 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
-            {% if event.settings.invoice_address_asked %}
-                <div class="alert alert-info">
-                    {% blocktrans trimmed %}
-                        Modifying your invoice address will not automatically generate a new invoice.
-                        Please contact us if you need a new invoice.
-                    {% endblocktrans %}
-                </div>
+            {% if event.settings.invoice_address_asked or event.settings.invoice_name_required %}
+                {% if event.settings.invoice_address_asked %}
+                    <div class="alert alert-info">
+                        {% blocktrans trimmed %}
+                            Modifying your invoice address will not automatically generate a new invoice.
+                            Please contact us if you need a new invoice.
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required %}
-                                {% trans "(optional)" %}
-                            {% endif %}</strong>
+                            <strong>
+                                {% if request.event.settings.invoice_address_asked %}
+                                    {% trans "Invoice information" %}{% if not event.settings.invoice_address_required %}
+                                        {% trans "(optional)" %}
+                                    {% endif %}
+                                {% else %}
+                                    {% trans "Contact information" %}
+                                {% endif %}
+                            </strong>
                             <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
                     </summary>
