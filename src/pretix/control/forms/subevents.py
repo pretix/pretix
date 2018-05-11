@@ -102,7 +102,7 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['placeholder'] = money_filter(self.item.default_price, self.item.event.currency, hide_currency=True)
-        self.fields['price'].label = str(self.item.name)
+        self.fields['price'].label = str(self.item)
 
     class Meta:
         model = SubEventItem
@@ -116,7 +116,7 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['placeholder'] = money_filter(self.variation.price, self.item.event.currency, hide_currency=True)
-        self.fields['price'].label = '{} – {}'.format(str(self.item.name), self.variation.value)
+        self.fields['price'].label = '{} – {}'.format(str(self.item), self.variation.value)
 
     class Meta:
         model = SubEventItem

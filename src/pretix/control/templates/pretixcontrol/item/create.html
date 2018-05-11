@@ -10,6 +10,9 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="control" %}
+            <div class="internal-name-wrapper">
+                {% bootstrap_field form.internal_name layout="control" %}
+            </div>
             {% bootstrap_field form.copy_from layout="control" %}
             {% bootstrap_field form.has_variations layout="control" %}
             {% bootstrap_field form.category layout="control" %}

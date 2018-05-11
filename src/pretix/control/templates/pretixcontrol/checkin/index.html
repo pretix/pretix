@@ -90,7 +90,7 @@
                                     <span class="label label-warning">{% trans "unpaid" %}</span>
                                 {% endif %}
                             </td>
-                            <td>{{ e.item.name }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
+                            <td>{{ e.item }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
                             <td>{{ e.order.email }}</td>
                             <td>
                                 {% if e.addon_to %}

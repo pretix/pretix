@@ -86,13 +86,13 @@ class VoucherForm(I18nModelForm):
                 itemid, varid = iv.split('-')
                 i = self.instance.event.items.get(pk=itemid)
                 v = i.variations.get(pk=varid)
-                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (str(i), v.value)))
             elif iv:
                 i = self.instance.event.items.get(pk=iv)
                 if i.variations.exists():
-                    choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                    choices.append((str(i.pk), _('{product} – Any variation').format(product=i)))
                 else:
-                    choices.append((str(i.pk), str(i.name)))
+                    choices.append((str(i.pk), str(i)))
 
         self.fields['itemvar'].choices = choices
         self.fields['itemvar'].widget = Select2ItemVarQuota(

@@ -12,6 +12,9 @@
                 <fieldset>
                     <legend>{% trans "General information" %}</legend>
                     {% bootstrap_field form.name layout="control" %}
+                    <div class="internal-name-wrapper">
+                        {% bootstrap_field form.internal_name layout="control" %}
+                    </div>
                     {% bootstrap_field form.description layout="control" %}
                     {% bootstrap_field form.is_addon layout="control" %}
                 </fieldset>

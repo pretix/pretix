@@ -43,6 +43,11 @@ class ItemCategory(LoggedModel):
         max_length=255,
         verbose_name=_("Category name"),
     )
+    internal_name = models.CharField(
+        verbose_name=_("Internal name"),
+        help_text=_("If you set this, this will be used instead of the public name in the backend."),
+        blank=True, null=True, max_length=255
+    )
     description = I18nTextField(
         blank=True, verbose_name=_("Category description")
     )
@@ -63,9 +68,10 @@ class ItemCategory(LoggedModel):
         ordering = ('position', 'id')
 
     def __str__(self):
+        name = self.internal_name or self.name
         if self.is_addon:
-            return _('{category} (Add-On products)').format(category=str(self.name))
-        return str(self.name)
+            return _('{category} (Add-On products)').format(category=str(name))
+        return str(name)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -205,6 +211,11 @@ class Item(LoggedModel):
         max_length=255,
         verbose_name=_("Item name"),
     )
+    internal_name = models.CharField(
+        verbose_name=_("Internal name"),
+        help_text=_("If you set this, this will be used instead of the public name in the backend."),
+        blank=True, null=True, max_length=255
+    )
     active = models.BooleanField(
         default=True,
         verbose_name=_("Active"),
@@ -309,7 +320,7 @@ class Item(LoggedModel):
         ordering = ("category__position", "category", "position")
 
     def __str__(self):
-        return str(self.name)
+        return str(self.internal_name or self.name)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

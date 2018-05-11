@@ -42,7 +42,7 @@
             <ul class="nav nav-second-level">
                 <li>
                     <a href="{% url 'control:event.items' organizer=request.event.organizer.slug event=request.event.slug %}"
-                            {% if "event.items" == url_name or "event.item." in url_name or url_name == "event.item" %}class="active"{% endif %}>
+                            {% if "event.items" == url_name or "event.item." in url_name or "event.items.add" == url_name or url_name == "event.item" %}class="active"{% endif %}>
                         {% trans "Products" %}</a>
                 </li>
                 <li>

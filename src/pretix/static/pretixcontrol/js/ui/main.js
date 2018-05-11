@@ -25,7 +25,7 @@ var ajaxErrDialog = {
         "use strict";
         $("#ajaxerr").html(c);
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-                                  + gettext("Close message") + "</a>");
+            + gettext("Close message") + "</a>");
         $("body").addClass("ajaxerr");
     },
     hide: function () {
@@ -45,7 +45,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
 });
 
 var form_handlers = function (el) {
-    el.find(".datetimepicker").each(function() {
+    el.find(".datetimepicker").each(function () {
         $(this).datetimepicker({
             format: $("body").attr("data-datetimeformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -68,7 +68,7 @@ var form_handlers = function (el) {
         }
     });
 
-    el.find(".datepickerfield").each(function() {
+    el.find(".datepickerfield").each(function () {
         var opts = {
             format: $("body").attr("data-dateformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -104,7 +104,7 @@ var form_handlers = function (el) {
         }
     });
 
-    el.find(".timepickerfield").each(function() {
+    el.find(".timepickerfield").each(function () {
         var opts = {
             format: $("body").attr("data-timeformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -127,7 +127,7 @@ var form_handlers = function (el) {
         $(this).datetimepicker(opts);
     });
 
-    el.find(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function() {
+    el.find(".datetimepicker[data-date-after], .datepickerfield[data-date-after]").each(function () {
         var later_field = $(this),
             earlier_field = $($(this).attr("data-date-after")),
             update = function () {
@@ -144,7 +144,7 @@ var form_handlers = function (el) {
         earlier_field.on("dp.change", update);
     });
 
-    el.find(".datetimepicker[data-date-default], .datepickerfield[data-date-default]").each(function() {
+    el.find(".datetimepicker[data-date-default], .datepickerfield[data-date-default]").each(function () {
         var fill_field = $(this),
             default_field = $($(this).attr("data-date-default")),
             show = function () {
@@ -461,7 +461,7 @@ $(function () {
         } else {
             $(".form-group:has(#voucher-bulk-codes-num)").addClass("has-error");
             $("#voucher-bulk-codes-num").focus();
-            setTimeout(function() {
+            setTimeout(function () {
                 $(".form-group:has(#voucher-bulk-codes-num)").removeClass("has-error");
             }, 3000);
         }
@@ -469,7 +469,7 @@ $(function () {
 
     form_handlers($("body"));
 
-    $(".qrcode-canvas").each(function() {
+    $(".qrcode-canvas").each(function () {
         $(this).qrcode(
             {
                 text: $.trim($($(this).attr("data-qrdata")).html())
@@ -477,7 +477,7 @@ $(function () {
         );
     });
 
-    $(".propagated-settings-box button[data-action=unlink]").click(function(ev) {
+    $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
         $box.find(".propagated-settings-overlay").fadeOut();
         $box.find("input[name=_settings_ignore]").attr("name", "decouple");
@@ -486,6 +486,7 @@ $(function () {
         return true;
     });
 
+    // Tables with bulk selection, e.g. subevent list
     $("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
 
@@ -512,6 +513,28 @@ $(function () {
         $(this).change(function (ev) {
             $(this).closest("table").find("td:first-child input[type=checkbox]").prop("checked", $(this).prop("checked"));
         });
+    });
+
+    // Items and categories
+    $(".internal-name-wrapper").each(function () {
+        if ($(this).find("input").val() === "") {
+            var $fg = $(this).find(".form-group");
+            $fg.hide();
+            var $fgl = $("<div>").addClass("form-group").append(
+                $("<div>").addClass("col-md-9 col-md-offset-3").append(
+                    $("<div>").addClass("help-block").append(
+                        $("<a>").attr("href", "#").text(
+                            gettext("Use a different name internally")
+                        ).click(function () {
+                            $fg.slideDown();
+                            $fgl.slideUp();
+                            return false;
+                        })
+                    )
+                )
+            );
+            $(this).append($fgl);
+        }
     });
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);

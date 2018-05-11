@@ -49,7 +49,7 @@
                 {% for tup in items_by_category %}
                     {% if tup.0 %}
                         <tr class="category">
-                            <th>{{ tup.0.name }}</th>
+                            <th>{{ tup.0 }}</th>
                             <th>{{ tup.0.num_canceled|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num_refunded|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num_expired|togglesum:request.event.currency }}</th>
@@ -60,7 +60,7 @@
                     {% endif %}
                     {% for item in tup.1 %}
                         <tr class="item {% if tup.0 %}categorized{% endif %}">
-                            <td>{{ item.name }}</td>
+                            <td>{{ item }}</td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
                                     {{ item.num_canceled|togglesum:request.event.currency }}

@@ -90,7 +90,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                           .annotate(cnt=Count('id')).order_by())
             }
             item_names = {
-                i.id: str(i.name)
+                i.id: str(i)
                 for i in Item.objects.filter(event=self.request.event)
             }
             ctx['obp_data'] = json.dumps([

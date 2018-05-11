@@ -14,6 +14,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the item
 name                                  multi-lingual string       The item's visible name
+internal_name                         string                     An optional name that is only used in the backend
 default_price                         money (string)             The item price that is applied if the price is not
                                                                  overwritten by variations or other options.
 category                              integer                    The ID of the category this item belongs to
@@ -88,6 +89,10 @@ addons                                list of objects            Definition of a
    The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
    The attribute ``price_included`` has been added to ``addons``.
 
+.. versionchanged:: 1.16
+
+   The field ``internal_name`` has been added.
+
 Notes
 -----
 Please note that an item either always has variations or never has. Once created with variations the item can never
@@ -129,6 +134,7 @@ Endpoints
           {
             "id": 1,
             "name": {"en": "Standard ticket"},
+            "internal_name": "",
             "default_price": "23.00",
             "category": null,
             "active": true,
@@ -211,6 +217,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Standard ticket"},
+        "internal_name": "",
         "default_price": "23.00",
         "category": null,
         "active": true,
@@ -274,6 +281,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Standard ticket"},
+        "internal_name": "",
         "default_price": "23.00",
         "category": null,
         "active": true,
@@ -324,6 +332,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Standard ticket"},
+        "internal_name": "",
         "default_price": "23.00",
         "category": null,
         "active": true,
@@ -406,6 +415,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "Ticket"},
+        "internal_name": "",
         "default_price": "25.00",
         "category": null,
         "active": true,
