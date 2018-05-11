@@ -406,7 +406,7 @@ body.loading #wrapper {
     transform: rotate(180deg);
 }
 
-.panel-title a[data-toggle="collapse"] {
+.panel-title a[data-toggle="collapse"], details h3.panel-title, details h4.panel-title {
     display: flex;
     padding: 10px 15px;
     margin: -10px -15px;
@@ -570,3 +570,25 @@ ul.pagination {
 .table-payment-providers > tbody > tr > td {
     vertical-align: middle;
 }
+
+
+details {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+details summary {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.nojs details[open] .collapse-indicator, details.details-open .collapse-indicator {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+

@@ -11,17 +11,14 @@
         {% endif %}
     </h1>
     {% for e in exporters %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <details class="panel panel-default" {% if "identifier" in request.GET %}open{% endif %}>
+            <summary class="panel-heading">
                 <h3 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#{{ e.identifier }}">
-                        {{ e.verbose_name }}
-                        <i class="fa fa-angle-down collapse-indicator"></i>
-                    </a>
+                    {{ e.verbose_name }}
+                    <i class="fa fa-angle-down collapse-indicator"></i>
                 </h3>
-            </div>
-            <div id="{{ e.identifier }}" class="panel-collapse collapse {% if "identifier" in request.GET %}in
-{% endif %}">
+            </summary>
+            <div id="{{ e.identifier }}">
                 <div class="panel-body">
                     <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
                             method="post" class="form-horizontal" data-asynctask data-asynctask-download
@@ -35,6 +32,6 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </details>
     {% endfor %}
 {% endblock %}

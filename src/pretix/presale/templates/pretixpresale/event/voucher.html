@@ -47,7 +47,9 @@
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                            <strong>{{ item.name }}</strong>
+                                            <h4>
+                                                {{ item.name }}
+                                            </h4>
                                             {% if item.description %}
                                                 <div class="product-description">
                                                     {{ item.description|localize|rich_text }}
@@ -74,7 +76,11 @@
                                     {% for var in item.available_variations %}
                                         <div class="row-fluid product-row variation">
                                             <div class="col-md-8 col-xs-12">
-                                                {{ var }}
+                                                <h5>
+                                                    <label for="variation_{{ item.id }}_{{ var.id }}">
+                                                        {{ var }}
+                                                    </label>
+                                                </h5>
                                                 {% if var.description %}
                                                     <div class="variation-description">
                                                         {{ var.description|localize|rich_text }}
@@ -89,6 +95,7 @@
                                                                 placeholder="0"
                                                                 min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                 name="price_{{ item.id }}_{{ var.id }}"
+                                                                title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
                                                                 value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                 step="any">
                                                     </div>
@@ -115,10 +122,13 @@
                                                         {% if max_times > 1 %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                     pattern="\d*"
-                                                                    max="{{ item.order_max }}" name="variation_{{ item.id }}_{{ var.id }}">
+                                                                    max="{{ item.order_max }}"
+                                                                    id="variation_{{ item.id }}_{{ var.id }}"
+                                                                    name="variation_{{ item.id }}_{{ var.id }}">
                                                         {% else %}
                                                             <input type="radio" name="_voucher_item"
                                                                     {% if options == 1 %}checked="checked"{% endif %}
+                                                                    id="variation_{{ item.id }}_{{ var.id }}"
                                                                     value="variation_{{ item.id }}_{{ var.id }}">
                                                         {% endif %}
                                                     </label>
@@ -144,7 +154,9 @@
                                         </a>
                                     {% endif %}
                                     <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                        <strong>{{ item.name }}</strong>
+                                        <h4>
+                                            <label for="item_{{ item.id }}">{{ item.name }}</label>
+                                        </h4>
                                         {% if item.description %}
                                             <div class="product-description">
                                                 {{ item.description|localize|rich_text }}
@@ -159,6 +171,7 @@
                                             <input type="number" class="form-control input-item-price" placeholder="0"
                                                     min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     name="price_{{ item.id }}"
+                                                    title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
                                                     value="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     step="any">
                                         </div>
@@ -185,10 +198,13 @@
                                             {% if max_times > 1 %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                         pattern="\d*"
-                                                        max="{{ item.order_max }}" name="item_{{ item.id }}">
+                                                        max="{{ item.order_max }}"
+                                                        id="item_{{ item.id }}"
+                                                        name="item_{{ item.id }}">
                                             {% else %}
                                                 <input type="radio" name="_voucher_item"
                                                         {% if options == 1 %}checked="checked"{% endif %}
+                                                        id="item_{{ item.id }}"
                                                         value="item_{{ item.id }}">
                                             {% endif %}
                                         </label>

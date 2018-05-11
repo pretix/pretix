@@ -21,16 +21,15 @@
         {% bootstrap_field form.name layout="control" %}
         {% bootstrap_field form.rate addon_after="%" layout="control" %}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <details class="panel panel-default"
+                {% if rule.eu_reverse_charge or rule.has_custom_rules or form.errors %}open{% endif %}>
+            <summary class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#advanced">
-                        <strong>{% trans "Advanced settings" %}</strong>
-                        <i class="fa fa-angle-down collapse-indicator"></i>
-                    </a>
+                    <strong>{% trans "Advanced settings" %}</strong>
+                    <i class="fa fa-angle-down collapse-indicator"></i>
                 </h4>
-            </div>
-            <div id="advanced" class="panel-collapse collapsed {% if rule.eu_reverse_charge or rule.has_custom_rules or form.errors %}in{% endif %}">
+            </summary>
+            <div id="advanced">
                 <div class="panel-body">
                     <legend>{% trans "Advanced settings" %}</legend>
                     <div class="alert alert-legal">
@@ -111,7 +110,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </details>
 
 
         <div class="form-group submit-group">

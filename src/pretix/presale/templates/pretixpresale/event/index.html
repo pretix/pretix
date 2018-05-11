@@ -16,28 +16,26 @@
         </script>
     {% endautoescape %}
     {% if show_cart %}
-        <div class="panel panel-primary cart">
-            <div class="panel-heading">
+        <details class="panel panel-primary cart" open>
+            <summary class="panel-heading">
                 <h3 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" href="#cart">
-                        <span>
-                            <i class="fa fa-shopping-cart"></i>
-                            <strong>{% trans "Your cart" %}</strong>
-                        </span>
-                        <span>
-                            <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                                {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
-                                    {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
-                                {% else %}
-                                    {% trans "Cart expired" %}
-                                {% endif %}
-                            </strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
-                        </span>
-                    </a>
+                    <span>
+                        <i class="fa fa-shopping-cart"></i>
+                        <strong>{% trans "Your cart" %}</strong>
+                    </span>
+                    <span>
+                        <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                                {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                            {% else %}
+                                {% trans "Cart expired" %}
+                            {% endif %}
+                        </strong>
+                        <i class="fa fa-angle-down collapse-indicator"></i>
+                    </span>
                 </h3>
-            </div>
-            <div class="panel-collapse collapse in" id="cart">
+            </summary>
+            <div>
                 <div class="panel-body">
                     {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
                     <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
@@ -79,7 +77,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </details>
     {% endif %}
 
     {% if show_dates %}
@@ -167,7 +165,7 @@
                             {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
                                 Begin: {{ time }}
                             {% endblocktrans %}
-                            {% if event.settings.show_date_to %}
+                            {% if event.settings.show_date_to and ev.date_to %}
                                 <br>
                                 {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
                                     End: {{ time }}
@@ -217,8 +215,8 @@
                         {% endif %}
                         {% for item in tup.1 %}
                             {% if item.has_variations %}
-                                <div class="item-with-variations">
-                                    <div class="row-fluid product-row headline">
+                                <details class="item-with-variations" {% if event.settings.show_variations_expanded %}open{% endif %}>
+                                    <summary class="row-fluid product-row headline">
                                         <div class="col-md-8 col-xs-12">
                                             {% if item.picture %}
                                                 <a href="{{ item.picture.url }}" class="productpicture"
@@ -230,9 +228,11 @@
                                                 </a>
                                             {% endif %}
                                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                                <a href="#" data-toggle="variations">
-                                                    <strong>{{ item.name }}</strong>
-                                                </a>
+                                                <h4>
+                                                    <a href="#" data-toggle="variations">
+                                                        {{ item.name }}
+                                                    </a>
+                                                </h4>
                                                 {% if item.description %}
                                                     <div class="product-description">
                                                         {{ item.description|localize|rich_text }}
@@ -268,12 +268,16 @@
                                             {% endif %}
                                         </div>
                                         <div class="clearfix"></div>
-                                    </div>
+                                    </summary>
                                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                                         {% for var in item.available_variations %}
                                             <div class="row-fluid product-row variation">
                                                 <div class="col-md-8 col-xs-12">
-                                                    {{ var }}
+                                                    <h5>
+                                                        <label for="variation_{{ item.pk }}_{{ var.pk }}">
+                                                            {{ var }}
+                                                        </label>
+                                                    </h5>
                                                     {% if var.description %}
                                                         <div class="variation-description">
                                                             {{ var.description|localize|rich_text }}
@@ -291,6 +295,7 @@
                                                                     placeholder="0"
                                                                     min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                                     name="price_{{ item.id }}_{{ var.id }}"
+                                                                    title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
                                                                     step="any"
                                                                     value="{% if event.settings.display_net_prices %}{{var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                             >
@@ -323,12 +328,14 @@
                                                         {% if item.max_per_order == 1 %}
                                                             <label class="item-checkbox-label">
                                                                 <input type="checkbox" value="1"
+                                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                                         name="variation_{{ item.id }}_{{ var.id }}">
                                                             </label>
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                     max="{{ var.order_max }}"
                                                                     pattern="\d*"
+                                                                    id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}">
                                                         {% endif %}
                                                     </div>
@@ -339,7 +346,7 @@
                                             </div>
                                         {% endfor %}
                                     </div>
-                                </div>
+                                </details>
                             {% else %}
                                 <div class="row-fluid product-row simple">
                                     <div class="col-md-8 col-xs-12">
@@ -353,7 +360,9 @@
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                            <strong>{{ item.name }}</strong>
+                                            <h4>
+                                                <label for="item_{{ item.pk }}">{{ item.name }}</label>
+                                            </h4>
                                             {% if item.description %}
                                                 <div class="product-description">
                                                     {{ item.description|localize|rich_text }}
@@ -380,6 +389,7 @@
                                                 <input type="number" class="form-control input-item-price" placeholder="0"
                                                         min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="price_{{ item.id }}"
+                                                        title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
                                                         value="{% if event.settings.display_net_prices %}{{item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         step="any">
                                             </div>
@@ -411,12 +421,14 @@
                                             {% if item.max_per_order == 1 %}
                                                 <label class="item-checkbox-label">
                                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
-                                                            name="item_{{ item.id }}">
+                                                            name="item_{{ item.id }}" id="item_{{ item.id }}">
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                         pattern="\d*" {% if itemnum == 1 %}value="1"{% endif %}
-                                                        max="{{ item.order_max }}" name="item_{{ item.id }}">
+                                                        max="{{ item.order_max }}"
+                                                        name="item_{{ item.id }}"
+                                                        id="item_{{ item.id }}">
                                             {% endif %}
                                         </div>
                                     {% else %}

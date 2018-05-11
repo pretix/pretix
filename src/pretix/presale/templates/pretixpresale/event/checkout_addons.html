@@ -9,19 +9,16 @@
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
             {% for form in forms %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#cp{{ form.cartpos.pk }}">
-                                <strong>{{ form.item.name }}{% if form.variation %}
-                                    – {{ form.variation }}
-                                {% endif %}</strong>
-                                <i class="fa fa-angle-down collapse-indicator"></i>
-                            </a>
+                            <strong>{{ form.item.name }}{% if form.variation %}
+                                – {{ form.variation }}
+                            {% endif %}</strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
-                    </div>
-                    <div id="cp{{ form.cartpos.pk }}"
-                            class="panel-collapse collapsed in">
+                    </summary>
+                    <div id="cp{{ form.cartpos.pk }}">
                         <div class="panel-body">
                             {% for c in form.categories %}
                                 <fieldset>
@@ -55,7 +52,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                </div>
+                </details>
             {% endfor %}
         </div>
         <div class="row checkout-button-row">
