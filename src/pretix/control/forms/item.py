@@ -226,6 +226,7 @@ class ItemCreateForm(I18nModelForm):
             self.instance.max_per_order = self.cleaned_data['copy_from'].max_per_order
             self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
             self.instance.free_price = self.cleaned_data['copy_from'].free_price
+            self.instance.original_price = self.cleaned_data['copy_from'].original_price
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)
@@ -325,7 +326,8 @@ class ItemUpdateForm(I18nModelForm):
             'allow_cancel',
             'max_per_order',
             'min_per_order',
-            'checkin_attention'
+            'checkin_attention',
+            'original_price'
         ]
         field_classes = {
             'available_from': forms.SplitDateTimeField,

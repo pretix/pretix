@@ -38,14 +38,13 @@
                     <legend>{% trans "Check-in" %}</legend>
                     {% bootstrap_field form.checkin_attention layout="control" %}
                 </fieldset>
-                {% if plugin_forms %}
-                    <fieldset>
-                        <legend>{% trans "Additional settings" %}</legend>
-                        {% for f in plugin_forms %}
-                            {% bootstrap_form f layout="control" %}
-                        {% endfor %}
-                    </fieldset>
-                {% endif %}
+                <fieldset>
+                    <legend>{% trans "Additional settings" %}</legend>
+                    {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
+                    {% for f in plugin_forms %}
+                        {% bootstrap_form f layout="control" %}
+                    {% endfor %}
+                </fieldset>
             </div>
             <div class="col-xs-12 col-lg-2">
                 <div class="panel panel-default">

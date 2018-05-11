@@ -64,6 +64,9 @@
         margin: 0;
         line-height: inherit;
     }
+    .price del {
+        color: $brand-danger;
+    }
 }
 
 .radio .variation-description {
