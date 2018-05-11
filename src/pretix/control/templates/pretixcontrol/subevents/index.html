@@ -16,6 +16,9 @@
             <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
                 {% trans "Create a new date" context "subevent" %}</a>
+            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                {% trans "Create many new dates" context "subevent" %}</a>
         </div>
     {% else %}
         <form class="row filter-form" action="" method="get">
