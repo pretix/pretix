@@ -854,6 +854,16 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
+    frontpage_subevent_ordering = forms.ChoiceField(
+            label=_('Subevent ordering'),
+            choices=[
+                ('[ "date_from", "name"]', _('Event start time')),
+                ('["-date_from", "name"]', _('Event start time (descending)')),
+                ('[ "name", "date_from"]', _('Name')),
+                ('["-name", "date_from"]', _('Name (descending)')),
+            ],
+    )
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

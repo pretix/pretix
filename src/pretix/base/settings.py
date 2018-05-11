@@ -495,6 +495,10 @@ Your {event} team"""))
         'default': '',
         'type': LazyI18nString
     },
+    'frontpage_subevent_ordering': {
+        'default': '["date_from", "name"]',
+        'type': str
+    },
 }
 
 settings_hierarkey = Hierarkey(attribute_name='settings')

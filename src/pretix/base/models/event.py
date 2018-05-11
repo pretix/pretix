@@ -528,12 +528,13 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def active_future_subevents(self):
+        orderfields = self.settings.get('frontpage_subevent_ordering', default=['-date_from', 'name'], as_type=list)
         return self.subevents.filter(
             Q(active=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(date_to__gte=now())
             )
-        ).order_by('date_from', 'name')
+        ).order_by(*orderfields)
 
     @property
     def meta_data(self):
