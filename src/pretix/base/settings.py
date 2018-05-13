@@ -496,7 +496,7 @@ Your {event} team"""))
         'type': LazyI18nString
     },
     'frontpage_subevent_ordering': {
-        'default': '["date_from", "name"]',
+        'default': 'date_ascending',
         'type': str
     },
 }

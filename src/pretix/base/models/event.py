@@ -528,7 +528,13 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def active_future_subevents(self):
-        orderfields = self.settings.get('frontpage_subevent_ordering', default=['-date_from', 'name'], as_type=list)
+        ordering = self.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
+        orderfields = {
+            'date_ascending': ('date_from', 'name'),
+            'date_descending': ('-date_from', 'name'),
+            'name_ascending': ('name', 'date_from'),
+            'name_descending': ('-name', 'date_from'),
+        }[ordering]
         return self.subevents.filter(
             Q(active=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))

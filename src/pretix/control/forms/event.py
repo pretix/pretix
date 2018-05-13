@@ -857,10 +857,10 @@ class DisplaySettingsForm(SettingsForm):
     frontpage_subevent_ordering = forms.ChoiceField(
             label=_('Subevent ordering'),
             choices=[
-                ('[ "date_from", "name"]', _('Event start time')),
-                ('["-date_from", "name"]', _('Event start time (descending)')),
-                ('[ "name", "date_from"]', _('Name')),
-                ('["-name", "date_from"]', _('Name (descending)')),
+                ('date_ascending', _('Event start time')),
+                ('date_descending', _('Event start time (descending)')),
+                ('name_ascending', _('Name')),
+                ('name_descending', _('Name (descending)')),
             ],
     )
 
