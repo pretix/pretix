@@ -855,15 +855,14 @@ class DisplaySettingsForm(SettingsForm):
         required=False
     )
     frontpage_subevent_ordering = forms.ChoiceField(
-            label=_('Subevent ordering'),
-            choices=[
-                ('date_ascending', _('Event start time')),
-                ('date_descending', _('Event start time (descending)')),
-                ('name_ascending', _('Name')),
-                ('name_descending', _('Name (descending)')),
-            ],
+        label=_('Subevent ordering'),
+        choices=[
+            ('date_ascending', _('Event start time')),
+            ('date_descending', _('Event start time (descending)')),
+            ('name_ascending', _('Name')),
+            ('name_descending', _('Name (descending)')),
+        ],
     )
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
