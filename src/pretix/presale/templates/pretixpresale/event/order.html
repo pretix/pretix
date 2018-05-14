@@ -91,7 +91,7 @@
                     {% endfor %}
                 </p>
             {% endif %}
-        {% elif not download_buttons %}
+        {% elif not download_buttons and ticket_download_date %}
             <div class="alert alert-info">
                 {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}
                     You will be able to download your tickets here starting on {{ date }}.
