@@ -883,7 +883,7 @@ def test_order_create_code_optional(token_client, organizer, event, item, quota,
     assert resp.status_code == 400
     assert resp.data == {'code': ['This order code is already in use.']}
 
-    res['code'] = 'ABcDE'
+    res['code'] = 'ABaDE'
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
