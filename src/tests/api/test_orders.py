@@ -9,7 +9,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from pytz import UTC
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import InvoiceAddress, Order, OrderPosition, Question
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
@@ -22,6 +22,11 @@ def item(event):
 
 
 @pytest.fixture
+def item2(event2):
+    return event2.items.create(name="Budget Ticket", default_price=23)
+
+
+@pytest.fixture
 def taxrule(event):
     return event.tax_rules.create(rate=Decimal('19.00'))
 
@@ -31,6 +36,13 @@ def question(event, item):
     q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
     q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
+    return q
+
+
+@pytest.fixture
+def question2(event2, item2):
+    q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q.items.add(item2)
     return q
 
 
@@ -754,58 +766,61 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
+ORDER_CREATE_PAYLOAD = {
+    "email": "dummy@dummy.test",
+    "locale": "en",
+    "fees": [
+        {
+            "fee_type": "payment",
+            "value": "0.25",
+            "description": "",
+            "internal_type": "",
+            "tax_rule": None
+        }
+    ],
+    "payment_provider": "banktransfer",
+    "invoice_address": {
+        "is_business": False,
+        "company": "Sample company",
+        "name": "Fo",
+        "street": "Bar",
+        "zipcode": "",
+        "city": "Sample City",
+        "country": "NZ",
+        "internal_reference": "",
+        "vat_id": ""
+    },
+    "positions": [
+        {
+            "positionid": 1,
+            "item": 1,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [
+                {
+                    "question": 1,
+                    "answer": "S",
+                    "options": []
+                }
+            ],
+            "subevent": None
+        }
+    ],
+}
+
+
 @pytest.mark.django_db
 def test_order_create(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
-        ), format='json', data={
-            "email": "dummy@dummy.test",
-            "locale": "en",
-            "fees": [
-                {
-                    "fee_type": "payment",
-                    "value": "0.25",
-                    "description": "",
-                    "internal_type": "",
-                    "tax_rate": "19.00",
-                    "tax_value": "0.05"
-                }
-            ],
-            "payment_provider": "banktransfer",
-            "invoice_address": {
-                "is_business": False,
-                "company": "Sample company",
-                "name": "Fo",
-                "street": "Bar",
-                "zipcode": "",
-                "city": "Sample City",
-                "country": "NZ",
-                "internal_reference": "",
-                "vat_id": ""
-            },
-            "positions": [
-                {
-                    "positionid": 1,
-                    "item": 1,
-                    "variation": None,
-                    "price": "23.00",
-                    "attendee_name": "Peter",
-                    "attendee_email": None,
-                    "tax_rule": None,
-                    "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
-                    "addon_to": None,
-                    "answers": [
-                        {
-                            "question": 1,
-                            "answer": "S",
-                            "options": []
-                        }
-                    ],
-                    "subevent": None
-                }
-            ],
-        }
+        ), format='json', data=res
     )
     assert resp.status_code == 201
     o = Order.objects.get(code=resp.data['code'])
@@ -822,3 +837,664 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     pos = o.positions.first()
     assert pos.item == item
     assert pos.price == Decimal("23.00")
+    answ = pos.answers.first()
+    assert answ.question == question
+    assert answ.answer == "S"
+
+
+@pytest.mark.django_db
+def test_order_create_invoice_address_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['invoice_address']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    with pytest.raises(InvoiceAddress.DoesNotExist):
+        o.invoice_address
+
+
+@pytest.mark.django_db
+def test_order_create_code_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['code'] = 'ABCDE'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.code == "ABCDE"
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'code': ['This order code is already in use.']}
+
+    res['code'] = 'ABcDE'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'code': ['This order code contains invalid characters.']}
+
+
+@pytest.mark.django_db
+def test_order_create_position_secret_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.positions.first().secret
+
+    res['positions'][0]['secret'] = "aaa"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.positions.first().secret == "aaa"
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+
+    assert resp.data == {'positions': [{'secret': ['You cannot assign a position secret that already exists.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_tax_rules(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    item.tax_rule = taxrule
+    item.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    fee = o.fees.first()
+    assert fee.fee_type == "payment"
+    assert fee.value == Decimal('0.25')
+    assert fee.tax_rate == Decimal('19.00')
+    assert fee.tax_rule == taxrule
+    ia = o.invoice_address
+    assert ia.company == "Sample company"
+    pos = o.positions.first()
+    assert pos.item == item
+    assert pos.tax_rate == Decimal('19.00')
+    assert pos.tax_value == Decimal('3.67')
+    assert pos.tax_rule == taxrule
+
+
+@pytest.mark.django_db
+def test_order_create_fee_type_validation(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['fee_type'] = 'unknown'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'fees': [{'fee_type': ['"unknown" is not a valid choice.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item, quota, question, taxrule2):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rule'] = taxrule2.pk
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'fees': [{'tax_rule': ['The specified tax rate does not belong to this event.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_subevent_not_allowed(token_client, organizer, event, item, quota, question, subevent2):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['subevent'] = subevent2.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'subevent': ['You cannot set a subevent for this event.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_empty(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': ['An order cannot be empty.']}
+
+
+@pytest.mark.django_db
+def test_order_create_subevent_validation(token_client, organizer, event, item, subevent, subevent2, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'subevent': ['You need to set a subevent.']}]}
+
+    res['positions'][0]['subevent'] = subevent2.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'subevent': ['The specified subevent does not belong to this event.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_item_validation(token_client, organizer, event, item, item2, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item2.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'item': ['The specified item does not belong to this event.']}]}
+
+    var2 = item2.variations.create(value="A")
+
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['variation'] = var2.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'non_field_errors': ['You cannot specify a variation for this item.']}]}
+
+    var1 = item.variations.create(value="A")
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['variation'] = var1.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+    res['positions'][0]['variation'] = var2.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'non_field_errors': ['The specified variation does not belong to the specified item.']}]}
+
+    res['positions'][0]['variation'] = None
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'non_field_errors': ['You should specify a variation for this item.']}]}
+
+
+@pytest.mark.django_db
+def test_order_create_positionids_addons(token_client, organizer, event, item, quota):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": 1,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos1 = o.positions.first()
+    pos2 = o.positions.last()
+    assert pos2.addon_to == pos1
+
+
+@pytest.mark.django_db
+def test_order_create_positionid_validation(token_client, organizer, event, item, quota):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": 2,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': ['If you set addon_to, you need to make sure that the '
+                                       'referenced position ID exists and is transmitted directly '
+                                       'before its add-ons.']}
+
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": 2,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': ['If you set addon_to, you need to specify position IDs manually.']}
+
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': ['If you set position IDs manually, you need to do so for all positions.']}
+
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 3,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': ['Position IDs need to be consecutive.']}
+
+
+@pytest.mark.django_db
+def test_order_create_answer_validation(token_client, organizer, event, item, quota, question, question2):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question2.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'question': ['The specified question does not belong to this event.']}]}]}
+
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['answers'][0]['options'] = [question.options.first().pk]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}]}
+
+    question.type = Question.TYPE_CHOICE
+    question.save()
+    res['positions'][0]['answers'][0]['options'] = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
+
+    question.options.create(answer="L")
+    res['positions'][0]['answers'][0]['options'] = [
+        question.options.first().pk,
+        question.options.last().pk,
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}]}
+
+    question.type = Question.TYPE_FILE
+    question.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['File uploads are currently not supported via the API.']}]}]}
+
+    question.type = Question.TYPE_CHOICE_MULTIPLE
+    question.save()
+    res['positions'][0]['answers'][0]['options'] = [
+        question.options.first().pk,
+        question.options.last().pk,
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.question == question
+    assert answ.answer == "XL, L"
+
+    question.type = Question.TYPE_BOOLEAN
+    question.save()
+    res['positions'][0]['answers'][0]['options'] = []
+    res['positions'][0]['answers'][0]['answer'] = 'True'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "True"
+
+    question.type = Question.TYPE_BOOLEAN
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = '0'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "False"
+
+    question.type = Question.TYPE_BOOLEAN
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = 'bla'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}]}
+
+    question.type = Question.TYPE_DATE
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = '2018-05-14'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "2018-05-14"
+
+    question.type = Question.TYPE_DATE
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = 'bla'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY[-MM[-DD]].']}]}]}
+
+    question.type = Question.TYPE_DATETIME
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = '2018-05-14T13:00:00Z'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "2018-05-14 13:00:00+00:00"
+
+    question.type = Question.TYPE_DATETIME
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = 'bla'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': [
+        'Datetime has wrong format. Use one of these formats instead: '
+        'YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].']}]}]}
+
+    question.type = Question.TYPE_TIME
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = '13:00:00'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "13:00:00"
+
+    question.type = Question.TYPE_TIME
+    question.save()
+    res['positions'][0]['answers'][0]['answer'] = 'bla'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}]}]}
+
+
+@pytest.mark.django_db
+def test_order_create_quota_validation(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    quota.size = 0
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+
+    quota.size = 1
+    quota.save()
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": 1,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']

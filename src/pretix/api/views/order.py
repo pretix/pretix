@@ -2,6 +2,7 @@ import datetime
 
 import django_filters
 import pytz
+from django.db import transaction
 from django.db.models import Q
 from django.db.models.functions import Concat
 from django.http import FileResponse
@@ -33,7 +34,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import order_placed, register_ticket_outputs
 
 
 class OrderFilter(FilterSet):
@@ -233,10 +234,21 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        order = serializer.instance
+        serializer = OrderSerializer(order)
+
+        order.log_action(
+            'pretix.event.order.placed',
+            user=request.user if request.user.is_authenticated else None,
+            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+        )
+        order_placed.send(self.request.event, order=order)
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

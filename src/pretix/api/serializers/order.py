@@ -1,14 +1,15 @@
+from collections import Counter
 from decimal import Decimal
 
-from django.db import transaction
 from django_countries.fields import Country
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
-    QuestionAnswer,
+    Question, QuestionAnswer, Quota,
 )
 from pretix.base.models.orders import OrderFee
 from pretix.base.signals import register_ticket_outputs
@@ -32,6 +33,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
                   'vat_id_validated', 'internal_reference')
+        read_only_fields = ('last_modified', 'vat_id_validated')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -153,50 +155,248 @@ class AnswerCreateSerializer(I18nAwareModelSerializer):
         model = QuestionAnswer
         fields = ('question', 'answer', 'options')
 
+    def validate_question(self, q):
+        if q.event != self.context['event']:
+            raise ValidationError(
+                'The specified question does not belong to this event.'
+            )
+        return q
+
+    def validate(self, data):
+        if not data.get('question'):
+            return data
+
+        if data.get('question').type == Question.TYPE_FILE:
+            raise ValidationError(
+                'File uploads are currently not supported via the API.'
+            )
+        elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            if not data.get('options'):
+                raise ValidationError(
+                    'You need to specify options if the question is of a choice type.'
+                )
+            if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options')) > 1:
+                raise ValidationError(
+                    'You can specify at most one option for this question.'
+                )
+            data['answer'] = ", ".join([str(o) for o in data.get('options')])
+
+        else:
+            if data.get('options'):
+                raise ValidationError(
+                    'You should not specify options if the question is not of a choice type.'
+                )
+
+            if data.get('question').type == Question.TYPE_BOOLEAN:
+                if data.get('answer') in ['true', 'True', '1', 'TRUE']:
+                    data['answer'] = 'True'
+                elif data.get('answer') in ['false', 'False', '0', 'FALSE']:
+                    data['answer'] = 'False'
+                else:
+                    raise ValidationError(
+                        'Please specify "true" or "false" for boolean questions.'
+                    )
+            elif data.get('question').type == Question.TYPE_NUMBER:
+                serializers.DecimalField(
+                    max_digits=50,
+                    decimal_places=25
+                ).to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_DATE:
+                data['answer'] = serializers.DateField().to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_TIME:
+                data['answer'] = serializers.TimeField().to_internal_value(data.get('answer'))
+            elif data.get('question').type == Question.TYPE_DATETIME:
+                data['answer'] = serializers.DateTimeField().to_internal_value(data.get('answer'))
+        return data
+
+
+class OrderFeeCreateSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = OrderFee
+        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rule')
+
+    def validate_tax_rule(self, tr):
+        if tr and tr.event != self.context['event']:
+            raise ValidationError(
+                'The specified tax rate does not belong to this event.'
+            )
+        return tr
+
 
 class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
+    addon_to = serializers.IntegerField(required=False, allow_null=True)
+    secret = serializers.CharField(required=False)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'tax_rule', 'secret', 'addon_to', 'subevent', 'answers')
+                  'secret', 'addon_to', 'subevent', 'answers')
+
+    def validate_secret(self, secret):
+        if secret and OrderPosition.objects.filter(order__event=self.context['event'], secret=secret).exists():
+            raise ValidationError(
+                'You cannot assign a position secret that already exists.'
+            )
+        return secret
+
+    def validate_item(self, item):
+        if item.event != self.context['event']:
+            raise ValidationError(
+                'The specified item does not belong to this event.'
+            )
+        return item
+
+    def validate_subevent(self, subevent):
+        if self.context['event'].has_subevents:
+            if not subevent:
+                raise ValidationError(
+                    'You need to set a subevent.'
+                )
+            if subevent.event != self.context['event']:
+                raise ValidationError(
+                    'The specified subevent does not belong to this event.'
+                )
+        elif subevent:
+            raise ValidationError(
+                'You cannot set a subevent for this event.'
+            )
+        return subevent
+
+    def validate(self, data):
+        if data.get('item'):
+            if data.get('item').has_variations:
+                if not data.get('variation'):
+                    raise ValidationError('You should specify a variation for this item.')
+                else:
+                    if data.get('variation').item != data.get('item'):
+                        raise ValidationError(
+                            'The specified variation does not belong to the specified item.'
+                        )
+            elif data.get('variation'):
+                raise ValidationError(
+                    'You cannot specify a variation for this item.'
+                )
+        return data
 
 
 class OrderCreateSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(required=False)
     positions = OrderPositionCreateSerializer(many=True, required=False)
-    fees = OrderFeeSerializer(many=True, required=False)
+    fees = OrderFeeCreateSerializer(many=True, required=False)
     status = serializers.ChoiceField(choices=(
         ('n', Order.STATUS_PENDING),
         ('p', Order.STATUS_PAID),
     ), default='n', required=False)
-    code = serializers.CharField(required=False)
+    code = serializers.CharField(
+        required=False,
+        max_length=16,
+        min_length=5
+    )
+    comment = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
                   'invoice_address', 'positions', 'checkin_attention')
 
-    @transaction.atomic
+    def validate_code(self, code):
+        if code and Order.objects.filter(event__organizer=self.context['event'].organizer, code=code).exists():
+            raise ValidationError(
+                'This order code is already in use.'
+            )
+        if any(c not in 'ABCDEFGHJKLMNPQRSTUVWXYZ1234567890' for c in code):
+            raise ValidationError(
+                'This order code contains invalid characters.'
+            )
+        return code
+
+    def validate_positions(self, data):
+        if not data:
+            raise ValidationError(
+                'An order cannot be empty.'
+            )
+        if any([p.get('positionid') for p in data]):
+            if not all([p.get('positionid') for p in data]):
+                raise ValidationError(
+                    'If you set position IDs manually, you need to do so for all positions.'
+                )
+
+            last_non_add_on = None
+            last_posid = 0
+
+            for p in data:
+                if p['positionid'] != last_posid + 1:
+                    raise ValidationError("Position IDs need to be consecutive.")
+                if p.get('addon_to') and p['addon_to'] != last_non_add_on:
+                    raise ValidationError("If you set addon_to, you need to make sure that the referenced "
+                                          "position ID exists and is transmitted directly before its add-ons.")
+
+                if not p.get('addon_to'):
+                    last_non_add_on = p['positionid']
+                last_posid = p['positionid']
+
+        elif any([p.get('addon_to') for p in data]):
+            raise ValidationError("If you set addon_to, you need to specify position IDs manually.")
+        return data
+
     def create(self, validated_data):
         fees_data = validated_data.pop('fees') if 'fees' in validated_data else []
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
-        ia = InvoiceAddress(**validated_data.pop('invoice_address'))
-        order = Order(event=self.context['event'], **validated_data)
-        order.set_expires(subevents=[p['subevent'] for p in positions_data])
-        order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
-        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
-            order.payment_provider = 'free'
-            order.status = Order.STATUS_PAID
-        order.save()
-        ia.order = order
-        ia.save()
-        for pos_data in positions_data:
-            del pos_data['answers']
-            order.positions.create(**pos_data)
+        if 'invoice_address' in validated_data:
+            ia = InvoiceAddress(**validated_data.pop('invoice_address'))
+        else:
+            ia = None
+
+        with self.context['event'].lock():
+            quotadiff = Counter()
+            for pos_data in positions_data:
+                new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
+                              if pos_data.get('variation')
+                              else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
+                quotadiff.update(new_quotas)
+
+                for quota, diff in quotadiff.items():
+                    if diff <= 0:
+                        continue
+                    avail = quota.availability()
+                    if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
+                        raise ValidationError(
+                            'There is not enough quota available on quota "{}" to perform the operation.'.format(
+                                quota.name
+                            )
+                        )
+
+            order = Order(event=self.context['event'], **validated_data)
+            order.set_expires(subevents=[p['subevent'] for p in positions_data])
+            order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
+            if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+                order.payment_provider = 'free'
+                order.status = Order.STATUS_PAID
+            order.save()
+            if ia:
+                ia.order = order
+                ia.save()
+            pos_map = {}
+            for pos_data in positions_data:
+                answers_data = pos_data.pop('answers')
+                addon_to = pos_data.pop('addon_to')
+                pos = OrderPosition(**pos_data)
+                pos.order = order
+                pos._calculate_tax()
+                if addon_to:
+                    pos.addon_to = pos_map[addon_to]
+                pos.save()
+                pos_map[pos.positionid] = pos
+                for answ_data in answers_data:
+                    options = answ_data.pop('options')
+                    answ = pos.answers.create(**answ_data)
+                    answ.options.add(*options)
         for fee_data in fees_data:
-            order.fees.create(**fee_data)
+            f = OrderFee(**fee_data)
+            f.order = order
+            f._calculate_tax()
+            f.save()
         return order
 
 
