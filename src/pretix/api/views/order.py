@@ -13,10 +13,12 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.filters import OrderingFilter
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
 from pretix.api.serializers.order import (
-    InvoiceSerializer, OrderPositionSerializer, OrderSerializer,
+    InvoiceSerializer, OrderCreateSerializer, OrderPositionSerializer,
+    OrderSerializer,
 )
 from pretix.base.models import Invoice, Order, OrderPosition, Quota
 from pretix.base.models.organizer import TeamAPIToken
@@ -45,7 +47,7 @@ class OrderFilter(FilterSet):
         fields = ['code', 'status', 'email', 'locale']
 
 
-class OrderViewSet(viewsets.ReadOnlyModelViewSet):
+class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -55,6 +57,11 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'code'
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
 
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
@@ -225,6 +232,16 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
                 {'detail': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def create(self, request, *args, **kwargs):
+        serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class OrderPositionFilter(FilterSet):

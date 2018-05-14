@@ -2,7 +2,7 @@ import copy
 import json
 import os
 import string
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Union
 
@@ -218,10 +218,41 @@ class Order(LoggedModel):
             self.assign_code()
         if not self.datetime:
             self.datetime = now()
+        if not self.expires:
+            self.set_expires()
         super().save(**kwargs)
 
     def touch(self):
         self.save(update_fields=['last_modified'])
+
+    def set_expires(self, now_dt=None, subevents=None):
+        now_dt = now_dt or now()
+        tz = pytz.timezone(self.event.settings.timezone)
+        exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
+        exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
+        if self.event.settings.get('payment_term_weekdays'):
+            if exp_by_date.weekday() == 5:
+                exp_by_date += timedelta(days=2)
+            elif exp_by_date.weekday() == 6:
+                exp_by_date += timedelta(days=1)
+
+        self.expires = exp_by_date
+
+        term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+        if term_last:
+            if self.event.has_subevents and subevents:
+                term_last = min([
+                    term_last.datetime(se).date()
+                    for se in subevents
+                ])
+            else:
+                term_last = term_last.datetime(self.event).date()
+            term_last = make_aware(datetime.combine(
+                term_last,
+                time(hour=23, minute=59, second=59)
+            ), tz)
+            if term_last < self.expires:
+                self.expires = term_last
 
     @cached_property
     def tax_total(self):

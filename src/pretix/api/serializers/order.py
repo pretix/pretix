@@ -1,3 +1,7 @@
+from decimal import Decimal
+
+from django.db import transaction
+from django_countries.fields import Country
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -11,6 +15,9 @@ from pretix.base.signals import register_ticket_outputs
 
 
 class CompatibleCountryField(serializers.Field):
+    def to_internal_value(self, data):
+        return {self.field_name: Country(data)}
+
     def to_representation(self, instance: InvoiceAddress):
         if instance.country:
             return str(instance.country)
@@ -25,6 +32,12 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
                   'vat_id_validated', 'internal_reference')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for v in self.fields.values():
+            v.required = False
+            v.allow_blank = True
 
 
 class AnswerQuestionIdentifierField(serializers.Field):
@@ -132,6 +145,59 @@ class OrderSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
                   'checkin_attention', 'last_modified')
+
+
+class AnswerCreateSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = QuestionAnswer
+        fields = ('question', 'answer', 'options')
+
+
+class OrderPositionCreateSerializer(I18nAwareModelSerializer):
+    answers = AnswerCreateSerializer(many=True, required=False)
+
+    class Meta:
+        model = OrderPosition
+        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
+                  'tax_rule', 'secret', 'addon_to', 'subevent', 'answers')
+
+
+class OrderCreateSerializer(I18nAwareModelSerializer):
+    invoice_address = InvoiceAddressSerializer(required=False)
+    positions = OrderPositionCreateSerializer(many=True, required=False)
+    fees = OrderFeeSerializer(many=True, required=False)
+    status = serializers.ChoiceField(choices=(
+        ('n', Order.STATUS_PENDING),
+        ('p', Order.STATUS_PAID),
+    ), default='n', required=False)
+    code = serializers.CharField(required=False)
+
+    class Meta:
+        model = Order
+        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
+                  'invoice_address', 'positions', 'checkin_attention')
+
+    @transaction.atomic
+    def create(self, validated_data):
+        fees_data = validated_data.pop('fees') if 'fees' in validated_data else []
+        positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
+        ia = InvoiceAddress(**validated_data.pop('invoice_address'))
+        order = Order(event=self.context['event'], **validated_data)
+        order.set_expires(subevents=[p['subevent'] for p in positions_data])
+        order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
+        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+            order.payment_provider = 'free'
+            order.status = Order.STATUS_PAID
+        order.save()
+        ia.order = order
+        ia.save()
+        for pos_data in positions_data:
+            del pos_data['answers']
+            order.positions.create(**pos_data)
+        for fee_data in fees_data:
+            order.fees.create(**fee_data)
+        return order
 
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):

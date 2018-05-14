@@ -752,3 +752,73 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
     assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+
+
+@pytest.mark.django_db
+def test_order_create(token_client, organizer, event, item, quota, question):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data={
+            "email": "dummy@dummy.test",
+            "locale": "en",
+            "fees": [
+                {
+                    "fee_type": "payment",
+                    "value": "0.25",
+                    "description": "",
+                    "internal_type": "",
+                    "tax_rate": "19.00",
+                    "tax_value": "0.05"
+                }
+            ],
+            "payment_provider": "banktransfer",
+            "invoice_address": {
+                "is_business": False,
+                "company": "Sample company",
+                "name": "Fo",
+                "street": "Bar",
+                "zipcode": "",
+                "city": "Sample City",
+                "country": "NZ",
+                "internal_reference": "",
+                "vat_id": ""
+            },
+            "positions": [
+                {
+                    "positionid": 1,
+                    "item": 1,
+                    "variation": None,
+                    "price": "23.00",
+                    "attendee_name": "Peter",
+                    "attendee_email": None,
+                    "tax_rule": None,
+                    "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+                    "addon_to": None,
+                    "answers": [
+                        {
+                            "question": 1,
+                            "answer": "S",
+                            "options": []
+                        }
+                    ],
+                    "subevent": None
+                }
+            ],
+        }
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.email == "dummy@dummy.test"
+    assert o.locale == "en"
+    assert o.total == Decimal('23.25')
+    assert o.payment_provider == "banktransfer"
+    fee = o.fees.first()
+    assert fee.fee_type == "payment"
+    assert fee.value == Decimal('0.25')
+    ia = o.invoice_address
+    assert ia.company == "Sample company"
+    assert o.positions.count() == 1
+    pos = o.positions.first()
+    assert pos.item == item
+    assert pos.price == Decimal("23.00")
