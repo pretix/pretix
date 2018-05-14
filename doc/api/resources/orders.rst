@@ -100,6 +100,7 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 1.16
 
    The attributes ``order.last_modified`` as well as the corresponding filters to the resource have been added.
+   An endpoint for order creation has been added.
 
 .. _order-position-resource:
 
@@ -112,7 +113,7 @@ Order position resource
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the order position
-code                                  string                     Order code of the order the position belongs to
+order                                 string                     Order code of the order the position belongs to
 positionid                            integer                    Number of the position within the order
 item                                  integer                    ID of the purchased item
 variation                             integer                    ID of the purchased variation (or ``null``)
@@ -424,6 +425,170 @@ Order endpoints
    :statuscode 404: The requested order or output provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/
+
+   Creates a new order.
+
+   .. warning:: This endpoint is considered **experimental**. It might change at any time without prior notice.
+
+   .. warning::
+
+       This endpoint is intended for advanced users. It is not designed to be used to build your own shop frontend,
+       it's rather intended to import attendees from external sources etc.
+       There is a lot that it does not or can not do, and you will need to be careful using it.
+       It allows to bypass many of the restrictions imposed when creating an order through the
+       regular shop.
+
+       Specifically, this endpoint currently
+
+       * does not validate if products are active or if they're only to be sold in a specific time frame
+
+       * does not validate if the event's ticket sales are already over or haven't started
+
+       * does not validate the number of items per order or the number of times an item can be included in an order
+
+       * does not validate any requirements related to add-on products
+
+       * does not check or calculate prices but believes any prices you send
+
+       * does not support the redemption of vouchers
+
+       * does not prevent you from buying items that can only be bought with a voucher
+
+       * does not calculate fees
+
+       * does not allow to pass data to plugins and will therefore cause issues with some plugins like the shipping
+         module
+
+       * does not send order confirmations via email
+
+       * does not support reverse charge taxation
+
+       * does not support file upload questions
+
+   You can supply the following fields of the resource:
+
+   * ``code`` (optional)
+   * ``status`` (optional, defaults to pending for non-free orders and paid for free orders)
+   * ``email``
+   * ``locale``
+   * ``payment_provider``
+   * ``comment`` (optional)
+   * ``checkin_attention`` (optional)
+   * ``invoice_address`` (optional)
+
+      * ``company``
+      * ``is_business``
+      * ``name``
+      * ``street``
+      * ``zipcode``
+      * ``city``
+      * ``country``
+      * ``internal_reference``
+      * ``vat_id``
+
+   * ``positions``
+
+      * ``positionid`` (optional, see below)
+      * ``item``
+      * ``variation``
+      * ``price``
+      * ``attendee_name``
+      * ``attendee_email``
+      * ``secret`` (optional)
+      * ``addon_to`` (optional, see below)
+      * ``subevent``
+      * ``answers``
+
+        * ``question``
+        * ``answer``
+        * ``options``
+
+   * ``fees``
+
+      * ``fee_type``
+      * ``value``
+      * ``description``
+      * ``internal_type``
+      * ``tax_rule``
+
+   If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
+   to incrementing integers starting with ``1``. Then, you can reference one of these
+   IDs in the ``addon_to`` field of another position. Note that all add_ons for a specific position need to come
+   immediately after the position itself.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "email": "dummy@example.org",
+        "locale": "en",
+        "fees": [
+          {
+            "fee_type": "payment",
+            "value": "0.25",
+            "description": "",
+            "internal_type": "",
+            "tax_rule": 2
+          }
+        ],
+        "payment_provider": "banktransfer",
+        "invoice_address": {
+          "is_business": False,
+          "company": "Sample company",
+          "name": "John Doe",
+          "street": "Sesam Street 12",
+          "zipcode": "12345",
+          "city": "Sample City",
+          "country": "UK",
+          "internal_reference": "",
+          "vat_id": ""
+        },
+        "positions": [
+          {
+            "positionid": 1,
+            "item": 1,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name": "Peter",
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [
+              {
+                "question": 1,
+                "answer": "23",
+                "options": []
+              }
+            ],
+            "subevent": None
+          }
+        ],
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event to create an item for
+   :param event: The ``slug`` field of the event to create an item for
+   :statuscode 201: no error
+   :statuscode 400: The item could not be created due to invalid submitted data or lack of quota.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
+         order.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
 

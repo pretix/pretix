@@ -827,6 +827,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.email == "dummy@dummy.test"
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
+    assert o.status == Order.STATUS_PENDING
     assert o.payment_provider == "banktransfer"
     fee = o.fees.first()
     assert fee.fee_type == "payment"
@@ -1498,3 +1499,22 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
     )
     assert resp.status_code == 400
     assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+
+
+@pytest.mark.django_db
+def test_order_create_free(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['price'] = '0.00'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.total == Decimal('0.00')
+    assert o.status == Order.STATUS_PAID
+    assert o.payment_provider == "free"

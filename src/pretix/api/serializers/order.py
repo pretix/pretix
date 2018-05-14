@@ -397,6 +397,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             f.order = order
             f._calculate_tax()
             f.save()
+
         return order
 
 
