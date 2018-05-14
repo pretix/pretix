@@ -144,6 +144,7 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
+    res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(organizer.slug, event.slug))
@@ -172,6 +173,19 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?locale=de'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
+        organizer.slug, event.slug, (order.last_modified - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
+        organizer.slug, event.slug, order.last_modified.isoformat().replace('+00:00', 'Z')
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
+        organizer.slug, event.slug, (order.last_modified + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+    ))
+    assert [] == resp.data['results']
+
 
 @pytest.mark.django_db
 def test_order_detail(token_client, organizer, event, order, item, taxrule, question):
@@ -180,6 +194,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
+    res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
     assert resp.status_code == 200

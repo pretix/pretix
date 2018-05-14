@@ -180,6 +180,9 @@ class Order(LoggedModel):
         verbose_name=_("Meta information"),
         null=True, blank=True
     )
+    last_modified = models.DateTimeField(
+        auto_now=True, db_index=True
+    )
 
     class Meta:
         verbose_name = _("Order")
@@ -208,12 +211,17 @@ class Order(LoggedModel):
     def changable(self):
         return self.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
 
-    def save(self, *args, **kwargs):
+    def save(self, **kwargs):
+        if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
+            kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']
         if not self.code:
             self.assign_code()
         if not self.datetime:
             self.datetime = now()
-        super().save(*args, **kwargs)
+        super().save(**kwargs)
+
+    def touch(self):
+        self.save(update_fields=['last_modified'])
 
     @cached_property
     def tax_total(self):
@@ -547,7 +555,14 @@ class QuestionAnswer(models.Model):
     def save(self, *args, **kwargs):
         if self.orderposition and self.cartposition:
             raise ValueError('QuestionAnswer cannot be linked to an order and a cart position at the same time.')
+        if self.orderposition:
+            self.orderposition.order.touch()
         super().save(*args, **kwargs)
+
+    def delete(self, **kwargs):
+        if self.orderposition:
+            self.orderposition.order.touch()
+        super().delete(**kwargs)
 
 
 class AbstractPosition(models.Model):
@@ -751,7 +766,12 @@ class OrderFee(models.Model):
     def save(self, *args, **kwargs):
         if self.tax_rate is None:
             self._calculate_tax()
+        self.order.touch()
         return super().save(*args, **kwargs)
+
+    def delete(self, **kwargs):
+        self.order.touch()
+        super().delete(**kwargs)
 
 
 class OrderPosition(AbstractPosition):
@@ -861,6 +881,7 @@ class OrderPosition(AbstractPosition):
     def save(self, *args, **kwargs):
         if self.tax_rate is None:
             self._calculate_tax()
+        self.order.touch()
         if self.pk is None:
             while OrderPosition.objects.filter(secret=self.secret).exists():
                 self.secret = generate_position_secret()
@@ -944,6 +965,11 @@ class InvoiceAddress(models.Model):
         help_text=_('This reference will be printed on your invoice for your convenience.'),
         blank=True
     )
+
+    def save(self, **kwargs):
+        if self.order:
+            self.order.touch()
+        super().save(**kwargs)
 
 
 def cachedticket_name(instance, filename: str) -> str:

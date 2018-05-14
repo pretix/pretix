@@ -1143,6 +1143,7 @@ class OrderChangeManager:
             self._recalculate_total_and_payment_fee()
             self._reissue_invoice()
             self._clear_tickets_cache()
+            self.order.touch()
         self._check_paid_to_free()
 
         if self.notify:

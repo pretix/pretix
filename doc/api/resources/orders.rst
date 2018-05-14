@@ -49,7 +49,7 @@ invoice_address                       object                     Invoice address
 └ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
-position                              list of objects            List of order positions (see below)
+positions                             list of objects            List of order positions (see below)
 fees                                  list of objects            List of fees included in the order total (i.e.
                                                                  payment fees)
 ├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
@@ -68,6 +68,7 @@ downloads                             list of objects            List of ticket 
                                                                  download options.
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
+last_modified                         datetime                   Last modification of this object
 ===================================== ========================== =======================================================
 
 
@@ -95,6 +96,10 @@ downloads                             list of objects            List of ticket 
 
    The attributes ``order.payment_fee``, ``order.payment_fee_tax_rate``, ``order.payment_fee_tax_value`` and
    ``order.payment_fee_tax_rule`` have finally been removed.
+
+.. versionchanged:: 1.16
+
+   The attributes ``order.last_modified`` as well as the corresponding filters to the resource have been added.
 
 .. _order-position-resource:
 
@@ -174,6 +179,7 @@ Order endpoints
       HTTP/1.1 200 OK
       Vary: Accept
       Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
 
       {
         "count": 1,
@@ -188,6 +194,7 @@ Order endpoints
             "locale": "en",
             "datetime": "2017-12-01T10:00:00Z",
             "expires": "2017-12-10T10:00:00Z",
+            "last_modified": "2017-12-01T10:00:00Z",
             "payment_date": "2017-12-05",
             "payment_provider": "banktransfer",
             "fees": [],
@@ -264,8 +271,11 @@ Order endpoints
    :query string status: Only return orders in the given order status (see above)
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
+   :query datetime modified_since: Only return orders that have changed since the given date
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
+   :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
+                                differences, this is the value you want to use as ``modified_since`` in your next call.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
@@ -298,6 +308,7 @@ Order endpoints
         "locale": "en",
         "datetime": "2017-12-01T10:00:00Z",
         "expires": "2017-12-10T10:00:00Z",
+        "last_modified": "2017-12-01T10:00:00Z",
         "payment_date": "2017-12-05",
         "payment_provider": "banktransfer",
         "fees": [],

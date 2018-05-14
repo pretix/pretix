@@ -5,7 +5,7 @@ import pytz
 from django.db.models import Q
 from django.db.models.functions import Concat
 from django.http import FileResponse
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import detail_route
@@ -38,6 +38,7 @@ class OrderFilter(FilterSet):
     email = django_filters.CharFilter(name='email', lookup_expr='iexact')
     code = django_filters.CharFilter(name='code', lookup_expr='iexact')
     status = django_filters.CharFilter(name='status', lookup_expr='iexact')
+    modified_since = django_filters.IsoDateTimeFilter(name='last_modified', lookup_expr='gte')
 
     class Meta:
         model = Order
@@ -70,6 +71,18 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
             if prov.identifier == identifier:
                 return prov
         raise NotFound('Unknown output provider.')
+
+    def list(self, request, **kwargs):
+        date = serializers.DateTimeField().to_representation(now())
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, headers={'X-Page-Generated': date})
 
     @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):

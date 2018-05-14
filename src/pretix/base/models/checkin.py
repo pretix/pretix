@@ -168,3 +168,11 @@ class Checkin(models.Model):
         return "<Checkin: pos {} on list '{}' at {}>".format(
             self.position, self.list, self.datetime
         )
+
+    def save(self, **kwargs):
+        self.position.order.touch()
+        super().save(**kwargs)
+
+    def delete(self, **kwargs):
+        self.position.order.touch()
+        super().delete(**kwargs)
