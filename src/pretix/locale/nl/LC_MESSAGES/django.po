@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-04 23:00+0000\n"
-"Last-Translator: Pieter Roziers <pieter@trippeltwiejenul.be>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2018-05-15 13:08+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,16 +66,18 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Evenementen kunnen niet 'live' worden aangemaakt. Er moeten eerst quota en "
+"betalingsmethoden worden toegevoegd voor het evenement live kan gaan."
 
 #: pretix/api/serializers/event.py:90
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Metadataeigenschap '{name}' bestaat niet."
 
 #: pretix/api/serializers/event.py:103
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Onbekende plug-in: '{name}'."
 
 #: pretix/api/serializers/item.py:91
 msgid ""
@@ -1001,30 +1003,26 @@ msgstr "U moet ten minste één quotum instellen om iets te verkopen."
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Een evenement kan, wanneer aangemaakt, niet worden veranderd van een enkel "
+"evenement in een reeks of andersom."
 
 #: pretix/base/models/event.py:664
-#, fuzzy
-#| msgid "The variation \"{value}\" has been changed."
 msgid "The event slug cannot be changed."
-msgstr "De variant \"{value}\" is gewijzigd."
+msgstr "De slug van het evenement kan niet worden veranderd."
 
 #: pretix/base/models/event.py:667
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This slug has already been used for a different event."
-msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
+msgstr "Deze slug wordt al voor een ander evenement gebruikt."
 
 #: pretix/base/models/event.py:673
-#, fuzzy
-#| msgid "The item's availability cannot end before it starts."
 msgid "The event cannot end before it starts."
-msgstr "De beschikbaarheid van het item kan niet eindigen voordat het begint."
+msgstr "Het evenement kan niet eindigen voor het begint."
 
 #: pretix/base/models/event.py:679
-#, fuzzy
-#| msgid "The item's availability cannot end before it starts."
 msgid "The event's presale cannot end before it starts."
-msgstr "De beschikbaarheid van het item kan niet eindigen voordat het begint."
+msgstr ""
+"De voorverkoopperiode van het evenement kan niet eindigen voordat de "
+"voorverkoop begint."
 
 #: pretix/base/models/event.py:705 pretix/base/models/items.py:210
 #: pretix/base/models/items.py:438 pretix/control/forms/filter.py:302
@@ -1912,6 +1910,9 @@ msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Iemand met deze instelling kan toegang krijgen tot bijna alle data van al uw "
+"evenementen, bijvoorbeeld via privacyrapporten, dus pas op met wie u aan dit "
+"team toevoegt!"
 
 #: pretix/base/models/organizer.py:147
 msgid "Can change event settings"
@@ -2254,7 +2255,7 @@ msgstr "Er is al een voucher naar deze persoon verzonden."
 
 #: pretix/base/models/waitinglist.py:91
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Dit item is geanonimiseerd en kan niet meer worden gebruikt."
 
 #: pretix/base/models/waitinglist.py:101
 #, python-brace-format
@@ -2267,10 +2268,8 @@ msgid "You have been selected from the waitinglist for {event}"
 msgstr "U bent geselecteerd uit de wachtlijst voor {event}"
 
 #: pretix/base/models/waitinglist.py:141
-#, fuzzy
-#| msgid "The subevent does not belong to this event."
 msgid "The selected item does not belong to this event."
-msgstr "Het onderevenement hoort niet bij dit evenement."
+msgstr "Het geselecteerde item hoort niet bij dit evenement."
 
 #: pretix/base/models/waitinglist.py:143
 msgid "Please select a specific variation of this product."
@@ -2880,30 +2879,21 @@ msgstr ""
 "add-on bij een ander product."
 
 #: pretix/base/services/checkin.py:102
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This order position has an invalid product for this check-in list."
-msgstr "Deze voucher is niet geldig voor deze evenementsdatum."
+msgstr ""
+"Deze bestellingspositie heeft een ongeldig product voor deze inchecklijst."
 
 #: pretix/base/services/checkin.py:109
-#, fuzzy
-#| msgid "Order marked as paid"
 msgid "This order is not marked as paid."
-msgstr "Bestelling gemarkeerd als betaald"
+msgstr "Deze bestelling is niet gemarkeerd als betaald."
 
 #: pretix/base/services/checkin.py:114
-#, fuzzy
-#| msgid "You do not have permission to perform this action."
 msgid "You need to answer questions to complete this check-in."
-msgstr "U heeft geen toestemming om deze actie uit te voeren."
+msgstr "U moet vragen beantwoorden om deze check-in te voltooien."
 
 #: pretix/base/services/checkin.py:137
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "The payment for this invoice has already been received."
 msgid "This ticket has already been redeemed."
-msgstr "De betaling voor deze factuur is al ontvangen."
+msgstr "Dit ticket is al gebruikt."
 
 #: pretix/base/services/invoices.py:51
 #, python-brace-format
@@ -3208,22 +3198,20 @@ msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
 msgstr ""
+"Het downloadbestand kon niet meer op de server worden gevonden, probeer de "
+"download opnieuw te starten."
 
 #: pretix/base/services/shredder.py:77
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This file is from a different event."
-msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
+msgstr "Dit bestand is van een ander evenement."
 
 #: pretix/base/services/shredder.py:79
-#, fuzzy
-#| msgid "The current password you entered was not correct."
 msgid "The confirm code you entered was incorrect."
-msgstr "Het huidige wachtwoord dat u heeft ingevoerd is niet correct."
+msgstr "De bevestigingscode die u invoerde was onjuist."
 
 #: pretix/base/services/shredder.py:81
 msgid "Something happened in your event after the export, please try again."
-msgstr ""
+msgstr "Er is iets gebeurd in uw evenement na de export, probeer het opnieuw."
 
 #: pretix/base/services/stats.py:138
 msgid "Uncategorized"
@@ -3577,61 +3565,63 @@ msgstr ""
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
 msgid "Your event needs to be over for at least 60 days to use this feature."
 msgstr ""
+"Uw evenement moet ten minste 60 dagen geleden zijn afgelopen om deze functie "
+"te gebruiken."
 
 #: pretix/base/shredder.py:43
 msgid "Your ticket shop needs to be offline to use this feature."
-msgstr ""
+msgstr "Uw ticketwinkel moet offline zijn om deze functie te gebruiken."
 
 #: pretix/base/shredder.py:125
-#, fuzzy
-#| msgid "E-mail"
 msgid "E-mails"
-msgstr "E-mail"
+msgstr "E-mails"
 
 #: pretix/base/shredder.py:127
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents."
 msgstr ""
+"Dit zal alle e-mailadressen verwijderen van bestellingen en gasten, samen "
+"met opgeslagen emailinhoud."
 
 #: pretix/base/shredder.py:172
 msgid "This will remove all email addresses from the waiting list."
-msgstr ""
+msgstr "Dit zal alle e-mailadressen van de wachtlijst verwijderen."
 
 #: pretix/base/shredder.py:198
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee names"
-msgstr "Naam van aanwezige"
+msgstr "Namen van aanwezigen"
 
 #: pretix/base/shredder.py:200
 msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
+"Dit zal alle namen van aanwezigen van bestelposities verwijderen, samen met "
+"opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:224
-#, fuzzy
-#| msgid "Invoice address: name"
 msgid "Invoice addresses"
-msgstr "Factuuradres: naam"
+msgstr "Factuuradressen"
 
 #: pretix/base/shredder.py:227
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Dit zal alle factuuradressen van bestellingen verwijderen, samen met "
+"opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:251
-#, fuzzy
-#| msgid "Questions"
 msgid "Question answers"
-msgstr "Vragen"
+msgstr "Antwoorden op vragen"
 
 #: pretix/base/shredder.py:253
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Dit zal alle antwoorden op vragen verwijderen, samen met opgeslagen "
+"veranderingen hieraan."
 
 #: pretix/base/shredder.py:278
 #: pretix/control/templates/pretixcontrol/order/index.html:117
@@ -3647,16 +3637,19 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
+"Dit zal alle PDF-bestanden met facturen verwijderen, samen met eventuele "
+"tekstinhoud die persoonlijke gegevens zou kunnen bevatten. Factuurnummers en "
+"totaalbedragen zullen worden behouden."
 
 #: pretix/base/shredder.py:308
-#, fuzzy
-#| msgid "Device type"
 msgid "Cached ticket files"
-msgstr "Soort apparaat"
+msgstr "Gecachete ticketbestanden"
 
 #: pretix/base/shredder.py:310
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
+"Dit zal alle gecachete ticketbestanden verwijderen. Er zal geen download "
+"worden aangeboden."
 
 #: pretix/base/shredder.py:325
 msgid ""
@@ -3664,6 +3657,9 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
+"Dit zal betalings-gerelateerde informatie verwijderen. Afhankelijk van de "
+"betalingsmethode worden alle gegevens verwijderd of alleen persoonlijke "
+"gegevens. Er zal geen download worden aangeboden."
 
 #: pretix/base/templates/400.html:3 pretix/base/templates/400.html:6
 msgid "Bad Request"
@@ -4888,10 +4884,8 @@ msgstr "De slug die u invoerde was onjuist."
 
 #: pretix/control/forms/event.py:1021
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
-#, fuzzy
-#| msgid "Your current password"
 msgid "Your password"
-msgstr "Uw huidige wachtwoord"
+msgstr "Uw wachtwoord"
 
 #: pretix/control/forms/event.py:1026
 msgid "Event slug"
@@ -5076,11 +5070,8 @@ msgid "Weekday"
 msgstr "Weekdag"
 
 #: pretix/control/forms/filter.py:313
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "All days"
-msgstr "Alle data"
+msgstr "Alle dagen"
 
 #: pretix/control/forms/filter.py:314 pretix/control/forms/subevents.py:277
 #: pretix/control/forms/subevents.py:327 pretix/control/forms/subevents.py:343
@@ -6139,10 +6130,8 @@ msgid "The shop has been taken offline."
 msgstr "De winkel is offline gehaald."
 
 #: pretix/control/logdisplay.py:233
-#, fuzzy
-#| msgid "The new check-in list has been created."
 msgid "The event has been created."
-msgstr "De nieuwe inchecklijst is aangemaakt."
+msgstr "Het evenement is aangemaakt."
 
 #: pretix/control/logdisplay.py:235
 msgid "An answer option has been added to the question."
@@ -6177,22 +6166,16 @@ msgid "A voucher has been sent to a person on the waiting list."
 msgstr "Een voucher is verstuurd naar een persoon op de wachtlijst."
 
 #: pretix/control/logdisplay.py:243
-#, fuzzy
-#| msgid "An answer option has been removed from the question."
 msgid "An entry has been removed from the waiting list."
-msgstr "Een antwoordoptie is verwijderd van de vraag."
+msgstr "Een inschrijving is verwijderd van de wachtlijst."
 
 #: pretix/control/logdisplay.py:244
-#, fuzzy
-#| msgid "An answer option has been added to the question."
 msgid "An entry has been changed on the waiting list."
-msgstr "Een antwoordoptie is aan de vraag toegevoegd."
+msgstr "Een inschrijving is veranderd op de wachtlijst."
 
 #: pretix/control/logdisplay.py:245
-#, fuzzy
-#| msgid "An answer option has been added to the question."
 msgid "An entry has been added to the waiting list."
-msgstr "Een antwoordoptie is aan de vraag toegevoegd."
+msgstr "Een inschrijving is toegevoegd aan de wachtlijst."
 
 #: pretix/control/logdisplay.py:246
 msgid "The team has been created."
@@ -6245,10 +6228,8 @@ msgid "The settings of a ticket output provider have been changed."
 msgstr "De instellingen van een ticketsuitvoerprovider zijn aangepast."
 
 #: pretix/control/logdisplay.py:283
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "The user confirmed the following message: \"{}\""
-msgstr "Bevestig de volgende betalingsdetails."
+msgstr "De gebruiker bevestigde het volgende bericht: \"{}\""
 
 #: pretix/control/logdisplay.py:303
 #, python-brace-format
@@ -7060,10 +7041,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:62
 #: pretix/control/templates/pretixcontrol/event/delete.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:90
-#, fuzzy
-#| msgid "Delete entry"
 msgid "Delete personal data"
-msgstr "Verwijder item"
+msgstr "Verwijder persoonlijke gegevens"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
 #: pretix/control/templates/pretixcontrol/event/live.html:16
@@ -7110,7 +7089,7 @@ msgstr "Evenementlogboeken"
 #: pretix/control/templates/pretixcontrol/event/logs.html:37
 #: pretix/control/templates/pretixcontrol/includes/logs.html:22
 msgid "Personal data was cleared from this log entry."
-msgstr ""
+msgstr "Persoonlijke gegevens zijn verwijderd uit dit log-item."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:121
 #: pretix/control/templates/pretixcontrol/event/logs.html:46
@@ -7770,7 +7749,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:31
 msgid ""
 "We strongly recommend against using short forms of more then 16 characters."
-msgstr ""
+msgstr "We raden sterk af om korte vormen te gebruiken van meer dan 16 tekens."
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html:6
 msgid ""
@@ -9252,11 +9231,11 @@ msgstr "Schakel JavaScript in uw browser in."
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "Data-versnipperaar"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:14
 msgid "Step 1: Download data"
-msgstr ""
+msgstr "Stap 1: Download gegevens"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
@@ -9264,16 +9243,17 @@ msgid ""
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
+"U gaat gegevens permanent van de server verwijderen, ook al bent u mogelijk "
+"verplicht om sommige van deze gegevens te bewaren. U moet hierom het "
+"volgende bestand downloaden en op een veilige plaats bewaren:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:25
-#, fuzzy
-#| msgid "Download list"
 msgid "Download data"
-msgstr "Download lijst"
+msgstr "Download gegevens"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:30
 msgid "Step 2: Confirm download"
-msgstr ""
+msgstr "Stap 2: Bevestig download"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:32
 msgid ""
@@ -9281,16 +9261,17 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
+"Het gedownloade bestand bevat een tekstbestand met de naam \"CONFIRM_CODE."
+"txt\" met een code van zes tekens. Voer deze code hier in om te bevestigen "
+"dat u het bestand juist hebt gedownload."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:37
-#, fuzzy
-#| msgid "Confirmations"
 msgid "Confirmation code"
-msgstr "Bevestigingen"
+msgstr "Bevestigingscode"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Step 3: Confirm deletion"
-msgstr ""
+msgstr "Stap 3: Bevestig verwijdering"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:43
 #, python-format
@@ -9299,6 +9280,9 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"Controleer nog een keer dat u geheel zeker weet dat u de gekozen categorieën "
+"van gegevens wilt verwijderen van het evenement <strong>%(event)s</strong>. "
+"Voer uw wachtwoord in als u het echt zeker weet:"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -9308,12 +9292,21 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"Deze functie staat u toe om persoonlijke gegevens uit dit evenement te "
+"verwijderen. U kunt eerst selecteren welke soorten data u wilt versnipperen, "
+"en hierna de gegevens downloaden. Nadat u bevestigt dat u de gegevens heeft "
+"gedownload zullen de gegevens worden verwijderd uit de database van de "
+"server. De gegevens kunnen mogelijk nog voor een beperkte tijd blijven "
+"bestaan in back-ups van de servergegevens."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
 msgstr ""
+"Door deze functie te gebruiken worden de bestellingen voor uw evenement niet "
+"verwijderd, maar alleen de gegevens die de bestellingen aan individuele "
+"personen kunnen koppelen."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
 msgid ""
@@ -9321,6 +9314,10 @@ msgid ""
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
+"U bent zelf verantwoordelijk voor het controleren of u de data die u kiest "
+"ook daadwerkelijk mag verwijderen, bijvoorbeeld van belastingwetgeving in uw "
+"land. In veel landen moet u sommige gegevens altijd in het live systeem "
+"houden in het geval van een audit."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -9328,18 +9325,22 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
+"U kunt voor de meeste categorieën van gegevens eerst de gegevens downloaden "
+"om ze offline op te slaan. Sommige soorten gegevens (bijvoorbeeld sommige "
+"betalingsinformatie) en historische loggegevens kunnen momenteel niet worden "
+"gedownload."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
-#, fuzzy
-#| msgid "no selection"
 msgid "Data selection"
-msgstr "geen selectie"
+msgstr "Datakeuze"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:63
 msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
 msgstr ""
+"We raden aan om deze gegevens niet te verwijderen, omdat u het mogelijk "
+"nodig heeft bij een belastingaudit."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 msgctxt "subevent"
@@ -9425,24 +9426,21 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Delete date"
 msgctxt "subevent"
 msgid "Delete dates"
-msgstr "Datum verwijderen"
+msgstr "Verwijder datums"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the team?"
 msgid "Are you sure you want to delete the following dates?"
-msgstr "Weet u zeker dat u het team wilt verwijderen?"
+msgstr "Weet u zeker dat u de volgende datums wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
 msgstr ""
+"De volgende datums kunnen niet worden verwijderd omdat er al bestellingen "
+"aan zijn verbonden. In plaats hiervan zullen de datums worden uitgeschakeld."
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 msgctxt "subevent"
@@ -9484,23 +9482,16 @@ msgid "Use as a template for many new dates"
 msgstr "Gebruik als sjabloon voor meerdere nieuwe datums"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:145
-#, fuzzy
-#| msgid "Delete event"
 msgid "Delete selected"
-msgstr "Verwijder evenement"
+msgstr "Verwijder geselecteerde"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:148
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Enable selected"
-msgstr "Geen datum geselecteerd."
+msgstr "Schakel geselecteerde in"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:151
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disable selected"
-msgstr "Uitgeschakeld"
+msgstr "Schakel geselecteerde uit"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -9807,7 +9798,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "U kunt ook uw U2F-apparaat gebruiken."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -10699,7 +10690,7 @@ msgstr "De factuur is al geannuleerd."
 
 #: pretix/control/views/orders.py:351 pretix/control/views/orders.py:376
 msgid "The invoice has been cleaned of personal data."
-msgstr ""
+msgstr "Persoonlijke gegevens zijn uit de factuur verwijderd."
 
 #: pretix/control/views/orders.py:424
 msgid "The email has been queued to be sent."
@@ -10711,7 +10702,7 @@ msgstr "Deze factuur is niet gevonden"
 
 #: pretix/control/views/orders.py:455 pretix/presale/views/order.py:667
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Het factuurbestand wordt niet meer opgeslagen op de server."
 
 #: pretix/control/views/orders.py:460 pretix/presale/views/order.py:672
 msgid ""
@@ -10904,10 +10895,8 @@ msgid "Please only upload PDF files."
 msgstr "Upload alleen PDF-bestanden."
 
 #: pretix/control/views/shredder.py:92
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected data was deleted successfully."
-msgstr "De gekozen lijst is verwijderd."
+msgstr "De gekozen gegevens zijn verwijderd."
 
 #: pretix/control/views/subevents.py:99 pretix/control/views/subevents.py:369
 msgctxt "subevent"
@@ -10931,20 +10920,14 @@ msgid "The new date has been created."
 msgstr "De nieuwe datum is aangemaakt."
 
 #: pretix/control/views/subevents.py:493 pretix/control/views/subevents.py:503
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr "De geselecteerde datum is verwijderd."
+msgstr "De geselecteerde datums zijn uitgeschakeld."
 
 #: pretix/control/views/subevents.py:522
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr "De geselecteerde datum is verwijderd."
+msgstr "De geselecteerde datums zijn verwijderd of uitgeschakeld."
 
 #: pretix/control/views/subevents.py:729
 msgctxt "subevent"
@@ -11777,16 +11760,16 @@ msgid "PayPal reported an event: {}"
 msgstr "PayPal meldt: {}"
 
 #: pretix/plugins/paypal/signals.py:61
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "PayPal payment history"
-msgstr "Betaalmethode inschakelen"
+msgstr "PayPal-betalingsgeschiedenis"
 
 #: pretix/plugins/paypal/signals.py:63 pretix/plugins/stripe/signals.py:143
 msgid ""
 "This will remove payment-related history information. No download will be "
 "offered."
 msgstr ""
+"Dit zal betalings-gerelateerde historische informatie verwijderen. Er zal "
+"geen download worden aangeboden."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -12634,10 +12617,8 @@ msgid "Stripe Connect: Publishable key (test)"
 msgstr "Stripe Connect: Publiceerbare sleutel (test)"
 
 #: pretix/plugins/stripe/signals.py:141
-#, fuzzy
-#| msgid "Show account history"
 msgid "Stripe payment history"
-msgstr "Toon accountgeschiedenis"
+msgstr "Stripe-betalingsgeschiedenis"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -12966,18 +12947,13 @@ msgstr ""
 "het later opnieuw."
 
 #: pretix/presale/forms/checkout.py:25
-#, fuzzy
-#| msgid ""
-#| "Make sure to enter a valid email address. We will send you an order "
-#| "confirmation including a link that you need in case you want to make "
-#| "modifications to your order or download your ticket later."
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
 "Zorg ervoor dat u een geldig e-mailadres opgeeft. We sturen u een "
-"bestelbevestiging met een link die u nodig heeft om uw bestelling te "
-"wijzigen en om uw ticket te downloaden."
+"bestelbevestiging met een link die u nodig heeft om uw bestelling later te "
+"openen."
 
 #: pretix/presale/forms/checkout.py:37
 msgid "E-mail address (repeated)"
@@ -13219,16 +13195,12 @@ msgstr ""
 "beschikbaar worden."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
-#, fuzzy
-#| msgid "Remove"
 msgid "Remove one"
-msgstr "Verwijderen"
+msgstr "Verwijder één"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:109
-#, fuzzy
-#| msgid "Add a new rule"
 msgid "Add one more"
-msgstr "Voeg een nieuwe regel toe"
+msgstr "Voeg nog een toe"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
@@ -13375,10 +13347,9 @@ msgstr "Toon varianten"
 #: pretix/presale/templates/pretixpresale/event/index.html:392
 #: pretix/presale/templates/pretixpresale/event/voucher.html:98
 #: pretix/presale/templates/pretixpresale/event/voucher.html:174
-#, fuzzy, python-format
-#| msgid "Modify order: %(code)s"
+#, python-format
 msgid "Modify price for %(item)s"
-msgstr "Wijzig bestelling: %(code)s"
+msgstr "Verander prijs voor %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:315
 #: pretix/presale/templates/pretixpresale/event/index.html:408
