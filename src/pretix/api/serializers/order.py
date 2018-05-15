@@ -1,3 +1,4 @@
+import json
 from collections import Counter
 from decimal import Decimal
 
@@ -163,9 +164,6 @@ class AnswerCreateSerializer(I18nAwareModelSerializer):
         return q
 
     def validate(self, data):
-        if not data.get('question'):
-            return data
-
         if data.get('question').type == Question.TYPE_FILE:
             raise ValidationError(
                 'File uploads are currently not supported via the API.'
@@ -245,6 +243,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 'The specified item does not belong to this event.'
             )
+        if not item.active:
+            raise ValidationError(
+                'The specified item is not active.'
+            )
         return item
 
     def validate_subevent(self, subevent):
@@ -280,6 +282,19 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         return data
 
 
+class CompatibleJSONField(serializers.JSONField):
+    def to_internal_value(self, data):
+        try:
+            return json.dumps(data)
+        except (TypeError, ValueError):
+            self.fail('invalid')
+
+    def to_representation(self, value):
+        if value:
+            return json.load(value)
+        return value
+
+
 class OrderCreateSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(required=False)
     positions = OrderPositionCreateSerializer(many=True, required=False)
@@ -294,11 +309,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         min_length=5
     )
     comment = serializers.CharField(required=False, allow_blank=True)
+    payment_provider = serializers.CharField(required=True)
+    payment_info = CompatibleJSONField(required=False)
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
-                  'invoice_address', 'positions', 'checkin_attention')
+                  'invoice_address', 'positions', 'checkin_attention', 'payment_info')
+
+    def validate_payment_provider(self, pp):
+        if pp not in self.context['event'].get_payment_providers():
+            raise ValidationError('The given payment provider is not known.')
+        return pp
 
     def validate_code(self, code):
         if code and Order.objects.filter(event__organizer=self.context['event'].organizer, code=code).exists():
@@ -357,8 +379,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 quotadiff.update(new_quotas)
 
                 for quota, diff in quotadiff.items():
-                    if diff <= 0:
-                        continue
                     avail = quota.availability()
                     if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                         raise ValidationError(
@@ -373,6 +393,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
                 order.payment_provider = 'free'
                 order.status = Order.STATUS_PAID
+            elif order.payment_provider == "free" and order.total != Decimal('0.00'):
+                raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
             order.save()
             if ia:
                 ia.order = order

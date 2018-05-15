@@ -442,7 +442,7 @@ Order endpoints
 
        Specifically, this endpoint currently
 
-       * does not validate if products are active or if they're only to be sold in a specific time frame
+       * does not validate if products are only to be sold in a specific time frame
 
        * does not validate if the event's ticket sales are already over or haven't started
 
@@ -470,10 +470,19 @@ Order endpoints
    You can supply the following fields of the resource:
 
    * ``code`` (optional)
-   * ``status`` (optional, defaults to pending for non-free orders and paid for free orders)
+   * ``status`` (optional) – Defaults to pending for non-free orders and paid for free orders. You can only set this to
+     ``"n"`` for pending or ``"p"`` for paid. If you create a paid order, the ``order_paid`` signal will **not** be
+     sent out to plugins and no email will be sent. If you want that behavior, create an unpaid order and then call
+     the ``mark_paid`` API method.
    * ``email``
    * ``locale``
-   * ``payment_provider``
+   * ``payment_provider`` – The identifier of the payment provider set for this order. This needs to be an existing
+     payment provider. You should use ``"free"`` for free orders.
+   * ``payment_info`` (optional) – You can pass a nested JSON object that will be set as the internal ``payment_info``
+     value of the order. How this value is handled is up to the payment provider and you should only use this if you
+     know the specific payment provider in detail. Please keep in mind that the payment provider will not be called
+     to do anything about this (i.e. if you pass a bank account to a debit provider, *no* charge will be created),
+     this is just informative in case you *handled the payment already*.
    * ``comment`` (optional)
    * ``checkin_attention`` (optional)
    * ``invoice_address`` (optional)

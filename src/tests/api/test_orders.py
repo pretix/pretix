@@ -1,5 +1,6 @@
 import copy
 import datetime
+import json
 from decimal import Decimal
 from unittest import mock
 
@@ -894,6 +895,52 @@ def test_order_create_code_optional(token_client, organizer, event, item, quota,
 
 
 @pytest.mark.django_db
+def test_order_email_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['email']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert not o.email
+
+
+@pytest.mark.django_db
+def test_order_create_payment_info_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert not o.payment_info == "{}"
+
+    res['payment_info'] = {
+        'foo': {
+            'bar': [1, 2],
+            'test': False
+        }
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert json.loads(o.payment_info) == res['payment_info']
+
+
+@pytest.mark.django_db
 def test_order_create_position_secret_optional(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
@@ -1040,6 +1087,20 @@ def test_order_create_subevent_validation(token_client, organizer, event, item, 
 @pytest.mark.django_db
 def test_order_create_item_validation(token_client, organizer, event, item, item2, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    item.active = False
+    item.save()
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'item': ['The specified item is not active.']}]}
+    item.active = True
+    item.save()
+
     res['positions'][0]['item'] = item2.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
@@ -1332,6 +1393,33 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     assert answ.question == question
     assert answ.answer == "XL, L"
 
+    question.type = Question.TYPE_NUMBER
+    question.save()
+    res['positions'][0]['answers'][0]['options'] = []
+    res['positions'][0]['answers'][0]['answer'] = '3.45'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    pos = o.positions.first()
+    answ = pos.answers.first()
+    assert answ.answer == "3.45"
+
+    question.type = Question.TYPE_NUMBER
+    question.save()
+    res['positions'][0]['answers'][0]['options'] = []
+    res['positions'][0]['answers'][0]['answer'] = 'foo'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['A valid number is required.']}]}]}
+
     question.type = Question.TYPE_BOOLEAN
     question.save()
     res['positions'][0]['answers'][0]['options'] = []
@@ -1518,3 +1606,80 @@ def test_order_create_free(token_client, organizer, event, item, quota, question
     assert o.total == Decimal('0.00')
     assert o.status == Order.STATUS_PAID
     assert o.payment_provider == "free"
+
+
+@pytest.mark.django_db
+def test_order_create_require_payment_provider(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['payment_provider']
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'payment_provider': ['This field is required.']}
+
+
+@pytest.mark.django_db
+def test_order_create_invalid_payment_provider(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['payment_provider'] = 'foo'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'payment_provider': ['The given payment provider is not known.']}
+
+
+@pytest.mark.django_db
+def test_order_create_invalid_free_order(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['payment_provider'] = 'free'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['You cannot use the "free" payment provider for non-free orders.']
+
+
+@pytest.mark.django_db
+def test_order_create_invalid_status(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['status'] = 'e'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'status': ['"e" is not a valid choice.']}
+
+
+@pytest.mark.django_db
+def test_order_create_paid_generate_invoice(token_client, organizer, event, item, quota, question):
+    event.settings.invoice_generate = 'paid'
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['status'] = 'p'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.invoices.count() == 1
