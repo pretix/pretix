@@ -658,6 +658,39 @@ class FreeOrderProvider(BasePaymentProvider):
         return False
 
 
+class BoxOfficeProvider(BasePaymentProvider):
+    is_implicit = True
+    is_enabled = True
+    identifier = "boxoffice"
+    verbose_name = _("Box office")
+
+    def payment_perform(self, request: HttpRequest, order: Order):
+        from pretix.base.services.orders import mark_order_paid
+        try:
+            mark_order_paid(order, 'boxoffice', send_mail=False)
+        except Quota.QuotaExceededException as e:
+            raise PaymentException(str(e))
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def order_control_refund_render(self, order: Order) -> str:
+        return ''
+
+    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+        from pretix.base.services.orders import mark_order_refunded
+
+        mark_order_refunded(order, user=request.user)
+        messages.success(request, _('The order has been marked as refunded.'))
+
+    def is_allowed(self, request: HttpRequest) -> bool:
+        return False
+
+    def order_change_allowed(self, order: Order) -> bool:
+        return False
+
+
 @receiver(register_payment_providers, dispatch_uid="payment_free")
 def register_payment_provider(sender, **kwargs):
-    return FreeOrderProvider
+    return [FreeOrderProvider, BoxOfficeProvider]

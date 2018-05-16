@@ -13,7 +13,7 @@ from django.db import transaction
 from django.db.models import F, Max, Q, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from pretix.base.i18n import (
@@ -31,7 +31,6 @@ from pretix.base.models.orders import (
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider
-from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.async import ProfiledTask
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -448,50 +447,22 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None):
-    from datetime import time
-
     fees = _get_fees(positions, payment_provider, address, meta_info, event)
     total = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
-    tz = pytz.timezone(event.settings.timezone)
-    exp_by_date = now_dt.astimezone(tz) + timedelta(days=event.settings.get('payment_term_days', as_type=int))
-    exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
-    if event.settings.get('payment_term_weekdays'):
-        if exp_by_date.weekday() == 5:
-            exp_by_date += timedelta(days=2)
-        elif exp_by_date.weekday() == 6:
-            exp_by_date += timedelta(days=1)
-
-    expires = exp_by_date
-
-    term_last = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
-    if term_last:
-        if event.has_subevents:
-            term_last = min([
-                term_last.datetime(se).date()
-                for se in event.subevents.filter(id__in=[p.subevent_id for p in positions])
-            ])
-        else:
-            term_last = term_last.datetime(event).date()
-        term_last = make_aware(datetime.combine(
-            term_last,
-            time(hour=23, minute=59, second=59)
-        ), tz)
-        if term_last < expires:
-            expires = term_last
-
     with transaction.atomic():
-        order = Order.objects.create(
+        order = Order(
             status=Order.STATUS_PENDING,
             event=event,
             email=email,
             datetime=now_dt,
-            expires=expires,
             locale=locale,
             total=total,
             payment_provider=payment_provider.identifier,
             meta_info=json.dumps(meta_info or {}),
         )
+        order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
+        order.save()
 
         if address:
             if address.order is not None:

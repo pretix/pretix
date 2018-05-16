@@ -2,6 +2,7 @@ import datetime
 
 import django_filters
 import pytz
+from django.db import transaction
 from django.db.models import Q
 from django.db.models.functions import Concat
 from django.http import FileResponse
@@ -13,15 +14,18 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.filters import OrderingFilter
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
 from pretix.api.serializers.order import (
-    InvoiceSerializer, OrderPositionSerializer, OrderSerializer,
+    InvoiceSerializer, OrderCreateSerializer, OrderPositionSerializer,
+    OrderSerializer,
 )
 from pretix.base.models import Invoice, Order, OrderPosition, Quota
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.invoices import (
-    generate_cancellation, generate_invoice, invoice_pdf, regenerate_invoice,
+    generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
+    regenerate_invoice,
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
@@ -31,7 +35,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
 )
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import order_placed, register_ticket_outputs
 
 
 class OrderFilter(FilterSet):
@@ -45,7 +49,7 @@ class OrderFilter(FilterSet):
         fields = ['code', 'status', 'email', 'locale']
 
 
-class OrderViewSet(viewsets.ReadOnlyModelViewSet):
+class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -55,6 +59,11 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'code'
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
 
     def get_queryset(self):
         return self.request.event.orders.prefetch_related(
@@ -225,6 +234,34 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
                 {'detail': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def create(self, request, *args, **kwargs):
+        serializer = OrderCreateSerializer(data=request.data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        with transaction.atomic():
+            self.perform_create(serializer)
+            order = serializer.instance
+            serializer = OrderSerializer(order, context=serializer.context)
+
+            order.log_action(
+                'pretix.event.order.placed',
+                user=request.user if request.user.is_authenticated else None,
+                api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+            )
+        order_placed.send(self.request.event, order=order)
+
+        gen_invoice = invoice_qualified(order) and (
+            (order.event.settings.get('invoice_generate') == 'True') or
+            (order.event.settings.get('invoice_generate') == 'paid' and order.status == Order.STATUS_PAID)
+        ) and not order.invoices.last()
+        if gen_invoice:
+            generate_invoice(order, trigger_pdf=True)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class OrderPositionFilter(FilterSet):
