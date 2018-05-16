@@ -67,6 +67,7 @@ event_permission_sub_urls = [
     ('put', 'can_change_items', 'quotas/1/', 404),
     ('patch', 'can_change_items', 'quotas/1/', 404),
     ('delete', 'can_change_items', 'quotas/1/', 404),
+    ('post', 'can_change_orders', 'orders/', 400),
     ('post', 'can_change_orders', 'orders/ABC12/mark_paid/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
