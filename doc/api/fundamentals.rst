@@ -128,11 +128,11 @@ a list containing only objects that have changed in the time since your last req
 List-level conditional fetching
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If modificiation checks are not possible with this granularity, you can instead check for the full list.
+If modification checks are not possible with this granularity, you can instead check for the full list.
 In this case, the list of objects may contain a regular HTTP header ``Last-Modified`` with the date of the
 last modification to any item of that resource. You can then pass this date back in your next request in the
 ``If-Modified-Since`` header. If the any object has changed in the meantime, you will receive back a full list
-(if something it missing, this means the object has been deleted). If nothing happend, we'll send back a
+(if something it missing, this means the object has been deleted). If nothing happened, we'll send back a
 ``304 Not Modified`` return code.
 
 This is currently implemented on the following resources:
