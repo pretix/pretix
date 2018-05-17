@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-15 13:08+0000\n"
+"PO-Revision-Date: 2018-05-18 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -48,7 +48,7 @@ msgstr "In de verkoop"
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:810
 #: pretix/base/models/items.py:1119
 msgid "One or more items do not belong to this event."
-msgstr "Eén of meer items horen niet bij dit evenement."
+msgstr "Één of meer items horen niet bij dit evenement."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1128
 #: pretix/base/models/waitinglist.py:149
@@ -84,7 +84,7 @@ msgid ""
 "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
 "the dedicated nested endpoint."
 msgstr ""
-"Varianten bijwerken via PATCH/PUT wordt niet ondersteund. Gebruik "
+"Add-ons of varianten bijwerken via PATCH/PUT wordt niet ondersteund. Gebruik "
 "alstublieft het speciale geneste eindpunt."
 
 #: pretix/api/serializers/item.py:171
