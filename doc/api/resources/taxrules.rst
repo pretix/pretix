@@ -1,3 +1,5 @@
+.. _rest-taxrules:
+
 Tax rules
 =========
 

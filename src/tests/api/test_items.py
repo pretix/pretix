@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
@@ -115,6 +116,22 @@ def test_category_list(token_client, organizer, event, team, category):
         organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+    category.log_action('foo')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/categories/'.format(
+        organizer.slug, event.slug))
+    assert resp.status_code == 200
+    lmd = resp['Last-Modified']
+    assert lmd
+    time.sleep(1)
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/categories/'.format(
+        organizer.slug, event.slug), HTTP_IF_MODIFIED_SINCE=lmd)
+    assert resp.status_code == 304
+    time.sleep(1)
+    category.log_action('foo')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/categories/'.format(
+        organizer.slug, event.slug), HTTP_IF_MODIFIED_SINCE=lmd)
+    assert resp.status_code == 200
 
 
 @pytest.mark.django_db

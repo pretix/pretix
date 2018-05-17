@@ -13,6 +13,7 @@ from pretix.api.serializers.item import (
     ItemVariationSerializer, QuestionOptionSerializer, QuestionSerializer,
     QuotaSerializer,
 )
+from pretix.api.views import ConditionalListView
 from pretix.base.models import (
     Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
     Quota,
@@ -35,7 +36,7 @@ class ItemFilter(FilterSet):
         fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']
 
 
-class ItemViewSet(viewsets.ModelViewSet):
+class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -203,7 +204,7 @@ class ItemCategoryFilter(FilterSet):
         fields = ['is_addon']
 
 
-class ItemCategoryViewSet(viewsets.ModelViewSet):
+class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = ItemCategorySerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -257,7 +258,7 @@ class QuestionFilter(FilterSet):
         fields = ['ask_during_checkin', 'required', 'identifier']
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -355,7 +356,7 @@ class QuotaFilter(FilterSet):
         fields = ['subevent']
 
 
-class QuotaViewSet(viewsets.ModelViewSet):
+class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuotaSerializer
     queryset = Quota.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter,)

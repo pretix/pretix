@@ -1,3 +1,5 @@
+.. _`rest-categories`:
+
 Item categories
 ===============
 

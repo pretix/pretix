@@ -1,3 +1,5 @@
+.. _rest-subevents:
+
 Event series dates / Sub-events
 ===============================
 

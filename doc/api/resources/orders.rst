@@ -1,5 +1,8 @@
 .. spelling:: checkins
 
+
+.. _rest-orders:
+
 Orders
 ======
 

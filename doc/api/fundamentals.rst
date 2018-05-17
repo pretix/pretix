@@ -109,6 +109,41 @@ respective page.
 The field ``results`` contains a list of objects representing the first results. For most
 objects, every page contains 50 results.
 
+Conditional fetching
+--------------------
+
+If you pull object lists from pretix' APIs regularly, we ask you to implement conditional fetching
+to avoid unnecessary data traffic. This is not supported on all resources and we currently implement
+two different mechanisms for different resources, which is necessary because we can only obtain best
+efficiency for resources that do not support deletion operations.
+
+Object-level conditional fetching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The :ref:`rest-orders` resource list contains an HTTP header called ``X-Page-Generated`` containing the
+current time on the server in ISO 8601 format. On your next request, you can pass this header
+(as is, without any modifications necessary) as the ``modified_since`` query parameter and you will receive
+a list containing only objects that have changed in the time since your last request.
+
+List-level conditional fetching
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If modificiation checks are not possible with this granularity, you can instead check for the full list.
+In this case, the list of objects may contain a regular HTTP header ``Last-Modified`` with the date of the
+last modification to any item of that resource. You can then pass this date back in your next request in the
+``If-Modified-Since`` header. If the any object has changed in the meantime, you will receive back a full list
+(if something it missing, this means the object has been deleted). If nothing happend, we'll send back a
+``304 Not Modified`` return code.
+
+This is currently implemented on the following resources:
+
+* :ref:`rest-categories`
+* :ref:`rest-items`
+* :ref:`rest-questions`
+* :ref:`rest-quotas`
+* :ref:`rest-subevents`
+* :ref:`rest-taxrules`
+
 Errors
 ------
 

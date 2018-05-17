@@ -1,5 +1,7 @@
 .. spelling:: checkin
 
+.. _rest-questions:
+
 Questions
 =========
 

@@ -9,6 +9,7 @@ from pretix.api.serializers.event import (
     CloneEventSerializer, EventSerializer, SubEventSerializer,
     TaxRuleSerializer,
 )
+from pretix.api.views import ConditionalListView
 from pretix.base.models import Event, ItemCategory, TaxRule
 from pretix.base.models.event import SubEvent
 from pretix.base.models.organizer import TeamAPIToken
@@ -125,7 +126,7 @@ class SubEventFilter(FilterSet):
         fields = ['active']
 
 
-class SubEventViewSet(viewsets.ReadOnlyModelViewSet):
+class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
     serializer_class = SubEventSerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
@@ -137,7 +138,7 @@ class SubEventViewSet(viewsets.ReadOnlyModelViewSet):
         )
 
 
-class TaxRuleViewSet(viewsets.ModelViewSet):
+class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = TaxRuleSerializer
     queryset = TaxRule.objects.none()
     write_permission = 'can_change_event_settings'
