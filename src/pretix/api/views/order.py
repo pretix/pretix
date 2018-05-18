@@ -88,7 +88,9 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            resp = self.get_paginated_response(serializer.data)
+            resp['X-Page-Generated'] = date
+            return resp
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, headers={'X-Page-Generated': date})
