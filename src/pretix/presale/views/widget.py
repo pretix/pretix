@@ -177,6 +177,7 @@ class WidgetAPIProductList(View):
                             item.cached_availability[0],
                             item.cached_availability[1] if self.request.event.settings.show_quota_left else None
                         ] if not item.has_variations else None,
+                        'original_price': item.original_price,
                         'variations': [
                             {
                                 'id': var.id,

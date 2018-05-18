@@ -185,7 +185,10 @@ Vue.component('availbox', {
 });
 Vue.component('pricebox', {
     template: ('<div class="pretix-widget-pricebox">'
-        + '<span v-if="!free_price">{{ priceline }}</span>'
+        + '<span v-if="!free_price && !original_price">{{ priceline }}</span>'
+        + '<span v-if="!free_price && original_price">'
+        + '<del class="pretix-widget-pricebox-original-price">{{ original_line }}</del> '
+        + '<ins class="pretix-widget-pricebox-new-price">{{ priceline }}</ins></span>'
         + '<div v-if="free_price">'
         + '{{ $root.currency }} '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
@@ -199,7 +202,8 @@ Vue.component('pricebox', {
     props: {
         price: Object,
         free_price: Boolean,
-        field_name: String
+        field_name: String,
+        original_price: String
     },
     computed: {
         display_price: function () {
@@ -208,6 +212,9 @@ Vue.component('pricebox', {
             } else {
                 return roundTo(parseFloat(this.price.gross), 2).toFixed(2);
             }
+        },
+        original_line: function () {
+            return this.$root.currency + " " + roundTo(parseFloat(this.original_price), 2).toFixed(2);
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
@@ -247,7 +254,7 @@ Vue.component('variation', {
         + '</div>'
 
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="variation.price" :free_price="item.free_price"'
+        + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="item.original_price"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id">'
         + '</pricebox>'
         + '</div>'
@@ -293,7 +300,7 @@ Vue.component('item', {
 
         + '<div class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations"'
-        + '          :field_name="\'price_\' + item.id">'
+        + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
         + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
         + '</div>'

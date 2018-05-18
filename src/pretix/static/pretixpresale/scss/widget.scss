@@ -200,6 +200,16 @@
     text-align: right;
   }
 
+  del.pretix-widget-pricebox-original-price {
+    color: $text-muted;
+  }
+
+  ins.pretix-widget-pricebox-new-price {
+    font-size: 120%;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
   .pretix-widget-clear {
     clear: both;
   }
