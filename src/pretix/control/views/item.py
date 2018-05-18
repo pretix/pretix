@@ -428,11 +428,11 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                 del a['options__answer']
         elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
             qs = qs.order_by('answer')
-            qs_model = qs
-            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
-            for a, a_model in zip(qs, qs_model):
+            model_cache = {a.answer: a for a in qs}
+            qs = qs.values('answer').annotate(count=Count('id')).order_by('answer')
+            for a in qs:
                 a['alink'] = a['answer']
-                a['answer'] = str(a_model)
+                a['answer'] = str(model_cache[a['answer']])
         else:
             qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
 
