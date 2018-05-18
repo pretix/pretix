@@ -45,7 +45,6 @@ class ConditionalListView:
         )['m']
         if lmd:
             lmd_ts = timegm(lmd.utctimetuple())
-            print(lmd_ts, if_modified_since)
 
         if if_unmodified_since and lmd and lmd_ts > if_unmodified_since:
             return HttpResponse(status=412)
