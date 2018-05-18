@@ -283,8 +283,9 @@ def test_search_invoice_name(client, env):
 
 @pytest.mark.django_db
 def test_download_all_data(client, env):
+    op = OrderPosition.objects.last()
     OrderPosition.objects.create(
-        order=Order.objects.first(), item=Item.objects.first(), addon_to=OrderPosition.objects.last(),
+        order=Order.objects.first(), item=op.item, addon_to=op,
         price=12, secret='foooo'
     )
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
@@ -294,7 +295,7 @@ def test_download_all_data(client, env):
     assert jdata['results'][0]['secret'] == '1234'
     assert jdata['results'][0]['addons_text'] == ''
     assert jdata['results'][1]['secret'] == '5678910'
-    assert jdata['results'][1]['addons_text'] == 'T-Shirt'
+    assert jdata['results'][1]['addons_text'] == op.item.name
 
 
 @pytest.mark.django_db
