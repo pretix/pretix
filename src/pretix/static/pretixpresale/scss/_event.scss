@@ -64,6 +64,15 @@
         margin: 0;
         line-height: inherit;
     }
+    .price del {
+        color: $text-muted;
+    }
+    .price ins {
+        color: $brand-success;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+    }
 }
 
 .radio .variation-description {

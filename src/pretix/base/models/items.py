@@ -191,6 +191,8 @@ class Item(LoggedModel):
     :type min_per_order: int
     :param checkin_attention: Requires special attention at check-in
     :type checkin_attention: bool
+    :param original_price: The item's "original" price. Will not be used for any calculations, will just be shown.
+    :type original_price: decimal.Decimal
     """
 
     event = models.ForeignKey(
@@ -311,8 +313,15 @@ class Item(LoggedModel):
                     'attention. You can use this for example for student tickets to indicate to the person at '
                     'check-in that the student ID card still needs to be checked.')
     )
+    original_price = models.DecimalField(
+        verbose_name=_('Original price'),
+        blank=True, null=True,
+        max_digits=7, decimal_places=2,
+        help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
+                    'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
+    )
     # !!! Attention: If you add new fields here, also add them to the copying code in
-    # pretix/control/views/item.py if applicable.
+    # pretix/control/forms/item.py if applicable.
 
     class Meta:
         verbose_name = _("Product")

@@ -231,7 +231,8 @@ TEST_ITEM_RES = {
     "checkin_attention": False,
     "has_variations": False,
     "variations": [],
-    "addons": []
+    "addons": [],
+    "original_price": None
 }
 
 

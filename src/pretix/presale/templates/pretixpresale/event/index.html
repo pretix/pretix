@@ -288,6 +288,10 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-md-2 col-xs-6 price">
+                                                    {% if item.original_price %}
+                                                        <del>{{ item.original_price|money:event.currency }}</del>
+                                                        <ins>
+                                                    {% endif %}
                                                     {% if item.free_price %}
                                                         <div class="input-group input-group-price">
                                                             <span class="input-group-addon">{{ event.currency }}</span>
@@ -306,6 +310,9 @@
                                                         {{ var.display_price.net|money:event.currency }}
                                                     {% else %}
                                                         {{ var.display_price.gross|money:event.currency }}
+                                                    {% endif %}
+                                                    {% if item.original_price %}
+                                                        </ins>
                                                     {% endif %}
                                                     {% if var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
                                                         <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
@@ -383,6 +390,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
+                                        {% if item.original_price %}
+                                            <del>{{ item.original_price|money:event.currency }}</del>
+                                            <ins>
+                                        {% endif %}
                                         {% if item.free_price %}
                                             <div class="input-group input-group-price">
                                                 <span class="input-group-addon">{{ event.currency }}</span>
@@ -399,6 +410,9 @@
                                             {{ item.display_price.net|money:event.currency }}
                                         {% else %}
                                             {{ item.display_price.gross|money:event.currency }}
+                                        {% endif %}
+                                        {% if item.original_price %}
+                                            </ins>
                                         {% endif %}
                                         {% if item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
                                             <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
