@@ -283,12 +283,18 @@ def test_search_invoice_name(client, env):
 
 @pytest.mark.django_db
 def test_download_all_data(client, env):
+    OrderPosition.objects.create(
+        order=Order.objects.first(), item=Item.objects.first(), addon_to=OrderPosition.objects.last(),
+        price=12, secret='foooo'
+    )
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
     resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert len(jdata['results']) == 2
+    assert len(jdata['results']) == 3
     assert jdata['results'][0]['secret'] == '1234'
+    assert jdata['results'][0]['addons_text'] == ''
     assert jdata['results'][1]['secret'] == '5678910'
+    assert jdata['results'][1]['addons_text'] == 'T-Shirt'
 
 
 @pytest.mark.django_db

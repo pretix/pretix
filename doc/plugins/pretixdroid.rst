@@ -81,6 +81,7 @@ uses to communicate with the pretix server.
           "attention": false,
           "redeemed": true,
           "checkin_allowed": true,
+          "addons_text": "Parking spot",
           "paid": true
         }
       }
@@ -106,6 +107,7 @@ uses to communicate with the pretix server.
           "attention": false,
           "redeemed": true,
           "checkin_allowed": true,
+          "addons_text": "Parking spot",
           "paid": true
         },
         "questions": [
@@ -152,6 +154,7 @@ uses to communicate with the pretix server.
           "attention": false,
           "redeemed": true,
           "checkin_allowed": true,
+          "addons_text": "Parking spot",
           "paid": true
         }
       }
@@ -212,6 +215,7 @@ uses to communicate with the pretix server.
             "redeemed": false,
             "attention": false,
             "checkin_allowed": true,
+            "addons_text": "Parking spot",
             "paid": true
           },
           ...

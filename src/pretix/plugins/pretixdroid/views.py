@@ -257,7 +257,11 @@ def serialize_op(op, redeemed, clist):
         'attention': op.item.checkin_attention or op.order.checkin_attention,
         'redeemed': redeemed,
         'paid': op.order.status == Order.STATUS_PAID,
-        'checkin_allowed': checkin_allowed
+        'checkin_allowed': checkin_allowed,
+        'addons_text': ", ".join([
+            '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
+            for p in op.addons.all()
+        ])
     }
 
 
@@ -281,7 +285,9 @@ class ApiSearchView(ApiView):
                 subevent=self.config.list.subevent
             ).annotate(
                 last_checked_in=Subquery(cqs)
-            ).select_related('item', 'variation', 'order', 'order__invoice_address', 'addon_to')
+            ).select_related('item', 'variation', 'order', 'order__invoice_address', 'addon_to').prefetch_related(
+                'addons', 'addons__item', 'addons__variation'
+            )
 
             if not self.config.list.all_products:
                 qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
@@ -329,7 +335,9 @@ class ApiDownloadView(ApiView):
             subevent=self.config.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
-        ).select_related('item', 'variation', 'order', 'addon_to')
+        ).select_related('item', 'variation', 'order', 'addon_to').prefetch_related(
+            'addons', 'addons__item', 'addons__variation'
+        )
 
         if not self.config.list.all_products:
             qs = qs.filter(item__in=self.config.list.limit_products.values_list('id', flat=True))
