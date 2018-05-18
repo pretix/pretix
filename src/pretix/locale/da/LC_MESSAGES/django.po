@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-18 10:18+0000\n"
+"PO-Revision-Date: 2018-05-18 20:48+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
@@ -12260,6 +12260,8 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Du har tilføjet ordrer, hvor det er muligt at lave yderligere indstillinger "
+"før du forsætter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
 #, python-format
