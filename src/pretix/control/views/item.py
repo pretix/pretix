@@ -427,14 +427,9 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                 a['answer'] = str(a['options__answer'])
                 del a['options__answer']
         elif self.object.type in (Question.TYPE_TIME, Question.TYPE_DATE, Question.TYPE_DATETIME):
-            qs = qs.order_by('answer')
-            qs_model = qs
-            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
-            for a, a_model in zip(qs, qs_model):
-                a['alink'] = a['answer']
-                a['answer'] = str(a_model)
+            qs = qs.order_by('answer').values('answer').annotate(count=Count('id'))
         else:
-            qs = qs.order_by('answer').values('answer').annotate(count=Count('id')).order_by('-count')
+            qs = qs.values('answer').annotate(count=Count('id')).order_by('-count')
 
             if self.object.type == Question.TYPE_BOOLEAN:
                 for a in qs:
