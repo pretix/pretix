@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0090_auto_20180509_0917'),
+        ('pretixbase', '0091_auto_20180513_1641'),
     ]
 
     operations = [

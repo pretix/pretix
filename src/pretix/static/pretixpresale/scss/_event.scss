@@ -65,7 +65,13 @@
         line-height: inherit;
     }
     .price del {
-        color: $brand-danger;
+        color: $text-muted;
+    }
+    .price ins {
+        color: $brand-success;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
     }
 }
 
