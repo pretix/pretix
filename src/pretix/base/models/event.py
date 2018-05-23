@@ -550,7 +550,7 @@ class Event(EventMixin, LoggedModel):
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(date_to__gte=now())
             )
-        )
+        )  # order_by doesn't make sense with I18nField
         return sorted(subevs, key=attrgetter(*orderfields))
 
     @property
