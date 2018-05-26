@@ -963,6 +963,11 @@ class Question(LoggedModel):
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_value = models.TextField(null=True, blank=True)
+    default_value = models.TextField(
+        verbose_name=_('Default answer'),
+        help_text=_('The question will be filled with this response by default'),
+        null=True, blank=True,
+    )
 
     class Meta:
         verbose_name = _("Question")
@@ -979,6 +984,10 @@ class Question(LoggedModel):
 
     def clean_identifier(self, code):
         Question._clean_identifier(self.event, code, self)
+
+    def clean(self):
+        if self.default_value is not None:
+            self.clean_answer(self.default_value)
 
     @staticmethod
     def _clean_identifier(event, code, instance=None):
