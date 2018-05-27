@@ -24,7 +24,7 @@ function question_page_toggle_view() {
             $('.form-group:has(#id_default_value)').show();
             break;
         case 'B':
-            let checked = (value === 'True' ? 'checked' : '');
+            let checked = (value === 'True' || value === 'on' ? 'checked' : '');
             input.replaceWith('<input type="checkbox" ' + common_attrs + ' ' + checked + '>');
             $('.form-group:has(#id_default_value)').show();
             break;

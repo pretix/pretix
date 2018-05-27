@@ -987,7 +987,7 @@ class Question(LoggedModel):
 
     def clean(self):
         if self.default_value is not None:
-            self.clean_answer(self.default_value)
+            self.clean_answer(self.default_value, check_required=False)
 
     @staticmethod
     def _clean_identifier(event, code, instance=None):
@@ -1016,8 +1016,8 @@ class Question(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
-    def clean_answer(self, answer):
-        if self.required:
+    def clean_answer(self, answer, check_required=True):
+        if self.required and check_required:
             if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
                 raise ValidationError(_('An answer to this question is required to proceed.'))
         if not answer:
