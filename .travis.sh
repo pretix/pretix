@@ -25,13 +25,18 @@ if [ "$1" == "doctests" ]; then
 	cd doc
 	make doctest
 fi
-if [ "$1" == "spelling" ]; then
+if [ "$1" == "doc-spelling" ]; then
 	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
 	cd doc
 	make spelling
 	if [ -s _build/spelling/output.txt ]; then
 		exit 1
 	fi
+fi
+if [ "$1" == "translation-spelling" ]; then
+	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements/dev.txt
+	cd src
+	potypo
 fi
 if [ "$1" == "tests" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt

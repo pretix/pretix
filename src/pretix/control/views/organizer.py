@@ -474,7 +474,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                     can_change_teams=True, members__isnull=False
                 ).exists()
                 if not other_admin_teams and self.object.can_change_teams and self.object.members.count() == 1:
-                    messages.error(self.request, _('You cannot remove the last member from this team as noone would '
+                    messages.error(self.request, _('You cannot remove the last member from this team as no one would '
                                                    'be left with the permission to change teams.'))
                     return redirect(self.get_success_url())
                 else:

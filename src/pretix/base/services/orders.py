@@ -679,7 +679,7 @@ class OrderChangeManager:
                                    'no quota is available.'),
         'paid_price_change': _('Currently, paid orders can only be changed in a way that does not change the total '
                                'price of the order as partial payments or refunds are not yet supported.'),
-        'addon_to_required': _('This is an addon product, please select the base position it should be added to.'),
+        'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
     }

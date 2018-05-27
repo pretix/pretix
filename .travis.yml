@@ -37,12 +37,16 @@ matrix:
     - python: 3.6
       env: JOB=plugins
     - python: 3.6
-      env: JOB=spelling
+      env: JOB=doc-spelling
+    - python: 3.6
+      env: JOB=translation-spelling
 addons:
   postgresql: "9.4"
   apt:
       packages:
           - enchant
+          - myspell-de-de
+          - aspell-en
 branches:
   except:
   - /^weblate-.*/

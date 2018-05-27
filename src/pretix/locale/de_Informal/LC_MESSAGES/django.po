@@ -6347,7 +6347,7 @@ msgstr ""
 #: pretix/control/permissions.py:29 pretix/control/permissions.py:66
 #: pretix/control/permissions.py:97 pretix/control/permissions.py:114
 msgid "You do not have permission to view this content."
-msgstr "Du has keine Berechtigung, diese Inhalte aufzurufen."
+msgstr "Du hast keine Berechtigung, diese Inhalte aufzurufen."
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
@@ -11946,7 +11946,7 @@ msgstr "Hier klicken um das Fenster zu öffnen."
 
 #: pretix/plugins/paypal/views.py:70
 msgid "Invalid response from PayPal received."
-msgstr "Paypal hat uns eine ungültige Antwort geschickt."
+msgstr "PayPal hat uns eine ungültige Antwort geschickt."
 
 #: pretix/plugins/paypal/views.py:86
 msgid "It looks like you canceled the PayPal payment"

@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                                 verbose_name=_('Timezone'))
     require_2fa = models.BooleanField(
         default=False,
-        verbose_name=_('Two-factor authentification is required to log in')
+        verbose_name=_('Two-factor authentication is required to log in')
     )
     notifications_send = models.BooleanField(
         default=True,

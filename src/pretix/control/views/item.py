@@ -1006,7 +1006,7 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if self.get_object().category and self.get_object().category.is_addon:
-            messages.error(self.request, _('You cannot add addons to a product that is only available as an add-on '
+            messages.error(self.request, _('You cannot add add-ons to a product that is only available as an add-on '
                                            'itself.'))
             return redirect(self.get_previous_url())
 
