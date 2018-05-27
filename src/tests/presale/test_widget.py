@@ -146,6 +146,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "variations": [],
                             "id": self.ticket.pk,
                             "free_price": False,
+                            "original_price": None,
                             "name": "Early-bird ticket",
                             "order_max": 4
                         },
@@ -181,6 +182,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             ],
                             "id": self.shirt.pk,
                             "free_price": False,
+                            "original_price": None,
                             "name": "T-Shirt",
                             "order_max": None
                         }
@@ -222,6 +224,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "variations": [],
                             "id": self.ticket.pk,
                             "free_price": False,
+                            "original_price": None,
                             "name": "Early-bird ticket",
                             "order_max": 4
                         },
