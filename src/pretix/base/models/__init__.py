@@ -1,5 +1,8 @@
 from ..settings import GlobalSettingsObject_SettingsStore
-from .auth import U2FDevice, User
+from .auth import (
+    OAuthAccessToken, OAuthApplication, OAuthGrant, OAuthRefreshToken,
+    U2FDevice, User,
+)
 from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin, CheckinList
 from .event import (

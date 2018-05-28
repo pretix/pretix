@@ -250,6 +250,7 @@ INSTALLED_APPS = [
     'django_countries',
     'hijack',
     'compat',
+    'oauth2_provider',
 ]
 
 try:
@@ -275,6 +276,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'pretix.api.auth.token.TeamTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -590,3 +592,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'pretixbase.OAuthApplication'
+OAUTH2_PROVIDER_GRANT_MODEL = 'pretixbase.OAuthGrant'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'pretixbase.OAuthAccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'pretixbase.OAuthRefreshToken'
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'read': _('Read access'),
+        'write': _('Write access'),
+    },
+    'OAUTH2_VALIDATOR_CLASS': 'pretix.api.oauth.Validator',
+    'ALLOWED_REDIRECT_URI_SCHEMES': ['https'] if not DEBUG else ['http', 'https'],
+}
