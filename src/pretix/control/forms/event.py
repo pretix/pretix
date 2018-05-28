@@ -984,6 +984,7 @@ class WidgetCodeForm(forms.Form):
     )
     compatibility_mode = forms.BooleanField(
         label=_("Compatibility mode"),
+        required=False,
         help_text=_("Our regular widget doesn't work in all website builders. If you run into trouble, try using "
                     "this compatibility mode.")
     )
