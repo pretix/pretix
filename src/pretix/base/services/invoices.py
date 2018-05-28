@@ -171,6 +171,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.is_cancellation = True
     cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
+    cancellation.file = None
     cancellation.save()
 
     cancellation = build_cancellation(cancellation)
