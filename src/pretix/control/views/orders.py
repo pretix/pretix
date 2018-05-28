@@ -13,6 +13,7 @@ from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
@@ -134,7 +135,13 @@ class OrderDetail(OrderView):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
         ctx['event'] = self.request.event
-        ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
+        ctx['payment_provider'] = self.payment_provider
+        if self.payment_provider:
+            ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
+        else:
+            ctx['payment'] = mark_safe('<div class="alert alert-danger">{}</div>'.format(
+                _('This order was paid using a payment provider plugin that is now disabled or uninstalled.')
+            ))
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
@@ -243,9 +250,12 @@ class OrderTransition(OrderView):
             mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))
         elif self.order.status == Order.STATUS_PAID and to == 'r':
-            ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
-            if ret:
-                return redirect(ret)
+            if not self.payment_provider:
+                messages.error(self.request, _('This order is not assigned to a known payment provider.'))
+            else:
+                ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
+                if ret:
+                    return redirect(ret)
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
@@ -255,6 +265,10 @@ class OrderTransition(OrderView):
                 'order': self.order,
             })
         elif self.order.status == Order.STATUS_PAID and to == 'r':
+            if not self.payment_provider:
+                messages.error(self.request, _('This order is not assigned to a known payment provider.'))
+                return redirect(self.get_order_url())
+
             try:
                 cr = self.payment_provider.order_control_refund_render(self.order, self.request)
             except TypeError:
