@@ -31,8 +31,8 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
-    generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
-    regenerate_invoice,
+    generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
+    invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
@@ -461,7 +461,12 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
                                         'now. Please try again in a few seconds.'))
             return redirect(self.get_order_url())
 
-        resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
+        try:
+            resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
+        except FileNotFoundError:
+            invoice_pdf_task.apply(args=(self.invoice.pk,))
+            return self.get(request, *args, **kwargs)
+
         resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.invoice.number)
         return resp
 

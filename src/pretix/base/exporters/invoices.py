@@ -38,12 +38,19 @@ class InvoiceExporter(BaseExporter):
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in qs:
-                    if not i.file:
+                    try:
+                        if not i.file:
+                            invoice_pdf_task.apply(args=(i.pk,))
+                            i.refresh_from_db()
+                        i.file.open('rb')
+                        zipf.writestr('{}.pdf'.format(i.number), i.file.read())
+                        i.file.close()
+                    except FileNotFoundError:
                         invoice_pdf_task.apply(args=(i.pk,))
                         i.refresh_from_db()
-                    i.file.open('rb')
-                    zipf.writestr('{}.pdf'.format(i.number), i.file.read())
-                    i.file.close()
+                        i.file.open('rb')
+                        zipf.writestr('{}.pdf'.format(i.number), i.file.read())
+                        i.file.close()
 
             with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
                 return '{}_invoices.zip'.format(self.event.slug), 'application/zip', zipf.read()
