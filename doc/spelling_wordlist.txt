@@ -78,6 +78,7 @@ prometheus
 proxied
 proxying
 pseudonymize
+pseudonymization
 queryset
 redemptions
 redis
