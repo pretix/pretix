@@ -160,18 +160,19 @@ class TaxRule(LoggedModel):
 
     def get_matching_rule(self, invoice_address):
         rules = json.loads(self.custom_rules)
-        for r in rules:
-            if r['country'] == 'EU' and str(invoice_address.country) not in EU_COUNTRIES:
-                continue
-            if r['country'] not in ('ZZ', 'EU') and r['country'] != str(invoice_address.country):
-                continue
-            if r['address_type'] == 'individual' and invoice_address.is_business:
-                continue
-            if r['address_type'] in ('business', 'business_vat_id') and not invoice_address.is_business:
-                continue
-            if r['address_type'] == 'business_vat_id' and (not invoice_address.vat_id or not invoice_address.vat_id_validated):
-                continue
-            return r
+        if invoice_address:
+            for r in rules:
+                if r['country'] == 'EU' and str(invoice_address.country) not in EU_COUNTRIES:
+                    continue
+                if r['country'] not in ('ZZ', 'EU') and r['country'] != str(invoice_address.country):
+                    continue
+                if r['address_type'] == 'individual' and invoice_address.is_business:
+                    continue
+                if r['address_type'] in ('business', 'business_vat_id') and not invoice_address.is_business:
+                    continue
+                if r['address_type'] == 'business_vat_id' and (not invoice_address.vat_id or not invoice_address.vat_id_validated):
+                    continue
+                return r
         return {'action': 'vat'}
 
     def is_reverse_charge(self, invoice_address):
