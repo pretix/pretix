@@ -18,7 +18,11 @@ fabric.Barcodearea = fabric.util.createClass(fabric.Rect, {
 
         ctx.font = '16px Helvetica';
         ctx.fillStyle = '#fff';
-        ctx.fillText(gettext('QR Code'), -this.width / 2, -this.height / 2 + 20);
+        if (this.content === "pseudonymization_id") {
+            ctx.fillText(gettext('Lead Scan QR'), -this.width / 2, -this.height / 2 + 20);
+        } else {
+            ctx.fillText(gettext('Check-in QR'), -this.width / 2, -this.height / 2 + 20);
+        }
     },
 });
 fabric.Barcodearea.fromObject = function (object, callback, forceAsync) {
@@ -112,7 +116,8 @@ var editor = {
                     type: "barcodearea",
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
-                    size: editor._px2mm(o.height * o.scaleY).toFixed(2)
+                    size: editor._px2mm(o.height * o.scaleY).toFixed(2),
+                    content: o.content,
                 });
             }
         }
@@ -122,6 +127,7 @@ var editor = {
     _add_from_data: function (d) {
         if (d.type === "barcodearea") {
             o = editor._add_qrcode();
+            o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
         } else if (d.type === "textarea" || o.type === "text") {
             o = editor._add_text();
@@ -418,6 +424,7 @@ var editor = {
             lockRotation: true,
             lockUniScaling: true,
             fill: '#666',
+            content: $(this).attr("data-content"),
         });
         rect.setControlsVisibility({'mtr': false});
         editor.fabric.add(rect);
@@ -645,7 +652,7 @@ var editor = {
         editor.$fcv = $("#fabric-canvas");
         editor.$cva = $("#editor-canvas-area");
         editor._load_pdf();
-        $("#editor-add-qrcode").click(editor._add_qrcode);
+        $("#editor-add-qrcode, #editor-add-qrcode-lead").click(editor._add_qrcode);
         $("#editor-add-text").click(editor._add_text);
         editor.$cva.get(0).tabIndex = 1000;
         editor.$cva.on("keydown", editor._on_keydown);

@@ -835,6 +835,11 @@ class OrderPosition(AbstractPosition):
         verbose_name=_('Tax value')
     )
     secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
+    pseudonymization_id = models.CharField(
+        max_length=16,
+        unique=True,
+        db_index=True
+    )
 
     class Meta:
         verbose_name = _("Order position")
@@ -916,7 +921,23 @@ class OrderPosition(AbstractPosition):
         if self.pk is None:
             while OrderPosition.objects.filter(secret=self.secret).exists():
                 self.secret = generate_position_secret()
+
+        if not self.pseudonymization_id:
+            self.assign_pseudonymization_id()
+
         return super().save(*args, **kwargs)
+
+    def assign_pseudonymization_id(self):
+        # This omits some character pairs completely because they are hard to read even on screens (1/I and O/0)
+        # and includes only one of two characters for some pairs because they are sometimes hard to distinguish in
+        # handwriting (2/Z, 4/A, 5/S, 6/G). This allows for better detection e.g. in incoming wire transfers that
+        # might include OCR'd handwritten text
+        charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
+        while True:
+            code = get_random_string(length=10, allowed_chars=charset)
+            if not OrderPosition.objects.filter(pseudonymization_id=code).exists():
+                self.pseudonymization_id = code
+                return
 
 
 class CartPosition(AbstractPosition):

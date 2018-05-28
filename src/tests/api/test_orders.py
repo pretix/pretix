@@ -76,7 +76,8 @@ def order(event, item, taxrule, question):
             variation=None,
             price=Decimal("23"),
             attendee_name="Peter",
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            pseudonymization_id="ABCDEFGHKL",
         )
         op.answers.create(question=question, answer='S')
         return o
@@ -97,6 +98,7 @@ TEST_ORDERPOSITION_RES = {
     "tax_rule": None,
     "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
     "addon_to": None,
+    "pseudonymization_id": "ABCDEFGHKL",
     "checkins": [],
     "downloads": [],
     "answers": [

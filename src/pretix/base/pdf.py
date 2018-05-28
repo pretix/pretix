@@ -211,8 +211,14 @@ class Renderer:
                 pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
 
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
+        content = o.get('content', 'secret')
+        if content == 'secret':
+            content = op.secret
+        elif content == 'pseudonymization_id':
+            content = op.pseudonymization_id
+
         reqs = float(o['size']) * mm
-        qrw = QrCodeWidget(op.secret, barLevel='H', barHeight=reqs, barWidth=reqs)
+        qrw = QrCodeWidget(content, barLevel='H', barHeight=reqs, barWidth=reqs)
         d = Drawing(reqs, reqs)
         d.add(qrw)
         qr_x = float(o['left']) * mm

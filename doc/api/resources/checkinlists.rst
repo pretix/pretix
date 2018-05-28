@@ -375,6 +375,7 @@ Order position endpoints
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
             "subevent": null,
+            "pseudonymization_id": "MQLJvANO3B",
             "checkins": [
               {
                 "list": 1,
@@ -467,6 +468,7 @@ Order position endpoints
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,
         "subevent": null,
+        "pseudonymization_id": "MQLJvANO3B",
         "checkins": [
           {
             "list": 1,

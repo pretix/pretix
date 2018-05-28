@@ -130,6 +130,7 @@ tax_rule                              integer                    The ID of the u
 secret                                string                     Secret code printed on the tickets for validation
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
+pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
 checkins                              list of objects            List of check-ins with this ticket
 ├ list                                integer                    Internal ID of the check-in list
 └ datetime                            datetime                   Time of check-in
@@ -155,6 +156,10 @@ answers                               list of objects            Answers to user
 .. versionchanged:: 1.14
 
   The attributes ``answers.question_identifier`` and ``answers.option_identifiers`` have been added.
+
+.. versionchanged:: 1.16
+
+  The attribute ``pseudonymization_id`` has been added.
 
 
 Order endpoints
@@ -235,6 +240,7 @@ Order endpoints
                 "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
                 "addon_to": null,
                 "subevent": null,
+                "pseudonymization_id": "MQLJvANO3B",
                 "checkins": [
                   {
                     "list": 44,
@@ -349,6 +355,7 @@ Order endpoints
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
             "subevent": null,
+            "pseudonymization_id": "MQLJvANO3B",
             "checkins": [
               {
                 "list": 44,
@@ -847,6 +854,7 @@ Order position endpoints
             "tax_rule": null,
             "tax_value": "0.00",
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            "pseudonymization_id": "MQLJvANO3B",
             "addon_to": null,
             "subevent": null,
             "checkins": [
@@ -939,6 +947,7 @@ Order position endpoints
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,
         "subevent": null,
+        "pseudonymization_id": "MQLJvANO3B",
         "checkins": [
           {
             "list": 44,

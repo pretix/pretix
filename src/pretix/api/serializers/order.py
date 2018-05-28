@@ -128,7 +128,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
                   'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
-                  'answers', 'tax_rule')
+                  'answers', 'tax_rule', 'pseudonymization_id')
 
 
 class OrderFeeSerializer(I18nAwareModelSerializer):

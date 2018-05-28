@@ -51,7 +51,8 @@ def order(event, item, other_item, taxrule):
             variation=None,
             price=Decimal("23"),
             attendee_name="Peter",
-            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+            secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+            pseudonymization_id="ABCDEFGHKL",
         )
         OrderPosition.objects.create(
             order=o,
@@ -60,7 +61,8 @@ def order(event, item, other_item, taxrule):
             variation=None,
             price=Decimal("23"),
             attendee_name="Michael",
-            secret="sf4HZG73fU6kwddgjg2QOusFbYZwVKpK"
+            secret="sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
+            pseudonymization_id="BACDEFGHKL",
         )
         return o
 
@@ -83,7 +85,8 @@ TEST_ORDERPOSITION1_RES = {
     "checkins": [],
     "downloads": [],
     "answers": [],
-    "subevent": None
+    "subevent": None,
+    "pseudonymization_id": "ABCDEFGHKL",
 }
 
 TEST_ORDERPOSITION2_RES = {
@@ -104,7 +107,8 @@ TEST_ORDERPOSITION2_RES = {
     "checkins": [],
     "downloads": [],
     "answers": [],
-    "subevent": None
+    "subevent": None,
+    "pseudonymization_id": "BACDEFGHKL",
 }
 
 TEST_LIST_RES = {

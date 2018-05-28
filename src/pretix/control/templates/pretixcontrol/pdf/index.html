@@ -317,9 +317,15 @@
                         <span class="fa fa-font"></span>
                         {% trans "Text" %}
                     </button>
-                    <button class="btn btn-default btn-block" id="editor-add-qrcode" disabled>
+                    <button class="btn btn-default btn-block" id="editor-add-qrcode" data-content="secret" disabled>
                         <span class="fa fa-qrcode"></span>
-                        {% trans "QR code area" %}
+                        {% trans "QR code for Check-In" %}
+                    </button>
+                    <button class="btn btn-default btn-block" id="editor-add-qrcode-lead"
+                            data-content="pseudonymization_id"
+                            disabled>
+                        <span class="fa fa-qrcode"></span>
+                        {% trans "QR code for Lead Scanning" %}
                     </button>
                 </div>
             </div>
