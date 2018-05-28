@@ -3,7 +3,7 @@ FROM python:3.6
 RUN apt-get update && \
     apt-get install -y git libxml2-dev libxslt1-dev python-dev python-virtualenv locales \
       libffi-dev build-essential python3-dev zlib1g-dev libssl-dev gettext libpq-dev \
-      libmysqlclient-dev libmemcached-dev libjpeg-dev supervisor nginx sudo \
+      default-libmysqlclient-dev libmemcached-dev libjpeg-dev supervisor nginx sudo \
 	  --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
