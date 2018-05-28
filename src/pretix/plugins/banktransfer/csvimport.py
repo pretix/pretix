@@ -63,7 +63,7 @@ def get_rows_from_file(file):
             last_e = None
             break
     if dialect is None:
-        raise last_e
+        raise last_e or csv.Error("No dialect detected")
     reader = csv.reader(io.StringIO(data), dialect)
     rows = []
     for row in reader:
