@@ -360,7 +360,7 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'nl', 'pt-br', 'da'
+    'pt-br', 'da'
 }
 
 if DEBUG:
