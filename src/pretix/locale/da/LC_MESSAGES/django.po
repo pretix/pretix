@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-09 14:07+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"PO-Revision-Date: 2018-05-25 21:00+0000\n"
+"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6730,12 +6730,16 @@ msgid ""
 "Your shop is currently live. If you take it down, it will only be visible to "
 "you and your team."
 msgstr ""
+"Din butik er tilgængelig. Hvis du deaktiverer den, vil den kun være synlig "
+"for dig og dit team."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:22
 msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
 msgstr ""
+"Dit billetkøb er ikke aktiveret endnu. Den er derfor kun være tilgængelig "
+"for dig og dit team og ikke tilgængelig for nogle besøgende."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:27
 msgid ""
@@ -12235,17 +12239,16 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:16
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "Denne butik er i øjeblikket kun tilgængelig for dig og dit team."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:18
 msgid "Take it live now"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:29
-#, fuzzy, python-format
-#| msgid "Sample event name"
+#, python-format
 msgid "Show all events of %(name)s"
-msgstr "Eksempelarrangementsnavn"
+msgstr "Vis alle arrangementer fra %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:75
 msgid "Contact event organizer"
@@ -12260,6 +12263,8 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Du har tilføjet ordrer, hvor det er muligt at lave yderligere indstillinger "
+"før du forsætter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
 #, python-format
@@ -12272,8 +12277,10 @@ msgstr[1] ""
 #, python-format
 msgid "You can choose at most one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
+msgstr[0] "Du kan vælge en af følgende muligheder for dette arrangement."
 msgstr[1] ""
+"Du kan vælge op til %(max_count)s af følgende muligheder for dette "
+"arrangement."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:40
 #, python-format
@@ -12371,7 +12378,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:5
 msgid "Before we continue, we need you to answer some questions."
-msgstr "For vi går videre, skal du svare på nogle spørgsmål."
+msgstr "Før vi går videre, skal du svare på nogle spørgsmål."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:7
 msgid ""
@@ -12609,7 +12616,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:21
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Din bestilling er gennemført! Se detaljerne nedenfor."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "We successfully received your payment. See below for details."
@@ -12621,6 +12628,9 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Du bør gemme linket til denne side, hvis du ønsker at at tilgå din ordre "
+"senere. Vi har også sendt dig en e-mail indeholdende linket til denne "
+"adresse."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid ""
@@ -12646,6 +12656,8 @@ msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
 msgstr ""
+"Du kan downloade dine billetter på knapperne nedenfor. Dine billetter bør "
+"være udskrevet til fremvisning i indgangen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:82
 msgid "Download all tickets at once:"
