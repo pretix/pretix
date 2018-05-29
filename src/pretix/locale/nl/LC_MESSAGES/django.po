@@ -5649,7 +5649,7 @@ msgstr "September"
 
 #: pretix/control/forms/subevents.py:301
 msgid "October"
-msgstr "October"
+msgstr "Oktober"
 
 #: pretix/control/forms/subevents.py:302
 msgid "November"
