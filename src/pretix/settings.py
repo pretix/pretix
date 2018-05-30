@@ -603,4 +603,7 @@ OAUTH2_PROVIDER = {
     },
     'OAUTH2_VALIDATOR_CLASS': 'pretix.api.oauth.Validator',
     'ALLOWED_REDIRECT_URI_SCHEMES': ['https'] if not DEBUG else ['http', 'https'],
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600 * 24,
+    'ROTATE_REFRESH_TOKEN': False,
+
 }

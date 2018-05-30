@@ -18,7 +18,6 @@ from pretix.base.models import (
     Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
     Quota,
 )
-from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.dicts import merge_dicts
 
 
@@ -54,7 +53,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.item.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -69,7 +68,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.item.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -82,7 +81,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.item.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 
@@ -114,7 +113,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         item.log_action(
             'pretix.event.item.variation.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk},
                              {'value': serializer.instance.value})
         )
@@ -124,7 +123,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         serializer.instance.item.log_action(
             'pretix.event.item.variation.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk},
                              {'value': serializer.instance.value})
         )
@@ -141,7 +140,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         instance.item.log_action(
             'pretix.event.item.variation.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data={
                 'value': instance.value,
                 'id': self.kwargs['pk']
@@ -175,7 +174,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
         item.log_action(
             'pretix.event.item.addons.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
@@ -184,7 +183,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
         serializer.instance.base_item.log_action(
             'pretix.event.item.addons.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
@@ -193,7 +192,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
         instance.base_item.log_action(
             'pretix.event.item.addons.removed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data={'category': instance.addon_category.pk}
         )
 
@@ -222,7 +221,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.category.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -236,7 +235,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.category.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -247,7 +246,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.category.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 
@@ -275,7 +274,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.question.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -289,7 +288,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.question.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -297,7 +296,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.question.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 
@@ -327,7 +326,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         q.log_action(
             'pretix.event.question.option.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
@@ -336,7 +335,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         serializer.instance.question.log_action(
             'pretix.event.question.option.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
@@ -344,7 +343,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         instance.question.log_action(
             'pretix.event.question.option.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data={'id': instance.pk}
         )
         super().perform_destroy(instance)
@@ -374,14 +373,14 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.quota.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
         if serializer.instance.subevent:
             serializer.instance.subevent.log_action(
                 'pretix.subevent.quota.added',
                 user=self.request.user,
-                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                auth=self.request.auth,
                 data=self.request.data
             )
 
@@ -397,7 +396,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.quota.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
         if current_subevent == request_subevent:
@@ -405,7 +404,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
                 current_subevent.log_action(
                     'pretix.subevent.quota.changed',
                     user=self.request.user,
-                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    auth=self.request.auth,
                     data=self.request.data
                 )
         else:
@@ -413,14 +412,14 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
                 request_subevent.log_action(
                     'pretix.subevent.quota.added',
                     user=self.request.user,
-                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    auth=self.request.auth,
                     data=self.request.data
                 )
             if current_subevent is not None:
                 current_subevent.log_action(
                     'pretix.subevent.quota.deleted',
                     user=self.request.user,
-                    api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                    auth=self.request.auth,
                 )
         serializer.instance.rebuild_cache()
 
@@ -428,13 +427,13 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.quota.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         if instance.subevent:
             instance.subevent.log_action(
                 'pretix.subevent.quota.deleted',
                 user=self.request.user,
-                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                auth=self.request.auth,
             )
         super().perform_destroy(instance)
 

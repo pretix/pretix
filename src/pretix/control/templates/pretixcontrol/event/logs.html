@@ -16,7 +16,8 @@
                 </option>
                 {% for up in userlist %}
                     {% if up.user__id %}
-                        <option value="{{ up.user__id }}" {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
+                        <option value="{{ up.user__id }}"
+                                {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
                             {{ up.user__email }}
                         </option>
                     {% endif %}
@@ -42,13 +43,20 @@
                         {% if log.user %}
                             {% if log.user.is_staff %}
                                 <span class="fa fa-id-card fa-danger fa-fw"
-                                     data-toggle="tooltip"
-                                     title="{% trans "This change was performed by a pretix administrator." %}">
+                                      data-toggle="tooltip"
+                                      title="{% trans "This change was performed by a pretix administrator." %}">
                                 </span>
                             {% else %}
                                 <span class="fa fa-user fa-fw"></span>
                             {% endif %}
                             {{ log.user.get_full_name }}
+                            {% if log.oauth_application %}
+                                <br><span class="fa fa-plug fa-fw"></span>
+                                {{ log.oauth_application.name }}
+                            {% endif %}
+                        {% elif log.api_token %}
+                            <span class="fa fa-key fa-fw"></span>
+                            {{ log.api_token.name }}
                         {% endif %}
                     </div>
                     <div class="col-lg-2 col-sm-12 col-xs-12">
@@ -61,7 +69,7 @@
                     </div>
                 </div>
             </li>
-        {% empty %}
+            {% empty %}
             <div class="list-group-item">
                 <em>{% trans "No results" %}</em>
             </div>

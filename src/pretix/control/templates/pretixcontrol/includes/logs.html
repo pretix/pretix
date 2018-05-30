@@ -15,6 +15,13 @@
                         <span class="fa fa-user fa-fw"></span>
                     {% endif %}
                     {{ log.user.get_full_name }}
+                    {% if log.oauth_application %}
+                        <span class="fa fa-plug fa-fw"></span>
+                        {{ log.oauth_application.name }}
+                    {% endif %}
+                {% elif log.api_token %}
+                    <span class="fa fa-key fa-fw"></span>
+                    {{ log.api_token.name }}
                 {% endif %}
                 {% if log.shredded %}
                     <span class="fa fa-eraser fa-danger fa-fw"

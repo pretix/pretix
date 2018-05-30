@@ -2,11 +2,11 @@ import logging
 
 from django import forms
 from django.conf import settings
+from django.utils.translation import ugettext as _
 from oauth2_provider.exceptions import OAuthToolkitError
 from oauth2_provider.forms import AllowForm
 from oauth2_provider.views import (
     AuthorizationView as BaseAuthorizationView,
-    IntrospectTokenView as BaseIntrospectTokenView,
     RevokeTokenView as BaseRevokeTokenView, TokenView as BaseTokenView,
 )
 
@@ -68,6 +68,18 @@ class AuthorizationView(BaseAuthorizationView):
 
         self.success_url = uri
         logger.debug("Success url for the request: {0}".format(self.success_url))
+
+        msgs = [
+            _('The application "{application_name}" has been authorized to access your account.').format(
+                application_name=application.name
+            )
+        ]
+        self.request.user.send_security_notice(msgs)
+        self.request.user.log_action('pretix.user.oauth.authorized', user=self.request.user, data={
+            'application_id': application.pk,
+            'application_name': application.name,
+        })
+
         return self.redirect(self.success_url, application)
 
 
@@ -76,8 +88,4 @@ class TokenView(BaseTokenView):
 
 
 class RevokeTokenView(BaseRevokeTokenView):
-    pass
-
-
-class IntrospectTokenView(BaseIntrospectTokenView):
     pass

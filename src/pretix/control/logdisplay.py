@@ -197,6 +197,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.user.settings.notifications.enabled': _('Notifications have been enabled.'),
         'pretix.user.settings.notifications.disabled': _('Notifications have been disabled.'),
         'pretix.user.settings.notifications.changed': _('Your notification settings have been changed.'),
+        'pretix.user.oauth.authorized': _('The application "{application_name}" has been authorized to access your '
+                                          'account.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
         'pretix.voucher.added': _('The voucher has been created.'),

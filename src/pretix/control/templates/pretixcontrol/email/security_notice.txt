@@ -1,4 +1,4 @@
-{% load i18n %}{% blocktrans with url=url|safe %}Hello,
+{% load i18n %}{% blocktrans with url=url|safe messages=messages|safe %}Hello,
 
 this is to inform you that the account information of your pretix account has been
 changed. In particular, the following changes have been performed:

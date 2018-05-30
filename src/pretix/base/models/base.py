@@ -47,7 +47,7 @@ class LoggingMixin:
         """
         from .log import LogEntry
         from .event import Event
-        from .auth import OAuthAccessToken
+        from .auth import OAuthAccessToken, OAuthApplication
         from .organizer import TeamAPIToken
         from ..notifications import get_all_notification_types
         from ..services.notifications import notify
@@ -63,6 +63,8 @@ class LoggingMixin:
         kwargs = {}
         if isinstance(auth, OAuthAccessToken):
             kwargs['oauth_application'] = auth.application
+        elif isinstance(auth, OAuthApplication):
+            kwargs['oauth_application'] = auth
         elif isinstance(auth, TeamAPIToken):
             kwargs['api_token'] = auth
         elif isinstance(api_token, TeamAPIToken):
@@ -94,4 +96,4 @@ class LoggedModel(models.Model, LoggingMixin):
 
         return LogEntry.objects.filter(
             content_type=ContentType.objects.get_for_model(type(self)), object_id=self.pk
-        ).select_related('user', 'event')
+        ).select_related('user', 'event', 'oauth_application', 'api_token')

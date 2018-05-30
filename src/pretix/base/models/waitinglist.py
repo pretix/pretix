@@ -77,7 +77,7 @@ class WaitingListEntry(LoggedModel):
         WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
         WaitingListEntry.clean_subevent(self.event, self.subevent)
 
-    def send_voucher(self, quota_cache=None, user=None, api_token=None):
+    def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
             self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
             if self.variation
@@ -114,8 +114,8 @@ class WaitingListEntry(LoggedModel):
                 'email': self.email,
                 'waitinglistentry': self.pk,
                 'subevent': self.subevent.pk if self.subevent else None,
-            }, user=user, api_token=api_token)
-            self.log_action('pretix.waitinglist.voucher', user=user, api_token=api_token)
+            }, user=user, auth=auth)
+            self.log_action('pretix.waitinglist.voucher', user=user, auth=auth)
             self.voucher = v
             self.save()
 

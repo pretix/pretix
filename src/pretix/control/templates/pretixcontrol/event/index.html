@@ -124,6 +124,13 @@
                                     <span class="fa fa-user fa-fw"></span>
                                 {% endif %}
                                 {{ log.user.get_full_name }}
+                                {% if log.oauth_application %}
+                                    <br><span class="fa fa-plug fa-fw"></span>
+                                    {{ log.oauth_application.name }}
+                                {% endif %}
+                            {% elif log.api_token %}
+                                <span class="fa fa-key fa-fw"></span>
+                                {{ log.api_token.name }}
                             {% endif %}
                         </div>
                         <div class="col-lg-2 col-sm-12 col-xs-12">

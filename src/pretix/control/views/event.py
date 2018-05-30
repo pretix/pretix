@@ -824,7 +824,9 @@ class EventLog(EventPermissionRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        qs = self.request.event.logentry_set.all().select_related('user', 'content_type').order_by('-datetime')
+        qs = self.request.event.logentry_set.all().select_related(
+            'user', 'content_type', 'api_token', 'oauth_application'
+        ).order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
         if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders',
                                                       request=self.request):

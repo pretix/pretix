@@ -34,8 +34,12 @@ class Validator(OAuth2Validator):
             return False
 
     def _create_access_token(self, expires, request, token, source_refresh_token=None):
-        if not getattr(request, 'organizers', None):
+        if not getattr(request, 'organizers', None) and not getattr(source_refresh_token, 'access_token'):
             raise FatalClientError('No organizers selected.')
+        if hasattr(request, 'organizers'):
+            orgs = list(request.organizers.all())
+        else:
+            orgs = list(source_refresh_token.access_token.organizers.all())
         access_token = super()._create_access_token(expires, request, token, source_refresh_token=None)
-        access_token.organizers.add(*request.organizers.all())
+        access_token.organizers.add(*orgs)
         return access_token

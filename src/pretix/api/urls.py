@@ -54,8 +54,7 @@ urlpatterns = [
         include(question_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/checkinlists/(?P<list>[^/]+)/',
         include(checkinlist_router.urls)),
-    url(r"^oauth/authorize/$", oauth.AuthorizationView.as_view(), name="authorize"),
-    url(r"^oauth/token/$", oauth.TokenView.as_view(), name="token"),
-    url(r"^oauth/revoke_token/$", oauth.RevokeTokenView.as_view(), name="revoke-token"),
-    url(r"^oauth/introspect/$", oauth.IntrospectTokenView.as_view(), name="introspect"),
+    url(r"^oauth/authorize$", oauth.AuthorizationView.as_view(), name="authorize"),
+    url(r"^oauth/token$", oauth.TokenView.as_view(), name="token"),
+    url(r"^oauth/revoke_token$", oauth.RevokeTokenView.as_view(), name="revoke-token"),
 ]
