@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
     url(r'^settings/notifications/off/(?P<id>\d+)/(?P<token>[^/]+)/$', user.UserNotificationsDisableView.as_view(),
         name='user.settings.notifications.off'),
+    url(r'^settings/oauth/authorized/$', oauth.AuthorizationListView.as_view(),
+        name='user.settings.oauth.list'),
     url(r'^settings/oauth/apps/$', oauth.OAuthApplicationListView.as_view(),
         name='user.settings.oauth.apps'),
     url(r'^settings/oauth/apps/add$', oauth.OAuthApplicationRegistrationView.as_view(),

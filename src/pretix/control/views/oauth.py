@@ -2,9 +2,11 @@ import logging
 
 from django import forms
 from django.contrib import messages
+from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import ListView
 from oauth2_provider.generators import generate_client_secret
 from oauth2_provider.models import get_application_model
 from oauth2_provider.views import (
@@ -12,7 +14,7 @@ from oauth2_provider.views import (
     ApplicationRegistration, ApplicationUpdate,
 )
 
-from pretix.base.models import OAuthApplication
+from pretix.base.models import OAuthApplication, OAuthRefreshToken
 
 logger = logging.getLogger(__name__)
 
@@ -94,3 +96,17 @@ class OAuthApplicationDeleteView(ApplicationDelete):
         self.object.active = False
         self.object.save()
         return HttpResponseRedirect(self.success_url)
+
+
+class AuthorizationListView(ListView):
+    template_name = 'pretixcontrol/oauth/authorized.html'
+
+    def get_queryset(self):
+        has_refresh_token = OAuthRefreshToken.objects.filter(
+            user=self.request.user,
+            application_id=OuterRef('pk'),
+            revoked__isnull=True
+        )
+        return OAuthApplication.objects.annotate(has_rt=Exists(has_refresh_token)).filter(
+            Q(has_rt=True) | Q(oauthaccesstoken__user=self.request.user)
+        ).distinct()
