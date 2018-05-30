@@ -2,6 +2,7 @@ import json
 from collections import Counter
 from decimal import Decimal
 
+from django.utils.timezone import now
 from django_countries.fields import Country
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -395,6 +396,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.status = Order.STATUS_PAID
             elif order.payment_provider == "free" and order.total != Decimal('0.00'):
                 raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
+            if validated_data.get('status') == Order.STATUS_PAID:
+                order.payment_date = now()
             order.save()
             if ia:
                 ia.order = order
