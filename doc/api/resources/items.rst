@@ -64,6 +64,7 @@ variations                            list of objects            A list with one
                                                                  Can be empty. Only writable during creation,
                                                                  use separate endpoint to modify this later.
 ├ id                                  integer                    Internal ID of the variation
+├ value                               multi-lingual string       The "name" of the variation
 ├ default_price                       money (string)             The price set directly for this variation or ``null``
 ├ price                               money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
