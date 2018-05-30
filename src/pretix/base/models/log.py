@@ -41,6 +41,7 @@ class LogEntry(models.Model):
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
     user = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT)
     api_token = models.ForeignKey('TeamAPIToken', null=True, blank=True, on_delete=models.PROTECT)
+    oauth_application = models.ForeignKey('OAuthApplication', null=True, blank=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.SET_NULL)
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')

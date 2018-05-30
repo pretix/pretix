@@ -36,7 +36,7 @@ def cached_file_delete(sender, instance, **kwargs):
 
 class LoggingMixin:
 
-    def log_action(self, action, data=None, user=None, api_token=None, save=True):
+    def log_action(self, action, data=None, user=None, api_token=None, auth=None, save=True):
         """
         Create a LogEntry object that is related to this object.
         See the LogEntry documentation for details.
@@ -47,6 +47,8 @@ class LoggingMixin:
         """
         from .log import LogEntry
         from .event import Event
+        from .auth import OAuthAccessToken
+        from .organizer import TeamAPIToken
         from ..notifications import get_all_notification_types
         from ..services.notifications import notify
 
@@ -57,7 +59,16 @@ class LoggingMixin:
             event = self.event
         if user and not user.is_authenticated:
             user = None
-        logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, api_token=api_token)
+
+        kwargs = {}
+        if isinstance(auth, OAuthAccessToken):
+            kwargs['oauth_application'] = auth.application
+        elif isinstance(auth, TeamAPIToken):
+            kwargs['api_token'] = auth
+        elif isinstance(api_token, TeamAPIToken):
+            kwargs['api_token'] = api_token
+
+        logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, **kwargs)
         if data:
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
         if save:

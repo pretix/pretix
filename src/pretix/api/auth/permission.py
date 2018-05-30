@@ -1,6 +1,6 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
-from pretix.base.models import Event
+from pretix.base.models import Event, OAuthAccessToken
 from pretix.base.models.organizer import Organizer, TeamAPIToken
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
@@ -54,6 +54,10 @@ class EventPermission(BasePermission):
             request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
 
             if required_permission and required_permission not in request.orgapermset:
+                return False
+
+        if isinstance(request.auth, OAuthAccessToken) and hasattr(request, 'organizer'):
+            if not request.auth.organizers.filter(pk=request.organizer.pk).exists():
                 return False
         return True
 

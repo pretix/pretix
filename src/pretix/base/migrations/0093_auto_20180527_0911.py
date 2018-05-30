@@ -146,4 +146,10 @@ class Migration(migrations.Migration):
             name='organizers',
             field=models.ManyToManyField(to='pretixbase.Organizer'),
         ),
+        migrations.AddField(
+            model_name='logentry',
+            name='oauth_application',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
+                                    to=settings.OAUTH2_PROVIDER_APPLICATION_MODEL),
+        ),
     ]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from pretix.api.serializers.organizer import OrganizerSerializer
-from pretix.base.models import Organizer
+from pretix.base.models import OAuthAccessToken, Organizer
 
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -14,6 +14,12 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
         if self.request.user.is_authenticated():
             if self.request.user.has_active_staff_session(self.request.session.session_key):
                 return Organizer.objects.all()
+            elif isinstance(self.request.auth, OAuthAccessToken):
+                return Organizer.objects.filter(
+                    pk__in=self.request.user.teams.values_list('organizer', flat=True)
+                ).filter(
+                    pk__in=self.request.auth.organizers.values_list('pk', flat=True)
+                )
             else:
                 return Organizer.objects.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
         else:
