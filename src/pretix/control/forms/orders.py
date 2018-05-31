@@ -206,6 +206,7 @@ class OrderPositionChangeForm(forms.Form):
             ('subevent', 'Change event date'),
             ('cancel', 'Remove product'),
             ('split', 'Split into new order'),
+            ('secret', 'Regenerate secret'),
         )
     )
 

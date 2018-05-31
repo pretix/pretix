@@ -133,6 +133,13 @@
                         </div>
                         <div class="radio">
                             <label>
+                                <input name="{{ position.form.prefix }}-operation" type="radio" value="secret"
+                                        {% if position.form.operation.value == "secret" %}checked="checked"{% endif %}>
+                                {% trans "Generate a new secret" %}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="cancel"
                                         {% if position.form.operation.value == "cancel" %}checked="checked"{% endif %}>
                                 {% trans "Remove from order" %}

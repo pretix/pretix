@@ -82,6 +82,10 @@ def _display_order_changed(event: Event, logentry: LogEntry):
                 item=item,
                 price=money_filter(Decimal(data['price']), event.currency),
             )
+    elif logentry.action_type == 'pretix.event.order.changed.secret':
+        return text + ' ' + _('A new secret has been generated for position #{posid}.').format(
+            posid=data.get('positionid', '?'),
+        )
     elif logentry.action_type == 'pretix.event.order.changed.split':
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:

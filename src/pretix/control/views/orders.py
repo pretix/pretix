@@ -631,6 +631,8 @@ class OrderChange(OrderView):
                     ocm.cancel(p)
                 elif p.form.cleaned_data['operation'] == 'split':
                     ocm.split(p)
+                elif p.form.cleaned_data['operation'] == 'secret':
+                    ocm.regenerate_secret(p)
 
             except OrderError as e:
                 p.custom_error = str(e)

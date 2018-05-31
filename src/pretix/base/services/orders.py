@@ -689,6 +689,7 @@ class OrderChangeManager:
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
+    RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
     def __init__(self, order: Order, user, notify=True):
         self.order = order
@@ -743,6 +744,9 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.SubeventOperation(position, subevent, price))
+
+    def regenerate_secret(self, position: OrderPosition):
+        self._operations.append(self.RegenerateSecretOperation(position))
 
     def change_price(self, position: OrderPosition, price: Decimal):
         price = position.item.tax(price)
@@ -950,6 +954,15 @@ class OrderChangeManager:
                 })
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
+            elif isinstance(op, self.RegenerateSecretOperation):
+                op.position.secret = generate_position_secret()
+                op.position.save()
+                CachedTicket.objects.filter(order_position__order=self.order).delete()
+                CachedCombinedTicket.objects.filter(order=self.order).delete()
+                self.order.log_action('pretix.event.order.changed.secret', user=self.user, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                })
 
         if split_positions:
             self.split_order = self._create_split_order(split_positions)
