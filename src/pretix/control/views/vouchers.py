@@ -230,10 +230,10 @@ class VoucherGo(EventPermissionRequiredMixin, View):
     permission = 'can_view_vouchers'
 
     def get_voucher(self, code):
-        return Voucher.objects.get(code=code, event=self.request.event)
+        return Voucher.objects.get(code__iexact=code, event=self.request.event)
 
     def get(self, request, *args, **kwargs):
-        code = request.GET.get("code", "").upper().strip()
+        code = request.GET.get("code", "").strip()
         try:
             voucher = self.get_voucher(code)
             return redirect('control:event.voucher', event=request.event.slug, organizer=request.event.organizer.slug,
