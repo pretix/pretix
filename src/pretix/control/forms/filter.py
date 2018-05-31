@@ -130,6 +130,7 @@ class OrderFilterForm(FilterForm):
             matching_positions = OrderPosition.objects.filter(
                 Q(order=OuterRef('pk')) & Q(
                     Q(attendee_name__icontains=u) | Q(attendee_email__icontains=u)
+                    | Q(secret__istartswith=u)
                 )
             ).values('id')
 
@@ -565,6 +566,7 @@ class CheckInFilterForm(FilterForm):
             u = fdata.get('user')
             qs = qs.filter(
                 Q(order__code__istartswith=u)
+                | Q(secret__istartswith=u)
                 | Q(order__email__icontains=u)
                 | Q(attendee_name__icontains=u)
                 | Q(attendee_email__icontains=u)
