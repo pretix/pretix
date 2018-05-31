@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-25 21:00+0000\n"
+"PO-Revision-Date: 2018-05-31 10:28+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish "
 "<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
@@ -12491,7 +12491,7 @@ msgstr "Forsalget for dette arrangement er slut."
 #: pretix/presale/views/widget.py:238
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Forsalget for dette arrangement starter %(date)s, kl.%(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:143
 #: pretix/presale/views/widget.py:243
