@@ -581,6 +581,8 @@ class OrderChange(OrderView):
             return True
 
     def _process_add(self, ocm):
+        if 'add-do' not in self.request.POST:
+            return True
         if not self.add_form.is_valid():
             return False
         else:
