@@ -56,6 +56,11 @@ class EventPermission(BasePermission):
             if required_permission and required_permission not in request.orgapermset:
                 return False
 
+        if isinstance(request.auth, OAuthAccessToken):
+            if not request.auth.allow_scopes(['write']) and request.method not in SAFE_METHODS:
+                return False
+            if not request.auth.allow_scopes(['read']) and request.method in SAFE_METHODS:
+                return False
         if isinstance(request.auth, OAuthAccessToken) and hasattr(request, 'organizer'):
             if not request.auth.organizers.filter(pk=request.organizer.pk).exists():
                 return False
