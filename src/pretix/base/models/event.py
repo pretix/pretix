@@ -2,6 +2,7 @@ import string
 import uuid
 from collections import OrderedDict
 from datetime import datetime, time
+from operator import attrgetter
 
 import pytz
 from django.conf import settings
@@ -534,6 +535,23 @@ class Event(EventMixin, LoggedModel):
                 | Q(date_to__gte=now())
             )
         ).order_by('date_from', 'name')
+
+    @property
+    def subevent_list_subevents(self):
+        ordering = self.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
+        orderfields = {
+            'date_ascending': ('date_from', 'name'),
+            'date_descending': ('-date_from', 'name'),
+            'name_ascending': ('name', 'date_from'),
+            'name_descending': ('-name', 'date_from'),
+        }[ordering]
+        subevs = self.subevents.filter(
+            Q(active=True) & (
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                | Q(date_to__gte=now())
+            )
+        )  # order_by doesn't make sense with I18nField
+        return sorted(subevs, key=attrgetter(*orderfields))
 
     @property
     def meta_data(self):

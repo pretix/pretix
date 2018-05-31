@@ -6,7 +6,9 @@ from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import formset_factory
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import (
+    pgettext, pgettext_lazy, ugettext_lazy as _,
+)
 from django_countries import Countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
@@ -854,12 +856,24 @@ class DisplaySettingsForm(SettingsForm):
         label=_("Show variations of a product expanded by default"),
         required=False
     )
+    frontpage_subevent_ordering = forms.ChoiceField(
+        label=pgettext('subevent', 'Date ordering'),
+        choices=[
+            ('date_ascending', _('Event start time')),
+            ('date_descending', _('Event start time (descending)')),
+            ('name_ascending', _('Name')),
+            ('name_descending', _('Name (descending)')),
+        ],  # When adding a new ordering, remember to also define it in the event model
+    )
 
     def __init__(self, *args, **kwargs):
+        event = kwargs['obj']
         super().__init__(*args, **kwargs)
         self.fields['primary_font'].choices += [
             (a, a) for a in get_fonts()
         ]
+        if not event.has_subevents:
+            del self.fields['frontpage_subevent_ordering']
 
 
 class TicketSettingsForm(SettingsForm):

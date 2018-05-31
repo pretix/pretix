@@ -153,7 +153,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk + 1000))
         assert resp.status_code == 404
 
-    def test_subevent_list(self):
+    def test_subevent_list_activeness(self):
         self.event.has_subevents = True
         self.event.save()
         self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=1), active=True)
@@ -161,6 +161,20 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Foo SE1", resp.rendered_content)
         self.assertNotIn("Foo SE2", resp.rendered_content)
+
+    def test_subevent_list_ordering(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self.event.subevents.create(name='Epic SE', date_from=now() + datetime.timedelta(days=1), active=True)
+        self.event.subevents.create(name='Cool SE', date_from=now() + datetime.timedelta(days=2), active=True)
+
+        self.event.settings.frontpage_subevent_ordering = 'date_ascending'
+        content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertLess(content.index('Epic SE'), content.index('Cool SE'))
+
+        self.event.settings.frontpage_subevent_ordering = 'name_ascending'
+        content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertLess(content.index('Cool SE'), content.index('Epic SE'))
 
     def test_subevent_calendar(self):
         self.event.settings.event_list_type = 'calendar'
