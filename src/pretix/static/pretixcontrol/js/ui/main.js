@@ -1,12 +1,6 @@
 /*global $,gettext*/
 
-function question_page_toggle_view() {
-    var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
-    $("#answer-options").toggle(show);
-
-    show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
-    $(".alert-required-boolean").toggle(show);
-
+function update_default_value_field() {
     let input = $('#id_default_value');
     let common_attrs = ' name="default_value" placeholder="' + input.attr('placeholder') + '" title="' + input.attr('title') + '" id="id_default_value"';
     let value = input.val();
@@ -28,22 +22,36 @@ function question_page_toggle_view() {
             input.replaceWith('<input type="checkbox" ' + common_attrs + ' ' + checked + '>');
             $('.form-group:has(#id_default_value)').show();
             break;
-        case 'F':
-            $('.form-group:has(#id_default_value)').hide();
-            break;
         case 'D':
-            input.replaceWith('<input type="date" class="form-control" value="' + value + '" ' + common_attrs + '>');
+            let dateField = input.replaceWith('<input type="text" class="form-control datepickerfield" value="' + value + '" ' + common_attrs + '>');
+            form_handlers(dateField.parent());
             $('.form-group:has(#id_default_value)').show();
             break;
         case 'H':
-            input.replaceWith('<input type="time" class="form-control" value="' + value + '" ' + common_attrs + '>');
+            let timeField = input.replaceWith('<input type="text" class="form-control timepickerfield" value="' + value + '" ' + common_attrs + '>');
+            form_handlers(timeField.parent());
             $('.form-group:has(#id_default_value)').show();
             break;
         case 'W':
-            input.replaceWith('<input type="datetime-local" class="form-control" value="' + value + '" ' + common_attrs + '>');
+            let dtField = input.replaceWith('<input type="text" class="form-control datepickerfield" value="' + value + '" ' + common_attrs + '>');
+            form_handlers(dtField.parent());
             $('.form-group:has(#id_default_value)').show();
             break;
+        default:
+            // file, choice, and multiple choice are not implemented
+            $('.form-group:has(#id_default_value)').hide();
+            input.val('')
     }
+}
+
+function question_page_toggle_view() {
+    var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
+    $("#answer-options").toggle(show);
+
+    show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
+    $(".alert-required-boolean").toggle(show);
+
+    update_default_value_field();
 }
 
 var waitingDialog = {
