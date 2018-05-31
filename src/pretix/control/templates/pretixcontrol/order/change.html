@@ -78,6 +78,9 @@
                                 {{ position.custom_error }}
                             </div>
                         {% endif %}
+                        <p class="help-block">
+                            {% trans "Ticket secret:" %} {{ position.secret|slice:":12" }}…
+                        </p>
                         <div class="radio">
                             <label>
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value=""
