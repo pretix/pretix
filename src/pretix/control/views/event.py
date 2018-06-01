@@ -347,7 +347,7 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
-            return self.get(request)
+            return self.render_to_response(self.get_context_data(form=form))
 
 
 class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
