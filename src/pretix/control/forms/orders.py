@@ -61,17 +61,17 @@ class MarkPaidForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance")
         super().__init__(*args, **kwargs)
-        quota_fail = (
+        quota_success = (
             self.instance.status == Order.STATUS_PENDING or
             self.instance._is_still_available(now(), count_waitinglist=False) is True
         )
         term_last = self.instance.payment_term_last
-        term_fail = (
+        term_success = (
             (not term_last or term_last >= now()) and
             (self.instance.status == Order.STATUS_PENDING or self.instance.event.settings.get(
                 'payment_term_accept_late'))
         )
-        if quota_fail or term_fail:
+        if quota_success and term_success:
             del self.fields['force']
 
 

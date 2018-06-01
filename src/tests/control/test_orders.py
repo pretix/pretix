@@ -520,6 +520,43 @@ def test_order_mark_paid_overdue_quota_blocked_by_waiting_list(client, env):
 
 
 @pytest.mark.django_db
+def test_order_mark_paid_blocked(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_EXPIRED
+    o.expires = now() - timedelta(days=5)
+    o.save()
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p'
+    }, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    o = Order.objects.get(id=env[2].id)
+    assert o.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_order_mark_paid_forced(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_EXPIRED
+    o.expires = now() - timedelta(days=5)
+    o.save()
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p',
+        'force': 'on'
+    }, follow=True)
+    assert 'alert-success' in response.rendered_content
+    o = Order.objects.get(id=env[2].id)
+    assert o.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
 def test_order_go_lowercase(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/go?code=DuMmyfoO')
