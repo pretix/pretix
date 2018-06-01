@@ -282,19 +282,30 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                              preserveAspectRatio=True, anchor='n',
                              mask='auto')
 
+        def shorten(txt):
+            txt = str(txt)
+            p = Paragraph(txt.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+            p_size = p.wrap(65 * mm, 50 * mm)
+
+            while p_size[1] > 2 * self.stylesheet['Normal'].leading:
+                txt = ' '.join(txt.replace('…', '').split()[:-1]) + '…'
+                p = Paragraph(txt.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+                p_size = p.wrap(65 * mm, 50 * mm)
+            return txt
+
         if not self.invoice.event.has_subevents:
             if self.invoice.event.settings.show_date_to:
                 p_str = (
-                    str(self.invoice.event.name) + '\n' + pgettext('invoice', '{from_date}\nuntil {to_date}').format(
+                    shorten(self.invoice.event.name) + '\n' + pgettext('invoice', '{from_date}\nuntil {to_date}').format(
                         from_date=self.invoice.event.get_date_from_display(),
                         to_date=self.invoice.event.get_date_to_display())
                 )
             else:
                 p_str = (
-                    str(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display()
+                    shorten(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display()
                 )
         else:
-            p_str = str(self.invoice.event.name)
+            p_str = shorten(self.invoice.event.name)
 
         p = Paragraph(p_str.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
         p.wrapOn(canvas, 65 * mm, 50 * mm)
