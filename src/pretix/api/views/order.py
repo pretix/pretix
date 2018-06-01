@@ -30,7 +30,7 @@ from pretix.base.services.invoices import (
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderError, cancel_order, extend_order, mark_order_expired,
-    mark_order_paid,
+    mark_order_paid, mark_order_refunded,
 )
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
@@ -193,7 +193,22 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         )
         return self.retrieve(request, [], **kwargs)
 
-    # TODO: Find a way to implement mark_refunded
+    @detail_route(methods=['POST'])
+    def mark_refunded(self, request, **kwargs):
+        order = self.get_object()
+
+        if order.status != Order.STATUS_PAID:
+            return Response(
+                {'detail': 'The order is not paid.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        mark_order_refunded(
+            order,
+            user=request.user if request.user.is_authenticated else None,
+            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+        )
+        return self.retrieve(request, [], **kwargs)
 
     @detail_route(methods=['POST'])
     def extend(self, request, **kwargs):

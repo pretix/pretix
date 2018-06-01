@@ -600,6 +600,33 @@ def test_order_mark_canceled_paid(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_mark_paid_refunded(token_client, organizer, event, order):
+    order.status = Order.STATUS_PAID
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_refunded/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_REFUNDED
+
+
+@pytest.mark.django_db
+def test_order_mark_canceled_refunded(token_client, organizer, event, order):
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_refunded/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_CANCELED
+
+
+@pytest.mark.django_db
 def test_order_mark_paid_unpaid(token_client, organizer, event, order):
     order.status = Order.STATUS_PAID
     order.save()
