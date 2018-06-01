@@ -47,9 +47,9 @@ from pretix.base.views.async import AsyncAction
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.control.forms.filter import EventOrderFilterForm
 from pretix.control.forms.orders import (
-    CommentForm, ExporterForm, ExtendForm, OrderContactForm, OrderLocaleForm,
-    OrderMailForm, OrderPositionAddForm, OrderPositionChangeForm,
-    OtherOperationsForm,
+    CommentForm, ExporterForm, ExtendForm, MarkPaidForm, OrderContactForm,
+    OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
+    OrderPositionChangeForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -225,12 +225,24 @@ class OrderComment(OrderView):
 class OrderTransition(OrderView):
     permission = 'can_change_orders'
 
+    @cached_property
+    def mark_paid_form(self):
+        return MarkPaidForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
+            if not self.mark_paid_form.is_valid():
+                return render(self.request, 'pretixcontrol/order/pay.html', {
+                    'form': self.mark_paid_form,
+                    'order': self.order,
+                })
             try:
                 mark_order_paid(self.order, manual=True, user=self.request.user,
-                                count_waitinglist=False)
+                                count_waitinglist=False, force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
             except SendMailException:
@@ -260,7 +272,12 @@ class OrderTransition(OrderView):
 
     def get(self, *args, **kwargs):
         to = self.request.GET.get('status', '')
-        if self.order.cancel_allowed() and to == 'c':
+        if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
+            return render(self.request, 'pretixcontrol/order/pay.html', {
+                'form': self.mark_paid_form,
+                'order': self.order,
+            })
+        elif self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'order': self.order,
             })

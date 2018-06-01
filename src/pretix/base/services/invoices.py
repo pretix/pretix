@@ -39,7 +39,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-        payment = payment_provider.render_invoice_text(invoice.order)
+        if payment_provider:
+            payment = payment_provider.render_invoice_text(invoice.order)
+        else:
+            payment = ""
 
         invoice.introductory_text = str(introductory).replace('\n', '<br />')
         invoice.additional_text = str(additional).replace('\n', '<br />')

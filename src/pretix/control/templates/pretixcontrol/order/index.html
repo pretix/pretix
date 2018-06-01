@@ -25,7 +25,9 @@
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
                     {% if order.status == 'n' or order.status == 'e' %}
-                        <button name="status" value="p" class="btn btn-default">{% trans "Mark as paid" %}</button>
+                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p" class="btn btn-default">
+                            {% trans "Mark as paid" %}
+                        </a>
                         <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
                             {% trans "Extend payment term" %}
                         </a>
