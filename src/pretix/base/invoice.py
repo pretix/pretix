@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 from decimal import Decimal
 from io import BytesIO
@@ -8,6 +9,7 @@ from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
 from django.utils.translation import pgettext
+from PIL.Image import BICUBIC
 from reportlab.lib import pagesizes
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
@@ -25,6 +27,8 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
+
+logger = logging.getLogger(__name__)
 
 
 class BaseInvoiceRenderer:
@@ -178,6 +182,14 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         return 'invoice.pdf', 'application/pdf', buffer.read()
 
 
+class ThumbnailingImageReader(ImageReader):
+    def resize(self, width, height, dpi):
+        self._image.thumbnail(
+            size=(int(width * dpi / 72), int(height * dpi / 72)),
+            resample=BICUBIC
+        )
+
+
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     identifier = 'classic'
     verbose_name = pgettext('invoice', 'Classic renderer (pretix 1.0)')
@@ -276,7 +288,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.event.settings.invoice_logo_image:
             logo_file = self.invoice.event.settings.get('invoice_logo_image', binary_file=True)
-            canvas.drawImage(ImageReader(logo_file),
+            ir = ThumbnailingImageReader(logo_file)
+            try:
+                ir.resize(25 * mm, 25 * mm, 300)
+            except:
+                logger.exception("Can not resize image")
+                pass
+            canvas.drawImage(ir,
                              95 * mm, (297 - 38) * mm,
                              width=25 * mm, height=25 * mm,
                              preserveAspectRatio=True, anchor='n',
