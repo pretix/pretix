@@ -1,9 +1,10 @@
-from django.http import FileResponse, Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
 from pretix.base.models import CachedFile
+from pretix.helpers.http import ChunkBasedFileResponse
 
 
 class DownloadView(TemplateView):
@@ -20,7 +21,7 @@ class DownloadView(TemplateView):
         if 'ajax' in request.GET:
             return HttpResponse('1' if self.object.file else '0')
         elif self.object.file:
-            resp = FileResponse(self.object.file.file, content_type=self.object.type)
+            resp = ChunkBasedFileResponse(self.object.file.file, content_type=self.object.type)
             resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.object.filename)
             return resp
         else:
