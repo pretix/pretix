@@ -11,7 +11,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0092_auto_20180511_1224'),
+        ('pretixbase', '0093_auto_20180528_1432'),
     ]
 
     operations = [
@@ -150,6 +150,6 @@ class Migration(migrations.Migration):
             model_name='logentry',
             name='oauth_application',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    to=settings.OAUTH2_PROVIDER_APPLICATION_MODEL),
+                                    to='pretixbase.OAuthApplication'),
         ),
     ]
