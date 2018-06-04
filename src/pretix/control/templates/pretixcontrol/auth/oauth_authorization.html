@@ -30,6 +30,12 @@
         {% bootstrap_field form.organizers layout="inline" %}
 
         {% bootstrap_form_errors form layout="control" %}
+        <p class="text-danger">
+            {% blocktrans trimmed %}
+                This application has <strong>not</strong> been reviewed by the pretix team. Granting access to your
+                pretix account happens at your own risk.
+            {% endblocktrans %}
+        </p>
 
 		<div class="form-group buttons">
             <input type="submit" class="btn btn-large btn-default" value="Cancel"/>
