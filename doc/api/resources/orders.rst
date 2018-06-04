@@ -143,6 +143,9 @@ answers                               list of objects            Answers to user
 ├ question_identifier                 string                     The question's ``identifier`` field
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 └ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+pdf_data                              object                     Data object required for ticket PDF generation. By default,
+                                                                 this field is missing. It will be added only if you add the
+                                                                 ``pdf_data=true`` query parameter to your request.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -159,7 +162,7 @@ answers                               list of objects            Answers to user
 
 .. versionchanged:: 1.16
 
-  The attribute ``pseudonymization_id`` has been added.
+  The attributes ``pseudonymization_id`` and ``pdf_data`` have been added.
 
 
 Order endpoints
