@@ -328,12 +328,16 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             if f not in self.request.event.settings._cache():
                 self.request.event.settings.set(f, self.request.event.settings.get(f))
 
+    def form_success(self):
+        pass
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             form.save()
             self._save_decoupled(form)
+            self.form_success()
             if form.has_changed():
                 self.request.event.log_action(
                     'pretix.event.settings', user=self.request.user, data={
