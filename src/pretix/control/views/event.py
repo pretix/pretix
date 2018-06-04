@@ -347,11 +347,15 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
                         for k in form.changed_data
                     }
                 )
+            self.form_success()
             messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.render_to_response(self.get_context_data(form=form))
+
+    def form_success(self):
+        pass
 
 
 class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):

@@ -416,6 +416,10 @@ class OAuthAccessToken(AbstractAccessToken):
     )
     organizers = models.ManyToManyField('Organizer')
 
+    def revoke(self):
+        self.expires = now() - timedelta(hours=1)
+        self.save(update_fields=['expires'])
+
 
 class OAuthRefreshToken(AbstractRefreshToken):
     application = models.ForeignKey(

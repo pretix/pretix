@@ -2,19 +2,22 @@ import logging
 
 from django import forms
 from django.contrib import messages
-from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 from oauth2_provider.generators import generate_client_secret
 from oauth2_provider.models import get_application_model
+from oauth2_provider.scopes import get_scopes_backend
 from oauth2_provider.views import (
     ApplicationDelete, ApplicationDetail, ApplicationList,
     ApplicationRegistration, ApplicationUpdate,
 )
 
-from pretix.base.models import OAuthApplication, OAuthRefreshToken
+from pretix.base.models import (
+    OAuthAccessToken, OAuthApplication, OAuthRefreshToken,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -100,13 +103,38 @@ class OAuthApplicationDeleteView(ApplicationDelete):
 
 class AuthorizationListView(ListView):
     template_name = 'pretixcontrol/oauth/authorized.html'
+    context_object_name = 'tokens'
 
     def get_queryset(self):
-        has_refresh_token = OAuthRefreshToken.objects.filter(
-            user=self.request.user,
-            application_id=OuterRef('pk'),
-            revoked__isnull=True
-        )
-        return OAuthApplication.objects.annotate(has_rt=Exists(has_refresh_token)).filter(
-            Q(has_rt=True) | Q(oauthaccesstoken__user=self.request.user)
-        ).distinct()
+        return OAuthAccessToken.objects.filter(
+            user=self.request.user
+        ).select_related('application').prefetch_related('organizers')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        all_scopes = get_scopes_backend().get_all_scopes()
+        for t in ctx['tokens']:
+            t.scopes_descriptions = [all_scopes[scope] for scope in t.scopes]
+        return ctx
+
+
+class AuthorizationRevokeView(DetailView):
+    template_name = 'pretixcontrol/oauth/auth_revoke.html'
+    success_url = reverse_lazy("control:user.settings.oauth.list")
+
+    def get_queryset(self):
+        return OAuthAccessToken.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['application'] = self.get_object().application
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        o = self.get_object()
+        for rt in OAuthRefreshToken.objects.filter(access_token=o):
+            rt.revoke()
+        o.delete()
+
+        messages.success(request, _('Access for the selected application has been revoked.'))
+        return redirect(self.success_url)

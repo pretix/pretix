@@ -472,7 +472,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
         'token': refresh_token,
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
     assert resp.status_code == 200
-    assert not OAuthAccessToken.objects.filter(token=access_token).exists()
+    assert not OAuthAccessToken.objects.get(token=access_token).is_valid()
     assert not OAuthRefreshToken.objects.filter(token=refresh_token, revoked__isnull=True).exists()
     resp = client.post('/api/v1/oauth/token', data={
         'refresh_token': refresh_token,
@@ -481,7 +481,6 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
     assert resp.status_code == 401
 
 
-@pytest.mark.skip("https://github.com/jazzband/django-oauth-toolkit/issues/585")
 @pytest.mark.django_db
 def test_token_revoke_access_token(client, admin_user, organizer, application: OAuthApplication):
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -514,7 +513,7 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
         'token': access_token,
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
     assert resp.status_code == 200
-    assert not OAuthAccessToken.objects.filter(token=access_token).exists()  # old token revoked
+    assert not OAuthAccessToken.objects.get(token=access_token).is_valid()  # old token revoked
 
     resp = client.post('/api/v1/oauth/token', data={
         'refresh_token': refresh_token,
@@ -525,3 +524,48 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
     access_token = data['access_token']
     grant = OAuthAccessToken.objects.get(token=access_token)
     assert list(grant.organizers.all()) == [organizer]
+
+
+@pytest.mark.django_db
+def test_user_revoke(client, admin_user, organizer, application: OAuthApplication):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code' % (
+        application.client_id, urlquote(application.redirect_uris)
+    ))
+    assert resp.status_code == 200
+    resp = client.post('/api/v1/oauth/authorize', data={
+        'organizers': str(organizer.pk),
+        'redirect_uri': application.redirect_uris,
+        'scope': 'read write',
+        'client_id': application.client_id,
+        'response_type': 'code',
+        'allow': 'Authorize',
+    })
+    assert resp.status_code == 302
+    assert resp['Location'].startswith('https://pretalx.com?code=')
+    code = resp['Location'].split("=")[1]
+    client.logout()
+    resp = client.post('/api/v1/oauth/token', data={
+        'code': code,
+        'redirect_uri': application.redirect_uris,
+        'grant_type': 'authorization_code',
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+    assert resp.status_code == 200
+    data = json.loads(resp.content.decode())
+    refresh_token = data['refresh_token']
+    access_token = data['access_token']
+
+    at = OAuthAccessToken.objects.get(token=access_token)
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.post('/control/settings/oauth/authorized/{}/revoke'.format(at.pk), data={
+    })
+    assert resp.status_code == 302
+    client.logout()
+    assert not OAuthAccessToken.objects.filter(token=access_token).exists()
+    assert OAuthRefreshToken.objects.get(token=refresh_token).revoked
+
+    resp = client.post('/api/v1/oauth/token', data={
+        'refresh_token': refresh_token,
+        'grant_type': 'refresh_token',
+    }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+    assert resp.status_code == 401
