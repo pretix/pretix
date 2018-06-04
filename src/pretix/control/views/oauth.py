@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView
 from oauth2_provider.generators import generate_client_secret
+from oauth2_provider.models import get_application_model
 from oauth2_provider.scopes import get_scopes_backend
 from oauth2_provider.views import (
     ApplicationDelete, ApplicationDetail, ApplicationList,
@@ -33,7 +34,7 @@ class OAuthApplicationRegistrationView(ApplicationRegistration):
 
     def get_form_class(self):
         return forms.modelform_factory(
-            OAuthApplication,
+            get_application_model(),
             fields=(
                 "name", "redirect_uris"
             )

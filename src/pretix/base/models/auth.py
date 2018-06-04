@@ -1,5 +1,4 @@
 from datetime import timedelta
-from urllib.parse import parse_qsl, urlparse
 
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -7,7 +6,7 @@ from django.contrib.auth.models import (
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.models import ContentType
-from django.db import models, transaction
+from django.db import models
 from django.db.models import Q
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -17,8 +16,10 @@ from django_otp.models import Device
 from oauth2_provider.generators import (
     generate_client_id, generate_client_secret,
 )
-from oauth2_provider.scopes import get_scopes_backend
-from oauth2_provider.settings import oauth2_settings
+from oauth2_provider.models import (
+    AbstractAccessToken, AbstractApplication, AbstractGrant,
+    AbstractRefreshToken,
+)
 from oauth2_provider.validators import validate_uris
 
 from pretix.base.i18n import language
@@ -373,24 +374,7 @@ class U2FDevice(Device):
     json_data = models.TextField()
 
 
-class OAuthApplication(models.Model):
-    CLIENT_CONFIDENTIAL = "confidential"
-    CLIENT_PUBLIC = "public"
-    CLIENT_TYPES = (
-        (CLIENT_CONFIDENTIAL, _("Confidential")),
-        (CLIENT_PUBLIC, _("Public")),
-    )
-
-    GRANT_AUTHORIZATION_CODE = "authorization-code"
-    GRANT_IMPLICIT = "implicit"
-    GRANT_PASSWORD = "password"
-    GRANT_CLIENT_CREDENTIALS = "client-credentials"
-    GRANT_TYPES = (
-        (GRANT_AUTHORIZATION_CODE, _("Authorization code")),
-        (GRANT_IMPLICIT, _("Implicit")),
-        (GRANT_PASSWORD, _("Resource owner password-based")),
-        (GRANT_CLIENT_CREDENTIALS, _("Client credentials")),
-    )
+class OAuthApplication(AbstractApplication):
     name = models.CharField(verbose_name=_("Application name"), max_length=255, blank=False)
     redirect_uris = models.TextField(
         blank=False, validators=[validate_uris],
@@ -407,126 +391,21 @@ class OAuthApplication(models.Model):
     )
     active = models.BooleanField(default=True)
 
-    # inherited fields
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="%(app_label)s_%(class)s",
-        null=True, blank=True, on_delete=models.CASCADE
-    )
-
-    help_text = _("Allowed URIs list, space separated")
-    client_type = models.CharField(max_length=32, choices=CLIENT_TYPES)
-    authorization_grant_type = models.CharField(
-        max_length=32, choices=GRANT_TYPES
-    )
-    skip_authorization = models.BooleanField(default=False)
-
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
     def get_absolute_url(self):
         return reverse("control:user.settings.oauth.app", kwargs={'pk': self.id})
 
     def is_usable(self, request):
         return self.active and super().is_usable(request)
 
-    def __str__(self):
-        return self.name or self.client_id
 
-    @property
-    def default_redirect_uri(self):
-        """
-        Returns the default redirect_uri extracting the first item from
-        the :attr:`redirect_uris` string
-        """
-        if self.redirect_uris:
-            return self.redirect_uris.split().pop(0)
-
-        assert False, (
-            "If you are using implicit, authorization_code"
-            "or all-in-one grant_type, you must define "
-            "redirect_uris field in your Application model"
-        )
-
-    def redirect_uri_allowed(self, uri):
-        """
-        Checks if given url is one of the items in :attr:`redirect_uris` string
-
-        :param uri: Url to check
-        """
-        parsed_uri = urlparse(uri)
-        uqs_set = set(parse_qsl(parsed_uri.query))
-        for allowed_uri in self.redirect_uris.split():
-            parsed_allowed_uri = urlparse(allowed_uri)
-
-            if (parsed_allowed_uri.scheme == parsed_uri.scheme and
-                    parsed_allowed_uri.netloc == parsed_uri.netloc and
-                    parsed_allowed_uri.path == parsed_uri.path):
-
-                aqs_set = set(parse_qsl(parsed_allowed_uri.query))
-
-                if aqs_set.issubset(uqs_set):
-                    return True
-
-        return False
-
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        if not self.redirect_uris \
-                and self.authorization_grant_type \
-                in (self.GRANT_AUTHORIZATION_CODE, self.GRANT_IMPLICIT):
-            error = _("Redirect_uris could not be empty with {grant_type} grant_type")
-            raise ValidationError(error.format(grant_type=self.authorization_grant_type))
-
-    def get_allowed_schemes(self):
-        """
-        Returns the list of redirect schemes allowed by the Application.
-        By default, returns `ALLOWED_REDIRECT_URI_SCHEMES`.
-        """
-        return oauth2_settings.ALLOWED_REDIRECT_URI_SCHEMES
-
-    def allows_grant_type(self, *grant_types):
-        return self.authorization_grant_type in grant_types
-
-
-class OAuthGrant(models.Model):
+class OAuthGrant(AbstractGrant):
     application = models.ForeignKey(
         OAuthApplication, on_delete=models.CASCADE
     )
     organizers = models.ManyToManyField('Organizer')
 
-    # inherited fields
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        related_name="%(app_label)s_%(class)s"
-    )
-    code = models.CharField(max_length=255, unique=True)  # code comes from oauthlib
-    expires = models.DateTimeField()
-    redirect_uri = models.CharField(max_length=255)
-    scope = models.TextField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def is_expired(self):
-        """
-        Check token expiration with timezone awareness
-        """
-        if not self.expires:
-            return True
-
-        return now() >= self.expires
-
-    def redirect_uri_allowed(self, uri):
-        return uri == self.redirect_uri
-
-    def __str__(self):
-        return self.code
-
-
-class OAuthAccessToken(models.Model):
+class OAuthAccessToken(AbstractAccessToken):
     source_refresh_token = models.OneToOneField(
         # unique=True implied by the OneToOneField
         'OAuthRefreshToken', on_delete=models.SET_NULL, blank=True, null=True,
@@ -541,100 +420,11 @@ class OAuthAccessToken(models.Model):
         self.expires = now() - timedelta(hours=1)
         self.save(update_fields=['expires'])
 
-    # inherited fields
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True,
-        related_name="%(app_label)s_%(class)s"
-    )
-    token = models.CharField(max_length=255, unique=True, )
-    expires = models.DateTimeField()
-    scope = models.TextField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def is_valid(self, scopes=None):
-        """
-        Checks if the access token is valid.
-
-        :param scopes: An iterable containing the scopes to check or None
-        """
-        return not self.is_expired() and self.allow_scopes(scopes)
-
-    def is_expired(self):
-        """
-        Check token expiration with timezone awareness
-        """
-        if not self.expires:
-            return True
-
-        return now() >= self.expires
-
-    def allow_scopes(self, scopes):
-        """
-        Check if the token allows the provided scopes
-
-        :param scopes: An iterable containing the scopes to check
-        """
-        if not scopes:
-            return True
-
-        provided_scopes = set(self.scope.split())
-        resource_scopes = set(scopes)
-
-        return resource_scopes.issubset(provided_scopes)
-
-    @property
-    def scopes(self):
-        """
-        Returns a dictionary of allowed scope names (as keys) with their descriptions (as values)
-        """
-        all_scopes = get_scopes_backend().get_all_scopes()
-        token_scopes = self.scope.split()
-        return {name: desc for name, desc in all_scopes.items() if name in token_scopes}
-
-    def __str__(self):
-        return self.token
-
-
-class OAuthRefreshToken(models.Model):
+class OAuthRefreshToken(AbstractRefreshToken):
     application = models.ForeignKey(
         OAuthApplication, on_delete=models.CASCADE)
     access_token = models.OneToOneField(
         OAuthAccessToken, on_delete=models.SET_NULL, blank=True, null=True,
         related_name="refresh_token"
     )
-
-    # inherited fields
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        related_name="%(app_label)s_%(class)s"
-    )
-    token = models.CharField(max_length=255)
-
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    revoked = models.DateTimeField(null=True)
-
-    def revoke(self):
-        """
-        Mark this refresh token revoked and revoke related access token
-        """
-        access_token_model = OAuthAccessToken
-        refresh_token_model = OAuthRefreshToken
-        with transaction.atomic():
-            self = refresh_token_model.objects.filter(
-                pk=self.pk, revoked__isnull=True
-            ).select_for_update().first()
-            if not self:
-                return
-
-            access_token_model.objects.get(id=self.access_token_id).revoke()
-            self.access_token = None
-            self.revoked = now()
-            self.save()
-
-    def __str__(self):
-        return self.token
