@@ -1,6 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
-from pretix.base.models import Event, OAuthAccessToken
+from pretix.api.models import OAuthAccessToken
+from pretix.base.models import Event
 from pretix.base.models.organizer import Organizer, TeamAPIToken
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,

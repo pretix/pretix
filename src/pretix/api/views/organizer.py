@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 
+from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import OrganizerSerializer
-from pretix.base.models import OAuthAccessToken, Organizer
+from pretix.base.models import Organizer
 
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):

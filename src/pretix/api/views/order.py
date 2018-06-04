@@ -17,12 +17,13 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
+from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.order import (
     InvoiceSerializer, OrderCreateSerializer, OrderPositionSerializer,
     OrderSerializer,
 )
 from pretix.base.models import (
-    Invoice, OAuthAccessToken, Order, OrderPosition, Quota, TeamAPIToken,
+    Invoice, Order, OrderPosition, Quota, TeamAPIToken,
 )
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,

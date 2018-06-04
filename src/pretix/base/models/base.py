@@ -47,7 +47,7 @@ class LoggingMixin:
         """
         from .log import LogEntry
         from .event import Event
-        from .auth import OAuthAccessToken, OAuthApplication
+        from pretix.api.models import OAuthAccessToken, OAuthApplication
         from .organizer import TeamAPIToken
         from ..notifications import get_all_notification_types
         from ..services.notifications import notify

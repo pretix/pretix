@@ -16,12 +16,13 @@ from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
+from pretix.api.models import OAuthApplication
 from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, OAuthApplication, Order,
-    OrderPosition, Quota, User, Voucher,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
+    User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (

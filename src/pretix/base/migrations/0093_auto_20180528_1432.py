@@ -21,7 +21,6 @@ def set_pids(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('pretixbase', '0092_auto_20180511_1224'),
     ]

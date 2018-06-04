@@ -10,7 +10,8 @@ from oauth2_provider.views import (
     RevokeTokenView as BaseRevokeTokenView, TokenView as BaseTokenView,
 )
 
-from pretix.base.models import OAuthApplication, Organizer
+from pretix.api.models import OAuthApplication
+from pretix.base.models import Organizer
 
 logger = logging.getLogger(__name__)
 

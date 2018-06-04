@@ -592,10 +592,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-OAUTH2_PROVIDER_APPLICATION_MODEL = 'pretixbase.OAuthApplication'
-OAUTH2_PROVIDER_GRANT_MODEL = 'pretixbase.OAuthGrant'
-OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'pretixbase.OAuthAccessToken'
-OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'pretixbase.OAuthRefreshToken'
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'pretixapi.OAuthApplication'
+OAUTH2_PROVIDER_GRANT_MODEL = 'pretixapi.OAuthGrant'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'pretixapi.OAuthAccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'pretixapi.OAuthRefreshToken'
 OAUTH2_PROVIDER = {
     'SCOPES': {
         'read': _('Read access'),

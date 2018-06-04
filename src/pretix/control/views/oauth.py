@@ -15,7 +15,7 @@ from oauth2_provider.views import (
     ApplicationRegistration, ApplicationUpdate,
 )
 
-from pretix.base.models import (
+from pretix.api.models import (
     OAuthAccessToken, OAuthApplication, OAuthRefreshToken,
 )
 
