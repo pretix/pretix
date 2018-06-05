@@ -13,7 +13,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import DeleteView, DetailView, ListView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
 
@@ -22,7 +22,6 @@ from pretix.base.models import (
 )
 from pretix.base.pdf import Renderer
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.views import CreateView
 from pretix.control.views.pdf import BaseEditorView
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutForm
 from pretix.plugins.ticketoutputpdf.ticketoutput import PdfTicketOutput
@@ -176,6 +175,7 @@ class LayoutDelete(EventPermissionRequiredMixin, DeleteView):
 
 
 class LayoutEditorView(BaseEditorView):
+
     @cached_property
     def layout(self):
         try:
@@ -194,6 +194,12 @@ class LayoutEditorView(BaseEditorView):
         self.layout.save(update_fields=['layout'])
         self.layout.log_action(action='pretix.plugins.ticketoutputpdf.layout.changed', user=self.request.user,
                                data={'layout': self.request.POST.get("data")})
+        CachedTicket.objects.filter(
+            order_position__order__event=self.request.event, provider='pdf'
+        ).delete()
+        CachedCombinedTicket.objects.filter(
+            order__event=self.request.event, provider='pdf'
+        ).delete()
 
     def get_default_background(self):
         return static('pretixpresale/pdf/ticket_default_a4.pdf')
@@ -229,3 +235,9 @@ class LayoutEditorView(BaseEditorView):
         if self.layout.background:
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
+        CachedTicket.objects.filter(
+            order_position__order__event=self.request.event, provider='pdf'
+        ).delete()
+        CachedCombinedTicket.objects.filter(
+            order__event=self.request.event, provider='pdf'
+        ).delete()

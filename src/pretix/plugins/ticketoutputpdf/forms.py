@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.models import CachedCombinedTicket, CachedTicket
+
 from .models import TicketLayout, TicketLayoutItem
 
 
@@ -30,3 +32,9 @@ class TicketLayoutItemForm(forms.ModelForm):
                 return
         else:
             return super().save(commit=commit)
+        CachedTicket.objects.filter(
+            item=self.instance.item, provider='pdf'
+        ).delete()
+        CachedCombinedTicket.objects.filter(
+            order__positions__item=self.instance.item
+        ).delete()
