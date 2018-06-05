@@ -232,3 +232,10 @@ styles. It is advisable to set a prefix for your form to avoid clashes with othe
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+oauth_application_registered = Signal(
+    providing_args=["user", "application"]
+)
+"""
+This signal will be called whenever a user registers a new OAuth application.
+"""

@@ -18,6 +18,7 @@ from oauth2_provider.views import (
 from pretix.api.models import (
     OAuthAccessToken, OAuthApplication, OAuthRefreshToken,
 )
+from pretix.control.signals import oauth_application_registered
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,9 @@ class OAuthApplicationRegistrationView(ApplicationRegistration):
     def form_valid(self, form):
         form.instance.client_type = 'confidential'
         form.instance.authorization_grant_type = 'authorization-code'
+        oauth_application_registered.send(
+            sender=self.request, user=self.request.user, application=form.instance
+        )
         return super().form_valid(form)
 
 
