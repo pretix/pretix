@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-03 22:00+0000\n"
-"Last-Translator: etiontdn <etiontdn@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
-"pretix/pretix/pt_BR/>\n"
+"PO-Revision-Date: 2018-06-05 04:00+0000\n"
+"Last-Translator: wallber azevedo pinheiro <wallpinheiro@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) "
+"<https://translate.pretix.eu/projects/pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -81,13 +81,12 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plugin desconhecido: '{name}'."
 
 #: pretix/api/serializers/item.py:91
-#, fuzzy
 msgid ""
 "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
 "the dedicated nested endpoint."
 msgstr ""
-"Não é suportada a atualização de variações via PATCH / PUT. Use o nó "
-"aninhado dedicado."
+"A atualização de complementos ou variações via PATCH / PUT não é suportada. "
+"Por favor, use o endpoint aninhado dedicado."
 
 #: pretix/api/serializers/item.py:171
 #, fuzzy
@@ -317,9 +316,9 @@ msgid "Net at {rate} % tax"
 msgstr "Líquido em {rate} % tax"
 
 #: pretix/base/exporters/orderlist.py:73
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "Valor das taxas em {rate} % tax"
+msgstr "Valor do imposto em {rate} 1% de imposto"
 
 #: pretix/base/exporters/orderlist.py:76
 msgid "Invoice numbers"
@@ -961,7 +960,6 @@ msgstr "Plugins"
 #: pretix/base/models/event.py:255
 #: pretix/control/templates/pretixcontrol/event/index.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:430
-#, fuzzy
 msgid "Internal comment"
 msgstr "Comentário interno"
 
@@ -1009,10 +1007,8 @@ msgstr ""
 "Depois de criar um evento não pode mudar entre as series e um único evento."
 
 #: pretix/base/models/event.py:664
-#, fuzzy
-#| msgid "The payment method for this order cannot be changed."
 msgid "The event slug cannot be changed."
-msgstr "O método de pagamento para este pedido não pode ser alterado."
+msgstr "O slug do evento não pode ser alterado."
 
 #: pretix/base/models/event.py:667
 msgid "This slug has already been used for a different event."
@@ -1165,15 +1161,13 @@ msgid "Sales tax"
 msgstr "Imposto sobre vendas"
 
 #: pretix/base/models/items.py:239
-#, fuzzy
 msgid "Is an admission ticket"
-msgstr "É um ingresso de admissão"
+msgstr "É um bilhete de admissão"
 
 #: pretix/base/models/items.py:241
-#, fuzzy
 msgid "Whether or not buying this product allows a person to enter your event"
 msgstr ""
-"Se comprar ou não este produto permite que uma pessoa entre no seu evento"
+"Quer comprar este produto ou não permitir que uma pessoa entre no seu evento"
 
 #: pretix/base/models/items.py:250
 msgid "Product picture"
@@ -1197,29 +1191,36 @@ msgstr "Este produto não será vendido após a data indicada."
 
 #: pretix/base/models/items.py:265
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Este produto só pode ser comprado usando um voucher."
 
 #: pretix/base/models/items.py:267
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
+"Para comprar este produto, o usuário precisa de um voucher que se aplique a "
+"este produto diretamente ou por meio de uma cota."
 
 #: pretix/base/models/items.py:271
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
+"Este produto só será exibido se um voucher correspondente ao produto for "
+"resgatado."
 
 #: pretix/base/models/items.py:273
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher code that is specifically tied to this product (and not via a quota)."
 msgstr ""
+"Este produto será ocultado da página do evento até que o usuário insira um "
+"código de voucher especificamente vinculado a este produto (e não por meio "
+"de uma cota)."
 
 #: pretix/base/models/items.py:277
 msgid "Allow product to be canceled"
-msgstr ""
+msgstr "Permitir que o produto seja cancelado"
 
 #: pretix/base/models/items.py:279
 msgid ""
@@ -1228,10 +1229,15 @@ msgid ""
 "cannot cancel paid orders on their own and you can cancel orders at all "
 "times, regardless of this setting"
 msgstr ""
+"Se isso estiver ativo e as configurações gerais do evento permitirem, os "
+"pedidos contendo esse produto poderão ser cancelados pelo usuário até que o "
+"pedido seja pago. Os usuários não podem cancelar pedidos pagos por conta "
+"própria e você pode cancelar pedidos em todos os momentos, independentemente "
+"dessa configuração"
 
 #: pretix/base/models/items.py:284
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Quantidade mínima por pedido"
 
 #: pretix/base/models/items.py:286
 msgid ""
@@ -1239,10 +1245,13 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
+"Este produto só pode ser comprado se for adicionado ao carrinho pelo menos "
+"várias vezes. Se você mantiver o campo vazio ou defini-lo como 0, não há "
+"limite especial para este produto."
 
 #: pretix/base/models/items.py:290
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Quantidade máxima por pedido"
 
 #: pretix/base/models/items.py:292
 msgid ""
@@ -1251,10 +1260,14 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
+"Este produto só pode ser comprado no máximo várias vezes dentro de um "
+"pedido. Se você mantiver o campo vazio ou defini-lo como 0, não há limite "
+"especial para este produto. O limite para o número máximo de itens em toda a "
+"ordem se aplica independentemente."
 
 #: pretix/base/models/items.py:297 pretix/base/models/orders.py:166
 msgid "Requires special attention"
-msgstr ""
+msgstr "Requer atenção especial"
 
 #: pretix/base/models/items.py:299
 msgid ""
@@ -1263,6 +1276,10 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
+"Se você definir isso, o aplicativo de check-in mostrará um aviso visível de "
+"que esse ticket requer atenção especial. Você pode usar isso, por exemplo, "
+"para bilhetes de estudante para indicar à pessoa no check-in que a carteira "
+"de estudante ainda precisa ser verificada."
 
 #: pretix/base/models/items.py:307 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:49 pretix/control/forms/filter.py:703
@@ -1277,7 +1294,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:189
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 msgid "Product"
-msgstr ""
+msgstr "Produto"
 
 #: pretix/base/models/items.py:308 pretix/base/models/items.py:690
 #: pretix/control/forms/filter.py:171 pretix/control/forms/filter.py:546
@@ -1292,13 +1309,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/questions.html:34
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Products"
-msgstr ""
+msgstr "Produtos"
 
 #: pretix/base/models/items.py:392
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"O número máximo por pedido não pode ser menor que o número mínimo por pedido."
 
 #: pretix/base/models/items.py:398
 msgid "The item's category must belong to the same event as the item."
@@ -1614,7 +1632,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:130
 msgid "Locale"
-msgstr ""
+msgstr "Localidade"
 
 #: pretix/base/models/orders.py:137 pretix/base/models/orders.py:897
 msgid "Expiration date"
@@ -1695,7 +1713,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:539
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: pretix/base/models/orders.py:520 pretix/control/forms/event.py:556
 #: pretix/control/views/item.py:442 pretix/control/views/vouchers.py:77
@@ -1707,7 +1725,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:14
 #: pretix/presale/checkoutflow.py:541
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: pretix/base/models/orders.py:522
 msgid "<file>"
@@ -1816,14 +1834,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:5
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:7
 msgid "Organizer"
-msgstr ""
+msgstr "Organizador"
 
 #: pretix/base/models/organizer.py:49
 #: pretix/control/templates/pretixcontrol/base.html:233
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr ""
+msgstr "Organizadores"
 
 #: pretix/base/models/organizer.py:125
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:15
@@ -4563,37 +4581,37 @@ msgstr ""
 #: pretix/control/forms/filter.py:314 pretix/control/forms/subevents.py:277
 #: pretix/control/forms/subevents.py:327 pretix/control/forms/subevents.py:343
 msgid "Monday"
-msgstr ""
+msgstr "Segunda"
 
 #: pretix/control/forms/filter.py:315 pretix/control/forms/subevents.py:278
 #: pretix/control/forms/subevents.py:328 pretix/control/forms/subevents.py:344
 msgid "Tuesday"
-msgstr ""
+msgstr "Terça"
 
 #: pretix/control/forms/filter.py:316 pretix/control/forms/subevents.py:279
 #: pretix/control/forms/subevents.py:329 pretix/control/forms/subevents.py:345
 msgid "Wednesday"
-msgstr ""
+msgstr "Quarta"
 
 #: pretix/control/forms/filter.py:317 pretix/control/forms/subevents.py:280
 #: pretix/control/forms/subevents.py:330 pretix/control/forms/subevents.py:346
 msgid "Thursday"
-msgstr ""
+msgstr "Quinta"
 
 #: pretix/control/forms/filter.py:318 pretix/control/forms/subevents.py:281
 #: pretix/control/forms/subevents.py:331 pretix/control/forms/subevents.py:347
 msgid "Friday"
-msgstr ""
+msgstr "Sexta"
 
 #: pretix/control/forms/filter.py:319 pretix/control/forms/subevents.py:282
 #: pretix/control/forms/subevents.py:332 pretix/control/forms/subevents.py:348
 msgid "Saturday"
-msgstr ""
+msgstr "Sábado"
 
 #: pretix/control/forms/filter.py:320 pretix/control/forms/subevents.py:283
 #: pretix/control/forms/subevents.py:333 pretix/control/forms/subevents.py:349
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 #: pretix/control/forms/filter.py:413
 msgid "All events"

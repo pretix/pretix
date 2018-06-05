@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-10 10:07+0000\n"
-"PO-Revision-Date: 2018-05-18 04:00+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2018-05-29 11:34+0000\n"
+"Last-Translator: Jochem van Kessel <jochem@pitso.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -5649,7 +5649,7 @@ msgstr "September"
 
 #: pretix/control/forms/subevents.py:301
 msgid "October"
-msgstr "October"
+msgstr "Oktober"
 
 #: pretix/control/forms/subevents.py:302
 msgid "November"
