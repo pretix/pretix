@@ -149,6 +149,11 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
                   'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'request' in self.context and not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
+            self.fields.pop('pdf_data')
+
 
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
