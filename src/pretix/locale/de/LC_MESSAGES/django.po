@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 12:13+0000\n"
-"PO-Revision-Date: 2018-06-05 13:44+0000\n"
+"PO-Revision-Date: 2018-06-05 17:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German "
 "<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
@@ -8541,7 +8541,7 @@ msgstr "inoffizielle Übersetzung"
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
 msgid "Disable application"
-msgstr "App deaktiveren"
+msgstr "App deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:9
 #, python-format
