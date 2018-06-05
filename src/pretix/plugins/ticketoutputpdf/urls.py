@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
 from pretix.plugins.ticketoutputpdf.views import (
-    LayoutCreate, LayoutDelete, LayoutEditorView, LayoutListView,
-    LayoutSetDefault,
+    LayoutCreate, LayoutDelete, LayoutEditorView, LayoutGetDefault,
+    LayoutListView, LayoutSetDefault,
 )
 
 urlpatterns = [
@@ -12,6 +12,8 @@ urlpatterns = [
         LayoutCreate.as_view(), name='add'),
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/default$',
         LayoutSetDefault.as_view(), name='default'),
+    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/default$',
+        LayoutGetDefault.as_view(), name='getdefault'),
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/delete$',
         LayoutDelete.as_view(), name='delete'),
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/editor',

@@ -19,6 +19,7 @@ class BadgeItemForm(forms.ModelForm):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['layout'].label = _('Badge layout')
+        self.fields['layout'].empty_label = _('(Event default)')
         self.fields['layout'].queryset = event.badge_layouts.all()
         self.fields['layout'].required = False
 

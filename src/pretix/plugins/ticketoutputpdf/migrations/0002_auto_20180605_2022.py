@@ -51,5 +51,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(convert_old_settings)
+        migrations.RunPython(convert_old_settings, migrations.RunPython.noop)
     ]

@@ -13,9 +13,13 @@
             {% endblocktrans %}
         </p>
         <p>
+            <a class="btn btn-primary" target="_blank"
+                    href="{% url "plugins:ticketoutputpdf:getdefault" organizer=request.organizer.slug event=request.event.slug %}">
+                {% trans "Change default layout in a new tab" %}
+            </a>
             <a class="btn btn-default" target="_blank"
-                    href="{% url "plugins:ticketoutputpdf:editor" organizer=request.organizer.slug event=request.event.slug %}">
-                {% trans "Open the PDF editor in a new tab" %}
+                    href="{% url "plugins:ticketoutputpdf:index" organizer=request.organizer.slug event=request.event.slug %}">
+                {% trans "Advanced mode (multiple layouts)" %}
             </a>
         </p>
     </div>

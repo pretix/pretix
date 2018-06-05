@@ -21,6 +21,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['layout'].label = _('PDF ticket layout')
+        self.fields['layout'].empty_label = _('(Event default)')
         self.fields['layout'].queryset = event.ticket_layouts.all()
         self.fields['layout'].required = False
 

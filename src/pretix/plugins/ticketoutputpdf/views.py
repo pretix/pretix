@@ -12,7 +12,8 @@ from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext, ugettext_lazy as _
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
@@ -172,6 +173,23 @@ class LayoutDelete(EventPermissionRequiredMixin, DeleteView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+
+class LayoutGetDefault(EventPermissionRequiredMixin, View):
+    permission = 'can_change_event_settings'
+
+    def get(self, request, *args, **kwargs):
+        layout = self.request.event.ticket_layouts.get_or_create(
+            default=True,
+            defaults={
+                'name': gettext('Default layout'),
+            }
+        )[0]
+        return redirect(reverse('plugins:ticketoutputpdf:edit', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'layout': layout.pk
+        }))
 
 
 class LayoutEditorView(BaseEditorView):
