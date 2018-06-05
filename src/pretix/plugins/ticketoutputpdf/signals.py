@@ -94,6 +94,10 @@ def event_copy_data_receiver(sender, other, item_map, question_map, **kwargs):
         bl.layout = json.dumps(layout)
 
         bl.save()
+
+        if bl.background and bl.background.name:
+            bl.background.save('background.pdf', bl.background)
+
         layout_map[oldid] = bl
 
     for bi in TicketLayoutItem.objects.filter(item__event=other):
