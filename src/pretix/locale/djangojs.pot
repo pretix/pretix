@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-10 10:07+0000\n"
+"POT-Creation-Date: 2018-06-05 12:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,43 +112,47 @@ msgstr ""
 msgid "Press Ctrl-C to copy!"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:21
-msgid "QR Code"
+#: pretix/static/pretixcontrol/js/ui/editor.js:22
+msgid "Lead Scan QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:210
+#: pretix/static/pretixcontrol/js/ui/editor.js:24
+msgid "Check-in QR"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:216
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:359
+#: pretix/static/pretixcontrol/js/ui/editor.js:365
 msgid "Group of objects"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:365
+#: pretix/static/pretixcontrol/js/ui/editor.js:371
 msgid "Text object"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:367
+#: pretix/static/pretixcontrol/js/ui/editor.js:373
 msgid "Barcode area"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:369
+#: pretix/static/pretixcontrol/js/ui/editor.js:375
 msgid "Object"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:373
+#: pretix/static/pretixcontrol/js/ui/editor.js:379
 msgid "Ticket design"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:609
+#: pretix/static/pretixcontrol/js/ui/editor.js:616
 msgid "Saving failed."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:670
+#: pretix/static/pretixcontrol/js/ui/editor.js:677
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
@@ -170,6 +174,10 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:247
 msgid "None"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:527
+msgid "Use a different name internally"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
