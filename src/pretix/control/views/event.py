@@ -354,9 +354,6 @@ class EventSettingsFormView(EventPermissionRequiredMixin, FormView):
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.render_to_response(self.get_context_data(form=form))
 
-    def form_success(self):
-        pass
-
 
 class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
     template_name = 'pretixcontrol/event/payment.html'
