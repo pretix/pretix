@@ -1,4 +1,4 @@
-.. spelling:: checkins
+.. spelling:: checkins, pdf
 
 
 .. _rest-orders:
