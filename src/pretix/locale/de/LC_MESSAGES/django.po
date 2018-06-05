@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 12:13+0000\n"
-"PO-Revision-Date: 2018-05-30 09:35+0000\n"
-"Last-Translator: Sebastian Wallroth <sebastian@wallroth.de>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"PO-Revision-Date: 2018-06-05 12:55+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: German "
+"<https://translate.pretix.eu/projects/pretix/pretix/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,30 +45,24 @@ msgid "On sale"
 msgstr "Aktiv"
 
 #: pretix/api/models.py:18
-#, fuzzy
-#| msgid "Variation name"
 msgid "Application name"
-msgstr "Produktvariante"
+msgstr "Name der Applikation"
 
 #: pretix/api/models.py:21
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Redirection URIs"
-msgstr "Einlösungen"
+msgstr "URLs zur Weiterleitung"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Liste erlaubter URLs, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:58
 msgid "Client ID"
 msgstr "Client-ID"
 
 #: pretix/api/models.py:29
-#, fuzzy
-#| msgid "Invalidate secrets"
 msgid "Client secret"
-msgstr "Geheime Codes anpassen"
+msgstr "Geheimer Schlüssel"
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:830
 #: pretix/base/models/items.py:1139
@@ -121,14 +115,13 @@ msgstr ""
 "separate Ressource."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:200
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The two-factor authentication device \"{name}\" has been removed from "
-#| "your account."
+#, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde entfernt."
+msgstr ""
+"Der Application \"{application_name}\" wurde der Zugriff auf Ihr Konto "
+"erlaubt."
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -806,8 +799,6 @@ msgid "Timezone"
 msgstr "Zeitzone"
 
 #: pretix/base/models/auth.py:96
-#, fuzzy
-#| msgid "Two-factor authentification is required to log in"
 msgid "Two-factor authentication is required to log in"
 msgstr "Zwei-Faktor-Authentifizierung ist zum Log-In nötig"
 
@@ -1110,15 +1101,15 @@ msgid "Category name"
 msgstr "Bezeichnung"
 
 #: pretix/base/models/items.py:47 pretix/base/models/items.py:217
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Internal name"
-msgstr "Interner Kommentar"
+msgstr "Interner Name"
 
 #: pretix/base/models/items.py:48 pretix/base/models/items.py:218
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr ""
+"Wenn Sie diesen Namen setzen, wird er im Backend anstelle des öffentlichen "
+"Namens verwendet."
 
 #: pretix/base/models/items.py:52
 msgid "Category description"
@@ -1342,11 +1333,8 @@ msgstr ""
 "nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/items.py:317
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Original invoice"
 msgid "Original price"
-msgstr "Ursprüngl. Rechnung"
+msgstr "Ursprünglicher Preis"
 
 #: pretix/base/models/items.py:320
 msgid ""
@@ -1354,6 +1342,9 @@ msgid ""
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
 msgstr ""
+"Wenn dieser Preise gesetzt ist, wird er neben dem aktuellen Preis angezeigt, "
+"um eine Rabattierung zu kennzeichnen. Dies ändert nichts an der "
+"tatsächlichen Preisberechnung."
 
 #: pretix/base/models/items.py:327 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:49 pretix/control/forms/filter.py:705
@@ -2585,10 +2576,8 @@ msgid "The order has been marked as refunded."
 msgstr "Die Bestellung wurde als zurückerstattet markiert."
 
 #: pretix/base/payment.py:665
-#, fuzzy
-#| msgid "Go offline"
 msgid "Box office"
-msgstr "Shop ausschalten"
+msgstr "Abendkasse"
 
 #: pretix/base/pdf.py:37
 msgid "Ticket code (barcode content)"
@@ -3268,15 +3257,11 @@ msgstr ""
 "Teil-Nachzahlungen noch nicht unterstützt werden."
 
 #: pretix/base/services/orders.py:682
-#, fuzzy
-#| msgid ""
-#| "This is an addon product, please select the base position it should be "
-#| "added to."
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
-"Dieses Produkt ist nur als Zusatzprodukt verfügbar, bitte wählen Sie das die "
+"Dieses Produkt ist nur als Zusatzprodukt verfügbar, bitte wählen Sie die "
 "Basisposition zu der es hinzugefügt werden soll."
 
 #: pretix/base/services/orders.py:683
@@ -4408,12 +4393,6 @@ msgid "Only end payment terms on weekdays"
 msgstr "Zahlungsziel nur an Werktagen"
 
 #: pretix/control/forms/event.py:435
-#, fuzzy
-#| msgid ""
-#| "If this is activated and the payment term of any order ends on a saturday "
-#| "or sunday, it will be moved to the next monday instead. This is required "
-#| "in some countries by civil law. This will not effect the last date of "
-#| "payments configured above."
 msgid ""
 "If this is activated and the payment term of any order ends on a Saturday or "
 "Sunday, it will be moved to the next Monday instead. This is required in "
@@ -4889,23 +4868,17 @@ msgid "Show variations of a product expanded by default"
 msgstr "Zeige Produkt-Varianten standardmäßig ausgeklappt an"
 
 #: pretix/control/forms/event.py:860
-#, fuzzy
-#| msgid "Date joined"
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr "Registrierungsdatum"
+msgstr "Sortierung der Termine"
 
 #: pretix/control/forms/event.py:863
-#, fuzzy
-#| msgid "Event start time"
 msgid "Event start time (descending)"
-msgstr "Veranstaltungsbeginn"
+msgstr "Veranstaltungsbeginn (absteigend)"
 
 #: pretix/control/forms/event.py:865
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Name (descending)"
-msgstr "Zahlung ausstehend"
+msgstr "Name (absteigend)"
 
 #: pretix/control/forms/event.py:881
 msgid "Use feature"
@@ -5479,11 +5452,7 @@ msgstr ""
 "der Veranstaltung außer des VIP-Bereiches."
 
 #: pretix/control/forms/item.py:350
-#, fuzzy, python-format
-#| msgid ""
-#| "The variation \"%s\" cannot be deleted because it has already been "
-#| "ordered by a user or currently is in a users's cart. Please set the "
-#| "variation as \"inactive\" instead."
+#, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
 "by a user or currently is in a user's cart. Please set the variation as "
@@ -5520,16 +5489,10 @@ msgstr ""
 "verkauft haben als geplant!"
 
 #: pretix/control/forms/orders.py:54
-#, fuzzy
-#| msgid "Review invalid and ignored payments"
 msgid "Overbook quota and ignore late payment"
-msgstr "Ungültige und ignorierte Überweisungen anschauen"
+msgstr "Überbuchung von Kontingenten und Überschreitung von Fristen ignorieren"
 
 #: pretix/control/forms/orders.py:55
-#, fuzzy
-#| msgid ""
-#| "If you check this box, this operation will be performed even if it leads "
-#| "to an overbooked quota and you having sold more tickets than you planned!"
 msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned! The "
@@ -5538,7 +5501,8 @@ msgid ""
 msgstr ""
 "Wenn Sie diese Option aktivieren, wird die Änderung auch dann durchgeführt, "
 "wenn sie zu einem überbuchten Kontingent führt und Sie dadurch mehr Tickets "
-"verkauft haben als geplant!"
+"verkauft haben als geplant! Weiterhin werden Einstellungen wie das letzte "
+"mögliche Zahlungsdatum ignoriert."
 
 #: pretix/control/forms/orders.py:114
 msgid "Re-calculate taxes"
@@ -5905,7 +5869,7 @@ msgstr "Position #{posid} erstellt: {item} ({price})."
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "Ein neuer Ticket-Code für Position #{posid} wurde generiert."
 
 #: pretix/control/logdisplay.py:93
 #, python-brace-format
@@ -6539,10 +6503,6 @@ msgid "Welcome back!"
 msgstr "Willkommen zurück!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
-#, fuzzy
-#| msgid ""
-#| "You configured your account to require authentification with a second "
-#| "medium, e.g. your phone. Please enter your verification code here:"
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
@@ -6592,7 +6552,7 @@ msgstr "Fortfahren"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
-msgstr ""
+msgstr "Zugriff erlauben"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:18
 #, python-format
@@ -6600,27 +6560,30 @@ msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
 msgstr ""
+"Wollen Sie der App <strong>%(application)s</strong> wirklich Zugriff auf Ihr "
+"pretix-Konto gewähren?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:23
-#, fuzzy
-#| msgid "This plugin reports the following problems:"
 msgid "The application requires the following permissions:"
-msgstr "Dieses Plugin hat folgende Probleme gemeldet:"
+msgstr "Die App wird folgende Berechtigungen haben:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:29
 msgid ""
 "Please select the organizer accounts this application should get access to:"
 msgstr ""
+"Bitte wählen Sie die Veranstalterkonten aus, auf die die App zugreifen darf:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:34
 msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
 msgstr ""
+"Die App wurde <strong>nicht</strong> vom pretix-Team geprüft. Das Gewähren "
+"von Zugriff auf Ihr pretix-Konto erfolgt auf eigene Gefahr."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:47
 msgid "Error:"
-msgstr ""
+msgstr "Fehler:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
 msgid "Set new password"
@@ -7829,6 +7792,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:54
 msgid "All of these rules will only apply if an invoice address is set."
 msgstr ""
+"Alle diese Regeln kommen nur zum Einsatz, wenn eine Rechnungsadresse "
+"angegeben wird."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:109
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:250
@@ -8570,117 +8535,97 @@ msgstr ""
 "pretix.eu bei der Übersetzung helfen."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
-#, fuzzy
-#| msgid "Inofficial translation"
 msgid "Unofficial translation"
 msgstr "inoffizielle Übersetzung"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
-#, fuzzy
-#| msgid "Disable selected"
 msgid "Disable application"
-msgstr "Ausgewählte deaktivieren"
+msgstr "App deakitiveren"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the question <strong>%(question)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
-msgstr "Möchten Sie die Frage <strong>%(question)s</strong> wirklich löschen?"
+msgstr ""
+"Möchten Sie die App <strong>%(application)s</strong> wirklich dauerhaft "
+"deaktivieren?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:6
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your applications"
-msgstr "Ihre Informationen"
+msgstr "Ihre Apps"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:33
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create new application"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Neue App erstellen"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:39
 msgid "No applications registered yet."
-msgstr ""
+msgstr "Keine registrierten Apps gefunden."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:46
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
-#, fuzzy
-#| msgid "Add a new variation"
 msgid "Register a new application"
-msgstr "Neue Variante hinzufügen"
+msgstr "Neue App registrieren"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Generate new application secret"
-msgstr "Stornobeleg erstellen"
+msgstr "Neuen geheimen Schlüssel erstellen"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the question <strong>%(question)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
-msgstr "Möchten Sie die Frage <strong>%(question)s</strong> wirklich löschen?"
+msgstr ""
+"Möchten Sie wirklich einen neuen Schlüssel für die App "
+"<strong>%(application)s</strong> generieren?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 msgid "Roll secret"
-msgstr ""
+msgstr "Neuer Schlüssel"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:6
-#, fuzzy
-#| msgid "Add a new variation"
 msgid "Update an application"
-msgstr "Neue Variante hinzufügen"
+msgstr "App bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:4
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:49
 msgid "Revoke access"
-msgstr ""
+msgstr "Zugriff entfernen"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the question <strong>%(question)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to revoke access to your account for the application "
 "<strong>%(application)s</strong>?"
-msgstr "Möchten Sie die Frage <strong>%(question)s</strong> wirklich löschen?"
+msgstr ""
+"Möchten Sie den Zugang der App <strong>%(application)s</strong> zu Ihrem "
+"pretix-Konto wirklich entfernen?"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:15
 msgid "Revoke"
-msgstr ""
+msgstr "Widerrufen"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:4
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:57
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Authorized applications"
-msgstr "Kunden-Aktionen"
+msgstr "Autorisierte Apps"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:9
 msgid "Manage your own apps"
-msgstr ""
+msgstr "Eigene Apps verwalten"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
-msgstr ""
+msgstr "Derzeit haben keine Apps Zugriff auf Ihr pretix-Konto."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/cancel.html:8
@@ -8789,10 +8734,8 @@ msgid "Add-On to position #%(posid)s"
 msgstr "Zusatz zu Position #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:82
-#, fuzzy
-#| msgid "Tickets"
 msgid "Ticket secret:"
-msgstr "Tickets"
+msgstr "Ticket-Code:"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:88
 msgid "Keep unchanged"
@@ -8833,10 +8776,8 @@ msgid "Split into new order"
 msgstr "In neue Bestellung abspalten"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:141
-#, fuzzy
-#| msgid "Create a new user"
 msgid "Generate a new secret"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Neuen Ticket-Code generieren"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:148
 msgid "Remove from order"
@@ -8849,17 +8790,12 @@ msgstr ""
 "entfernen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:163
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Add product"
-msgstr "Zusatzprodukte"
+msgstr "Produkt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:189
-#, fuzzy
-#| msgid "Answer options"
 msgid "Other operations"
-msgstr "Antwortoptionen"
+msgstr "Andere Aktionen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:211
 msgid "Perform changes"
@@ -9132,19 +9068,12 @@ msgstr "Betreff:"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
-#, fuzzy
-#| msgid "Mark as paid"
 msgid "Mark order as paid"
 msgstr "Als bezahlt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
-#, fuzzy
-#| msgid ""
-#| "Do you really want to cancel this order? You cannot revert this action."
 msgid "Do you really want to mark this order as paid?"
-msgstr ""
-"Möchten Sie diese Bestellung wirklich stornieren? Sie können diese Aktion "
-"nicht rückgängig machen."
+msgstr "Möchten Sie diese Bestellung wirklich als bezahlt markieren?"
 
 #: pretix/control/templates/pretixcontrol/order/refund.html:17
 msgid "Do you really want to refund this order? You cannot revert this action."
@@ -9310,10 +9239,6 @@ msgid "Delete team:"
 msgstr "Team löschen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
-#, fuzzy
-#| msgid ""
-#| "You cannot delete the team because there would be noone left who could "
-#| "change team permissions afterwards."
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
@@ -9599,14 +9524,12 @@ msgid "Add a new object"
 msgstr "Neues Objekt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:322
-#, fuzzy
-#| msgid "QR code area"
 msgid "QR code for Check-In"
-msgstr "QR-Code-Bereich"
+msgstr "QR-Code für Check-In"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:328
 msgid "QR code for Lead Scanning"
-msgstr ""
+msgstr "QR-Code für Lead-Scanning"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:80
 msgid ""
@@ -10228,10 +10151,8 @@ msgid "Change two-factor settings"
 msgstr "Zwei-Faktor-Einstellungen ändern"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
-#, fuzzy
-#| msgid "Show information"
 msgid "Show applications"
-msgstr "Informationen anzeigen"
+msgstr "Apps anzeigen"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Show account history"
@@ -11013,10 +10934,6 @@ msgid "The requested item does not exist."
 msgstr "Das ausgewählte Produkt existiert nicht."
 
 #: pretix/control/views/item.py:1009
-#, fuzzy
-#| msgid ""
-#| "You cannot add addons to a product that is only available as an add-on "
-#| "itself."
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
@@ -11046,19 +10963,19 @@ msgstr "Standard"
 
 #: pretix/control/views/oauth.py:81
 msgid "A new client secret has been generated and is now effective."
-msgstr ""
+msgstr "Ein neuer geheimer Schlüssel wurde erzeugt und ist sofort aktiv."
 
 #: pretix/control/views/oauth.py:139
-#, fuzzy
-#| msgid "The selected configuration has been deleted."
 msgid "Access for the selected application has been revoked."
-msgstr "Die ausgewählte Konfiguration wurde gelöscht."
+msgstr "Der Zugriff für die ausgewählte App zu Ihrem Konto wurde entfernt."
 
 #: pretix/control/views/orders.py:143
 msgid ""
 "This order was paid using a payment provider plugin that is now disabled or "
 "uninstalled."
 msgstr ""
+"Diese Bestellung wurde mit einem Zahlungsplugin bezahlt, das nun deaktiviert "
+"oder deinstalliert ist."
 
 #: pretix/control/views/orders.py:249
 msgid ""
@@ -11073,10 +10990,8 @@ msgid "The order has been marked as not paid."
 msgstr "Die Bestellung wurde als nicht bezahlt markiert."
 
 #: pretix/control/views/orders.py:266 pretix/control/views/orders.py:286
-#, fuzzy
-#| msgid "This order is not marked as paid."
 msgid "This order is not assigned to a known payment provider."
-msgstr "Die Bestellung ist nicht als bezahlt markiert."
+msgstr "Die Bestellung ist keiner bekannten Zahlungsmethode zugeordnet."
 
 #: pretix/control/views/orders.py:307 pretix/presale/views/order.py:426
 msgid "You cannot generate an invoice for this order."
@@ -11267,10 +11182,6 @@ msgid "pretix account invitation"
 msgstr "pretix Team-Einladung"
 
 #: pretix/control/views/organizer.py:477
-#, fuzzy
-#| msgid ""
-#| "You cannot remove the last member from this team as noone would be left "
-#| "with the permission to change teams."
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
@@ -11502,10 +11413,8 @@ msgid "The new voucher has been created: {code}"
 msgstr "Der neue Gutschein wurde erstellt: {code}"
 
 #: pretix/control/views/vouchers.py:242
-#, fuzzy
-#| msgid "There is no order with the given order code."
 msgid "There is no voucher with the given voucher code."
-msgstr "Es existiert keine Bestellung mit der eingegebenen Bestellnummer."
+msgstr "Es existiert kein Gutschein mit dem eingegebenen Gutscheincode."
 
 #: pretix/control/views/vouchers.py:274
 msgid "The new vouchers have been created."
@@ -12551,11 +12460,6 @@ msgid "Connect with pretixdesk"
 msgstr "Mit pretixdesk verbinden"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:56
-#, fuzzy
-#| msgid ""
-#| "If this link does not open the pretixdesk application or if you want to "
-#| "set the application up on a seperate device, copy the following code and "
-#| "paste it into the application:"
 msgid ""
 "If this link does not open the pretixdesk application or if you want to set "
 "the application up on a separate device, copy the following code and paste "
@@ -13258,8 +13162,6 @@ msgstr "Unbekannter Grund"
 
 #: pretix/plugins/stripe/views.py:51 pretix/plugins/stripe/views.py:57
 #: pretix/plugins/stripe/views.py:84 pretix/plugins/stripe/views.py:96
-#, fuzzy
-#| msgid "An error occured during connecting with Stripe, please try again."
 msgid "An error occurred during connecting with Stripe, please try again."
 msgstr ""
 "Während der Verbindung mit Stripe ist ein Fehler aufgetreten, bitte "
@@ -14360,14 +14262,12 @@ msgid "Portuguese (Brazil)"
 msgstr "Portugiesisch (Brasilien)"
 
 #: pretix/settings.py:601
-#, fuzzy
-#| msgid "Read more"
 msgid "Read access"
-msgstr "Mehr erfahren"
+msgstr "Lesezugriff"
 
 #: pretix/settings.py:602
 msgid "Write access"
-msgstr ""
+msgstr "Schreibzugriff"
 
 #~ msgctxt "subevent"
 #~ msgid "The last date of an event series can not be deleted."

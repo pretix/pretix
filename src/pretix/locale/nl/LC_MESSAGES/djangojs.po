@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-05 12:13+0000\n"
-"PO-Revision-Date: 2018-05-02 13:40+0000\n"
+"PO-Revision-Date: 2018-06-05 13:42+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
-"nl/>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,11 +124,11 @@ msgstr "Gebruik Ctrl-C om te kopiëren!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:22
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "QR-code voor lead-scanning"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:24
 msgid "Check-in QR"
-msgstr ""
+msgstr "QR-code voor check-in"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:216
 msgid "The PDF background file could not be loaded for the following reason:"
@@ -188,7 +188,7 @@ msgstr "Geen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:527
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Gebruik intern een andere naam"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
