@@ -73,6 +73,9 @@ def logged_in_client(client, event):
     ('/control/', 200),
     ('/control/settings/2fa/', 302),
     ('/control/settings/history/', 200),
+    ('/control/settings/oauth/authorized/', 200),
+    ('/control/settings/oauth/apps/', 200),
+    ('/control/settings/oauth/apps/add', 200),
 
     ('/control/global/settings/', 200),
     ('/control/global/update/', 200),

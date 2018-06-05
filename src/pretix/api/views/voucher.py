@@ -9,7 +9,6 @@ from rest_framework.filters import OrderingFilter
 
 from pretix.api.serializers.voucher import VoucherSerializer
 from pretix.base.models import Voucher
-from pretix.base.models.organizer import TeamAPIToken
 
 
 class VoucherFilter(FilterSet):
@@ -51,7 +50,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.voucher.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -69,7 +68,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.voucher.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -80,6 +79,6 @@ class VoucherViewSet(viewsets.ModelViewSet):
         instance.log_action(
             'pretix.voucher.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)

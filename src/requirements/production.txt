@@ -33,6 +33,7 @@ raven
 babel
 django-i18nfield>=1.2.1
 django-hijack==2.1.*
+django-oauth-toolkit==1.1.*
 # Stripe
 stripe==1.79.*
 # PayPal

@@ -1,0 +1,51 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+{% load i18n %}
+{% block content %}
+    {% if not error %}
+	<form class="form-signin" action="" method="post">
+        <h3>{% trans "Authorize an application" %}</h3>
+
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+
+        <p>
+            {% blocktrans trimmed with application=application.name %}
+                Do you really want to grant the application <strong>{{ application }}</strong> access to your
+                pretix account?
+            {% endblocktrans %}
+        </p>
+        <p>{% trans "The application requires the following permissions:" %}</p>
+        <ul>
+            {% for scope in scopes_descriptions %}
+                <li>{{ scope }}</li>
+            {% endfor %}
+        </ul>
+        <p>{% trans "Please select the organizer accounts this application should get access to:" %}</p>
+        {% bootstrap_field form.organizers layout="inline" %}
+
+        {% bootstrap_form_errors form layout="control" %}
+        <p class="text-danger">
+            {% blocktrans trimmed %}
+                This application has <strong>not</strong> been reviewed by the pretix team. Granting access to your
+                pretix account happens at your own risk.
+            {% endblocktrans %}
+        </p>
+
+		<div class="form-group buttons">
+            <input type="submit" class="btn btn-large btn-default" value="Cancel"/>
+            <input type="submit" class="btn btn-large btn-primary" name="allow" value="Authorize"/>
+		</div>
+	</form>
+    {% else %}
+        <form class="form-signin" action="" method="post">
+            <h3>{% trans "Error:" %} {{ error.error }}</h3>
+            <p>{{ error.description }}</p>
+        </form>
+    {% endif %}
+{% endblock %}

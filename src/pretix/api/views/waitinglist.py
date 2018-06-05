@@ -7,7 +7,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from pretix.api.serializers.waitinglist import WaitingListSerializer
-from pretix.base.models import TeamAPIToken, WaitingListEntry
+from pretix.base.models import WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 
 
@@ -45,7 +45,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.orders.waitinglist.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
 
     def perform_update(self, serializer):
@@ -55,7 +55,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.orders.waitinglist.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
 
     def perform_destroy(self, instance):
@@ -65,7 +65,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.orders.waitinglist.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 
@@ -74,7 +74,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
         try:
             self.get_object().send_voucher(
                 user=self.request.user,
-                api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+                auth=self.request.auth,
             )
         except WaitingListException as e:
             raise ValidationError(str(e))

@@ -16,7 +16,6 @@ from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.models import Checkin, CheckinList, Order, OrderPosition
-from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, perform_checkin,
 )
@@ -49,7 +48,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.checkinlist.added',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -63,7 +62,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         serializer.instance.log_action(
             'pretix.event.checkinlist.changed',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
             data=self.request.data
         )
 
@@ -71,7 +70,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         instance.log_action(
             'pretix.event.checkinlist.deleted',
             user=self.request.user,
-            api_token=(self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None),
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 

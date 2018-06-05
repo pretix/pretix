@@ -6,26 +6,12 @@ with pretix' REST API, such as authentication, pagination and similar definition
 
 .. _`rest-auth`:
 
-Obtaining an API token
-----------------------
-
-To authenticate your API requests, you need to obtain an API token. You can create a
-token in the pretix web interface on the level of organizer teams. Create a new team
-or choose an existing team that has the level of permissions the token should have and
-create a new token using the form below the list of team members:
-
-.. image:: img/token_form.png
-   :class: screenshot
-
-You can enter a description for the token to distinguish from other tokens later on.
-Once you click "Add", you will be provided with an API token in the success message.
-Copy this token, as you won't be able to retrieve it again.
-
-.. image:: img/token_success.png
-   :class: screenshot
-
 Authentication
 --------------
+
+If you're building an application for end users, we strongly recommend that you use our
+:ref:`OAuth-based authentication progress <rest-oauth>`. However, for simpler needs, you
+can also go with static API tokens that you can create on a per-team basis (see below).
 
 You need to include the API token with every request to pretix' API in the ``Authorization`` header
 like the following:
@@ -43,6 +29,24 @@ like the following:
           third-party clients and might change or be removed at any time. We plan on
           adding OAuth2 support in the future for user-level authentication. If you want
           to use session authentication, be sure to comply with Django's `CSRF policies`_.
+
+Obtaining an API token
+----------------------
+
+To authenticate your API requests, you need to obtain an API token. You can create a
+token in the pretix web interface on the level of organizer teams. Create a new team
+or choose an existing team that has the level of permissions the token should have and
+create a new token using the form below the list of team members:
+
+.. image:: img/token_form.png
+    :class: screenshot
+
+You can enter a description for the token to distinguish from other tokens later on.
+Once you click "Add", you will be provided with an API token in the success message.
+Copy this token, as you won't be able to retrieve it again.
+
+.. image:: img/token_success.png
+    :class: screenshot
 
 Permissions
 -----------

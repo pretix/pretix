@@ -1,0 +1,16 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Update an application" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Update an application" %}</h1>
+    <form class="form-horizontal" method="post" action="">
+        {% csrf_token %}
+        {% bootstrap_form form layout='control' %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

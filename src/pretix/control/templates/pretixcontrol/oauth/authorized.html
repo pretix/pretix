@@ -1,0 +1,65 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Authorized applications" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Authorized applications" %}</h1>
+    <p>
+        <a href="{% url "control:user.settings.oauth.apps" %}" class="btn btn-default">
+            {% trans "Manage your own apps" %}
+        </a>
+    </p>
+    {% if tokens %}
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Permissions" %}</th>
+                    <th>{% trans "Organizers" %}</th>
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for token in tokens %}
+                    <tr>
+                        <td><strong>{{ token.application.name }}</strong></td>
+                        <td>
+                            <ul>
+                                {% for scope in token.scopes_descriptions %}
+                                    <li>
+                                        {{ scope }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                {% for o in token.organizers.all %}
+                                    <li>
+                                        <a href="{% url "control:organizer" organizer=o.slug %}">
+                                            {{ o.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:user.settings.oauth.revoke" pk=token.pk %}"
+                               class="btn btn-danger btn-sm">{% trans "Revoke access" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    No applications have access to your pretix account.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}

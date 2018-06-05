@@ -1,9 +1,9 @@
 from django.conf.urls import include, url
 
 from pretix.control.views import (
-    auth, checkin, dashboards, event, global_settings, item, main, orders,
-    organizer, pdf, search, shredder, subevents, typeahead, user, users,
-    vouchers, waitinglist,
+    auth, checkin, dashboards, event, global_settings, item, main, oauth,
+    orders, organizer, pdf, search, shredder, subevents, typeahead, user,
+    users, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -35,6 +35,20 @@ urlpatterns = [
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
     url(r'^settings/notifications/off/(?P<id>\d+)/(?P<token>[^/]+)/$', user.UserNotificationsDisableView.as_view(),
         name='user.settings.notifications.off'),
+    url(r'^settings/oauth/authorized/$', oauth.AuthorizationListView.as_view(),
+        name='user.settings.oauth.list'),
+    url(r'^settings/oauth/authorized/(?P<pk>\d+)/revoke$', oauth.AuthorizationRevokeView.as_view(),
+        name='user.settings.oauth.revoke'),
+    url(r'^settings/oauth/apps/$', oauth.OAuthApplicationListView.as_view(),
+        name='user.settings.oauth.apps'),
+    url(r'^settings/oauth/apps/add$', oauth.OAuthApplicationRegistrationView.as_view(),
+        name='user.settings.oauth.apps.register'),
+    url(r'^settings/oauth/apps/(?P<pk>\d+)/$', oauth.OAuthApplicationUpdateView.as_view(),
+        name='user.settings.oauth.app'),
+    url(r'^settings/oauth/apps/(?P<pk>\d+)/disable$', oauth.OAuthApplicationDeleteView.as_view(),
+        name='user.settings.oauth.app.disable'),
+    url(r'^settings/oauth/apps/(?P<pk>\d+)/roll$', oauth.OAuthApplicationRollView.as_view(),
+        name='user.settings.oauth.app.roll'),
     url(r'^settings/2fa/$', user.User2FAMainView.as_view(), name='user.settings.2fa'),
     url(r'^settings/2fa/add$', user.User2FADeviceAddView.as_view(), name='user.settings.2fa.add'),
     url(r'^settings/2fa/enable', user.User2FAEnableView.as_view(), name='user.settings.2fa.enable'),
