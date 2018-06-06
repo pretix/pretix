@@ -60,7 +60,6 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate_order(self, order: Order):
         merger = PdfFileMerger()
         with language(order.locale):
-            buffer = BytesIO()
             for op in order.positions.all():
                 if op.addon_to_id and not self.event.settings.ticket_download_addons:
                     continue
