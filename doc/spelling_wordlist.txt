@@ -43,6 +43,7 @@ inofficial
 invalidations
 iterable
 Jimdo
+libpretixprint
 libsass
 linters
 memcached

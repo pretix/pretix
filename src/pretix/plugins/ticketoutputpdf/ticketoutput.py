@@ -1,18 +1,25 @@
+import json
 import logging
 from io import BytesIO
 
 from django.contrib.staticfiles import finders
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from PyPDF2 import PdfFileMerger
 from reportlab.pdfgen.canvas import Canvas
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
 from pretix.base.ticketoutput import BaseTicketOutput
+from pretix.plugins.ticketoutputpdf.models import (
+    TicketLayout, TicketLayoutItem,
+)
 
 logger = logging.getLogger('pretix.plugins.ticketoutputpdf')
 
@@ -27,35 +34,61 @@ class PdfTicketOutput(BaseTicketOutput):
         self.override_background = override_background
         super().__init__(event)
 
+    @cached_property
+    def layout_map(self):
+        return {
+            bi.item_id: bi.layout
+            for bi in TicketLayoutItem.objects.select_related('layout').filter(item__event=self.event)
+        }
+
+    @cached_property
+    def default_layout(self):
+        try:
+            return self.event.ticket_layouts.get(default=True)
+        except TicketLayout.DoesNotExist:
+            return TicketLayout(
+                layout=json.dumps(self._default_layout())
+            )
+
     def _register_fonts(self):
         Renderer._register_fonts()
 
-    def _draw_page(self, canvas: Canvas, op: OrderPosition, order: Order):
-        objs = self.override_layout or self.settings.get('layout', as_type=list) or self._legacy_layout()
+    def _draw_page(self, layout: TicketLayout, canvas: Canvas, op: OrderPosition, order: Order):
+        objs = self.override_layout or json.loads(layout.layout) or self._legacy_layout()
         Renderer(self.event, objs, None).draw_page(canvas, order, op)
 
     def generate_order(self, order: Order):
-        buffer = BytesIO()
-        p = self._create_canvas(buffer)
+        merger = PdfFileMerger()
         with language(order.locale):
             for op in order.positions.all():
                 if op.addon_to_id and not self.event.settings.ticket_download_addons:
                     continue
                 if not op.item.admission and not self.event.settings.ticket_download_nonadm:
                     continue
-                self._draw_page(p, op, order)
-        p.save()
-        outbuffer = self._render_with_background(buffer)
+
+                buffer = BytesIO()
+                p = self._create_canvas(buffer)
+                layout = self.layout_map.get(op.item_id, self.default_layout)
+                self._draw_page(layout, p, op, order)
+                p.save()
+                outbuffer = self._render_with_background(layout, buffer)
+                merger.append(ContentFile(outbuffer.read()))
+
+        outbuffer = BytesIO()
+        merger.write(outbuffer)
+        merger.close()
+        outbuffer.seek(0)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     def generate(self, op):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         order = op.order
+        layout = self.layout_map.get(op.item_id, self.default_layout)
         with language(order.locale):
-            self._draw_page(p, op, order)
+            self._draw_page(layout, p, op, order)
         p.save()
-        outbuffer = self._render_with_background(buffer)
+        outbuffer = self._render_with_background(layout, buffer)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     def _create_canvas(self, buffer):
@@ -71,11 +104,11 @@ class PdfTicketOutput(BaseTicketOutput):
     def _get_default_background(self):
         return open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
 
-    def _render_with_background(self, buffer, title=_('Ticket')):
-        bg_file = self.settings.get('background', as_type=File)
+    def _render_with_background(self, layout: TicketLayout, buffer, title=_('Ticket')):
+        bg_file = layout.background
         if self.override_background:
             bgf = default_storage.open(self.override_background.name, "rb")
-        elif isinstance(bg_file, File):
+        elif isinstance(bg_file, File) and bg_file.name:
             bgf = default_storage.open(bg_file.name, "rb")
         else:
             bgf = self._get_default_background()

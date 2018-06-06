@@ -1,26 +1,28 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.plugins.badges.models import BadgeItem, BadgeLayout
+from pretix.base.models import CachedCombinedTicket, CachedTicket
+
+from .models import TicketLayout, TicketLayoutItem
 
 
-class BadgeLayoutForm(forms.ModelForm):
+class TicketLayoutForm(forms.ModelForm):
     class Meta:
-        model = BadgeLayout
+        model = TicketLayout
         fields = ('name',)
 
 
-class BadgeItemForm(forms.ModelForm):
+class TicketLayoutItemForm(forms.ModelForm):
     class Meta:
-        model = BadgeItem
+        model = TicketLayoutItem
         fields = ('layout',)
 
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
-        self.fields['layout'].label = _('Badge layout')
+        self.fields['layout'].label = _('PDF ticket layout')
         self.fields['layout'].empty_label = _('(Event default)')
-        self.fields['layout'].queryset = event.badge_layouts.all()
+        self.fields['layout'].queryset = event.ticket_layouts.all()
         self.fields['layout'].required = False
 
     def save(self, commit=True):
@@ -31,3 +33,9 @@ class BadgeItemForm(forms.ModelForm):
                 return
         else:
             return super().save(commit=commit)
+        CachedTicket.objects.filter(
+            order_position__item_id=self.instance.item, provider='pdf'
+        ).delete()
+        CachedCombinedTicket.objects.filter(
+            order__positions__item=self.instance.item
+        ).delete()

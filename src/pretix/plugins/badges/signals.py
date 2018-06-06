@@ -70,6 +70,10 @@ def event_copy_data_receiver(sender, other, item_map, **kwargs):
         bl.pk = None
         bl.event = sender
         bl.save()
+
+        if bl.background and bl.background.name:
+            bl.background.save('background.pdf', bl.background)
+
         layout_map[oldid] = bl
 
     for bi in BadgeItem.objects.filter(item__event=other):
