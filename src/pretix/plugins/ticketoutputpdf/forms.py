@@ -34,7 +34,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         else:
             return super().save(commit=commit)
         CachedTicket.objects.filter(
-            item=self.instance.item, provider='pdf'
+            order_position__item_id=self.instance.item, provider='pdf'
         ).delete()
         CachedCombinedTicket.objects.filter(
             order__positions__item=self.instance.item

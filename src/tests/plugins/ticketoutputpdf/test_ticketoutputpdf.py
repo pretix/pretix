@@ -13,7 +13,7 @@ from pretix.plugins.ticketoutputpdf.ticketoutput import PdfTicketOutput
 
 
 @pytest.fixture
-def env():
+def env0():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
@@ -39,8 +39,8 @@ def env():
 
 
 @pytest.mark.django_db
-def test_generate_pdf(env):
-    event, order = env
+def test_generate_pdf(env0):
+    event, order = env0
     event.settings.set('ticketoutput_pdf_code_x', 30)
     event.settings.set('ticketoutput_pdf_code_y', 50)
     event.settings.set('ticketoutput_pdf_code_s', 2)

@@ -78,7 +78,9 @@ def copy_item(sender, source, target, **kwargs):
 
 
 @receiver(signal=event_copy_data, dispatch_uid="pretix_ticketoutputpdf_copy_data")
-def event_copy_data_receiver(sender, other, item_map, question_map, **kwargs):
+def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs):
+    if sender.ticket_layouts.exists():  # idempotency
+        return
     layout_map = {}
     for bl in other.ticket_layouts.all():
         oldid = bl.pk
@@ -102,6 +104,7 @@ def event_copy_data_receiver(sender, other, item_map, question_map, **kwargs):
 
     for bi in TicketLayoutItem.objects.filter(item__event=other):
         TicketLayoutItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id))
+    return layout_map
 
 
 @receiver(signal=logentry_display, dispatch_uid="pretix_ticketoutputpdf_logentry_display")

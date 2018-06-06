@@ -320,7 +320,7 @@ class CompatibleJSONField(serializers.JSONField):
 
     def to_representation(self, value):
         if value:
-            return json.load(value)
+            return json.loads(value)
         return value
 
 

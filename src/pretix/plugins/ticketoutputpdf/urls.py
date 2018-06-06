@@ -1,5 +1,7 @@
 from django.conf.urls import url
 
+from pretix.api.urls import event_router
+from pretix.plugins.ticketoutputpdf.api import TicketLayoutViewSet
 from pretix.plugins.ticketoutputpdf.views import (
     LayoutCreate, LayoutDelete, LayoutEditorView, LayoutGetDefault,
     LayoutListView, LayoutSetDefault,
@@ -19,3 +21,4 @@ urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/editor',
         LayoutEditorView.as_view(), name='edit'),
 ]
+event_router.register('ticketlayouts', TicketLayoutViewSet)
