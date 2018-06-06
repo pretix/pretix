@@ -1011,7 +1011,7 @@ class Quota(LoggedModel):
             self.cached_availability_number = res[1]
             self.cached_availability_time = now_dt
             if self.size is None:
-                self.cached_availability_paid_orders = self.count_pending_orders()
+                self.cached_availability_paid_orders = self.count_paid_orders()
             self.save(
                 update_fields=[
                     'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
