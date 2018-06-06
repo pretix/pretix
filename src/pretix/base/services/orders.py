@@ -300,8 +300,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, oauth_
                 'secret': order.secret
             })
         }
-        email_subject = _('Order canceled: %(code)s') % {'code': order.code}
         with language(order.locale):
+            email_subject = _('Order canceled: %(code)s') % {'code': order.code}
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
