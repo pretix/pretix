@@ -6,7 +6,9 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import (
+    get_language, pgettext_lazy, ugettext_lazy as _,
+)
 from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
@@ -292,7 +294,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             return self.get(request, *args, **kwargs)
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
-                       invoice_address=self.invoice_address.pk)
+                       invoice_address=self.invoice_address.pk, locale=get_language())
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):

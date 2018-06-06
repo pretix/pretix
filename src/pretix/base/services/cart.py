@@ -10,7 +10,7 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext as _
 
-from pretix.base.i18n import LazyLocaleException, language
+from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemVariation, Voucher,
 )
@@ -27,8 +27,16 @@ from pretix.presale.signals import (
 )
 
 
-class CartError(LazyLocaleException):
-    pass
+class CartError(Exception):
+    def __init__(self, *args):
+        msg = args[0]
+        msgargs = args[1] if len(args) > 1 else None
+        self.args = args
+        if msgargs:
+            msg = _(msg) % msgargs
+        else:
+            msg = _(msg)
+        super().__init__(msg)
 
 
 error_messages = {
