@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-06 14:14+0000\n"
-"PO-Revision-Date: 2018-06-05 13:39+0000\n"
+"PO-Revision-Date: 2018-06-07 15:19+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11439,10 +11439,8 @@ msgid "Badge layout"
 msgstr "Badge-lay-out"
 
 #: pretix/plugins/badges/forms.py:22 pretix/plugins/ticketoutputpdf/forms.py:24
-#, fuzzy
-#| msgid "Event date"
 msgid "(Event default)"
-msgstr "Evenementdatum"
+msgstr "(Standaardlay-out van evenement)"
 
 #: pretix/plugins/badges/signals.py:108
 msgid "Badge layout created."
@@ -13151,18 +13149,14 @@ msgid "All paid PDF tickets in one file"
 msgstr "Alle betaalde PDF-tickets in één bestand"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:23
-#, fuzzy
-#| msgid "PDF ticket output"
 msgid "PDF ticket layout"
-msgstr "PDF-ticketsuitvoer"
+msgstr "PDF-ticketlay-out"
 
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:185
-#, fuzzy
-#| msgid "Default ticket layout"
 msgid "Default layout"
-msgstr "Standaard ticketlay-out"
+msgstr "Standaardlay-out"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:50
 #, python-brace-format
@@ -13175,54 +13169,40 @@ msgid "<Answer: {question}>"
 msgstr "<Antwoord: {question}>"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:116
-#, fuzzy
-#| msgid "Badge layout created."
 msgid "Ticket layout created."
-msgstr "Badge-lay-out aangemaakt."
+msgstr "Ticketlay-out aangemaakt."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:117
-#, fuzzy
-#| msgid "Badge layout deleted."
 msgid "Ticket layout deleted."
-msgstr "Badge-lay-out verwijderd."
+msgstr "Ticketlay-out verwijderd."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:118
-#, fuzzy
-#| msgid "Badge layout changed."
 msgid "Ticket layout changed."
-msgstr "Badge-lay-out veranderd."
+msgstr "Ticketlay-out veranderd."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:131
-#, fuzzy, python-brace-format
-#| msgid "Badge layout {val}"
+#, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "Badge-lay-out {val}"
+msgstr "Ticketlay-out {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
-#, fuzzy
-#| msgid "Default ticket layout"
 msgid "Ticket layout"
-msgstr "Standaard ticketlay-out"
+msgstr "Ticketlay-out"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the badge layout <strong>%(layout)s</"
-#| "strong>?"
+#, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Weet u zeker dat u de badge-lay-out <strong>%(layout)s</strong> wilt "
-"verwijderen?"
+"Weet u zeker dat u de lay-out <strong>%(layout)s</strong> wilt verwijderen?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
-#, fuzzy, python-format
-#| msgid "Badge layout: %(name)s"
+#, python-format
 msgid "Ticket layout: %(name)s"
-msgstr "Badge-lay-out: %(name)s"
+msgstr "Ticketlay-out: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
@@ -13245,31 +13225,25 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Change default layout in a new tab"
-msgstr ""
+msgstr "Bewerk de standaardlay-out in een nieuw tabblad"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:22
 msgid "Advanced mode (multiple layouts)"
-msgstr ""
+msgstr "Geavanceerde modus (meerdere lay-outs)"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
-#, fuzzy
-#| msgid "Default ticket layout"
 msgid "Ticket layouts"
-msgstr "Standaard ticketlay-out"
+msgstr "Ticketlay-outs"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
-#, fuzzy
-#| msgid "You haven't created any badge layouts yet."
 msgid "You haven't created any layouts yet."
-msgstr "U heeft nog geen badge-lay-outs gemaakt."
+msgstr "U heeft nog geen lay-outs aangemaakt."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create a new layout"
-msgstr "Maak een nieuw account"
+msgstr "Maak een nieuwe lay-out"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:29
 msgid "PDF output"
@@ -13280,30 +13254,22 @@ msgid "Default ticket layout"
 msgstr "Standaard ticketlay-out"
 
 #: pretix/plugins/ticketoutputpdf/views.py:98
-#, fuzzy
-#| msgid "The new badge layout has been created."
 msgid "The new ticket layout has been created."
-msgstr "De nieuwe badge-lay-out is aangemaakt."
+msgstr "De nieuwe ticketlay-out is aangemaakt."
 
 #: pretix/plugins/ticketoutputpdf/views.py:126
 #: pretix/plugins/ticketoutputpdf/views.py:156
 #: pretix/plugins/ticketoutputpdf/views.py:204
-#, fuzzy
-#| msgid "The requested badge layout does not exist."
 msgid "The requested layout does not exist."
-msgstr "De gevraagde badge-lay-out bestaat niet."
+msgstr "De gevraagde lay-out bestaat niet."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
-#, fuzzy
-#| msgid "The selected badge layout been deleted."
 msgid "The selected ticket layout been deleted."
-msgstr "De gekozen badge-lay-out is verwijderd."
+msgstr "De gekozen ticketlay-out is verwijderd."
 
 #: pretix/plugins/ticketoutputpdf/views.py:208
-#, fuzzy
-#| msgid "Badge layout: {}"
 msgid "Ticket PDF layout: {}"
-msgstr "Badge-lay-out: {}"
+msgstr "PDF-ticketlay-out: {}"
 
 #: pretix/presale/checkoutflow.py:50
 msgctxt "checkoutflow"
