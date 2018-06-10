@@ -288,8 +288,7 @@ class CSVCheckinList(BaseCheckinList):
         if form_data['secrets']:
             headers.append(_('Secret'))
 
-        if self.event.settings.attendee_emails_asked:
-            headers.append(_('E-mail'))
+        headers.append(_('E-mail'))
 
         if self.event.has_subevents:
             headers.append(pgettext('subevent', 'Date'))
@@ -319,8 +318,7 @@ class CSVCheckinList(BaseCheckinList):
                 row.append(_('Yes') if op.order.status == Order.STATUS_PAID else _('No'))
             if form_data['secrets']:
                 row.append(op.secret)
-            if self.event.settings.attendee_emails_asked:
-                row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else ''))
+            row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '') or op.order.email or '')
             if self.event.has_subevents:
                 row.append(str(op.subevent))
             acache = {}
