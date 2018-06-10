@@ -66,10 +66,13 @@ class LogEntry(models.Model):
     def display_object(self):
         from . import Order, Voucher, Quota, Item, ItemCategory, Question, Event, TaxRule, SubEvent
 
-        if self.content_type.model_class() is Event:
-            return ''
+        try:
+            if self.content_type.model_class() is Event:
+                return ''
 
-        co = self.content_object
+            co = self.content_object
+        except:
+            return ''
         a_map = None
         a_text = None
 
