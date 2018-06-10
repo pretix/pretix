@@ -5,7 +5,10 @@ $(function () {
 
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
 
-    $("details summary, details summary a").click(function (e) {
+    $("details summary, details summary a[data-toggle=variations]").click(function (e) {
+        if (this.tagName !== "A" && e.target.tagName === "A") {
+            return true;
+        }
         var $details = $(this).closest("details");
         var isOpen = $details.prop("open");
         var $detailsNotSummary = $details.children(':not(summary)');
