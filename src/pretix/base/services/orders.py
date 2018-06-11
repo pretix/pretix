@@ -646,24 +646,25 @@ def send_download_reminders(sender, **kwargs):
             if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
                 continue
 
-            o.download_reminder_sent = True
-            o.save()
-            email_template = e.settings.mail_text_download_reminder
-            email_context = {
-                'event': o.event.name,
-                'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                    'order': o.code,
-                    'secret': o.secret
-                }),
-            }
-            email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
-            try:
-                o.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.download_reminder_sent'
-                )
-            except SendMailException:
-                logger.exception('Reminder email could not be sent')
+            with language(o.locale):
+                o.download_reminder_sent = True
+                o.save()
+                email_template = e.settings.mail_text_download_reminder
+                email_context = {
+                    'event': o.event.name,
+                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                        'order': o.code,
+                        'secret': o.secret
+                    }),
+                }
+                email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
+                try:
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.download_reminder_sent'
+                    )
+                except SendMailException:
+                    logger.exception('Reminder email could not be sent')
 
 
 class OrderChangeManager:
