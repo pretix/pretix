@@ -490,6 +490,9 @@ Order endpoints
      ``"n"`` for pending or ``"p"`` for paid. If you create a paid order, the ``order_paid`` signal will **not** be
      sent out to plugins and no email will be sent. If you want that behavior, create an unpaid order and then call
      the ``mark_paid`` API method.
+   * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
+     order creation is successful. Any quotas that become free by this operation will be credited to your order
+     creation.
    * ``email``
    * ``locale``
    * ``payment_provider`` – The identifier of the payment provider set for this order. This needs to be an existing
