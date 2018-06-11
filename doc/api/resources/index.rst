@@ -20,3 +20,4 @@ Resources and endpoints
    vouchers
    checkinlists
    waitinglist
+   carts

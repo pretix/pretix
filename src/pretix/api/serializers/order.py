@@ -13,7 +13,7 @@ from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     Question, QuestionAnswer, Quota,
 )
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import CartPosition, OrderFee
 from pretix.base.pdf import get_variables
 from pretix.base.signals import register_ticket_outputs
 
@@ -340,11 +340,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     comment = serializers.CharField(required=False, allow_blank=True)
     payment_provider = serializers.CharField(required=True)
     payment_info = CompatibleJSONField(required=False)
+    consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
-                  'invoice_address', 'positions', 'checkin_attention', 'payment_info')
+                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts')
 
     def validate_payment_provider(self, pp):
         if pp not in self.context['event'].get_payment_providers():
@@ -399,15 +400,27 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         else:
             ia = None
 
-        with self.context['event'].lock():
+        with self.context['event'].lock() as now_dt:
             quotadiff = Counter()
+
+            consume_carts = validated_data.pop('consume_carts', [])
+            delete_cps = []
+            if consume_carts:
+                for cp in CartPosition.objects.filter(event=self.context['event'], cart_id__in=consume_carts):
+                    quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
+                              if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
+                    if cp.expires > now_dt:
+                        quotadiff.subtract(quotas)
+                    delete_cps.append(cp)
+
             for pos_data in positions_data:
                 new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
                               if pos_data.get('variation')
                               else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
                 quotadiff.update(new_quotas)
 
-                for quota, diff in quotadiff.items():
+            for quota, diff in quotadiff.items():
+                if diff > 0:
                     avail = quota.availability()
                     if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                         raise ValidationError(
@@ -445,6 +458,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     options = answ_data.pop('options')
                     answ = pos.answers.create(**answ_data)
                     answ.options.add(*options)
+
+            for cp in delete_cps:
+                cp.delete()
         for fee_data in fees_data:
             f = OrderFee(**fee_data)
             f.order = order

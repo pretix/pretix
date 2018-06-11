@@ -4,6 +4,8 @@ from django.apps import apps
 from django.conf.urls import include, url
 from rest_framework import routers
 
+from pretix.api.views import cart
+
 from .views import (
     checkin, event, item, oauth, order, organizer, voucher, waitinglist,
 )
@@ -28,6 +30,7 @@ event_router.register(r'invoices', order.InvoiceViewSet)
 event_router.register(r'taxrules', event.TaxRuleViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 event_router.register(r'checkinlists', checkin.CheckinListViewSet)
+event_router.register(r'cartpositions', cart.CartPositionViewSet)
 
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet)

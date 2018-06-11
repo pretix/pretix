@@ -11,7 +11,7 @@ from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition, Question
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import CartPosition, OrderFee
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
@@ -1616,6 +1616,38 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
     )
     assert resp.status_code == 400
     assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+
+
+@pytest.mark.django_db
+def test_order_create_quota_consume_cart(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    cr = CartPosition.objects.create(
+        event=event, cart_id="uxLJBUMEcnxOLI2EuxLYN1hWJq9GKu4yWL9FEgs2m7M0vdFi@api", item=item,
+        price=23,
+        expires=now() + datetime.timedelta(hours=3)
+    )
+
+    quota.size = 1
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+
+    res['consume_carts'] = [cr.cart_id]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert not CartPosition.objects.filter(pk=cr.pk).exists()
 
 
 @pytest.mark.django_db
