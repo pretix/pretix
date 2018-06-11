@@ -1,10 +1,16 @@
+from datetime import timedelta
+
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer,
 )
+from pretix.base.models import Quota
 from pretix.base.models.orders import CartPosition
 
 
@@ -20,6 +26,7 @@ class CartPositionSerializer(I18nAwareModelSerializer):
 
 class CartPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
+    expires = serializers.DateTimeField(required=False)
 
     class Meta:
         model = CartPosition
@@ -33,12 +40,36 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             while CartPosition.objects.filter(cart_id=cid).exists():
                 cid = "{}@api".format(get_random_string(48))
             validated_data['cart_id'] = cid
-        cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
+
+        if not validated_data.get('expires'):
+            validated_data['expires'] = now() + timedelta(
+                minutes=self.context['event'].settings.get('reservation_time', as_type=int)
+            )
+
+        with self.context['event'].lock():
+            new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
+                          if validated_data.get('variation')
+                          else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
+            for quota in new_quotas:
+                avail = quota.availability()
+                if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
+                    raise ValidationError(
+                        ugettext_lazy('There is not enough quota available on quota "{}" to perform '
+                                      'the operation.').format(
+                            quota.name
+                        )
+                    )
+            cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
+
         for answ_data in answers_data:
             options = answ_data.pop('options')
             answ = cp.answers.create(**answ_data)
             answ.options.add(*options)
         return cp
+
+    def validate_cart_id(self, cid):
+        if cid and not cid.endswith('@api'):
+            raise ValidationError('Cart ID should end in @api or be empty.')
 
     def validate_item(self, item):
         if item.event != self.context['event']:

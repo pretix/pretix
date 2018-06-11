@@ -1,8 +1,7 @@
 from django.db import transaction
-from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 
 from pretix.api.serializers.cart import (
@@ -11,7 +10,7 @@ from pretix.api.serializers.cart import (
 from pretix.base.models import CartPosition
 
 
-class CartPositionViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = CartPositionSerializer
     queryset = CartPosition.objects.none()
     filter_backends = (OrderingFilter,)
@@ -21,11 +20,10 @@ class CartPositionViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
 
-    def get_object(self):
-        return get_object_or_404(
-            CartPosition,
+    def get_queryset(self):
+        return CartPosition.objects.filter(
             event=self.request.event,
-            pk=self.kwargs['id']
+            cart_id__endswith="@api"
         )
 
     def get_serializer_context(self):

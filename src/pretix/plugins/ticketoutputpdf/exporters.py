@@ -25,7 +25,8 @@ class AllTicketsPDF(BaseExporter):
                 continue
             if not op.item.admission and not self.event.settings.ticket_download_nonadm:
                 continue
-            o._draw_page(p, op, op.order)
+            layout = o.layout_map.get(op.item_id, o.default_layout)
+            o._draw_page(layout, p, op, op.order)
 
         p.save()
         outbuffer = o._render_with_background(buffer)

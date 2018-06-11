@@ -580,11 +580,11 @@ Order endpoints
           {
             "positionid": 1,
             "item": 1,
-            "variation": None,
+            "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
-            "attendee_email": None,
-            "addon_to": None,
+            "attendee_email": null,
+            "addon_to": null,
             "answers": [
               {
                 "question": 1,
@@ -592,7 +592,7 @@ Order endpoints
                 "options": []
               }
             ],
-            "subevent": None
+            "subevent": null
           }
         ],
       }
