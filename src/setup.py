@@ -112,6 +112,7 @@ setup(
         'vat_moss==0.11.0',
         'django-hijack==2.1.*',
         'django-oauth-toolkit==1.1.*',
+        'idna==2.6',  # required by current requests
     ],
     extras_require={
         'dev': [
