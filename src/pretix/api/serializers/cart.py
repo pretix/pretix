@@ -50,6 +50,12 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
                           if validated_data.get('variation')
                           else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
+            if len(new_quotas) == 0:
+                raise ValidationError(
+                    ugettext_lazy('The product "{}" is not assigned to a quota.').format(
+                        str(validated_data.get('item'))
+                    )
+                )
             for quota in new_quotas:
                 avail = quota.availability()
                 if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):

@@ -189,7 +189,8 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     assert [] == resp.data['results']
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
-        organizer.slug, event.slug, (order.last_modified - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+        organizer.slug, event.slug,
+        (order.last_modified - datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
     ))
     assert [res] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
@@ -197,7 +198,8 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     ))
     assert [res] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?modified_since={}'.format(
-        organizer.slug, event.slug, (order.last_modified + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+        organizer.slug, event.slug,
+        (order.last_modified + datetime.timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
     ))
     assert [] == resp.data['results']
 
@@ -1141,6 +1143,7 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
     assert resp.data == {'positions': [{'item': ['The specified item does not belong to this event.']}]}
 
     var2 = item2.variations.create(value="A")
+    quota.variations.add(var2)
 
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['variation'] = var2.pk
@@ -1150,11 +1153,20 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'non_field_errors': ['You cannot specify a variation for this item.']}]}
+    assert resp.data == {'positions': [{'variation': ['You cannot specify a variation for this item.']}]}
 
     var1 = item.variations.create(value="A")
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['variation'] = var1.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'positions': [{'item': ['The product "Budget Ticket" is not assigned to a quota.']}]}
+
+    quota.variations.add(var1)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1169,7 +1181,8 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'non_field_errors': ['The specified variation does not belong to the specified item.']}]}
+    assert resp.data == {
+        'positions': [{'variation': ['The specified variation does not belong to the specified item.']}]}
 
     res['positions'][0]['variation'] = None
     resp = token_client.post(
@@ -1178,7 +1191,7 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'non_field_errors': ['You should specify a variation for this item.']}]}
+    assert resp.data == {'positions': [{'variation': ['You should specify a variation for this item.']}]}
 
 
 @pytest.mark.django_db
@@ -1253,9 +1266,18 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': ['If you set addon_to, you need to make sure that the '
-                                       'referenced position ID exists and is transmitted directly '
-                                       'before its add-ons.']}
+    assert resp.data == {
+        'positions': [
+            {},
+            {
+                'addon_to': [
+                    'If you set addon_to, you need to make sure that the '
+                    'referenced position ID exists and is transmitted directly '
+                    'before its add-ons.'
+                ]
+            }
+        ]
+    }
 
     res['positions'] = [
         {
@@ -1285,7 +1307,10 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': ['If you set addon_to, you need to specify position IDs manually.']}
+    assert resp.data == {'positions': [
+        {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]},
+        {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]}
+    ]}
 
     res['positions'] = [
         {
@@ -1314,7 +1339,14 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': ['If you set position IDs manually, you need to do so for all positions.']}
+    assert resp.data == {
+        'positions': [
+            {},
+            {
+                'positionid': ['If you set position IDs manually, you need to do so for all positions.']
+            }
+        ]
+    }
 
     res['positions'] = [
         {
@@ -1344,7 +1376,14 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': ['Position IDs need to be consecutive.']}
+    assert resp.data == {
+        'positions': [
+            {},
+            {
+                'positionid': ['Position IDs need to be consecutive.']
+            }
+        ]
+    }
 
 
 @pytest.mark.django_db
@@ -1358,7 +1397,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'question': ['The specified question does not belong to this event.']}]}]}
+    assert resp.data == {
+        'positions': [{'answers': [{'question': ['The specified question does not belong to this event.']}]}]}
 
     res['positions'][0]['answers'][0]['question'] = question.pk
     res['positions'][0]['answers'][0]['options'] = [question.options.first().pk]
@@ -1368,7 +1408,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}]}
+    assert resp.data == {'positions': [{'answers': [
+        {'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}]}
 
     question.type = Question.TYPE_CHOICE
     question.save()
@@ -1379,7 +1420,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
+    assert resp.data == {'positions': [
+        {'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
 
     question.options.create(answer="L")
     res['positions'][0]['answers'][0]['options'] = [
@@ -1392,7 +1434,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}]}
+    assert resp.data == {
+        'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}]}
 
     question.type = Question.TYPE_FILE
     question.save()
@@ -1402,7 +1445,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['File uploads are currently not supported via the API.']}]}]}
+    assert resp.data == {
+        'positions': [{'answers': [{'non_field_errors': ['File uploads are currently not supported via the API.']}]}]}
 
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
@@ -1487,7 +1531,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}]}
+    assert resp.data == {
+        'positions': [{'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}]}
 
     question.type = Question.TYPE_DATE
     question.save()
@@ -1512,7 +1557,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY[-MM[-DD]].']}]}]}
+    assert resp.data == {'positions': [{'answers': [
+        {'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY[-MM[-DD]].']}]}]}
 
     question.type = Question.TYPE_DATETIME
     question.save()
@@ -1564,27 +1610,13 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': [{'answers': [{'non_field_errors': ['Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}]}]}
+    assert resp.data == {'positions': [{'answers': [
+        {'non_field_errors': ['Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}]}]}
 
 
 @pytest.mark.django_db
 def test_order_create_quota_validation(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
-    res['positions'][0]['item'] = item.pk
-    res['positions'][0]['answers'][0]['question'] = question.pk
-
-    quota.size = 0
-    quota.save()
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 400
-    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
-
-    quota.size = 1
-    quota.save()
     res['positions'] = [
         {
             "positionid": 1,
@@ -1609,13 +1641,36 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
             "subevent": None
         }
     ]
+
+    quota.size = 0
+    quota.save()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+    assert resp.data == {
+        'positions': [
+            {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']},
+            {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']},
+        ]
+    }
+
+    quota.size = 1
+    quota.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {},
+            {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']},
+        ]
+    }
 
 
 @pytest.mark.django_db
@@ -1638,7 +1693,11 @@ def test_order_create_quota_consume_cart(token_client, organizer, event, item, q
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+    assert resp.data == {
+        'positions': [
+            {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']},
+        ]
+    }
 
     res['consume_carts'] = [cr.cart_id]
     resp = token_client.post(

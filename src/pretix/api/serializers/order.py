@@ -3,6 +3,7 @@ from collections import Counter
 from decimal import Decimal
 
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy
 from django_countries.fields import Country
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -11,7 +12,7 @@ from rest_framework.reverse import reverse
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
-    Question, QuestionAnswer, Quota,
+    Question, QuestionAnswer,
 )
 from pretix.base.models.orders import CartPosition, OrderFee
 from pretix.base.pdf import get_variables
@@ -298,15 +299,15 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         if data.get('item'):
             if data.get('item').has_variations:
                 if not data.get('variation'):
-                    raise ValidationError('You should specify a variation for this item.')
+                    raise ValidationError({'variation': ['You should specify a variation for this item.']})
                 else:
                     if data.get('variation').item != data.get('item'):
                         raise ValidationError(
-                            'The specified variation does not belong to the specified item.'
+                            {'variation': ['The specified variation does not belong to the specified item.']}
                         )
             elif data.get('variation'):
                 raise ValidationError(
-                    'You cannot specify a variation for this item.'
+                    {'variation': ['You cannot specify a variation for this item.']}
                 )
         return data
 
@@ -368,28 +369,42 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 'An order cannot be empty.'
             )
+        errs = [{} for p in data]
         if any([p.get('positionid') for p in data]):
             if not all([p.get('positionid') for p in data]):
-                raise ValidationError(
-                    'If you set position IDs manually, you need to do so for all positions.'
-                )
+                for i, p in enumerate(data):
+                    if not p.get('positionid'):
+                        errs[i]['positionid'] = [
+                            'If you set position IDs manually, you need to do so for all positions.'
+                        ]
+                raise ValidationError(errs)
 
             last_non_add_on = None
             last_posid = 0
 
-            for p in data:
+            for i, p in enumerate(data):
                 if p['positionid'] != last_posid + 1:
-                    raise ValidationError("Position IDs need to be consecutive.")
+                    errs[i]['positionid'] = [
+                        'Position IDs need to be consecutive.'
+                    ]
                 if p.get('addon_to') and p['addon_to'] != last_non_add_on:
-                    raise ValidationError("If you set addon_to, you need to make sure that the referenced "
-                                          "position ID exists and is transmitted directly before its add-ons.")
+                    errs[i]['addon_to'] = [
+                        "If you set addon_to, you need to make sure that the referenced "
+                        "position ID exists and is transmitted directly before its add-ons."
+                    ]
 
                 if not p.get('addon_to'):
                     last_non_add_on = p['positionid']
                 last_posid = p['positionid']
 
         elif any([p.get('addon_to') for p in data]):
-            raise ValidationError("If you set addon_to, you need to specify position IDs manually.")
+            errs = [
+                {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]}
+                for p in data
+            ]
+
+        if any(errs):
+            raise ValidationError(errs)
         return data
 
     def create(self, validated_data):
@@ -405,29 +420,48 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             consume_carts = validated_data.pop('consume_carts', [])
             delete_cps = []
+            quota_avail_cache = {}
             if consume_carts:
                 for cp in CartPosition.objects.filter(event=self.context['event'], cart_id__in=consume_carts):
                     quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
                               if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
+                    for quota in quotas:
+                        if quota not in quota_avail_cache:
+                            quota_avail_cache[quota] = list(quota.availability())
+                        if quota_avail_cache[quota][1] is not None:
+                            quota_avail_cache[quota][1] += 1
                     if cp.expires > now_dt:
                         quotadiff.subtract(quotas)
                     delete_cps.append(cp)
 
-            for pos_data in positions_data:
+            errs = [{} for p in positions_data]
+
+            for i, pos_data in enumerate(positions_data):
                 new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
                               if pos_data.get('variation')
                               else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
+                if len(new_quotas) == 0:
+                    errs[i]['item'] = [ugettext_lazy('The product "{}" is not assigned to a quota.').format(
+                        str(pos_data.get('item'))
+                    )]
+                else:
+                    for quota in new_quotas:
+                        if quota not in quota_avail_cache:
+                            quota_avail_cache[quota] = list(quota.availability())
+
+                        if quota_avail_cache[quota][1] is not None:
+                            quota_avail_cache[quota][1] -= 1
+                            if quota_avail_cache[quota][1] < 0:
+                                errs[i]['item'] = [
+                                    ugettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
+                                        quota.name
+                                    )
+                                ]
+
                 quotadiff.update(new_quotas)
 
-            for quota, diff in quotadiff.items():
-                if diff > 0:
-                    avail = quota.availability()
-                    if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
-                        raise ValidationError(
-                            'There is not enough quota available on quota "{}" to perform the operation.'.format(
-                                quota.name
-                            )
-                        )
+            if any(errs):
+                raise ValidationError({'positions': errs})
 
             order = Order(event=self.context['event'], **validated_data)
             order.set_expires(subevents=[p['subevent'] for p in positions_data])

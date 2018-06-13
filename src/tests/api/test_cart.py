@@ -276,6 +276,15 @@ def test_cartpos_create_item_validation(token_client, organizer, event, item, it
             organizer.slug, event.slug
         ), format='json', data=res
     )
+    assert resp.status_code == 400
+    assert resp.data == ['The product "Budget Ticket" is not assigned to a quota.']
+
+    quota.variations.add(var1)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
     assert resp.status_code == 201
 
     res['variation'] = var2.pk
