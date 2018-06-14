@@ -83,6 +83,14 @@ class BadgeExporter(BaseExporter):
                      label=_('Include pending orders'),
                      required=False
                  )),
+                ('order_by',
+                 forms.ChoiceField(
+                     label=_('Sort by'),
+                     choices=(
+                         ('name', _('Attendee name')),
+                         ('last_name', _('Last part of attendee name')),
+                     )
+                 )),
             ]
         )
         return d
@@ -98,6 +106,12 @@ class BadgeExporter(BaseExporter):
             qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
         else:
             qs = qs.filter(order__status__in=[Order.STATUS_PAID])
+
+        if form_data.get('order_by') == 'name':
+            qs = qs.order_by('attendee_name', 'order__code')
+        elif form_data.get('order_by') == 'last_name':
+            qs = qs.order_by('order__code')
+            qs = sorted(qs, key=lambda op: op.attendee_name.split()[-1] if op.attendee_name else '')
 
         outbuffer = render_pdf(self.event, qs)
         return 'badges.pdf', 'application/pdf', outbuffer.read()
