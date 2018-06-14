@@ -244,9 +244,25 @@ class CSVCheckinList(BaseCheckinList):
     identifier = 'checkinlistcsv'
     verbose_name = ugettext_lazy('Check-in list (CSV)')
 
+    @property
+    def export_form_fields(self):
+        d = super().export_form_fields
+        d['dialect'] = forms.ChoiceField(
+            label=_('CSV dialect'),
+            choices=(
+                ('default', 'Default'),
+                ('excel', 'Excel')
+            )
+        )
+        return d
+
     def render(self, form_data: dict):
         output = io.StringIO()
-        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+        if form_data.get('dialect', '-') in csv.list_dialects():
+            writer = csv.writer(output, dialect=form_data.get('dialect'))
+        else:
+            writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+
         cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
