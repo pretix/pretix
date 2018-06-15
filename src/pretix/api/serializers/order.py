@@ -466,6 +466,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             order = Order(event=self.context['event'], **validated_data)
             order.set_expires(subevents=[p['subevent'] for p in positions_data])
             order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
+            order.meta_info = "{}"
             if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
                 order.payment_provider = 'free'
                 order.status = Order.STATUS_PAID
