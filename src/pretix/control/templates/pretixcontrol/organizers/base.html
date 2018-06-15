@@ -7,13 +7,13 @@
         {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
         {% if 'can_change_organizer_settings' in request.orgapermset %}
             <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
-                    class="btn btn-default">
+                    class="btn btn-default hidden-print">
                 <span class="fa fa-edit"></span>
                 {% trans "Edit" %}
             </a>
         {% endif %}
     </h1>
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills hidden-print">
         <li {% if "organizer" == url_name %}class="active"{% endif %}>
             <a href="{% url "control:organizer" organizer=organizer.slug %}">
                 {% trans "Events" %}
