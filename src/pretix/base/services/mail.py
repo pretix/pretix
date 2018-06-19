@@ -114,6 +114,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 headers['Reply-To'] = event.settings.contact_mail
 
             prefix = event.settings.get('mail_prefix')
+            if prefix and prefix.startswith('[') and prefix.endswith(']'):
+                prefix = prefix[1:-1]
             if prefix:
                 subject = "[%s] %s" % (prefix, subject)
 
