@@ -437,7 +437,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def provider_forms(self):
         providers = []
         for provider in self.request.event.get_payment_providers().values():
-            if not provider.is_enabled or not provider.is_allowed(self.request):
+            if not provider.is_enabled or not self._is_allowed(provider, self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
             providers.append({
@@ -480,6 +480,12 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def payment_provider(self):
         return self.request.event.get_payment_providers().get(self.cart_session['payment'])
 
+    def _is_allowed(self, prov, request):
+        try:
+            return prov.is_allowed(request, total=self._total_order_value)
+        except TypeError:
+            return prov.is_allowed(request)
+
     def is_completed(self, request, warn=False):
         self.request = request
         if 'payment' not in self.cart_session or not self.payment_provider:
@@ -488,7 +494,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             return False
         if not self.payment_provider.payment_is_valid_session(request) or \
                 not self.payment_provider.is_enabled or \
-                not self.payment_provider.is_allowed(request):
+                not self._is_allowed(self.payment_provider, request):
             if warn:
                 messages.error(request, _('The payment information you entered was incomplete.'))
             return False
@@ -499,7 +505,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for p in self.request.event.get_payment_providers().values():
             if p.is_implicit:
-                if p.is_allowed(request):
+                if self._is_allowed(p, request):
                     self.cart_session['payment'] = p.identifier
                     return False
 

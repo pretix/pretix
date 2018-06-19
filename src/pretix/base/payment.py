@@ -7,6 +7,7 @@ import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import receiver
 from django.forms import Form
 from django.http import HttpRequest
@@ -185,6 +186,28 @@ class BasePaymentProvider:
                  widget=I18nTextarea,
                  widget_kwargs={'attrs': {'rows': '2'}}
              )),
+            ('_total_min',
+             forms.DecimalField(
+                 label=_('Minimum order total'),
+                 help_text=_('This payment will be available only if the order total is equal to or exceeds the given '
+                             'value. The order total for this purpose may be computed without taking the fees imposed '
+                             'by this payment method into account.'),
+                 localize=True,
+                 required=False,
+                 decimal_places=places,
+                 widget=DecimalTextInput(places=places)
+             )),
+            ('_total_max',
+             forms.DecimalField(
+                 label=_('Maximum order total'),
+                 help_text=_('This payment will be available only if the order total is equal to or below the given '
+                             'value. The order total for this purpose may be computed without taking the fees imposed '
+                             'by this payment method into account.'),
+                 localize=True,
+                 required=False,
+                 decimal_places=places,
+                 widget=DecimalTextInput(places=places)
+             )),
             ('_fee_abs',
              forms.DecimalField(
                  label=_('Additional fee'),
@@ -304,16 +327,36 @@ class BasePaymentProvider:
 
         return True
 
-    def is_allowed(self, request: HttpRequest) -> bool:
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         """
         You can use this method to disable this payment provider for certain groups
         of users, products or other criteria. If this method returns ``False``, the
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
 
-        The default implementation checks for the _availability_date setting to be either unset or in the future.
+        The default implementation checks for the _availability_date setting to be either unset or in the future
+        and for the _total_max and _total_min requirements to be met.
+
+        :param total: The total value without the payment method fee, after taxes.
+
+        .. versionchanged:: 1.17.0
+
+           The ``total`` parameter has been added. For backwards compatibility, this method is called again
+           without this parameter if it raises a ``TypeError`` on first try.
         """
-        return self._is_still_available(cart_id=get_or_create_cart_id(request))
+        timing = self._is_still_available(cart_id=get_or_create_cart_id(request))
+        pricing = True
+
+        if (self.settings._total_max is not None or self.settings._total_min is not None) and total is None:
+            raise ImproperlyConfigured('This payment provider does not support maximum or minimum amounts.')
+
+        if self.settings._total_max is not None:
+            pricing = pricing and total <= Decimal(self.settings._total_max)
+
+        if self.settings._total_min is not None:
+            pricing = pricing and total >= Decimal(self.settings._total_min)
+
+        return timing and pricing
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
@@ -451,6 +494,12 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
+        if self.settings._total_max is not None and order.total > Decimal(self.settings._total_max):
+            return False
+
+        if self.settings._total_min is not None and order.total < Decimal(self.settings._total_min):
+            return False
+
         return self._is_still_available(order=order)
 
     def order_can_retry(self, order: Order) -> bool:
@@ -647,7 +696,7 @@ class FreeOrderProvider(BasePaymentProvider):
         mark_order_refunded(order, user=request.user)
         messages.success(request, _('The order has been marked as refunded.'))
 
-    def is_allowed(self, request: HttpRequest) -> bool:
+    def is_allowed(self, request: HttpRequest, total: Decimal) -> bool:
         from .services.cart import get_fees
 
         total = get_cart_total(request)
@@ -684,7 +733,7 @@ class BoxOfficeProvider(BasePaymentProvider):
         mark_order_refunded(order, user=request.user)
         messages.success(request, _('The order has been marked as refunded.'))
 
-    def is_allowed(self, request: HttpRequest) -> bool:
+    def is_allowed(self, request: HttpRequest, total: Decimal) -> bool:
         return False
 
     def order_change_allowed(self, order: Order) -> bool:
