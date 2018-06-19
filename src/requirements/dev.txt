@@ -7,7 +7,7 @@ pep8-naming
 flake8
 codecov
 coverage
-pytest==3.0.*
+pytest==3.6.*
 pytest-django
 isort
 pytest-mock==1.4.*

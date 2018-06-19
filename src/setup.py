@@ -124,7 +124,7 @@ setup(
             'pep8-naming',
             'coveralls',
             'coverage',
-            'pytest==2.9.*',
+            'pytest==3.6.*',
             'pytest-django',
             'isort',
             'pytest-mock',
