@@ -106,9 +106,12 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             'color': '#8E44B3'
         }
 
+        bcc = []
         if event:
             htmlctx['event'] = event
             htmlctx['color'] = event.settings.primary_color
+            if event.settings.mail_bcc:
+                bcc.append(event.settings.mail_bcc)
 
             if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail and not headers.get('Reply-To'):
                 headers['Reply-To'] = event.settings.contact_mail
@@ -153,6 +156,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
         send_task = mail_send_task.si(
             to=[email],
+            bcc=bcc,
             subject=subject,
             body=body_plain,
             html=body_html,

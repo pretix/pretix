@@ -663,6 +663,11 @@ class MailSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing emails")
     )
+    mail_bcc = forms.EmailField(
+        label=_("Bcc address"),
+        help_text=_("All emails will be sent to this address as a Bcc copy"),
+        required=False
+    )
 
     mail_text_signature = I18nFormField(
         label=_("Signature"),

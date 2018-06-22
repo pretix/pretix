@@ -225,6 +225,10 @@ DEFAULTS = {
         'default': None,
         'type': str
     },
+    'mail_bcc': {
+        'default': None,
+        'type': str
+    },
     'mail_from': {
         'default': settings.MAIL_FROM,
         'type': str
