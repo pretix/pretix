@@ -648,7 +648,7 @@ var shared_root_computed = {
         return form_target;
     },
     useIframe: function () {
-        return window.innerWidth >= 800 && (this.skip_ssl || site_is_secure());
+        return Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());
     }
 };
 
