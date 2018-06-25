@@ -11,7 +11,9 @@ def redir_view(request):
         url = signer.unsign(request.GET.get('url', ''))
     except signing.BadSignature:
         return HttpResponseBadRequest('Invalid parameter')
-    return HttpResponseRedirect(url)
+    r = HttpResponseRedirect(url)
+    r['X-Robots-Tag'] = 'noindex'
+    return r
 
 
 def safelink(url):
