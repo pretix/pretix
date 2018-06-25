@@ -3,6 +3,7 @@ import os
 from decimal import Decimal
 
 from django.contrib import messages
+from django.core.files import File
 from django.db import transaction
 from django.db.models import Sum
 from django.http import FileResponse, Http404, JsonResponse
@@ -450,7 +451,12 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
         self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {
             'invoice_data': self.invoice_form.cleaned_data,
-            'data': [f.cleaned_data for f in self.forms]
+            'data': [{
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            } for f in self.forms]
         })
         if self.invoice_form.has_changed():
             success_message = ('Your invoice address has been updated. Please contact us if you need us '
