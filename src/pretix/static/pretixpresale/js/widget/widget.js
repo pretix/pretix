@@ -255,8 +255,9 @@ Vue.component('variation', {
 
         + '<div class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="item.original_price"'
-        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id">'
+        + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
         + '</pricebox>'
+        + '<span v-if="!$root.showPrices">&nbsp;</span>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
         + '<availbox :item="item" :variation="variation"></availbox>'
@@ -299,10 +300,11 @@ Vue.component('item', {
         + '</div>'
 
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations"'
+        + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
         + '</pricebox>'
-        + '<div class="pretix-widget-pricebox" v-if="item.has_variations">{{ pricerange }}</div>'
+        + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices">{{ pricerange }}</div>'
+        + '<span v-if="!$root.showPrices">&nbsp;</span>'
         + '</div>'
         + '<div class="pretix-widget-item-availability-col">'
         + '<a v-if="show_toggle" href="#" @click.prevent="expand">'+ strings.variations + '</a>'
@@ -649,6 +651,23 @@ var shared_root_computed = {
     },
     useIframe: function () {
         return Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());
+    },
+    showPrices: function () {
+        var has_priced = false;
+        var cnt_items = 0;
+        for (var i = 0; i < this.categories.length; i++) {
+            for (var j = 0; j < this.categories[i].items.length; j++) {
+                var item = this.categories[i].items[j];
+                if (item.has_variations) {
+                    cnt_items += item.variations.length;
+                    has_priced = true;
+                } else {
+                    cnt_items++;
+                    has_priced = has_priced || item.price.gross != "0.00";
+                }
+            }
+        }
+        return has_priced || cnt_items > 1;
     }
 };
 
