@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
+from django.forms.utils import ErrorList
 from django.urls import reverse
 from django.utils.translation import (
     pgettext_lazy, ugettext as __, ugettext_lazy as _,
@@ -31,6 +32,17 @@ class CategoryForm(I18nModelForm):
             'description',
             'is_addon'
         ]
+
+
+class AdjustableTypeField(forms.Textarea):
+    def __init__(self, *args, type=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def value_from_datadict(self, data, files, name):
+        if 'type' in data and data['type'] == 'W' and 'default_value_date' in data and 'default_value_time' in data:
+            return '{} {}'.format(data['default_value_date'], data['default_value_time'])
+        else:
+            return super().value_from_datadict(data, files, name)
 
 
 class QuestionForm(I18nModelForm):
@@ -91,7 +103,8 @@ class QuestionForm(I18nModelForm):
             'items': forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
-            'dependency_value': forms.Select,
+            'default_value': AdjustableTypeField(),
+            'dependency_value': forms.Select
         }
 
 

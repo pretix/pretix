@@ -2,8 +2,11 @@
 
 function update_default_value_field() {
     let input = $('#id_default_value');
-    let common_attrs = ' name="default_value" placeholder="' + input.attr('placeholder') + '" title="' + input.attr('title') + '" id="id_default_value"';
-    let value = input.val();
+    let parent = input.parent();
+
+    let field = input.prop("tagName") == 'DIV' ? input.children().first() : input;
+    let common_attrs = ' name="default_value" placeholder="' + field.attr('placeholder') + '" title="' + field.attr('title') + '" id="id_default_value"';
+    let value = field.val();
     switch ($("#id_type").val()) {
         case 'N':
             input.replaceWith('<input type="number" class="form-control" value="' + value + '" ' + common_attrs + '>');
@@ -24,17 +27,29 @@ function update_default_value_field() {
             break;
         case 'D':
             let dateField = input.replaceWith('<input type="text" class="form-control datepickerfield" value="' + value + '" ' + common_attrs + '>');
-            form_handlers(dateField.parent());
+            form_handlers(parent);
             $('.form-group:has(#id_default_value)').show();
             break;
         case 'H':
             let timeField = input.replaceWith('<input type="text" class="form-control timepickerfield" value="' + value + '" ' + common_attrs + '>');
-            form_handlers(timeField.parent());
+            form_handlers(parent);
             $('.form-group:has(#id_default_value)').show();
             break;
         case 'W':
-            let dtField = input.replaceWith('<input type="text" class="form-control datepickerfield" value="' + value + '" ' + common_attrs + '>');
-            form_handlers(dtField.parent());
+            let split = value.split(' ');
+            let date, time;
+            if (split.length > 1) {
+                date = split[0];
+                time = split[1];
+            } else {
+                date = null;
+                time = null;
+            }
+            let dtField = input.replaceWith('<div class="splitdatetimerow" id="id_default_value">\n' +
+                '<input type="text" class="form-control splitdatetimepart datepickerfield" value="' + date + '"  name="default_value_date" placeholder="' + field.attr('placeholder') + '" title="' + field.attr('title') + '">\n' +
+                '<input type="text" class="form-control splitdatetimepart timepickerfield" value="' + time + '"  name="default_value_time" placeholder="' + field.attr('placeholder') + '" title="' + field.attr('title') + '">\n' +
+                '</div>\n');
+            form_handlers(parent);
             $('.form-group:has(#id_default_value)').show();
             break;
         default:
