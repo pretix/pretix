@@ -172,6 +172,12 @@ class SecurityMiddleware(MiddlewareMixin):
             return resp
 
         resp['X-XSS-Protection'] = '1'
+
+        # We just need to have a P3P, not matter whats in there
+        # https://blogs.msdn.microsoft.com/ieinternals/2013/09/17/a-quick-look-at-p3p/
+        # https://github.com/pretix/pretix/issues/765
+        resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
+
         h = {
             'default-src': ["{static}"],
             'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
