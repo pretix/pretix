@@ -13,6 +13,7 @@ from django.db import transaction
 from django.db.models import F, Max, Q, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -21,12 +22,12 @@ from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Quota,
-    User, Voucher,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPayment,
+    OrderPosition, Quota, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee,
+    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee, OrderRefund,
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
@@ -40,8 +41,7 @@ from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.signals import (
-    allow_ticket_download, order_fee_calculation, order_paid, order_placed,
-    periodic_task,
+    allow_ticket_download, order_fee_calculation, order_placed, periodic_task,
 )
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -79,99 +79,8 @@ error_messages = {
 logger = logging.getLogger(__name__)
 
 
-def mark_order_paid(order: Order, provider: str=None, info: str=None, date: datetime=None, manual: bool=None,
-                    force: bool=False, send_mail: bool=True, user: User=None, mail_text='',
-                    count_waitinglist=True, auth=None) -> Order:
-    """
-    Marks an order as paid. This sets the payment provider, info and date and returns
-    the order object.
-
-    :param provider: The payment provider that marked this as paid
-    :type provider: str
-    :param info: The information to store in order.payment_info
-    :type info: str
-    :param date: The date the payment was received (if you pass ``None``, the current
-                 time will be used).
-    :type date: datetime
-    :param force: Whether this payment should be marked as paid even if no remaining
-                  quota is available (default: ``False``).
-    :type force: boolean
-    :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
-    :type send_mail: boolean
-    :param user: The user that performed the change
-    :param mail_text: Additional text to be included in the email
-    :type mail_text: str
-    :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
-    """
-    if order.status == Order.STATUS_PAID:
-        return order
-
-    with order.event.lock() as now_dt:
-        can_be_paid = order._can_be_paid(count_waitinglist=count_waitinglist)
-        if not force and can_be_paid is not True:
-            raise Quota.QuotaExceededException(can_be_paid)
-        order.payment_provider = provider or order.payment_provider
-        order.payment_info = info or order.payment_info
-        order.payment_date = date or now_dt
-        if manual is not None:
-            order.payment_manual = manual
-        order.status = Order.STATUS_PAID
-        order.save()
-
-    order.log_action('pretix.event.order.paid', {
-        'provider': provider,
-        'info': info,
-        'date': date or now_dt,
-        'manual': manual,
-        'force': force
-    }, user=user, auth=auth)
-    order_paid.send(order.event, order=order)
-
-    invoice = None
-    if invoice_qualified(order):
-        invoices = order.invoices.filter(is_cancellation=False).count()
-        cancellations = order.invoices.filter(is_cancellation=True).count()
-        gen_invoice = (
-            (invoices == 0 and order.event.settings.get('invoice_generate') in ('True', 'paid')) or
-            0 < invoices <= cancellations
-        )
-        if gen_invoice:
-            invoice = generate_invoice(
-                order,
-                trigger_pdf=not send_mail or not order.event.settings.invoice_email_attachment
-            )
-
-    if send_mail:
-        with language(order.locale):
-            try:
-                invoice_name = order.invoice_address.name
-                invoice_company = order.invoice_address.company
-            except InvoiceAddress.DoesNotExist:
-                invoice_name = ""
-                invoice_company = ""
-            email_template = order.event.settings.mail_text_order_paid
-            email_context = {
-                'event': order.event.name,
-                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
-                    'order': order.code,
-                    'secret': order.secret
-                }),
-                'downloads': order.event.settings.get('ticket_download', as_type=bool),
-                'invoice_name': invoice_name,
-                'invoice_company': invoice_company,
-                'payment_info': mail_text
-            }
-            email_subject = _('Payment received for your order: %(code)s') % {'code': order.code}
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_paid', user,
-                    invoices=[invoice] if invoice and order.event.settings.invoice_email_attachment else []
-                )
-            except SendMailException:
-                logger.exception('Order paid email could not be sent')
-
-    return order
+def mark_order_paid(*args, **kwargs):
+    raise NotImplementedError("This method is no longer supported since pretix 1.17.")
 
 
 def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None):
@@ -215,7 +124,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
 
 
 @transaction.atomic
-def mark_order_refunded(order, user=None, api_token=None):
+def mark_order_refunded(order, user=None, auth=None, api_token=None):
     """
     Mark this order as refunded. This sets the payment status and returns the order object.
     :param order: The order to change
@@ -229,7 +138,7 @@ def mark_order_refunded(order, user=None, api_token=None):
         order.status = Order.STATUS_REFUNDED
         order.save()
 
-    order.log_action('pretix.event.order.refunded', user=user, api_token=api_token)
+    order.log_action('pretix.event.order.refunded', user=user, auth=auth or api_token)
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
@@ -434,20 +343,22 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
     fees = []
     total = sum([c.price for c in positions])
     payment_fee = payment_provider.calculate_fee(total)
+    pf = None
     if payment_fee:
-        fees.append(OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
-                             internal_type=payment_provider.identifier))
+        pf = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
+                      internal_type=payment_provider.identifier)
+        fees.append(pf)
 
     for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
                                                  meta_info=meta_info, positions=positions):
         fees += resp
-    return fees
+    return fees, pf
 
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None):
-    fees = _get_fees(positions, payment_provider, address, meta_info, event)
+    fees, pf = _get_fees(positions, payment_provider, address, meta_info, event)
     total = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
     with transaction.atomic():
@@ -458,7 +369,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             datetime=now_dt,
             locale=locale,
             total=total,
-            payment_provider=payment_provider.identifier,
             meta_info=json.dumps(meta_info or {}),
         )
         order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
@@ -478,6 +388,13 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             if fee.tax_rule and not fee.tax_rule.pk:
                 fee.tax_rule = None  # TODO: deprecate
             fee.save()
+
+        order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            provider=payment_provider,
+            amount=total,
+            fee=pf
+        )
 
         OrderPosition.transform_cart_positions(positions, order)
         order.log_action('pretix.event.order.placed')
@@ -528,7 +445,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             # send_mail will trigger PDF generation later
 
     if order.email:
-        if order.payment_provider == 'free':
+        if payment_provider == 'free':
             email_template = event.settings.mail_text_order_free
             log_entry = 'pretix.event.order.email.order_free'
         else:
@@ -678,8 +595,6 @@ class OrderChangeManager:
         'not_pending_or_paid': _('Only pending or paid orders can be changed.'),
         'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
                                    'no quota is available.'),
-        'paid_price_change': _('Currently, paid orders can only be changed in a way that does not change the total '
-                               'price of the order as partial payments or refunds are not yet supported.'),
         'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
@@ -840,28 +755,43 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['free_to_paid'])
 
     def _check_paid_price_change(self):
-        if self.order.status == Order.STATUS_PAID and self._totaldiff != 0:
-            raise OrderError(self.error_messages['paid_price_change'])
+        if self.order.status == Order.STATUS_PAID and self._totaldiff > 0:
+            self.order.status = Order.STATUS_PENDING
+            self.order.set_expires(
+                now(),
+                self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
+            )
+            self.order.save()
+        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff < 0:
+            if self.order.pending_sum <= Decimal('0.00'):
+                self.order.status = Order.STATUS_PAID
+                self.order.save()
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
             # if the order becomes free, mark it paid using the 'free' provider
             # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
             # or positions got split off to a new order (split_order with positive total)
+            p = self.order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                provider='free',
+                amount=0,
+                fee=None
+            )
             try:
-                mark_order_paid(
-                    self.order, 'free', send_mail=False, count_waitinglist=False,
-                    user=self.user
-                )
+                p.confirm(send_mail=False, count_waitinglist=False, user=self.user)
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
         if self.split_order and self.split_order.total == 0:
+            p = self.split_order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                provider='free',
+                amount=0,
+                fee=None
+            )
             try:
-                mark_order_paid(
-                    self.split_order, 'free', send_mail=False, count_waitinglist=False,
-                    user=self.user
-                )
+                p.confirm(send_mail=False, count_waitinglist=False, user=self.user)
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
@@ -1002,7 +932,11 @@ class OrderChangeManager:
 
         split_order.total = sum([p.price for p in split_positions])
         if split_order.total != Decimal('0.00') and self.order.status != Order.STATUS_PAID:
-            payment_fee = self._get_payment_provider().calculate_fee(split_order.total)
+            pp = self._get_payment_provider()
+            if pp:
+                payment_fee = pp.calculate_fee(split_order.total)
+            else:
+                payment_fee = Decimal('0.00')
             fee = split_order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
             fee.value = payment_fee
             fee._calculate_tax()
@@ -1021,41 +955,89 @@ class OrderChangeManager:
 
         split_order.save()
 
+        if split_order.status == Order.STATUS_PAID:
+            split_order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=split_order.total,
+                payment_date=now(),
+                provider='offsetting',
+                info=json.dumps({'orders': [self.order.code]})
+            )
+            self.order.refunds.create(
+                state=OrderRefund.REFUND_STATE_DONE,
+                amount=split_order.total,
+                execution_date=now(),
+                provider='offsetting',
+                info=json.dumps({'orders': [split_order.code]})
+            )
+
         if split_order.total != Decimal('0.00') and self.order.invoices.filter(is_cancellation=False).last():
             generate_invoice(split_order)
         return split_order
 
-    def _recalculate_total_and_payment_fee(self):
-        self.order.total = sum([p.price for p in self.order.positions.all()])
+    @cached_property
+    def open_payment(self):
+        lp = self.order.payments.last()
+        if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                   OrderPayment.PAYMENT_STATE_REFUNDED):
+            return lp
 
-        if self.order.status != Order.STATUS_PAID:
-            # Do not change payment fees of paid orders
-            payment_fee = Decimal('0.00')
-            if self.order.total != 0:
-                prov = self._get_payment_provider()
+    @cached_property
+    def completed_payment_sum(self):
+        payment_sum = self.order.payments.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        refund_sum = self.order.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_DONE)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        return payment_sum - refund_sum
+
+    def _recalculate_total_and_payment_fee(self):
+        total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
+        payment_fee = Decimal('0.00')
+        if self.open_payment:
+            current_fee = Decimal('0.00')
+            fee = None
+            if self.open_payment.fee:
+                fee = self.open_payment.fee
+                current_fee = self.open_payment.fee.value
+            total -= current_fee
+
+            if self.order.pending_sum - current_fee != 0:
+                prov = self.open_payment.payment_provider
                 if prov:
-                    payment_fee = prov.calculate_fee(self.order.total)
+                    payment_fee = prov.calculate_fee(total - self.completed_payment_sum)
 
             if payment_fee:
-                fee = self.order.fees.get_or_create(fee_type=OrderFee.FEE_TYPE_PAYMENT, defaults={'value': 0})[0]
+                fee = fee or OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, order=self.order)
                 fee.value = payment_fee
                 fee._calculate_tax()
                 fee.save()
-            else:
-                self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).delete()
+                if not self.open_payment.fee:
+                    self.open_payment.fee = fee
+                    self.open_payment.save()
+            elif fee:
+                fee.delete()
 
-        self.order.total += sum([f.value for f in self.order.fees.all()])
+        self.order.total = total + payment_fee
         self.order.save()
 
     def _payment_fee_diff(self):
-        prov = self._get_payment_provider()
-        if self.order.status != Order.STATUS_PAID and prov:
-            # payment fees of paid orders do not change
-            old_fee = OrderFee.objects.filter(order=self.order, fee_type=OrderFee.FEE_TYPE_PAYMENT).aggregate(s=Sum('value'))['s'] or 0
-            new_total = sum([p.price for p in self.order.positions.all()]) + self._totaldiff
-            if new_total != 0:
-                new_fee = prov.calculate_fee(new_total)
-                self._totaldiff += new_fee - old_fee
+        total = self.order.total + self._totaldiff
+        if self.open_payment:
+            current_fee = Decimal('0.00')
+            if self.open_payment and self.open_payment.fee:
+                current_fee = self.open_payment.fee.value
+            total -= current_fee
+
+            # Do not change payment fees of paid orders
+            payment_fee = Decimal('0.00')
+            if self.order.pending_sum - current_fee != 0:
+                prov = self.open_payment.payment_provider
+                if prov:
+                    payment_fee = prov.calculate_fee(total - self.completed_payment_sum)
+
+                self._totaldiff += payment_fee - current_fee
 
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
@@ -1121,7 +1103,6 @@ class OrderChangeManager:
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
                     raise OrderError(self.error_messages['not_pending_or_paid'])
                 self._check_free_to_paid()
-                self._check_paid_price_change()
                 self._check_quotas()
                 self._check_complete_cancel()
                 self._perform_operations()
@@ -1129,6 +1110,7 @@ class OrderChangeManager:
             self._reissue_invoice()
             self._clear_tickets_cache()
             self.order.touch()
+        self._check_paid_price_change()
         self._check_paid_to_free()
 
         if self.notify:
@@ -1144,9 +1126,12 @@ class OrderChangeManager:
             CachedCombinedTicket.objects.filter(order=self.split_order).delete()
 
     def _get_payment_provider(self):
-        pprov = self.order.event.get_payment_providers().get(self.order.payment_provider)
+        lp = self.order.payments.last()
+        if not lp:
+            return None
+        pprov = lp.payment_provider
         if not pprov:
-            raise OrderError(error_messages['internal'])
+            return None
         return pprov
 
 

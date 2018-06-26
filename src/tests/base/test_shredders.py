@@ -9,7 +9,7 @@ from django.utils.timezone import now
 
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
-    OrderPosition, Organizer, QuestionAnswer,
+    OrderPayment, OrderPosition, Organizer, QuestionAnswer,
 )
 from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
 from pretix.base.services.tickets import generate, generate_order
@@ -45,7 +45,7 @@ def order(event, item):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=14, payment_provider='banktransfer', locale='en'
+        total=14, locale='en'
     )
     event.settings.set('attendee_names_asked', True)
     event.settings.set('locales', ['en', 'de'])
@@ -295,12 +295,12 @@ def test_cached_tickets(event, order):
 
 @pytest.mark.django_db
 def test_payment_info_shredder(event, order):
-    order.payment_info = json.dumps({
+    order.payments.create(info=json.dumps({
         'reference': 'Verwendungszweck 1',
         'date': '2018-05-01',
         'payer': 'Hans',
         'trans_id': 12
-    })
+    }), provider='banktransfer', amount=order.total, state=OrderPayment.PAYMENT_STATE_PENDING)
     order.save()
 
     s = PaymentInfoShredder(event)
@@ -308,7 +308,7 @@ def test_payment_info_shredder(event, order):
     s.shred_data()
 
     order.refresh_from_db()
-    assert json.loads(order.payment_info) == {
+    assert order.payments.first().info_data == {
         '_shredded': True,
         'reference': '█',
         'date': '2018-05-01',

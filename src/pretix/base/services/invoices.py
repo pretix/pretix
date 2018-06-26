@@ -18,7 +18,9 @@ from django.utils.translation import pgettext, ugettext as _
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
-from pretix.base.models import Invoice, InvoiceAddress, InvoiceLine, Order
+from pretix.base.models import (
+    Invoice, InvoiceAddress, InvoiceLine, Order, OrderPayment,
+)
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
@@ -31,16 +33,19 @@ logger = logging.getLogger(__name__)
 
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
-    with language(invoice.locale):
-        payment_provider = invoice.event.get_payment_providers().get(invoice.order.payment_provider)
+    lp = invoice.order.payments.last()
+    open_payment = None
+    if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+        open_payment = lp
 
+    with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
 
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-        if payment_provider:
-            payment = payment_provider.render_invoice_text(invoice.order)
+        if open_payment and open_payment.payment_provider:
+            payment = open_payment.payment_provider.render_invoice_text(invoice.order)
         else:
             payment = ""
 

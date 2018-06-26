@@ -9,6 +9,10 @@ is very similar to creating an export output.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
 
+.. warning:: We changed our payment provider API a lot in pretix 2.x. Our documentation page on :ref:`payment2.0`
+             might be insightful even if you do not have a payment provider to port, as it outlines the rationale
+             behind the current design.
+
 Provider registration
 ---------------------
 
@@ -31,7 +35,7 @@ that the plugin will provide::
 The provider class
 ------------------
 
-.. class:: pretix.base.payment.BasePaymentProvider
+.. py:class:: pretix.base.payment.BasePaymentProvider
 
    The central object of each payment provider is the subclass of ``BasePaymentProvider``.
 
@@ -54,57 +58,61 @@ The provider class
 
       This is an abstract attribute, you **must** override this!
 
-   .. autoattribute:: is_enabled
+   .. autoattribute:: public_name
 
-   .. automethod:: calculate_fee
+   .. autoattribute:: is_enabled
 
    .. autoattribute:: settings_form_fields
 
    .. automethod:: settings_content_render
 
-   .. automethod:: render_invoice_text
+   .. automethod:: is_allowed
 
    .. automethod:: payment_form_render
 
    .. automethod:: payment_form
 
-   .. automethod:: is_allowed
-
    .. autoattribute:: payment_form_fields
 
-   .. automethod:: checkout_prepare
-
    .. automethod:: payment_is_valid_session
+
+   .. automethod:: checkout_prepare
 
    .. automethod:: checkout_confirm_render
 
       This is an abstract method, you **must** override this!
 
-   .. automethod:: payment_perform
+   .. automethod:: execute_payment
+
+   .. automethod:: calculate_fee
 
    .. automethod:: order_pending_mail_render
 
-   .. automethod:: order_pending_render
+   .. automethod:: payment_pending_render
 
-      This is an abstract method, you **must** override this!
+   .. autoattribute:: abort_pending_allowed
+
+   .. automethod:: render_invoice_text
 
    .. automethod:: order_change_allowed
 
    .. automethod:: order_can_retry
 
-   .. automethod:: order_prepare
+   .. automethod:: payment_prepare
 
-   .. automethod:: order_paid_render
+   .. automethod:: payment_control_render
 
-   .. automethod:: order_control_render
+   .. automethod:: payment_refund_supported
 
-   .. automethod:: order_control_refund_render
+   .. automethod:: payment_partial_refund_supported
 
-   .. automethod:: order_control_refund_perform
-
-   .. automethod:: is_implicit
+   .. automethod:: execute_refund
 
    .. automethod:: shred_payment_info
+
+   .. autoattribute:: is_implicit
+
+   .. autoattribute:: is_meta
 
 
 Additional views

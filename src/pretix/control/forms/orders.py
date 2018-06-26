@@ -344,3 +344,47 @@ class OrderMailForm(forms.Form):
             validators=[PlaceholderValidator(['{expire_date}', '{event}', '{code}', '{date}', '{url}',
                                               '{invoice_name}', '{invoice_company}'])]
         )
+
+
+class OrderRefundForm(forms.Form):
+    action = forms.ChoiceField(
+        required=False,
+        widget=forms.RadioSelect,
+        choices=(
+            ('mark_refunded', _('Mark the complete order as refunded. The order will be canceled and all tickets will '
+                                'no longer work. This can not be reverted.')),
+            ('mark_pending', _('Mark the order as pending and allow the user to pay the open amount with another '
+                               'payment method.')),
+            ('do_nothing', _('Do nothing and keep the order as it is.')),
+        )
+    )
+    mode = forms.ChoiceField(
+        required=False,
+        widget=forms.RadioSelect,
+        choices=(
+            ('full', 'Full refund'),
+            ('partial', 'Partial refund'),
+        )
+    )
+    partial_amount = forms.DecimalField(
+        required=False, max_digits=10, decimal_places=2,
+        localize=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order')
+        super().__init__(*args, **kwargs)
+        change_decimal_field(self.fields['partial_amount'], self.order.event.currency)
+
+    def clean_partial_amount(self):
+        max_amount = self.order.total - self.order.pending_sum
+        val = self.cleaned_data.get('partial_amount')
+        if val is not None and (val > max_amount or val <= 0):
+            raise ValidationError(_('The refund amount needs to be positive and less than {}.').format(max_amount))
+        return val
+
+    def clean(self):
+        data = self.cleaned_data
+        if data.get('mode') == 'partial' and not data.get('partial_amount'):
+            raise ValidationError(_('You need to specify an amount for a partial refund.'))
+        return data

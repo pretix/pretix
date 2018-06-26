@@ -16,15 +16,13 @@ from django.utils.timezone import now
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CartPosition, CheckinList, Event, Item, ItemCategory,
-    ItemVariation, Order, OrderPosition, Organizer, Question, Quota, User,
-    Voucher, WaitingListEntry,
+    ItemVariation, Order, OrderPayment, OrderPosition, OrderRefund, Organizer,
+    Question, Quota, User, Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
-from pretix.base.services.orders import (
-    OrderError, cancel_order, mark_order_paid, perform_order,
-)
+from pretix.base.services.orders import OrderError, cancel_order, perform_order
 
 
 class UserTestCase(TestCase):
@@ -600,7 +598,9 @@ class OrderTestCase(BaseQuotaTestCase):
     def test_paid_in_time(self):
         self.quota.size = 0
         self.quota.save()
-        mark_order_paid(self.order)
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -609,7 +609,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.status = Order.STATUS_EXPIRED
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
-        mark_order_paid(self.order)
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -619,7 +621,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         with self.assertRaises(Quota.QuotaExceededException):
-            mark_order_paid(self.order)
+            self.order.payments.create(
+                provider='manual', amount=self.order.total
+            ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
@@ -640,7 +644,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         with self.assertRaises(Quota.QuotaExceededException):
-            mark_order_paid(self.order)
+            self.order.payments.create(
+                provider='manual', amount=self.order.total
+            ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
         self.event.has_subevents = False
@@ -652,7 +658,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
         with self.assertRaises(Quota.QuotaExceededException):
-            mark_order_paid(self.order)
+            self.order.payments.create(
+                provider='manual', amount=self.order.total
+            ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
@@ -664,7 +672,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 0
         self.quota.save()
         with self.assertRaises(Quota.QuotaExceededException):
-            mark_order_paid(self.order)
+            self.order.payments.create(
+                provider='manual', amount=self.order.total
+            ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertIn(self.order.status, (Order.STATUS_PENDING, Order.STATUS_EXPIRED))
 
@@ -672,7 +682,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.payment_term_accept_late = True
         self.order.expires = now() - timedelta(days=2)
         self.order.save()
-        mark_order_paid(self.order)
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -683,7 +695,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.save()
         self.quota.size = 0
         self.quota.save()
-        mark_order_paid(self.order, force=True)
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm(force=True)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -696,7 +710,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.quota.size = 2
         self.quota.save()
         with self.assertRaises(Quota.QuotaExceededException):
-            mark_order_paid(self.order)
+            self.order.payments.create(
+                provider='manual', amount=self.order.total
+            ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_EXPIRED)
 
@@ -707,7 +723,9 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.save()
         self.quota.size = 2
         self.quota.save()
-        mark_order_paid(self.order, count_waitinglist=False)
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm(count_waitinglist=False)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
 
@@ -865,6 +883,144 @@ class OrderTestCase(BaseQuotaTestCase):
                                           variation=None, price=23)
         assert p1.secret != p2.secret
         assert self.order.can_user_cancel is False
+
+    def test_paid_order_underpaid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_DONE,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('10.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert o.is_underpaid
+        assert not o.is_overpaid
+        assert not o.has_pending_refund
+        assert not o.has_external_refund
+
+    def test_pending_order_underpaid(self):
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_DONE,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('10.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert not o.is_overpaid
+        assert not o.has_pending_refund
+        assert not o.has_external_refund
+
+    def test_canceled_order_overpaid(self):
+        self.order.status = Order.STATUS_CANCELED
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_DONE,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('-36.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert o.is_overpaid
+        assert not o.has_pending_refund
+        assert not o.has_external_refund
+
+    def test_paid_order_external_refund(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_EXTERNAL,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('0.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert not o.is_overpaid
+        assert not o.has_pending_refund
+        assert o.has_external_refund
+
+    def test_pending_order_pending_refund(self):
+        self.order.status = Order.STATUS_REFUNDED
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('46.00'),
+            state=OrderRefund.REFUND_STATE_CREATED,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('0.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert not o.is_overpaid
+        assert o.has_pending_refund
+        assert not o.has_external_refund
+
+    def test_paid_order_overpaid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('66.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_DONE,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('-10.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert o.is_overpaid
+        assert not o.has_pending_refund
+        assert not o.has_external_refund
+
+    def test_pending_order_overpaid(self):
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        self.order.payments.create(
+            amount=Decimal('56.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual'
+        )
+        self.order.refunds.create(
+            amount=Decimal('10.00'),
+            state=OrderRefund.REFUND_STATE_DONE,
+            provider='manual'
+        )
+        assert self.order.pending_sum == Decimal('0.00')
+        o = Order.annotate_overpayments(Order.objects.all()).first()
+        assert not o.is_underpaid
+        assert o.is_overpaid
+        assert not o.has_pending_refund
+        assert not o.has_external_refund
 
 
 class ItemCategoryTest(TestCase):
@@ -1130,7 +1286,7 @@ class CheckinListTestCase(TestCase):
             code='FOO', event=cls.event, email='dummy@dummy.test',
             status=Order.STATUS_PAID,
             datetime=now(), expires=now() + timedelta(days=10),
-            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+            total=Decimal("30"), locale='en'
         )
         OrderPosition.objects.create(
             order=o,
@@ -1157,7 +1313,7 @@ class CheckinListTestCase(TestCase):
             code='FOO', event=cls.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
-            total=Decimal("30"), payment_provider='banktransfer', locale='en'
+            total=Decimal("30"), locale='en'
         )
         op4 = OrderPosition.objects.create(
             order=o,

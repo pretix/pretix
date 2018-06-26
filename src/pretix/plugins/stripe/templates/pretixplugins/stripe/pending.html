@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% if provider.method == "sofort" %}
+{% if payment.state == "pending" %}
     <p>{% blocktrans trimmed %}
         We're waiting for an answer from the payment provider regarding your payment. Please contact us if this
         takes more than a few days.

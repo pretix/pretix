@@ -838,7 +838,7 @@ class SubEventsTest(SoupTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         OrderPosition.objects.create(
             order=o,
@@ -1180,7 +1180,7 @@ class SubEventsTest(SoupTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         OrderPosition.objects.create(
             order=o,
@@ -1266,7 +1266,7 @@ class EventDeletionTest(SoupTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now(),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         self.post_doc('/control/event/ccc/30c3/delete/', {
             'user_pw': 'dummy',

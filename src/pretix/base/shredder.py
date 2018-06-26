@@ -15,8 +15,8 @@ from pretix.api.serializers.order import (
 from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPosition,
-    QuestionAnswer,
+    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPayment,
+    OrderPosition, OrderRefund, QuestionAnswer,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
@@ -331,10 +331,14 @@ class PaymentInfoShredder(BaseDataShredder):
     @transaction.atomic
     def shred_data(self):
         provs = self.event.get_payment_providers()
-        for o in self.event.orders.all():
-            pprov = provs.get(o.payment_provider)
+        for obj in OrderPayment.objects.filter(order__event=self.event):
+            pprov = provs.get(obj.provider)
             if pprov:
-                pprov.shred_payment_info(o)
+                pprov.shred_payment_info(obj)
+        for obj in OrderRefund.objects.filter(order__event=self.event):
+            pprov = provs.get(obj.provider)
+            if pprov:
+                pprov.shred_payment_info(obj)
 
 
 @receiver(register_data_shredders, dispatch_uid="shredders_builtin")

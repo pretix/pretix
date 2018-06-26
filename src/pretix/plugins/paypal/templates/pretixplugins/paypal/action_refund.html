@@ -7,14 +7,3 @@
         Do you want to mark the matching order ({{ order }}) as refunded?
     {% endblocktrans %}
 </p>
-<form class="form-inline" method="post" action="{% url "plugins:paypal:refund"  event=event.slug organizer=event.organizer.slug id=action.id %}">
-    {% csrf_token %}
-    <a href="{% url "control:event.requiredaction.discard" event=event.slug organizer=event.organizer.slug id=action.id %}"
-            class="btn btn-default">
-        {% trans "No" %}
-    </a>
-    <button type="submit" class="btn btn-default btn-danger">
-        {% trans "Yes, mark order as refunded" %}
-    </button>&nbsp;
-    {% trans "This action cannot be undone." %}
-</form>

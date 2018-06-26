@@ -1,30 +1,19 @@
 {% load i18n %}
 
 {% if payment_info %}
-    {% if order.status == "p" %}
-        <p>{% blocktrans trimmed with method=provider.verbose_name %}
-            This order has been paid with {{ method }}.
-        {% endblocktrans %}</p>
-    {% elif order.status == "r" %}
-        <p>{% blocktrans trimmed with method=provider.verbose_name %}
-            This order has been planned to be paid with {{ method }} and has been marked as refunded.
-        {% endblocktrans %}</p>
-    {% else %}
-        <p>{% blocktrans trimmed with method=provider.verbose_name %}
-            This order has been planned to be paid with {{ method }}, but the payment has not yet been completed.
-        {% endblocktrans %}</p>
-    {% endif %}
     {% if "source" in payment_info %}
         <dl class="dl-horizontal">
             <dt>{% trans "Charge ID" %}</dt>
             <dd>{{ payment_info.id }}</dd>
-            {% if payment_info.source.type == "card" or payment_info.source.type == "three_d_secure" %}
+            {% if payment_info.source.card %}
                 <dt>{% trans "Card type" %}</dt>
-                <dd>{{ payment_info.source.brand }}</dd>
+                <dd>{{ payment_info.source.card.brand }}</dd>
                 <dt>{% trans "Card number" %}</dt>
-                <dd>**** **** **** {{ payment_info.source.last4 }}</dd>
-                <dt>{% trans "Payer name" %}</dt>
-                <dd>{{ payment_info.source.name }}</dd>
+                <dd>**** **** **** {{ payment_info.source.card.last4 }}</dd>
+                {% if payment_info.source.owner.name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ payment_info.source.owner.name }}</dd>
+                {% endif %}
             {% endif %}
             {% if payment_info.source.type == "giropay" %}
                 <dt>{% trans "Bank" %}</dt>
@@ -58,8 +47,4 @@
             <dd>{{ payment_info.message }}</dd>
         </dl>
     {% endif %}
-{% else %}
-    <p>{% blocktrans trimmed %}
-        This order has been planned to be paid via Stripe, but the payment has not yet been completed.
-    {% endblocktrans %}</p>
 {% endif %}

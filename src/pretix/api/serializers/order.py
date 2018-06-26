@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy
 from django_countries.fields import Country
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -14,7 +15,9 @@ from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     Question, QuestionAnswer,
 )
-from pretix.base.models.orders import CartPosition, OrderFee
+from pretix.base.models.orders import (
+    CartPosition, OrderFee, OrderPayment, OrderRefund,
+)
 from pretix.base.pdf import get_variables
 from pretix.base.signals import register_ticket_outputs
 
@@ -156,10 +159,44 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             self.fields.pop('pdf_data')
 
 
+class OrderPaymentTypeField(serializers.Field):
+    # TODO: Remove after pretix 2.2
+    def to_representation(self, instance: Order):
+        t = None
+        for p in instance.payments.all():
+            t = p.provider
+        return t
+
+
+class OrderPaymentDateField(serializers.DateField):
+    # TODO: Remove after pretix 2.2
+    def to_representation(self, instance: Order):
+        t = None
+        for p in instance.payments.all():
+            t = p.payment_date or t
+        if t:
+
+            return super().to_representation(t.date())
+
+
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderFee
         fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule')
+
+
+class OrderPaymentSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = OrderPayment
+        fields = ('local_id', 'state', 'amount', 'created', 'payment_date', 'provider')
+
+
+class OrderRefundSerializer(I18nAwareModelSerializer):
+    payment = SlugRelatedField(slug_field='local_id', read_only=True)
+
+    class Meta:
+        model = OrderRefund
+        fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'provider')
 
 
 class OrderSerializer(I18nAwareModelSerializer):
@@ -167,12 +204,16 @@ class OrderSerializer(I18nAwareModelSerializer):
     positions = OrderPositionSerializer(many=True)
     fees = OrderFeeSerializer(many=True)
     downloads = OrderDownloadsField(source='*')
+    payments = OrderPaymentSerializer(many=True)
+    refunds = OrderRefundSerializer(many=True)
+    payment_date = OrderPaymentDateField(source='*')
+    payment_provider = OrderPaymentTypeField(source='*')
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'checkin_attention', 'last_modified')
+                  'checkin_attention', 'last_modified', 'payments', 'refunds')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -410,6 +451,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     def create(self, validated_data):
         fees_data = validated_data.pop('fees') if 'fees' in validated_data else []
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
+        payment_provider = validated_data.pop('payment_provider')
+        payment_info = validated_data.pop('payment_info', '{}')
+
         if 'invoice_address' in validated_data:
             ia = InvoiceAddress(**validated_data.pop('invoice_address'))
         else:
@@ -467,14 +511,32 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
             order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
             order.meta_info = "{}"
-            if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
-                order.payment_provider = 'free'
-                order.status = Order.STATUS_PAID
-            elif order.payment_provider == "free" and order.total != Decimal('0.00'):
-                raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
-            if validated_data.get('status') == Order.STATUS_PAID:
-                order.payment_date = now()
             order.save()
+
+            if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+                order.status = Order.STATUS_PAID
+                order.save()
+                order.payments.create(
+                    amount=order.total, provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+                )
+            elif payment_provider == "free" and order.total != Decimal('0.00'):
+                raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
+            elif validated_data.get('status') == Order.STATUS_PAID:
+                order.payments.create(
+                    amount=order.total,
+                    provider=payment_provider,
+                    info=payment_info,
+                    payment_date=now(),
+                    state=OrderPayment.PAYMENT_STATE_CONFIRMED
+                )
+            elif payment_provider:
+                order.payments.create(
+                    amount=order.total,
+                    provider=payment_provider,
+                    info=payment_info,
+                    state=OrderPayment.PAYMENT_STATE_CREATED
+                )
+
             if ia:
                 ia.order = order
                 ia.save()
@@ -522,3 +584,27 @@ class InvoiceSerializer(I18nAwareModelSerializer):
                   'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines',
                   'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date',
                   'internal_reference')
+
+
+class OrderRefundCreateSerializer(I18nAwareModelSerializer):
+    payment = serializers.IntegerField(required=False, allow_null=True)
+    provider = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    info = CompatibleJSONField(required=False)
+
+    class Meta:
+        model = OrderRefund
+        fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info')
+
+    def create(self, validated_data):
+        pid = validated_data.pop('payment', None)
+        if pid:
+            try:
+                p = self.context['order'].payments.get(local_id=pid)
+            except OrderPayment.DoesNotExist:
+                raise ValidationError('Unknown payment ID.')
+        else:
+            p = None
+
+        order = OrderRefund(order=self.context['order'], payment=p, **validated_data)
+        order.save()
+        return order

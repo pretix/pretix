@@ -1,22 +1,20 @@
 import json
 import logging
+from decimal import Decimal
 
 import paypalrestsdk
 from django.contrib import messages
 from django.core import signing
-from django.db import transaction
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
-from pretix.base.services.orders import mark_order_paid, mark_order_refunded
-from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.plugins.paypal.payment import Paypal
@@ -50,16 +48,16 @@ def success(request, *args, **kwargs):
     if 'cart_namespace' in kwargs:
         urlkwargs['cart_namespace'] = kwargs['cart_namespace']
 
-    if request.session.get('payment_paypal_order'):
-        order = Order.objects.get(pk=request.session.get('payment_paypal_order'))
+    if request.session.get('payment_paypal_payment'):
+        payment = OrderPayment.objects.get(pk=request.session.get('payment_paypal_payment'))
     else:
-        order = None
+        payment = None
 
     if pid == request.session.get('payment_paypal_id', None):
-        if order:
+        if payment:
             prov = Paypal(request.event)
             try:
-                resp = prov.payment_perform(request, order)
+                resp = prov.execute_payment(request, payment)
             except PaymentException as e:
                 messages.error(request, str(e))
                 urlkwargs['step'] = 'payment'
@@ -72,11 +70,11 @@ def success(request, *args, **kwargs):
         urlkwargs['step'] = 'payment'
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
 
-    if order:
+    if payment:
         return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
-            'order': order.code,
-            'secret': order.secret
-        }) + ('?paid=yes' if order.status == Order.STATUS_PAID else ''))
+            'order': payment.order.code,
+            'secret': payment.order.secret
+        }) + ('?paid=yes' if payment.order.status == Order.STATUS_PAID else ''))
     else:
         urlkwargs['step'] = 'confirm'
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
@@ -85,16 +83,16 @@ def success(request, *args, **kwargs):
 def abort(request, *args, **kwargs):
     messages.error(request, _('It looks like you canceled the PayPal payment'))
 
-    if request.session.get('payment_paypal_order'):
-        order = Order.objects.get(pk=request.session.get('payment_paypal_order'))
+    if request.session.get('payment_paypal_payment'):
+        payment = OrderPayment.objects.get(pk=request.session.get('payment_paypal_payment'))
     else:
-        order = None
+        payment = None
 
-    if order:
+    if payment:
         return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
-            'order': order.code,
-            'secret': order.secret
-        }) + ('?paid=yes' if order.status == Order.STATUS_PAID else ''))
+            'order': payment.order.code,
+            'secret': payment.order.secret
+        }) + ('?paid=yes' if payment.order.status == Order.STATUS_PAID else ''))
     else:
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
 
@@ -124,6 +122,7 @@ def webhook(request, *args, **kwargs):
         )
         event = rso.order.event
     except ReferencedPayPalObject.DoesNotExist:
+        rso = None
         if hasattr(request, 'event'):
             event = request.event
         else:
@@ -138,74 +137,67 @@ def webhook(request, *args, **kwargs):
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)
 
-    orders = Order.objects.filter(event=event, payment_provider='paypal',
-                                  payment_info__icontains=sale['id'])
-    order = None
-    for o in orders:
-        payment_info = json.loads(o.payment_info)
-        for res in payment_info['transactions'][0]['related_resources']:
-            for k, v in res.items():
-                if k == 'sale' and v['id'] == sale['id']:
-                    order = o
-                    break
+    if rso and rso.payment:
+        payment = rso.payment
+    else:
+        payments = OrderPayment.objects.filter(order__event=event, provider='paypal',
+                                               info__icontains=sale['id'])
+        payment = None
+        for p in payments:
+            payment_info = p.info_data
+            for res in payment_info['transactions'][0]['related_resources']:
+                for k, v in res.items():
+                    if k == 'sale' and v['id'] == sale['id']:
+                        payment = p
+                        break
 
-    if not order:
-        return HttpResponse('Order not found', status=200)
+    if not payment:
+        return HttpResponse('Payment not found', status=200)
 
-    order.log_action('pretix.plugins.paypal.event', data=event_json)
+    payment.order.log_action('pretix.plugins.paypal.event', data=event_json)
 
-    if order.status == Order.STATUS_PAID and sale['state'] in ('partially_refunded', 'refunded'):
-        RequiredAction.objects.create(
-            event=event, action_type='pretix.plugins.paypal.refund', data=json.dumps({
-                'order': order.code,
-                'sale': sale['id']
-            })
-        )
-    elif order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and sale['state'] == 'completed' and \
-            order.payment_provider != "paypal":
-        RequiredAction.objects.create(
-            event=event, action_type='pretix.plugins.paypal.double', data=json.dumps({
-                'order': order.code,
-                'payment': sale['parent_payment']
-            })
-        )
-    elif order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and sale['state'] == 'completed':
-        try:
-            mark_order_paid(order, user=None)
-        except Quota.QuotaExceededException:
-            if not RequiredAction.objects.filter(event=event, action_type='pretix.plugins.paypal.overpaid',
-                                                 data__icontains=order.code).exists():
-                RequiredAction.objects.create(
-                    event=event, action_type='pretix.plugins.paypal.overpaid', data=json.dumps({
-                        'order': order.code,
-                        'payment': sale['parent_payment']
-                    })
+    if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['state'] in ('partially_refunded', 'refunded'):
+        if event_json['resource_type'] == 'refund':
+            try:
+                refund = paypalrestsdk.Refund.find(event_json['resource']['id'])
+            except:
+                logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
+                return HttpResponse('Refund not found', status=500)
+
+            known_refunds = {r.info_data.get('id'): r for r in payment.refunds.all()}
+            if refund['id'] not in known_refunds:
+                payment.create_external_refund(
+                    amount=abs(Decimal(refund['amount']['total'])),
+                    info=json.dumps(refund.to_dict() if not isinstance(refund, dict) else refund)
                 )
+            elif known_refunds.get(refund['id']).state in (
+                    OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT) and refund['state'] == 'completed':
+                known_refunds.get(refund['id']).done()
+
+            if 'total_refunded_amount' in refund:
+                known_sum = payment.refunds.filter(
+                    state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                               OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
+                ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+                total_refunded_amount = Decimal(refund['total_refunded_amount']['value'])
+                if known_sum < total_refunded_amount:
+                    payment.create_external_refund(
+                        amount=total_refunded_amount - known_sum
+                    )
+        elif sale['state'] == 'refunded':
+            known_sum = payment.refunds.filter(
+                state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                           OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
+            ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+
+            if known_sum < payment.amount:
+                payment.create_external_refund(
+                    amount=payment.amount - known_sum
+                )
+    elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED) and sale['state'] == 'completed':
+        try:
+            payment.confirm()
+        except Quota.QuotaExceededException:
+            pass
 
     return HttpResponse(status=200)
-
-
-@event_permission_required('can_change_orders')
-@require_POST
-def refund(request, **kwargs):
-    with transaction.atomic():
-        action = get_object_or_404(RequiredAction, event=request.event, pk=kwargs.get('id'),
-                                   action_type='pretix.plugins.paypal.refund', done=False)
-        data = json.loads(action.data)
-        action.done = True
-        action.user = request.user
-        action.save()
-        order = get_object_or_404(Order, event=request.event, code=data['order'])
-        if order.status != Order.STATUS_PAID:
-            messages.error(request, _('The order cannot be marked as refunded as it is not marked as paid!'))
-        else:
-            mark_order_refunded(order, user=request.user)
-            messages.success(
-                request, _('The order has been marked as refunded and the issue has been marked as resolved!')
-            )
-
-    return redirect(reverse('control:event.order', kwargs={
-        'organizer': request.event.organizer.slug,
-        'event': request.event.slug,
-        'code': data['order']
-    }))

@@ -150,7 +150,7 @@ def test_availability_date_order_relative_subevents(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + datetime.timedelta(days=10),
-        total=Decimal('46.00'), payment_provider='dummtest'
+        total=Decimal('46.00'),
     )
     OrderPosition.objects.create(
         order=order, item=ticket, variation=None, subevent=se1,

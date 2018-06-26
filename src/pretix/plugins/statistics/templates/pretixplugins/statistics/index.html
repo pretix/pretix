@@ -18,6 +18,13 @@
             </div>
             <div class="panel-body">
                 <div id="obd_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Orders paid in multiple payments are shown with the date of their last payment.
+                        {% endblocktrans %}
+                    </small>
+                </p>
             </div>
         </div>
         <div class="panel panel-default">
@@ -34,6 +41,14 @@
                         {% endblocktrans %}
                     </div>
                 {% endif %}
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Only fully paid orders are counted.
+                            Orders paid in multiple payments are shown with the date of their last payment.
+                        {% endblocktrans %}
+                    </small>
+                </p>
             </div>
         </div>
         <div class="panel panel-default">

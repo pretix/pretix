@@ -35,7 +35,7 @@ def env():
     o1 = Order.objects.create(
         code='FOO', event=event, status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=0
     )
     op1 = OrderPosition.objects.create(
         order=o1, item=shirt, variation=shirt_red,

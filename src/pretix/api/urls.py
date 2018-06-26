@@ -42,6 +42,10 @@ item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
 item_router.register(r'addons', item.ItemAddOnViewSet)
 
+order_router = routers.DefaultRouter()
+order_router.register(r'payments', order.PaymentViewSet)
+order_router.register(r'refunds', order.RefundViewSet)
+
 # Force import of all plugins to give them a chance to register URLs with the router
 for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
@@ -57,6 +61,7 @@ urlpatterns = [
         include(question_router.urls)),
     url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/checkinlists/(?P<list>[^/]+)/',
         include(checkinlist_router.urls)),
+    url(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/orders/(?P<order>[^/]+)/', include(order_router.urls)),
     url(r"^oauth/authorize$", oauth.AuthorizationView.as_view(), name="authorize"),
     url(r"^oauth/token$", oauth.TokenView.as_view(), name="token"),
     url(r"^oauth/revoke_token$", oauth.RevokeTokenView.as_view(), name="revoke-token"),

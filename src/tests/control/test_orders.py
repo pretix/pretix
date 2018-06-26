@@ -3,15 +3,18 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from bs4 import BeautifulSoup
 from django.core import mail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from tests.base import SoupTest
+from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, Organizer, Question,
-    QuestionAnswer, Quota, Team, User,
+    Event, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
+    OrderRefund, Organizer, Question, QuestionAnswer, Quota, Team, User,
 )
+from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
@@ -22,7 +25,7 @@ def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer,tests.testdummy'
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy'
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -33,7 +36,10 @@ def env():
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=14, payment_provider='banktransfer', locale='en'
+        total=14, locale='en'
+    )
+    o.payments.create(
+        amount=o.total, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_PENDING
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23,
@@ -212,7 +218,7 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
 
     (Order.STATUS_PAID, Order.STATUS_PENDING, True),
     (Order.STATUS_PAID, Order.STATUS_CANCELED, False),
-    (Order.STATUS_PAID, Order.STATUS_REFUNDED, True),
+    (Order.STATUS_PAID, Order.STATUS_REFUNDED, False),
     (Order.STATUS_PAID, Order.STATUS_EXPIRED, False),
 
     (Order.STATUS_PENDING, Order.STATUS_CANCELED, True),
@@ -688,7 +694,7 @@ class OrderChangeTests(SoupTest):
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
-            total=Decimal('46.00'), payment_provider='banktransfer'
+            total=Decimal('46.00'),
         )
         self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
         self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
@@ -944,3 +950,530 @@ def test_check_vatid_unavailable(client, env):
         assert 'alert-danger' in response.rendered_content
         ia.refresh_from_db()
         assert not ia.vat_id_validated
+
+
+@pytest.mark.django_db
+def test_cancel_payment(client, env):
+    p = env[2].payments.last()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/cancel'.format(p.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CANCELED
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/cancel'.format(p.pk), {}, follow=True)
+    assert 'alert-danger' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_cancel_refund(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='transit',
+        source='admin',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/cancel'.format(r.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_CANCELED
+    r.state = OrderRefund.REFUND_STATE_DONE
+    r.save()
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/cancel'.format(r.pk), {}, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+
+
+@pytest.mark.django_db
+def test_process_refund(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='external',
+        source='external',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_process_refund_invalid_state(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='canceled',
+        source='external',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_CANCELED
+
+
+@pytest.mark.django_db
+def test_process_refund_mark_refunded(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='external',
+        source='external',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {'action': 'r'},
+                           follow=True)
+    assert 'alert-success' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_REFUNDED
+
+
+@pytest.mark.django_db
+def test_done_refund(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='transit',
+        source='admin',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/done'.format(r.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+
+
+@pytest.mark.django_db
+def test_done_refund_invalid_state(client, env):
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='external',
+        source='external',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/done'.format(r.pk), {}, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+
+
+@pytest.mark.django_db
+def test_confirm_payment(client, env):
+    p = env[2].payments.last()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_confirm_payment_invalid_state(client, env):
+    p = env[2].payments.last()
+    p.state = OrderPayment.PAYMENT_STATE_FAILED
+    p.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    assert 'alert-danger' in response.rendered_content
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_FAILED
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_confirm_payment_partal_amount(client, env):
+    p = env[2].payments.last()
+    p.amount -= Decimal(5.00)
+    p.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_fully_mark_as_refunded(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '14.00',
+        'start-mode': 'full',
+        'start-action': 'mark_refunded'
+    }, follow=True)
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '14.00',
+        'start-mode': 'full',
+        'start-action': 'mark_refunded',
+        'refund-manual': '14.00',
+        'manual_state': 'done',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "manual"
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    assert r.amount == Decimal('14.00')
+    assert env[2].status == Order.STATUS_REFUNDED
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_fully_mark_as_pending(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '14.00',
+        'start-mode': 'full',
+        'start-action': 'mark_pending',
+        'refund-manual': '14.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "manual"
+    assert r.state == OrderRefund.REFUND_STATE_CREATED
+    assert r.amount == Decimal('14.00')
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_partially_mark_as_pending(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending'
+    }, follow=True)
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-manual': '7.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "manual"
+    assert r.state == OrderRefund.REFUND_STATE_CREATED
+    assert r.amount == Decimal('7.00')
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_propose_lower_payment(client, env):
+    p = env[2].payments.last()
+    p.amount = Decimal('8.00')
+    p.confirm()
+    p2 = env[2].payments.create(
+        amount=Decimal('6.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending'
+    }, follow=True)
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name=refund-{}]".format(p2.pk))[0]['value'] == '6.00'
+    assert doc.select("input[name=refund-manual]".format(p2.pk))[0]['value'] == '1.00'
+
+
+@pytest.mark.django_db
+def test_refund_propose_equal_payment(client, env):
+    p = env[2].payments.last()
+    p.amount = Decimal('7.00')
+    p.confirm()
+    p2 = env[2].payments.create(
+        amount=Decimal('7.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending'
+    }, follow=True)
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name=refund-{}]".format(p2.pk))[0]['value'] == '7.00'
+    assert doc.select("input[name=refund-manual]".format(p2.pk))[0]['value'] == '0.00'
+
+
+@pytest.mark.django_db
+def test_refund_propose_higher_payment(client, env):
+    p = env[2].payments.last()
+    p.amount = Decimal('6.00')
+    p.confirm()
+    p2 = env[2].payments.create(
+        amount=Decimal('8.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending'
+    }, follow=True)
+    doc = BeautifulSoup(response.content, "lxml")
+    assert doc.select("input[name=refund-{}]".format(p2.pk))[0]['value'] == '7.00'
+    assert doc.select("input[name=refund-manual]".format(p2.pk))[0]['value'] == '0.00'
+
+
+@pytest.mark.django_db
+def test_refund_amount_does_not_match_or_invalid(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-manual': '4.00',
+        'refund-{}'.format(p.pk): '4.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'do not match the' in resp.content
+    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '15.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-manual': '0.00',
+        'refund-{}'.format(p.pk): '15.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'The refund amount needs to be positive' in resp.content
+    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-manual': '-3.00',
+        'refund-{}'.format(p.pk): '10.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'do not match the' in resp.content
+    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-manual': 'AA',
+        'refund-{}'.format(p.pk): '10.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'invalid number' in resp.content
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_automatically_failed(client, env, monkeypatch):
+    p = env[2].payments.last()
+    p.provider = 'stripe'
+    p.info_data = {
+        'id': 'foo'
+    }
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def charge_retr(*args, **kwargs):
+        def refund_create(amount):
+            raise PaymentException('This failed.')
+
+        c = MockedCharge()
+        c.refunds.create = refund_create
+        return c
+
+    monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+
+    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-{}'.format(p.pk): '7.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'This failed.' in r.content
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "stripe"
+    assert r.state == OrderRefund.REFUND_STATE_FAILED
+    assert r.amount == Decimal('7.00')
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_automatically(client, env, monkeypatch):
+    p = env[2].payments.last()
+    p.provider = 'stripe'
+    p.info_data = {
+        'id': 'foo'
+    }
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def charge_retr(*args, **kwargs):
+        def refund_create(amount):
+            pass
+
+        c = MockedCharge()
+        c.refunds.create = refund_create
+        return c
+
+    monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '7.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-{}'.format(p.pk): '7.00',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "stripe"
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    assert r.amount == Decimal('7.00')
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_offsetting_to_unknown(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '5.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-offsetting': '5.00',
+        'order-offsetting': 'BAZ',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in r.content
+
+
+@pytest.mark.django_db
+def test_refund_paid_order_offsetting(client, env):
+    p = env[2].payments.last()
+    p.confirm()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    o = Order.objects.create(
+        code='BAZ', event=env[0], email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=5, locale='en'
+    )
+
+    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '5.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-offsetting': '5.00',
+        'order-offsetting': 'BAZ',
+        'manual_state': 'pending',
+        'perform': 'on'
+    }, follow=True)
+    p.refresh_from_db()
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    env[2].refresh_from_db()
+    r = env[2].refunds.last()
+    assert r.provider == "offsetting"
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    assert r.amount == Decimal('5.00')
+    assert env[2].status == Order.STATUS_PENDING
+    o.refresh_from_db()
+    assert o.status == Order.STATUS_PAID
+    p2 = o.payments.first()
+    assert p2.provider == "offsetting"
+    assert p2.amount == Decimal('5.00')
+    assert p2.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+
+@pytest.mark.django_db
+def test_refund_list(client, env):
+    env[2].refunds.create(
+        provider='banktransfer',
+        state='done',
+        source='admin',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    env[2].refunds.create(
+        provider='manual',
+        state='created',
+        source='admin',
+        amount=Decimal('23.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/refunds/')
+    assert 'R-1' not in response.rendered_content
+    assert 'R-2' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/refunds/?status=all')
+    assert 'R-1' in response.rendered_content
+    assert 'R-2' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/refunds/?status=created')
+    assert 'R-1' not in response.rendered_content
+    assert 'R-2' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/refunds/?status=done')
+    assert 'R-1' in response.rendered_content
+    assert 'R-2' not in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/refunds/?status=all&provider=manual')
+    assert 'R-1' not in response.rendered_content
+    assert 'R-2' in response.rendered_content
+    response = client.get('/control/event/dummy/dummy/orders/refunds/?status=all&provider=banktransfer')
+    assert 'R-1' in response.rendered_content
+    assert 'R-2' not in response.rendered_content

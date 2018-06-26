@@ -28,7 +28,7 @@ class OrderSearchTest(SoupTest):
             code='FO1A', event=self.event1, email='dummy1@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         InvoiceAddress.objects.create(order=o1, company="Test Ltd.", name="Peter Miller")
         ticket1 = Item.objects.create(event=self.event1, name='Early-bird ticket',
@@ -47,7 +47,7 @@ class OrderSearchTest(SoupTest):
             code='FO2', event=self.event2, email='dummy2@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         ticket2 = Item.objects.create(event=self.event1, name='Early-bird ticket',
                                       category=None, default_price=23,

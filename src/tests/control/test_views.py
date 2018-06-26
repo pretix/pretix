@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
@@ -34,8 +35,22 @@ def order(item):
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(), payment_provider='banktransfer')
+                             datetime=now())
     OrderPosition.objects.create(order=o, item=item, price=13)
+    p1 = o.payments.create(
+        provider='stripe',
+        state='refunded',
+        amount=Decimal('23.00'),
+        payment_date=o.datetime,
+    )
+    o.refunds.create(
+        provider='stripe',
+        state='done',
+        source='admin',
+        amount=Decimal('23.00'),
+        execution_date=o.datetime,
+        payment=p1,
+    )
     return o
 
 
@@ -131,6 +146,12 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/orders/{order_code}/comment', 405),
     ('/control/event/{orga}/{event}/orders/{order_code}/change', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/locale', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/payments/{payment}/cancel', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/payments/{payment}/confirm', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/refund', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/refunds/{refund}/cancel', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/refunds/{refund}/process', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/refunds/{refund}/done', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/', 200),
     ('/control/event/{orga}/{event}/orders/overview/', 200),
     ('/control/event/{orga}/{event}/orders/export/', 200),
@@ -141,6 +162,8 @@ def logged_in_client(client, event):
 ])
 @pytest.mark.django_db
 def test_one_view(logged_in_client, url, expected, event, item, item_category, order, question, quota, voucher):
+    payment = order.payments.first()
+    refund = order.refunds.first()
     url = url.format(
         event=event.slug, orga=event.organizer.slug,
         category=item_category.pk,
@@ -149,6 +172,8 @@ def test_one_view(logged_in_client, url, expected, event, item, item_category, o
         question=question.pk,
         quota=quota.pk,
         voucher=voucher.pk,
+        payment=payment.pk,
+        refund=refund.pk
     )
     response = logged_in_client.get(url)
     assert response.status_code == expected

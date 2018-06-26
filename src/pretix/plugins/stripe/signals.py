@@ -8,10 +8,9 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey
-from pretix.base.shredder import BaseDataShredder
 from pretix.base.signals import (
-    logentry_display, register_data_shredders, register_global_settings,
-    register_payment_providers, requiredaction_display,
+    logentry_display, register_global_settings, register_payment_providers,
+    requiredaction_display,
 )
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head
@@ -74,24 +73,6 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         return _('Stripe reported an event: {}').format(text)
 
 
-@receiver(signal=requiredaction_display, dispatch_uid="stripe_requiredaction_display")
-def pretixcontrol_action_display(sender, action, request, **kwargs):
-    if not action.action_type.startswith('pretix.plugins.stripe'):
-        return
-
-    data = json.loads(action.data)
-
-    if action.action_type == 'pretix.plugins.stripe.refund':
-        template = get_template('pretixplugins/stripe/action_refund.html')
-    elif action.action_type == 'pretix.plugins.stripe.overpaid':
-        template = get_template('pretixplugins/stripe/action_overpaid.html')
-    elif action.action_type == 'pretix.plugins.stripe.double':
-        template = get_template('pretixplugins/stripe/action_double.html')
-
-    ctx = {'data': data, 'event': sender, 'action': action}
-    return template.render(ctx, request)
-
-
 settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
 settings_hierarkey.add_default('payment_stripe_cc_3ds_mode', 'recommended', str)
 
@@ -137,28 +118,20 @@ def register_global_settings(sender, **kwargs):
     ])
 
 
-class PaymentLogsShredder(BaseDataShredder):
-    verbose_name = _('Stripe payment history')
-    identifier = 'stripe_logs'
-    description = _('This will remove payment-related history information. No download will be offered.')
+@receiver(signal=requiredaction_display, dispatch_uid="stripe_requiredaction_display")
+def pretixcontrol_action_display(sender, action, request, **kwargs):
+    # DEPRECATED
+    if not action.action_type.startswith('pretix.plugins.stripe'):
+        return
 
-    def generate_files(self):
-        pass
+    data = json.loads(action.data)
 
-    def shred_data(self):
-        for le in self.event.logentry_set.filter(action_type="pretix.plugins.stripe.event").exclude(data=""):
-            d = le.parsed_data
-            if 'data' in d:
-                for k, v in list(d['data']['object'].items()):
-                    if v not in ('reason', 'status', 'failure_message', 'object', 'id'):
-                        d['data']['object'][k] = '█'
-                le.data = json.dumps(d)
-                le.shredded = True
-                le.save(update_fields=['data', 'shredded'])
+    if action.action_type == 'pretix.plugins.stripe.refund':
+        template = get_template('pretixplugins/stripe/action_refund.html')
+    elif action.action_type == 'pretix.plugins.stripe.overpaid':
+        template = get_template('pretixplugins/stripe/action_overpaid.html')
+    elif action.action_type == 'pretix.plugins.stripe.double':
+        template = get_template('pretixplugins/stripe/action_double.html')
 
-
-@receiver(register_data_shredders, dispatch_uid="stripe_shredders")
-def register_shredder(sender, **kwargs):
-    return [
-        PaymentLogsShredder,
-    ]
+    ctx = {'data': data, 'event': sender, 'action': action}
+    return template.render(ctx, request)

@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from pretix.multidomain import event_url
 
-from .views import abort, redirect_view, refund, success, webhook
+from .views import abort, redirect_view, success, webhook
 
 event_patterns = [
     url(r'^paypal/', include([
@@ -19,7 +19,5 @@ event_patterns = [
 
 
 urlpatterns = [
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/refund/(?P<id>\d+)/',
-        refund, name='refund'),
     url(r'^_paypal/webhook/$', webhook, name='webhook'),
 ]

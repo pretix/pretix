@@ -1,0 +1,55 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% trans "Mark refund as done" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Mark refund as done" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+
+    <form method="post" class="" action="">
+        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed with amount=refund.amount|money:request.event.currency method=refund.payment_provider.verbose_name pending=pending_sum|money:request.event.currency total=order.total|money:request.event.currency %}
+                We recevied notice that <strong>{{ amount }}</strong> have been refunded via
+                <strong>{{ method }}</strong>. If this refund is processed, the order will be underpaid by
+                <strong>{{ pending }}</strong>. The order total is <strong>{{ total }}</strong>.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed with amount=refund.amount|money:request.event.currency method=refund.payment_provider.verbose_name %}
+                What should happen to the ticket order?
+            {% endblocktrans %}
+        </p>
+    <div class="form-inline">
+        <label class="radio">
+            <input type="radio" name="action" value="n" {% if not propose_cancel %}checked{% endif %}>
+            {% trans "Mark the order as unpaid and allow the customer to pay again with another payment method." %}
+        </label>
+        <br>
+        <label class="radio">
+            <input type="radio" name="action" value="r" {% if propose_cancel %}checked{% endif %}>
+            {% trans "Cancel the order irrevocably." %}
+        </label>
+    </div>
+        <div class="form-group submit-group">
+            <a class="btn btn-default btn-lg"
+                    href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+            <button class="btn btn-primary btn-save btn-lg" type="submit">
+                {% trans "Process refund" %}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

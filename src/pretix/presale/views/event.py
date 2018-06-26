@@ -289,7 +289,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
 
 class EventIcalDownload(EventViewMixin, View):
-
     def get(self, request, *args, **kwargs):
         if not self.request.event:
             raise Http404(_('Unknown event code or not authorized to access this event.'))

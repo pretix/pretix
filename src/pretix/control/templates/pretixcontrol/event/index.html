@@ -15,6 +15,25 @@
             {% endif %}
         </small>
     </h1>
+    {% if has_overpaid_orders %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                This event contains <strong>overpaid orders</strong>, for example due to duplicate payment attempts.
+                You should review the cases and consider refunding the overpaid amount to the user.
+            {% endblocktrans %}
+            <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=overpaid"
+                    class="btn btn-primary">{% trans "Show overpaid orders" %}</a>
+        </div>
+    {% endif %}
+    {% if has_pending_refunds %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                This event contains <strong>pending refunds</strong> that you should take care of.
+            {% endblocktrans %}
+            <a href="{% url "control:event.orders.refunds" event=request.event.slug organizer=request.event.organizer.slug %}"
+                    class="btn btn-primary">{% trans "Show pending refunds" %}</a>
+        </div>
+    {% endif %}
     {% if actions|length > 0 %}
         <div class="panel panel-danger">
             <div class="panel-heading">

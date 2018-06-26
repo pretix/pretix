@@ -7,8 +7,8 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.models import (
-    Checkin, Event, Invoice, Item, Order, OrderPosition, Organizer, Question,
-    QuestionAnswer, SubEvent,
+    Checkin, Event, Invoice, Item, Order, OrderPayment, OrderPosition,
+    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -152,14 +152,21 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
+            elif s in ('p', 'n', 'e', 'c', 'r'):
                 qs = qs.filter(status=s)
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
 
         if fdata.get('provider'):
-            qs = qs.filter(payment_provider=fdata.get('provider'))
+            qs = qs.annotate(
+                has_payment_with_provider=Exists(
+                    OrderPayment.objects.filter(
+                        Q(order=OuterRef('pk')) & Q(provider=fdata.get('provider'))
+                    )
+                )
+            )
+            qs = qs.filter(has_payment_with_provider=1)
 
         return qs
 
@@ -186,6 +193,23 @@ class EventOrderFilterForm(OrderFilterForm):
     )
     answer = forms.CharField(
         required=False
+    )
+    status = forms.ChoiceField(
+        label=_('Order status'),
+        choices=(
+            ('', _('All orders')),
+            ('p', _('Paid')),
+            ('n', _('Pending')),
+            ('o', _('Pending (overdue)')),
+            ('np', _('Pending or paid')),
+            ('e', _('Expired')),
+            ('ne', _('Pending or expired')),
+            ('c', _('Canceled')),
+            ('r', _('Refunded')),
+            ('overpaid', _('Overpaid')),
+            ('underpaid', _('Underpaid')),
+        ),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
@@ -246,6 +270,18 @@ class EventOrderFilterForm(OrderFilterForm):
                     answer__iexact=fdata.get('answer')
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
+
+        if fdata.get('status') == 'overpaid':
+            qs = qs.filter(
+                Q(~Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_t__lt=0))
+                | Q(Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_rc__lt=0))
+                | Q(Q(status__in=[Order.STATUS_EXPIRED, Order.STATUS_PENDING]) & Q(pending_sum_rc__lte=0))
+            )
+        elif fdata.get('status') == 'underpaid':
+            qs = qs.filter(
+                status=Order.STATUS_PAID,
+                pending_sum_t__gt=0
+            )
 
         return qs
 
@@ -791,5 +827,45 @@ class VoucherFilterForm(FilterForm):
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
+
+        return qs
+
+
+class RefundFilterForm(FilterForm):
+    provider = forms.ChoiceField(
+        label=_('Payment provider'),
+        choices=[
+            ('', _('All payment providers')),
+        ],
+        required=False,
+    )
+    status = forms.ChoiceField(
+        label=_('Refund status'),
+        choices=(
+            ('', _('All open refunds')),
+            ('all', _('All refunds')),
+        ) + OrderRefund.REFUND_STATES,
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        self.fields['provider'].choices += [(k, v.verbose_name) for k, v
+                                            in self.event.get_payment_providers().items()]
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+        qs = super().filter_qs(qs)
+
+        if fdata.get('provider'):
+            qs = qs.filter(provider=fdata.get('provider'))
+
+        if fdata.get('status'):
+            if fdata.get('status') != 'all':
+                qs = qs.filter(state=fdata.get('status'))
+        else:
+            qs = qs.filter(state__in=[OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT,
+                                      OrderRefund.REFUND_STATE_EXTERNAL])
 
         return qs

@@ -6,7 +6,7 @@ import pytest
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Order, Organizer, RequiredAction, Team, User,
+    Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
 )
 from pretix.plugins.stripe.models import ReferencedStripeObject
 
@@ -26,7 +26,7 @@ def env():
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('13.37'), payment_provider='stripe'
+        total=Decimal('13.37'),
     )
     return event, o1
 
@@ -129,7 +129,7 @@ def test_webhook_all_good(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_webhook_mark_paid(env, client, monkeypatch):
+def test_webhook_mark_paid_without_reference_and_payment(env, client, monkeypatch):
     order = env[1]
     order.status = Order.STATUS_PENDING
     order.save()
@@ -164,6 +164,13 @@ def test_webhook_mark_paid(env, client, monkeypatch):
 @pytest.mark.django_db
 def test_webhook_partial_refund(env, client, monkeypatch):
     charge = get_test_charge(env[1])
+
+    payment = env[1].payments.create(
+        provider='stripe', amount=env[1].total, info=json.dumps(charge)
+    )
+    ReferencedStripeObject.objects.create(order=env[1], reference="ch_18TY6GGGWE2Ias8TZHanef25",
+                                          payment=payment)
+
     charge['refunds'] = {
         "object": "list",
         "data": [
@@ -209,13 +216,10 @@ def test_webhook_partial_refund(env, client, monkeypatch):
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
-    ra = RequiredAction.objects.get(action_type="pretix.plugins.stripe.refund")
-    client.login(username='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/stripe/refund/{}/'.format(ra.pk))
-
-    order = env[1]
-    order.refresh_from_db()
-    assert order.status == Order.STATUS_REFUNDED
+    ra = order.refunds.first()
+    assert ra.state == OrderRefund.REFUND_STATE_EXTERNAL
+    assert ra.source == 'external'
+    assert ra.amount == Decimal('123.00')
 
 
 @pytest.mark.django_db
@@ -227,6 +231,48 @@ def test_webhook_global(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
+    payment = order.payments.create(
+        provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
+    )
+    ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25",
+                                          payment=payment)
+
+    client.post('/_stripe/webhook/', json.dumps(
+        {
+            "id": "evt_18otImGGWE2Ias8TUyVRDB1G",
+            "object": "event",
+            "api_version": "2016-03-07",
+            "created": 1472729052,
+            "data": {
+                "object": {
+                    "id": "ch_18TY6GGGWE2Ias8TZHanef25",
+                    "object": "charge",
+                    # Rest of object is ignored anway
+                }
+            },
+            "livemode": True,
+            "pending_webhooks": 1,
+            "request": "req_977XOWC8zk51Z9",
+            "type": "charge.succeeded"
+        }
+    ), content_type='application_json')
+
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_webhook_global_legacy_reference(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+
+    charge = get_test_charge(env[1])
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
+
+    payment = order.payments.create(
+        provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
+    )
     ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25")
 
     client.post('/_stripe/webhook/', json.dumps(
@@ -251,3 +297,4 @@ def test_webhook_global(env, client, monkeypatch):
 
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
+    assert list(order.payments.all()) == [payment]

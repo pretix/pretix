@@ -90,6 +90,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{% url 'control:event.orders.refunds' organizer=request.event.organizer.slug event=request.event.slug %}"
+                            {% if url_name == "event.orders.refunds" %}class="active"{% endif %}>
+                        {% trans "Refunds" %}
+                    </a>
+                </li>
+                <li>
                     <a href="{% url 'control:event.orders.export' organizer=request.event.organizer.slug event=request.event.slug %}"
                             {% if url_name == "event.orders.export" %}class="active"{% endif %}>
                         {% trans "Export" %}

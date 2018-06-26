@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import OrderedDict
 from decimal import ROUND_HALF_UP, Decimal
@@ -6,7 +7,6 @@ from typing import Any, Dict, Union
 import pytz
 from django import forms
 from django.conf import settings
-from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import receiver
 from django.forms import Form
@@ -14,13 +14,18 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
-from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import CartPosition, Event, Order, Quota
+from pretix.base.forms import PlaceholderValidator
+from pretix.base.models import (
+    CartPosition, Event, Order, OrderPayment, OrderRefund, Quota,
+)
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
+from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.money import DecimalTextInput
 from pretix.presale.views import get_cart_total
 from pretix.presale.views.cart import get_or_create_cart_id
@@ -130,6 +135,16 @@ class BasePaymentProvider:
         cases will be the same as your package name.
         """
         raise NotImplementedError()  # NOQA
+
+    @property
+    def abort_pending_allowed(self) -> bool:
+        """
+        Whether or not a user can abort a payment in pending start to switch to another
+        payment method. This returns ``False`` by default which is no guarantee that
+        aborting a pending payment can never happen, it just hides the frontend button
+        to avoid users accidentally committing double payments.
+        """
+        return False
 
     @property
     def settings_form_fields(self) -> dict:
@@ -360,7 +375,7 @@ class BasePaymentProvider:
 
     def payment_form_render(self, request: HttpRequest) -> str:
         """
-        When the user selects this provider as his preferred payment method,
+        When the user selects this provider as their preferred payment method,
         they will be shown the HTML you return from this method.
 
         The default implementation will call :py:meth:`checkout_form`
@@ -375,8 +390,8 @@ class BasePaymentProvider:
 
     def checkout_confirm_render(self, request) -> str:
         """
-        If the user has successfully filled in his payment data, they will be redirected
-        to a confirmation page which lists all details of his order for a final review.
+        If the user has successfully filled in their payment data, they will be redirected
+        to a confirmation page which lists all details of their order for a final review.
         This method should return the HTML which should be displayed inside the
         'Payment' box on this page.
 
@@ -385,11 +400,19 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
+    def payment_pending_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        """
+        Render customer-facing instructions on how to proceed with a pending payment
+
+        :return: HTML
+        """
+        return ""
+
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str]:
         """
-        Will be called after the user selects this provider as his payment method.
+        Will be called after the user selects this provider as their payment method.
         If you provided a form to the user to enter payment data, this method should
-        at least store the user's input into his session.
+        at least store the user's input into their session.
 
         This method should return ``False`` if the user's input was invalid, ``True``
         if the input was valid and the frontend should continue with default behavior
@@ -404,7 +427,7 @@ class BasePaymentProvider:
         If your payment method requires you to redirect the user to an external provider,
         this might be the place to do so.
 
-        .. IMPORTANT:: If this is called, the user has not yet confirmed his or her order.
+        .. IMPORTANT:: If this is called, the user has not yet confirmed their order.
            You may NOT do anything which actually moves money.
 
         :param cart: This dictionary contains at least the following keys:
@@ -439,26 +462,29 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def payment_perform(self, request: HttpRequest, order: Order) -> str:
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
-        If you need any special  behavior,  you can return a string
+        You will be passed an :py:class:`pretix.base.models.OrderPayment` object that contains
+        the amount of money that should be paid.
+
+        If you need any special behavior, you can return a string
         containing the URL the user will be redirected to. If you are done with your process
         you should return the user to the order's detail page.
 
-        If the payment is completed, you should call ``pretix.base.services.orders.mark_order_paid(order, provider, info)``
-        with ``provider`` being your :py:attr:`identifier` and ``info`` being any string
-        you might want to store for later usage. Please note that ``mark_order_paid`` might
-        raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this
-        order is over and some of the items are sold out. You should use the exception message
-        to display a meaningful error to the user.
+        If the payment is completed, you should call ``payment.confirm()``. Please note that ``this`` might
+        raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this order is over and
+        some of the items are sold out. You should use the exception message to display a meaningful error
+        to the user.
 
         The default implementation just returns ``None`` and therefore leaves the
         order unpaid. The user will be redirected to the order's detail page by default.
 
         On errors, you should raise a ``PaymentException``.
+
         :param order: The order object
+        :param payment: An ``OrderPayment`` instance
         """
         return None
 
@@ -472,19 +498,6 @@ class BasePaymentProvider:
         """
         return ""
 
-    def order_pending_render(self, request: HttpRequest, order: Order) -> str:
-        """
-        If the user visits a detail page of an order which has not yet been paid but
-        this payment method was selected during checkout, this method will be called
-        to provide HTML content for the 'payment' box on the page.
-
-        It should contain instructions on how to continue with the payment process,
-        either in form of text or buttons/links/etc.
-
-        :param order: The order object
-        """
-        raise NotImplementedError()  # NOQA
-
     def order_change_allowed(self, order: Order) -> bool:
         """
         Will be called to check whether it is allowed to change the payment method of
@@ -494,39 +507,16 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        if self.settings._total_max is not None and order.total > Decimal(self.settings._total_max):
+        ps = order.pending_sum
+        if self.settings._total_max is not None and ps > Decimal(self.settings._total_max):
             return False
 
-        if self.settings._total_min is not None and order.total < Decimal(self.settings._total_min):
+        if self.settings._total_min is not None and ps < Decimal(self.settings._total_min):
             return False
 
         return self._is_still_available(order=order)
 
-    def order_can_retry(self, order: Order) -> bool:
-        """
-        Will be called if the user views the detail page of an unpaid order to determine
-        whether the user should be presented with an option to retry the payment. The default
-        implementation always returns False.
-
-        If you want to enable retrials for your payment method, the best is to just return
-        ``self._is_still_available()`` from this method to disable it as soon as the method
-        gets disabled or the methods end date is reached.
-
-        The retry workflow is also used if a user switches to this payment method for an existing
-        order!
-
-        :param order: The order object
-        """
-        return False
-
-    def retry_prepare(self, request: HttpRequest, order: Order) -> Union[bool, str]:
-        """
-        Deprecated, use order_prepare instead
-        """
-        raise DeprecationWarning('retry_prepare is deprecated, use order_prepare instead')
-        return self.order_prepare(request, order)
-
-    def order_prepare(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str]:
         """
         Will be called if the user retries to pay an unpaid order (after the user filled in
         e.g. the form returned by :py:meth:`payment_form`) or if the user changes the payment
@@ -547,22 +537,9 @@ class BasePaymentProvider:
         else:
             return False
 
-    def order_paid_render(self, request: HttpRequest, order: Order) -> str:
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         """
-        Will be called if the user views the detail page of a paid order which is
-        associated with this payment provider.
-
-        It should return HTML code which should be displayed to the user or None,
-        if there is nothing to say (like the default implementation does).
-
-        :param order: The order object
-        """
-        return None
-
-    def order_control_render(self, request: HttpRequest, order: Order) -> str:
-        """
-        Will be called if the *event administrator* views the detail page of an order
-        which is associated with this payment provider.
+        Will be called if the *event administrator* views the details of a payment.
 
         It should return HTML code containing information regarding the current payment
         status and, if applicable, next steps.
@@ -571,62 +548,44 @@ class BasePaymentProvider:
 
         :param order: The order object
         """
-        return _('Payment provider: %s' % self.verbose_name)
+        return ''
 
-    def order_control_refund_render(self, order: Order, request: HttpRequest=None) -> str:
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
         """
-        Will be called if the event administrator clicks an order's 'refund' button.
-        This can be used to display information *before* the order is being refunded.
-
-        It should return HTML code which should be displayed to the user. It should
-        contain information about to which extend the money will be refunded
-        automatically.
-
-        :param order: The order object
-        :param request: The HTTP request
-
-        .. versionchanged:: 1.6
-
-           The parameter ``request`` has been added.
+        Will be called to check if the provider supports automatic refunding for this
+        payment.
         """
-        return '<div class="alert alert-warning">%s</div>' % _('The money can not be automatically refunded, '
-                                                               'please transfer the money back manually.')
+        return False
 
-    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         """
-        Will be called if the event administrator confirms the refund.
-
-        This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behavior or None to continue
-        with default behavior.
-
-        On failure, you should use Django's message framework to display an error message
-        to the user.
-
-        The default implementation sets the Order's state to refunded and shows a success
-        message.
-
-        :param request: The HTTP request
-        :param order: The order object
+        Will be called to check if the provider supports automatic partial refunding for this
+        payment.
         """
-        from pretix.base.services.orders import mark_order_refunded
+        return False
 
-        mark_order_refunded(order, user=request.user)
-        messages.success(request, _('The order has been marked as refunded. Please transfer the money '
-                                    'back to the buyer manually.'))
+    def execute_refund(self, refund: OrderRefund):
+        """
+        Will be called to execute an refund. Note that refunds have an amount property and can be partial.
 
-    def shred_payment_info(self, order: Order):
+        This should transfer the money back (if possible).
+        On success, you should call ``refund.done()``.
+        On failure, you should raise a PaymentException.
+        """
+        raise PaymentException(_('Automatic refunds are not supported by this payment provider.'))
+
+    def shred_payment_info(self, obj: Union[OrderPayment, OrderRefund]):
         """
         When personal data is removed from an event, this method is called to scrub payment-related data
-        from an order. By default, it removes all info from the ``payment_info`` attribute. You can override
+        from a payment or refund. By default, it removes all info from the ``info`` attribute. You can override
         this behavior if you want to retain attributes that are not personal data on their own, i.e. a
         reference to a transaction in an external system. You can also override this to scrub more data, e.g.
         data from external sources that is saved in LogEntry objects or other places.
 
         :param order: An order
         """
-        order.payment_info = None
-        order.save(update_fields=['payment_info'])
+        obj.info = '{}'
+        obj.save(update_fields=['info'])
 
 
 class PaymentException(Exception):
@@ -634,24 +593,12 @@ class PaymentException(Exception):
 
 
 class FreeOrderProvider(BasePaymentProvider):
-
-    @property
-    def is_implicit(self) -> bool:
-        return True
-
-    @property
-    def is_enabled(self) -> bool:
-        return True
-
-    @property
-    def identifier(self) -> str:
-        return "free"
+    is_implicit = True
+    is_enabled = True
+    identifier = "free"
 
     def checkout_confirm_render(self, request: HttpRequest) -> str:
         return _("No payment is required as this order only includes products which are free of charge.")
-
-    def order_pending_render(self, request: HttpRequest, order: Order) -> str:
-        pass
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         return True
@@ -660,10 +607,9 @@ class FreeOrderProvider(BasePaymentProvider):
     def verbose_name(self) -> str:
         return _("Free of charge")
 
-    def payment_perform(self, request: HttpRequest, order: Order):
-        from pretix.base.services.orders import mark_order_paid
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
-            mark_order_paid(order, 'free', send_mail=False)
+            payment.confirm()
         except Quota.QuotaExceededException as e:
             raise PaymentException(str(e))
 
@@ -671,32 +617,7 @@ class FreeOrderProvider(BasePaymentProvider):
     def settings_form_fields(self) -> dict:
         return {}
 
-    def order_control_refund_render(self, order: Order) -> str:
-        return ''
-
-    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
-        """
-        Will be called if the event administrator confirms the refund.
-
-        This should transfer the money back (if possible). You can return the URL the
-        user should be redirected to if you need special behavior or None to continue
-        with default behavior.
-
-        On failure, you should use Django's message framework to display an error message
-        to the user.
-
-        The default implementation sets the Order's state to refunded and shows a success
-        message.
-
-        :param request: The HTTP request
-        :param order: The order object
-        """
-        from pretix.base.services.orders import mark_order_refunded
-
-        mark_order_refunded(order, user=request.user)
-        messages.success(request, _('The order has been marked as refunded.'))
-
-    def is_allowed(self, request: HttpRequest, total: Decimal) -> bool:
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         from .services.cart import get_fees
 
         total = get_cart_total(request)
@@ -713,10 +634,9 @@ class BoxOfficeProvider(BasePaymentProvider):
     identifier = "boxoffice"
     verbose_name = _("Box office")
 
-    def payment_perform(self, request: HttpRequest, order: Order):
-        from pretix.base.services.orders import mark_order_paid
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
-            mark_order_paid(order, 'boxoffice', send_mail=False)
+            payment.confirm()
         except Quota.QuotaExceededException as e:
             raise PaymentException(str(e))
 
@@ -724,22 +644,136 @@ class BoxOfficeProvider(BasePaymentProvider):
     def settings_form_fields(self) -> dict:
         return {}
 
-    def order_control_refund_render(self, order: Order) -> str:
-        return ''
-
-    def order_control_refund_perform(self, request: HttpRequest, order: Order) -> Union[bool, str]:
-        from pretix.base.services.orders import mark_order_refunded
-
-        mark_order_refunded(order, user=request.user)
-        messages.success(request, _('The order has been marked as refunded.'))
-
-    def is_allowed(self, request: HttpRequest, total: Decimal) -> bool:
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         return False
 
     def order_change_allowed(self, order: Order) -> bool:
         return False
 
 
+class ManualPayment(BasePaymentProvider):
+    identifier = 'manual'
+    verbose_name = _('Manual payment')
+
+    @property
+    def is_implicit(self):
+        return 'pretix.plugins.manualpayment' not in self.event.plugins
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None):
+        return 'pretix.plugins.manualpayment' in self.event.plugins
+
+    def order_change_allowed(self, order: Order):
+        return 'pretix.plugins.manualpayment' in self.event.plugins
+
+    @property
+    def public_name(self):
+        return str(self.settings.get('public_name', as_type=LazyI18nString))
+
+    @property
+    def settings_form_fields(self):
+        d = OrderedDict(
+            [
+                ('public_name', I18nFormField(
+                    label=_('Payment method name'),
+                    widget=I18nTextInput,
+                )),
+                ('checkout_description', I18nFormField(
+                    label=_('Payment process description during checkout'),
+                    help_text=_('This text will be shown during checkout when the user selects this payment method. '
+                                'It should give a short explanation on this payment method.'),
+                    widget=I18nTextarea,
+                )),
+                ('email_instructions', I18nFormField(
+                    label=_('Payment process description in order confirmation emails'),
+                    help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
+                                'mails. It should instruct the user on how to proceed with the payment. You can use'
+                                'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
+                    widget=I18nTextarea,
+                    validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
+                )),
+                ('pending_description', I18nFormField(
+                    label=_('Payment process description for pending orders'),
+                    help_text=_('This text will be shown on the order confirmation page for pending orders. '
+                                'It should instruct the user on how to proceed with the payment. You can use'
+                                'the placeholders {order}, {total}, {currency} and {total_with_currency}'),
+                    widget=I18nTextarea,
+                    validators=[PlaceholderValidator(['{order}', '{total}', '{currency}', '{total_with_currency}'])],
+                )),
+            ] + list(super().settings_form_fields.items())
+        )
+        d.move_to_end('_enabled', last=False)
+        return d
+
+    def payment_form_render(self, request) -> str:
+        return rich_text(
+            str(self.settings.get('checkout_description', as_type=LazyI18nString))
+        )
+
+    def checkout_prepare(self, request, total):
+        return True
+
+    def payment_is_valid_session(self, request):
+        return True
+
+    def checkout_confirm_render(self, request):
+        return self.payment_form_render(request)
+
+    def format_map(self, order):
+        return {
+            'order': order.code,
+            'total': order.total,
+            'currency': self.event.currency,
+            'total_with_currency': money_filter(order.total, self.event.currency)
+        }
+
+    def order_pending_mail_render(self, order) -> str:
+        msg = str(self.settings.get('email_instructions', as_type=LazyI18nString)).format_map(self.format_map(order))
+        return msg
+
+    def order_pending_render(self, request, order) -> str:
+        return rich_text(
+            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(order))
+        )
+
+
+class OffsettingProvider(BasePaymentProvider):
+    is_enabled = True
+    identifier = "offsetting"
+    verbose_name = _("Offsetting")
+    is_implicit = True
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            payment.confirm()
+        except Quota.QuotaExceededException as e:
+            raise PaymentException(str(e))
+
+    def execute_refund(self, refund: OrderRefund):
+        code = refund.info_data['orders'][0]
+        order = self.event.orders.get(code=code)
+        p = order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            amount=refund.amount,
+            payment_date=now(),
+            provider='offsetting',
+            info=json.dumps({'orders': [refund.order.code]})
+        )
+        p.confirm()
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return False
+
+    def order_change_allowed(self, order: Order) -> bool:
+        return False
+
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
+        return _('Balanced against orders: %s' % ', '.join(payment.info_data['orders']))
+
+
 @receiver(register_payment_providers, dispatch_uid="payment_free")
 def register_payment_provider(sender, **kwargs):
-    return [FreeOrderProvider, BoxOfficeProvider]
+    return [FreeOrderProvider, BoxOfficeProvider, OffsettingProvider, ManualPayment]

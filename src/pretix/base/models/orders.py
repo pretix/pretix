@@ -1,5 +1,6 @@
 import copy
 import json
+import logging
 import os
 import string
 from datetime import datetime, time, timedelta
@@ -9,8 +10,11 @@ from typing import Any, Dict, List, Union
 import dateutil
 import pytz
 from django.conf import settings
-from django.db import models
-from django.db.models import F, Sum
+from django.db import models, transaction
+from django.db.models import (
+    Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
+)
+from django.db.models.functions import Coalesce
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -30,6 +34,8 @@ from pretix.base.reldate import RelativeDateWrapper
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
+
+logger = logging.getLogger(__name__)
 
 
 def generate_secret():
@@ -76,12 +82,6 @@ class Order(LoggedModel):
     :type datetime: datetime
     :param expires: The date until this order has to be paid to guarantee the fulfillment
     :type expires: datetime
-    :param payment_date: The date of the payment completion (null if not yet paid)
-    :type payment_date: datetime
-    :param payment_provider: The payment provider selected by the user
-    :type payment_provider: str
-    :param payment_info: Arbitrary information stored by the payment provider
-    :type payment_info: str
     :param total: The total amount of the order, including the payment fee
     :type total: decimal.Decimal
     :param comment: An internal comment that will only be visible to staff, and never displayed to the user
@@ -136,23 +136,6 @@ class Order(LoggedModel):
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
     )
-    payment_date = models.DateTimeField(
-        verbose_name=_("Payment date"),
-        null=True, blank=True
-    )
-    payment_provider = models.CharField(
-        null=True, blank=True,
-        max_length=255,
-        verbose_name=_("Payment provider")
-    )
-    payment_info = models.TextField(
-        verbose_name=_("Payment information"),
-        null=True, blank=True
-    )
-    payment_manual = models.BooleanField(
-        verbose_name=_("Payment state was manually modified"),
-        default=False
-    )
     total = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Total amount")
@@ -198,6 +181,68 @@ class Order(LoggedModel):
             return json.loads(self.meta_info)
         except TypeError:
             return None
+
+    @property
+    def pending_sum(self):
+        total = self.total
+        if self.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
+            total = 0
+        payment_sum = self.payments.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        refund_sum = self.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        return total - payment_sum + refund_sum
+
+    @classmethod
+    def annotate_overpayments(cls, qs):
+        payment_sum = OrderPayment.objects.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
+        refund_sum = OrderRefund.objects.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED),
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
+        external_refund = OrderRefund.objects.filter(
+            state=OrderRefund.REFUND_STATE_EXTERNAL,
+            order=OuterRef('pk')
+        )
+        pending_refund = OrderRefund.objects.filter(
+            state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
+            order=OuterRef('pk')
+        )
+
+        qs = qs.annotate(
+            payment_sum=Subquery(payment_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10)),
+            refund_sum=Subquery(refund_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10)),
+            has_external_refund=Exists(external_refund),
+            has_pending_refund=Exists(pending_refund),
+        ).annotate(
+            pending_sum_t=F('total') - Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
+            pending_sum_rc=-1 * F('payment_sum') + Coalesce(F('refund_sum'), 0),
+        ).annotate(
+            is_overpaid=Case(
+                When(~Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_t__lt=0),
+                     then=Value('1')),
+                When(Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_rc__lt=0),
+                     then=Value('1')),
+                When(Q(status__in=[Order.STATUS_EXPIRED, Order.STATUS_PENDING]) & Q(pending_sum_t__lte=0),
+                     then=Value('1')),
+                default=Value('0'),
+                output_field=models.IntegerField()
+            ),
+            is_underpaid=Case(
+                When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=0),
+                     then=Value('1')),
+                default=Value('0'),
+                output_field=models.IntegerField()
+            )
+        )
+        return qs
 
     @property
     def full_code(self):
@@ -711,10 +756,441 @@ class AbstractPosition(models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
 
+class OrderPayment(models.Model):
+    """
+    Represents a payment or payment attempt for an order.
+
+
+    :param id: A globally unique ID for this payment
+    :type id:
+    :param local_id: An ID of this payment, counting from one for every order independently.
+    :type local_id: int
+    :param state: The state of the payment, one of ``created``, ``pending``, ``confirmed``, ``failed``,
+      ``canceled``, or ``refunded``.
+    :type state: str
+    :param amount: The payment amount
+    :type amount: Decimal
+    :param order: The order that is paid
+    :type order: Order
+    :param created: The creation time of this record
+    :type created: datetime
+    :param payment_date: The completion time of this payment
+    :type payment_date: datetime
+    :param provider: The payment provider in use
+    :type provider: str
+    :param info: Provider-specific meta information (in JSON format)
+    :type info: str
+    :param fee: The ``OrderFee`` object used to track the fee for this order.
+    :type fee: pretix.base.models.OrderFee
+    """
+    PAYMENT_STATE_CREATED = 'created'
+    PAYMENT_STATE_PENDING = 'pending'
+    PAYMENT_STATE_CONFIRMED = 'confirmed'
+    PAYMENT_STATE_FAILED = 'failed'
+    PAYMENT_STATE_CANCELED = 'canceled'
+    PAYMENT_STATE_REFUNDED = 'refunded'
+
+    PAYMENT_STATES = (
+        (PAYMENT_STATE_CREATED, pgettext_lazy('payment_state', 'created')),
+        (PAYMENT_STATE_PENDING, pgettext_lazy('payment_state', 'pending')),
+        (PAYMENT_STATE_CONFIRMED, pgettext_lazy('payment_state', 'confirmed')),
+        (PAYMENT_STATE_CANCELED, pgettext_lazy('payment_state', 'canceled')),
+        (PAYMENT_STATE_FAILED, pgettext_lazy('payment_state', 'failed')),
+        (PAYMENT_STATE_REFUNDED, pgettext_lazy('payment_state', 'refunded')),
+    )
+    local_id = models.PositiveIntegerField()
+    state = models.CharField(
+        max_length=190, choices=PAYMENT_STATES
+    )
+    amount = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Amount")
+    )
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order"),
+        related_name='payments',
+        on_delete=models.PROTECT
+    )
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+    payment_date = models.DateTimeField(
+        null=True, blank=True
+    )
+    provider = models.CharField(
+        null=True, blank=True,
+        max_length=255,
+        verbose_name=_("Payment provider")
+    )
+    info = models.TextField(
+        verbose_name=_("Payment information"),
+        null=True, blank=True
+    )
+    fee = models.ForeignKey(
+        'OrderFee',
+        null=True, blank=True, related_name='payments'
+    )
+    migrated = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ('local_id',)
+
+    @property
+    def info_data(self):
+        """
+        This property allows convenient access to the data stored in the ``info``
+        attribute by automatically encoding and decoding the content as JSON.
+        """
+        return json.loads(self.info) if self.info else {}
+
+    @info_data.setter
+    def info_data(self, d):
+        self.info = json.dumps(d)
+
+    @cached_property
+    def payment_provider(self):
+        """
+        Cached access to an instance of the payment provider in use.
+        """
+        return self.order.event.get_payment_providers().get(self.provider)
+
+    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text=''):
+        """
+        Marks the payment as complete. If possible, this also marks the order as paid if no further
+        payment is required
+
+        :param count_waitinglist: Whether, when calculating quota, people on the waiting list should be taken into
+                                  consideration (default: ``True``).
+        :type count_waitinglist: boolean
+        :param force: Whether this payment should be marked as paid even if no remaining
+                      quota is available (default: ``False``).
+        :type force: boolean
+        :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
+        :type send_mail: boolean
+        :param user: The user who performed the change
+        :param auth: The API auth token that performed the change
+        :param mail_text: Additional text to be included in the email
+        :type mail_text: str
+        :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
+        """
+        from pretix.base.signals import order_paid
+        from pretix.base.services.invoices import generate_invoice, invoice_qualified
+        from pretix.base.services.mail import SendMailException
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        self.state = self.PAYMENT_STATE_CONFIRMED
+        self.payment_date = now()
+        self.save()
+
+        self.order.log_action('pretix.event.order.payment.confirmed', {
+            'local_id': self.local_id,
+            'provider': self.provider,
+        }, user=user, auth=auth)
+
+        if self.order.status == Order.STATUS_PAID:
+            return
+
+        payment_sum = self.order.payments.filter(
+            state__in=(self.PAYMENT_STATE_CONFIRMED, self.PAYMENT_STATE_REFUNDED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        refund_sum = self.order.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        if payment_sum - refund_sum < self.order.total:
+            return
+
+        with self.order.event.lock():
+            can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
+            if not force and can_be_paid is not True:
+                raise Quota.QuotaExceededException(can_be_paid)
+            self.order.status = Order.STATUS_PAID
+            self.order.save()
+
+            self.order.log_action('pretix.event.order.paid', {
+                'provider': self.provider,
+                'info': self.info,
+                'date': self.payment_date,
+                'force': force
+            }, user=user, auth=auth)
+            order_paid.send(self.order.event, order=self.order)
+
+        invoice = None
+        if invoice_qualified(self.order):
+            invoices = self.order.invoices.filter(is_cancellation=False).count()
+            cancellations = self.order.invoices.filter(is_cancellation=True).count()
+            gen_invoice = (
+                (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
+                0 < invoices <= cancellations
+            )
+            if gen_invoice:
+                invoice = generate_invoice(
+                    self.order,
+                    trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
+                )
+
+        if send_mail:
+            with language(self.order.locale):
+                try:
+                    invoice_name = self.order.invoice_address.name
+                    invoice_company = self.order.invoice_address.company
+                except InvoiceAddress.DoesNotExist:
+                    invoice_name = ""
+                    invoice_company = ""
+                email_template = self.order.event.settings.mail_text_order_paid
+                email_context = {
+                    'event': self.order.event.name,
+                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                        'order': self.order.code,
+                        'secret': self.order.secret
+                    }),
+                    'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
+                    'payment_info': mail_text
+                }
+                email_subject = _('Payment received for your order: %(code)s') % {'code': self.order.code}
+                try:
+                    self.order.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.order_paid', user,
+                        invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else []
+                    )
+                except SendMailException:
+                    logger.exception('Order paid email could not be sent')
+
+    @property
+    def refunded_amount(self):
+        """
+        The sum of all refund amounts in ``done``, ``transit``, or ``created`` states associated
+        with this payment.
+        """
+        return self.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+
+    @property
+    def full_id(self):
+        """
+        The full human-readable ID of this payment, constructed by the order code and the ``local_id``
+        field with ``-P-`` in between.
+        :return:
+        """
+        return '{}-P-{}'.format(self.order.code, self.local_id)
+
+    def save(self, *args, **kwargs):
+        if not self.local_id:
+            self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
+        super().save(*args, **kwargs)
+
+    def create_external_refund(self, amount=None, execution_date=None, info='{}'):
+        """
+        This should be called to create an OrderRefund object when a refund has triggered
+        by an external source, e.g. when a credit card payment has been refunded by the
+        credit card provider.
+
+        :param amount: Amount to refund. If not given, the full payment amount will be used.
+        :type amount: Decimal
+        :param execution_date: Date of the refund. Defaults to the current time.
+        :type execution_date: datetime
+        :param info: Additional information, defaults to ``"{}"``.
+        :type info: str
+        :return: OrderRefund
+        """
+        r = self.order.refunds.create(
+            state=OrderRefund.REFUND_STATE_EXTERNAL,
+            source=OrderRefund.REFUND_SOURCE_EXTERNAL,
+            amount=amount if amount is not None else self.amount,
+            order=self.order,
+            payment=self,
+            execution_date=execution_date or now(),
+            provider=self.provider,
+            info=info
+        )
+        self.order.log_action('pretix.event.order.refund.created.externally', {
+            'local_id': r.local_id,
+            'provider': r.provider,
+        })
+        return r
+
+
+class OrderRefund(models.Model):
+    """
+    Represents a refund or refund attempt for an order.
+
+    :param id: A globally unique ID for this refund
+    :type id:
+    :param local_id: An ID of this refund, counting from one for every order independently.
+    :type local_id: int
+    :param state: The state of the refund, one of ``created``, ``transit``, ``external``, ``canceled``,
+      ``failed``, or ``done``.
+    :type state: str
+    :param source: How this refund was started, one of ``buyer``, ``admin``, or ``external``.
+    :param amount: The refund amount
+    :type amount: Decimal
+    :param order: The order that is refunded
+    :type order: Order
+    :param created: The creation time of this record
+    :type created: datetime
+    :param execution_date: The completion time of this refund
+    :type execution_date: datetime
+    :param provider: The payment provider in use
+    :type provider: str
+    :param info: Provider-specific meta information in JSON format
+    :type info: dict
+    """
+    # REFUND_STATE_REQUESTED = 'requested'
+    # REFUND_STATE_APPROVED = 'approved'
+    REFUND_STATE_EXTERNAL = 'external'
+    REFUND_STATE_TRANSIT = 'transit'
+    REFUND_STATE_DONE = 'done'
+    # REFUND_STATE_REJECTED = 'rejected'
+    REFUND_STATE_CANCELED = 'canceled'
+    REFUND_STATE_CREATED = 'created'
+    REFUND_STATE_FAILED = 'failed'
+
+    REFUND_STATES = (
+        # (REFUND_STATE_REQUESTED, pgettext_lazy('refund_state', 'requested')),
+        # (REFUND_STATE_APPROVED, pgettext_lazy('refund_state', 'approved')),
+        (REFUND_STATE_EXTERNAL, pgettext_lazy('refund_state', 'started externally')),
+        (REFUND_STATE_CREATED, pgettext_lazy('refund_state', 'created')),
+        (REFUND_STATE_TRANSIT, pgettext_lazy('refund_state', 'in transit')),
+        (REFUND_STATE_DONE, pgettext_lazy('refund_state', 'done')),
+        (REFUND_STATE_FAILED, pgettext_lazy('refund_state', 'failed')),
+        # (REFUND_STATE_REJECTED, pgettext_lazy('refund_state', 'rejected')),
+        (REFUND_STATE_CANCELED, pgettext_lazy('refund_state', 'canceled')),
+    )
+
+    REFUND_SOURCE_BUYER = 'buyer'
+    REFUND_SOURCE_ADMIN = 'admin'
+    REFUND_SOURCE_EXTERNAL = 'external'
+
+    REFUND_SOURCES = (
+        (REFUND_SOURCE_ADMIN, pgettext_lazy('refund_source', 'Organizer')),
+        (REFUND_SOURCE_BUYER, pgettext_lazy('refund_source', 'Customer')),
+        (REFUND_SOURCE_EXTERNAL, pgettext_lazy('refund_source', 'External')),
+    )
+
+    local_id = models.PositiveIntegerField()
+    state = models.CharField(
+        max_length=190, choices=REFUND_STATES
+    )
+    source = models.CharField(
+        max_length=190, choices=REFUND_SOURCES
+    )
+    amount = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Amount")
+    )
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order"),
+        related_name='refunds',
+        on_delete=models.PROTECT
+    )
+    payment = models.ForeignKey(
+        OrderPayment,
+        null=True, blank=True,
+        related_name='refunds',
+        on_delete=models.PROTECT
+    )
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+    execution_date = models.DateTimeField(
+        null=True, blank=True
+    )
+    provider = models.CharField(
+        null=True, blank=True,
+        max_length=255,
+        verbose_name=_("Payment provider")
+    )
+    info = models.TextField(
+        verbose_name=_("Payment information"),
+        null=True, blank=True
+    )
+
+    class Meta:
+        ordering = ('local_id',)
+
+    @property
+    def info_data(self):
+        """
+        This property allows convenient access to the data stored in the ``info``
+        attribute by automatically encoding and decoding the content as JSON.
+        """
+        return json.loads(self.info) if self.info else {}
+
+    @info_data.setter
+    def info_data(self, d):
+        self.info = json.dumps(d)
+
+    @cached_property
+    def payment_provider(self):
+        """
+        Cached access to an instance of the payment provider in use.
+        """
+        return self.order.event.get_payment_providers().get(self.provider)
+
+    @transaction.atomic
+    def done(self, user=None, auth=None):
+        """
+        Marks the refund as complete. This does not modify the state of the order.
+
+        :param user: The user who performed the change
+        :param user: The API auth token that performed the change
+        """
+        self.state = self.REFUND_STATE_DONE
+        self.execution_date = self.execution_date or now()
+        self.save()
+
+        self.order.log_action('pretix.event.order.refund.done', {
+            'local_id': self.local_id,
+            'provider': self.provider,
+        }, user=user, auth=auth)
+
+        if self.payment and self.payment.refunded_amount >= self.payment.amount:
+            self.payment.state = OrderPayment.PAYMENT_STATE_REFUNDED
+            self.payment.save(update_fields=['state'])
+
+    @property
+    def full_id(self):
+        """
+        The full human-readable ID of this refund, constructed by the order code and the ``local_id``
+        field with ``-R-`` in between.
+        :return:
+        """
+        return '{}-R-{}'.format(self.order.code, self.local_id)
+
+    def save(self, *args, **kwargs):
+        if not self.local_id:
+            self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
+        super().save(*args, **kwargs)
+
+
 class OrderFee(models.Model):
     """
-    An OrderFee objet represents a fee that is added to the order total independently of
+    An OrderFee object represents a fee that is added to the order total independently of
     the actual positions. This might for example be a payment or a shipping fee.
+
+    :param value: Gross price of this fee
+    :type value: Decimal
+    :param order: Order this fee is charged with
+    :type order: Order
+    :param fee_type: The type of the fee, currently ``payment``, ``shipping``, ``service``, ``giftcard``, or ``other``.
+    :type fee_type: str
+    :param description: A human-readable description of the fee
+    :type description: str
+    :param internal_type: An internal string to group fees by, e.g. the identifier string of a payment provider
+    :type internal_type: str
+    :param tax_rate: The tax rate applied to this fee
+    :type tax_rate: Decimal
+    :param tax_rule: The tax rule applied to this fee
+    :type tax_rule: TaxRule
+    :param tax_value: The tax amount included in the price
+    :type tax_value: Decimal
     """
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
@@ -813,6 +1289,18 @@ class OrderPosition(AbstractPosition):
 
     :param order: The order this position is a part of
     :type order: Order
+    :param positionid: A local ID of this position, counted for each order individually
+    :type positionid: int
+    :param tax_rate: The tax rate applied to this position
+    :type tax_rate: Decimal
+    :param tax_rule: The tax rule applied to this position
+    :type tax_rule: TaxRule
+    :param tax_value: The tax amount included in the price
+    :type tax_value: Decimal
+    :param secret: The secret used for ticket QR codes
+    :type secret: str
+    :param pseudonymization_id: The QR code content for lead scanning
+    :type pseudonymization_id: str
     """
     positionid = models.PositiveIntegerField(default=1)
     order = models.ForeignKey(

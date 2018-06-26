@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Cancel payment" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Cancel payment" %}
+    </h1>
+    <p>{% blocktrans trimmed %}
+        Do you really want to cancel this payment? You cannot revert this action.
+    {% endblocktrans %}</p>
+
+    <form method="post" href="">
+        {% csrf_token %}
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, cancel payment" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

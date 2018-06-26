@@ -1,7 +1,9 @@
+import json
 import logging
 import mimetypes
 import os
 from datetime import timedelta
+from decimal import Decimal, DecimalException
 
 import pytz
 import vat_moss.id
@@ -9,12 +11,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import Count
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.safestring import mark_safe
+from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
@@ -29,8 +33,9 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.models.tax import EU_COUNTRIES
+from pretix.base.payment import PaymentException
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
@@ -40,17 +45,18 @@ from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, extend_order,
-    mark_order_expired, mark_order_paid,
+    mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
+from pretix.base.templatetags.money import money_filter
 from pretix.base.views.async import AsyncAction
 from pretix.base.views.mixins import OrderQuestionsViewMixin
-from pretix.control.forms.filter import EventOrderFilterForm
+from pretix.control.forms.filter import EventOrderFilterForm, RefundFilterForm
 from pretix.control.forms.orders import (
     CommentForm, ExporterForm, ExtendForm, MarkPaidForm, OrderContactForm,
     OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
-    OrderPositionChangeForm, OtherOperationsForm,
+    OrderPositionChangeForm, OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -71,6 +77,9 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
         qs = Order.objects.filter(
             event=self.request.event
         ).annotate(pcnt=Count('positions', distinct=True)).select_related('invoice_address')
+
+        qs = Order.annotate_overpayments(qs)
+
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
@@ -116,10 +125,6 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
         )
         return ctx
 
-    @cached_property
-    def payment_provider(self):
-        return self.request.event.get_payment_providers().get(self.order.payment_provider)
-
     def get_order_url(self):
         return reverse('control:event.order', kwargs={
             'event': self.request.event.slug,
@@ -136,19 +141,19 @@ class OrderDetail(OrderView):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
         ctx['event'] = self.request.event
-        ctx['payment_provider'] = self.payment_provider
-        if self.payment_provider:
-            ctx['payment'] = self.payment_provider.order_control_render(self.request, self.object)
-        else:
-            ctx['payment'] = mark_safe('<div class="alert alert-danger">{}</div>'.format(
-                _('This order was paid using a payment provider plugin that is now disabled or uninstalled.')
-            ))
+        ctx['payments'] = self.order.payments.order_by('-created')
+        ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
+        for p in ctx['payments']:
+            if p.payment_provider:
+                p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
             'checkin_attention': self.order.checkin_attention
         })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
+
+        ctx['overpaid'] = self.order.pending_sum * -1
         return ctx
 
     def get_items(self):
@@ -223,6 +228,390 @@ class OrderComment(OrderView):
         return HttpResponseNotAllowed(['POST'])
 
 
+class OrderPaymentCancel(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def payment(self):
+        return get_object_or_404(self.order.payments, pk=self.kwargs['payment'])
+
+    def post(self, *args, **kwargs):
+        if self.payment.state in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
+            with transaction.atomic():
+                self.payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                self.payment.save()
+                self.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': self.payment.local_id,
+                    'provider': self.payment.provider,
+                }, user=self.request.user)
+            messages.success(self.request, _('This payment has been canceled.'))
+        else:
+            messages.error(self.request, _('This payment can not be canceled at the moment.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/pay_cancel.html', {
+            'order': self.order,
+        })
+
+
+class OrderRefundCancel(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def refund(self):
+        return get_object_or_404(self.order.refunds, pk=self.kwargs['refund'])
+
+    def post(self, *args, **kwargs):
+        if self.refund.state in (OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT,
+                                 OrderRefund.REFUND_STATE_EXTERNAL):
+            with transaction.atomic():
+                self.refund.state = OrderRefund.REFUND_STATE_CANCELED
+                self.refund.save()
+                self.order.log_action('pretix.event.order.refund.canceled', {
+                    'local_id': self.refund.local_id,
+                    'provider': self.refund.provider,
+                }, user=self.request.user)
+            messages.success(self.request, _('The refund has been canceled.'))
+        else:
+            messages.error(self.request, _('This refund can not be canceled at the moment.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+            return redirect(self.request.GET.get("next"))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/refund_cancel.html', {
+            'order': self.order,
+        })
+
+
+class OrderRefundProcess(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def refund(self):
+        return get_object_or_404(self.order.refunds, pk=self.kwargs['refund'])
+
+    def post(self, *args, **kwargs):
+        if self.refund.state == OrderRefund.REFUND_STATE_EXTERNAL:
+            self.refund.done(user=self.request.user)
+
+            if self.request.POST.get("action") == "r":
+                mark_order_refunded(self.order, user=self.request.user)
+            else:
+                self.order.status = Order.STATUS_PENDING
+                self.order.set_expires(
+                    now(),
+                    self.order.event.subevents.filter(
+                        id__in=self.order.positions.values_list('subevent_id', flat=True))
+                )
+                self.order.save()
+
+            messages.success(self.request, _('The refund has been processed.'))
+        else:
+            messages.error(self.request, _('This refund can not be processed at the moment.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+            return redirect(self.request.GET.get("next"))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/refund_process.html', {
+            'order': self.order,
+            'refund': self.refund,
+            'pending_sum': self.order.pending_sum + self.refund.amount,
+            'propose_cancel': self.order.pending_sum + self.refund.amount >= self.order.total
+        })
+
+
+class OrderRefundDone(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def refund(self):
+        return get_object_or_404(self.order.refunds, pk=self.kwargs['refund'])
+
+    def post(self, *args, **kwargs):
+        if self.refund.state in (OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT):
+            self.refund.done(user=self.request.user)
+            messages.success(self.request, _('The refund has been marked as done.'))
+        else:
+            messages.error(self.request, _('This refund can not be processed at the moment.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+            return redirect(self.request.GET.get("next"))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/refund_done.html', {
+            'order': self.order,
+        })
+
+
+class OrderPaymentConfirm(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def payment(self):
+        return get_object_or_404(self.order.payments, pk=self.kwargs['payment'])
+
+    @cached_property
+    def mark_paid_form(self):
+        return MarkPaidForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
+    def post(self, *args, **kwargs):
+        if self.payment.state in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
+            if not self.mark_paid_form.is_valid():
+                return render(self.request, 'pretixcontrol/order/pay_complete.html', {
+                    'form': self.mark_paid_form,
+                    'order': self.order,
+                })
+            try:
+                self.payment.confirm(user=self.request.user,
+                                     count_waitinglist=False,
+                                     force=self.mark_paid_form.cleaned_data.get('force', False))
+            except Quota.QuotaExceededException as e:
+                messages.error(self.request, str(e))
+            except PaymentException as e:
+                messages.error(self.request, str(e))
+            except SendMailException:
+                messages.warning(self.request,
+                                 _('The payment has been marked as complete, but we were unable to send a '
+                                   'confirmation mail.'))
+            else:
+                messages.success(self.request, _('The payment has been marked as complete.'))
+        else:
+            messages.error(self.request, _('This payment can not be confirmed at the moment.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/pay_complete.html', {
+            'form': self.mark_paid_form,
+            'order': self.order,
+        })
+
+
+class OrderRefundView(OrderView):
+    permission = 'can_change_orders'
+
+    @cached_property
+    def start_form(self):
+        return OrderRefundForm(
+            order=self.order,
+            data=self.request.POST if self.request.method == "POST" else None,
+            prefix='start',
+            initial={
+                'partial_amount': self.order.total - self.order.pending_sum,
+                'action': (
+                    'mark_pending' if self.order.status == Order.STATUS_PAID
+                    else 'do_nothing'
+                )
+            }
+        )
+
+    def post(self, *args, **kwargs):
+        if self.start_form.is_valid():
+            payments = self.order.payments.filter(
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED
+            )
+            for p in payments:
+                p.full_refund_possible = p.payment_provider.payment_refund_supported(p)
+                p.partial_refund_possible = p.payment_provider.payment_partial_refund_supported(p)
+                p.propose_refund = Decimal('0.00')
+                p.available_amount = p.amount - p.refunded_amount
+
+            unused_payments = set(p for p in payments if p.full_refund_possible or p.partial_refund_possible)
+
+            # Algorithm to choose which payments are to be refunded to create the least hassle
+            if self.start_form.cleaned_data.get('mode') == 'full':
+                to_refund = full_refund = self.order.total - self.order.pending_sum
+            else:
+                to_refund = full_refund = self.start_form.cleaned_data.get('partial_amount')
+
+            while to_refund and unused_payments:
+                bigger = sorted([p for p in unused_payments if p.available_amount > to_refund],
+                                key=lambda p: p.available_amount)
+                same = [p for p in unused_payments if p.available_amount == to_refund]
+                smaller = sorted([p for p in unused_payments if p.available_amount < to_refund],
+                                 key=lambda p: p.available_amount,
+                                 reverse=True)
+                if same:
+                    for payment in same:
+                        if payment.full_refund_possible or payment.partial_refund_possible:
+                            payment.propose_refund = payment.available_amount
+                            to_refund -= payment.available_amount
+                            unused_payments.remove(payment)
+                            break
+                elif bigger:
+                    for payment in bigger:
+                        if payment.partial_refund_possible:
+                            payment.propose_refund = to_refund
+                            to_refund -= to_refund
+                            unused_payments.remove(payment)
+                            break
+                elif smaller:
+                    for payment in smaller:
+                        if payment.full_refund_possible or payment.partial_refund_possible:
+                            payment.propose_refund = payment.available_amount
+                            to_refund -= payment.available_amount
+                            unused_payments.remove(payment)
+                            break
+
+            if 'perform' in self.request.POST:
+                refund_selected = Decimal('0.00')
+                refunds = []
+
+                is_valid = True
+                manual_value = self.request.POST.get('refund-manual', '0') or '0'
+                manual_value = formats.sanitize_separators(manual_value)
+                try:
+                    manual_value = Decimal(manual_value)
+                except (DecimalException, TypeError) as e:
+                    messages.error(self.request, _('You entered an invalid number.'))
+                    is_valid = False
+                else:
+                    refund_selected += manual_value
+                    if manual_value:
+                        refunds.append(OrderRefund(
+                            order=self.order,
+                            payment=None,
+                            source=OrderRefund.REFUND_SOURCE_ADMIN,
+                            state=(
+                                OrderRefund.REFUND_STATE_DONE
+                                if self.request.POST.get('manual_state') == 'done'
+                                else OrderRefund.REFUND_STATE_CREATED
+                            ),
+                            amount=manual_value,
+                            provider='manual'
+                        ))
+
+                offsetting_value = self.request.POST.get('refund-offsetting', '0') or '0'
+                offsetting_value = formats.sanitize_separators(offsetting_value)
+                try:
+                    offsetting_value = Decimal(offsetting_value)
+                except (DecimalException, TypeError) as e:
+                    messages.error(self.request, _('You entered an invalid number.'))
+                    is_valid = False
+                else:
+                    if offsetting_value:
+                        refund_selected += offsetting_value
+                        try:
+                            order = Order.objects.get(code=self.request.POST.get('order-offsetting'))
+                        except Order.DoesNotExist:
+                            messages.error(self.request, _('You entered an order that could not be found.'))
+                            is_valid = False
+                        else:
+                            refunds.append(OrderRefund(
+                                order=self.order,
+                                payment=None,
+                                source=OrderRefund.REFUND_SOURCE_ADMIN,
+                                state=OrderRefund.REFUND_STATE_DONE,
+                                execution_date=now(),
+                                amount=offsetting_value,
+                                provider='offsetting',
+                                info=json.dumps({
+                                    'orders': [order.code]
+                                })
+                            ))
+
+                for p in payments:
+                    value = self.request.POST.get('refund-{}'.format(p.pk), '0') or '0'
+                    value = formats.sanitize_separators(value)
+                    try:
+                        value = Decimal(value)
+                    except (DecimalException, TypeError) as e:
+                        messages.error(self.request, _('You entered an invalid number.'))
+                        is_valid = False
+                    else:
+                        if value == 0:
+                            continue
+                        elif value > p.available_amount:
+                            messages.error(self.request, _('You can not refund more than the amount of a '
+                                                           'payment that is not yet refunded.'))
+                            is_valid = False
+                            break
+                        elif value != p.amount and not p.partial_refund_possible:
+                            messages.error(self.request, _('You selected a partial refund for a payment method that '
+                                                           'only supports full refunds.'))
+                            is_valid = False
+                            break
+                        elif (p.partial_refund_possible or p.full_refund_possible) and value > 0:
+                            refund_selected += value
+                            refunds.append(OrderRefund(
+                                order=self.order,
+                                payment=p,
+                                source=OrderRefund.REFUND_SOURCE_ADMIN,
+                                state=OrderRefund.REFUND_STATE_CREATED,
+                                amount=value,
+                                provider=p.provider
+                            ))
+
+                any_success = False
+                if refund_selected == full_refund and is_valid:
+                    for r in refunds:
+                        r.save()
+                        if r.payment or r.provider == "offsetting":
+                            try:
+                                r.payment_provider.execute_refund(r)
+                            except PaymentException as e:
+                                r.state = OrderRefund.REFUND_STATE_FAILED
+                                r.save()
+                                messages.error(self.request, _('One of the refunds failed to be processed. You should '
+                                                               'retry to refund in a different way. The error message '
+                                                               'was: {}').format(str(e)))
+                            else:
+                                any_success = True
+                                if r.state == OrderRefund.REFUND_STATE_DONE:
+                                    messages.success(self.request, _('A refund of {} has been processed.').format(
+                                        money_filter(r.amount, self.request.event.currency)
+                                    ))
+                                elif r.state == OrderRefund.REFUND_STATE_CREATED:
+                                    messages.info(self.request, _('A refund of {} has been saved, but not yet '
+                                                                  'fully executed. You can mark it as complete '
+                                                                  'below.').format(
+                                        money_filter(r.amount, self.request.event.currency)
+                                    ))
+                        else:
+                            any_success = True
+
+                    self.order.log_action('pretix.event.order.refund.created', {
+                        'local_id': r.local_id,
+                        'provider': r.provider,
+                    }, user=self.request.user)
+                    if any_success:
+                        if self.start_form.cleaned_data.get('action') == 'mark_refunded':
+                            mark_order_refunded(self.order, user=self.request.user)
+                        elif self.start_form.cleaned_data.get('action') == 'mark_pending':
+                            self.order.status = Order.STATUS_PENDING
+                            self.order.set_expires(
+                                now(),
+                                self.order.event.subevents.filter(
+                                    id__in=self.order.positions.values_list('subevent_id', flat=True))
+                            )
+                            self.order.save()
+
+                    return redirect(self.get_order_url())
+                else:
+                    messages.error(self.request, _('The refunds you selected do not match the selected total refund '
+                                                   'amount.'))
+
+            return render(self.request, 'pretixcontrol/order/refund_choose.html', {
+                'payments': payments,
+                'remainder': to_refund,
+                'order': self.order,
+                'partial_amount': self.request.POST.get('start-partial_amount'),
+                'start_form': self.start_form
+            })
+        return self.get(*args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/refund_start.html', {
+            'form': self.start_form,
+            'order': self.order,
+        })
+
+
 class OrderTransition(OrderView):
     permission = 'can_change_orders'
 
@@ -235,19 +624,35 @@ class OrderTransition(OrderView):
 
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
-        if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
-            if not self.mark_paid_form.is_valid():
-                return render(self.request, 'pretixcontrol/order/pay.html', {
-                    'form': self.mark_paid_form,
-                    'order': self.order,
-                })
+        if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
+            ps = self.order.pending_sum
             try:
-                mark_order_paid(self.order, manual=True, user=self.request.user,
-                                count_waitinglist=False, force=self.mark_paid_form.cleaned_data.get('force', False))
+                p = self.order.payments.get(
+                    state__in=(OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
+                    provider='manual',
+                    amount=ps
+                )
+            except OrderPayment.DoesNotExist:
+                self.order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_PENDING,
+                                                      OrderPayment.PAYMENT_STATE_CREATED)) \
+                    .update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+                p = self.order.payments.create(
+                    state=OrderPayment.PAYMENT_STATE_CREATED,
+                    provider='manual',
+                    amount=ps,
+                    fee=None
+                )
+
+            try:
+                p.confirm(user=self.request.user, count_waitinglist=False,
+                          force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
+            except PaymentException as e:
+                messages.error(self.request, str(e))
             except SendMailException:
-                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a confirmation mail.'))
+                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
+                                                 'confirmation mail.'))
             else:
                 messages.success(self.request, _('The order has been marked as paid.'))
         elif self.order.cancel_allowed() and to == 'c':
@@ -255,20 +660,12 @@ class OrderTransition(OrderView):
             messages.success(self.request, _('The order has been canceled.'))
         elif self.order.status == Order.STATUS_PAID and to == 'n':
             self.order.status = Order.STATUS_PENDING
-            self.order.payment_manual = True
             self.order.save()
             self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
             messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
             mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))
-        elif self.order.status == Order.STATUS_PAID and to == 'r':
-            if not self.payment_provider:
-                messages.error(self.request, _('This order is not assigned to a known payment provider.'))
-            else:
-                ret = self.payment_provider.order_control_refund_perform(self.request, self.order)
-                if ret:
-                    return redirect(ret)
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
@@ -281,20 +678,6 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'order': self.order,
-            })
-        elif self.order.status == Order.STATUS_PAID and to == 'r':
-            if not self.payment_provider:
-                messages.error(self.request, _('This order is not assigned to a known payment provider.'))
-                return redirect(self.get_order_url())
-
-            try:
-                cr = self.payment_provider.order_control_refund_render(self.order, self.request)
-            except TypeError:
-                cr = self.payment_provider.order_control_refund_render(self.order)
-
-            return render(self.request, 'pretixcontrol/order/refund.html', {
-                'order': self.order,
-                'payment': cr,
             })
         else:
             return HttpResponseNotAllowed(['POST'])
@@ -700,9 +1083,7 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
         self.order.log_action('pretix.event.order.modified', {
             'invoice_data': self.invoice_form.cleaned_data,
             'data': [{
-                k: (f.cleaned_data.get(k).name
-                    if isinstance(f.cleaned_data.get(k), File)
-                    else f.cleaned_data.get(k))
+                k: (f.cleaned_data.get(k).name if isinstance(f.cleaned_data.get(k), File) else f.cleaned_data.get(k))
                 for k in f.changed_data
             } for f in self.forms]
         }, user=request.user)
@@ -878,7 +1259,8 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                     email_context, 'pretix.event.order.email.custom_sent',
                     self.request.user
                 )
-                messages.success(self.request, _('Your message has been queued and will be sent to {}.'.format(order.email)))
+                messages.success(self.request,
+                                 _('Your message has been queued and will be sent to {}.'.format(order.email)))
             except SendMailException:
                 messages.error(
                     self.request,
@@ -890,8 +1272,8 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         return reverse('control:event.order', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
-            'code': self.kwargs['code']}
-        )
+            'code': self.kwargs['code']
+        })
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
@@ -988,7 +1370,6 @@ class OrderGo(EventPermissionRequiredMixin, View):
 
 
 class ExportMixin:
-
     @cached_property
     def exporters(self):
         exporters = []
@@ -1065,3 +1446,30 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['exporters'] = self.exporters
         return ctx
+
+
+class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
+    model = OrderRefund
+    context_object_name = 'refunds'
+    template_name = 'pretixcontrol/orders/refunds.html'
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        qs = OrderRefund.objects.filter(
+            order__event=self.request.event
+        ).select_related('order')
+
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return RefundFilterForm(data=self.request.GET, event=self.request.event,
+                                initial={'status': 'open'})

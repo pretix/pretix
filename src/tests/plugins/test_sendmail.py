@@ -39,7 +39,7 @@ def order(item):
     o = Order.objects.create(event=item.event, status=Order.STATUS_PENDING,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(), payment_provider='banktransfer', locale='en')
+                             datetime=now(), locale='en')
     OrderPosition.objects.create(order=o, item=item, price=13)
     return o
 
@@ -148,7 +148,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
     o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(), payment_provider='banktransfer',
+                             datetime=now(),
                              locale='de')
     OrderPosition.objects.create(order=o, item=item, price=13)
 
