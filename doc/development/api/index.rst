@@ -10,6 +10,7 @@ Contents:
    exporter
    ticketoutput
    payment
+   payment_2.0
    invoice
    shredder
    customview

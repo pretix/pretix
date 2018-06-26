@@ -35,7 +35,7 @@ django-i18nfield>=1.2.1
 django-hijack==2.1.*
 django-oauth-toolkit==1.1.*
 # Stripe
-stripe==1.79.*
+stripe==2.0.*
 # PayPal
 paypalrestsdk==1.12.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147

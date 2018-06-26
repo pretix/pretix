@@ -1,4 +1,3 @@
-import json
 import logging
 import re
 from decimal import Decimal
@@ -10,11 +9,10 @@ from django.db.models import Q
 from django.utils.translation import ugettext_noop
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, Organizer, Quota
+from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
 from pretix.base.services.async import TransactionAwareTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
-from pretix.base.services.orders import mark_order_paid
 from pretix.celery_app import app
 
 from .models import BankImportJob, BankTransaction
@@ -50,7 +48,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
                 trans.save()
                 return
 
-    if trans.order.status == Order.STATUS_PAID:
+    if trans.order.status == Order.STATUS_PAID and trans.order.pending_sum <= Decimal('0.00'):
         trans.state = BankTransaction.STATE_DUPLICATE
     elif trans.order.status == Order.STATUS_REFUNDED:
         trans.state = BankTransaction.STATE_ERROR
@@ -58,17 +56,23 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
     elif trans.order.status == Order.STATUS_CANCELED:
         trans.state = BankTransaction.STATE_ERROR
         trans.message = ugettext_noop('The order has already been canceled.')
-    elif trans.amount != trans.order.total:
-        trans.state = BankTransaction.STATE_INVALID
-        trans.message = ugettext_noop('The transaction amount is incorrect.')
     else:
+        p = trans.order.payments.get_or_create(
+            amount=trans.amount,
+            provider='banktransfer',
+            state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+            defaults={
+                'state': OrderPayment.PAYMENT_STATE_CREATED,
+            }
+        )[0]
+        p.info_data = {
+            'reference': trans.reference,
+            'date': trans.date,
+            'payer': trans.payer,
+            'trans_id': trans.pk
+        }
         try:
-            mark_order_paid(trans.order, provider='banktransfer', info=json.dumps({
-                'reference': trans.reference,
-                'date': trans.date,
-                'payer': trans.payer,
-                'trans_id': trans.pk
-            }))
+            p.confirm()
         except Quota.QuotaExceededException as e:
             trans.state = BankTransaction.STATE_ERROR
             trans.message = str(e)
@@ -77,6 +81,10 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
             trans.message = ugettext_noop('Problem sending email.')
         else:
             trans.state = BankTransaction.STATE_VALID
+            trans.order.payments.filter(
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
     trans.save()
 
 

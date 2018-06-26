@@ -3,18 +3,20 @@ import textwrap
 from collections import OrderedDict
 
 from django import forms
+from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Order
+from pretix.base.models import OrderPayment
 from pretix.base.payment import BasePaymentProvider
 
 
 class BankTransfer(BasePaymentProvider):
     identifier = 'banktransfer'
     verbose_name = _('Bank transfer')
+    abort_pending_allowed = True
 
     @staticmethod
     def form_field(**kwargs):
@@ -65,6 +67,9 @@ class BankTransfer(BasePaymentProvider):
     def checkout_prepare(self, request, total):
         return True
 
+    def payment_prepare(self, request: HttpRequest, payment: OrderPayment):
+        return True
+
     def payment_is_valid_session(self, request):
         return True
 
@@ -81,12 +86,12 @@ class BankTransfer(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    def order_pending_render(self, request, order) -> str:
+    def payment_pending_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {
             'event': self.event,
-            'order': order,
-            'code': self._code(order),
+            'code': self._code(payment.order),
+            'order': payment.order,
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)
@@ -102,18 +107,18 @@ class BankTransfer(BasePaymentProvider):
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
 
-    def _code(self, order: Order):
+    def _code(self, order):
         if self.settings.get('omit_hyphen', as_type=bool):
             return self.event.slug.upper() + order.code
         else:
             return order.full_code
 
-    def shred_payment_info(self, order: Order):
-        if not order.payment_info:
+    def shred_payment_info(self, obj):
+        if not obj.info_data:
             return
-        d = json.loads(order.payment_info)
+        d = obj.info_data
         d['reference'] = '█'
         d['payer'] = '█'
         d['_shredded'] = True
-        order.payment_info = json.dumps(d)
-        order.save(update_fields=['payment_info'])
+        obj.info = json.dumps(d)
+        obj.save(update_fields=['info'])

@@ -28,13 +28,13 @@ def env():
         code='1Z3AS', event=event,
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=23, payment_provider='banktransfer'
+        total=23
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
         status=Order.STATUS_CANCELED,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=23, payment_provider='banktransfer'
+        total=23
     )
     quota = Quota.objects.create(name="Test", size=2, event=event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)

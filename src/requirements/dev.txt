@@ -12,7 +12,6 @@ pytest-django
 isort
 pytest-mock==1.4.*
 pytest-rerunfailures==4.*
-pytest-warnings
 pytest-cache
 pytest-sugar
 responses

@@ -14,8 +14,5 @@ class ManualPaymentApp(AppConfig):
         version = version
         description = _("This plugin adds a customizable payment method for manual processing.")
 
-    def ready(self):
-        from . import signals  # NOQA
-
 
 default_app_config = 'pretix.plugins.manualpayment.ManualPaymentApp'

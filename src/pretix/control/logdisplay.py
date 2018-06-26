@@ -173,7 +173,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.comment': _('The order\'s internal comment has been updated.'),
         'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                                   'toggled.'),
-        'pretix.event.order.payment.changed': _('The payment method has been changed.'),
+        'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
         'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
@@ -186,6 +186,13 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.order_paid': _('An email has been sent to notify the user that payment has been received.'),
         'pretix.event.order.email.order_placed': _('An email has been sent to notify the user that the order has been received and requires payment.'),
         'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
+        'pretix.event.order.payment.confirmed': _('Payment {local_id} has been confirmed.'),
+        'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),
+        'pretix.event.order.payment.started': _('Payment {local_id} has been started.'),
+        'pretix.event.order.refund.created': _('Refund {local_id} has been created.'),
+        'pretix.event.order.refund.created.externally': _('Refund {local_id} has been created by an external entity.'),
+        'pretix.event.order.refund.done': _('Refund {local_id} has been completed.'),
+        'pretix.event.order.refund.canceled': _('Refund {local_id} has been canceled.'),
         'pretix.control.auth.user.created': _('The user has been created.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),

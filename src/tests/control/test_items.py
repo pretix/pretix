@@ -185,7 +185,7 @@ class QuestionsTest(ItemFormTest):
         o = Order.objects.create(code='FOO', event=self.event1, email='dummy@dummy.test',
                                  status=Order.STATUS_PENDING, datetime=now(),
                                  expires=now() + datetime.timedelta(days=10),
-                                 total=14, payment_provider='banktransfer', locale='en')
+                                 total=14, locale='en')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
                                           attendee_name="Peter")
         op.answers.create(question=c, answer='42')
@@ -407,7 +407,7 @@ class ItemsTest(ItemFormTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
         OrderPosition.objects.create(
             order=o,

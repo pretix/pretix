@@ -5,8 +5,11 @@ from zipfile import ZipFile
 
 import dateutil.parser
 from django import forms
+from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+
+from pretix.base.models import OrderPayment
 
 from ..exporter import BaseExporter
 from ..services.invoices import invoice_pdf_task
@@ -21,7 +24,14 @@ class InvoiceExporter(BaseExporter):
         qs = self.event.invoices.filter(shredded=False)
 
         if form_data.get('payment_provider'):
-            qs = qs.filter(order__payment_provider=form_data.get('payment_provider'))
+            qs = qs.annotate(
+                has_payment_with_provider=Exists(
+                    OrderPayment.objects.filter(
+                        Q(order=OuterRef('pk')) & Q(provider=form_data.get('payment_provider'))
+                    )
+                )
+            )
+            qs = qs.filter(has_payment_with_provider=1)
 
         if form_data.get('date_from'):
             date_value = form_data.get('date_from')
@@ -84,10 +94,10 @@ class InvoiceExporter(BaseExporter):
                          (k, v.verbose_name) for k, v in self.event.get_payment_providers().items()
                      ],
                      required=False,
-                     help_text=_('Only include invoices for orders that are currently set to this payment provider. '
-                                 'Note that this might include some invoices of other payment providers or misses '
-                                 'some invoices if the payment provider of an order has been changed and a new invoice '
-                                 'has been generated.')
+                     help_text=_('Only include invoices for orders that have at least one payment attempt '
+                                 'with this payment provider. '
+                                 'Note that this might include some invoices of orders which in the end have been '
+                                 'fully or partially paid with a different provider.')
                  )),
             ]
         )

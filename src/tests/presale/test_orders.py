@@ -11,7 +11,7 @@ from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
     Question, Quota,
 )
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 
@@ -54,7 +54,6 @@ class OrdersTest(TestCase):
             datetime=now() - datetime.timedelta(days=3),
             expires=now() + datetime.timedelta(days=11),
             total=Decimal("23"),
-            payment_provider='banktransfer',
             locale='en'
         )
         self.ticket_pos = OrderPosition.objects.create(
@@ -400,11 +399,185 @@ class OrdersTest(TestCase):
         )
         assert 'alert-danger' in response.rendered_content
 
+    def test_pay_wrong_payment_state(self):
+        p = self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CANCELED,
+            amount=Decimal('10.00'),
+        )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                            p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                                   p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                                    p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+
+    def test_pay_wrong_order_state(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        p = self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            amount=Decimal('10.00'),
+        )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                            p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                                   p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
+                                                    p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.rendered_content
+
+    def test_pay_change_link(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        p = self.order.payments.create(
+            provider='banktransfer',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert '/pay/change' not in response.rendered_content
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        p.state = OrderPayment.PAYMENT_STATE_PENDING
+        p.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert '/pay/change' in response.rendered_content
+        p.provider = 'testdummy'
+        p.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert '/pay/change' not in response.rendered_content
+
+    def test_change_paymentmethod_partial(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_testdummy__enabled', True)
+        self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
+        self.event.settings.set('payment_testdummy__fee_percent', '10.00')
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=Decimal('10.00'),
+        )
+
+        generate_invoice(self.order)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Test dummy' in response.rendered_content
+        assert '+ €1.30' in response.rendered_content
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'testdummy'
+            }
+        )
+        self.order.refresh_from_db()
+        assert self.order.payments.last().provider == 'testdummy'
+        fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
+        assert fee.value == Decimal('1.30')
+        assert self.order.total == Decimal('23.00') + fee.value
+        assert self.order.invoices.count() == 3
+        p = self.order.payments.last()
+        assert p.provider == 'testdummy'
+        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+        assert p.amount == Decimal('14.30')
+
+    def test_change_paymentmethod_partial_with_previous_fee(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_testdummy__enabled', True)
+        self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
+        self.event.settings.set('payment_testdummy__fee_percent', '10.00')
+        f = self.order.fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT,
+            value='1.40'
+        )
+        self.order.total += Decimal('1.4')
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=Decimal('11.40'),
+            fee=f
+        )
+
+        generate_invoice(self.order)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Test dummy' in response.rendered_content
+        assert '+ €1.30' in response.rendered_content
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'testdummy'
+            }
+        )
+        self.order.refresh_from_db()
+        assert self.order.payments.last().provider == 'testdummy'
+        fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
+        assert fee.value == Decimal('1.30')
+        assert self.order.total == Decimal('24.40') + fee.value
+        assert self.order.invoices.count() == 3
+        p = self.order.payments.last()
+        assert p.provider == 'testdummy'
+        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+        assert p.amount == Decimal('14.30')
+        self.client.get(
+            '/%s/%s/order/%s/%s/pay/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                            self.order.secret, p.pk),
+            {}
+        )
+        self.client.get(
+            '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                   self.order.secret, p.pk),
+            {}
+        )
+        p.refresh_from_db()
+        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+
     def test_change_paymentmethod_available(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)
         self.event.settings.set('payment_testdummy__fee_abs', '12.00')
         generate_invoice(self.order)
+        self.order.payments.create(
+            provider='banktransfer',
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            amount=self.order.total,
+        )
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -417,7 +590,12 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        assert self.order.payment_provider == 'testdummy'
+        p = self.order.payments.last()
+        assert p.provider == 'testdummy'
+        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+        p0 = self.order.payments.first()
+        assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
+        assert p0.provider == 'banktransfer'
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
         assert fee.value == Decimal('12.00')
         assert self.order.total == Decimal('23.00') + fee.value

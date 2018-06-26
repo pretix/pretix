@@ -484,7 +484,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         try:
             return prov.is_allowed(request, total=self._total_order_value)
         except TypeError:
-            return prov.is_allowed(request)
+            return prov.is_allowed(request, )
 
     def is_completed(self, request, warn=False):
         self.request = request
@@ -622,7 +622,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_order_url(self, order):
         return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
             'order': order.code,
-            'secret': order.secret
+            'secret': order.secret,
+            'payment': order.payments.first().pk
         })
 
 

@@ -18,7 +18,7 @@ def env():
         code='FOO', event=event,
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=0,
     )
     Team.objects.create(pk=1, organizer=o)
     return event, user, o
@@ -103,6 +103,12 @@ event_urls = [
     "orders/ABC/comment",
     "orders/ABC/locale",
     "orders/ABC/checkvatid",
+    "orders/ABC/payments/1/cancel",
+    "orders/ABC/payments/1/confirm",
+    "orders/ABC/refund",
+    "orders/ABC/refunds/1/cancel",
+    "orders/ABC/refunds/1/process",
+    "orders/ABC/refunds/1/done",
     "orders/ABC/",
     "orders/",
     "checkinlists/",

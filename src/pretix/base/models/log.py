@@ -52,7 +52,7 @@ class LogEntry(models.Model):
     all = models.Manager()
 
     class Meta:
-        ordering = ('-datetime',)
+        ordering = ('-datetime', '-id')
 
     def display(self):
         from ..signals import logentry_display

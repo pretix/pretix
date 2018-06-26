@@ -7,31 +7,19 @@ import paypalrestsdk
 from django import forms
 from django.contrib import messages
 from django.core import signing
+from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Order, Quota, RequiredAction
+from pretix.base.models import OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
-from pretix.base.services.orders import mark_order_paid, mark_order_refunded
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
 logger = logging.getLogger('pretix.plugins.paypal')
-
-
-class RefundForm(forms.Form):
-    auto_refund = forms.ChoiceField(
-        initial='auto',
-        label=_('Refund automatically?'),
-        choices=(
-            ('auto', _('Automatically refund charge with PayPal')),
-            ('manual', _('Do not send refund instruction to PayPal, only mark as refunded in pretix'))
-        ),
-        widget=forms.RadioSelect,
-    )
 
 
 class Paypal(BasePaymentProvider):
@@ -162,6 +150,10 @@ class Paypal(BasePaymentProvider):
             'XPF': 0,
         }))
 
+    @property
+    def abort_pending_allowed(self):
+        return False
+
     def _create_payment(self, request, payment):
         try:
             if payment.create():
@@ -196,36 +188,23 @@ class Paypal(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
-    def payment_perform(self, request, order) -> str:
-        """
-        Will be called if the user submitted his order successfully to initiate the
-        payment process.
-
-        It should return a custom redirct URL, if you need special behavior, or None to
-        continue with default behavior.
-
-        On errors, it should use Django's message framework to display an error message
-        to the user (or the normal form validation error messages).
-
-        :param order: The order object
-        """
-        if (request.session.get('payment_paypal_id', '') == ''
-                or request.session.get('payment_paypal_payer', '') == ''):
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        if (request.session.get('payment_paypal_id', '') == '' or request.session.get('payment_paypal_payer', '') == ''):
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
 
         self.init_api()
-        payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
-        ReferencedPayPalObject.objects.get_or_create(order=order, reference=payment.id)
-        if str(payment.transactions[0].amount.total) != str(order.total) or payment.transactions[0].amount.currency != \
-                self.event.currency:
-            logger.error('Value mismatch: Order %s vs payment %s' % (order.id, str(payment)))
+        pp_payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
+        ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_payment.id)
+        if str(pp_payment.transactions[0].amount.total) != str(payment.amount) or pp_payment.transactions[0].amount.currency \
+                != self.event.currency:
+            logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_payment)))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
 
-        return self._execute_payment(payment, request, order)
+        return self._execute_payment(pp_payment, request, payment)
 
-    def _execute_payment(self, payment, request, order):
+    def _execute_payment(self, payment, request, payment_obj):
         if payment.state == 'created':
             payment.replace([
                 {
@@ -234,10 +213,11 @@ class Paypal(BasePaymentProvider):
                     "value": {
                         "items": [
                             {
-                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
+                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
+                                                                         code=payment_obj.order.code),
                                 "quantity": 1,
-                                "price": self.format_price(order.total),
-                                "currency": order.event.currency
+                                "price": self.format_price(payment_obj.amount),
+                                "currency": payment_obj.order.event.currency
                             }
                         ]
                     }
@@ -247,122 +227,92 @@ class Paypal(BasePaymentProvider):
                     "path": "/transactions/0/description",
                     "value": __('Order {order} for {event}').format(
                         event=request.event.name,
-                        order=order.code
+                        order=payment_obj.order.code
                     )
                 }
             ])
             payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
 
-        order.refresh_from_db()
+        payment_obj.refresh_from_db()
         if payment.state == 'pending':
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
                                         'payment completed.'))
-            order.payment_info = json.dumps(payment.to_dict())
-            order.save()
+            payment_obj.info = json.dumps(payment.to_dict())
+            payment_obj.state = OrderPayment.PAYMENT_STATE_PENDING
+            payment_obj.save()
             return
 
         if payment.state != 'approved':
+            payment_obj.state = OrderPayment.PAYMENT_STATE_FAILED
+            payment_obj.save()
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
 
-        if order.status == Order.STATUS_PAID:
+        if payment_obj.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
             logger.warning('PayPal success event even though order is already marked as paid')
             return
 
         try:
-            mark_order_paid(order, 'paypal', json.dumps(payment.to_dict()))
+            payment_obj.info = json.dumps(payment.to_dict())
+            payment_obj.save(update_fields=['info'])
+            payment_obj.confirm()
         except Quota.QuotaExceededException as e:
-            RequiredAction.objects.create(
-                event=request.event, action_type='pretix.plugins.paypal.overpaid', data=json.dumps({
-                    'order': order.code,
-                    'payment': payment.id
-                })
-            )
             raise PaymentException(str(e))
 
         except SendMailException:
             messages.warning(request, _('There was an error sending the confirmation mail.'))
         return None
 
-    def order_pending_render(self, request, order) -> str:
+    def payment_pending_render(self, request, payment) -> str:
         retry = True
         try:
-            if order.payment_info and json.loads(order.payment_info)['state'] == 'pending':
+            if payment.info and payment.info_data['state'] == 'pending':
                 retry = False
         except KeyError:
             pass
         template = get_template('pretixplugins/paypal/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'retry': retry, 'order': order}
+               'retry': retry, 'order': payment.order}
         return template.render(ctx)
 
-    def order_control_render(self, request, order) -> str:
-        if order.payment_info:
-            payment_info = json.loads(order.payment_info)
-        else:
-            payment_info = None
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/paypal/control.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment_info, 'order': order}
+               'payment_info': payment.info_data, 'order': payment.order}
         return template.render(ctx)
 
-    def _refund_form(self, request):
-        return RefundForm(data=request.POST if request.method == "POST" else None)
+    def payment_partial_refund_supported(self, payment: OrderPayment):
+        return True
 
-    def order_control_refund_render(self, order, request) -> str:
-        template = get_template('pretixplugins/paypal/control_refund.html')
-        ctx = {
-            'request': request,
-            'form': self._refund_form(request),
-        }
-        return template.render(ctx)
+    def payment_refund_supported(self, payment: OrderPayment):
+        return True
 
-    def order_control_refund_perform(self, request, order) -> "bool|str":
-        f = self._refund_form(request)
-        if not f.is_valid():
-            messages.error(request, _('Your input was invalid, please try again.'))
-            return
-        elif f.cleaned_data.get('auto_refund') == 'manual':
-            order = mark_order_refunded(order, user=request.user)
-            order.payment_manual = True
-            order.save()
-            return
-
+    def execute_refund(self, refund: OrderRefund):
         self.init_api()
 
-        if order.payment_info:
-            payment_info = json.loads(order.payment_info)
-        else:
-            payment_info = None
-
-        if not payment_info:
-            mark_order_refunded(order, user=request.user)
-            messages.warning(request, _('We were unable to transfer the money back automatically. '
-                                        'Please get in touch with the customer and transfer it back manually.'))
-            return
-
-        for res in payment_info['transactions'][0]['related_resources']:
+        sale = None
+        for res in refund.payment.info_data['transactions'][0]['related_resources']:
             for k, v in res.items():
                 if k == 'sale':
                     sale = paypalrestsdk.Sale.find(v['id'])
                     break
 
-        refund = sale.refund({})
-        if not refund.success():
-            mark_order_refunded(order, user=request.user)
-            messages.warning(request, _('We were unable to transfer the money back automatically. '
-                                        'Please get in touch with the customer and transfer it back manually.'))
+        pp_refund = sale.refund({
+            "amount": {
+                "total": self.format_price(refund.amount),
+                "currency": refund.order.event.currency
+            }
+        })
+        if not pp_refund.success():
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(refund.error))
         else:
-            sale = paypalrestsdk.Payment.find(payment_info['id'])
-            order = mark_order_refunded(order, user=request.user)
-            order.payment_info = json.dumps(sale.to_dict())
-            order.save()
+            sale = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
+            refund.payment.info = json.dumps(sale.to_dict())
+            refund.info = json.dumps(pp_refund.to_dict())
+            refund.done()
 
-    def order_can_retry(self, order):
-        return self._is_still_available(order=order)
-
-    def order_prepare(self, request, order):
+    def payment_prepare(self, request, payment_obj):
         self.init_api()
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
@@ -378,43 +328,58 @@ class Paypal(BasePaymentProvider):
                     "item_list": {
                         "items": [
                             {
-                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(), code=order.code),
+                                "name": __('Order {slug}-{code}').format(slug=self.event.slug.upper(),
+                                                                         code=payment_obj.order.code),
                                 "quantity": 1,
-                                "price": self.format_price(order.total),
-                                "currency": order.event.currency
+                                "price": self.format_price(payment_obj.amount),
+                                "currency": payment_obj.order.event.currency
                             }
                         ]
                     },
                     "amount": {
                         "currency": request.event.currency,
-                        "total": self.format_price(order.total)
+                        "total": self.format_price(payment_obj.amount)
                     },
                     "description": __('Order {order} for {event}').format(
                         event=request.event.name,
-                        order=order.code
+                        order=payment_obj.order.code
                     )
                 }
             ]
         })
-        request.session['payment_paypal_order'] = order.pk
+        request.session['payment_paypal_order'] = payment_obj.order.pk
+        request.session['payment_paypal_payment'] = payment_obj.pk
         return self._create_payment(request, payment)
 
-    def shred_payment_info(self, order: Order):
-        d = json.loads(order.payment_info)
-        new = {
-            'id': d.get('id'),
-            'payer': {
-                'payer_info': {
-                    'email': '█'
+    def shred_payment_info(self, obj):
+        if obj.info:
+            d = json.loads(obj.info)
+            new = {
+                'id': d.get('id'),
+                'payer': {
+                    'payer_info': {
+                        'email': '█'
+                    }
+                },
+                'update_time': d.get('update_time'),
+                'transactions': [
+                    {
+                        'amount': t.get('amount')
+                    } for t in d.get('transactions', [])
+                ],
+                '_shredded': True
+            }
+            obj.info = json.dumps(new)
+            obj.save(update_fields=['info'])
+
+        for le in obj.order.all_logentries().filter(action_type="pretix.plugins.paypal.event").exclude(data=""):
+            d = le.parsed_data
+            if 'resource' in d:
+                d['resource'] = {
+                    'id': d['resource'].get('id'),
+                    'sale_id': d['resource'].get('sale_id'),
+                    'parent_payment': d['resource'].get('parent_payment'),
                 }
-            },
-            'update_time': d.get('update_time'),
-            'transactions': [
-                {
-                    'amount': t.get('amount')
-                } for t in d.get('transactions', [])
-            ],
-            '_shredded': True
-        }
-        order.payment_info = json.dumps(new)
-        order.save(update_fields=['payment_info'])
+            le.data = json.dumps(d)
+            le.shredded = True
+            le.save(update_fields=['data', 'shredded'])

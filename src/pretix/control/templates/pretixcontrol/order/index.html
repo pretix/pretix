@@ -25,7 +25,8 @@
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
                     {% if order.status == 'n' or order.status == 'e' %}
-                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p" class="btn btn-default">
+                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p"
+                                class="btn {% if overpaid >= 0 %}btn-primary{% else %}btn-default{% endif %}">
                             {% trans "Mark as paid" %}
                         </a>
                         <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
@@ -36,10 +37,13 @@
                         <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
                             {% trans "Cancel order" %}
                         </a>
-                    {% elif order.status == 'p' %}
+                    {% endif %}
+                    {% if order.status == 'p' %}
                         <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
-                        <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=r" class="btn btn-default">
-                            {% trans "Refund order" %}
+                    {% endif %}
+                    {% if overpaid|add:order.total != 0 %}
+                        <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                            {% trans "Create a refund" %}
                         </a>
                     {% endif %}
 
@@ -66,6 +70,26 @@
         </form>
     {% endif %}
 
+    {% if overpaid > 0 %}
+        <form action="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                method="post">
+            {% csrf_token %}
+            <input type="hidden" name="start-action" value="do_nothing">
+            <input type="hidden" name="start-mode" value="partial">
+            <input type="hidden" name="start-partial_amount" value="{{ overpaid }}">
+            <div class="alert alert-warning">
+                {% blocktrans trimmed with amount=overpaid|money:request.event.currency %}
+                    This order is currently overpaid by {{ amount }}.
+                {% endblocktrans %}
+                <button class="btn btn-primary" type="submit">
+                    {% blocktrans trimmed with amount=overpaid|money:request.event.currency %}
+                        Initiate a refund of {{ amount }}
+                    {% endblocktrans %}
+                </button>
+            </div>
+        </form>
+    {% endif %}
+
     <div class="row">
         <div class="col-xs-12 col-lg-10">
             <div class="panel panel-primary items">
@@ -87,10 +111,7 @@
                                 <span class="fa fa-edit"></span>
                             </a>
                         </dd>
-                        {% if order.status == "p" %}
-                            <dt>{% trans "Payment date" %}</dt>
-                            <dd>{{ order.payment_date }}</dd>
-                        {% elif order.status == "n" %}
+                        {% if order.status == "n" %}
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>{{ order.expires }}</dd>
                         {% endif %}
@@ -207,7 +228,8 @@
                                     </a>
                                 {% endif %}
                                 {% if line.subevent %}
-                                    <br /><span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                    <br/>
+                                    <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                                 {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
@@ -239,7 +261,7 @@
                                                             {{ q.answer.file_name }}
                                                         </a>
                                                         <span class="label label-danger" data-toggle="tooltip"
-                                                            title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
+                                                                title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
                                                             {% trans "UNSAFE" %}
                                                         </span>
                                                     {% else %}
@@ -262,7 +284,7 @@
                                 {% if event.settings.display_net_prices %}
                                     <strong>{{ line.net_price|money:event.currency }}</strong>
                                     {% if line.tax_rate %}
-                                        <br />
+                                        <br/>
                                         <small>
                                             {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
                                                 <strong>plus</strong> {{ rate }}% {{ taxname }}
@@ -272,7 +294,7 @@
                                 {% else %}
                                     <strong>{{ line.price|money:event.currency }}</strong>
                                     {% if line.tax_rate and line.price %}
-                                        <br />
+                                        <br/>
                                         <small>
                                             {% blocktrans trimmed with rate=line.tax_rate taxname=line.tax_rule.name|default:s_taxes %}
                                                 incl. {{ rate }}% {{ taxname }}
@@ -350,28 +372,154 @@
                 </div>
             </div>
             {% eventsignal event "pretix.control.signals.order_info" order=order request=request %}
-            <div class="row">
+            <div class="row payments">
                 <div class="{% if request.event.settings.invoice_address_asked or order.invoice_address %}col-md-6{% else %}col-md-12{% endif %}">
                     <div class="panel panel-default items">
                         <div class="panel-heading">
                             <h3 class="panel-title">
-                                {% trans "Payment information" %}
+                                {% trans "Payments" %}
                             </h3>
                         </div>
                         <div class="panel-body">
-                            {% if order.payment_manual %}
-                                <div class="alert alert-info">
-                                    {% trans "The payment state of this order was manually modified." %}
-                                </div>
-                            {% endif %}
-                            {{ payment }}
-                            {% if order.status == 'n' %}
-                                <p>{% blocktrans trimmed with date=order.expires %}
-                                    The payment has to be completed before {{ date }}.
-                                {% endblocktrans %}</p>
-                            {% endif %}
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{% trans "Start date" %}</th>
+                                        <th>{% trans "Confirmation date" %}</th>
+                                        <th>{% trans "Payment method" %}</th>
+                                        <th>{% trans "Status" %}</th>
+                                        <th class="text-right">{% trans "Amount" %}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for p in payments %}
+                                        <tr>
+                                            <td>{{ p.full_id }}</td>
+                                            <td>
+                                                {% if p.migrated %}
+                                                    <span class="label label-default" data-toggle="tooltip"
+                                                    title="{% trans "This payment was created with an older version of pretix, therefore accurate data might not be available." %}">
+                                                        {% trans "MIGRATED" %}
+                                                    </span>
+                                                {% else %}
+                                                    {{ p.created|date:"SHORT_DATETIME_FORMAT" }}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+                                            <td>
+                                                {{ p.payment_provider.verbose_name }}
+                                                {% if p.state == "pending" or p.state == "created" %}
+                                                    <a href="{% url "control:event.order.payments.cancel" event=request.event.slug organizer=request.event.organizer.slug code=order.code payment=p.pk %}"
+                                                            class="btn btn-danger btn-xs" data-toggle="tooltip"
+                                                            title="{% trans "Cancel payment" %}">
+                                                        <span class="fa fa-times"></span>
+                                                    </a>
+                                                    <a href="{% url "control:event.order.payments.confirm" event=request.event.slug organizer=request.event.organizer.slug code=order.code payment=p.pk %}"
+                                                            class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                                            title="{% trans "Confirm as paid" %}">
+                                                        <span class="fa fa-check"></span>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="label label-{% if p.state == "created" or p.state == "pending" %}warning{% elif p.state == "confirmed" %}success{% else %}danger{% endif %}">
+                                                    {{ p.get_state_display }}
+                                                </span>
+                                            </td>
+                                            <td class="text-right">{{ p.amount|money:request.event.currency }}</td>
+                                        </tr>
+                                        {% if p.html_info %}
+                                            <tr>
+                                                <td colspan="1"></td>
+                                                <td colspan="5">{{ p.html_info|safe }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    {% if refunds %}
+                        <div class="panel panel-default items">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Refunds" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>{% trans "Start date" %}</th>
+                                            <th>{% trans "Completion date" %}</th>
+                                            <th>{% trans "Source" %}</th>
+                                            <th>{% trans "Payment method" %}</th>
+                                            <th>{% trans "Payment" %}</th>
+                                            <th>{% trans "Status" %}</th>
+                                            <th class="text-right">{% trans "Amount" %}</th>
+                                            <th class="text-right"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for r in refunds %}
+                                            <tr>
+                                                <td>{{ r.full_id }}</td>
+                                                <td>{{ r.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                                                <td>{{ r.execution_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+                                                <td>{{ r.get_source_display }}</td>
+                                                <td>
+                                                    {{ r.payment_provider.verbose_name }}
+                                                </td>
+                                                <td>
+                                                    {% if r.payment %}
+                                                        {{ r.payment.full_id }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                <span class="label label-{% if r.state == "external" or r.state == "transit" or r.state == "created" %}warning{% elif r.state == "done" %}success{% else %}danger{% endif %}">
+                                                    {{ r.get_state_display }}
+                                                </span>
+                                                </td>
+                                                <td class="text-right">{{ r.amount|money:request.event.currency }}</td>
+                                                <td class="text-right">
+                                                    {% if r.state == "transit" or r.state == "created" %}
+                                                        <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=order.code refund=r.pk %}"
+                                                                class="btn btn-danger btn-xs" data-toggle="tooltip"
+                                                                title="{% trans "Cancel transfer" %}">
+                                                            <span class="fa fa-times"></span>
+                                                        </a>
+                                                        <a href="{% url "control:event.order.refunds.done" event=request.event.slug organizer=request.event.organizer.slug code=order.code refund=r.pk %}"
+                                                                class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                                                title="{% trans "Confirm as done" %}">
+                                                            <span class="fa fa-check"></span>
+                                                        </a>
+                                                    {% elif r.state == "external" %}
+                                                        <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                                                class="btn btn-default btn-xs" data-toggle="tooltip">
+                                                            <span class="fa fa-times"></span>
+                                                            {% trans "Ignore" %}
+                                                        </a>
+                                                        <a href="{% url "control:event.order.refunds.process" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                                                class="btn btn-primary btn-xs"
+                                                                data-toggle="tooltip">
+                                                            <span class="fa fa-check"></span>
+                                                            {% trans "Process refund" %}
+                                                        </a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
                 {% if request.event.settings.invoice_address_asked or order.invoice_address %}
                     <div class="col-md-6">

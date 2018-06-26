@@ -13,13 +13,13 @@ from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
 )
 from pretix.base.models.items import SubEventItem
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.payment import FreeOrderProvider
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, expire_orders,
-    mark_order_paid, send_download_reminders,
+    send_download_reminders,
 )
 
 
@@ -147,13 +147,13 @@ def test_expiring(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=0,
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
-        total=12, payment_provider='banktransfer'
+        total=12,
     )
     generate_invoice(o2)
     expire_orders(None)
@@ -171,14 +171,16 @@ def test_expiring_paid_invoice(event):
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
-        total=12, payment_provider='banktransfer'
+        total=12,
     )
     generate_invoice(o2)
     expire_orders(None)
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_EXPIRED
     assert o2.invoices.count() == 2
-    mark_order_paid(o2)
+    o2.payments.create(
+        provider='manual', amount=o2.total
+    ).confirm()
     assert o2.invoices.count() == 3
     assert o2.invoices.last().is_cancellation is False
 
@@ -190,13 +192,13 @@ def test_expiring_auto_disabled(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=0,
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, payment_provider='banktransfer'
+        total=0,
     )
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
@@ -219,7 +221,7 @@ class DownloadReminderTests(TestCase):
             status=Order.STATUS_PAID, locale='en',
             datetime=now(),
             expires=now() + timedelta(days=10),
-            total=Decimal('46.00'), payment_provider='banktransfer'
+            total=Decimal('46.00'),
         )
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           default_price=Decimal('23.00'), admission=True)
@@ -264,7 +266,10 @@ class OrderChangeManagerTests(TestCase):
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, locale='en',
             datetime=now(), expires=now() + timedelta(days=10),
-            total=Decimal('46.00'), payment_provider='banktransfer'
+            total=Decimal('46.00'),
+        )
+        self.order.payments.create(
+            provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CREATED, amount=self.order.total
         )
         self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
         self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
@@ -593,10 +598,9 @@ class OrderChangeManagerTests(TestCase):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.ocm.change_item(self.op1, self.shirt, None)
-        with self.assertRaises(OrderError):
-            self.ocm.commit()
+        self.ocm.commit()
         self.op1.refresh_from_db()
-        assert self.op1.item == self.ticket
+        assert self.op1.item == self.shirt
 
     def test_change_price_to_free_marked_as_paid(self):
         self.ocm.change_price(self.op1, Decimal('0.00'))
@@ -605,7 +609,7 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.total == 0
         assert self.order.status == Order.STATUS_PAID
-        assert self.order.payment_provider == 'free'
+        assert self.order.payments.last().provider == 'free'
 
     def test_change_paid_same_price(self):
         self.order.status = Order.STATUS_PAID
@@ -620,11 +624,25 @@ class OrderChangeManagerTests(TestCase):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.ocm.change_price(self.op1, Decimal('5.00'))
-        with self.assertRaises(OrderError):
-            self.ocm.commit()
+        self.ocm.commit()
         self.order.refresh_from_db()
-        assert self.order.total == 46
+        assert self.order.total == Decimal('28.00')
         assert self.order.status == Order.STATUS_PAID
+
+    def test_change_paid_to_pending(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+        self.ocm.change_price(self.op1, Decimal('25.00'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('48.00')
+        assert self.order.pending_sum == Decimal('2.00')
+        assert self.order.status == Order.STATUS_PENDING
 
     def test_add_item_quota_required(self):
         self.quota.delete()
@@ -775,10 +793,10 @@ class OrderChangeManagerTests(TestCase):
         assert fee.tax_rate == Decimal('19.00')
         assert fee.tax_value == Decimal('0.05')
 
+        self.ocm = OrderChangeManager(self.order, None)
         ia = self._enable_reverse_charge()
         self.ocm.recalculate_taxes()
         self.ocm.commit()
-        self.ocm = OrderChangeManager(self.order, None)
         ops = list(self.order.positions.all())
         for op in ops:
             assert op.price == Decimal('21.50')
@@ -794,6 +812,7 @@ class OrderChangeManagerTests(TestCase):
         ia.vat_id_validated = False
         ia.save()
 
+        self.ocm = OrderChangeManager(self.order, None)
         self.ocm.recalculate_taxes()
         self.ocm.commit()
         ops = list(self.order.positions.all())
@@ -870,6 +889,11 @@ class OrderChangeManagerTests(TestCase):
     def test_split_paid_no_payment_fees(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
 
         # Split
         self.ocm.split(self.op2)
@@ -880,6 +904,11 @@ class OrderChangeManagerTests(TestCase):
         # First order
         assert self.order.total == Decimal('23.00')
         assert not self.order.fees.exists()
+        assert self.order.pending_sum == Decimal('0.00')
+        r = self.order.refunds.last()
+        assert r.provider == 'offsetting'
+        assert r.amount == Decimal('23.00')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
 
         # New order
         assert self.op2.order != self.order
@@ -888,6 +917,11 @@ class OrderChangeManagerTests(TestCase):
         assert o2.status == Order.STATUS_PAID
         assert o2.positions.count() == 1
         assert o2.fees.count() == 0
+        assert o2.pending_sum == Decimal('0.00')
+        p = o2.payments.last()
+        assert p.provider == 'offsetting'
+        assert p.amount == Decimal('23.00')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     def test_split_invoice_address(self):
         ia = InvoiceAddress.objects.create(
@@ -1026,6 +1060,9 @@ class OrderChangeManagerTests(TestCase):
 
         self.order.status = Order.STATUS_PAID
         self.order.save()
+        payment = self.order.payments.first()
+        payment.state = OrderPayment.PAYMENT_STATE_CONFIRMED
+        payment.save()
 
         # Split
         self.ocm.split(self.op2)

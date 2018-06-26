@@ -29,7 +29,7 @@ class EventShredderTest(SoupTest):
             code='FOO', event=self.event1, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now(),
-            total=14, payment_provider='banktransfer', locale='en'
+            total=14, locale='en'
         )
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
@@ -37,7 +37,7 @@ class EventShredderTest(SoupTest):
     def test_shred_simple(self):
         doc = self.get_doc('/control/event/%s/%s/shredder/' % (self.orga1.slug, self.event1.slug))
         assert doc.select("input[value=order_emails]")
-        assert doc.select("input[value=stripe_logs]")
+        assert doc.select("input[value=invoices]")
         doc = self.post_doc('/control/event/%s/%s/shredder/export' % (self.orga1.slug, self.event1.slug), {
             'shredder': 'order_emails'
         })
@@ -67,7 +67,7 @@ class EventShredderTest(SoupTest):
     def test_shred_password_wrong(self):
         doc = self.get_doc('/control/event/%s/%s/shredder/' % (self.orga1.slug, self.event1.slug))
         assert doc.select("input[value=order_emails]")
-        assert doc.select("input[value=stripe_logs]")
+        assert doc.select("input[value=invoices]")
         doc = self.post_doc('/control/event/%s/%s/shredder/export' % (self.orga1.slug, self.event1.slug), {
             'shredder': 'order_emails'
         })
@@ -97,7 +97,7 @@ class EventShredderTest(SoupTest):
     def test_shred_confirm_code_wrong(self):
         doc = self.get_doc('/control/event/%s/%s/shredder/' % (self.orga1.slug, self.event1.slug))
         assert doc.select("input[value=order_emails]")
-        assert doc.select("input[value=stripe_logs]")
+        assert doc.select("input[value=invoices]")
         doc = self.post_doc('/control/event/%s/%s/shredder/export' % (self.orga1.slug, self.event1.slug), {
             'shredder': 'order_emails'
         })
@@ -137,7 +137,7 @@ class EventShredderTest(SoupTest):
     def test_shred_something_happened(self):
         doc = self.get_doc('/control/event/%s/%s/shredder/' % (self.orga1.slug, self.event1.slug))
         assert doc.select("input[value=order_emails]")
-        assert doc.select("input[value=stripe_logs]")
+        assert doc.select("input[value=invoices]")
         doc = self.post_doc('/control/event/%s/%s/shredder/export' % (self.orga1.slug, self.event1.slug), {
             'shredder': 'order_emails'
         })

@@ -86,6 +86,15 @@ Carts and Orders
 .. autoclass:: pretix.base.models.OrderPosition
    :members:
 
+.. autoclass:: pretix.base.models.OrderFee
+   :members:
+
+.. autoclass:: pretix.base.models.OrderPayment
+   :members:
+
+.. autoclass:: pretix.base.models.OrderRefund
+   :members:
+
 .. autoclass:: pretix.base.models.CartPosition
    :members:
 

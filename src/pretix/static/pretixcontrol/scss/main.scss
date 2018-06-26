@@ -394,6 +394,9 @@ body.loading #wrapper {
 .dl-horizontal dt  {
     white-space: normal;
 }
+td > .dl-horizontal {
+    margin-bottom: 0;
+}
 
 .collapse-indicator {
     -webkit-transition: all 150ms ease-in 0s;

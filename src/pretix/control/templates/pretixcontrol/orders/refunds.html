@@ -1,0 +1,104 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load money %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Refunds" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Refunds" %}</h1>
+    <div class="row filter-form">
+        <form class="" action="" method="get">
+            <div class="col-md-5 col-xs-6">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-5 col-xs-6">
+                {% bootstrap_field filter_form.provider layout='inline' %}
+            </div>
+            <div class="col-md-2 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
+                            {% trans "Filter" %}
+                        </span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% if not filter_form.filtered and refunds|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    No refunds are currently open.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans "Payment provider" %}</th>
+                    <th>{% trans "Start date" %}</th>
+                    <th>{% trans "Source" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th class="text-right">{% trans "Amount" %}</th>
+                    <th class="text-right">{% trans "Actions" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in refunds %}
+                    <tr>
+                        <td>
+                            <strong>
+                                <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code %}">
+                                    {{ r.order.code }}</a>-R-{{ r.local_id }}
+                            </strong>
+                        </td>
+                        <td>
+                            {{ r.payment_provider.verbose_name }}
+                        </td>
+                        <td>{{ o.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{{ r.get_source_display }}</td>
+                        <td>
+                            <span class="label label-{% if r.state == "external" or r.state == "transit" or r.state == "created" %}warning{% elif r.state == "done" %}success{% else %}danger{% endif %}">
+                                {{ r.get_state_display }}
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            {{ r.amount|money:request.event.currency }}
+                        </td>
+                        <td class="text-right">
+                            {% if r.state == "transit" or r.state == "created" %}
+                                <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                   class="btn btn-danger btn-xs" data-toggle="tooltip">
+                                    <span class="fa fa-times"></span>
+                                    {% trans "Cancel" %}
+                                </a>
+                                <a href="{% url "control:event.order.refunds.done" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                   class="btn btn-primary btn-xs" data-toggle="tooltip">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Confirm as done" %}
+                                </a>
+                                {% elif r.state == "external" %}
+                                <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                   class="btn btn-default btn-xs" data-toggle="tooltip">
+                                    <span class="fa fa-times"></span>
+                                    {% trans "Ignore" %}
+                                </a>
+                                <a href="{% url "control:event.order.refunds.process" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                   class="btn btn-primary btn-xs" data-toggle="tooltip">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Process refund" %}
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

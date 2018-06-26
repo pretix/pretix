@@ -3,11 +3,13 @@ import json
 
 import dateutil.parser
 import dateutil.rrule
-from django.db.models import Count
+from django.db.models import Count, DateTimeField, Max, OuterRef, Subquery
 from django.utils import timezone
 from django.views.generic import TemplateView
 
-from pretix.base.models import Item, Order, OrderPosition, SubEvent
+from pretix.base.models import (
+    Item, Order, OrderPayment, OrderPosition, SubEvent,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 from pretix.plugins.statistics.signals import clear_cache
@@ -35,10 +37,29 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         cache = self.request.event.cache
         ckey = str(subevent.pk) if subevent else 'all'
 
+        p_date = OrderPayment.objects.filter(
+            order=OuterRef('pk'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            payment_date__isnull=False
+        ).order_by().values('order').annotate(
+            m=Max('payment_date')
+        ).values(
+            'm'
+        )
+        op_date = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            payment_date__isnull=False
+        ).order_by().values('order').annotate(
+            m=Max('payment_date')
+        ).values(
+            'm'
+        )
+
         # Orders by day
         ctx['obd_data'] = cache.get('statistics_obd_data' + ckey)
         if not ctx['obd_data']:
-            oqs = Order.objects
+            oqs = Order.objects.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
             if subevent:
                 oqs = oqs.filter(positions__subevent_id=subevent).distinct()
 
@@ -106,16 +127,20 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         if not ctx['rev_data']:
             rev_by_day = {}
             if subevent:
-                for o in OrderPosition.objects.filter(order__event=self.request.event,
-                                                      subevent=subevent,
-                                                      order__status=Order.STATUS_PAID,
-                                                      order__payment_date__isnull=False).values('order__payment_date', 'price'):
+                for o in OrderPosition.objects.annotate(
+                        payment_date=Subquery(op_date, output_field=DateTimeField())
+                ).filter(order__event=self.request.event,
+                         subevent=subevent,
+                         order__status=Order.STATUS_PAID,
+                         order__payment_date__isnull=False).values('order__payment_date', 'price'):
                     day = o['order__payment_date'].astimezone(tz).date()
                     rev_by_day[day] = rev_by_day.get(day, 0) + o['price']
             else:
-                for o in Order.objects.filter(event=self.request.event,
-                                              status=Order.STATUS_PAID,
-                                              payment_date__isnull=False).values('payment_date', 'total'):
+                for o in Order.objects.annotate(
+                        payment_date=Subquery(p_date, output_field=DateTimeField())
+                ).filter(event=self.request.event,
+                         status=Order.STATUS_PAID,
+                         payment_date__isnull=False).values('payment_date', 'total'):
                     day = o['payment_date'].astimezone(tz).date()
                     rev_by_day[day] = rev_by_day.get(day, 0) + o['total']
 

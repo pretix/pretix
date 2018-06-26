@@ -15,9 +15,9 @@ from .log import LogEntry
 from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
-    InvoiceAddress, Order, OrderPosition, QuestionAnswer,
-    cachedcombinedticket_name, cachedticket_name, generate_position_secret,
-    generate_secret,
+    InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    QuestionAnswer, cachedcombinedticket_name, cachedticket_name,
+    generate_position_secret, generate_secret,
 )
 from .organizer import (
     Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,

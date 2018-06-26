@@ -25,13 +25,13 @@ def env():
         code='1Z3AS', event=event,
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=23, payment_provider='banktransfer'
+        total=23,
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
         status=Order.STATUS_CANCELED,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=23, payment_provider='banktransfer'
+        total=23,
     )
     quota = Quota.objects.create(name="Test", size=2, event=event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)
@@ -54,23 +54,6 @@ def test_discard(env, client):
     trans.refresh_from_db()
     assert trans.state == BankTransaction.STATE_DISCARDED
     assert trans.payer == ''
-
-
-@pytest.mark.django_db
-def test_accept_wrong_amount(env, client):
-    job = BankImportJob.objects.create(event=env[0])
-    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
-                                           state=BankTransaction.STATE_INVALID,
-                                           amount=12, date='unknown', order=env[2])
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
-        'action_{}'.format(trans.pk): 'accept',
-    }).content.decode('utf-8'))
-    assert r['status'] == 'ok'
-    trans.refresh_from_db()
-    assert trans.state == BankTransaction.STATE_VALID
-    env[2].refresh_from_db()
-    assert env[2].status == Order.STATUS_PAID
 
 
 @pytest.mark.django_db

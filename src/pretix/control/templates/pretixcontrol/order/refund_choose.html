@@ -1,0 +1,145 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% trans "Refund order" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Refund order" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <form method="post" href="">
+        {% csrf_token %}
+        <fieldset class="form-inline form-order-change">
+            <legend>{% trans "How should the refund be sent?" %}</legend>
+
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{% trans "Payment confirmation date" %}</th>
+                        <th>{% trans "Payment method" %}</th>
+                        <th>{% trans "Amount not refunded" %}</th>
+                        <th>{% trans "Refund" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for p in payments %}
+                        <tr>
+                            <td>{{ p.full_id }}</td>
+                            <td>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+                            <td>
+                                {{ p.payment_provider.verbose_name }}
+                            </td>
+                            <td>{{ p.available_amount|money:request.event.currency }}</td>
+                            <td>
+                                {% if p.partial_refund_possible %}
+                                    {% trans "Automatically refund" context "amount_label" %}
+                                    <div class="input-group">
+                                        <input type="text" name="refund-{{ p.pk }}"
+                                                value="{{ p.propose_refund|floatformat:2 }}"
+                                                title="" class="form-control">
+                                        <span class="input-group-addon">
+                                            {{ request.event.currency }}
+                                        </span>
+                                    </div>
+                                {% elif p.full_refund_possible %}
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="refund-{{ p.pk }}"
+                                                value="{{ p.amount|floatformat:2 }}"
+                                                {% if p.propose_refund == p.amount %}checked{% endif %}>
+                                        {% trans "Automatically refund full amount" %}
+                                    </label>
+                                {% else %}
+                                    <em>{% trans "This payment method does not support automatic refunds." %}</em>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{% trans "Transfer to other order" %}</strong></td>
+                        <td></td>
+                        <td>
+                            {% trans "Transfer" context "amount_label" %}
+                            <div class="input-group">
+                                <input type="text" name="refund-offsetting"
+                                       title="" class="form-control" value="{{ 0|floatformat:2 }}">
+                                <span class="input-group-addon">
+                                            {{ request.event.currency }}
+                                        </span>
+                            </div>
+                            {% trans "to" context "order_label" %}
+                            <input type="text" name="order-offsetting"
+                                   value="" title="" class="form-control">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{% trans "Manual refund" %}</strong></td>
+                        <td></td>
+                        <td>
+                            {% trans "Manually refund" context "amount_label" %}
+                            <div class="input-group">
+                                <input type="text" name="refund-manual"
+                                        value="{{ remainder|floatformat:2 }}"
+                                        title="" class="form-control">
+                                <span class="input-group-addon">
+                                            {{ request.event.currency }}
+                                        </span>
+                            </div>
+                            <label class="radio">
+                                <input type="radio" name="manual_state" value="created" checked>
+                                {% trans "Keep transfer as to do" %}
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="manual_state" value="done">
+                                {% trans "Mark refund as done" %}
+                            </label>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <p>
+            {% blocktrans trimmed %}
+                Any payments that you selected for automatical refunds will be immediately communicate the refund
+                request to the respective payment provider. Manual refunds will be created as pending refunds, you
+                can then later mark them as done once you actually transferred the money back to the customer.
+            {% endblocktrans %}
+        </p>
+        <p>&nbsp;</p>
+
+        <input type="hidden" name="start-action" value="{{ start_form.cleaned_data.action }}">
+        <input type="hidden" name="start-mode" value="{{ start_form.cleaned_data.mode }}">
+        <input type="hidden" name="start-partial_amount" value="{{ partial_amount }}">
+
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "Cancel" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit" name="perform" value="true">
+                    {% trans "Perform refund" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

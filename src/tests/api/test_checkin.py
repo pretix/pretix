@@ -41,7 +41,7 @@ def order(event, item, other_item, taxrule):
             status=Order.STATUS_PAID, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
-            total=46, payment_provider='banktransfer', locale='en'
+            total=46, locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         OrderPosition.objects.create(

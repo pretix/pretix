@@ -27,7 +27,7 @@ def order(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('46.00'), payment_provider='banktransfer'
+        total=Decimal('46.00'),
     )
     tr19 = event.tax_rules.create(rate=Decimal('19.00'))
     ticket = Item.objects.create(event=event, name='Early-bird ticket', tax_rule=tr19,

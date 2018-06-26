@@ -32,7 +32,7 @@ def env():
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer', locale='en'
+        total=0, locale='en'
     )
     tr = event.tax_rules.create(rate=Decimal('19.00'))
     o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -275,7 +275,7 @@ def test_invoice_numbers(env):
         code='BAR', event=event, email='dummy2@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer',
+        total=0,
         locale='en'
     )
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
@@ -322,7 +322,7 @@ def test_invoice_number_prefixes(env):
         event=event2, email='dummy2@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=0, payment_provider='banktransfer',
+        total=0,
         locale='en'
     )
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),

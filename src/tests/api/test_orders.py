@@ -9,9 +9,13 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from pytz import UTC
+from stripe.error import APIConnectionError
+from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition, Question
-from pretix.base.models.orders import CartPosition, OrderFee
+from pretix.base.models.orders import (
+    CartPosition, OrderFee, OrderPayment, OrderRefund,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
@@ -57,6 +61,8 @@ def quota(event, item):
 @pytest.fixture
 def order(event, item, taxrule, question):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    event.plugins += ",pretix.plugins.stripe"
+    event.save()
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
@@ -65,7 +71,26 @@ def order(event, item, taxrule, question):
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
-            total=23, payment_provider='banktransfer', locale='en'
+            total=23, locale='en'
+        )
+        p1 = o.payments.create(
+            provider='stripe',
+            state='refunded',
+            amount=Decimal('23.00'),
+            payment_date=testtime,
+        )
+        o.refunds.create(
+            provider='stripe',
+            state='done',
+            source='admin',
+            amount=Decimal('23.00'),
+            execution_date=testtime,
+            payment=p1,
+        )
+        o.payments.create(
+            provider='banktransfer',
+            state='pending',
+            amount=Decimal('23.00'),
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule)
@@ -112,6 +137,36 @@ TEST_ORDERPOSITION_RES = {
     ],
     "subevent": None
 }
+TEST_PAYMENTS_RES = [
+    {
+        "local_id": 1,
+        "created": "2017-12-01T10:00:00Z",
+        "payment_date": "2017-12-01T10:00:00Z",
+        "provider": "stripe",
+        "state": "refunded",
+        "amount": "23.00"
+    },
+    {
+        "local_id": 2,
+        "created": "2017-12-01T10:00:00Z",
+        "payment_date": None,
+        "provider": "banktransfer",
+        "state": "pending",
+        "amount": "23.00"
+    }
+]
+TEST_REFUNDS_RES = [
+    {
+        "local_id": 1,
+        "payment": 1,
+        "source": "admin",
+        "created": "2017-12-01T10:00:00Z",
+        "execution_date": "2017-12-01T10:00:00Z",
+        "provider": "stripe",
+        "state": "done",
+        "amount": "23.00"
+    },
+]
 TEST_ORDER_RES = {
     "code": "FOO",
     "status": "n",
@@ -120,7 +175,7 @@ TEST_ORDER_RES = {
     "locale": "en",
     "datetime": "2017-12-01T10:00:00Z",
     "expires": "2017-12-10T10:00:00Z",
-    "payment_date": None,
+    "payment_date": "2017-12-01",
     "fees": [
         {
             "fee_type": "payment",
@@ -149,7 +204,9 @@ TEST_ORDER_RES = {
         "vat_id_validated": False
     },
     "positions": [TEST_ORDERPOSITION_RES],
-    "downloads": []
+    "downloads": [],
+    "payments": TEST_PAYMENTS_RES,
+    "refunds": TEST_REFUNDS_RES,
 }
 
 
@@ -224,6 +281,252 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
                                                                                 order.code))
     assert len(resp.data['downloads']) == 1
     assert len(resp.data['positions'][0]['downloads']) == 1
+
+
+@pytest.mark.django_db
+def test_payment_list(token_client, organizer, event, order):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(organizer.slug, event.slug,
+                                                                                         order.code))
+    assert resp.status_code == 200
+    assert TEST_PAYMENTS_RES == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_payment_detail(token_client, organizer, event, order):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/payments/1/'.format(organizer.slug, event.slug,
+                                                                                           order.code))
+    assert resp.status_code == 200
+    assert TEST_PAYMENTS_RES[0] == resp.data
+
+
+@pytest.mark.django_db
+def test_payment_confirm(token_client, organizer, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/confirm/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={'force': True})
+    p = order.payments.get(local_id=2)
+    assert resp.status_code == 200
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/confirm/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={'force': True})
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_payment_cancel(token_client, organizer, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/cancel/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    p = order.payments.get(local_id=2)
+    assert resp.status_code == 200
+    assert p.state == OrderPayment.PAYMENT_STATE_CANCELED
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/cancel/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch):
+    order.payments.last().confirm()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'amount': '25.00',
+        'mark_refunded': False
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'amount': ['Invalid refund amount, only 23.00 are available to refund.']}
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'amount': '20.00',
+        'mark_refunded': False
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'amount': ['Partial refund not available for this payment method.']}
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'mark_refunded': False
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'amount': ['Full refund not available for this payment method.']}
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'amount': '23.00',
+        'mark_refunded': False
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'amount': ['Full refund not available for this payment method.']}
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/1/refund/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'amount': '23.00',
+        'mark_refunded': False
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'detail': 'Invalid state of payment.'}
+
+
+@pytest.mark.django_db
+def test_payment_refund_success(token_client, organizer, event, order, monkeypatch):
+    def charge_retr(*args, **kwargs):
+        def refund_create(amount):
+            pass
+
+        c = MockedCharge()
+        c.refunds.create = refund_create
+        return c
+
+    p1 = order.payments.create(
+        provider='stripe',
+        state='confirmed',
+        amount=Decimal('23.00'),
+        payment_date=order.datetime,
+        info=json.dumps({
+            'id': 'ch_123345345'
+        })
+    )
+    monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
+        organizer.slug, event.slug, order.code, p1.local_id
+    ), format='json', data={
+        'amount': '23.00',
+        'mark_refunded': False,
+    })
+    assert resp.status_code == 200
+    r = order.refunds.get(local_id=resp.data['local_id'])
+    assert r.provider == "stripe"
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+
+
+@pytest.mark.django_db
+def test_payment_refund_unavailable(token_client, organizer, event, order, monkeypatch):
+    def charge_retr(*args, **kwargs):
+        def refund_create(amount):
+            raise APIConnectionError(message='Foo')
+
+        c = MockedCharge()
+        c.refunds.create = refund_create
+        return c
+
+    p1 = order.payments.create(
+        provider='stripe',
+        state='confirmed',
+        amount=Decimal('23.00'),
+        payment_date=order.datetime,
+        info=json.dumps({
+            'id': 'ch_123345345'
+        })
+    )
+    monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
+        organizer.slug, event.slug, order.code, p1.local_id
+    ), format='json', data={
+        'amount': '23.00',
+        'mark_refunded': False,
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'detail': 'External error: We had trouble communicating with Stripe. Please try again and contact support if the problem persists.'}
+    r = order.refunds.last()
+    assert r.provider == "stripe"
+    assert r.state == OrderRefund.REFUND_STATE_FAILED
+    assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+
+
+@pytest.mark.django_db
+def test_refund_list(token_client, organizer, event, order):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(organizer.slug, event.slug,
+                                                                                        order.code))
+    assert resp.status_code == 200
+    assert TEST_REFUNDS_RES == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_refund_detail(token_client, organizer, event, order):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/'.format(organizer.slug, event.slug,
+                                                                                          order.code))
+    assert resp.status_code == 200
+    assert TEST_REFUNDS_RES[0] == resp.data
+
+
+@pytest.mark.django_db
+def test_refund_done(token_client, organizer, event, order):
+    r = order.refunds.get(local_id=1)
+    r.state = 'transit'
+    r.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/done/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    r = order.refunds.get(local_id=1)
+    assert resp.status_code == 200
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/done/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_refund_process_mark_refunded(token_client, organizer, event, order):
+    p = order.payments.get(local_id=1)
+    p.create_external_refund()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={'mark_refunded': True})
+    r = order.refunds.get(local_id=1)
+    assert resp.status_code == 200
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_REFUNDED
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={'mark_refunded': True})
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_refund_process_mark_pending(token_client, organizer, event, order):
+    p = order.payments.get(local_id=1)
+    p.create_external_refund()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={'mark_refunded': False})
+    r = order.refunds.get(local_id=1)
+    assert resp.status_code == 200
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_cancel(token_client, organizer, event, order):
+    r = order.refunds.get(local_id=1)
+    r.state = 'transit'
+    r.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/cancel/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    r = order.refunds.get(local_id=1)
+    assert resp.status_code == 200
+    assert r.state == OrderRefund.REFUND_STATE_CANCELED
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/cancel/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 400
 
 
 @pytest.mark.django_db
@@ -860,7 +1163,12 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
-    assert o.payment_provider == "banktransfer"
+
+    p = o.payments.first()
+    assert p.provider == "banktransfer"
+    assert p.amount == o.total
+    assert p.state == "created"
+
     fee = o.fees.first()
     assert fee.fee_type == "payment"
     assert fee.value == Decimal('0.25')
@@ -953,7 +1261,6 @@ def test_order_create_payment_info_optional(token_client, organizer, event, item
     )
     assert resp.status_code == 201
     o = Order.objects.get(code=resp.data['code'])
-    assert not o.payment_info == "{}"
 
     res['payment_info'] = {
         'foo': {
@@ -968,7 +1275,11 @@ def test_order_create_payment_info_optional(token_client, organizer, event, item
     )
     assert resp.status_code == 201
     o = Order.objects.get(code=resp.data['code'])
-    assert json.loads(o.payment_info) == res['payment_info']
+
+    p = o.payments.first()
+    assert p.provider == "banktransfer"
+    assert p.amount == o.total
+    assert json.loads(p.info) == res['payment_info']
 
 
 @pytest.mark.django_db
@@ -1725,7 +2036,11 @@ def test_order_create_free(token_client, organizer, event, item, quota, question
     o = Order.objects.get(code=resp.data['code'])
     assert o.total == Decimal('0.00')
     assert o.status == Order.STATUS_PAID
-    assert o.payment_provider == "free"
+
+    p = o.payments.first()
+    assert p.provider == "free"
+    assert p.amount == o.total
+    assert p.state == "confirmed"
 
 
 @pytest.mark.django_db
@@ -1803,3 +2118,76 @@ def test_order_create_paid_generate_invoice(token_client, organizer, event, item
     assert resp.status_code == 201
     o = Order.objects.get(code=resp.data['code'])
     assert o.invoices.count() == 1
+
+    p = o.payments.first()
+    assert p.provider == "banktransfer"
+    assert p.amount == o.total
+    assert p.state == "confirmed"
+
+
+REFUND_CREATE_PAYLOAD = {
+    "state": "created",
+    "provider": "manual",
+    "amount": "23.00",
+    "source": "admin",
+    "payment": 2,
+    "info": {
+        "foo": "bar",
+    }
+}
+
+
+@pytest.mark.django_db
+def test_refund_create(token_client, organizer, event, order):
+    res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    r = order.refunds.get(local_id=resp.data['local_id'])
+    assert r.provider == "manual"
+    assert r.amount == Decimal("23.00")
+    assert r.state == "created"
+    assert r.source == "admin"
+    assert r.info_data == {"foo": "bar"}
+    assert r.payment.local_id == 2
+
+
+@pytest.mark.django_db
+def test_refund_optional_fields(token_client, organizer, event, order):
+    res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
+    del res['info']
+    del res['payment']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    r = order.refunds.get(local_id=resp.data['local_id'])
+    assert r.provider == "manual"
+    assert r.amount == Decimal("23.00")
+    assert r.state == "created"
+    assert r.source == "admin"
+
+    del res['state']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_refund_create_invalid_payment(token_client, organizer, event, order):
+    res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
+    res['payment'] = 7
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
