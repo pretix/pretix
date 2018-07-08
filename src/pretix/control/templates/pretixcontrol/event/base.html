@@ -107,7 +107,7 @@
     {% if 'can_view_vouchers' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
-                    {% if url_name == "event.voucher" %}class="active"{% endif %}>
+                    {% if "event.voucher" in url_name %}class="active"{% endif %}>
                 <i class="fa fa-tags fa-fw"></i>
                 {% trans "Vouchers" %}
             </a>

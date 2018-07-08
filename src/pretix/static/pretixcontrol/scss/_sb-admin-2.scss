@@ -7,7 +7,7 @@ Modified by Raphael Michel
 // Global Styles
 
 body {
-    background-color: $gray-lightest;
+    background-color: $page-background;
 }
 
 // Wrappers
@@ -17,17 +17,15 @@ body {
 }
 
 #page-wrapper {
-    padding: 0 15px;
+    padding: 20px 15px 0;
     min-height: 568px;
-    background-color: white;
 }
 
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 250px;
-        padding: 0 30px;
-        border-left: 1px solid darken($gray-lightest, 6.5%);
+        margin: 0 0 0 220px;
+        padding: 20px 30px 0;
     }
 }
 
@@ -95,7 +93,7 @@ body {
 
 // --Sidebar
 
-.sidebar {
+.sidebar { li
     .sidebar-nav.navbar-collapse {
         padding-left: 0;
         padding-right: 0;
@@ -107,13 +105,7 @@ body {
 }
 
 .sidebar ul li {
-    border-bottom: 1px solid darken($gray-lightest, 6.5%);
     position: relative;
-    a {
-        &.active {
-            background-color: $gray-lighter;
-        }
-    }
     a.arrow {
         position: absolute;
         right: 0;

@@ -1,6 +1,26 @@
 .sidebar-nav li > a > .fa {
   color: $navbar-inverse-bg;
 }
+.sidebar-nav {
+  padding-top: 10px;
+}
+.sidebar-nav li > a {
+  padding: 7px 15px;
+}
+.sidebar-nav li li a {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.sidebar-nav li ul {
+  margin-bottom: 5px;
+}
+.sidebar-nav li.active > a, .sidebar-nav li a.active {
+  font-weight: bold;
+}
+
+.panel h1, .panel h2 {
+  margin-top: 0;
+}
 
 .btn {
   border-width: 0px;
@@ -69,6 +89,14 @@
 .alert-primary, .alert-warning, .alert-info, .alert-success, .alert-danger {
   color: #3b3b3b;
 }
+
+.panel {
+  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+}
+.panel-default > .panel-heading, .panel-default > .panel-footer {
+  background: white;
+}
+
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {
   color: #000000;
 }

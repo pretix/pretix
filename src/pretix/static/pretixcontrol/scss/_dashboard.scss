@@ -10,9 +10,12 @@
   flex: 1 0 auto;
   align-self: stretch;
   padding: 15px 5px;
-  border: 5px solid white;
   min-height: 160px;
-  background: #F8F8F8;
+  margin: 5px;
+
+  background: white;
+  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+  border-radius: $panel-border-radius;
 }
 
 .dashboard .widget-container.widget-full {
@@ -110,6 +113,7 @@
     }
     a.status-warning {
       background: $brand-warning;
+      color: black;
     }
     a.status-default {
       background: $gray-light;

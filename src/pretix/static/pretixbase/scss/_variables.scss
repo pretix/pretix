@@ -13,6 +13,8 @@ $gray-light: lighten(#000, 60%);
 $gray-lighter: lighten(#000, 93.5%);
 $gray-lightest: lighten(#000, 97.25%);
 
+$page-background: #fbf7fc;
+
 $font-family-sans-serif:  "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $text-color: #222222;
 $text-muted: #999999;
@@ -22,6 +24,10 @@ $brand-success: #50a167;
 $brand-info: #5f9cd4;
 $brand-warning: #ffb419;
 $brand-danger: #d36060;
+
+$font-size-base:          14px;
+$font-size-h1:            floor(($font-size-base * 2.15));
+$font-size-h2:            floor(($font-size-base * 2.0));
 
 $btn-default-border: #CCCCCC;
 
@@ -39,6 +45,11 @@ $navbar-inverse-link-color: white;
 $navbar-inverse-link-hover-color: $gray-lighter;
 $navbar-inverse-brand-hover-color: $gray-lighter;
 $navbar-inverse-color: white;
+$navbar-default-bg: $page-background;
+
+$nav-link-hover-bg: $page-background;
+$navbar-default-link-active-bg: $page-background;
+$navbar-default-link-hover-bg: $page-background;
 
 $state-success-bg:               white;
 $state-success-border:           $brand-success;
