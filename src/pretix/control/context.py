@@ -12,7 +12,9 @@ from pretix.base.settings import GlobalSettingsObject
 from ..helpers.i18n import (
     get_javascript_format, get_javascript_output_format, get_moment_locale,
 )
-from .signals import html_head, nav_event, nav_global, nav_topbar
+from .signals import (
+    html_head, nav_event, nav_event_settings, nav_global, nav_topbar,
+)
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -44,6 +46,12 @@ def contextprocessor(request):
     if getattr(request, 'event', None) and hasattr(request, 'organizer') and request.user.is_authenticated:
         for receiver, response in nav_event.send(request.event, request=request):
             _nav_event += response
+
+        ctx['nav_event_settings'] = []
+        for recv, retv in nav_event_settings.send(sender=request.event, request=request):
+            ctx['nav_event_settings'] += retv
+        ctx['nav_event_settings'].sort(key=lambda n: n['label'])
+
         if request.event.settings.get('payment_term_weekdays'):
             _js_payment_weekdays_disabled = '[0,6]'
 

@@ -4,8 +4,10 @@
 {% block inside %}
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
-        <fieldset>
-            <legend>{% trans "Payment providers" %}</legend>
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Payment providers" %}</legend>
+            </div>
             <table class="table table-payment-providers">
                 <tbody>
                 {% for provider in providers %}
@@ -28,13 +30,13 @@
                         </td>
                         <td class="text-right">
                             <a href="{% url 'control:event.settings.payment.provider' event=request.event.slug organizer=request.organizer.slug provider=provider.identifier %}"
-                                    class="btn btn-default">
+                               class="btn btn-default">
                                 <span class="fa fa-cog"></span>
                                 {% trans "Settings" %}
                             </a>
                         </td>
                     </tr>
-                {% empty %}
+                    {% empty %}
                     <tr>
                         <td colspan="3">
                             {% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}
@@ -44,15 +46,19 @@
                 </tbody>
             </table>
         </fieldset>
-        <fieldset>
-            <legend>{% trans "General payment settings" %}</legend>
-            {% bootstrap_form_errors form layout="control" %}
-            {% bootstrap_field form.payment_term_days layout="control" %}
-            {% bootstrap_field form.payment_term_last layout="control" %}
-            {% bootstrap_field form.payment_term_weekdays layout="control" %}
-            {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
-            {% bootstrap_field form.payment_term_accept_late layout="control" %}
-            {% bootstrap_field form.tax_rate_default layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "General payment settings" %}</legend>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_form_errors form layout="control" %}
+                {% bootstrap_field form.payment_term_days layout="control" %}
+                {% bootstrap_field form.payment_term_last layout="control" %}
+                {% bootstrap_field form.payment_term_weekdays layout="control" %}
+                {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
+                {% bootstrap_field form.payment_term_accept_late layout="control" %}
+                {% bootstrap_field form.tax_rate_default layout="control" %}
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

@@ -22,6 +22,14 @@
   margin-top: 0;
 }
 
+.panel-heading legend {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: ceil(($font-size-base * 1.125));
+  border: 0;
+  color: inherit;
+}
+
 .btn {
   border-width: 0px;
 }
@@ -90,11 +98,34 @@
   color: #3b3b3b;
 }
 
-.panel {
+.box-shadow-small {
+  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+}
+.box-shadow-medium {
   box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+}
+.box-shadow-medium {
+  box-shadow: 0 15px 35px 0 rgba(78, 50, 92, 0.1),0 5px 15px 0 rgba(0,0,0,.07);
+}
+
+.panel {
+  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
 }
 .panel-default > .panel-heading, .panel-default > .panel-footer {
   background: white;
+}
+
+.panel > table td:first-child,
+.panel > .table-responsive table td:first-child,
+.panel > table th:first-child,
+.panel > .table-responsive table th:first-child {
+  padding-left: $panel-body-padding;
+}
+.panel > table td:last-child,
+.panel > .table-responsive table td:last-child,
+.panel > table th:last-child,
+.panel > .table-responsive table th:last-child {
+  padding-right: $panel-body-padding;
 }
 
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {

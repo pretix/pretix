@@ -55,9 +55,11 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
 }
 
 .submit-group {
+  background: white;
+  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+  border-radius: $panel-border-radius;
   margin: 15px 0 0 0 !important;
   padding: 15px;
-  background: #eeeeee;
   text-align: right;
   .btn-save {
     // btn-lg
