@@ -5,26 +5,31 @@
     {% trans "Change contact information" %}
 {% endblock %}
 {% block content %}
-    <h1>
-        {% trans "Change order information" %}
-        <a class="btn btn-link btn-lg"
-                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-            {% blocktrans trimmed with order=order.code %}
-                Back to order {{ order }}
-            {% endblocktrans %}
-        </a>
-    </h1>
+    <div class="panel panel-default panel-with-btn">
+        <div class="panel-heading">
+            <a class="btn btn-default btn-sm pull-right"
+               href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% blocktrans trimmed with order=order.code %}
+                    Back to order {{ order }}
+                {% endblocktrans %}
+            </a>
+            <h1 class="panel-title">
+                {% trans "Change order information" %}
+            </h1>
+        </div>
+    </div>
 
     <form method="post" class="form-horizontal" href="" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="panel-group" id="questions_accordion">
+        <div class="" id="questions_accordion">
             {% if request.event.settings.invoice_address_asked or order.invoice_address or request.event.settings.invoice_name_required %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <strong>{% trans "Invoice information" %} {% if not request.event.settings.invoice_address_required %}
-                                {% trans "(optional)" %}
-                            {% endif %}</strong>
+                            <strong>{% trans "Invoice information" %}
+                                {% if not request.event.settings.invoice_address_required %}
+                                    {% trans "(optional)" %}
+                                {% endif %}</strong>
                             <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
                     </summary>
@@ -61,7 +66,7 @@
         </div>
         <div class="form-group submit-group">
             <a class="btn btn-default btn-lg"
-                    href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+               href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                 {% trans "Cancel" %}
             </a>
             <button class="btn btn-primary btn-save btn-lg" type="submit">

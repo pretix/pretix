@@ -4,12 +4,11 @@
 {% load order_overview %}
 {% block title %}{% trans "Data export" %}{% endblock %}
 {% block content %}
-	<h1>
-        {% trans "Data export" %}
-        {% if "identifier" in request.GET %}
+    {% if "identifier" in request.GET %}
+        <p class="text-right">
             <a href="?" class="btn btn-default">{% trans "Show all" %}</a>
-        {% endif %}
-    </h1>
+        </p>
+    {% endif %}
     {% for e in exporters %}
         <details class="panel panel-default" {% if "identifier" in request.GET %}open{% endif %}>
             <summary class="panel-heading">
@@ -21,10 +20,10 @@
             <div id="{{ e.identifier }}">
                 <div class="panel-body">
                     <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
-                            method="post" class="form-horizontal" data-asynctask data-asynctask-download
-                            data-asynctask-long>
+                          method="post" class="form-horizontal" data-asynctask data-asynctask-download
+                          data-asynctask-long>
                         {% csrf_token %}
-                        <input type="hidden" name="exporter" value="{{ e.identifier }}" />
+                        <input type="hidden" name="exporter" value="{{ e.identifier }}"/>
                         {% bootstrap_form e.form layout='horizontal' %}
                         <button class="btn btn-primary pull-right" type="submit">
                             <span class="icon icon-upload"></span> {% trans "Start export" %}

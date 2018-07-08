@@ -3,16 +3,18 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Email history" %}{% endblock %}
 {% block content %}
-    <h1>
-        {% trans "Email history" %}
-        <a class="btn btn-link btn-lg"
-                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-            {% blocktrans trimmed with order=order.code %}
-                Back to order {{ order }}
-            {% endblocktrans %}
-        </a>
-    </h1>
-    <div>
+    <div class="panel panel-default panel-with-btn">
+        <div class="panel-heading">
+            <a class="btn btn-default btn-sm pull-right"
+               href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                {% blocktrans trimmed with order=order.code %}
+                    Back to order {{ order }}
+                {% endblocktrans %}
+            </a>
+            <h1 class="panel-title">
+                {% trans "Email history" %}
+            </h1>
+        </div>
         <ul class="list-group">
             {% for log in logs %}
                 <li class="list-group-item logentry">
@@ -55,6 +57,8 @@
                 </li>
             {% endfor %}
         </ul>
+    <div class="panel-footer">
+        {% include "pretixcontrol/pagination.html" %}
     </div>
-    {% include "pretixcontrol/pagination.html" %}
+    </div>
 {% endblock %}
