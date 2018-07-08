@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-06-06 14:47+0000\n"
+"PO-Revision-Date: 2018-07-08 14:03+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19.1\n"
+"X-Generator: Weblate 3.0.1\n"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -40,20 +40,14 @@ msgid "Client secret"
 msgstr "Geheimer Schlüssel"
 
 #: pretix/api/serializers/cart.py:55 pretix/api/serializers/order.py:444
-#, fuzzy
-#| msgid "This order is not assigned to a known payment provider."
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Die Bestellung ist keiner bekannten Zahlungsmethode zugeordnet."
+msgstr "Das Produkt \"{}\" ist keinem Kontingent zugeordnet."
 
 #: pretix/api/serializers/cart.py:63 pretix/api/serializers/order.py:456
-#, fuzzy
-#| msgid ""
-#| "The quota {name} does not have enough capacity left to perform the "
-#| "operation."
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
-"Das Kontingent {name} hat nicht genug freie Kapazität für diese Änderung."
+"Das Kontingent \"{name}\" hat nicht genug freie Kapazität für diese Änderung."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:830
 #: pretix/base/models/items.py:1139
@@ -2488,10 +2482,8 @@ msgstr ""
 "ein Text der sagt, dass die Rechnung bereits bezahlt wurde."
 
 #: pretix/base/payment.py:191
-#, fuzzy
-#| msgid "Order total"
 msgid "Minimum order total"
-msgstr "Gesamtbetrag"
+msgstr "Minimaler Gesamtbetrag"
 
 #: pretix/base/payment.py:192
 msgid ""
@@ -2499,12 +2491,13 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Diese Zahlungsmethode wird nur verfügbar sein, wenn der Zahlungsbetrag "
+"größer oder gleich dem angegebenen Wert ist. Der Gesamtbetrag wird hierfür "
+"gegebenenfalls ohne Einbeziehung eventueller Zahlungsgebühren berechnet."
 
 #: pretix/base/payment.py:202
-#, fuzzy
-#| msgid "Order total"
 msgid "Maximum order total"
-msgstr "Gesamtbetrag"
+msgstr "Maximaler Gesamtbetrag"
 
 #: pretix/base/payment.py:203
 msgid ""
@@ -2512,6 +2505,9 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Diese Zahlungsmethode wird nur verfügbar sein, wenn der Zahlungsbetrag "
+"kleiner oder gleich dem angegebenen Wert ist. Der Gesamtbetrag wird hierfür "
+"gegebenenfalls ohne Einbeziehung eventueller Zahlungsgebühren berechnet."
 
 #: pretix/base/payment.py:213 pretix/base/payment.py:222
 msgid "Additional fee"
@@ -4687,14 +4683,12 @@ msgid "Sender address for outgoing emails"
 msgstr "Absender-Adresse für ausgehende E-Mails"
 
 #: pretix/control/forms/event.py:667
-#, fuzzy
-#| msgid "Your address"
 msgid "Bcc address"
-msgstr "Deine Adresse"
+msgstr "BCC-Adresse"
 
 #: pretix/control/forms/event.py:668
 msgid "All emails will be sent to this address as a Bcc copy"
-msgstr ""
+msgstr "Alle E-Mails werden in Bcc-Kopie an diese Adresse geschickt"
 
 #: pretix/control/forms/event.py:673
 msgid "Signature"
@@ -11534,10 +11528,8 @@ msgid "Sort by"
 msgstr "Sortieren nach"
 
 #: pretix/plugins/badges/exporters.py:91
-#, fuzzy
-#| msgid "Ask for attendee names"
 msgid "Last part of attendee name"
-msgstr "Namen der Teilnehmer erfragen"
+msgstr "Letzter Teil des Teilnehmernamens"
 
 #: pretix/plugins/badges/forms.py:21
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
@@ -12055,7 +12047,7 @@ msgstr "Check-in-Liste (CSV)"
 
 #: pretix/plugins/checkinlists/exporters.py:251
 msgid "CSV dialect"
-msgstr ""
+msgstr "CSV-Dialekt"
 
 #: pretix/plugins/checkinlists/exporters.py:305
 #: pretix/plugins/paypal/payment.py:68
@@ -12065,34 +12057,35 @@ msgstr "Secret"
 #: pretix/plugins/manualpayment/__init__.py:9
 #: pretix/plugins/manualpayment/__init__.py:12
 #: pretix/plugins/manualpayment/payment.py:16
-#, fuzzy
-#| msgid "Invalid payments"
 msgid "Manual payment"
-msgstr "Ungültige Zahlungen"
+msgstr "Manuelle Zahlung"
 
 #: pretix/plugins/manualpayment/__init__.py:15
 msgid "This plugin adds a customizable payment method for manual processing."
 msgstr ""
+"Diese Erweiterung fügt eine anpassbare Zahlungsmethode für manuelle Zahlung "
+"hinzu."
 
 #: pretix/plugins/manualpayment/payment.py:27
-#, fuzzy
-#| msgid "Payment method fee"
 msgid "Payment method name"
-msgstr "Gebühr für gewählte Zahlungsmethode"
+msgstr "Name der Zahlungsmethode"
 
 #: pretix/plugins/manualpayment/payment.py:31
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Beschreibung des Zahlungsvorgangs im Bestellprozess"
 
 #: pretix/plugins/manualpayment/payment.py:32
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Dieser Text wird während des Bestellvorgangs angezeigt, wenn der Nutzer "
+"diese Zahlungsmethode auswählt. Er sollte eine kurze Erklärung der "
+"Zahlungsmethode enthalten."
 
 #: pretix/plugins/manualpayment/payment.py:37
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Beschreibung des Zahlungsvorgangs in Bestellbestätigungs-E-Mails"
 
 #: pretix/plugins/manualpayment/payment.py:38
 #, python-brace-format
@@ -12102,10 +12095,14 @@ msgid ""
 "payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
+"Dieser Text wird statt des {payment_info}-Platzhalters in "
+"Bestellbestätigungen verwendet. Er sollte den Kunden darüber informieren, "
+"wie die Zahlung vervollständigt werden kann. Die Platzhalter {order}, {total}"
+", {currency} und {total_with_currency} können verwendet werden."
 
 #: pretix/plugins/manualpayment/payment.py:45
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Beschreibung des Zahlungsvorgangs für ausstehende Bestellungen"
 
 #: pretix/plugins/manualpayment/payment.py:46
 #, python-brace-format
@@ -12114,18 +12111,16 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can "
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
+"Dieser Text wird auf der Bestellbestätigungsseite angezeigt. Er sollte dem "
+"Kunden erklären, wie mit der Zahlung fortzufahren ist. Die Platzhalter "
+"{order}, {total}, {currency} und {total_with_currency} können verwendet "
+"werden."
 
 #: pretix/plugins/manualpayment/templates/pretixplugins/manualpayment/control.html:4
-#, fuzzy
-#| msgid "This order has been paid via PayPal."
 msgid "This order has been paid manually."
-msgstr "Diese Bestellung wurde über PayPal bezahlt."
+msgstr "Diese Bestellung wurde manuell bezahlt."
 
 #: pretix/plugins/manualpayment/templates/pretixplugins/manualpayment/control.html:8
-#, fuzzy
-#| msgid ""
-#| "This order has been planned to be paid via PayPal and has been marked as "
-#| "refunded."
 msgid ""
 "This order has been planned to be paid manually, but is not marked as paid."
 msgstr ""
