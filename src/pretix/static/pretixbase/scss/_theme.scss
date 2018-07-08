@@ -111,6 +111,9 @@
 .panel {
   box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
 }
+.panel-default {
+  border: none;
+}
 .panel-default > .panel-heading, .panel-default > .panel-footer {
   background: white;
 }
@@ -126,6 +129,15 @@
 .panel > table th:last-child,
 .panel > .table-responsive table th:last-child {
   padding-right: $panel-body-padding;
+}
+.panel > table td,
+.panel > table th,
+.panel > .table-responsive table td,
+.panel > .table-responsive table th {
+  vertical-align: middle;
+}
+.panel-with-btn .panel-title {
+  line-height: 30px;
 }
 
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {

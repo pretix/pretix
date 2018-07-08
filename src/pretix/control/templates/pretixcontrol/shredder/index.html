@@ -4,37 +4,44 @@
 {% load order_overview %}
 {% block title %}{% trans "Data shredder" %}{% endblock %}
 {% block content %}
-    <h1>
-        {% trans "Data shredder" %}
-    </h1>
-    <p>
-        {% blocktrans trimmed %}
-            This feature allows you to remove personal data from this event. You will first select what kind of data
-            you want to shred, then you are able to download the affected data and after you confirmed the download,
-            the data will be removed from the server's database. The data might still exist in backups for a limited
-            period of time.
-        {% endblocktrans %}
-        <strong>
-            {% blocktrans trimmed %}
-                Using this will not remove the orders for your event, it just scrubs them of data that can be linked
-                to individual persons.
-            {% endblocktrans %}
-        </strong>
-    </p>
-    <div class="alert alert-legal">
-        <strong>
-            {% blocktrans trimmed %}
-                It is within your own responsibility to check if you are allowed to delete the affected data in your
-                legislation, e.g. for reasons of taxation. In many countries, you need to keep some data in the live
-                system in case of an audit.
-            {% endblocktrans %}
-        </strong>
-        {% blocktrans trimmed %}
-            For most categories of data, you will be able to partially download the data to store it offline. Some
-            kinds of data (such as some payment information) as well as historical log data cannot be downloaded at
-            the moment.
-        {% endblocktrans %}
-        <div class="clear"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">
+                {% trans "Data shredder" %}
+            </h1>
+        </div>
+        <div class="panel-body">
+
+            <p>
+                {% blocktrans trimmed %}
+                    This feature allows you to remove personal data from this event. You will first select what kind of
+                    data you want to shred, then you are able to download the affected data and after you confirmed the
+                    download, the data will be removed from the server's database. The data might still exist in backups for a
+                    limited period of time.
+                {% endblocktrans %}
+                <strong>
+                    {% blocktrans trimmed %}
+                        Using this will not remove the orders for your event, it just scrubs them of data that can be
+                        linked to individual persons.
+                    {% endblocktrans %}
+                </strong>
+            </p>
+            <div class="alert alert-legal">
+                <strong>
+                    {% blocktrans trimmed %}
+                        It is within your own responsibility to check if you are allowed to delete the affected data in
+                        your legislation, e.g. for reasons of taxation. In many countries, you need to keep some data in the
+                        live system in case of an audit.
+                    {% endblocktrans %}
+                </strong>
+                {% blocktrans trimmed %}
+                    For most categories of data, you will be able to partially download the data to store it offline.
+                    Some kinds of data (such as some payment information) as well as historical log data cannot be downloaded
+                    at the moment.
+                {% endblocktrans %}
+                <div class="clear"></div>
+            </div>
+        </div>
     </div>
     {% if constraints %}
         <div class="alert alert-danger">
@@ -42,10 +49,9 @@
         </div>
     {% else %}
         <form action="{% url "control:event.shredder.export" event=request.event.slug organizer=request.organizer.slug %}"
-                method="post" class="form-horizontal" data-asynctask>
-            <legend>{% trans "Data selection" %}</legend>
+              method="post" class="form-horizontal" data-asynctask>
             {% csrf_token %}
-            <div class="panel-group" id="payment_accordion">
+            <div class="" id="payment_accordion">
                 {% for ident, shredder in shredders.items %}
                     <div class="panel panel-default">
                         <label class="accordion-radio">

@@ -10,19 +10,25 @@
     {% endif %}
 {% endblock %}
 {% block inside %}
-    {% if rule %}
-        <legend>{% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}</legend>
-    {% else %}
-        <legend>{% trans "Tax rule" %}</legend>
-    {% endif %}
     <form action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        {% bootstrap_form_errors form %}
-        {% bootstrap_field form.name layout="control" %}
-        {% bootstrap_field form.rate addon_after="%" layout="control" %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% if rule %}
+                    <legend>{% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}</legend>
+                {% else %}
+                    <legend>{% trans "Tax rule" %}</legend>
+                {% endif %}
+            </div>
+            {% csrf_token %}
+            <div class="panel-body">
+                {% bootstrap_form_errors form %}
+                {% bootstrap_field form.name layout="control" %}
+                {% bootstrap_field form.rate addon_after="%" layout="control" %}
+            </div>
 
+        </div>
         <details class="panel panel-default"
-                {% if rule.eu_reverse_charge or rule.has_custom_rules or form.errors %}open{% endif %}>
+                 {% if rule.eu_reverse_charge or rule.has_custom_rules or form.errors %}open{% endif %}>
             <summary class="panel-heading">
                 <h4 class="panel-title">
                     <strong>{% trans "Advanced settings" %}</strong>
@@ -31,7 +37,6 @@
             </summary>
             <div id="advanced">
                 <div class="panel-body">
-                    <legend>{% trans "Advanced settings" %}</legend>
                     <div class="alert alert-legal">
                         {% blocktrans trimmed with docs="https://docs.pretix.eu/en/latest/user/events/taxes.html" %}
                             These settings are intended for advanced users. See the
@@ -47,8 +52,10 @@
                     <div class="alert alert-warning">
                         {% blocktrans trimmed %}
                             These settings are intended for professional users with very specific taxation situations.
-                            If you create any rule here, the reverse charge settings above will be ignored. The rules will be
-                            checked in order and once the first rule matches the order, it will be used and all further rules will
+                            If you create any rule here, the reverse charge settings above will be ignored. The rules
+                            will be
+                            checked in order and once the first rule matches the order, it will be used and all further
+                            rules will
                             be ignored. If no rule matches, tax will be charged.
                         {% endblocktrans %}
                         {% trans "All of these rules will only apply if an invoice address is set." %}

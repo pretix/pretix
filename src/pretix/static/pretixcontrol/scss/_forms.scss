@@ -71,6 +71,11 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
     @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
   }
 }
+.panel-body .submit-group {
+  box-shadow: none;
+  padding: 0;
+
+}
 
 .panel .form-group:last-child {
   margin-bottom: 0;

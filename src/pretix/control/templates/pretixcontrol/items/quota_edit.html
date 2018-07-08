@@ -9,36 +9,37 @@
     {% endif %}
 {% endblock %}
 {% block inside %}
-    {% if question %}
-        <h1>{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}</h1>
-    {% else %}
-        <h1>{% trans "Quota" %}</h1>
-    {% endif %}
-    <form action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            {% bootstrap_field form.size layout="control" %}
-            {% if form.subevent %}
-                {% bootstrap_field form.subevent layout="control" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% if quota %}
+                <h1 class="panel-title">{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}</h1>
+            {% else %}
+                <h1 class="panel-title">{% trans "Quota" %}</h1>
             {% endif %}
-            <legend>{% trans "Items" %}</legend>
-            <p>
-                {% blocktrans trimmed %}
-                    Please select the products or product variations this quota should be applied to. If you apply two
-                    quotas to the same product, it will only be available if
-                    <strong>both</strong> quotas have capacity
-                    left.
-                {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.itemvars layout="control" %}
-        </fieldset>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
         </div>
-    </form>
+        <form action="" method="post" class="form-horizontal panel-body">
+            {% csrf_token %}
+            {% bootstrap_form_errors form %}
+            <fieldset>
+                {% bootstrap_field form.name layout="control" %}
+                {% bootstrap_field form.size layout="control" %}
+                {% if form.subevent %}
+                    {% bootstrap_field form.subevent layout="control" %}
+                {% endif %}
+                {% bootstrap_field form.itemvars layout="control" %}
+                <p class="help-block">
+                    {% blocktrans trimmed %}
+                        Please select the products or product variations this quota should be applied to. If you apply
+                        two quotas to the same product, it will only be available if <strong>both</strong> quotas have capacity
+                        left.
+                    {% endblocktrans %}
+                </p>
+            </fieldset>
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

@@ -5,16 +5,20 @@
 {% load staticfiles %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <h1>
-        {{ request.event.name }}
-        <small>
-            {% if request.event.has_subevents %}
-                {% trans "Event series" %}
-            {% else %}
-                {{ request.event.get_date_range_display }}
-            {% endif %}
-        </small>
-    </h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h1>
+                {{ request.event.name }}
+                <small>
+                    {% if request.event.has_subevents %}
+                        {% trans "Event series" %}
+                    {% else %}
+                        {{ request.event.get_date_range_display }}
+                    {% endif %}
+                </small>
+            </h1>
+        </div>
+    </div>
     {% if actions|length > 0 %}
         <div class="panel panel-danger">
             <div class="panel-heading">
@@ -71,7 +75,6 @@
         {% endfor %}
     </div>
 
-    <p>&nbsp;</p>
     <div class="panel panel-default items">
         <div class="panel-heading">
             <h3 class="panel-title">

@@ -1,40 +1,55 @@
 {% extends "pretixcontrol/item/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block inside %}
 {% load static %}
-<script type="text/javascript" src="{% static "pretixcontrol/js/ui/hidequota.js" %}"></script>
+{% block inside %}
+    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/hidequota.js" %}"></script>
 
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            <div class="internal-name-wrapper">
-                {% bootstrap_field form.internal_name layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "General information" %}</legend>
             </div>
-            {% bootstrap_field form.copy_from layout="control" %}
-            {% bootstrap_field form.has_variations layout="control" %}
-            {% bootstrap_field form.category layout="control" %}
-            {% bootstrap_field form.admission layout="control" %}
+            <div class="panel-body">
+                <p>{% blocktrans trimmed %}
+                    You will be able to adjust further settings in the next step.
+                {% endblocktrans %}</p>
+                {% bootstrap_field form.name layout="control" %}
+                <div class="internal-name-wrapper">
+                    {% bootstrap_field form.internal_name layout="control" %}
+                </div>
+                {% bootstrap_field form.copy_from layout="control" %}
+                {% bootstrap_field form.has_variations layout="control" %}
+                {% bootstrap_field form.category layout="control" %}
+                {% bootstrap_field form.admission layout="control" %}
+            </div>
         </fieldset>
         {% if form.quota_option %}
-            <fieldset>
-                <legend>{% trans "Quota settings" %}</legend>
-                {% bootstrap_field form.quota_option layout="control" %}
-                <div id="existing-quota-group">
-                    {% bootstrap_field form.quota_add_existing layout="control" %}
+            <fieldset class="panel panel-default">
+                <div class="panel-heading">
+                    <legend>{% trans "Quota settings" %}</legend>
                 </div>
-                <div id="new-quota-group">
-                    {% bootstrap_field form.quota_add_new_name layout="control" %}
-                    {% bootstrap_field form.quota_add_new_size layout="control" %}
+                <div class="panel-body">
+                    {% bootstrap_field form.quota_option layout="control" %}
+                    <div id="existing-quota-group">
+                        {% bootstrap_field form.quota_add_existing layout="control" %}
+                    </div>
+                    <div id="new-quota-group">
+                        {% bootstrap_field form.quota_add_new_name layout="control" %}
+                        {% bootstrap_field form.quota_add_new_size layout="control" %}
+                    </div>
                 </div>
             </fieldset>
         {% endif %}
-        <fieldset>
-            <legend>{% trans "Price settings" %}</legend>
-            {% bootstrap_field form.default_price layout="control" %}
-            {% bootstrap_field form.tax_rule layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Price settings" %}</legend>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_field form.default_price layout="control" %}
+                {% bootstrap_field form.tax_rule layout="control" %}
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

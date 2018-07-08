@@ -58,12 +58,12 @@
                 {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
                 {% bootstrap_field form.payment_term_accept_late layout="control" %}
                 {% bootstrap_field form.tax_rate_default layout="control" %}
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
             </div>
         </fieldset>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
     </form>
 {% endblock %}

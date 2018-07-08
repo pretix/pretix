@@ -2,81 +2,89 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block content %}
-    <h1>{% trans "Delete event" %}</h1>
-    {% if request.event.allow_delete %}
-        {% bootstrap_form_errors form layout="inline" %}
-        <p>
-            {% blocktrans trimmed %}
-                This operation will destroy your event including all configuration, products, quotas, questions,
-                vouchers, lists, etc.
-            {% endblocktrans %}
-        </p>
-        <p><strong>
-            {% blocktrans trimmed %}
-                This operation is irreversible and there is no way to bring your data back.
-            {% endblocktrans %}
-        </strong></p>
-        <form action="" method="post">
-            {% csrf_token %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{% trans "Delete event" %}</h2>
+        </div>
+        <div class="panel-body">
+        {% if request.event.allow_delete %}
+            {% bootstrap_form_errors form layout="inline" %}
             <p>
-                {% blocktrans trimmed with slug=request.event.slug %}
-                    To confirm you really want this, please type out the event's short name ("{{ slug }}") here:
+                {% blocktrans trimmed %}
+                    This operation will destroy your event including all configuration, products, quotas, questions,
+                    vouchers, lists, etc.
                 {% endblocktrans %}
             </p>
-            {% bootstrap_field form.slug layout="inline" %}
-            <p>
-                {% blocktrans trimmed with slug=request.event.slug %}
-                    Also, to make sure it's really you, please enter your user password here:
+            <p><strong>
+                {% blocktrans trimmed %}
+                    This operation is irreversible and there is no way to bring your data back.
                 {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.user_pw layout="inline" %}
-
-            <div class="form-group submit-group">
-                <button type="submit" class="btn btn-danger btn-save">
-                    {% trans "Delete" %}
-                </button>
-            </div>
-        </form>
-    {% else %}
-        <p>
-            {% trans "Your event can not be deleted as it already contains orders." %}
-        </p>
-        <p>
-            {% blocktrans trimmed %}
-                pretix does not allow deleting orders once they have been placed in order to be audit-proof and
-                trustable by financial authorities.
-            {% endblocktrans %}
-        </p>
-        {% if request.event.live %}
-            <p>
-                {% trans "You can instead take your shop offline. This will hide it from everyone except from the organizer teams you configured to have access to the event." %}
-            </p>
-            <form action="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}"
-                    method="post">
+            </strong></p>
+            <form action="" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="live" value="false">
+                <p>
+                    {% blocktrans trimmed with slug=request.event.slug %}
+                        To confirm you really want this, please type out the event's short name ("{{ slug }}") here:
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.slug layout="inline" %}
+                <p>
+                    {% blocktrans trimmed with slug=request.event.slug %}
+                        Also, to make sure it's really you, please enter your user password here:
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.user_pw layout="inline" %}
 
                 <div class="form-group submit-group">
-                    <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-save">
-                        <span class="fa fa-eraser"></span>
-                        {% trans "Delete personal data" %}
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-save">
-                        <span class="fa fa-power-off"></span>
-                        {% trans "Go offline" %}
+                    <button type="submit" class="btn btn-danger btn-save">
+                        {% trans "Delete" %}
                     </button>
                 </div>
             </form>
         {% else %}
             <p>
-                {% trans "However, since your shop is offline, it is only visible to the organizing team according to the permissions you configured." %}
+                {% trans "Your event can not be deleted as it already contains orders." %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    pretix does not allow deleting orders once they have been placed in order to be audit-proof and
+                    trustable by financial authorities.
+                {% endblocktrans %}
+            </p>
+            {% if request.event.live %}
+                <p>
+                    {% trans "You can instead take your shop offline. This will hide it from everyone except from the organizer teams you configured to have access to the event." %}
+                </p>
+                <form action="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}"
+                      method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="live" value="false">
+
+                    <div class="form-group submit-group">
+                        <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}"
+                           class="btn btn-danger btn-save">
+                            <span class="fa fa-eraser"></span>
+                            {% trans "Delete personal data" %}
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-save">
+                            <span class="fa fa-power-off"></span>
+                            {% trans "Go offline" %}
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <p>
+                    {% trans "However, since your shop is offline, it is only visible to the organizing team according to the permissions you configured." %}
                 <div class="form-group submit-group">
-                    <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-save">
+                    <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}"
+                       class="btn btn-danger btn-save">
                         <span class="fa fa-eraser"></span>
                         {% trans "Delete personal data" %}
                     </a>
                 </div>
-            </p>
+                </p>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
+    </div>
 {% endblock %}
