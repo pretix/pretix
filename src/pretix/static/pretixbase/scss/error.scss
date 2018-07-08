@@ -5,12 +5,35 @@
 
 
 body {
-    background: #ececec;
-    text-align: center;
+    background: #fbf7fc;
     padding: 50px 0;
 }
 
 .big-icon {
     font-size: 200px;
-    color: $brand-primary;
+    color: $navbar-inverse-bg;
+    display: block;
+    float: left;
+}
+
+.error-details {
+    margin-left: 260px;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+}
+
+@media(max-width: 600px) {
+    body {
+        text-align: center;
+    }
+    .big-icon {
+        margin: auto;
+        float: none;
+    }
+    .error-details {
+        margin-left: 0;
+    }
 }
