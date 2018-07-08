@@ -14,7 +14,7 @@
 .sidebar-nav li ul {
   margin-bottom: 5px;
 }
-.sidebar-nav li.active > a, .sidebar-nav li a.active {
+.sidebar-nav li.active > a:not(.has-children), .sidebar-nav li a.active {
   font-weight: bold;
 }
 

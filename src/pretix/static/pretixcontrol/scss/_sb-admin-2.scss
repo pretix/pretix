@@ -24,9 +24,13 @@ body {
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 220px;
-        padding: 20px 30px 0;
+        margin: 0 0 0 250px;
+        padding: 20px 15px 0;
     }
+}
+
+#page-wrapper > .container-fluid {
+    padding: 0;
 }
 
 // Navigation
