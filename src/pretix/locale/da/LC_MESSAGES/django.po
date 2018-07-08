@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-06 14:14+0000\n"
-"PO-Revision-Date: 2018-06-04 16:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"PO-Revision-Date: 2018-06-12 13:50+0000\n"
+"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
+"Language-Team: Danish "
+"<https://translate.pretix.eu/projects/pretix/pretix/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8111,6 +8111,8 @@ msgstr "Annuller bestilling"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 msgid "Do you really want to cancel this order? You cannot revert this action."
 msgstr ""
+"Er du sikker på at du vil annullere denne bestilling? Du kan ikke fortryde "
+"denne handling."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:20
 msgid "Notify user by e-mail"
@@ -12875,6 +12877,8 @@ msgstr "Reserveret"
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "All remaining products are reserved but might become available again."
 msgstr ""
+"Alle resterende billetter indenfor billettypen er reserveret, men der kan "
+"måske komme ledige billetter igen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
 #, fuzzy
@@ -13158,7 +13162,7 @@ msgstr "Intern reference"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Annuller ordre: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:4
 msgid "Modify order"
