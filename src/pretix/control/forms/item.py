@@ -1,9 +1,15 @@
+import copy
+import datetime
+
+import dateutil
+import pytz
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
-from django.forms.utils import ErrorList
+from django.forms.utils import from_current_timezone, to_current_timezone
 from django.urls import reverse
+from django.utils import formats
 from django.utils.translation import (
     pgettext_lazy, ugettext as __, ugettext_lazy as _,
 )
@@ -38,11 +44,57 @@ class AdjustableTypeField(forms.Textarea):
     def __init__(self, *args, type=None, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def format_value(self, value):
+        if getattr(self, 'type') == 'W' and value:
+            return str(formats.localize_input(to_current_timezone(dateutil.parser.parse(value))))
+        elif getattr(self, 'type') == 'D' and value:
+            return str(formats.localize_input(dateutil.parser.parse(value).date()))
+        elif getattr(self, 'type') == 'T' and value:
+            return str(formats.localize_input(dateutil.parser.parse(value).time()))
+        return super().format_value(value)
+
     def value_from_datadict(self, data, files, name):
         if 'type' in data and data['type'] == 'W' and 'default_value_date' in data and 'default_value_time' in data:
-            return '{} {}'.format(data['default_value_date'], data['default_value_time'])
+            d_date = d_time = None
+
+            for format in formats.get_format('DATE_INPUT_FORMATS'):
+                try:
+                    d_date = datetime.datetime.strptime(data['default_value_date'], format).date()
+                    break
+                except (ValueError, TypeError):
+                    continue
+
+            for format in formats.get_format('TIME_INPUT_FORMATS'):
+                try:
+                    d_time = datetime.datetime.strptime(data['default_value_time'], format).time()
+                    break
+                except (ValueError, TypeError):
+                    continue
+
+            if d_date and d_time:
+                return from_current_timezone(datetime.datetime.combine(d_date, d_time)).astimezone(pytz.UTC).isoformat()
+            else:
+                return None
         else:
-            return super().value_from_datadict(data, files, name)
+            val = super().value_from_datadict(data, files, name)
+            if 'type' in data and data['type'] == 'D' and val:
+                for format in formats.get_format('DATE_INPUT_FORMATS'):
+                    try:
+                        d_date = datetime.datetime.strptime(val, format).date()
+                        val = d_date.isoformat()
+                        break
+                    except (ValueError, TypeError):
+                        continue
+            elif 'type' in data and data['type'] == 'T' and val:
+                for format in formats.get_format('TIME_INPUT_FORMATS'):
+                    try:
+                        d_date = datetime.datetime.strptime(val, format).time()
+                        val = d_date.isoformat()
+                        break
+                    except (ValueError, TypeError):
+                        continue
+
+            return val
 
 
 class QuestionForm(I18nModelForm):
@@ -63,6 +115,8 @@ class QuestionForm(I18nModelForm):
                 pk=self.instance.pk
             )
         self.fields['identifier'].required = False
+        if self.instance:
+            self.fields['default_value'].widget.type = self.instance.type
         self.fields['help_text'].widget.attrs['rows'] = 3
 
     def clean_dependency_question(self):

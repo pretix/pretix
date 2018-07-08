@@ -263,7 +263,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else (
-                        dateutil.parser.parse(default) if default else None),
+                        dateutil.parser.parse(default).astimezone(tz) if default else None),
                     widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             field.question = q
