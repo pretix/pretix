@@ -8,6 +8,7 @@
         {% csrf_token %}
         {% bootstrap_field form.email %}
         {% bootstrap_field form.password %}
+
         {% if form.keep_logged_in %}
             {% bootstrap_field form.keep_logged_in %}
         {% endif %}
