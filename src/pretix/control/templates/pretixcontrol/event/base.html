@@ -176,10 +176,25 @@
     {% if 'can_view_vouchers' in request.eventpermset %}
         <li>
             <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
-               {% if "event.voucher" in url_name %}class="active"{% endif %}>
+               class="has-children">
                 <i class="fa fa-tags fa-fw"></i>
                 {% trans "Vouchers" %}
             </a>
+            <a href="#" class="arrow">
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="{% url 'control:event.vouchers' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if "event.voucher" in url_name and not url_name == "event.vouchers.tags" %}class="active"{% endif %}>
+                        {% trans "All vouchers" %}
+                    </a>
+                    <a href="{% url 'control:event.vouchers.tags' organizer=request.event.organizer.slug event=request.event.slug %}"
+                       {% if url_name == "event.vouchers.tags" %}class="active"{% endif %}>
+                        {% trans "Tags" %}
+                    </a>
+                </li>
+            </ul>
         </li>
     {% endif %}
     {% if 'can_view_orders' in request.eventpermset %}

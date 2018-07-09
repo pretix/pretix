@@ -3,17 +3,27 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Delete voucher" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Delete voucher" %}</h1>
-    <form action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        <p>{% blocktrans %}Are you sure you want to delete the voucher <strong>{{ voucher }}</strong>?{% endblocktrans %}</p>
-        <div class="form-group submit-group">
-            <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
-                {% trans "Cancel" %}
-            </a>
-            <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Delete" %}
-            </button>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Delete voucher" %}</h1>
         </div>
-    </form>
+        <div class="panel-body">
+
+
+            <form action="" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <p>{% blocktrans %}Are you sure you want to delete the voucher <strong>{{ voucher }}</strong>
+                    ?{% endblocktrans %}</p>
+                <div class="form-group submit-group">
+                    <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}"
+                       class="btn btn-default btn-cancel">
+                        {% trans "Cancel" %}
+                    </a>
+                    <button type="submit" class="btn btn-danger btn-save">
+                        {% trans "Delete" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

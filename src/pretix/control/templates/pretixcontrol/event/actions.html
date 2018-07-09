@@ -2,24 +2,31 @@
 {% load i18n %}
 {% block title %}{% trans "Current issues" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Current issues" %}</h1>
-    <ul class="list-group">
-        {% for action in actions %}
-            <li class="list-group-item logentry">
-                <p>
-                    <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
-                            class="btn btn-default btn-xs pull-right">
-                        {% trans "Hide message" %}
-                    </a>
-                    <small><span class="fa fa-clock-o"></span> {{ action.datetime|date:"SHORT_DATETIME_FORMAT" }}</small>
-                </p>
-                {{ action.display|safe }}
-            </li>
-        {% empty %}
-            <div class="list-group-item">
-                <em>{% trans "No issues. Awesome!" %}</em>
-            </div>
-        {% endfor %}
-    </ul>
-    {% include "pretixcontrol/pagination.html" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Current issues" %}</h1>
+        </div>
+        <ul class="list-group">
+            {% for action in actions %}
+                <li class="list-group-item logentry">
+                    <p>
+                        <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
+                           class="btn btn-default btn-xs pull-right">
+                            {% trans "Hide message" %}
+                        </a>
+                        <small><span class="fa fa-clock-o"></span> {{ action.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        </small>
+                    </p>
+                    {{ action.display|safe }}
+                </li>
+                {% empty %}
+                <div class="list-group-item">
+                    <em>{% trans "No issues. Awesome!" %}</em>
+                </div>
+            {% endfor %}
+        </ul>
+        <div class="panel-footer">
+            {% include "pretixcontrol/pagination.html" %}
+        </div>
+    </div>
 {% endblock %}

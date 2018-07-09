@@ -9,29 +9,38 @@
     {% endif %}
 {% endblock %}
 {% block inside %}
-    {% if checkinlist %}
-        <h1>{% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}</h1>
-    {% else %}
-        <h1>{% trans "Check-in list" %}</h1>
-    {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
-            {% if form.subevent %}
-                {% bootstrap_field form.subevent layout="control" %}
-            {% endif %}
-            {% bootstrap_field form.include_pending layout="control" %}
-            <legend>{% trans "Products" %}</legend>
-            <p>
-                {% blocktrans trimmed %}
-                    Please select the products that should be part of this check-in list.
-                {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.all_products layout="control" %}
-            {% bootstrap_field form.limit_products layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                {% if checkinlist %}
+                    <h1 class="panel-title">{% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}</h1>
+                {% else %}
+                    <h1 class="panel-title">{% trans "Check-in list" %}</h1>
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                {% bootstrap_field form.name layout="control" %}
+                {% if form.subevent %}
+                    {% bootstrap_field form.subevent layout="control" %}
+                {% endif %}
+                {% bootstrap_field form.include_pending layout="control" %}
+            </div>
+        </fieldset>
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Products" %}</legend>
+            </div>
+            <div class="panel-body">
+                <p>
+                    {% blocktrans trimmed %}
+                        Please select the products that should be part of this check-in list.
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.all_products layout="control" %}
+                {% bootstrap_field form.limit_products layout="control" %}
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

@@ -3,9 +3,11 @@
 {% load staticfiles %}
 {% block title %}{% trans "Event logs" %}{% endblock %}
 {% block inside %}
-    <h1>{% trans "Event logs" %}</h1>
-    <form class="form-inline helper-display-inline" action="" method="get">
-        <p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Event logs" %}</h1>
+        </div>
+        <form class="form-inline panel-body" action="" method="get">
             <select name="user" class="form-control">
                 <option value="">{% trans "All actions" %}</option>
                 <option value="yes" {% if request.GET.user == "yes" %}selected="selected"{% endif %}>
@@ -24,56 +26,58 @@
                 {% endfor %}
             </select>
             <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        </p>
-    </form>
-    <ul class="list-group">
-        {% for log in logs %}
-            <li class="list-group-item logentry">
-                <div class="row">
-                    <div class="col-lg-2 col-sm-6 col-xs-12">
-                        <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                        {% if log.shredded %}
-                            <span class="fa fa-eraser fa-danger fa-fw"
-                                  data-toggle="tooltip"
-                                  title="{% trans "Personal data was cleared from this log entry." %}">
-                            </span>
-                        {% endif %}
-                    </div>
-                    <div class="col-lg-2 col-sm-6 col-xs-12">
-                        {% if log.user %}
-                            {% if log.user.is_staff %}
-                                <span class="fa fa-id-card fa-danger fa-fw"
+        </form>
+        <ul class="list-group">
+            {% for log in logs %}
+                <li class="list-group-item logentry">
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-6 col-xs-12">
+                            <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                            {% if log.shredded %}
+                                <span class="fa fa-eraser fa-danger fa-fw"
                                       data-toggle="tooltip"
-                                      title="{% trans "This change was performed by a pretix administrator." %}">
+                                      title="{% trans "Personal data was cleared from this log entry." %}">
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-2 col-sm-6 col-xs-12">
+                            {% if log.user %}
+                                {% if log.user.is_staff %}
+                                    <span class="fa fa-id-card fa-danger fa-fw"
+                                          data-toggle="tooltip"
+                                          title="{% trans "This change was performed by a pretix administrator." %}">
                                 </span>
-                            {% else %}
-                                <span class="fa fa-user fa-fw"></span>
+                                {% else %}
+                                    <span class="fa fa-user fa-fw"></span>
+                                {% endif %}
+                                {{ log.user.get_full_name }}
+                                {% if log.oauth_application %}
+                                    <br><span class="fa fa-plug fa-fw"></span>
+                                    {{ log.oauth_application.name }}
+                                {% endif %}
+                            {% elif log.api_token %}
+                                <span class="fa fa-key fa-fw"></span>
+                                {{ log.api_token.name }}
                             {% endif %}
-                            {{ log.user.get_full_name }}
-                            {% if log.oauth_application %}
-                                <br><span class="fa fa-plug fa-fw"></span>
-                                {{ log.oauth_application.name }}
+                        </div>
+                        <div class="col-lg-2 col-sm-12 col-xs-12">
+                            {% if log.display_object %}
+                                <span class="fa fa-flag"></span> {{ log.display_object|safe }}
                             {% endif %}
-                        {% elif log.api_token %}
-                            <span class="fa fa-key fa-fw"></span>
-                            {{ log.api_token.name }}
-                        {% endif %}
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12">
+                            {{ log.display }}
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-sm-12 col-xs-12">
-                        {% if log.display_object %}
-                            <span class="fa fa-flag"></span> {{ log.display_object|safe }}
-                        {% endif %}
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-xs-12">
-                        {{ log.display }}
-                    </div>
+                </li>
+                {% empty %}
+                <div class="list-group-item">
+                    <em>{% trans "No results" %}</em>
                 </div>
-            </li>
-            {% empty %}
-            <div class="list-group-item">
-                <em>{% trans "No results" %}</em>
-            </div>
-        {% endfor %}
-    </ul>
-    {% include "pretixcontrol/pagination.html" %}
+            {% endfor %}
+        </ul>
+        <div class="panel-footer">
+            {% include "pretixcontrol/pagination.html" %}
+        </div>
+    </div>
 {% endblock %}

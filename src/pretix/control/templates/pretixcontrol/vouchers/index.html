@@ -4,135 +4,146 @@
 {% load urlreplace %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
 {% block inside %}
-    <p>
-        {% blocktrans trimmed %}
-            Vouchers allow you to assign tickets to specific persons for a lower price. They also enable you to
-            reserve some quota for your very special guests.
-        {% endblocktrans %}
-    </p>
-    <div class="row filter-form">
-        <form class="col-lg-2 col-sm-6 col-xs-6"
-              action="{% url "control:event.vouchers.go" event=request.event.slug organizer=request.event.organizer.slug %}">
-            <div class="input-group">
-                <input type="text" name="code" class="form-control" placeholder="{% trans "Voucher code" %}" autofocus>
-                <span class="input-group-btn">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Vouchers" %}</h1>
+        </div>
+        <div class="panel-body">
+            {% blocktrans trimmed %}
+                Vouchers allow you to assign tickets to specific persons for a lower price. They also enable you to
+                reserve some quota for your very special guests.
+            {% endblocktrans %}
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="row filter-form panel-body">
+            <form class="col-lg-2 col-sm-6 col-xs-6"
+                  action="{% url "control:event.vouchers.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                <div class="input-group">
+                    <input type="text" name="code" class="form-control" placeholder="{% trans "Voucher code" %}"
+                           autofocus>
+                    <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                 </span>
-            </div>
-        </form>
-        <form class="" action="" method="get">
-            <div class="col-lg-2 col-sm-3 col-xs-6">
-                {% bootstrap_field filter_form.search layout='inline' %}
-            </div>
-            <div class="col-lg-1 col-sm-3 col-xs-6">
-                {% bootstrap_field filter_form.tag layout='inline' %}
-            </div>
-            {% if request.event.has_subevents %}
-                <div class="col-lg-1 col-sm-3 col-xs-6">
-                    {% bootstrap_field filter_form.status layout='inline' %}
                 </div>
+            </form>
+            <form class="" action="" method="get">
                 <div class="col-lg-2 col-sm-3 col-xs-6">
-                    {% bootstrap_field filter_form.subevent layout='inline' %}
+                    {% bootstrap_field filter_form.search layout='inline' %}
                 </div>
-            {% else %}
-                <div class="col-lg-3 col-sm-6 col-xs-6">
-                    {% bootstrap_field filter_form.status layout='inline' %}
+                <div class="col-lg-1 col-sm-3 col-xs-6">
+                    {% bootstrap_field filter_form.tag layout='inline' %}
                 </div>
-            {% endif %}
-            <div class="col-lg-2 col-sm-6 col-xs-6">
-                {% bootstrap_field filter_form.itemvar layout='inline' %}
-            </div>
-            <div class="col-lg-1 col-sm-6 col-xs-6">
-                {% bootstrap_field filter_form.qm layout='inline' %}
-            </div>
-            <div class="col-lg-1 col-sm-6 col-xs-6">
-                <button class="btn btn-primary btn-block" type="submit">
-                    <span class="fa fa-filter"></span>
-                    <span class="hidden-md">
+                {% if request.event.has_subevents %}
+                    <div class="col-lg-1 col-sm-3 col-xs-6">
+                        {% bootstrap_field filter_form.status layout='inline' %}
+                    </div>
+                    <div class="col-lg-2 col-sm-3 col-xs-6">
+                        {% bootstrap_field filter_form.subevent layout='inline' %}
+                    </div>
+                {% else %}
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        {% bootstrap_field filter_form.status layout='inline' %}
+                    </div>
+                {% endif %}
+                <div class="col-lg-2 col-sm-6 col-xs-6">
+                    {% bootstrap_field filter_form.itemvar layout='inline' %}
+                </div>
+                <div class="col-lg-1 col-sm-6 col-xs-6">
+                    {% bootstrap_field filter_form.qm layout='inline' %}
+                </div>
+                <div class="col-lg-1 col-sm-6 col-xs-6">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span class="fa fa-filter"></span>
+                        <span class="hidden-md">
                             {% trans "Filter" %}
                         </span>
-                </button>
-            </div>
-        </form>
-    </div>
-    {% if vouchers|length == 0 %}
-        <div class="empty-collection">
-            <p>
-                {% if request.GET.search or request.GET.tag or request.GET.status or request.GET.subevent %}
-                    {% trans "Your search did not match any vouchers." %}
-                {% else %}
-                    {% blocktrans trimmed %}
-                        You haven't created any vouchers yet.
-                    {% endblocktrans %}
-                {% endif %}
-            </p>
-
-            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
-            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
+                    </button>
+                </div>
+            </form>
         </div>
-    {% else %}
-        <p>
-            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
-            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create multiple new vouchers" %}</a>
-            <a href="?{% url_replace request "download" "yes" %}"
-                    class="btn btn-default"><i class="fa fa-download"></i>
-                {% trans "Download list" %}</a>
-        </p>
-        <div class="table-responsive">
-            <table class="table table-hover table-quotas">
-                <thead>
-                <tr>
-                    <th>{% trans "Voucher code" %}</th>
-                    <th>{% trans "Redemptions" %}</th>
-                    <th>{% trans "Expiry" %}</th>
-                    <th>{% trans "Tag" %}</th>
-                    <th>{% trans "Product" %}</th>
-                    {% if request.event.has_subevents %}
-                        <th>{% trans "Date" context "subevent" %}</th>
+        {% if vouchers|length == 0 %}
+            <div class="empty-collection panel-body">
+                <p>
+                    {% if request.GET.search or request.GET.tag or request.GET.status or request.GET.subevent %}
+                        {% trans "Your search did not match any vouchers." %}
+                    {% else %}
+                        {% blocktrans trimmed %}
+                            You haven't created any vouchers yet.
+                        {% endblocktrans %}
                     {% endif %}
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for v in vouchers %}
+                </p>
+
+                <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+                <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}
+                </a>
+            </div>
+        {% else %}
+            <div class="panel-heading">
+                <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+                <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create multiple new vouchers" %}</a>
+                <a href="?{% url_replace request "download" "yes" %}"
+                   class="btn btn-default"><i class="fa fa-download"></i>
+                    {% trans "Download list" %}</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-quotas">
+                    <thead>
                     <tr>
-                        <td>
-                            <strong><a href="
-                        {% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
-                        </td>
-                        <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
-                        <td>{{ v.valid_until|date }}</td>
-                        <td>
-                            {{ v.tag }}
-                        </td>
-                        <td>
-                            {% if v.item %}
-                                {{ v.item }}
-                                {% if v.variation %}
-                                    – {{ v.variation }}
-                                {% endif %}
-                            {% else %}
-                                {% blocktrans trimmed with quota=v.quota.name %}
-                                    Any product in quota "{{ quota }}"
-                                {% endblocktrans %}
-                            {% endif %}
-                        </td>
+                        <th>{% trans "Voucher code" %}</th>
+                        <th>{% trans "Redemptions" %}</th>
+                        <th>{% trans "Expiry" %}</th>
+                        <th>{% trans "Tag" %}</th>
+                        <th>{% trans "Product" %}</th>
                         {% if request.event.has_subevents %}
-                            <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                            <th>{% trans "Date" context "subevent" %}</th>
                         {% endif %}
-                        <td class="text-right">
-                            <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <th></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% include "pretixcontrol/pagination.html" %}
-    {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for v in vouchers %}
+                        <tr>
+                            <td>
+                                <strong><a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
+                            </td>
+                            <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
+                            <td>{{ v.valid_until|date }}</td>
+                            <td>
+                                {{ v.tag }}
+                            </td>
+                            <td>
+                                {% if v.item %}
+                                    {{ v.item }}
+                                    {% if v.variation %}
+                                        – {{ v.variation }}
+                                    {% endif %}
+                                {% else %}
+                                    {% blocktrans trimmed with quota=v.quota.name %}
+                                        Any product in quota "{{ quota }}"
+                                    {% endblocktrans %}
+                                {% endif %}
+                            </td>
+                            {% if request.event.has_subevents %}
+                                <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                            {% endif %}
+                            <td class="text-right">
+                                <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}"
+                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                {% include "pretixcontrol/pagination.html" %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

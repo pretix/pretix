@@ -15,8 +15,10 @@
                 number of a specific ticket type at the same time.
             {% endblocktrans %}
         </div>
+    </div>
+    <div class="panel panel-default">
         {% if request.event.has_subevents %}
-            <form class="form-inline helper-display-inline" action="" method="get">
+            <form class="panel-body form-inline helper-display-inline" action="" method="get">
                 {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
             </form>
         {% endif %}
