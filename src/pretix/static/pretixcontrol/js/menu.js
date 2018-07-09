@@ -38,16 +38,26 @@
                 $this.find("li").not(".active").has("ul").children("ul").addClass("collapse");
             }
 
-            $this.find("li").has("ul").children("a.arrow").on("click" + "." + pluginName, function(e) {
-                e.preventDefault();
-                $(this).blur();
+            $this.find("li a").click(function(e) {
 
-                $(this).parent("li").toggleClass("active").children("ul").collapse("toggle");
-
-                if ($toggle) {
-                    $(this).parent("li").siblings().removeClass("active").children("ul.in").collapse("hide");
+                var $a;
+                if ($(this).is('.has-children')) {
+                    $a = $(this).closest("li").find("ul a").first();
+                    $(this).closest("li").find("ul").stop().collapse("show");
+                } else {
+                    $a = $(this);
                 }
+                $(this).closest(".sidebar").find(".active").removeClass("active");
+                $a.addClass("active").append(
+                    $("<span>").addClass("fa fa-circle-o-notch fa-spin")
+                );
 
+                $(this).closest(".sidebar").find("li:has(.has-children):has(.in)").each(function() {
+                    var oul = $(this).children("ul");
+                    if ($(this).has($a.parent()).length === 0) {
+                        oul.stop().collapse("hide");
+                    }
+                })
             });
         },
 

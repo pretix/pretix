@@ -4,9 +4,21 @@
   border-radius: 0;
   z-index: 100;
 }
-
+.navbar-fixed {
+  position: fixed;
+  width: 100%;
+}
 .sidebar-nav li > a > .fa {
-  color: $navbar-inverse-bg;
+  color: rgba($navbar-inverse-bg, 0.7);
+  margin-right: 5px;
+}
+.sidebar-nav li > a > .fa-spin {
+  margin-left: 5px;
+}
+.sidebar-nav .arrow {
+  display: none;
+}
+.sidebar-nav li > a:hover > .fa {
 }
 .sidebar-nav {
   padding-top: 10px;

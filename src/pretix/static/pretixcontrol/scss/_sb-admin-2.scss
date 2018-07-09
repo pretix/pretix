@@ -25,7 +25,7 @@ body {
     #page-wrapper {
         position: inherit;
         margin: 0 0 0 260px;
-        padding: 30px 30px 0;
+        padding: 82px 30px 0;
     }
 }
 
@@ -124,7 +124,7 @@ body {
 .sidebar .fa.arrow {
     line-height: 19px !important;
     width: 10px;
-    text-align: center;
+    text-align: center
 }
 
 .sidebar .fa.arrow:before {
@@ -141,7 +141,7 @@ body {
 }
 
 .sidebar .nav-second-level li a {
-    padding-left: 37px;
+    padding-left: 42px;
 }
 
 .sidebar .nav-third-level li a {
@@ -151,10 +151,21 @@ body {
 @media(min-width:768px) {
     .sidebar {
         z-index: 1;
-        position: absolute;
+        position: fixed;
         width: 250px;
         margin-left: 15px;
-        margin-top: 10px;
+        height: 100%;
+
+        .sidebar-nav {
+            padding-top: 82px;
+            padding-bottom: 10px;
+            height: 100%;
+
+            & > ul.nav {
+                height: 100%;
+                overflow-y: auto;
+            }
+        }
     }
 
     .navbar-top-links .dropdown-messages,
