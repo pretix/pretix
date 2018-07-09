@@ -59,138 +59,140 @@
             data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}"
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
         <div id="wrapper">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle"
-                            data-toggle="collapse" data-target=".navbar-nav-collapse">
-                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <button type="button" class="navbar-toggle navbar-events"
-                            data-toggle="collapse" data-target=".navbar-events-collapse">
-                        <i class="fa fa-calendar"></i><span class="caret"></span>
-                    </button>
-                    {% if request.event %}
-                        {% if has_domain and not request.event.live %}
-                            <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
-                                    target="_blank" class="mobile-navbar-view-form visible-xs-block">
-                                <input type="hidden" value="{{ new_session }}" name="session">
-                                <button type="submit" class="btn btn-link navbar-toggle">
-                                    <i class="fa fa-eye"></i>
-                                </button>
-                            </form>
-                        {% else %}
-                            <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"
-                                    target="_blank" class="navbar-toggle mobile-navbar-view-link">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                    <a class="navbar-brand" href="{% url "control:index" %}">
-                        <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
-                        {{ settings.PRETIX_INSTANCE_NAME }}
-                    </a>
-                </div>
-                <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
-                            <span class="event-name">{{ request.event }}</span>
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
-                            data-source="{% url "control:events.typeahead" %}">
-                            <li class="query-holder">
-                                <div class="form-box">
-                                    <input type="text" class="form-control"
-                                            placeholder="{% trans "Search for events" %}"
-                                            data-typeahead-query>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    {% if request.event %}
-                        <li>
+            <nav class="navbar-static-top" role="navigation">
+                <div class="navbar navbar-inverse ">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle"
+                                data-toggle="collapse" data-target=".navbar-nav-collapse">
+                            <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <button type="button" class="navbar-toggle navbar-events"
+                                data-toggle="collapse" data-target=".navbar-events-collapse">
+                            <i class="fa fa-calendar"></i><span class="caret"></span>
+                        </button>
+                        {% if request.event %}
                             {% if has_domain and not request.event.live %}
-                                <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
+                                <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
+                                        target="_blank" class="mobile-navbar-view-form visible-xs-block">
                                     <input type="hidden" value="{{ new_session }}" name="session">
-                                    <button type="submit" class="btn btn-link" id="button-shop">
-                                       <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                    <button type="submit" class="btn btn-link navbar-toggle">
+                                        <i class="fa fa-eye"></i>
                                     </button>
                                 </form>
                             {% else %}
-                                <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"  target="_blank">
-                                    <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"
+                                        target="_blank" class="navbar-toggle mobile-navbar-view-link">
+                                    <i class="fa fa-eye"></i>
                                 </a>
                             {% endif %}
+                        {% endif %}
+                        <a class="navbar-brand" href="{% url "control:index" %}">
+                            <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
+                            {{ settings.PRETIX_INSTANCE_NAME }}
+                        </a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
+                                <span class="event-name">{{ request.event }}</span>
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
+                                data-source="{% url "control:events.typeahead" %}">
+                                <li class="query-holder">
+                                    <div class="form-box">
+                                        <input type="text" class="form-control"
+                                                placeholder="{% trans "Search for events" %}"
+                                                data-typeahead-query>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
-                    {% endif %}
-                </ul>
-                <ul class="nav navbar-nav navbar-top-links navbar-right">
-                    {% for nav in nav_topbar %}
-                        <li {% if nav.children %}class="dropdown"{% endif %}>
-                            <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
-                                    {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
-                                {% if nav.icon %}
-                                    <span class="fa fa-{{ nav.icon }}"></span>
-                                    <span class="visible-xs-inline">{{ nav.label }}</span>
+                        {% if request.event %}
+                            <li>
+                                {% if has_domain and not request.event.live %}
+                                    <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
+                                        <input type="hidden" value="{{ new_session }}" name="session">
+                                        <button type="submit" class="btn btn-link" id="button-shop">
+                                           <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                        </button>
+                                    </form>
                                 {% else %}
-                                    {{ nav.label }}
+                                    <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to Shop" %}"  target="_blank">
+                                        <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                    </a>
                                 {% endif %}
-                            </a>
-                            {% if nav.children %}
-                                <ul class="dropdown-menu" role="menu">
-                                    {% for item in nav.children %}
-                                        <li>
-                                            <a href="{{ item.url }}"
-                                                    {% if item.active %}class="active"{% endif %}>
-                                                {% if item.icon %}
-                                                    <span class="fa fa-{{ item.icon }}"></span>
-                                                {% endif %}
-                                                {{ item.label|safe }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-top-links navbar-right">
+                        {% for nav in nav_topbar %}
+                            <li {% if nav.children %}class="dropdown"{% endif %}>
+                                <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
+                                        {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+                                    {% if nav.icon %}
+                                        <span class="fa fa-{{ nav.icon }}"></span>
+                                        <span class="visible-xs-inline">{{ nav.label }}</span>
+                                    {% else %}
+                                        {{ nav.label }}
+                                    {% endif %}
+                                </a>
+                                {% if nav.children %}
+                                    <ul class="dropdown-menu" role="menu">
+                                        {% for item in nav.children %}
+                                            <li>
+                                                <a href="{{ item.url }}"
+                                                        {% if item.active %}class="active"{% endif %}>
+                                                    {% if item.icon %}
+                                                        <span class="fa fa-{{ item.icon }}"></span>
+                                                    {% endif %}
+                                                    {{ item.label|safe }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
 
-                    {% if request.user.is_staff and not staff_session %}
+                        {% if request.user.is_staff and not staff_session %}
+                            <li>
+                                <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-link" id="button-sudo">
+                                        <i class="fa fa-id-card"></i> {% trans "Admin mode" %}
+                                    </button>
+                                </form>
+                            </li>
+                        {% elif request.user.is_staff and staff_session %}
+                            <li>
+                                <a href="{% url 'control:user.sudo.stop' %}" class="danger">
+                                    <i class="fa fa-id-card"></i> {% trans "End admin session" %}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if warning_update_available %}
+                            <li>
+                                <a href="{% url 'control:global.update' %}" class="danger">
+                                    <i class="fa fa-bell"></i>
+                                </a>
+                            </li>
+                        {% endif %}
                         <li>
-                            <form action="{% url 'control:user.sudo' %}?next={{ request.path|urlencode }}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-link" id="button-sudo">
-                                    <i class="fa fa-id-card"></i> {% trans "Admin mode" %}
-                                </button>
-                            </form>
-                        </li>
-                    {% elif request.user.is_staff and staff_session %}
-                        <li>
-                            <a href="{% url 'control:user.sudo.stop' %}" class="danger">
-                                <i class="fa fa-id-card"></i> {% trans "End admin session" %}
+                            <a href="{% url 'control:user.settings' %}" title="{% trans "Account Settings" %}" >
+                                <i class="fa fa-user"></i> {{ request.user.get_full_name }}
                             </a>
                         </li>
-                    {% endif %}
-                    {% if warning_update_available %}
                         <li>
-                            <a href="{% url 'control:global.update' %}" class="danger">
-                                <i class="fa fa-bell"></i>
+                            <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                                <i class="fa fa-sign-out"></i>
+                                <span class="visible-xs-inline">{% trans "Log out" %}</span>
                             </a>
                         </li>
-                    {% endif %}
-                    <li>
-                        <a href="{% url 'control:user.settings' %}" title="{% trans "Account Settings" %}" >
-                            <i class="fa fa-user"></i> {{ request.user.get_full_name }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
-                            <i class="fa fa-sign-out"></i>
-                            <span class="visible-xs-inline">{% trans "Log out" %}</span>
-                        </a>
-                    </li>
-                </ul>
+                    </ul>
+                </div>
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg mobile-event-dropdown">
                         <ul class="nav" data-event-typeahead data-source="{% url "control:events.typeahead" %}">

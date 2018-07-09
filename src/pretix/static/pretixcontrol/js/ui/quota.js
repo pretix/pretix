@@ -10,11 +10,12 @@ $(function () {
         data: JSON.parse($("#quota-chart-data").html()),
         resize: true,
         colors: [
-            '#0044CC', // paid
-            '#0088CC', // pending
-            '#BD362F', // vouchers
-            '#F89406', // carts
-            '#51A351' // available
+            '#3b1c4a', // paid
+            '#7f4a91', // pending
+            '#d36060', // vouchers
+            '#ffb419', // carts
+            '#5f9cd4', // waiting list
+            '#50a167' // available
         ]
     });
 });

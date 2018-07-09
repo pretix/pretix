@@ -1,3 +1,10 @@
+.navbar-inverse {
+  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+  margin: 0;
+  border-radius: 0;
+  z-index: 100;
+}
+
 .sidebar-nav li > a > .fa {
   color: $navbar-inverse-bg;
 }
@@ -5,29 +12,43 @@
   padding-top: 10px;
 }
 .sidebar-nav li > a {
-  padding: 7px 15px;
+  padding: 8px 15px;
+}
+.sidebar-nav > ul > li > a {
+  color: $navbar-inverse-bg;
 }
 .sidebar-nav li li a {
   padding-top: 2px;
   padding-bottom: 2px;
+  color: desaturate($brand-primary, 10%);
+}
+.sidebar-nav li a:hover {
+  color: $brand-primary;
 }
 .sidebar-nav li ul {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .sidebar-nav li.active > a:not(.has-children), .sidebar-nav li a.active {
   font-weight: bold;
+  color: $brand-primary;
 }
 
 .panel h1, .panel h2 {
   margin-top: 0;
 }
 
-.panel-heading legend {
+.panel-heading {
+  padding: 10px 15px;
+}
+.panel-heading legend, .panel-heading .panel-title {
   margin-top: 0;
   margin-bottom: 0;
   font-size: ceil(($font-size-base * 1.125));
+  font-weight: bold;
   border: 0;
   color: inherit;
+  height: auto;
+  line-height: 30px;
 }
 
 .btn {
