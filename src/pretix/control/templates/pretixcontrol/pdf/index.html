@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load compress %}
-{% block title %}{% trans "PDF Ticket Editor" %}{% endblock %}
+{% block title %}{% trans "PDF Editor" %}{% endblock %}
 {% block custom_header %}
     {{ block.super }}
     {% compress css %}
@@ -204,7 +204,7 @@
                                     id="toolbox-position-y">
                         </div>
                     </div>
-                    <div class="row control-group squaresize">
+                    <div class="row control-group squaresize poweredby">
                         <div class="col-sm-12">
                             <label>{% trans "Size (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
@@ -288,6 +288,15 @@
                                     id="toolbox-textwidth">
                         </div>
                     </div>
+                    <div class="row control-group poweredby">
+                        <div class="col-sm-12">
+                            <label>{% trans "Style" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-poweredby-style">
+                                <option value="dark">{% trans "Dark" %}</option>
+                                <option value="white">{% trans "Light" %}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row control-group text">
                         <div class="col-sm-12">
                             <label>{% trans "Text content" %}</label><br>
@@ -327,6 +336,12 @@
                         <span class="fa fa-qrcode"></span>
                         {% trans "QR code for Lead Scanning" %}
                     </button>
+                    <button class="btn btn-default btn-block" id="editor-add-poweredby"
+                            data-content="dark"
+                            disabled>
+                        <span class="fa fa-image"></span>
+                        {% trans "pretix Logo" %}
+                    </button>
                 </div>
             </div>
 
@@ -349,6 +364,8 @@
     <script type="text/javascript" src="{% static "pdfjs/pdf.js" %}"></script>
     <script type="text/javascript" src="{% static "fabric/fabric.min.js" %}"></script>
     <script type="text/javascript" src="{% static "pretixcontrol/js/ui/editor.js" %}"></script>
+    <img src="{% static 'pretixpresale/pdf/powered_by_pretix_dark.png' %}" id="poweredby-dark" class="sr-only">
+    <img src="{% static 'pretixpresale/pdf/powered_by_pretix_white.png' %}" id="poweredby-white" class="sr-only">
     {% for family, styles in fonts.items %}
     {% for style, formats in styles.items %}
         <span class="preload-font" data-family="{{ family }}" data-style="{{ style }}">

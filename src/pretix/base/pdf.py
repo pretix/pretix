@@ -24,6 +24,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
+from pretix.base.invoice import ThumbnailingImageReader
 from pretix.base.models import Order, OrderPosition
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -210,6 +211,22 @@ class Renderer:
             if 'bolditalic' in styles:
                 pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
 
+    def _draw_poweredby(self, canvas: Canvas, op: OrderPosition, o: dict):
+        content = o.get('content', 'dark')
+        img = finders.find('pretixpresale/pdf/powered_by_pretix_{}.png'.format(content))
+
+        ir = ThumbnailingImageReader(img)
+        try:
+            width, height = ir.resize(None, float(o['size']) * mm, 300)
+        except:
+            logger.exception("Can not resize image")
+            pass
+        canvas.drawImage(ir,
+                         float(o['left']) * mm, float(o['bottom']) * mm,
+                         width=width, height=height,
+                         preserveAspectRatio=True, anchor='n',
+                         mask='auto')
+
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
         content = o.get('content', 'secret')
         if content == 'secret':
@@ -284,6 +301,8 @@ class Renderer:
                 self._draw_barcodearea(canvas, op, o)
             elif o['type'] == "textarea":
                 self._draw_textarea(canvas, op, order, o)
+            elif o['type'] == "poweredby":
+                self._draw_poweredby(canvas, op, o)
         canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):

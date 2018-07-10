@@ -13,10 +13,19 @@ body {
 #toolbox .control-group {
     margin-bottom: 5px;
 }
-#toolbox .position, #toolbox .squaresize, #toolbox[data-type] .pdf-info, #toolbox .text, #toolbox .object-buttons {
+#toolbox .position,
+#toolbox .squaresize,
+#toolbox .poweredby,
+#toolbox[data-type] .pdf-info,
+#toolbox .text,
+#toolbox .object-buttons {
     display: none;
 }
-#toolbox[data-type] .position, #toolbox[data-type=barcodearea] .squaresize, #toolbox[data-type=text] .text, #toolbox[data-type=textarea] .text,
+#toolbox[data-type] .position,
+#toolbox[data-type=barcodearea] .squaresize,
+#toolbox[data-type=poweredby] .poweredby,
+#toolbox[data-type=text] .text,
+#toolbox[data-type=textarea] .text,
 #toolbox[data-type] .object-buttons {
     display: block;
 }

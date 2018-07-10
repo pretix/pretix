@@ -184,10 +184,15 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
 
 class ThumbnailingImageReader(ImageReader):
     def resize(self, width, height, dpi):
+        if width is None:
+            width = height * self._image.size[0] / self._image.size[1]
+        if height is None:
+            height = width * self._image.size[1] / self._image.size[0]
         self._image.thumbnail(
             size=(int(width * dpi / 72), int(height * dpi / 72)),
             resample=BICUBIC
         )
+        return width, height
 
 
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):

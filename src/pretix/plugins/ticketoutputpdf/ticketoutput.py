@@ -157,7 +157,8 @@ class PdfTicketOutput(BaseTicketOutput):
             {"type": "textarea", "left": "102.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
              "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "90.00", "content": "secret",
              "text": "tdmruoekvkpbv1o2mv8xccvqcikvr58u", "align": "left"},
-            {"type": "barcodearea", "left": "130.40", "bottom": "204.50", "size": "64.00"}
+            {"type": "barcodearea", "left": "130.40", "bottom": "204.50", "size": "64.00"},
+            {"type": "poweredby", "left": "88.72", "bottom": "10.00", "size": "20.00"},
         ]
 
     def _migrate_from_old_settings(self):

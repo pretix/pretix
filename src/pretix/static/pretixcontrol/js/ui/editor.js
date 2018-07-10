@@ -1,4 +1,25 @@
 /*globals $, gettext, fabric, PDFJS*/
+fabric.Poweredby = fabric.util.createClass(fabric.Image, {
+    type: 'poweredby',
+
+    initialize: function (options) {
+        options || (options = {});
+
+        this.callSuper('initialize', $("#poweredby-" + options.content).get(0), options);
+        this.set('label', options.label || '');
+    },
+
+    toObject: function () {
+        return fabric.util.object.extend(this.callSuper('toObject'), {});
+    },
+
+    _render: function (ctx) {
+        this.callSuper('_render', ctx);
+    },
+});
+fabric.Poweredby.fromObject = function (object, callback, forceAsync) {
+    return fabric.Object._fromObject('Poweredby', object, callback, forceAsync);
+};
 fabric.Barcodearea = fabric.util.createClass(fabric.Rect, {
     type: 'barcodearea',
 
@@ -119,6 +140,14 @@ var editor = {
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     content: o.content,
                 });
+            } else  if (o.type === "poweredby") {
+                d.push({
+                    type: "poweredby",
+                    left: editor._px2mm(left).toFixed(2),
+                    bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
+                    size: editor._px2mm(o.height * o.scaleY).toFixed(2),
+                    content: o.content,
+                });
             }
         }
         return d;
@@ -127,6 +156,10 @@ var editor = {
     _add_from_data: function (d) {
         if (d.type === "barcodearea") {
             o = editor._add_qrcode();
+            o.content = d.content;
+            o.scaleToHeight(editor._mm2px(d.size));
+        } else if (d.type === "poweredby") {
+            o = editor._add_poweredby(d.content);
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
         } else if (d.type === "textarea" || o.type === "text") {
@@ -289,6 +322,9 @@ var editor = {
 
         if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
+        } else if (o.type === "poweredby") {
+            $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
+            $("#toolbox-poweredby-style").val(o.content);
         } else if (o.type === "text" || o.type === "textarea") {
             var col = (new fabric.Color(o.getFill()))._source;
             $("#toolbox-col").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
@@ -334,6 +370,23 @@ var editor = {
             o.setScaleX(1);
             o.setScaleY(1);
             o.set('top', new_top)
+        } else if (o.type === "poweredby") {
+            var new_h = Math.max(1, editor._mm2px($("#toolbox-squaresize").val()));
+            new_top += o.height * o.scaleY - new_h;
+            o.setWidth(new_h / o.height * o.width);
+            o.setHeight(new_h);
+            o.setScaleX(1);
+            o.setScaleY(1);
+            o.set('top', new_top)
+            if ($("#toolbox-poweredby-style").val() !== o.content) {
+                var data = editor.dump([o]);
+                data[0].content = $("#toolbox-poweredby-style").val();
+                var newo = editor._add_from_data(data[0]);
+                o.remove();
+                editor.fabric.discardActiveGroup();
+                editor.fabric.discardActiveObject();
+                editor.fabric.setActiveObject(newo);
+            }
         } else if (o.type === "textarea" || o.type === "text") {
             o.setColor($("#toolbox-col").val());
             o.setFontSize(editor._pt2px($("#toolbox-fontsize").val()));
@@ -371,6 +424,8 @@ var editor = {
                 $("#toolbox-heading").text(gettext("Text object"));
             } else if (o.type === "barcodearea") {
                 $("#toolbox-heading").text(gettext("Barcode area"));
+            } else if (o.type === "poweredby") {
+                $("#toolbox-heading").text(gettext("Powered by pretix"));
             } else {
                 $("#toolbox-heading").text(gettext("Object"));
             }
@@ -413,6 +468,22 @@ var editor = {
         editor.fabric.add(text);
         editor._create_savepoint();
         return text;
+    },
+
+    _add_poweredby: function (content) {
+        var rect = new fabric.Poweredby({
+            left: 100,
+            top: 100,
+            width: 205,
+            height: 126,
+            lockRotation: true,
+            lockUniScaling: true,
+            content: content
+        });
+        rect.setControlsVisibility({'mtr': false});
+        editor.fabric.add(rect);
+        editor._create_savepoint();
+        return rect;
     },
 
     _add_qrcode: function () {
@@ -654,6 +725,7 @@ var editor = {
         editor._load_pdf();
         $("#editor-add-qrcode, #editor-add-qrcode-lead").click(editor._add_qrcode);
         $("#editor-add-text").click(editor._add_text);
+        $("#editor-add-poweredby").click(function() {editor._add_poweredby("dark")});
         editor.$cva.get(0).tabIndex = 1000;
         editor.$cva.on("keydown", editor._on_keydown);
         $("#editor-save").on("click", editor._save);

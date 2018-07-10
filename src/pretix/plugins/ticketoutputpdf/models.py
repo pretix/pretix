@@ -53,7 +53,8 @@ class TicketLayout(LoggedModel):
                 '"type": "textarea"}, {"italic": false, "bottom": "194.50", "align": "left", "fontfamily": "Open '
                 'Sans", "width": "90.00", "left": "102.50", "text": "tdmruoekvkpbv1o2mv8xccvqcikvr58u", "content": '
                 '"secret", "fontsize": "13.0", "bold": false, "color": [0, 0, 0, 1], "type": "textarea"}, '
-                '{"left": "130.40", "bottom": "204.50", "type": "barcodearea", "size": "64.00"}]'
+                '{"left": "130.40", "bottom": "204.50", "type": "barcodearea", "size": "64.00"},{"type":"poweredby",'
+                '"left":"88.72","bottom":"10.00","size":"20.00","content":"dark"}]'
     )
     background = models.FileField(null=True, blank=True, upload_to=bg_name, max_length=255)
 
