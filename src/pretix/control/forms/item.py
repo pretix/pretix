@@ -404,19 +404,20 @@ class ItemAddOnsFormSet(I18nFormSet):
 
     def clean(self):
         super().clean()
-        categories = set()
+        categories = set(self.queryset.values_list('addon_category_id', flat=True))
         for i in range(0, self.total_form_count()):
             form = self.forms[i]
             if self.can_delete:
                 if self._should_delete_form(form):
                     # This form is going to be deleted so any of its errors
                     # should not cause the entire formset to be invalid.
+                    categories.remove(form.cleaned_data['addon_category'].pk)
                     continue
 
-            if form.cleaned_data['addon_category'] in categories:
+            if form.cleaned_data['addon_category'].pk in categories:
                 raise ValidationError(_('You added the same add-on category twice'))
 
-            categories.add(form.cleaned_data['addon_category'])
+            categories.add(form.cleaned_data['addon_category'].pk)
 
     @property
     def empty_form(self):
