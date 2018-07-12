@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-11 01:00+0000\n"
+"PO-Revision-Date: 2018-07-13 06:00+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -1916,7 +1916,7 @@ msgstr ""
 "Doit être court, ne contenir que des lettres minuscules, chiffres, points et "
 "tirets. Chaque Slug ne peut être utilisée qu'une seule fois. Ceci est "
 "utilisé dans les URLs pour faire référence à vos comptes organisateurs et à "
-"vos événements"
+"vos événements."
 
 #: pretix/base/models/organizer.py:48 pretix/control/forms/event.py:53
 #: pretix/control/forms/filter.py:259 pretix/control/forms/filter.py:427
@@ -2019,7 +2019,7 @@ msgstr "Inviter dans l'équipe '{team}' pour '{email}'"
 
 #: pretix/base/models/tax.py:66
 msgid "Should be short, e.g. \"VAT\""
-msgstr "Doit être court, par exemple \"TVA\"."
+msgstr "Doit être court, par exemple \"TVA\""
 
 #: pretix/base/models/tax.py:75
 msgid "The configured product prices include the tax amount"
@@ -2549,7 +2549,7 @@ msgstr ""
 "paient les frais de votre prestataire de paiement. <a href=\"{docs_url}\" "
 "target=\"_blank\" rel=\"noopener\">Cliquez ici pour des informations "
 "détaillées sur ce que cela fait. </a> N'oubliez pas de définir les frais "
-"corrects ci-dessus!"
+"corrects ci-dessus !"
 
 #: pretix/base/payment.py:255
 msgctxt "invoice"
@@ -3873,7 +3873,7 @@ msgstr "Afficher la barre d'outils"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr "Nous préparons votre fichier à télécharger...."
+msgstr "Nous préparons votre fichier à télécharger…"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
@@ -4141,7 +4141,7 @@ msgid ""
 "price that needs to be paid"
 msgstr ""
 "Indépendamment de votre choix, le panier affichera les prix bruts car c'est "
-"le prix à payer."
+"le prix à payer"
 
 #: pretix/control/forms/event.py:270
 msgid "Show start date"
@@ -4915,7 +4915,7 @@ msgstr "Seulement supporté par les navigateurs modernes."
 
 #: pretix/control/forms/event.py:861
 msgid "Show variations of a product expanded by default"
-msgstr "Affichage étendu par défaut pour les variantes d'un produit "
+msgstr "Afficher les variantes d'un produit étendu par défaut"
 
 #: pretix/control/forms/event.py:865
 msgctxt "subevent"
@@ -5116,7 +5116,7 @@ msgstr "Quantité disponible"
 
 #: pretix/control/forms/filter.py:82 pretix/control/forms/filter.py:84
 msgid "Search for…"
-msgstr "Rechercher...."
+msgstr "Rechercher…"
 
 #: pretix/control/forms/filter.py:99
 #: pretix/control/templates/pretixcontrol/event/base.html:83
@@ -5301,7 +5301,7 @@ msgstr "Événement unique dans le passé"
 
 #: pretix/control/forms/filter.py:530 pretix/control/forms/filter.py:532
 msgid "Search attendee…"
-msgstr "Recherche d'un participant...."
+msgstr "Recherche d'un participant…"
 
 #: pretix/control/forms/filter.py:538
 msgid "Check-in status"
@@ -5501,7 +5501,7 @@ msgstr "Nombre de billets"
 
 #: pretix/control/forms/item.py:272
 msgid "Quota name is required."
-msgstr "Le nom du quota est requis"
+msgstr "Le nom du quota est requis."
 
 #: pretix/control/forms/item.py:277
 msgid "Please select a quota."
@@ -6577,7 +6577,7 @@ msgstr "Mot de passe oublié ?"
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
 msgid "Welcome back!"
-msgstr "Bon retour parmi nous!"
+msgstr "Bon retour parmi nous !"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
@@ -6791,7 +6791,7 @@ msgstr "Vous travaillez actuellement pour le compte de %(user)s1."
 
 #: pretix/control/templates/pretixcontrol/base.html:314
 msgid "Stop impersonating"
-msgstr "Arrêtez de vous faire passer pour quelqu'un d'autre."
+msgstr "Arrêtez de vous faire passer pour quelqu'un d'autre"
 
 #: pretix/control/templates/pretixcontrol/base.html:325
 msgid "Read more"
@@ -7516,10 +7516,8 @@ msgid "Back"
 msgstr "Retour"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:14
-#, fuzzy
-#| msgid "Payment provider"
 msgid "Payment provider:"
-msgstr "Fournisseur de paiement"
+msgstr "Fournisseur de paiement :"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:20
 msgid "Warning:"
@@ -7635,7 +7633,7 @@ msgstr "Ce plugin signale les problèmes suivants:"
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:13
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:10
 msgid "Congratulations!"
-msgstr "Félicitations!"
+msgstr "Félicitations !"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:15
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:12
@@ -7653,34 +7651,24 @@ msgstr ""
 "modifier les paramètres de votre événement de façon beaucoup plus détaillée."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:34
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create ticket types"
-msgstr "Créer une nouvelle équipe"
+msgstr "Créer des types de billets"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:40
-#, fuzzy
-#| msgid "Tickets on sale"
 msgid "Ticket name"
-msgstr "Billets en vente"
+msgstr "Nom du billet"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:46
-#, fuzzy
-#| msgid "(optional)"
 msgid "Capacity (optional)"
-msgstr "(optionnel)"
+msgstr "Capacité (en option)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:99
-#, fuzzy
-#| msgid "Add a new device"
 msgid "Add a new ticket type"
-msgstr "Ajouter un nouvel appareil"
+msgstr "Ajouter un nouveau type de ticket"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:104
-#, fuzzy
-#| msgid "Total capacity"
 msgid "Total capacity:"
-msgstr "Capacité totale"
+msgstr "Capacité totale :"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:107
 msgid ""
@@ -7705,10 +7693,8 @@ msgstr ""
 "changer tout ce que vous entrez ici."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:130
-#, fuzzy
-#| msgid "Use feature"
 msgid "Features"
-msgstr "Utiliser la fonction"
+msgstr "Fonctionnalités"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid ""
@@ -8134,9 +8120,8 @@ msgstr "Actuellement disponible: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
-#, fuzzy
 msgid "System message"
-msgstr "Masquer le message"
+msgstr "Message système"
 
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:16
 msgid "Update check"
@@ -8318,10 +8303,8 @@ msgid "Check-in"
 msgstr "Enregistrement"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:42
-#, fuzzy
-#| msgid "Additional text"
 msgid "Additional settings"
-msgstr "Texte supplémentaire"
+msgstr "Réglages supplémentaires"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:53
 msgid "Product history"
@@ -8499,14 +8482,13 @@ msgstr ""
 "dessus."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:59
-#, fuzzy, python-format
+#, python-format
 msgid "Answer option %(id)s"
-msgstr "Options de réponse"
+msgstr "Option de réponse %(id)s1"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:90
-#, fuzzy
 msgid "New answer option"
-msgstr "Options de réponse"
+msgstr "Nouvelle option de réponse"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:109
 msgid "Add a new option"
@@ -8602,7 +8584,8 @@ msgid ""
 msgstr ""
 "Veuillez sélectionner les produits ou les variantes de produits auxquels ce "
 "quota doit s'appliquer. Si vous appliquez deux quotas à un même produit, il "
-"ne sera disponible que s'il reste de la place."
+"ne sera seulement disponible si les quotas <strong>1 et </strong>2 ont "
+"encore de la place."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
@@ -8651,9 +8634,8 @@ msgstr ""
 "pretix, pas en production."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:10
-#, fuzzy
 msgid "Translation in development"
-msgstr "exécution en mode développement"
+msgstr "Traduction en développement"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:13
 msgid ""
@@ -8668,41 +8650,31 @@ msgstr ""
 "place. Vous pouvez nous aider à traduire sur translate.pretix.eu."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
-#, fuzzy
 msgid "Unofficial translation"
-msgstr "Transactions non résolues"
+msgstr "Traduction non officielle"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
-#, fuzzy
-#| msgid "Disabled"
 msgid "Disable application"
-msgstr "Désactivé"
+msgstr "Désactiver l'application"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the question <strong>%(question)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer la question <strong>%(question)s</strong>?"
+"Êtes-vous sûr de vouloir désactiver l'application "
+"<strong>1%(application)s2</strong>3 en permanence ?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:6
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your applications"
-msgstr "Vos informations"
+msgstr "Vos applications"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:33
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create new application"
-msgstr "Créer un nouveau compte"
+msgstr "Créer une nouvelle application"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:39
 msgid "No applications registered yet."
@@ -8711,17 +8683,13 @@ msgstr "Aucune demande n'a encore été enregistrée."
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:46
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
-#, fuzzy
-#| msgid "Add a new variation"
 msgid "Register a new application"
-msgstr "Ajouter une nouvelle variante"
+msgstr "Enregistrer une nouvelle application"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Generate new application secret"
-msgstr "Générer annulation"
+msgstr "Générer un nouveau secret d'application"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:9
 #, fuzzy, python-format
@@ -9306,7 +9274,7 @@ msgstr "Allez à la billetterie"
 #: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:19
 msgid "Go!"
-msgstr "Go!"
+msgstr "Go !"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, fuzzy, python-format
@@ -9530,7 +9498,7 @@ msgstr "Afficher par page:"
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
 msgid "Page %(page)s"
-msgstr ""
+msgstr "Page %(page)s1"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:5
 msgid "PDF Ticket Editor"
@@ -9577,7 +9545,7 @@ msgstr "Appliquer"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:86
 msgid "Uploading new PDF background…"
-msgstr "Chargement d'un nouveau fond PDF...."
+msgstr "Chargement d'un nouveau fond PDF…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:94
 msgid "Welcome to the PDF ticket editor!"
@@ -9628,7 +9596,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:139
 #: pretix/control/templates/pretixcontrol/pdf/index.html:171
 msgid "Loading…"
-msgstr "Chargement...."
+msgstr "Chargement…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:142
 msgid "Start editing"
@@ -9697,7 +9665,7 @@ msgstr "Attribut d'événement:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:303
 msgid "Other…"
-msgstr "Autres..."
+msgstr "Autres…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:313
 msgid "Add a new object"
@@ -9711,7 +9679,7 @@ msgstr "Zone de QR code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:328
 msgid "QR code for Lead Scanning"
-msgstr ""
+msgstr "Code QR pour le scan"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:80
 msgid ""
@@ -9723,14 +9691,14 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
 msgid "Please enable JavaScript in your browser."
-msgstr ""
+msgstr "Veuillez activer JavaScript dans votre navigateur."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:5
 #: pretix/control/templates/pretixcontrol/shredder/download.html:8
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "Destructeur de données"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:14
 #, fuzzy
@@ -9744,6 +9712,10 @@ msgid ""
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
+"Vous êtes sur le point de supprimer de façon permanente des données du "
+"serveur, même si vous êtes tenu de conserver une partie de ces données dans "
+"un fichier. Vous devriez donc télécharger le fichier suivant et le stocker "
+"dans un endroit sûr :"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:25
 #, fuzzy
@@ -9753,7 +9725,7 @@ msgstr "Date de téléchargement"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:30
 msgid "Step 2: Confirm download"
-msgstr ""
+msgstr "Etape 2 : Confirmer le téléchargement"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:32
 msgid ""
@@ -9761,6 +9733,9 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
+"Dans le fichier téléchargé, il y a un fichier texte nommé \"CONFIRM_CODE."
+"txt\" avec un code à six caractères. Veuillez entrer ce code ici pour "
+"confirmer que vous avez bien téléchargé le fichier."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:37
 #, fuzzy
@@ -9770,7 +9745,7 @@ msgstr "Texte de confirmation"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Step 3: Confirm deletion"
-msgstr ""
+msgstr "Etape 3 : Confirmer la suppression"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:43
 #, python-format
@@ -9779,6 +9754,10 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"Veuillez vérifier à nouveau que vous êtes certain de vouloir supprimer les "
+"catégories de données sélectionnées de l'événement "
+"<strong>1%(event)s2</strong>3. dans ce cas, veuillez entrer votre mot de "
+"passe utilisateur ici :"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -9788,12 +9767,21 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"Cette fonction vous permet de supprimer les données personnelles de cet "
+"événement. Vous sélectionnerez d'abord le type de données que vous voulez "
+"détruire, puis vous pourrez télécharger les données affectées et après avoir "
+"confirmé le téléchargement, les données seront supprimées de la base de "
+"données du serveur. Les données peuvent encore exister dans les sauvegardes "
+"pour une période de temps limitée."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
 msgstr ""
+"L'utilisation de cette option ne supprimera pas les commandes pour votre "
+"événement, mais les débarrassera simplement des données qui peuvent être "
+"liées à des personnes individuelles."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
 msgid ""
@@ -9801,6 +9789,10 @@ msgid ""
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
+"Il est de votre propre responsabilité de vérifier si vous êtes autorisé à "
+"effacer les données concernées dans votre législation, par exemple pour des "
+"raisons fiscales. Dans de nombreux pays, vous devez conserver certaines "
+"données dans le système en direct en cas d'audit."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -9808,6 +9800,10 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
+"Pour la plupart des catégories de données, vous pourrez télécharger "
+"partiellement les données pour les stocker hors ligne. Certains types de "
+"données (comme certaines informations de paiement) ainsi que des données "
+"historiques ne peuvent pas être téléchargées pour le moment."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 #, fuzzy
@@ -9820,6 +9816,8 @@ msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
 msgstr ""
+"Nous vous recommandons de ne pas supprimer ces données, car vous pourriez en "
+"avoir besoin en cas de contrôle fiscal."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 #, fuzzy
@@ -9839,41 +9837,41 @@ msgstr "Supprimer la règle fiscale"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "Répétez chaque %(interval)s1 %(freq)s2, à partir de %(start)s3."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:88
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:199
 msgid "At the same date every year"
-msgstr ""
+msgstr "A la même date chaque année"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:92
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:203
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "Le %(setpos)s1 %(weekday)s2 de %(month)s3"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:102
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:213
 msgid "At the same date every month"
-msgstr ""
+msgstr "A la même date tous les mois"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "Le %(setpos)s1 %(weekday)s2"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "Répéter %(count)s1 fois"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:125
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:236
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "Répéter jusqu'à %(until)s1"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
 #, fuzzy
@@ -9929,6 +9927,8 @@ msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
 msgstr ""
+"Les dates suivantes ne peuvent pas être supprimées car elles ont déjà des "
+"commandes, mais seront désactivées à la place."
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 msgctxt "subevent"
@@ -9974,7 +9974,7 @@ msgstr "Créer un nouveau rendez-vous"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:134
 msgctxt "subevent"
 msgid "Use as a template for many new dates"
-msgstr ""
+msgstr "Utiliser comme modèle pour de nombreuses nouvelles dates"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:148
 #, fuzzy
@@ -10070,7 +10070,7 @@ msgstr "Entrez ici le code affiché:"
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr ""
+msgstr "Exiger un deuxième facteur pour les connexions futures"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
@@ -10305,7 +10305,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "Vous pouvez également utiliser votre appareil U2F."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
@@ -10348,7 +10348,7 @@ msgstr "Afficher l'historique du compte"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
-msgstr ""
+msgstr "Session du Staff"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
 #, fuzzy
@@ -10358,19 +10358,19 @@ msgstr "Type de question"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "Audit log"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "Méthode"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "Au nom de"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
@@ -10378,6 +10378,10 @@ msgid ""
 "Everything you do in that session will be logged and you will later be asked "
 "to fill in a comment on what you did in your session for later reference."
 msgstr ""
+"Pour effectuer cette action, vous devez lancer une session administrative. "
+"Tout ce que vous faites dans cette session sera enregistré et vous serez "
+"invité plus tard à remplir un commentaire sur ce que vous avez fait dans "
+"votre session pour référence ultérieure."
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
 #, fuzzy
@@ -10388,46 +10392,46 @@ msgstr "Démarrer l'édition"
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "Créer un utilisateur"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:23
 msgid "Base settings"
-msgstr ""
+msgstr "Réglages de base"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:31
 msgid "Log-in settings"
-msgstr ""
+msgstr "Paramètres de connexion"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:10
 msgid "Send password reset email"
-msgstr ""
+msgstr "Envoyer un e-mail de réinitialisation du mot de passe"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:14
 msgid "Impersonate user"
-msgstr ""
+msgstr "Utilisateur usurpé"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:38
 msgid "Team memberships"
-msgstr ""
+msgstr "Membres de l'équipe"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 #, python-format
 msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
-msgstr ""
+msgstr "Équipe \"%(team)s1\" de l'organisateur \"%(organizer)s2\""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:62
 msgid "User history"
-msgstr ""
+msgstr "Historique de l'utilisateur"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:71
 msgid "User created."
-msgstr ""
+msgstr "Utilisateur créé."
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "Créer un nouvel utilisateur"
 
 #: pretix/control/templates/pretixcontrol/vouchers/base.html:10
 msgid "All vouchers"
@@ -10478,7 +10482,7 @@ msgstr ""
 "Si vous choisissez \"n'importe quel produit\" pour un quota spécifique et "
 "que vous choisissez de réserver un quota pour ce bon ci-dessus, le produit "
 "peut toujours être indisponible pour le détenteur du bon si un autre quota "
-"associé au produit est épuisé!"
+"associé au produit est épuisé !"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
@@ -10616,12 +10620,12 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
-"Vous avez configuré que les bons seront envoyés automatiquement. Vous pouvez "
-"soit les envoyer un par un dans l'ordre de votre choix en cliquant sur les "
-"boutons à côté d'une ligne de ce tableau (si un quota suffisant est "
-"disponible), soit appuyer sur le gros bouton en dessous de ce texte pour "
-"envoyer autant de bons que possible aux personnes qui ont attendu le plus "
-"longtemps."
+"Vous avez configuré que les bons <strong>1not</strong>2 seront envoyés "
+"automatiquement. Vous pouvez soit les envoyer un par un dans l'ordre de "
+"votre choix en cliquant sur les boutons à côté d'une ligne dans ce tableau ("
+"si un quota suffisant est disponible), soit vous pouvez appuyer sur le gros "
+"bouton en dessous de ce texte pour envoyer autant de bons que possible aux "
+"personnes qui ont attendu le plus longtemps."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
@@ -10638,6 +10642,9 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional <strong>"
 "%(amount)s</strong>."
 msgstr ""
+"Si vous pouvez faire assez de place à votre événement pour accueillir toutes "
+"les personnes sur la liste d'attente, vous pourriez vendre des billets "
+"supplémentaires d'une valeur de <strong>1%(amount)s2</strong>3."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
@@ -10702,11 +10709,11 @@ msgstr "Changement pour tous les événements"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
-msgstr ""
+msgstr "Ce numéro de page n'est pas un nombre entier"
 
 #: pretix/control/views/__init__.py:147
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "Ce numéro de page est inférieur à 1"
 
 #: pretix/control/views/auth.py:120
 msgid ""
@@ -10870,17 +10877,20 @@ msgstr "Enregistré – {list}"
 
 #: pretix/control/views/dashboards.py:217
 msgid "Welcome to pretix!"
-msgstr "Bienvenue sur pretix!"
+msgstr "Bienvenue sur pretix !"
 
 #: pretix/control/views/dashboards.py:223
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "Commencez avec notre outil d'installation"
 
 #: pretix/control/views/dashboards.py:224
 msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
+"Pour commencer à vendre des billets, vous devez créer des produits ou des "
+"quotas. La façon la plus rapide de créer ceci est d'utiliser notre outil de "
+"configuration."
 
 #: pretix/control/views/dashboards.py:226
 #, fuzzy
@@ -10952,7 +10962,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:511
 msgid "{} has been transferred to account <9999-9999-9999-9999> at {}"
-msgstr ""
+msgstr "{} a été transféré au compte <9999-9999-9999-9999> à {}"
 
 #: pretix/control/views/event.py:560
 msgid "Sample Admission Ticket"
@@ -10981,25 +10991,27 @@ msgstr "Votre boutique est maintenant en ligne !"
 #: pretix/control/views/event.py:770
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
-"Votre boutique est désactivée. Vous pouvez le réactiver quand vous voulez!"
+"Votre boutique est désactivée. Vous pouvez le réactiver quand vous voulez !"
 
 #: pretix/control/views/event.py:787
 msgid "This event can not be deleted."
-msgstr ""
+msgstr "Cet événement ne peut pas être supprimé."
 
 #: pretix/control/views/event.py:810
 msgid "The event has been deleted."
-msgstr ""
+msgstr "L'événement a été supprimé."
 
 #: pretix/control/views/event.py:813
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"L'événement n'a pas pu être supprimé car certaines contraintes (par exemple "
+"les données créées par les plug-ins) ne le permettent pas."
 
 #: pretix/control/views/event.py:880
 msgid "The issue has been marked as resolved!"
-msgstr "Le problème a été marqué comme résolu!"
+msgstr "Le problème a été marqué comme résolu !"
 
 #: pretix/control/views/event.py:901 pretix/control/views/orders.py:217
 msgid "The comment has been updated."
@@ -11031,13 +11043,16 @@ msgstr "La règle fiscale sélectionnée ne peut pas être supprimée."
 
 #: pretix/control/views/event.py:1111
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "Votre événement n'est pas vide, vous devez le configurer manuellement."
 
 #: pretix/control/views/event.py:1226
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
+"Vos modifications ont été sauvegardées. Vous pouvez maintenant continuer à "
+"vérifier les détails ou mettre votre événement en ligne pour commencer à "
+"vendre !"
 
 #: pretix/control/views/event.py:1245
 #, fuzzy
@@ -11162,7 +11177,7 @@ msgstr "Défaut"
 
 #: pretix/control/views/oauth.py:85
 msgid "A new client secret has been generated and is now effective."
-msgstr ""
+msgstr "Un nouveau secret de client a été généré et est maintenant effectif."
 
 #: pretix/control/views/oauth.py:143
 #, fuzzy
@@ -11175,6 +11190,8 @@ msgid ""
 "This order was paid using a payment provider plugin that is now disabled or "
 "uninstalled."
 msgstr ""
+"Cette commande a été payée à l'aide d'un plugin de fournisseur de paiement "
+"qui est maintenant désactivé ou désinstallé."
 
 #: pretix/control/views/orders.py:250
 msgid ""
@@ -11256,7 +11273,7 @@ msgstr "Cette facture n' a pas été trouvée"
 
 #: pretix/control/views/orders.py:487 pretix/presale/views/order.py:674
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Le fichier de factures n'est plus stocké sur le serveur."
 
 #: pretix/control/views/orders.py:492 pretix/presale/views/order.py:679
 msgid ""
@@ -11404,7 +11421,7 @@ msgstr "Le membre a été retiré de l'équipe."
 
 #: pretix/control/views/organizer.py:495
 msgid "Invalid invite selected."
-msgstr "Invite sélectionnée invalide"
+msgstr "Invite sélectionnée invalide."
 
 #: pretix/control/views/organizer.py:504
 msgid "The invite has been revoked."
@@ -11412,7 +11429,7 @@ msgstr "L'invitation a été révoquée."
 
 #: pretix/control/views/organizer.py:511
 msgid "Invalid token selected."
-msgstr "Token sélectionné invalide"
+msgstr "Token sélectionné invalide."
 
 #: pretix/control/views/organizer.py:521
 msgid "The token has been revoked."
@@ -11606,11 +11623,11 @@ msgstr "Le commentaire a été mis à jour."
 
 #: pretix/control/views/users.py:95
 msgid "We sent out an e-mail containing further instructions."
-msgstr ""
+msgstr "Nous avons envoyé un e-mail contenant d'autres instructions."
 
 #: pretix/control/views/users.py:162
 msgid "The new user has been created."
-msgstr ""
+msgstr "Le nouvel utilisateur a été créé."
 
 #: pretix/control/views/vouchers.py:61
 msgid "Reserve quota"
@@ -11690,7 +11707,7 @@ msgstr "Domaines connus"
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
 msgid "Badges"
-msgstr ""
+msgstr "Badges"
 
 #: pretix/plugins/badges/__init__.py:13
 #: pretix/plugins/banktransfer/__init__.py:14
@@ -11743,7 +11760,7 @@ msgstr "Demander les noms des participants"
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "Disposition des badges"
 
 #: pretix/plugins/badges/forms.py:22 pretix/plugins/ticketoutputpdf/forms.py:24
 #, fuzzy
@@ -11753,7 +11770,7 @@ msgstr "Date de l'événement"
 
 #: pretix/plugins/badges/signals.py:108
 msgid "Badge layout created."
-msgstr ""
+msgstr "Mise en page des badges créée."
 
 #: pretix/plugins/badges/signals.py:109
 #, fuzzy
@@ -11763,7 +11780,7 @@ msgstr "Token sélectionné invalide"
 
 #: pretix/plugins/badges/signals.py:110
 msgid "Badge layout changed."
-msgstr ""
+msgstr "La disposition des badges a changé."
 
 #: pretix/plugins/badges/signals.py:123
 #, python-brace-format
@@ -12094,7 +12111,7 @@ msgid ""
 "the data …"
 msgstr ""
 "Le résultat de votre importation est en cours. Veuillez patienter pendant "
-"que nous traitons les données ..."
+"que nous traitons les données…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
@@ -12163,7 +12180,7 @@ msgstr "Réessayer"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr "Commentaire:"
+msgstr "Commentaire :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -13293,7 +13310,7 @@ msgstr "Paiement échoué. Raison: {}"
 
 #: pretix/plugins/stripe/signals.py:67
 msgid "Dispute created. Reason: {}"
-msgstr "Litige créé. Raison: {}."
+msgstr "Litige créé. Raison: {}"
 
 #: pretix/plugins/stripe/signals.py:69
 msgid "Dispute updated. Reason: {}"
@@ -14746,7 +14763,7 @@ msgstr ""
 
 #: pretix/settings.py:603
 msgid "Write access"
-msgstr ""
+msgstr "Accès en écriture"
 
 #~ msgid "Open the PDF editor in a new tab"
 #~ msgstr "Ouvrir l'éditeur PDF dans un nouvel onglet"
