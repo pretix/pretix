@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-08 17:01+0000\n"
+"PO-Revision-Date: 2018-07-13 06:00+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -26,7 +26,7 @@ msgstr "Marqué comme payé"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr "Commentaire:"
+msgstr "Commentaire :"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
@@ -136,7 +136,7 @@ msgstr "Enregistrement QR code"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "Le fichier PDF généré en arrière-plan n'a pas pu être chargé pour la raison "
-"suivante:"
+"suivante :"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:365
 msgid "Group of objects"
@@ -252,7 +252,7 @@ msgstr "de %(currency)s %(price)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr "incl. %(rate)s% %(taxname)s"
+msgstr "dont %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
