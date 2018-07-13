@@ -43,7 +43,8 @@ class BankTransfer(BasePaymentProvider):
                 ('bank_details', self.form_field()),
                 ('omit_hyphen', forms.BooleanField(
                     label=_('Do not include a hypen in the payment reference.'),
-                    help_text=_('This is required in some countries.')
+                    help_text=_('This is required in some countries.'),
+                    required=False
                 )),
 
             ]
