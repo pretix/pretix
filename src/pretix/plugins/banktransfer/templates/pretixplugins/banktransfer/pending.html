@@ -9,5 +9,5 @@
 <address>
     {{ details|linebreaksbr }}<br />
     {% trans "Amount:" %} {{ order.total|money:event.currency }}<br />
-    <strong>{% trans "Reference code (important):" %} {{ order.full_code }}</strong>
+    <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
 </address>

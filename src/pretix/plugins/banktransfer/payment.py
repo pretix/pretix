@@ -2,6 +2,7 @@ import json
 import textwrap
 from collections import OrderedDict
 
+from django import forms
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
@@ -38,7 +39,14 @@ class BankTransfer(BasePaymentProvider):
     @property
     def settings_form_fields(self):
         d = OrderedDict(
-            list(super().settings_form_fields.items()) + [('bank_details', self.form_field())]
+            list(super().settings_form_fields.items()) + [
+                ('bank_details', self.form_field()),
+                ('omit_hyphen', forms.BooleanField(
+                    label=_('Do not include a hypen in the payment reference.'),
+                    help_text=_('This is required in some countries.')
+                )),
+
+            ]
         )
         d.move_to_end('bank_details', last=False)
         d.move_to_end('_enabled', last=False)
@@ -67,6 +75,7 @@ class BankTransfer(BasePaymentProvider):
         ctx = {
             'event': self.event,
             'order': order,
+            'code': self._code(order),
             'details': textwrap.indent(str(self.settings.get('bank_details', as_type=LazyI18nString)), '    '),
         }
         return template.render(ctx)
@@ -76,6 +85,7 @@ class BankTransfer(BasePaymentProvider):
         ctx = {
             'event': self.event,
             'order': order,
+            'code': self._code(order),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)
@@ -87,8 +97,15 @@ class BankTransfer(BasePaymentProvider):
             payment_info = None
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
+               'code': self._code(order),
                'payment_info': payment_info, 'order': order}
         return template.render(ctx)
+
+    def _code(self, order: Order):
+        if self.settings.get('omit_hyphen', as_type=bool):
+            return self.event.slug.upper() + order.code
+        else:
+            return order.full_code
 
     def shred_payment_info(self, order: Order):
         if not order.payment_info:
