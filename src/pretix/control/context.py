@@ -69,7 +69,7 @@ def contextprocessor(request):
             ctx['selected_subevents'] = request.event.subevents.filter(pk=request.GET.get('subevent'))
     elif getattr(request, 'organizer', None) and request.user.is_authenticated:
         ctx['nav_items'] = get_organizer_navigation(request)
-    else:
+    elif request.user.is_authenticated:
         ctx['nav_items'] = get_global_navigation(request)
 
     ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled

@@ -288,7 +288,7 @@ def get_global_navigation(request):
         {
             'label': _('Organizers'),
             'url': reverse('control:organizers'),
-            'active': 'events' in url.url_name,
+            'active': 'organizers' in url.url_name,
             'icon': 'group',
         },
         {
@@ -296,6 +296,39 @@ def get_global_navigation(request):
             'url': reverse('control:search.orders'),
             'active': 'search.orders' in url.url_name,
             'icon': 'search',
+        },
+        {
+            'label': _('User settings'),
+            'url': reverse('control:user.settings'),
+            'active': False,
+            'icon': 'user',
+            'children': [
+                {
+                    'label': _('General'),
+                    'url': reverse('control:user.settings'),
+                    'active': 'user.settings' == url.url_name,
+                },
+                {
+                    'label': _('Notifications'),
+                    'url': reverse('control:user.settings.notifications'),
+                    'active': 'user.settings.notifications' == url.url_name,
+                },
+                {
+                    'label': _('2FA'),
+                    'url': reverse('control:user.settings.2fa'),
+                    'active': 'user.settings.2fa' in url.url_name,
+                },
+                {
+                    'label': _('Authorized apps'),
+                    'url': reverse('control:user.settings.oauth.list'),
+                    'active': 'user.settings.oauth' in url.url_name,
+                },
+                {
+                    'label': _('Account history'),
+                    'url': reverse('control:user.settings.history'),
+                    'active': 'user.settings.history' in url.url_name,
+                },
+            ]
         },
     ]
     if has_staff_session:

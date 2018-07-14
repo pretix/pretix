@@ -309,7 +309,7 @@ body.loading #wrapper {
 
 .event-name {
     display: inline-block;
-    max-width: 150px;
+    max-width: 160px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -320,9 +320,6 @@ body.loading #wrapper {
     padding: 3px 10px;
 }
 
-.event-dropdown {
-    width: 300px;
-}
 .event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full, .primary {
         display: block;
@@ -333,8 +330,11 @@ body.loading #wrapper {
         color: $text-muted;
     }
     .active .event-daterange, .active .event-organizer, .active a,
+    .active .primary, .active .event-name-full,
     .select2-results__option--highlighted .event-daterange,
     .select2-results__option--highlighted .secondary,
+    .select2-results__option--highlighted .primary,
+    .select2-results__option--highlighted .event-name-full,
     .select2-results__option--highlighted .event-organizer {
         color: white;
     }

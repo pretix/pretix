@@ -1,45 +1,84 @@
+.context-selector {
+  font-size: 16px;
+  margin-bottom: 16px;
+  .fa {
+    margin-right: 5px;
+    color: rgba($navbar-inverse-bg, 0.7);
+  }
+  a {
+    padding: 8px 15px 8px 14px;
+    color: $navbar-inverse-bg;
+    text-decoration: none !important;
+    &:hover {
+      color: $brand-primary;
+    }
+  }
+  .event-dropdown {
+    margin-top: 8px;
+    width: 260px;
+  }
+}
+
 .navbar-inverse {
-  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+  box-shadow: 0 2px 5px 0 rgba(78, 50, 92, .1), 0 1px 1px 0 rgba(0, 0, 0, .07);
   margin: 0;
   border-radius: 0;
   z-index: 100;
 }
+
 .navbar-fixed {
   position: fixed;
   width: 100%;
 }
+
 .sidebar-nav li > a > .fa {
   color: rgba($navbar-inverse-bg, 0.7);
   margin-right: 5px;
 }
+
 .sidebar-nav li > a > .fa-spin {
   margin-left: 5px;
+  position: absolute;
+  top: 11px;
 }
+
+.sidebar-nav li li > a > .fa-spin {
+  top: 6px;
+}
+
 .sidebar-nav .arrow {
   display: none;
 }
+
 .sidebar-nav li > a:hover > .fa {
 }
+
 .sidebar-nav {
   padding-top: 10px;
 }
+
 .sidebar-nav li > a {
   padding: 8px 15px;
 }
+
 .sidebar-nav > ul > li > a {
   color: $navbar-inverse-bg;
 }
+
 .sidebar-nav li li a {
   padding-top: 2px;
   padding-bottom: 2px;
   color: desaturate($brand-primary, 10%);
 }
+
 .sidebar-nav li a:hover {
   color: $brand-primary;
 }
+
 .sidebar-nav li ul {
   margin-bottom: 10px;
 }
+
 .sidebar-nav li.active > a:not(.has-children), .sidebar-nav li a.active {
   font-weight: bold;
   color: $brand-primary;
@@ -52,6 +91,7 @@
 .panel-heading {
   padding: 10px 15px;
 }
+
 .panel-heading legend, .panel-heading .panel-title {
   margin-top: 0;
   margin-bottom: 0;
@@ -132,21 +172,25 @@
 }
 
 .box-shadow-small {
-  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+  box-shadow: 0 2px 5px 0 rgba(78, 50, 92, .1), 0 1px 1px 0 rgba(0, 0, 0, .07);
 }
+
 .box-shadow-medium {
-  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1), 0 3px 6px 0 rgba(0, 0, 0, .07);
 }
+
 .box-shadow-medium {
-  box-shadow: 0 15px 35px 0 rgba(78, 50, 92, 0.1),0 5px 15px 0 rgba(0,0,0,.07);
+  box-shadow: 0 15px 35px 0 rgba(78, 50, 92, 0.1), 0 5px 15px 0 rgba(0, 0, 0, .07);
 }
 
 .panel {
-  box-shadow:0 2px 5px 0 rgba(78,50,92,.1),0 1px 1px 0 rgba(0,0,0,.07);
+  box-shadow: 0 2px 5px 0 rgba(78, 50, 92, .1), 0 1px 1px 0 rgba(0, 0, 0, .07);
 }
+
 .panel-default {
   border: none;
 }
+
 .panel-default > .panel-heading, .panel-default .panel-footer {
   background: white;
 }
@@ -157,18 +201,21 @@
 .panel > .table-responsive table th:first-child {
   padding-left: $panel-body-padding;
 }
+
 .panel > table td:last-child,
 .panel > .table-responsive table td:last-child,
 .panel > table th:last-child,
 .panel > .table-responsive table th:last-child {
   padding-right: $panel-body-padding;
 }
+
 .panel > table td,
 .panel > table th,
 .panel > .table-responsive table td,
 .panel > .table-responsive table th {
   vertical-align: middle;
 }
+
 .panel-with-btn .panel-title {
   line-height: 30px;
 }
@@ -176,17 +223,19 @@
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {
   color: #000000;
 }
+
 .panel-primary .panel-heading {
   color: white;
 }
 
-
 .alert {
   text-align: left;
 }
+
 .alert-legal {
   border-color: $state-info-border;
 }
+
 .alert-success, .alert-danger, .alert-info, .alert-warning, .alert-legal {
   position: relative;
   padding-left: 65px;
@@ -208,27 +257,33 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
 .sr-only.alert::before {
   background: none !important;
 }
+
 .alert-success::before {
   background: $state-success-border;
   content: "\f00c";
 }
+
 .alert-info::before {
   background: $state-info-border;
   content: "\f129";
 }
+
 .alert-warning::before {
   background: $state-warning-border;
   content: "\f071";
   font-size: 22px;
   padding-top: 14px;
 }
+
 .alert-legal::before {
   background: $state-info-border;
   content: "\f0e3";
 }
+
 .alert-danger::before {
   background: $state-danger-border;
   content: "\f071";
