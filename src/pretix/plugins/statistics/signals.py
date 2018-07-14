@@ -18,6 +18,10 @@ def control_nav_import(sender, request=None, **kwargs):
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
+            'parent': reverse('control:event.orders', kwargs={
+                'event': request.event.slug,
+                'organizer': request.event.organizer.slug,
+            }),
             'active': (url.namespace == 'plugins:statistics'),
             'icon': 'bar-chart',
         }

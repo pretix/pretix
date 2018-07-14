@@ -20,6 +20,10 @@ def control_nav_import(sender, request=None, **kwargs):
                 'event': request.event.slug,
                 'organizer': request.event.organizer.slug,
             }),
+            'parent': reverse('control:event.orders.checkinlists', kwargs={
+                'event': request.event.slug,
+                'organizer': request.event.organizer.slug,
+            }),
             'active': (url.namespace == 'plugins:pretixdroid' and url.url_name == 'config'),
             'icon': 'mobile',
         }

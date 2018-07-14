@@ -261,10 +261,10 @@ def get_event_navigation(request: HttpRequest):
             ]
         })
 
-    nav += sorted(
+    merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_event.send(request.event, request=request)), []),
         key=lambda r: r['label']
-    )
+    ))
 
     return nav
 
@@ -336,11 +336,10 @@ def get_global_navigation(request):
             ]
         })
 
-    nav += sorted(
+    merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_global.send(request, request=request)), []),
         key=lambda r: r['label']
-    )
-
+    ))
     return nav
 
 
@@ -390,9 +389,19 @@ def get_organizer_navigation(request):
             'icon': 'group',
         })
 
-    nav += sorted(
+    merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
             []),
         key=lambda r: r['label']
-    )
+    ))
     return nav
+
+
+def merge_in(nav, newnav):
+    for item in newnav:
+        if 'parent' in item:
+            parents = [n for n in nav if n['url'] == item['parent']]
+            if parents:
+                parents[0]['children'].append(item)
+        else:
+            nav.append(item)
