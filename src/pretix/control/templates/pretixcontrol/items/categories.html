@@ -6,6 +6,11 @@
         <div class="panel-heading">
             <h1 class="panel-title">{% trans "Product categories" %}</h1>
         </div>
+        <div class="panel-body">
+            {% trans "You can use categories to group multiple products together in an organized way." %}
+        </div>
+    </div>
+    <div class="panel panel-default">
         {% if categories|length == 0 %}
             <div class="empty-collection panel-body">
                 <p>

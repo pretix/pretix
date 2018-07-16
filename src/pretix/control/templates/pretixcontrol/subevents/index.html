@@ -4,53 +4,55 @@
 {% load urlreplace %}
 {% block title %}{% trans "Dates" context "subevent" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Dates" context "subevent" %}</h1>
     {% if subevents|length == 0 and not filter_form.filtered %}
-        <div class="empty-collection">
-            <p>
-                {% blocktrans trimmed %}
-                    You haven't created any dates for this event series yet.
-                {% endblocktrans %}
-            </p>
+        <div class="panel-default">
+            <div class="empty-collection panel-body">
+                <p>
+                    {% blocktrans trimmed %}
+                        You haven't created any dates for this event series yet.
+                    {% endblocktrans %}
+                </p>
 
-            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
-                {% trans "Create a new date" context "subevent" %}</a>
-            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
-                {% trans "Create many new dates" context "subevent" %}</a>
+                <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                    {% trans "Create a new date" context "subevent" %}</a>
+                <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>
+                    {% trans "Create many new dates" context "subevent" %}</a>
+            </div>
         </div>
     {% else %}
-        <form class="row filter-form" action="" method="get">
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                {% bootstrap_field filter_form.query layout='inline' %}
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                {% bootstrap_field filter_form.status layout='inline' %}
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                {% bootstrap_field filter_form.weekday layout='inline' %}
-            </div>
-            <div class="col-md-2 col-sm-6 col-xs-12">
-                <button class="btn btn-primary btn-block" type="submit">
-                    <span class="fa fa-filter"></span>
-                    <span class="hidden-md">
+        <div class="panel panel-default">
+            <form class="row filter-form panel-body" action="" method="get">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.query layout='inline' %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.status layout='inline' %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.weekday layout='inline' %}
+                </div>
+                <div class="col-md-2 col-sm-6 col-xs-12">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <span class="fa fa-filter"></span>
+                        <span class="hidden-md">
                     {% trans "Filter" %}
                 </span>
-                </button>
+                    </button>
+                </div>
+            </form>
+            <div class="panel-body">
+                <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create a new date" context "subevent" %}</a>
+                <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create many new dates" context "subevent" %}</a>
             </div>
-        </form>
-        <p>
-            <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create a new date" context "subevent" %}</a>
-            <a href="{% url "control:event.subevents.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create many new dates" context "subevent" %}</a>
-        </p>
-        <form action="{% url "control:event.subevents.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
-            {% csrf_token %}
-            <div class="table-responsive">
+            <form action="{% url "control:event.subevents.bulkaction" organizer=request.event.organizer.slug event=request.event.slug %}"
+                  method="post" class="table-responsive">
+                {% csrf_token %}
                 <table class="table table-hover table-quotas">
                     <thead>
                     <tr>
@@ -64,17 +66,22 @@
                         </th>
                         <th>
                             {% trans "Begin" %}
-                            <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'ordering' '-date_from' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'date_from' %}"><i
+                                    class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Paid tickets per quota" %}
-                            <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
-                            <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
+                            <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i
+                                    class="fa fa-caret-up"></i></a>
                         </th>
                         <th>
                             {% trans "Status" %}
-                            <a href="?{% url_replace request 'ordering' '-active' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' '-active' %}"><i
+                                    class="fa fa-caret-down"></i></a>
                             <a href="?{% url_replace request 'ordering' 'active' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                         <th></th>
@@ -89,7 +96,8 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}">
+                                <strong><a
+                                        href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}">
                                     {{ s.name }}</a></strong>
                             </td>
                             <td>{{ s.get_date_from_display }}</td>
@@ -99,8 +107,8 @@
                                 {% endfor %}
                                 {% if s.first_quotas|length > 3 %}
                                     <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
-                                            class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
-                                            data-placement="top">
+                                       class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                                       data-placement="top">
                                         &middot;&middot;&middot;
                                     </a>
                                 {% endif %}
@@ -108,16 +116,17 @@
                             <td>
                                 {% if not s.active %}
                                     <span class="label label-danger">{% trans "Disabled" %}</span>
-                                {% elif s.presale_has_ended %}
+                                    {% elif s.presale_has_ended %}
                                     <span class="label label-warning">{% trans "Presale over" %}</span>
-                                {% elif not s.presale_is_running %}
+                                    {% elif not s.presale_is_running %}
                                     <span class="label label-warning">{% trans "Presale not started" %}</span>
                                 {% else %}
                                     <span class="label label-success">{% trans "On sale" %}</span>
                                 {% endif %}
                             </td>
                             <td class="text-right">
-                                <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}"
+                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <div class="btn-group {% if forloop.revcounter0 < 2 %}dropup{% endif %}">
                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle"
                                             data-toggle="dropdown">
@@ -136,25 +145,34 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{% url "control:event.subevent.delete" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}"
+                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
                     </tbody>
+                    {% if "can_change_event_settings" in request.eventpermset %}
+                        <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
+                                    {% trans "Delete selected" %}
+                                </button>
+                                <button type="submit" class="btn btn-default btn-save" name="action" value="enable">
+                                    {% trans "Enable selected" %}
+                                </button>
+                                <button type="submit" class="btn btn-default btn-save" name="action" value="disable">
+                                    {% trans "Disable selected" %}
+                                </button>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    {% endif %}
                 </table>
+            </form>
+            <div class="panel-footer">
+                {% include "pretixcontrol/pagination.html" %}
             </div>
-            {% if "can_change_event_settings" in request.eventpermset %}
-                <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
-                    {% trans "Delete selected" %}
-                </button>
-                <button type="submit" class="btn btn-default btn-save" name="action" value="enable">
-                    {% trans "Enable selected" %}
-                </button>
-                <button type="submit" class="btn btn-default btn-save" name="action" value="disable">
-                    {% trans "Disable selected" %}
-                </button>
-            {% endif %}
-        </form>
-        {% include "pretixcontrol/pagination.html" %}
+        </div>
     {% endif %}
 {% endblock %}

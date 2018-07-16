@@ -4,25 +4,32 @@
 {% block inner %}
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
-        <fieldset>
-            <legend>{% trans "Organizer page" %}</legend>
-            {% bootstrap_form_errors form %}
-            {% bootstrap_field form.locales layout="control" %}
-            {% bootstrap_field form.organizer_logo_image layout="control" %}
-            {% bootstrap_field form.organizer_homepage_text layout="control" %}
-            {% bootstrap_field form.event_list_type layout="control" %}
-            {% bootstrap_field form.organizer_link_back layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Organizer page" %}</legend>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_form_errors form %}
+                {% bootstrap_field form.locales layout="control" %}
+                {% bootstrap_field form.organizer_logo_image layout="control" %}
+                {% bootstrap_field form.organizer_homepage_text layout="control" %}
+                {% bootstrap_field form.event_list_type layout="control" %}
+                {% bootstrap_field form.organizer_link_back layout="control" %}
+            </div>
         </fieldset>
-        <fieldset>
-            <legend>{% trans "Shop design" %}</legend>
-            <p class="help-block">
-                {% blocktrans trimmed %}
-                    These settings will be used for the organizer page as well as for the default settings
-                    for all events in this account that do not have their own design settings.
-                {% endblocktrans %}
-            </p>
-            {% bootstrap_field form.primary_color layout="control" %}
-            {% bootstrap_field form.primary_font layout="control" %}
+        <fieldset class="panel-default panel">
+            <div class="panel-heading">
+                <legend>{% trans "Shop design" %}</legend>
+            </div>
+            <div class="panel-body">
+                <p class="help-block">
+                    {% blocktrans trimmed %}
+                        These settings will be used for the organizer page as well as for the default settings
+                        for all events in this account that do not have their own design settings.
+                    {% endblocktrans %}
+                </p>
+                {% bootstrap_field form.primary_color layout="control" %}
+                {% bootstrap_field form.primary_font layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

@@ -3,23 +3,24 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Add a two-factor authentication device" %}</h1>
-    <p>
-        {% trans "To set up this device, please follow the following steps:" %}
-    </p>
-    <ol class="multi-step-tutorial">
-        <li>
-            {% trans "Download the Google Authenticator application to your phone:" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <legend>
+                {% trans "Step 1:" %}
+                {% trans "Download the Google Authenticator application to your phone:" %}
+            </legend>
+        </div>
+        <div class="panel-body">
             <ul>
                 <li>
                     <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&"
-                            target="_blank">
+                       target="_blank">
                         {% trans "Android (Google Play)" %}
                     </a>
                 </li>
                 <li>
                     <a href="https://f-droid.org/repository/browse/?fdfilter=authenticator&fdid=com.google.android.apps.authenticator2"
-                            target="_blank">
+                       target="_blank">
                         {% trans "Android (F-Droid)" %}
                     </a>
                 </li>
@@ -34,9 +35,14 @@
                     </a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Step 2:" %}
             {% trans "Add a new account to the app by scanning the following barcode:" %}
+        </div>
+        <div class="panel-body">
             <div class="qrcode-canvas" data-qrdata="#qrdata"></div>
             <p>
                 <a data-toggle="collapse" href="#no_scan">
@@ -55,39 +61,47 @@
                         {% trans 'In "Secret"/"Account Key", enter the following code:' %}
                         <div>
                             <code id="otp_secret" style="white-space: pre">{{ secretGrouped }}</code>
-                            <button type="button" class="btn btn-default btn-xs btn-clipboard" data-clipboard-target="#otp_secret">
+                            <button type="button" class="btn btn-default btn-xs btn-clipboard"
+                                    data-clipboard-target="#otp_secret">
                                 <span class="fa fa-clipboard" aria-hidden="true"></span>
                                 {% trans "copy" %}
                             </button>
                         </div>
                         <div>
-                            <small>Spaces don't matter.</small>
+                            <small>{% trans "Spaces don't matter." %}</small>
                         </div>
                     </li>
-                <li>
+                    <li>
                         {% trans 'If present, make sure "Time-based"/"TOTP" and 6 digit codes are selected.' %}
-                </li>
+                    </li>
                 </ol>
             </div>
-        </li>
-        <li>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Step 3:" %}
             {% trans "Enter the displayed code here:" %}
+        </div>
+        <div class="panel-body">
             <form class="form form-inline" method="post" action="">
                 {% csrf_token %}
                 <input type="number" name="token" class="form-control" required="required">
                 <button class="btn btn-primary" type="submit">
                     {% trans "Continue" %}
-                </button><br>
+                </button>
+                <br>
                 <label>
                     <input type="checkbox" name="activate" checked="checked" value="on">
                     {% trans "Require second factor for future logins" %}
                 </label>
             </form>
-        </li>
-    </ol>
+        </div>
+    </div>
 
     <script type="text/json" id="qrdata">
         {{ qrdata|safe }}
+
 
 
     </script>

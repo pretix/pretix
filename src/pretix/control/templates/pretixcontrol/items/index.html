@@ -4,8 +4,13 @@
 {% block inside %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h1 class="panel-title">{% trans "Products" %}</h1>
+            <legend>{% trans "Products" %}</legend>
         </div>
+        <div class="panel-body">
+            {% trans "Products are everything that you sell: Different ticket price categories, additional merchandise items, or parts of your event that you sell individually." %}
+        </div>
+    </div>
+    <div class="panel panel-default">
         {% if items|length == 0 %}
             <div class="empty-collection panel-body">
                 <p>

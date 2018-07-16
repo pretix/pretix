@@ -2,19 +2,41 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block form %}
-    <p>
-        {% blocktrans trimmed %}
-            Do you want to copy over your configuration from a different event? We will copy all
-			products, categories, quotas, and questions as well as general event settings.
-        {% endblocktrans %}
-    </p>
-    <div class="alert alert-info">
-        <strong>
-            {% blocktrans trimmed %}
-                Please make sure to review all settings extensively. You will probably still need to change some
-                settings manually, e.g. date and time settings and texts that contain the event name.
-            {% endblocktrans %}
-        </strong>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Create a new event" %}
+                <small>{% blocktrans trimmed with step=wizard.steps.step1 %}
+                    Step {{ step }}
+                {% endblocktrans %}</small>
+            </h1>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans trimmed %}
+                    Do you want to copy over your configuration from a different event? We will copy all
+                    products, categories, quotas, and questions as well as general event settings.
+                {% endblocktrans %}
+            </p>
+            <div class="alert alert-info">
+                <strong>
+                    {% blocktrans trimmed %}
+                        Please make sure to review all settings extensively. You will probably still need to change some
+                        settings manually, e.g. date and time settings and texts that contain the event name.
+                    {% endblocktrans %}
+                </strong>
+            </div>
+            {% bootstrap_field form.copy_from_event layout="control" %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save pull-right">
+                    {% trans "Continue" %}
+                </button>
+                {% if wizard.steps.prev %}
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"
+                            class="btn btn-default btn-lg pull-left">
+                        {% trans "Back" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    {% bootstrap_field form.copy_from_event layout="control" %}
 {% endblock %}

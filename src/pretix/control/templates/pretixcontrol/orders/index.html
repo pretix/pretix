@@ -7,9 +7,6 @@
 {% block title %}{% trans "Orders" %}{% endblock %}
 {% block content %}
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1 class="panel-title">{% trans "Orders" %}</h1>
-        </div>
         {% if not filter_form.filtered and orders|length == 0 %}
             <div class="empty-collection panel-body">
                 <p>

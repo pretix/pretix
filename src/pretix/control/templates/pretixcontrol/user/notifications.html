@@ -3,39 +3,49 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Notification settings" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Notification settings" %}</h1>
-    <form method="post">
-        {% csrf_token %}
-        <fieldset>
-            {% if request.user.notifications_send %}
-                <div class="alert alert-info">
-                    <button name="notifications_send" value="off" type="submit" class="pull-right btn btn-default">
-                        <span class="fa fa-bell-slash"></span>
-                        {% trans "Disable" %}
-                    </button>
-                    {% trans "Notifications are turned on according to the settings below." %}
-                    <div class="clearfix"></div>
-                </div>
-            {% else %}
-                <div class="alert alert-warning">
-                    <button name="notifications_send" value="on" type="submit" class="pull-right btn btn-default">
-                        <span class="fa fa-bell"></span>
-                        {% trans "Enable" %}
-                    </button>
-                    {% trans "All notifications are turned off globally." %}
-                    <div class="clearfix"></div>
-                </div>
-            {% endif %}
-        </fieldset>
-    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Notification settings" %}</h1>
+        </div>
+        <div class="panel-body">
+            <form method="post">
+                {% csrf_token %}
+                <fieldset>
+                    {% if request.user.notifications_send %}
+                        <div class="alert alert-info">
+                            <button name="notifications_send" value="off" type="submit"
+                                    class="pull-right btn btn-default">
+                                <span class="fa fa-bell-slash"></span>
+                                {% trans "Disable" %}
+                            </button>
+                            {% trans "Notifications are turned on according to the settings below." %}
+                            <div class="clearfix"></div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <button name="notifications_send" value="on" type="submit"
+                                    class="pull-right btn btn-default">
+                                <span class="fa fa-bell"></span>
+                                {% trans "Enable" %}
+                            </button>
+                            {% trans "All notifications are turned off globally." %}
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endif %}
+                </fieldset>
+            </form>
+        </div>
+    </div>
     <form class="form-inline" method="get">
-        <fieldset>
-            <legend>{% trans "Choose event" %}</legend>
-            <p>
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Choose event" %}</legend>
+            </div>
+            <div class="panel-body">
                 <select name="event" class="form-control simple-subevent-choice"
-                    data-model-select2="event"
-                    data-placeholder="{% trans "All my events" %}"
-                    data-select2-url="{% url "control:events.typeahead" %}">
+                        data-model-select2="event"
+                        data-placeholder="{% trans "All my events" %}"
+                        data-select2-url="{% url "control:events.typeahead" %}">
                     {% if event %}
                         <option value="{{ event.pk }}" selected>
                             {{ event.name }}
@@ -43,13 +53,15 @@
                     {% endif %}
                 </select>
                 <span class="help-block">{% trans "Save your modifications before switching events." %}</span>
-            </p>
+            </div>
         </fieldset>
     </form>
     <form method="post">
         {% csrf_token %}
-        <fieldset>
-            <legend>{% trans "Choose notifications to get" %}</legend>
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Choose notifications to get" %}</legend>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
@@ -67,23 +79,30 @@
                             {% if not event or type.required_permission in permset %}
                                 <select name="mail:{{ type.action_type }}" class="form-control">
                                     {% if event %}
-                                        <option value="global">{% trans "Global" %} ({% if global.mail %}{% trans "On" %}{% else %}{% trans "Off" %}{% endif %})</option>{% endif %}
-                                    <option value="off" {% if "mail" in enabled and enabled.mail == False %}selected{% endif %}>{% trans "Off" %}</option>
-                                    <option value="on" {% if enabled.mail %}selected{% endif %}>{% trans "On" %}</option>
+                                        <option value="global">{% trans "Global" %} ({% if global.mail %}
+                                            {% trans "On" %}{% else %}{% trans "Off" %}{% endif %})
+                                        </option>{% endif %}
+                                    <option value="off"
+                                            {% if "mail" in enabled and enabled.mail == False %}selected{% endif %}>{% trans "Off" %}</option>
+                                    <option value="on"
+                                            {% if enabled.mail %}selected{% endif %}>{% trans "On" %}</option>
                                 </select>
                             {% else %}
-                                <span class="fa fa-lock" data-toggle="tooltip" title="{% trans "You have no permission to receive this notification" %}"></span>
+                                <span class="fa fa-lock" data-toggle="tooltip"
+                                      title="{% trans "You have no permission to receive this notification" %}"></span>
                             {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="panel-body">
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
+            </div>
         </fieldset>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
     </form>
 {% endblock %}

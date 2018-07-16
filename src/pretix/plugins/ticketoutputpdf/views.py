@@ -77,6 +77,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
     permission = ('can_change_event_settings')
     template_name = 'pretixplugins/ticketoutputpdf/index.html'
     context_object_name = 'layouts'
+    paginate_by = 25
 
     def get_queryset(self):
         return self.request.event.ticket_layouts.prefetch_related('item_assignments')

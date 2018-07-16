@@ -3,20 +3,39 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Send out emails" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Send out emails" %}</h1>
-    {% block inner %}
-        <form class="form-horizontal" method="post" action="">
-            {% csrf_token %}
-            {% bootstrap_field form.sendto layout='horizontal' %}
-            {% if form.subevent %}
-                {% bootstrap_field form.subevent layout='horizontal' %}
-            {% endif %}
-            {% bootstrap_field form.item layout='horizontal' %}
-            {% bootstrap_field form.subject layout='horizontal' %}
-            {% bootstrap_field form.message layout='horizontal' %}
-            {% if request.method == "POST" %}
-            <fieldset>
-            <legend>{% trans "E-mail preview" %}</legend>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Send out emails" %}</h1>
+        </div>
+        <div class="panel-body">
+            {% block inner %}
+                <form class="form-horizontal" method="post" action="">
+                    {% csrf_token %}
+                    {% bootstrap_field form.sendto layout='horizontal' %}
+                    {% if form.subevent %}
+                        {% bootstrap_field form.subevent layout='horizontal' %}
+                    {% endif %}
+                    {% bootstrap_field form.item layout='horizontal' %}
+                    {% bootstrap_field form.subject layout='horizontal' %}
+                    {% bootstrap_field form.message layout='horizontal' %}
+                    <div class="form-group submit-group">
+                        <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
+                            {% trans "Preview email" %}
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-save">
+                            {% trans "Send" %}
+                        </button>
+                    </div>
+                </form>
+            {% endblock %}
+        </div>
+    </div>
+    {% if request.method == "POST" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "E-mail preview" %}</legend>
+            </div>
+            <div class="panel-body">
                 <div class="tab-pane mail-preview-group">
                     {% for locale, segments in output.items %}
                         <pre lang="{{ locale }}" class="mail-preview">{% spaceless %}
@@ -26,16 +45,7 @@
                         {% endspaceless %}</pre>
                     {% endfor %}
                 </div>
-            </fieldset>
-            {% endif %}
-            <div class="form-group submit-group">
-                <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
-                {% trans "Preview email" %}
-                </button>
-                <button type="submit" class="btn btn-primary btn-save">
-                    {% trans "Send" %}
-                </button>
             </div>
-        </form>
-    {% endblock %}
+        </fieldset>
+    {% endif %}
 {% endblock %}

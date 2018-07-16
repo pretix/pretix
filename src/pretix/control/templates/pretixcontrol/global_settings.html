@@ -3,14 +3,21 @@
 {% load bootstrap3 %}
 
 {% block inner %}
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form_errors form %}
-        {% bootstrap_form form layout='horizontal' %}
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Global settings" %}</h1>
         </div>
-    </form>
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form_errors form %}
+                {% bootstrap_form form layout='horizontal' %}
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

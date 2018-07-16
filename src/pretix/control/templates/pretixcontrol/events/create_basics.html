@@ -2,54 +2,81 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block form %}
-    <fieldset>
-        <legend>{% trans "General information" %}</legend>
-        {% bootstrap_field form.name layout="control" %}
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
-            <div class="col-md-9 form-inline">
-                <button class="btn btn-default pull-right" type="button" id="event-slug-random-generate"
-                        data-rng-url="{% url "control:events.add.slugrng" organizer=organizer.slug %}">
-                    {% trans "Set to random" %}
-                </button>
-                {% bootstrap_field form.slug form_group_class="helper-display-inline" show_label=False layout="inline" %}
-                <div class="help-block">
-                    {% blocktrans trimmed %}
-                        This is the address users can buy your tickets at. Should be short, only contain lowercase
-                        letters and numbers, and must be unique among your events. We recommend some kind of
-                        abbreviation or a date with less than 10 characters that can be easily remembered, but you
-                        can also choose to use a random value.
-                    {% endblocktrans %}
-                </div>
-                <div class="help-block">
-                    {% blocktrans trimmed %}
-                        We will also use this in some places like order codes, invoice numbers or bank transfer
-                        references as an abbreviation to reference this event.
-                    {% endblocktrans %}
-                </div>
-                <div class="slug-length alert alert-warning helper-display-none-soft">
-                    {% blocktrans trimmed %}
-                        We strongly recommend against using short forms of more then 16 characters.
-                    {% endblocktrans %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Create a new event" %}
+                <small>{% blocktrans trimmed with step=wizard.steps.step1 %}
+                    Step {{ step }}
+                {% endblocktrans %}</small>
+            </h1>
+        </div>
+        <fieldset class="panel-body">
+            {% bootstrap_field form.name layout="control" %}
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
+                <div class="col-md-9 form-inline">
+                    <button class="btn btn-default pull-right" type="button" id="event-slug-random-generate"
+                            data-rng-url="{% url "control:events.add.slugrng" organizer=organizer.slug %}">
+                        {% trans "Set to random" %}
+                    </button>
+                    {% bootstrap_field form.slug form_group_class="helper-display-inline" show_label=False layout="inline" %}
+                    <div class="help-block">
+                        {% blocktrans trimmed %}
+                            This is the address users can buy your tickets at. Should be short, only contain lowercase
+                            letters and numbers, and must be unique among your events. We recommend some kind of
+                            abbreviation or a date with less than 10 characters that can be easily remembered, but you
+                            can also choose to use a random value.
+                        {% endblocktrans %}
+                    </div>
+                    <div class="help-block">
+                        {% blocktrans trimmed %}
+                            We will also use this in some places like order codes, invoice numbers or bank transfer
+                            references as an abbreviation to reference this event.
+                        {% endblocktrans %}
+                    </div>
+                    <div class="slug-length alert alert-warning helper-display-none-soft">
+                        {% blocktrans trimmed %}
+                            We strongly recommend against using short forms of more then 16 characters.
+                        {% endblocktrans %}
+                    </div>
                 </div>
             </div>
+            {% bootstrap_field form.date_from layout="control" %}
+            {% bootstrap_field form.date_to layout="control" %}
+            {% bootstrap_field form.location layout="control" %}
+            {% bootstrap_field form.currency layout="control" %}
+            {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
+        </fieldset>
+    </div>
+    <fieldset class="panel panel-default">
+        <div class="panel-heading">
+            <legend>{% trans "Display settings" %}</legend>
         </div>
-        {% bootstrap_field form.date_from layout="control" %}
-        {% bootstrap_field form.date_to layout="control" %}
-        {% bootstrap_field form.location layout="control" %}
-        {% bootstrap_field form.currency layout="control" %}
-        {% bootstrap_field form.tax_rate addon_after="%" layout="control" %}
-    </fieldset>
-    <fieldset>
-        <legend>{% trans "Display settings" %}</legend>
-        {% bootstrap_field form.locale layout="control" %}
-        {% bootstrap_field form.timezone layout="control" %}
+        <div class="panel-body">
+            {% bootstrap_field form.locale layout="control" %}
+            {% bootstrap_field form.timezone layout="control" %}
+        </div>
     </fieldset>
     {% if form.presale_start %}
-        <fieldset>
-            <legend>{% trans "Timeline" %}</legend>
-            {% bootstrap_field form.presale_start layout="control" %}
-            {% bootstrap_field form.presale_end layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Timeline" %}</legend>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_field form.presale_start layout="control" %}
+                {% bootstrap_field form.presale_end layout="control" %}
+            </div>
         </fieldset>
     {% endif %}
+    <div class="form-group submit-group">
+        <button type="submit" class="btn btn-primary btn-save pull-right">
+            {% trans "Continue" %}
+        </button>
+        {% if wizard.steps.prev %}
+            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"
+                    class="btn btn-default btn-lg pull-left">
+                {% trans "Back" %}
+            </button>
+        {% endif %}
+    </div>
 {% endblock %}

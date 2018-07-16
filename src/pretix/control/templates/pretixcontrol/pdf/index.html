@@ -11,12 +11,6 @@
     <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" organizer=request.organizer.slug event=request.event.slug %}">
 {% endblock %}
 {% block content %}
-    <h1>
-        {% trans "PDF Editor" %}
-        {% if title %}
-            <small>{{ title }}</small>
-        {% endif %}
-    </h1>
 
     <script type="application/json" id="editor-data">
         {{ layout|safe }}
@@ -27,25 +21,30 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-source"
+                            <button type="button" class="btn btn-default btn-sm" id="toolbox-source"
                                     title="{% trans "Code" %}">
                                 <span class="fa fa-code"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-paste"
+                            <button type="button" class="btn btn-default btn-sm" id="toolbox-paste"
                                     title="{% trans "Paste" %}">
                                 <span class="fa fa-paste"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-undo"
+                            <button type="button" class="btn btn-default btn-sm" id="toolbox-undo"
                                     title="{% trans "Undo" %}">
                                 <span class="fa fa-undo"></span>
                             </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-redo"
+                            <button type="button" class="btn btn-default btn-sm" id="toolbox-redo"
                                     title="{% trans "Redo" %}">
                                 <span class="fa fa-repeat"></span>
                             </button>
                         </div>
                     </div>
-                    {% trans "Editor" %}
+                    <h1 class="panel-title">
+                        {% trans "PDF Editor" %}
+                        {% if title %}
+                            <small>{{ title }}</small>
+                        {% endif %}
+                    </h1>
                 </div>
                 <div class="panel-body">
                     <div id="editor-canvas-area">

@@ -32,6 +32,26 @@
                 {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
             </h1>
         </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal dl-left">
+                <dt>{% trans "Products" %}</dt>
+                <dd>
+                    {% if checkinlist.all_products %}
+                        {% trans "All" %}
+                    {% else %}
+                        {{ checkinlist.limit_products.all|join:"<br>" }}
+                    {% endif %}
+                </dd>
+                <dt>{% trans "Orders" %}</dt>
+                <dd>{% if checkinlist.include_pending %}{% trans "Pending and paid" %}{% else %}{% trans "Only paid orders" %}{% endif %}</dd>
+                {% if checkinlist.subevent %}
+                    <dt>{% trans "Date" context "subevent" %}</dt>
+                    <dd>{{ checkinlist.subevent }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+    <div class="panel panel-default">
         <form class="panel-body row filter-form" action="" method="get">
             <div class="col-md-4 col-sm-6 col-xs-12">
                 {% bootstrap_field filter_form.user layout='inline' %}

@@ -2,11 +2,33 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block form %}
-    {% bootstrap_field form.organizer layout="horizontal" %}
-    {% bootstrap_field form.locales layout="horizontal" %}
-    {% bootstrap_field form.has_subevents layout="horizontal" %}
-    <p>
-        <span class="fa fa-info-circle"></span>
-        {% trans "Please note that you will only be able to delete your event until the first order has been created." %}
-    </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Create a new event" %}
+                <small>{% blocktrans trimmed with step=wizard.steps.step1 %}
+                    Step {{ step }}
+                {% endblocktrans %}</small>
+            </h1>
+        </div>
+        <div class="panel-body">
+            {% bootstrap_field form.organizer layout="horizontal" %}
+            {% bootstrap_field form.locales layout="horizontal" %}
+            {% bootstrap_field form.has_subevents layout="horizontal" %}
+            <p class="help-block">
+                <span class="fa fa-info-circle"></span>
+                {% trans "Please note that you will only be able to delete your event until the first order has been created." %}
+            </p>
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save pull-right">
+                    {% trans "Continue" %}
+                </button>
+                {% if wizard.steps.prev %}
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"
+                            class="btn btn-default btn-lg pull-left">
+                        {% trans "Back" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

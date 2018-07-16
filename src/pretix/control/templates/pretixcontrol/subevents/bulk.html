@@ -6,7 +6,6 @@
 {% load eventsignal %}
 {% block title %}{% trans "Date" context "subevent" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Create multiple dates" context "subevent" %}</h1>
     <form action="" method="post" class="form-horizontal" id="subevent-bulk-create-form">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
@@ -16,10 +15,8 @@
         <div class="row">
             <div class="col-md-8">
                 <fieldset>
-                    <legend>{% trans "Dates" context "subevent" %}</legend>
-
                     <div class="formset" data-formset data-formset-prefix="{{ rrule_formset.prefix }}"
-                            id="rrule-formset">
+                         id="rrule-formset">
                         {{ rrule_formset.management_form }}
                         {% bootstrap_formset_errors rrule_formset %}
                         <div data-formset-body>
@@ -34,7 +31,7 @@
                                                         {% trans "Repetition rule" %}
                                                     </div>
                                                     <div class="col-md-2 text-right">
-                                                        <button type="button" class="btn btn-danger btn-xs"
+                                                        <button type="button" class="btn btn-danger btn-sm"
                                                                 data-formset-delete-button>
                                                             <i class="fa fa-trash"></i></button>
                                                     </div>
@@ -145,7 +142,7 @@
                                                         {% trans "Repetition rule" %}
                                                     </div>
                                                     <div class="col-md-2 text-right">
-                                                        <button type="button" class="btn btn-danger btn-xs"
+                                                        <button type="button" class="btn btn-danger btn-sm"
                                                                 data-formset-delete-button>
                                                             <i class="fa fa-trash"></i></button>
                                                     </div>
@@ -253,10 +250,14 @@
                 </fieldset>
             </div>
             <div class="col-md-4">
-                <fieldset>
-                    <legend>{% trans "Preview" context "subevent" %}</legend>
-                    <ul id="rrule-preview">
-                    </ul>
+                <fieldset class="panel panel-default">
+                    <div class="panel-heading">
+                        <legend>{% trans "Preview" context "subevent" %}</legend>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="rrule-preview">
+                        </ul>
+                    </div>
                 </fieldset>
             </div>
         </div>

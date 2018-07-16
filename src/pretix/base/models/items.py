@@ -1151,3 +1151,15 @@ class Quota(LoggedModel):
         else:
             if subevent:
                 raise ValidationError(_('The subevent does not belong to this event.'))
+
+    def get_items_display(self):
+        parts = []
+        vars = self.variations.all()
+        for i in self.items.all():
+            if i.has_variations:
+                for v in vars:
+                    if v.item_id == i.pk:
+                        parts.append('{} – {}'.format(i, v))
+            else:
+                parts.append(str(i))
+        return parts

@@ -2,40 +2,53 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    {% if team %}
-        <h2>{% trans "Team:" %} {{ team.name }}</h2>
-    {% else %}
-        <h2>{% trans "Create a new team" %}</h2>
-        <p>
-            {% blocktrans trimmed %}
-                You will be able to add team members in the next step.
-            {% endblocktrans %}
-        </p>
-    {% endif %}
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        <fieldset>
-            <legend>{% trans "General information" %}</legend>
-            {% bootstrap_field form.name layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                {% if team %}
+                    <h2 class="panel-title">{% trans "Team:" %} {{ team.name }}</h2>
+                {% else %}
+                    <h2 class="panel-title">{% trans "Create a new team" %}</h2>
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                {% if not team %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            You will be able to add team members in the next step.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
+                {% bootstrap_field form.name layout="control" %}
+            </div>
         </fieldset>
-        <fieldset>
-            <legend>{% trans "Organizer permissions" %}</legend>
-            {% bootstrap_field form.can_create_events layout="control" %}
-            {% bootstrap_field form.can_change_teams layout="control" %}
-            {% bootstrap_field form.can_change_organizer_settings layout="control" %}
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Organizer permissions" %}</legend>
+            </div>
+            <div class="panel-body">
+                {% bootstrap_field form.can_create_events layout="control" %}
+                {% bootstrap_field form.can_change_teams layout="control" %}
+                {% bootstrap_field form.can_change_organizer_settings layout="control" %}
+            </div>
         </fieldset>
-        <fieldset>
-            <legend>{% trans "Event permissions" %}</legend>
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
+                <legend>{% trans "Event permissions" %}</legend>
+            </div>
+            <div class="panel-body">
 
-            {% bootstrap_field form.all_events layout="control" %}
-            {% bootstrap_field form.limit_events layout="control" %}
-            {% bootstrap_field form.can_change_event_settings layout="control" %}
-            {% bootstrap_field form.can_change_items layout="control" %}
-            {% bootstrap_field form.can_view_orders layout="control" %}
-            {% bootstrap_field form.can_change_orders layout="control" %}
-            {% bootstrap_field form.can_view_vouchers layout="control" %}
-            {% bootstrap_field form.can_change_vouchers layout="control" %}
+                {% bootstrap_field form.all_events layout="control" %}
+                {% bootstrap_field form.limit_events layout="control" %}
+                {% bootstrap_field form.can_change_event_settings layout="control" %}
+                {% bootstrap_field form.can_change_items layout="control" %}
+                {% bootstrap_field form.can_view_orders layout="control" %}
+                {% bootstrap_field form.can_change_orders layout="control" %}
+                {% bootstrap_field form.can_view_vouchers layout="control" %}
+                {% bootstrap_field form.can_change_vouchers layout="control" %}
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

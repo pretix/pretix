@@ -4,34 +4,37 @@
 {% load formset_tags %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <div class="quick-setup-step">
-        <div class="quick-icon">
-            <span class="fa fa-fw fa-check-circle text-success"></span>
-        </div>
-        <div class="quick-content">
-
-            <h2>{% trans "Congratulations!" %}</h2>
-            <p>
-                <strong>{% trans "You just created an event!" %}</strong>
-            </p>
-            <p>
-                {% blocktrans trimmed %}
-                    You can scroll down and create your first ticket products quickly, or you can use the navigation
-                    on the left to modify the settings of your event in much more detail.
-                {% endblocktrans %}
-            </p>
-            <div class="clearfix"></div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="quick-setup-step">
+                <div class="quick-icon">
+                    <span class="fa fa-fw fa-check-circle text-success"></span>
+                </div>
+                <div class="quick-content">
+                    <h2>{% trans "Congratulations!" %}</h2>
+                    <p>
+                        <strong>{% trans "You just created an event!" %}</strong>
+                    </p>
+                    <p>
+                        {% blocktrans trimmed %}
+                            You can scroll down and create your first ticket products quickly, or you can use the
+                            navigation
+                            on the left to modify the settings of your event in much more detail.
+                        {% endblocktrans %}
+                    </p>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-        <fieldset class="quick-setup-step">
-            <div class="quick-icon">
-                <span class="fa fa-fw fa-ticket text-muted"></span>
-            </div>
-            <div class="quick-content">
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
                 <legend>{% trans "Create ticket types" %}</legend>
+            </div>
+            <div class="panel-body">
                 <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
                     {{ formset.management_form }}
                     {% bootstrap_formset_errors formset %}
@@ -104,7 +107,9 @@
                             <strong>{% trans "Total capacity:" %}</strong>
                             <span id="total-capacity"></span>
                             {% bootstrap_field form.total_quota layout="inline" field_class="sr-only" %}
-                            <a href="#" data-toggle="tooltip" title="{% trans 'You can set a limit on the total number of tickets sold for your event, regardless of the ticket type.' %}" id="total-capacity-edit">
+                            <a href="#" data-toggle="tooltip"
+                               title="{% trans 'You can set a limit on the total number of tickets sold for your event, regardless of the ticket type.' %}"
+                               id="total-capacity-edit">
                                 <span class="fa fa-edit"></span>
                             </a>
                         </div>
@@ -114,20 +119,19 @@
                 <p>&nbsp;</p>
                 <p class="bigger">
                     {% blocktrans trimmed %}
-                        If you want to use more advanced features like non-admission products, product variations, custom
-                        quotas, add-on products or want to modify your ticket types in more detail, you can later do so
-                        in the "Products" section in the navigation. Don't worry, you can change everything you input here.
+                        If you want to use more advanced features like non-admission products, product variations,
+                        custom quotas, add-on products or want to modify your ticket types in more detail, you can later
+                        do so in the "Products" section in the navigation. Don't worry, you can change everything you
+                        input here.
                     {% endblocktrans %}
                 </p>
-                <p>&nbsp;</p>
             </div>
         </fieldset>
-        <fieldset class="quick-setup-step">
-            <div class="quick-icon">
-                <span class="fa fa-fw fa-wrench text-muted"></span>
-            </div>
-            <div class="quick-content">
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
                 <legend>{% trans "Features" %}</legend>
+            </div>
+            <div class="panel-body">
                 <p class="bigger">
                     {% blocktrans trimmed %}
                         We recommend that you take some time to go through the "Settings" part of your event, but if
@@ -138,15 +142,13 @@
                 {% bootstrap_field form.waiting_list_enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
                 {% bootstrap_field form.show_quota_left layout="control" label_class="sr-only" field_class="col-md-12" %}
                 {% bootstrap_field form.attendee_names_required layout="control" label_class="sr-only" field_class="col-md-12" %}
-                <p>&nbsp;</p>
             </div>
         </fieldset>
-        <fieldset class="quick-setup-step" id="quick-setup-step-payment">
-            <div class="quick-icon">
-                <span class="fa fa-fw fa-money text-muted"></span>
-            </div>
-            <div class="quick-content">
+        <fieldset class="panel panel-default" id="quick-setup-step-payment">
+            <div class="panel-heading">
                 <legend>{% trans "Payment" %}</legend>
+            </div>
+            <div class="panel-body">
                 <p class="bigger">
                     {% blocktrans trimmed %}
                         pretix supports a
@@ -164,21 +166,20 @@
                     <div data-display-dependency="#id_payment_stripe__enabled">
                         <div class="alert alert-info">
                             {% blocktrans trimmed %}
-                                After you saved this page, we will redirect you to Stripe to create or connect an account
+                                After you saved this page, we will redirect you to Stripe to create or connect an
+                                account
                                 there. Once you completed this, you will be taken back to pretix.
                             {% endblocktrans %}
                         </div>
                     </div>
                 {% endif %}
-                <p>&nbsp;</p>
             </div>
         </fieldset>
-        <fieldset class="quick-setup-step">
-            <div class="quick-icon">
-                <span class="fa fa-fw fa-envelope text-muted"></span>
-            </div>
-            <div class="quick-content">
+        <fieldset class="panel panel-default">
+            <div class="panel-heading">
                 <legend>{% trans "Getting in touch with you" %}</legend>
+            </div>
+            <div class="quick-content panel-body">
                 <p class="bigger">
                     {% blocktrans trimmed %}
                         In case something goes wrong or is unclear, we strongly suggest that you provide ways for your

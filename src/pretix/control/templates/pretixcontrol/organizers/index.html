@@ -5,32 +5,37 @@
 {% load eventurl %}
 {% block title %}{% trans "Organizers" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Organizers" %}</h1>
-	<p>{% trans "The list below shows all organizer accounts you have administrative access to." %}</p>
-    <form class="row filter-form" action="" method="get">
-        <div class="col-md-10 col-sm-6 col-xs-12">
-            {% bootstrap_field filter_form.query layout='inline' %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Organizers" %}</h1>
         </div>
-        <div class="col-md-2 col-sm-6 col-xs-12">
-            <button class="btn btn-primary btn-block" type="submit">
-                <span class="fa fa-filter"></span>
-                <span class="hidden-md">
+        <div class="panel-body">{% trans "The list below shows all organizer accounts you have administrative access to." %}</div>
+    </div>
+    <div class="panel panel-default">
+        <form class="row filter-form panel-body" action="" method="get">
+            <div class="col-md-10 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.query layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">
                     {% trans "Filter" %}
                 </span>
-            </button>
-        </div>
-    </form>
-    {% if staff_session %}
-        <p>
-            <a href="{% url "control:organizers.add" %}" class="btn btn-default">
-                <span class="fa fa-plus"></span>
-                {% trans "Create a new organizer" %}
-            </a>
-        </p>
-    {% endif %}
-	<table class="table table-condensed table-hover">
-		<thead>
-			<tr>
+                </button>
+            </div>
+        </form>
+        {% if staff_session %}
+            <div class="panel-body">
+                <a href="{% url "control:organizers.add" %}" class="btn btn-default">
+                    <span class="fa fa-plus"></span>
+                    {% trans "Create a new organizer" %}
+                </a>
+            </div>
+        {% endif %}
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
                 <th>
                     {% trans "Organizer name" %}
                     <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
@@ -41,18 +46,21 @@
                     <a href="?{% url_replace request 'ordering' '-slug' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'slug' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for o in organizers %}
-			<tr>
-				<td><strong>
-                    <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
-                </strong></td>
-                <td>{{ o.slug }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-    {% include "pretixcontrol/pagination.html" %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for o in organizers %}
+                <tr>
+                    <td><strong>
+                        <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
+                    </strong></td>
+                    <td>{{ o.slug }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            {% include "pretixcontrol/pagination.html" %}
+        </div>
+    </div>
 {% endblock %}

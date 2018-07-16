@@ -3,76 +3,85 @@
 {% load money %}
 {% block title %}{% trans "Ticket layouts" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Ticket layouts" %}</h1>
-    {% if layouts|length == 0 %}
-        <div class="empty-collection">
-            <p>
-                {% blocktrans trimmed %}
-                    You haven't created any layouts yet.
-                {% endblocktrans %}
-            </p>
-
-            {% if "can_change_event_settings" in request.eventpermset %}
-                <a href="{% url "plugins:ticketoutputpdf:add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new layout" %}
-                </a>
-            {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1 class="panel-title">{% trans "Ticket layouts" %}</h1>
         </div>
-    {% else %}
-        <p>
-            {% if "can_change_event_settings" in request.eventpermset %}
-                <a href="{% url "plugins:ticketoutputpdf:add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new layout" %}
-                </a>
-            {% endif %}
-        </p>
-        <div class="table-responsive">
-            <table class="table table-hover table-quotas">
-                <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Default" %}</th>
-                    <th class="action-col-2"></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for l in layouts %}
+        {% if layouts|length == 0 %}
+            <div class="empty-collection panel-body">
+                <p>
+                    {% blocktrans trimmed %}
+                        You haven't created any layouts yet.
+                    {% endblocktrans %}
+                </p>
+
+                {% if "can_change_event_settings" in request.eventpermset %}
+                    <a href="{% url "plugins:ticketoutputpdf:add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                       class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new layout" %}
+                    </a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="panel-body">
+                {% if "can_change_event_settings" in request.eventpermset %}
+                    <a href="{% url "plugins:ticketoutputpdf:add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                       class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new layout" %}
+                    </a>
+                {% endif %}
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-quotas">
+                    <thead>
                     <tr>
-                        <td>
-                            {% if "can_change_event_settings" in request.eventpermset %}
-                                <strong><a href="{% url "plugins:ticketoutputpdf:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
-                                    {{ l.name }}
-                                </a></strong>
-                            {% else %}
-                                <strong>{{ l.name }}</strong>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if l.default %}
-                                <span class="text-success">
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Default" %}</th>
+                        <th class="action-col-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for l in layouts %}
+                        <tr>
+                            <td>
+                                {% if "can_change_event_settings" in request.eventpermset %}
+                                    <strong><a href="{% url "plugins:ticketoutputpdf:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
+                                        {{ l.name }}
+                                    </a></strong>
+                                {% else %}
+                                    <strong>{{ l.name }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if l.default %}
+                                    <span class="text-success">
                                     <span class="fa fa-check"></span>
                                     {% trans "Default" %}
                                 </span>
-                            {% elif "can_change_event_settings" in request.eventpermset %}
-                                <form class="form-inline" method="post"
-                                        action="{% url "plugins:ticketoutputpdf:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-default btn-sm">
-                                        {% trans "Make default" %}
-                                    </button>
-                                </form>
-                            {% endif %}
-                        </td>
-                        <td class="text-right">
-                            {% if "can_change_event_settings" in request.eventpermset %}
-                                <a href="{% url "plugins:ticketoutputpdf:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="{% url "plugins:ticketoutputpdf:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endif %}
-    {% include "pretixcontrol/pagination.html" %}
+                                    {% elif "can_change_event_settings" in request.eventpermset %}
+                                    <form class="form-inline" method="post"
+                                          action="{% url "plugins:ticketoutputpdf:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default btn-sm">
+                                            {% trans "Make default" %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if "can_change_event_settings" in request.eventpermset %}
+                                    <a href="{% url "plugins:ticketoutputpdf:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
+                                       class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    <a href="{% url "plugins:ticketoutputpdf:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}"
+                                       class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                {% include "pretixcontrol/pagination.html" %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

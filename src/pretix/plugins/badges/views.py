@@ -35,6 +35,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
     permission = ('can_change_event_settings', 'can_view_orders')
     template_name = 'pretixplugins/badges/index.html'
     context_object_name = 'layouts'
+    paginate_by = 25
 
     def get_queryset(self):
         return self.request.event.badge_layouts.prefetch_related('item_assignments')

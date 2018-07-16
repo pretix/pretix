@@ -3,12 +3,15 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Authorized applications" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Authorized applications" %}</h1>
-    <p>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">{% trans "Authorized applications" %}</h1>
+    </div>
+    <div class="panel-body">
         <a href="{% url "control:user.settings.oauth.apps" %}" class="btn btn-default">
             {% trans "Manage your own apps" %}
         </a>
-    </p>
+    </div>
     {% if tokens %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover table-quotas">
@@ -54,7 +57,7 @@
             </table>
         </div>
     {% else %}
-        <div class="empty-collection">
+        <div class="empty-collection panel-body">
             <p>
                 {% blocktrans trimmed %}
                     No applications have access to your pretix account.
@@ -62,4 +65,5 @@
             </p>
         </div>
     {% endif %}
+    </div>
 {% endblock %}

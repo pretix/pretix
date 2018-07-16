@@ -5,80 +5,99 @@
 {% load eventsignal %}
 {% block title %}{% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
-    <div class="panel panel-default panel-with-btn">
-        <div class="panel-heading">
-            {% if 'can_change_items' in request.eventpermset %}
-                <a href="{% url "control:event.items.quotas.edit" event=request.event.slug organizer=request.event.organizer.slug quota=quota.pk %}"
-                   class="btn btn-default btn-sm pull-right">
-                    <span class="fa fa-edit"></span>
-                    {% trans "Edit quota" %}
-                </a>
-            {% endif %}
-            <h1 class="panel-title">
-                {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
-                <div class="clearfix"></div>
-            </h1>
-        </div>
-    </div>
-    {% if quota.subevent %}
-        <p>
-            <span class="fa fa-calendar"></span> {{ quota.subevent.name }} – {{ quota.subevent.get_date_range_display }}
-        </p>
-    {% endif %}
     <div class="row" id="quota-stats">
-        <div class="col-md-5 col-xs-12">
-            <div class="panel panel-default">
+        <div class="col-lg-10 col-xs-12">
+            <div class="panel panel-default panel-with-btn">
                 <div class="panel-heading">
-                    <legend>{% trans "Usage overview" %}</legend>
+                    {% if 'can_change_items' in request.eventpermset %}
+                        <a href="{% url "control:event.items.quotas.edit" event=request.event.slug organizer=request.event.organizer.slug quota=quota.pk %}"
+                           class="btn btn-default btn-sm pull-right">
+                            <span class="fa fa-edit"></span>
+                            {% trans "Edit quota" %}
+                        </a>
+                    {% endif %}
+                    <h1 class="panel-title">
+                        {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
+                        <div class="clearfix"></div>
+                    </h1>
                 </div>
                 <div class="panel-body">
-                    <div class="chart" id="quota_chart">
-
-                    </div>
-                    <script type="application/json" id="quota-chart-data">{{ quota_chart_data|escapejson }}</script>
+                    <dl class="dl-horizontal dl-left">
+                        <dt>{% trans "Size" %}</dt>
+                        <dd>{{ quota.size|default_if_none:"Unlimited" }}</dd>
+                        <dt>{% trans "Products" %}</dt>
+                        <dd>{{ quota.get_items_display|join:"<br>" }}</dd>
+                        {% if quota.subevent %}
+                            <dt>{% trans "Date" context "subevent" %}</dt>
+                            <dd>{{ quota.subevent }}</dd>
+                        {% endif %}
+                    </dl>
                 </div>
             </div>
-        </div>
-        <div class="col-md-5 col-xs-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <legend>{% trans "Availability calculation" %}</legend>
-                </div>
-                <div class="panel-body">
+            {% if quota.subevent %}
+                <p>
+                    <span class="fa fa-calendar"></span> {{ quota.subevent.name }}
+                    – {{ quota.subevent.get_date_range_display }}
+                </p>
+            {% endif %}
+            <div class="row" id="quota-stats">
+                <div class="col-md-6 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <legend>{% trans "Usage overview" %}</legend>
+                        </div>
+                        <div class="panel-body">
+                            <div class="chart" id="quota_chart">
 
-                    <div class="row">
-                        <div class="col-xs-9">{% trans "Total quota" %}</div>
-                        <div class="col-xs-3 text-right">
-                            {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ quota.size }}{% endif %}
+                            </div>
+                            <script type="application/json"
+                                    id="quota-chart-data">{{ quota_chart_data|escapejson }}</script>
                         </div>
                     </div>
-                    {% for row in quota_table_rows %}
-                        <div class="row">
-                            <div class="col-xs-9">{{ row.label }}</div>
-                            <div class="col-xs-3 text-right"> – {{ row.value }}</div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <legend>{% trans "Availability calculation" %}</legend>
                         </div>
-                    {% endfor %}
-                    <div class="row">
-                        <div class="col-xs-9"><strong>{% trans "Current availability" %}</strong></div>
-                        <div class="col-xs-3 text-right">
-                            {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-xs-9">{% trans "Total quota" %}</div>
+                                <div class="col-xs-3 text-right">
+                                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}
+                                        {{ quota.size }}{% endif %}
+                                </div>
+                            </div>
+                            {% for row in quota_table_rows %}
+                                <div class="row">
+                                    <div class="col-xs-9">{{ row.label }}</div>
+                                    <div class="col-xs-3 text-right"> – {{ row.value }}</div>
+                                </div>
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col-xs-9"><strong>{% trans "Current availability" %}</strong></div>
+                                <div class="col-xs-3 text-right">
+                                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
+                                </div>
+                            </div>
+                            {% if quota_overbooked > 0 %}
+                                <div class="alert alert-warning">
+                                    {% blocktrans trimmed with num=quota_overbooked %}
+                                        This quota is currently overbooked by {{ num }} tickets.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
+                            {% if has_ignore_vouchers %}
+                                <div class="alert alert-warning">
+                                    {% blocktrans trimmed %}
+                                        Your event contains vouchers that affect products covered by this quota and that
+                                        allow a user to buy products even if this quota is sold out.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% if quota_overbooked > 0 %}
-                        <div class="alert alert-warning">
-                            {% blocktrans trimmed with num=quota_overbooked %}
-                                This quota is currently overbooked by {{ num }} tickets.
-                            {% endblocktrans %}
-                        </div>
-                    {% endif %}
-                    {% if has_ignore_vouchers %}
-                        <div class="alert alert-warning">
-                            {% blocktrans trimmed %}
-                                Your event contains vouchers that affect products covered by this quota and that
-                                allow a user to buy products even if this quota is sold out.
-                            {% endblocktrans %}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>

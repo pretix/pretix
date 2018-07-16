@@ -19,6 +19,14 @@
   }
 }
 
+.dl-left dt {
+  text-align: left;
+}
+
+.panel-body > dl:last-child, .panel-body > p:last-child {
+  margin-bottom: 0;
+}
+
 .navbar-inverse {
   box-shadow: 0 2px 5px 0 rgba(78, 50, 92, .1), 0 1px 1px 0 rgba(0, 0, 0, .07);
   margin: 0;
@@ -91,7 +99,14 @@
 .panel-heading {
   padding: 10px 15px;
 }
-
+.panel-heading small {
+  font-size: ceil(($font-size-base * 1.125));
+  color: $text-muted;
+}
+.panel-default > label > .panel-heading {
+    color: #333333;
+    border-color: #e5e5e5;
+}
 .panel-heading legend, .panel-heading .panel-title {
   margin-top: 0;
   margin-bottom: 0;

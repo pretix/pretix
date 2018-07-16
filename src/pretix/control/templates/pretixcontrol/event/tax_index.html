@@ -6,6 +6,11 @@
         <div class="panel-heading">
             <legend>{% trans "Tax rules" %}</legend>
         </div>
+        <div class="panel-body">
+            {% trans "You can create one or multiple tax rules that you can apply to your products." %}
+        </div>
+    </div>
+    <div class="panel panel-default">
         {% if taxrules|length == 0 %}
             <div class="panel-body empty-collection">
                 <p>

@@ -2,11 +2,18 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
+    <div class="panel panel-default">
     {% if events|length == 0 %}
-        <p>
+        <div class="panel-body empty-collection">
             <em>{% trans "You currently do not have access to any events." %}</em>
-        </p>
+        </div>
     {% else %}
+        <div class="panel-body">
+            <a href="{% url "control:events.add" %}" class="btn btn-default">
+                <span class="fa fa-plus"></span>
+                {% trans "Create a new event" %}
+            </a>
+        </div>
         <table class="table table-condensed table-hover">
             <thead>
             <tr>
@@ -27,8 +34,5 @@
             </tbody>
         </table>
     {% endif %}
-    <a href="{% url "control:events.add" %}" class="btn btn-default">
-        <span class="fa fa-plus"></span>
-        {% trans "Create a new event" %}
-    </a>
+    </div>
 {% endblock %}

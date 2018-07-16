@@ -5,11 +5,12 @@
 {% load escapejson %}
 {% block title %}{% trans "Statistics" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Statistics" %}</h1>
     {% if request.event.has_subevents %}
-        <form class="form-inline helper-display-inline" action="" method="get">
-            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
-        </form>
+        <div class="panel panel-default">
+            <form class="panel-body form-inline" action="" method="get">
+                {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
+            </form>
+        </div>
     {% endif %}
     {% if has_orders %}
         <div class="panel panel-default">
@@ -29,7 +30,8 @@
                 {% if request.GET.subevent %}
                     <div class="alert alert-info">
                         {% blocktrans trimmed context "subevent" %}
-                            If you select a single date, payment method fees will not be listed here as it might not be clear which
+                            If you select a single date, payment method fees will not be listed here as it might not be
+                            clear which
                             date they belong to.
                         {% endblocktrans %}
                     </div>
