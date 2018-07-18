@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-17 21:00+0000\n"
+"PO-Revision-Date: 2018-07-18 07:33+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/tr/>\n"
@@ -69,7 +69,7 @@ msgstr "{Code} türünde bir hata oluştu."
 #: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
 msgid "We are processing your request …"
-msgstr "İsteğinizi işliyoruz …"
+msgstr "İsteğinizi işliyoruz…"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
@@ -182,7 +182,7 @@ msgstr "Bilinmeyen hata."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:246
 msgid "All"
-msgstr "Hepsi"
+msgstr "Herşey"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:247
 msgid "None"
@@ -204,93 +204,101 @@ msgstr "Saymak"
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] ""
+"Bir\n"
+"(Bir başka tarih)"
 msgstr[1] ""
+"Diğer\n"
+"({num} daha fazla tarih)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Sepetinizdeki öğeler artık sizin için ayrılmamış."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Sepetin süresi doldu"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
+"Bir\n"
+"Sepetinizdeki ürünler bir dakikalığına ayrılmıştır."
 msgstr[1] ""
+"Diğer\n"
+"Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:9
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Satıldı"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:10
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Satın al"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:11
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Ayrılmış"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:12
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "Ücretsiz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:13
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "% (para birimi) s% (fiyat) s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "dahil %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "artı %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "şu anda mevcut: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Sadece bir kupon ile kullanılabilir"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "sipariş için minimum miktar: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Bilet dükkanını kapat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Bilet mağazası yüklenemedi."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Sepet oluşturulamadı. Lütfen daha sonra tekrar deneyiniz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Bekleme listesi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -299,6 +307,9 @@ msgid ""
 "products, they will be added to your existing cart. Click on this message to "
 "continue checkout with your cart."
 msgstr ""
+"Şu anda bu etkinlik için aktif bir sepetiniz var. Daha fazla ürün "
+"seçerseniz, mevcut sepetinize eklenir. Sepetinizle ödeme işlemine devam "
+"etmek için bu mesajı tıklayın."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
@@ -306,33 +317,35 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\"> etkinlik "
+"biletleme pretix tarafından desteklenmektedir </a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Bir kupon kullan"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Ödemek"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Kupon kodu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Kapalı"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Devam et"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "Varyasyonları gör"
