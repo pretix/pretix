@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-17 22:01+0000\n"
+"PO-Revision-Date: 2018-07-18 22:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -265,7 +265,7 @@ msgstr "Şirket"
 #: pretix/presale/templates/pretixpresale/event/order.html:189
 #: pretix/presale/templates/pretixpresale/organizers/index.html:46
 msgid "Name"
-msgstr "İsim"
+msgstr "Ad"
 
 #: pretix/base/exporters/orderlist.py:65 pretix/base/models/orders.py:1007
 #: pretix/control/templates/pretixcontrol/order/index.html:398
@@ -311,7 +311,7 @@ msgstr "Ödeme türü"
 
 #: pretix/base/exporters/orderlist.py:66 pretix/base/services/stats.py:163
 msgid "Fees"
-msgstr "Vergiler"
+msgstr "Harç"
 
 #: pretix/base/exporters/orderlist.py:66
 #: pretix/control/templates/pretixcontrol/order/index.html:83
@@ -353,7 +353,7 @@ msgstr "Toplam kota"
 
 #: pretix/base/exporters/orderlist.py:156 pretix/control/views/item.py:606
 msgid "Paid orders"
-msgstr "Ödenmiş siparişler"
+msgstr "Ücretli siparişler"
 
 #: pretix/base/exporters/orderlist.py:156 pretix/control/views/item.py:611
 msgid "Pending orders"
@@ -424,12 +424,12 @@ msgstr "Bu hesap aktif değildir."
 #: pretix/base/forms/auth.py:76
 msgid ""
 "You already registered with that email address, please use the login form."
-msgstr "Bu e-posta adresiyle zaten kaydoldunuz, lütfen giriş formunu kullanın."
+msgstr "Bu e-posta adresiyle zaten kaydoldunuz, lütfen giriş panelini kullanın."
 
 #: pretix/base/forms/auth.py:77 pretix/base/forms/auth.py:133
 #: pretix/base/forms/user.py:21 pretix/control/forms/users.py:24
 msgid "Please enter the same password twice"
-msgstr "Lütfen aynı şifreyi iki kez girin"
+msgstr "Lütfen aynı şifreyi ikince kez girin"
 
 #: pretix/base/forms/auth.py:80
 msgid "Email address"
@@ -890,7 +890,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:215 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "Harf dizisi sadece harf, sayı, nokta ve tire içerebilir."
+msgstr "Dizi sadece harf, sayı, nokta ve tire içerebilir."
 
 #: pretix/base/models/event.py:219 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -993,7 +993,7 @@ msgstr "Etkinlik"
 #: pretix/control/templates/pretixcontrol/organizers/base.html:19
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:17
 msgid "Events"
-msgstr "Etkinlikler"
+msgstr "Olaylar"
 
 #: pretix/base/models/event.py:584
 msgid ""
@@ -1830,7 +1830,7 @@ msgstr "Sipariş pozisyonu"
 
 #: pretix/base/models/orders.py:846 pretix/base/notifications.py:182
 msgid "Order positions"
-msgstr "Sipariş pozisyonları"
+msgstr "Sipariş durumları"
 
 #: pretix/base/models/orders.py:963
 msgid "Cart ID (e.g. session key)"
@@ -2549,7 +2549,6 @@ msgid "Sample product"
 msgstr "Örnek ürün"
 
 #: pretix/base/pdf.py:52
-#, fuzzy
 msgid "Variation name"
 msgstr "Varyasyon adı"
 
@@ -3735,7 +3734,7 @@ msgstr "İç Sunucu Hatası"
 
 #: pretix/base/templates/500.html:7
 msgid "We had trouble processing your request."
-msgstr "İsteğinizi işlerken sorun yaşadık."
+msgstr "İsteğinizi işlerken sorun yaşandı."
 
 #: pretix/base/templates/500.html:8
 msgid "If this problem persists, please contact us."
@@ -3802,7 +3801,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:363
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "%(a_attr)s>pretix</a> tarafından desteklenmektedir"
+msgstr "<a %(a_attr)s > pretix </a> ile desteklenmektedir"
 
 #: pretix/base/templates/pretixbase/email/notification.html:43
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -5092,7 +5091,7 @@ msgstr "Tüm organizatörler"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:39
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:74
 msgid "All"
-msgstr "Hepsi"
+msgstr "Herşey"
 
 #: pretix/control/forms/filter.py:304 pretix/control/forms/filter.py:416
 msgid "Shop live and presale running"
@@ -5160,7 +5159,7 @@ msgstr "Pazar"
 
 #: pretix/control/forms/filter.py:414
 msgid "All events"
-msgstr "Bütün etkinlikler"
+msgstr "Bütün olaylar"
 
 #: pretix/control/forms/filter.py:415
 msgid "Shop live"
@@ -5774,12 +5773,12 @@ msgstr ""
 #: pretix/control/logdisplay.py:52
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "{posid} pozisyonunun fiyatı {old_price}'dan {new_price}'a değişti."
 
 #: pretix/control/logdisplay.py:62
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) removed."
-msgstr ""
+msgstr "Pozisyon {posid} ({old_item},{old_price}) kaldırıldı."
 
 #: pretix/control/logdisplay.py:73
 #, python-brace-format
@@ -5787,42 +5786,46 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
+"Pozisyon {posid} oluşturuldu: {item}({price}) eklenti olarak pozisyon "
+"#{addon_to}'ya."
 
 #: pretix/control/logdisplay.py:80
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr ""
+msgstr "Poziyon #{posid} oluşturuldu: {item} ({price})."
 
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "Pozisyon #{posid} için yeni bir sır oluşturuldu"
 
 #: pretix/control/logdisplay.py:93
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
+"Poziyons #{posid} ({old_item},{old_price}) yeni bir sipaşie bölündü: {order}"
 
 #: pretix/control/logdisplay.py:100
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr ""
+msgstr "Bu sipariş, {order} siparişinin bölünmesiyle oluşturuldu"
 
 #: pretix/control/logdisplay.py:119 pretix/control/logdisplay.py:121
 #: pretix/control/logdisplay.py:304 pretix/control/logdisplay.py:306
 msgid "(unknown)"
-msgstr ""
+msgstr "(Bilinmeyen)"
 
 #: pretix/control/logdisplay.py:125
 #, python-brace-format
 msgid "Position #{posid} has been scanned at {datetime} for list \"{list}\"."
 msgstr ""
+"Pozisyon #{posid} {datetime} tarihinde \"{list}\" listesi için incelendi."
 
 #: pretix/control/logdisplay.py:131
 #, python-brace-format
 msgid "Position #{posid} has been scanned for list \"{list}\"."
-msgstr ""
+msgstr "Pozisyon #{posid} \"{list}\" listesi için incelendi."
 
 #: pretix/control/logdisplay.py:138
 #, python-brace-format
@@ -5830,6 +5833,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
+"Daha önceden incelenmesine rağmen #{posid} pzisyonu için {datetime}'da \""
+"{list}\" listesi için incelenme yüklendi."
 
 #: pretix/control/logdisplay.py:146
 #, python-brace-format
@@ -5837,150 +5842,161 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
+"Pozisyon #{posid} incelendi ve daha önceden \"{list}\" listesi için "
+"incelendiğinden reddedildi."
 
 #: pretix/control/logdisplay.py:157
 msgid "The event's internal comment has been updated."
-msgstr ""
+msgstr "Etkinliğin dahili yorumu güncellendi."
 
 #: pretix/control/logdisplay.py:158
 msgid "The order details have been changed."
-msgstr ""
+msgstr "Sipariş detayları değiştirildi."
 
 #: pretix/control/logdisplay.py:159
 msgid "The order has been marked as unpaid."
-msgstr ""
+msgstr "Sipariş ödenmemiş olarak işaretlendi."
 
 #: pretix/control/logdisplay.py:160
 msgid "The order's secret has been changed."
-msgstr ""
+msgstr "Siparişin sırrı değişti."
 
 #: pretix/control/logdisplay.py:161
 msgid "The order's expiry date has been changed."
-msgstr ""
+msgstr "Siparişin sona erme tarihi değiştirildi."
 
 #: pretix/control/logdisplay.py:162 pretix/control/views/orders.py:264
 msgid "The order has been marked as expired."
-msgstr ""
+msgstr "Siparişin süresi dolmuş olarak işaretlendi."
 
 #: pretix/control/logdisplay.py:163 pretix/control/views/orders.py:252
 msgid "The order has been marked as paid."
-msgstr ""
+msgstr "Sipariş ödenmiş olarak işaretlendi."
 
 #: pretix/control/logdisplay.py:164
 msgid "The order has been refunded."
-msgstr ""
+msgstr "Sipariş iade edildi."
 
 #: pretix/control/logdisplay.py:165 pretix/control/views/orders.py:255
 #: pretix/presale/views/order.py:532
 msgid "The order has been canceled."
-msgstr ""
+msgstr "Sipariş iptal edildi."
 
 #: pretix/control/logdisplay.py:166
 msgid "The order has been created."
-msgstr ""
+msgstr "Sipariş oluşturuldu."
 
 #: pretix/control/logdisplay.py:167
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
+"E-posta adresi \"{old_email}\" den \"{new_email}2\" adresine değiştirildi."
 
 #: pretix/control/logdisplay.py:169
 msgid "The order locale has been changed."
-msgstr ""
+msgstr "Sipariş yerel ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:170 pretix/control/views/orders.py:316
 #: pretix/presale/views/order.py:435
 msgid "The invoice has been generated."
-msgstr ""
+msgstr "Fatura oluşturuldu."
 
 #: pretix/control/logdisplay.py:171 pretix/control/views/orders.py:389
 msgid "The invoice has been regenerated."
-msgstr ""
+msgstr "Fatura yeniden oluşturuldu."
 
 #: pretix/control/logdisplay.py:172 pretix/control/views/orders.py:418
 msgid "The invoice has been reissued."
-msgstr ""
+msgstr "Fatura yeniden yayınlandı."
 
 #: pretix/control/logdisplay.py:173
 msgid "The order's internal comment has been updated."
-msgstr ""
+msgstr "Siparişin dahili yorumu güncellendi."
 
 #: pretix/control/logdisplay.py:174
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr ""
+"Siparişin Check-in sırasında dikkat edilmesini gösteren bayrağı değiştirildi."
 
 #: pretix/control/logdisplay.py:176
 msgid "The payment method has been changed."
-msgstr ""
+msgstr "Ödeme şekli değiştirildi."
 
 #: pretix/control/logdisplay.py:177
 msgid "An unidentified type email has been sent."
-msgstr ""
+msgstr "Tanımlanamayan bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:178
 msgid "A custom email has been sent."
-msgstr ""
+msgstr "Özel bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:179
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
-msgstr ""
+msgstr "Biletin indirilebileceğini hatırlatmak için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:181
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
 msgstr ""
+"Siparişin süresinin dolmak üzere olduğu konusunda bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:183
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
 msgstr ""
+"Siparişin iptal edildiğini kullanıcıya bildirmek için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:184
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
 msgstr ""
+"Siparişin değiştirildiğini kullanıcıya bildirmek için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:185
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr ""
+msgstr "Siparişin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:186
 msgid ""
 "An email has been sent to notify the user that payment has been received."
-msgstr ""
+msgstr "Ödemenin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:187
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
 msgstr ""
+"Kullanıcıya siparişin alındığını ve ödeme yapılmasını istediğini bildirmek "
+"için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:188
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
+"Sipariş detay sayfasına bağlantı içeren bir e-posta kullanıcıya yeniden "
+"gönderilmiştir."
 
 #: pretix/control/logdisplay.py:189
 msgid "The user has been created."
-msgstr ""
+msgstr "Kullanıcı oluşturuldu."
 
 #: pretix/control/logdisplay.py:190 pretix/control/views/user.py:290
 #: pretix/control/views/user.py:348 pretix/control/views/user.py:383
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama etkinleştirildi."
 
 #: pretix/control/logdisplay.py:191 pretix/control/views/user.py:238
 #: pretix/control/views/user.py:397
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama devre dışı bırakıldı."
 
 #: pretix/control/logdisplay.py:192 pretix/control/views/user.py:412
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "İki faktörlü acil durum kodlarınız yeniden oluşturuldu."
 
 #: pretix/control/logdisplay.py:193
 #, python-brace-format
@@ -5988,6 +6004,7 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
+"Hesabınıza yeni bir iki faktörlü kimlik doğrulama cihazı \"{name}\" eklendi."
 
 #: pretix/control/logdisplay.py:195
 #, python-brace-format
@@ -5995,272 +6012,273 @@ msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr ""
+"İki faktörlü kimlik doğrulama cihazı \"{name}\" hesabınızdan kaldırıldı."
 
 #: pretix/control/logdisplay.py:197
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "Bildirimler etkinleştirildi."
 
 #: pretix/control/logdisplay.py:198
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "Bildirimler devre dışı bırakıldı."
 
 #: pretix/control/logdisplay.py:199
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Bildirim ayarlarınız değiştirildi."
 
 #: pretix/control/logdisplay.py:202
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "Şifre sıfırlama e-postası gönderildi."
 
 #: pretix/control/logdisplay.py:203
 msgid "The password has been reset."
-msgstr ""
+msgstr "Şifre sıfırlandı."
 
 #: pretix/control/logdisplay.py:204
 msgid "The voucher has been created."
-msgstr ""
+msgstr "Kupon oluşturuldu."
 
 #: pretix/control/logdisplay.py:205
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr ""
+msgstr "Kupon oluşturuldu ve bekleme listesinde bir kişiye gönderildi."
 
 #: pretix/control/logdisplay.py:206
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "Kupon değiştirildi."
 
 #: pretix/control/logdisplay.py:207
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "Kupon silindi."
 
 #: pretix/control/logdisplay.py:208
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "Kupon, {order_code} sırasına göre kullanıldı."
 
 #: pretix/control/logdisplay.py:209
 msgid "The product has been created."
-msgstr ""
+msgstr "Ürün oluşturuldu."
 
 #: pretix/control/logdisplay.py:210
 msgid "The product has been changed."
-msgstr ""
+msgstr "Ürün değiştirildi."
 
 #: pretix/control/logdisplay.py:211
 msgid "The product has been deleted."
-msgstr ""
+msgstr "Ürün silindi."
 
 #: pretix/control/logdisplay.py:212
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "\"{value}\" varyasyonu oluşturuldu."
 
 #: pretix/control/logdisplay.py:213
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "\"{value}\" varyasyonu silindi."
 
 #: pretix/control/logdisplay.py:214
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "\"{value}\" varyasyonu değiştirildi."
 
 #: pretix/control/logdisplay.py:215
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "Bu ürüne bir eklenti eklendi."
 
 #: pretix/control/logdisplay.py:216
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "Bu üründen bir eklenti kaldırıldı."
 
 #: pretix/control/logdisplay.py:217
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "Bu üründe bir eklenti değiştirildi."
 
 #: pretix/control/logdisplay.py:218
 msgid "The quota has been added."
-msgstr ""
+msgstr "Kota eklendi."
 
 #: pretix/control/logdisplay.py:219
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "Kota silindi."
 
 #: pretix/control/logdisplay.py:220
 msgid "The quota has been changed."
-msgstr ""
+msgstr "Kota değişti."
 
 #: pretix/control/logdisplay.py:221
 msgid "The category has been added."
-msgstr ""
+msgstr "Kategori eklendi."
 
 #: pretix/control/logdisplay.py:222
 msgid "The category has been deleted."
-msgstr ""
+msgstr "Kategori silindi."
 
 #: pretix/control/logdisplay.py:223
 msgid "The category has been changed."
-msgstr ""
+msgstr "Kategori değiştirildi."
 
 #: pretix/control/logdisplay.py:224
 msgid "The question has been added."
-msgstr ""
+msgstr "Soru eklendi."
 
 #: pretix/control/logdisplay.py:225
 msgid "The question has been deleted."
-msgstr ""
+msgstr "Soru silindi."
 
 #: pretix/control/logdisplay.py:226
 msgid "The question has been changed."
-msgstr ""
+msgstr "Soru değişti."
 
 #: pretix/control/logdisplay.py:227
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "Vergi kuralı eklendi."
 
 #: pretix/control/logdisplay.py:228
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "Vergi kuralı silindi."
 
 #: pretix/control/logdisplay.py:229
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "Vergi kuralı değiştirildi."
 
 #: pretix/control/logdisplay.py:230
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "Check-in listesi eklendi."
 
 #: pretix/control/logdisplay.py:231
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "Check-in listesi silindi."
 
 #: pretix/control/logdisplay.py:232
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "Check-in listesi değiştirildi."
 
 #: pretix/control/logdisplay.py:233 pretix/control/logdisplay.py:240
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "Etkinlik ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:234
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "Bilet indirme ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:235
 msgid "A plugin has been enabled."
-msgstr ""
+msgstr "Bir eklenti etkinleştirildi."
 
 #: pretix/control/logdisplay.py:236
 msgid "A plugin has been disabled."
-msgstr ""
+msgstr "Bir eklenti devre dışı bırakıldı."
 
 #: pretix/control/logdisplay.py:237
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "Mağaza çevrimiçi duruma getirildi."
 
 #: pretix/control/logdisplay.py:238
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "Mağaza çevrimdışı duruma getirildi."
 
 #: pretix/control/logdisplay.py:239
 msgid "The event has been created."
-msgstr ""
+msgstr "Etkinlik oluşturuldu."
 
 #: pretix/control/logdisplay.py:241
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "Bu soruya bir cevap seçeneği eklendi."
 
 #: pretix/control/logdisplay.py:242
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "Bir cevap seçeneği sorudan kaldırıldı."
 
 #: pretix/control/logdisplay.py:243
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "Bir cevap seçeneği değiştirildi."
 
 #: pretix/control/logdisplay.py:244
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "Etkinlik ekibine bir kullanıcı eklendi."
 
 #: pretix/control/logdisplay.py:245
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "Etkinlik ekibine bir kullanıcı davet edildi."
 
 #: pretix/control/logdisplay.py:246
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "Bir kullanıcının izinleri değiştirildi."
 
 #: pretix/control/logdisplay.py:247
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "Etkinlik ekibinden bir kullanıcı kaldırıldı."
 
 #: pretix/control/logdisplay.py:248
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "Bekleme listesinde bir kişiye bir makbuz gönderildi."
 
 #: pretix/control/logdisplay.py:249
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "Bekleme listesinden bir giriş kaldırıldı."
 
 #: pretix/control/logdisplay.py:250
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "Bekleme listesinde bir giriş değiştirildi."
 
 #: pretix/control/logdisplay.py:251
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "Bekleme listesine bir giriş eklendi."
 
 #: pretix/control/logdisplay.py:252
 msgid "The team has been created."
-msgstr ""
+msgstr "Takım oluşturuldu."
 
 #: pretix/control/logdisplay.py:253
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "Takım ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:254
 msgid "The team has been deleted."
-msgstr ""
+msgstr "Ekip silindi."
 
 #: pretix/control/logdisplay.py:255
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "Etkinlik tarihi silindi."
 
 #: pretix/control/logdisplay.py:256
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "Etkinlik tarihi değiştirildi."
 
 #: pretix/control/logdisplay.py:257
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "Etkinlik tarihi oluşturuldu."
 
 #: pretix/control/logdisplay.py:258
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "Etkinlik tarihine bir kota eklendi."
 
 #: pretix/control/logdisplay.py:259
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "Etkinlik tarihinde bir kota değiştirildi."
 
 #: pretix/control/logdisplay.py:260
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "Etkinlik tarihinden bir kota kaldırıldı."
 
 #: pretix/control/logdisplay.py:283
 msgid "The settings of a payment provider have been changed."
-msgstr ""
+msgstr "Bir ödeme sağlayıcısının ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:286
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "Bir ödeme sağlayıcısının ayarları değiştirildi."
 
 #: pretix/control/logdisplay.py:289
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "Kullanıcı şu mesajı doğruladı: \"{}\""
 
 #: pretix/control/logdisplay.py:309
 #, python-brace-format
@@ -6268,101 +6286,104 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
+"# {posid} konumu, \"{list}\" listesindeki {datetime}'da manuel olarak "
+"kontrol edildi."
 
 #: pretix/control/logdisplay.py:314
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
+"# {posid} konumu tekrar {datetime} 'de \"{list}\" listesinde kontrol edildi."
 
 #: pretix/control/logdisplay.py:321
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "{user} ekibe eklendi."
 
 #: pretix/control/logdisplay.py:324
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "{user}, ekipten kaldırıldı."
 
 #: pretix/control/logdisplay.py:327
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
+msgstr "{user}, {email}'ye gönderilen davetiyeyi kullanarak ekibine katıldı."
 
 #: pretix/control/logdisplay.py:332
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "{user} takıma davet edildi."
 
 #: pretix/control/logdisplay.py:335
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr ""
+msgstr "{user} için davetiye iptal edildi."
 
 #: pretix/control/logdisplay.py:338
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "\"{name}\" simgesi oluşturuldu."
 
 #: pretix/control/logdisplay.py:341
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "\"{name}\" jetonu iptal edildi."
 
 #: pretix/control/logdisplay.py:344
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "Hesap ayarlarınız değiştirildi."
 
 #: pretix/control/logdisplay.py:346 pretix/control/views/user.py:135
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "E-posta adresiniz {email} olarak değiştirildi."
 
 #: pretix/control/logdisplay.py:348 pretix/control/views/user.py:132
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Şifreniz değiştirildi."
 
 #: pretix/control/logdisplay.py:350
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Hesabınız etkinleştirildi."
 
 #: pretix/control/logdisplay.py:352
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Hesabınız engellendi."
 
 #: pretix/control/logdisplay.py:356
 msgid "You impersonated {}."
-msgstr ""
+msgstr "{} Kimliğine büründün."
 
 #: pretix/control/logdisplay.py:359
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "{} Kimliğine bürünmeyi bıraktınız."
 
 #: pretix/control/middleware.py:88
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
-msgstr ""
+msgstr "Seçilen etkinlik bulunamadı ya da bunu yönetmek için izniniz yok."
 
 #: pretix/control/middleware.py:100
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
-msgstr ""
+msgstr "Seçilen organizatör bulunamadı veya onu yönetmek için izniniz yok."
 
 #: pretix/control/permissions.py:29 pretix/control/permissions.py:66
 #: pretix/control/permissions.py:97 pretix/control/permissions.py:114
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "Bu içeriği görüntüleme izniniz yok."
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "Kurtarma bilgilerini gönder"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Daveti kabul etmek"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -6371,40 +6392,45 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Bu sitede farklı bir e-posta adresine sahip bir hesabınız varsa, önce <a "
+"%(login_href)s>log in </a> adresinde oturum açabilirsiniz ve ardından mevcut "
+"hesabınızla daveti kabul etmek için bu bağlantıyı tekrar tıklayabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "Oturum aç"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:25
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Kayıt olmak"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:16
 msgid "Log in"
-msgstr ""
+msgstr "Oturum aç"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:20
 msgid "Lost password?"
-msgstr ""
+msgstr "Kayıp Şifre?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
 msgid "Welcome back!"
-msgstr ""
+msgstr "Tekrar hoşgeldiniz!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:11
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
+"Hesabınızı ikinci bir medyayla kimlik doğrulaması gerektirecek şekilde "
+"yapılandırdınız. Telefonunuz. Lütfen doğrulama kodunuzu buraya girin:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
-msgstr ""
+msgstr "Jeton"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:23
@@ -6412,12 +6438,16 @@ msgid ""
 "U2F failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
+"U2F başarısız oldu. Doğru kimlik doğrulama cihazının doğru şekilde "
+"takıldığını kontrol edin."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:22
 msgid ""
 "Alternatively, connect your U2F device. If it has a button, touch it now. "
 "You might have to unplug the device and plug it back in again."
 msgstr ""
+"Alternatif olarak, U2F cihazınızı bağlayın. Bir tuşa sahipse, şimdi ona "
+"dokunun. Cihazı fişten çekip tekrar takmanız gerekebilir."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/events/create_base.html:18
@@ -6438,7 +6468,7 @@ msgstr "Devam et"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
-msgstr ""
+msgstr "Bir uygulamayı yetkilendir"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:18
 #, python-format
@@ -6446,29 +6476,33 @@ msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
 msgstr ""
+"Pretix hesabınıza <strong>%(application)s</strong> erişimini gerçekten "
+"vermek istiyor musunuz?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:23
 msgid "The application requires the following permissions:"
-msgstr ""
+msgstr "Uygulama aşağıdaki izinleri gerektirir:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:29
 msgid ""
 "Please select the organizer accounts this application should get access to:"
-msgstr ""
+msgstr "Lütfen bu uygulamanın erişmesi gereken düzenleyici hesaplarını seçin:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:34
 msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
 msgstr ""
+"Bu uygulama, <strong>'e sahip </strong>'ye değil, bu pretix ekibi tarafından "
+"incelenmiştir. Pretix hesabınıza erişim vermek, kendi sorumluluğunuzda olur."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:47
 msgid "Error:"
-msgstr ""
+msgstr "Hata:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
 msgid "Set new password"
-msgstr ""
+msgstr "Yeni şifre belirle"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:38
@@ -6512,91 +6546,93 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:35
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:35
 msgid "Save"
-msgstr "Kayıt et"
+msgstr "Kaydet"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
-msgstr ""
+msgstr "Yeni bir hesap oluştur"
 
 #: pretix/control/templates/pretixcontrol/base.html:66
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Gezinmeyi değiştir"
 
 #: pretix/control/templates/pretixcontrol/base.html:85
 #: pretix/control/templates/pretixcontrol/base.html:122
 msgid "Go to Shop"
-msgstr ""
+msgstr "Dükkana git"
 
 #: pretix/control/templates/pretixcontrol/base.html:106
 #: pretix/control/templates/pretixcontrol/base.html:200
 msgid "Search for events"
-msgstr ""
+msgstr "Etkinlikeri ara"
 
 #: pretix/control/templates/pretixcontrol/base.html:118
 #: pretix/control/templates/pretixcontrol/base.html:123
 msgid "Go to shop"
-msgstr ""
+msgstr "Dükkana git"
 
 #: pretix/control/templates/pretixcontrol/base.html:164
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 msgid "Admin mode"
-msgstr ""
+msgstr "Yönetici modu"
 
 #: pretix/control/templates/pretixcontrol/base.html:171
 msgid "End admin session"
-msgstr ""
+msgstr "Yönetici oturumunu sonlandır"
 
 #: pretix/control/templates/pretixcontrol/base.html:183
 msgid "Account Settings"
-msgstr ""
+msgstr "Hesap ayarları"
 
 #: pretix/control/templates/pretixcontrol/base.html:188
 #: pretix/control/templates/pretixcontrol/base.html:190
 msgid "Log out"
-msgstr ""
+msgstr "Çıkış Yap"
 
 #: pretix/control/templates/pretixcontrol/base.html:212
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Gösterge paneli"
 
 #: pretix/control/templates/pretixcontrol/base.html:220
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "Genel Ayarlar"
 
 #: pretix/control/templates/pretixcontrol/base.html:240
 #: pretix/control/templates/pretixcontrol/search/orders.html:7
 #: pretix/control/templates/pretixcontrol/search/orders.html:9
 msgid "Order search"
-msgstr ""
+msgstr "Sipariş araması"
 
 #: pretix/control/templates/pretixcontrol/base.html:255
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "Yönetici oturumları"
 
 #: pretix/control/templates/pretixcontrol/base.html:294
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
+"Lütfen aşağıdaki yönetici oturumlarında neler yaptığınıza dair kısa bir "
+"açıklama bırakın:"
 
 #: pretix/control/templates/pretixcontrol/base.html:309
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "Şu anda %(user)s adına çalışıyorsunuz."
 
 #: pretix/control/templates/pretixcontrol/base.html:314
 msgid "Stop impersonating"
-msgstr ""
+msgstr "İfade etmeyi bırak"
 
 #: pretix/control/templates/pretixcontrol/base.html:325
 msgid "Read more"
-msgstr ""
+msgstr "Daha fazla oku"
 
 #: pretix/control/templates/pretixcontrol/base.html:342
 msgid ""
@@ -6606,28 +6642,36 @@ msgid ""
 "disable this feature or enter your email address to get notified via email "
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
+"1.2.0 sürümünden başlayarak, pretix otomatik olarak arka planda "
+"güncellemeleri kontrol eder. Bu kontrol sırasında, anonim veriler pretix "
+"'geliştiricileri tarafından işletilen sunuculara iletilir. Daha fazla bilgi "
+"edinmek için bu mesajı tıklayın, bu özelliği devre dışı bırakın veya yeni "
+"bir güncelleme geldiğinde e-posta yoluyla bilgilendirilmek için e-posta "
+"adresinizi girin. Bu mesaj siz tıkladıktan sonra kaybolacaktır."
 
 #: pretix/control/templates/pretixcontrol/base.html:355
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
+"pretix hata ayıklama modunda çalışıyor. Güvenlik nedenleriyle, lütfen bir "
+"üretim örneğinde hata ayıklama modunu çalıştırma."
 
 #: pretix/control/templates/pretixcontrol/base.html:368
 msgid "running in development mode"
-msgstr ""
+msgstr "geliştirme modunda çalışıyor"
 
 #: pretix/control/templates/pretixcontrol/base.html:378
 #: pretix/presale/templates/pretixpresale/base.html:64
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "İsteğinizi işliyoruz …"
+msgstr "İsteğinizi işliyoruz…"
 
 #: pretix/control/templates/pretixcontrol/base.html:380
 #: pretix/presale/templates/pretixpresale/base.html:66
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Bu işlem birkaç dakikadan uzun sürerse, lütfen bizimle iletişime geçin."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -6635,20 +6679,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:13
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr ""
+msgstr "Check-in listesi: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 msgid "Edit list"
-msgstr ""
+msgstr "Listeyi düzenle"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:30
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:44
 #: pretix/control/templates/pretixcontrol/event/logs.html:26
@@ -6667,38 +6711,40 @@ msgstr "Filtre"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
 msgid "No attendee record was found."
-msgstr ""
+msgstr "Katılımcı kaydı bulunamadı."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:75
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
 msgid "Timestamp"
-msgstr ""
+msgstr "Zaman Damgası"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:90
 msgid "unpaid"
-msgstr ""
+msgstr "ödenmemiş"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 msgid "Check-In selected attendees"
-msgstr ""
+msgstr "Seçilen katılımcıları check-in'le"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr ""
+msgstr "Check-in listesini sil"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
+"<strong>%(name)s</strong> check-in listesini silmek istediğinizden emin "
+"misiniz?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
-msgstr ""
+msgstr "Bu, <strong>%(num)s</strong> check-in bilgisini de silecektir."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -6763,7 +6809,7 @@ msgstr "Sil"
 #: pretix/plugins/pretixdroid/models.py:24
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:51
 msgid "Check-in list"
-msgstr ""
+msgstr "Check-in listesi"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:21
 #: pretix/control/templates/pretixcontrol/event/settings.html:9
@@ -6784,7 +6830,7 @@ msgstr "Genel bilgi"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:29
 msgid "Please select the products that should be part of this check-in list."
-msgstr ""
+msgstr "Lütfen bu check-in listesinin parçası olması gereken ürünleri seçiniz."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:5
@@ -6794,7 +6840,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:127
 #: pretix/plugins/checkinlists/__init__.py:10
 msgid "Check-in lists"
-msgstr ""
+msgstr "Check-in listeleri"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -6803,6 +6849,11 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
+"Kullanabileceğiniz check-in listeleri oluşturabilirsiniz, Örneğin etkinliğin "
+"girişinde, kimin geleceğini ve aslında bir bilet aldıklarını izlemek için. "
+"Bu işlemi kağıt üzerindeki listeyi yazdırarak, bu web arayüzünü kullanarak "
+"ya da otomatik olarak biletleri taramak için mobil veya masaüstü "
+"uygulamalarımızdan birini kullanarak yapabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:14
 msgid ""
@@ -6813,27 +6864,34 @@ msgid ""
 "festival with festival passes that allow access to every or multiple "
 "performances as well as tickets only valid for single performances."
 msgstr ""
+"Örneğin, birden fazla bilet türü için ayrı girişleriniz varsa, "
+"etkinliğinizin birden çok bölümünü ayırmak için birden fazla giriş listeleri "
+"oluşturabilirsiniz. Farklı check-in listeleri tamamen bağımsızdır: Bir bilet "
+"iki listede listeleniyorsa, her listede bir kez geçerlidir. Bu, festival "
+"performanslarının her veya birden fazla performansa erişimini sağlayan bir "
+"festivali ve yalnızca tek performanslar için geçerli olan biletler için "
+"yararlı olabilir."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:33
 msgid "Your search did not match any check-in lists."
-msgstr ""
+msgstr "Aramanız herhangi bir check-in listesiyle eşleşmedi."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:35
 msgid "You haven't created any check-in lists yet."
-msgstr ""
+msgstr "Henüz check-in listeleri oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:44
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:50
 msgid "Create a new check-in list"
-msgstr ""
+msgstr "Yeni bir check-in listesi oluştur"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
-msgstr ""
+msgstr "Etkinliğe git"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Yaklaşan etkinlikleriniz"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:19
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -6842,31 +6900,31 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:45
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:32
 msgid "Create a new event"
-msgstr ""
+msgstr "Yeni etkinlik oluştur"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:33
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Tüm yaklaşan etkinlikleri görüntüle"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:38
 msgid "Your most recent events"
-msgstr ""
+msgstr "En son etkinlikleriniz"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:50
 msgid "View all recent events"
-msgstr ""
+msgstr "Tüm güncel etkinlikleri görüntüle"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:55
 msgid "Your event series"
-msgstr ""
+msgstr "Etkinlik diziniz"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:67
 msgid "View all event series"
-msgstr ""
+msgstr "Tüm etkinlik serilerini görüntüle"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:72
 msgid "Other features"
-msgstr ""
+msgstr "Diğer özellikler"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
 #, python-format
@@ -6881,6 +6939,15 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Merhaba,\n"
+"\n"
+"Yeni bir şifre talep ettiniz. Lütfen şifrenizi sıfırlamak için aşağıdaki "
+"sayfaya gidin:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"En iyi dileklerimizle,\n"
+"pretix ekibiniz\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -6902,6 +6969,23 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"Merhaba,\n"
+"\n"
+"Etkinliklere bilet satma platformu olan pretix'te bir ekibe davet edildiniz."
+"\n"
+"\n"
+"Organizatör: %(organizer)s\n"
+"Takım: %(team)s\n"
+"\n"
+"Eğer takıma katılmak isterseniz, lütfen linke tıklayın:\n"
+"%(url)s\n"
+"\n"
+"Eğer katılmak istemiyorsanız, güvenli bir şekilde bu e-postayı silebilir \n"
+"veya görmezden gelebilirsiniz\n"
+"\n"
+"En iyi dileklerimizle,\n"
+"\n"
+"pretix ekibiniz\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -6923,30 +7007,46 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Merhaba,\n"
+"\n"
+"pretix hesabınızdaki bilgiler değiştiği için bu e-postayı aldınız. Aşağıdaki "
+"değişiklikler gerçekleşti:\n"
+"\n"
+"%(messages)s\n"
+"\n"
+"Eğer bu değişiklikler sizin tarafınızdan yapılmadıysa, lütfen bizimle hemen "
+"iletişime geçin.\n"
+"\n"
+"Hesap ayarlarınızı buradan inceleyebilir ve değiştirebilirsiniz:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"En iyi dileklerimizle,\n"
+"pretix ekibiniz\n"
 
 #: pretix/control/templates/pretixcontrol/event/actions.html:3
 #: pretix/control/templates/pretixcontrol/event/actions.html:5
 msgid "Current issues"
-msgstr ""
+msgstr "Güncel konular"
 
 #: pretix/control/templates/pretixcontrol/event/actions.html:12
 #: pretix/control/templates/pretixcontrol/event/index.html:31
 msgid "Hide message"
-msgstr ""
+msgstr "Mesajı gizle"
 
 #: pretix/control/templates/pretixcontrol/event/actions.html:20
 msgid "No issues. Awesome!"
-msgstr ""
+msgstr "Sorun yok. Harika!"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:11
 msgid "Event dashboard"
-msgstr ""
+msgstr "Etkinlik kontrol paneli"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:19
 #: pretix/control/templates/pretixcontrol/event/payment.html:33
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:30
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:27
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:19
@@ -6954,35 +7054,37 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:7
 msgctxt "subevent"
 msgid "Dates"
-msgstr ""
+msgstr "Tarihler"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:57
 msgid "Categories"
-msgstr ""
+msgstr "Kategoriler"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:89
 msgid "Overview"
-msgstr ""
+msgstr "Genel bakış"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:95
 msgid "Export"
-msgstr ""
+msgstr "Dışa aktar"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:5
 #: pretix/control/templates/pretixcontrol/event/settings.html:85
 msgid "Delete event"
-msgstr ""
+msgstr "Etkinliği sil"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:9
 msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Bu işlem, tüm yapılandırma, ürünler, kotalar, sorular, kuponlar, listeler "
+"vb. Dahil olmak üzere etkinliğinizi yok edecektir."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
-msgstr ""
+msgstr "Bu işlem geri alınamaz ve verilerinizi geri getirmenin bir yolu yoktur."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
 #, python-format
@@ -6990,241 +7092,259 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Bunu gerçekten istediğinizi onaylayın, lütfen etkinliğin kısa adını %(slug)s "
+"yazın:"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:28
 msgid ""
 "Also, to make sure it's really you, please enter your user password here:"
 msgstr ""
+"Ayrıca, gerçekten sen olduğundan emin olmak için, lütfen kullanıcı şifrenizi "
+"buraya girin:"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:42
 msgid "Your event can not be deleted as it already contains orders."
-msgstr ""
+msgstr "Etkinliğiniz sipariş içerdiği için silinemez."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:45
 msgid ""
 "pretix does not allow deleting orders once they have been placed in order to "
 "be audit-proof and trustable by financial authorities."
 msgstr ""
+"pretix, finansal yetkililer tarafından denetleme ve güvenilirlik sağlamak "
+"amacıyla yerleştirildikten sonra emirleri silmeye izin vermez."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:52
 msgid ""
 "You can instead take your shop offline. This will hide it from everyone "
 "except from the organizer teams you configured to have access to the event."
 msgstr ""
+"Bunun yerine mağazanızı çevrimdışı olarak alabilirsiniz. Bu, etkinliğe "
+"erişim sağlamak için yapılandırdığınız düzenleyici ekipleri haricinde "
+"herkesi gizleyecektir."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:62
 #: pretix/control/templates/pretixcontrol/event/delete.html:76
 #: pretix/control/templates/pretixcontrol/event/settings.html:90
 msgid "Delete personal data"
-msgstr ""
+msgstr "Kişisel verileri sil"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
 #: pretix/control/templates/pretixcontrol/event/live.html:16
 msgid "Go offline"
-msgstr ""
+msgstr "Çevrimdışı ol"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:72
 msgid ""
 "However, since your shop is offline, it is only visible to the organizing "
 "team according to the permissions you configured."
 msgstr ""
+"Ancak, mağazanız çevrimdışı olduğu için, düzenlediğiniz izinlere göre "
+"yalnızca düzenleme ekibine görünür."
 
 #: pretix/control/templates/pretixcontrol/event/display.html:10
 msgid "Event page"
-msgstr ""
+msgstr "Etkinlik sayfası"
 
 #: pretix/control/templates/pretixcontrol/event/display.html:19
 #: pretix/control/templates/pretixcontrol/organizers/display.html:17
 msgid "Shop design"
-msgstr ""
+msgstr "Mağaza tasarımı"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:22
 msgid "Your attention is required to resolve the following issues"
-msgstr ""
+msgstr "Aşağıdaki sorunları çözmek için dikkat etmeniz gerekiyor"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:43
 msgid "Show more"
-msgstr ""
+msgstr "Daha fazla göster"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:91
 #: pretix/control/templates/pretixcontrol/order/index.html:444
 msgid "Update comment"
-msgstr ""
+msgstr "Yorumu güncelle"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:100
 #: pretix/control/templates/pretixcontrol/event/logs.html:4
 #: pretix/control/templates/pretixcontrol/event/logs.html:6
 msgid "Event logs"
-msgstr ""
+msgstr "Etkinlik günlükleri"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:112
 #: pretix/control/templates/pretixcontrol/event/logs.html:38
 #: pretix/control/templates/pretixcontrol/includes/logs.html:29
 msgid "Personal data was cleared from this log entry."
-msgstr ""
+msgstr "Kişisel veriler bu günlük girişinden temizlendi."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:121
 #: pretix/control/templates/pretixcontrol/event/logs.html:47
 #: pretix/control/templates/pretixcontrol/includes/logs.html:12
 msgid "This change was performed by a pretix administrator."
-msgstr ""
+msgstr "Bu değişiklik bir pretix yöneticisi tarafından gerçekleştirildi."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:150
 msgid "Show more logs"
-msgstr ""
+msgstr "Daha fazla günlük göster"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:9
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:70
 msgid "Invoicing"
-msgstr ""
+msgstr "Faturalama"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:30
 msgid "Save and show preview"
-msgstr ""
+msgstr "Önizlemeyi kaydet ve göster"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:5
 msgid "Shop status"
-msgstr ""
+msgstr "Mağaza durumu"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:8
 msgid ""
 "Your shop is currently live. If you take it down, it will only be visible to "
 "you and your team."
 msgstr ""
+"Mağazanız şu anda yayında. Eğer onu indirirseniz, sadece sizin ve ekibiniz "
+"tarafından görülebilir."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:22
 msgid ""
 "Your ticket shop is currently not live. It is thus only visible to you and "
 "your team, not to any visitors."
 msgstr ""
+"Bilet mağazanız şu anda çevrımdışı. Bu nedenle sadece siz ve ekibiniz "
+"görebilirsiniz, herhangi bir ziyaretçiye görünmez."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:27
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
+"Biletinizi yayınlamak için öncelikle aşağıdaki sorunları çözmeniz gerekir:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:37
 msgid "If you want to, you can publish your ticket shop now."
-msgstr ""
+msgstr "Eğer istersen, bilet dükkanını şimdi yayınlayabilirsin."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:45
 msgid "Go live"
-msgstr ""
+msgstr "Çevrimiçi ol"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:10
 msgid "All actions"
-msgstr ""
+msgstr "Tüm eylemler"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:12
 msgid "Team actions"
-msgstr ""
+msgstr "Takım eylemleri"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:15
 msgid "Customer actions"
-msgstr ""
+msgstr "Müşteri eylemleri"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:74
 msgid "No results"
-msgstr ""
+msgstr "Sonuç yok"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:10
 msgid "E-mail settings"
-msgstr ""
+msgstr "E-posta ayarları"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:17
 msgid "E-mail content"
-msgstr ""
+msgstr "E-posta içeriği"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:19
 msgid "Placed order"
-msgstr ""
+msgstr "Yerleştirilen sipariş"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:22
 msgid "Paid order"
-msgstr ""
+msgstr "Ödenmiş sipariş"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:25
 msgid "Free order"
-msgstr ""
+msgstr "Bedava sipariş"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:28
 #: pretix/control/templates/pretixcontrol/order/index.html:112
 msgid "Resend link"
-msgstr ""
+msgstr "Bağlantıyı tekrar gönder"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:34
 msgid "Payment reminder"
-msgstr ""
+msgstr "Ödeme hatırlatıcısı"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:37
 msgid "Waiting list notification"
-msgstr ""
+msgstr "Bekleme listesi bildirimi"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:43
 msgid "Order custom mail"
-msgstr ""
+msgstr "Özel posta siparişi ver"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:46
 msgid "Reminder to download tickets"
-msgstr ""
+msgstr "Biletleri indirmek için hatırlatma"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:51
 msgid "SMTP settings"
-msgstr ""
+msgstr "SMTP ayarları"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:65
 msgid "Save and test custom SMTP connection"
-msgstr ""
+msgstr "Özel SMTP bağlantısını kaydet ve test et"
 
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:27
 #: pretix/control/templates/pretixcontrol/organizers/base.html:12
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:10
 msgid "Edit"
-msgstr ""
+msgstr "Düzenle"
 
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
 #: pretix/control/templates/pretixcontrol/event/tickets.html:28
 #: pretix/control/templates/pretixcontrol/pdf/index.html:340
 msgid "Preview"
-msgstr ""
+msgstr "Ön izleme"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:8
 msgid "Payment providers"
-msgstr ""
+msgstr "Ödeme sağlayıcıları"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:20
 #: pretix/control/templates/pretixcontrol/user/settings.html:44
 msgid "Enabled"
-msgstr ""
+msgstr "Etkin"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:25
 #: pretix/control/templates/pretixcontrol/subevents/index.html:110
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 msgid "Disabled"
-msgstr ""
+msgstr "Devre dışı"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:40
 msgid ""
 "There are no payment providers available. Please go to the plugin settings "
 "and activate one or more payment plugins."
 msgstr ""
+"Mevcut ödeme sağlayıcı yok. Lütfen eklenti ayarlarına gidin ve bir veya daha "
+"fazla ödeme eklentisini etkinleştirin."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:48
 msgid "General payment settings"
-msgstr ""
+msgstr "Genel ödeme ayarları"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:12
 #: pretix/control/templates/pretixcontrol/events/create_base.html:23
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:14
 msgid "Payment provider:"
-msgstr ""
+msgstr "Ödeme sağlayıcısı:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:20
 msgid "Warning:"
-msgstr ""
+msgstr "Uyarı:"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid ""
@@ -7232,26 +7352,34 @@ msgid ""
 "most common payment methods within the European Union. If in doubt, consult "
 "a lawyer or refrain from charging payment fees."
 msgstr ""
+"AB Direktifi 2015/2366, Avrupa Birliği içinde en yaygın ödeme yöntemleri "
+"için ek ücretlerin ödenmesini yasaklamaktadır. Şüpheniz varsa, bir avukata "
+"danışın veya ödeme ücretlerini ödemekten kaçının."
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:27
 msgid ""
 "In simple terms, this means you need to pay any fees imposed by the payment "
 "providers and cannot pass it on to your customers."
 msgstr ""
+"Basit anlamda, bu, ödeme sağlayıcıları tarafından uygulanan herhangi bir "
+"ücret ödemeniz gerektiği ve bunları müşterilerinize iletemeyeceğiniz "
+"anlamına gelir."
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:10
 msgid ""
 "Permission settings have moved and are now configured as part of an "
 "organizer account instead of every event on its own."
 msgstr ""
+"İzin ayarları taşındı ve artık her etkinlik kendi başına bir organizatör "
+"hesabının bir parçası olarak yapılandırıldı."
 
 #: pretix/control/templates/pretixcontrol/event/permissions.html:17
 msgid "Go to the organizer team settings"
-msgstr ""
+msgstr "Organizatör ekibi ayarlarına git"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:8
 msgid "Installed plugins"
-msgstr ""
+msgstr "Yüklü eklentiler"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
 #: pretix/control/views/checkin.py:175 pretix/control/views/event.py:146
@@ -7269,15 +7397,15 @@ msgstr ""
 #: pretix/control/views/vouchers.py:175 pretix/plugins/badges/views.py:88
 #: pretix/plugins/ticketoutputpdf/views.py:130
 msgid "Your changes have been saved."
-msgstr "Değişiklikler kaydedildi."
+msgstr "Değişiklikleriniz kaydedildi."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
-msgstr ""
+msgstr "Uyumsuz"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:27
 msgid "Not available"
-msgstr ""
+msgstr "Müsait değil"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:29
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -7285,7 +7413,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
 #: pretix/control/templates/pretixcontrol/user/notifications.html:14
 msgid "Disable"
-msgstr ""
+msgstr "Devre dışı"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:31
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:21
@@ -7293,40 +7421,42 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/notifications.html:23
 #: pretix/control/templates/pretixcontrol/user/settings.html:51
 msgid "Enable"
-msgstr ""
+msgstr "Etkinleştirme"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:38
 #, python-format
 msgid "Version %(v)s by <em>%(a)s</em>"
-msgstr ""
+msgstr "Versiyon %(v)s by <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:42
 #, python-format
 msgid "Version %(v)s"
-msgstr ""
+msgstr "Versiyon %(v)s"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:49
 msgid ""
 "This plugin needs to be enabled by a system administrator for your event."
 msgstr ""
+"Bu eklentinin etkinliğiniz için bir sistem yöneticisi tarafından "
+"etkinleştirilmesi gerekir."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:54
 msgid "This plugin cannot be enabled for the following reasons:"
-msgstr ""
+msgstr "Bu eklenti aşağıdaki nedenlerden dolayı etkinleştirilemez:"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:64
 msgid "This plugin reports the following problems:"
-msgstr ""
+msgstr "Bu eklenti aşağıdaki sorunları bildirir:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:13
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:10
 msgid "Congratulations!"
-msgstr ""
+msgstr "Tebrik ederiz!"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:15
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:12
 msgid "You just created an event!"
-msgstr ""
+msgstr "Bir etkinlik oluşturdunuz!"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:18
 msgid ""
@@ -7334,32 +7464,37 @@ msgid ""
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
 msgstr ""
+"İlk bilet ürünlerinizi hızlıca aşağı kaydırarak oluşturabilir veya "
+"etkinliğinizin ayarlarını daha ayrıntılı olarak değiştirmek için soldaki "
+"gezinmeyi kullanabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:34
 msgid "Create ticket types"
-msgstr ""
+msgstr "Bilet tipleri oluşturun"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:40
 msgid "Ticket name"
-msgstr ""
+msgstr "Bilet adı"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:46
 msgid "Capacity (optional)"
-msgstr ""
+msgstr "Kapasite (isteğe bağlı)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:99
 msgid "Add a new ticket type"
-msgstr ""
+msgstr "Yeni bir bilet türü ekle"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:104
 msgid "Total capacity:"
-msgstr ""
+msgstr "Toplam kapasite:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:107
 msgid ""
 "You can set a limit on the total number of tickets sold for your event, "
 "regardless of the ticket type."
 msgstr ""
+"Bilet türüne bakılmaksızın, etkinliğiniz için satılan toplam bilet sayısına "
+"bir sınır belirleyebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:116
 msgid ""
@@ -7368,10 +7503,15 @@ msgid ""
 "ticket types in more detail, you can later do so in the \"Products\" section "
 "in the navigation. Don't worry, you can change everything you input here."
 msgstr ""
+"Kabul edilmeyen ürünler, ürün varyasyonları, özel kotalar, eklenti ürünler "
+"gibi daha gelişmiş özellikler kullanmak veya bilet türlerinizi daha "
+"ayrıntılı olarak değiştirmek istiyorsanız, daha sonra navigasyondaki \""
+"Ürünler\" bölümünde bunu yapabilirsiniz. Endişelenme, buraya girdiğiniz her "
+"şeyi değiştirebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:130
 msgid "Features"
-msgstr ""
+msgstr "Özellikler"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid ""
@@ -7379,6 +7519,9 @@ msgid ""
 "your event, but if you're in a hurry and want to get started quickly, here's "
 "a short version:"
 msgstr ""
+"Etkinliğinizin \"Ayarlar\" bölümünü kullanmanız için biraz zaman ayırmanızı "
+"öneririz, ancak acele ediyorsanız ve hızlı bir şekilde başlamak istiyorsanız "
+"kısa bir sürüm sunuyoruz:"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:149
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:40
@@ -7386,7 +7529,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 #: pretix/presale/templates/pretixpresale/event/order.html:229
 msgid "Payment"
-msgstr ""
+msgstr "Ödeme"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
 msgid ""
@@ -7395,6 +7538,11 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
+"pretix, iş akışınıza en uygun ödeme yöntemlerini seçmenizi sağlayan <a href="
+"\"https://pretix.eu/about/en/features/payment\" target=\"_blank\"> geniş "
+"çaplı ödeme sağlayıcılarını </a> desteklemektedir. Örnek olarak bunlardan "
+"sadece ikisidir, etkinliğinizin \"Ayarlar\" bölümüne daha fazla "
+"ekleyebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:166
 msgid ""
@@ -7402,109 +7550,120 @@ msgid ""
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
 msgstr ""
+"Bu sayfayı kaydettikten sonra, orada bir hesap oluşturmak veya bağlamak için "
+"sizi Stripe'e yönlendireceğiz. Bunu tamamladıktan sonra, pretix'e geri "
+"alınacaksınız."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:181
 msgid "Getting in touch with you"
-msgstr ""
+msgstr "Sizinle iletişim kurmak"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:183
 msgid ""
 "In case something goes wrong or is unclear, we strongly suggest that you "
 "provide ways for your attendees to contact you:"
 msgstr ""
+"Bir şeyin yanlış gittiği veya belirsiz olduğu durumlarda, katılımcılarınızın "
+"sizinle iletişim kurması için yöntemler sağlamanızı öneririz:"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:21
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
 msgid "Meta data"
-msgstr ""
+msgstr "Meta veri"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:40
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:44
 msgid "Display settings"
-msgstr ""
+msgstr "Görüntü ayarları"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:53
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:50
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:293
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:51
 msgid "Timeline"
-msgstr ""
+msgstr "Zaman çizelgesi"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:15
 msgid ""
 "You can now scroll down and modify the settings in more detail, if you want, "
 "or you can create your first product to start selling tickets right away!"
 msgstr ""
+"İsterseniz, aşağı kaydırarak ayarları daha ayrıntılı değiştirebilirsiniz ya "
+"da ilk ürünü yaratıp hemen bilet satmaya başlayabilirsiniz!"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:23
 msgid "Create a first product"
-msgstr ""
+msgstr "İlk ürün oluştur"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:35
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:11
 msgid "General"
-msgstr ""
+msgstr "Genel"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:50
 #: pretix/control/templates/pretixcontrol/organizers/base.html:32
 msgid "Display"
-msgstr ""
+msgstr "Görüntüle"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:55
 #: pretix/control/views/event.py:1182 pretix/control/views/event.py:1184
 #: pretix/control/views/event.py:1214 pretix/control/views/event.py:1219
 msgid "Tickets"
-msgstr ""
+msgstr "Biletler"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:65
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:5
 msgid "Tax rules"
-msgstr ""
+msgstr "Vergi kuralları"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:75
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
-msgstr ""
+msgstr "İzinler"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:80
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "Widget"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
 msgid "Delete tax rule"
-msgstr ""
+msgstr "Vergi kuralını sil"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:10
 #, python-format
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
 msgstr ""
+"<strong>%(taxrule)s</strong> vergi kuralını silmek istediğinizden emin "
+"misiniz?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 msgid ""
 "You cannot delete a tax rule that is in use for a product or has been in use "
 "for any existing orders."
 msgstr ""
+"Bir ürün için kullanımda olan veya mevcut siparişlerde kullanımda olan bir "
+"vergi kuralını silemezsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:7
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
 #, python-format
 msgid "Tax rule: %(name)s"
-msgstr ""
+msgstr "Vergi kuralı: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:9
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 msgid "Tax rule"
-msgstr ""
+msgstr "Vergi kuralı"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:28
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 msgid "Advanced settings"
-msgstr ""
+msgstr "Gelişmiş Ayarlar"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:36
 #, python-format
@@ -7514,10 +7673,14 @@ msgid ""
 "for the correct handling of taxes in your ticket shop. If in doubt, please "
 "contact a lawyer or tax consultant."
 msgstr ""
+"Bu ayarlar ileri düzey kullanıcılar içindir. Daha fazla bilgi için <a href=\""
+"%(docs)s\"> belgelerine </a> bakın. Bilet mağazanızda vergilerin doğru "
+"şekilde ele alınmasından sorumlu olmadığımızı unutmayın. Şüpheniz varsa, "
+"lütfen bir avukata veya vergi danışmanına başvurun."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:46
 msgid "Custom taxation rules"
-msgstr ""
+msgstr "Özel vergi kuralları"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:48
 msgid ""
@@ -7527,44 +7690,54 @@ msgid ""
 "the first rule matches the order, it will be used and all further rules will "
 "be ignored. If no rule matches, tax will be charged."
 msgstr ""
+"Bu ayarlar, çok özel vergilendirme durumları olan profesyonel kullanıcılar "
+"içindir. Burada herhangi bir kural oluşturursanız, yukarıdaki ters ücret "
+"ayarları dikkate alınmaz. Kurallar sırayla kontrol edilecek ve ilk kural "
+"siparişle eşleştiğinde, kullanılacak ve tüm diğer kurallar göz ardı "
+"edilecektir. Kural uyuşmazsa, vergi tahsil edilir."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:54
 msgid "All of these rules will only apply if an invoice address is set."
-msgstr ""
+msgstr "Tüm bu kurallar sadece bir fatura adresi ayarlanmışsa uygulanacaktır."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:109
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:250
 msgid "Add a new rule"
-msgstr ""
+msgstr "Yeni kural ekle"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
-msgstr ""
+msgstr "Henüz herhangi bir vergi kuralı oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:15
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:19
 msgid "Create a new tax rule"
-msgstr ""
+msgstr "Yeni bir vergi kuralı oluştur"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:27
 msgid "Rate"
-msgstr ""
+msgstr "Derecelendir"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 msgid "Ticket download"
-msgstr ""
+msgstr "Bilet indir"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:11
 msgid ""
 "You activated ticket downloads but no output provider is enabled. Be sure to "
 "enable a plugin and activate an output provider."
 msgstr ""
+"Bilet indirme işlemlerini etkinleştirdiniz, ancak hiçbir çıkış sağlayıcısı "
+"etkin değil. Bir eklentiyi etkinleştirdiğinizden ve bir çıkış sağlayıcısını "
+"etkinleştirdiğinizden emin olun."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:42
 msgid ""
 "There are no ticket outputs available. Please go to the plugin settings and "
 "activate one or more ticket output plugins."
 msgstr ""
+"Mevcut bilet çıkışı yok. Lütfen eklenti ayarlarına gidin ve bir veya daha "
+"fazla bilet çıkış eklentisini etkinleştirin."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -7572,18 +7745,25 @@ msgid ""
 "website. This way, your visitors can buy their ticket right away without "
 "leaving your website."
 msgstr ""
+"Pretix widget bilet dükkanınızı etkinlik web sitenize yerleştirmenin bir "
+"yoludur. Bu sayede ziyaretçileriniz web sitenizden ayrılmadan biletlerini "
+"hemen satın alabilirler."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:17
 msgid ""
 "To embed the widget onto your website, simply copy the following code to the "
 "<code>&lt;head&gt;</code> section of your website:"
 msgstr ""
+"Widget'ı web sitenize yerleştirmek için kodu sayfanızın "
+"<code>&lt;head&gt;</code> kısmına kopyalayın:"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:25
 msgid ""
 "Then, copy the following code to the place of your website where you want "
 "the widget to show up:"
 msgstr ""
+"Ardından, aşağıdaki kodu web sitenizin widget'ın görünmesini istediğiniz "
+"yere kopyalayın:"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:39
 #: pretix/control/templates/pretixcontrol/event/widget.html:52
@@ -7592,42 +7772,49 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
+"Tarayıcınızda JavaScript devre dışı bırakıldı. JavaScript olmadan bilet "
+"mağazamıza erişmek için lütfen &lt;a %(a_attr)s &gt; buraya tıklayın &lt; "
+"/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 msgid "Read our documentation for more information"
-msgstr ""
+msgstr "Daha fazla bilgi için belgelerimizi okuyun"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:69
 msgid ""
 "Using this form, you can generate a code to copy and paste to your website "
 "source."
 msgstr ""
+"Bu formu kullanarak, web sitenizin kaynağına kopyalayıp yapıştırmak için bir "
+"kod oluşturabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:79
 msgid "Generate widget code"
-msgstr ""
+msgstr "Widget kodunu oluştur"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
 #, python-format
 msgid "Step %(step)s"
-msgstr ""
+msgstr "Adım %(step)s"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:30
 msgid ""
 "Every event needs to be created as part of an organizer account. Currently, "
 "you do not have access to any organizer accounts."
 msgstr ""
+"Her etkinliğin bir organizatör hesabının bir parçası olarak oluşturulması "
+"gerekir. Şu anda herhangi bir organizatör hesabına erişiminiz yok."
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:34
 #: pretix/control/templates/pretixcontrol/organizers/create.html:4
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:27
 msgid "Create a new organizer"
-msgstr ""
+msgstr "Yeni bir organizatör oluştur"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:13
 msgid "Set to random"
-msgstr ""
+msgstr "Rastgele ayarla"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:17
 msgid ""
@@ -7637,17 +7824,25 @@ msgid ""
 "characters that can be easily remembered, but you can also choose to use a "
 "random value."
 msgstr ""
+"Bu, kullanıcıların biletlerinizi alabileceği adres. Kısa olmalı, sadece "
+"küçük harfler ve sayılar içermeli ve etkinlikleriniz arasında benzersiz "
+"olmalıdır. Bir tür kısaltma veya 10 karakterden daha kısa bir tarih "
+"hatırlanabilmeyi kolaylaştırır, ancak aynı zamanda rastgele bir değer "
+"kullanmayı da seçebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:25
 msgid ""
 "We will also use this in some places like order codes, invoice numbers or "
 "bank transfer references as an abbreviation to reference this event."
 msgstr ""
+"Bunu referans olarak kısaltma olarak sipariş kodları, fatura numaraları veya "
+"banka havalesi referansları gibi bazı yerlerde de kullanacağız."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:31
 msgid ""
 "We strongly recommend against using short forms of more then 16 characters."
 msgstr ""
+"16 karakterden daha kısa formları kullanmamanızı şiddetle tavsiye ederiz."
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html:6
 msgid ""
@@ -7655,6 +7850,9 @@ msgid ""
 "copy all products, categories, quotas, and questions as well as general "
 "event settings."
 msgstr ""
+"Yapılandırmanızı farklı bir etkinlikten kopyalamak ister misiniz? Tüm ürün, "
+"kategori, kota ve soruların yanı sıra genel etkinlik ayarlarını da "
+"kopyalayacağız."
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html:13
 msgid ""
@@ -7662,81 +7860,88 @@ msgid ""
 "need to change some settings manually, e.g. date and time settings and texts "
 "that contain the event name."
 msgstr ""
+"Lütfen tüm ayarları kapsamlı bir şekilde gözden geçirdiğinizden emin olun. "
+"Muhtemelen bazı ayarları manuel olarak değiştirmeniz gerekecektir, örn. "
+"tarih ve saat ayarları ve etkinlik adını içeren metinler."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:10
 msgid ""
 "Please note that you will only be able to delete your event until the first "
 "order has been created."
 msgstr ""
+"Lütfen yalnızca ilk siparişiniz oluşturuluncaya kadar etkinliğinizi "
+"silebileceğinizi unutmayın."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:8
 msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
 msgstr ""
+"Aşağıdaki liste, yönetim erişimine sahip olduğunuz tüm etkinlikleri "
+"gösterir. Etkinlik ayrıntılarına erişmek için etkinlik adına tıklayın."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:7
 msgid "You currently do not have access to any events."
-msgstr ""
+msgstr "Şu anda herhangi bir etkinliğe erişiminiz yok."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:71
 #: pretix/control/templates/pretixcontrol/subevents/index.html:71
 msgid "Paid tickets per quota"
-msgstr ""
+msgstr "Kota başına ücretli bilet"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:97
 msgid "Series"
-msgstr ""
+msgstr "Seri"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:114
 #: pretix/control/templates/pretixcontrol/subevents/index.html:102
 msgid "More quotas"
-msgstr ""
+msgstr "Daha fazla kota"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:122
 #: pretix/control/views/dashboards.py:348
 msgid "Shop disabled"
-msgstr ""
+msgstr "Mağaza devre dışı"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:128
 #: pretix/control/templates/pretixcontrol/subevents/index.html:116
 #: pretix/control/views/dashboards.py:354
 msgid "On sale"
-msgstr ""
+msgstr "Satılık"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 msgid "Quota:"
-msgstr ""
+msgstr "Kota:"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Numbers as of %(date)s"
-msgstr ""
+msgstr "Olarak sayılar %(date)s"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr ""
+msgstr "Şu anda mevcut: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
 msgid "System message"
-msgstr ""
+msgstr "Sistem mesajı"
 
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:16
 msgid "Update check"
-msgstr ""
+msgstr "Güncelleme kontrolü"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:7
 msgid "Update check results"
-msgstr ""
+msgstr "Güncelleme kontrol sonuçları"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:10
 msgid "Update checks are disabled."
-msgstr ""
+msgstr "Güncelleme kontrolleri devre dışı."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:14
 msgid ""
@@ -7744,49 +7949,52 @@ msgid ""
 "installation. Update checks are performed on a daily basis if your cronjob "
 "is set up properly."
 msgstr ""
+"Bu yüklemenin son güncellemesinden bu yana henüz güncelleme kontrolü "
+"yapılmadı. Güncellemeleriniz, cronjob ayarlarınız doğru bir şekilde "
+"ayarlanmışsa, günlük olarak yapılır."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:20
 #: pretix/control/templates/pretixcontrol/global_update.html:39
 #: pretix/control/templates/pretixcontrol/global_update.html:51
 msgid "Check for updates now"
-msgstr ""
+msgstr "Güncellemeleri kontrol et"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:26
 msgid "The last update check was not successful."
-msgstr ""
+msgstr "Son güncelleme kontrolü başarılı değildi."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:28
 msgid "The pretix.eu server returned an error code."
-msgstr ""
+msgstr "Pretix.eu sunucusu bir hata kodu verdi."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:30
 msgid "The pretix.eu server could not be reached."
-msgstr ""
+msgstr "Pretix.eu sunucusuna ulaşılamıyor."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:32
 msgid "This installation appears to be a development installation."
-msgstr ""
+msgstr "Bu yükleme bir geliştirme yüklemesi gibi görünüyor."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:47
 #, python-format
 msgid "Last updated: %(date)s"
-msgstr ""
+msgstr "Son güncelleme: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:59
 msgid "Component"
-msgstr ""
+msgstr "Bileşen"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:60
 msgid "Installed version"
-msgstr ""
+msgstr "Yüklü sürümü"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:61
 msgid "Latest version"
-msgstr ""
+msgstr "En son versiyon"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:80
 msgid "Update check settings"
-msgstr ""
+msgstr "Güncelleme kontrol ayarları"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:7
 msgid ""
@@ -7801,55 +8009,69 @@ msgid ""
 "on from the category at most once. If an add-on product has multiple "
 "variations, only one of them can be bought."
 msgstr ""
+"Eklentilerle, bu ürüne ek olarak satın alınabilecek ürünleri "
+"belirtebilirsiniz. Örneğin, bir temel konferans bileti ve bir dizi atölye "
+"ile bir konferansa ev sahipliği yaparsanız, atölyeleri konferans bileti için "
+"eklentiler olarak tanımlayabilirsiniz. Bu yapılandırma ile, atölyeler kendi "
+"başlarına satın alınamaz, ancak sadece bir konferans bileti ile birlikte "
+"alınabilir. Burada, bu ürüne eklenti olarak kullanılabilecek ürün "
+"kategorileri belirtilebilir. Ayrıca, seçilen kategorinin seçilebilecek veya "
+"seçilmesi gereken minimum ve maksimum eklenti sayısını da belirtebilirsiniz. "
+"Kullanıcı, her eklentiyi kategoriden en çok bir kez alabilir. Bir eklenti "
+"ürün birden fazla varyasyona sahipse, bunlardan sadece bir tanesi satın "
+"alınabilir."
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:33
 #: pretix/control/templates/pretixcontrol/item/addons.html:66
 msgid "Add-On"
-msgstr ""
+msgstr "Eklenti öğesi"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:89
 msgid "Add a new add-on"
-msgstr ""
+msgstr "Yeni bir eklenti ekle"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
-msgstr ""
+msgstr "Ürün değiştir:"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:22
 msgid "Add-Ons"
-msgstr ""
+msgstr "Eklentiler"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
 msgid "Create product"
-msgstr ""
+msgstr "Ürün oluştur"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:28
 msgid "You will be able to adjust further settings in the next step."
-msgstr ""
+msgstr "Bir sonraki adımda daha fazla ayar yapabileceksiniz."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:34
+#, fuzzy
 msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
+"Lütfen ürününüzün <strong> </strong> öğenizi mevcut veya yeni oluşturulmuş "
+"bir kotaya ekleyene kadar satışa sunulmadığını unutmayın"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
-msgstr ""
+msgstr "Kota ayarları"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:35
 #: pretix/control/templates/pretixcontrol/item/index.html:22
 msgid "Price settings"
-msgstr ""
+msgstr "Fiyat ayarları"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:41
 msgid "Save and continue with more settings"
-msgstr ""
+msgstr "Kaydet ve daha fazla ayarla devam et"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:4
 #: pretix/control/templates/pretixcontrol/item/delete.html:6
 msgid "Delete product"
-msgstr ""
+msgstr "Ürünü sil"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:8
 #, python-format
@@ -7857,11 +8079,12 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered."
 msgstr ""
+"Ürünü silemezsiniz <strong>%(item)s</strong> çünkü zaten sipariş edilmişti."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:19
 #, python-format
 msgid "Are you sure you want to delete the product <strong>%(item)s</strong>?"
-msgstr ""
+msgstr "Ürünü silmek istediğinize emin misiniz? <strong>%(item)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:21
 #, python-format
@@ -7869,80 +8092,85 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered, but you can deactivate it."
 msgstr ""
+"Ürünü silemezsiniz <strong>%(item)s</strong> çünkü zaten sipariş edilmişti, "
+"ancak bunu devre dışı bırakabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:28
 msgid "Deactivate"
-msgstr ""
+msgstr "Devre dışı bırakmak"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:28
 msgid "Availability"
-msgstr ""
+msgstr "Kullanılabilirlik"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:38
 msgid "Check-in"
-msgstr ""
+msgstr "Check-in"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:42
 msgid "Additional settings"
-msgstr ""
+msgstr "Ek ayarlar"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:53
 msgid "Product history"
-msgstr ""
+msgstr "Ürün geçmişi"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:80
 msgid "Add a new variation"
-msgstr ""
+msgstr "Yeni bir varyasyon ekle"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:7
 msgid ""
 "You can use categories to group multiple products together in an organized "
 "way."
 msgstr ""
+"Birden çok ürünü birlikte organize bir şekilde gruplandırmak için "
+"kategorileri kullanabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:14
 msgid "You haven't created any categories yet."
-msgstr ""
+msgstr "Henüz hiç kategori oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:20
 #: pretix/control/templates/pretixcontrol/items/categories.html:24
 msgid "Create a new category"
-msgstr ""
+msgstr "Yeni kategori oluştur"
 
 #: pretix/control/templates/pretixcontrol/items/category.html:27
 msgid "Category history"
-msgstr ""
+msgstr "Kategori geçmişi"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:6
 msgid "Delete product category"
-msgstr ""
+msgstr "Ürün kategorisini sil"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the category <strong>%(name)s</strong>?"
 msgstr ""
+"Kategoriyi silmek istediğinizden emin misiniz <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Sold out (pending orders)"
-msgstr ""
+msgstr "Tükendi (bekleyen siparişler)"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:6
 #, python-format
 msgid "%(num)s available"
-msgstr ""
+msgstr "%(num)s mevcut"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:9
 msgid "Unlimited"
-msgstr ""
+msgstr "Sınırsız"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:12
 msgid "Fully reserved"
-msgstr ""
+msgstr "Tamamen ayrılmış"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:14
 msgid "Sold out"
-msgstr ""
+msgstr "Satıldı"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:7
 msgid ""
@@ -7950,35 +8178,39 @@ msgid ""
 "name to inspect and change product details. You can also use the buttons on "
 "the right to change the order of products within a give category."
 msgstr ""
+"Aşağıda, tüm mevcut ürünlerin bir listesini bulabilirsiniz. Ürün detaylarını "
+"incelemek ve değiştirmek için bir ürün adına tıklayabilirsiniz. Bir kategori "
+"içindeki ürünlerin sırasını değiştirmek için sağdaki düğmeleri de "
+"kullanabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/items/index.html:16
 msgid "You haven't created any products yet."
-msgstr ""
+msgstr "Henüz hiç ürün oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/items/index.html:22
 #: pretix/control/templates/pretixcontrol/items/index.html:27
 msgid "Create a new product"
-msgstr ""
+msgstr "Yeni bir ürün oluştur"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:57
 msgid "Only available in a limited timeframe"
-msgstr ""
+msgstr "Yalnızca sınırlı bir zaman diliminde kullanılabilir"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:63
 msgid "Admission ticket"
-msgstr ""
+msgstr "Giriş bileti"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:68
 msgid "Product with variations"
-msgstr ""
+msgstr "Varyasyonlu ürün"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:73
 msgid "Only visible with a voucher"
-msgstr ""
+msgstr "Sadece bir kuponla görünür"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:75
 msgid "Can only bought using a voucher"
-msgstr ""
+msgstr "Sadece bir kupon kullanarak satın alabilirsiniz"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -7986,20 +8218,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:14
 #, python-format
 msgid "Question: %(name)s"
-msgstr ""
+msgstr "Soru: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:13
 #: pretix/control/templates/pretixcontrol/items/question.html:55
 msgid "Edit question"
-msgstr ""
+msgstr "Soruyu düzenle"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:45
 msgid "No matching answers found."
-msgstr ""
+msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:51
 msgid "You need to assign the question to a product to collect answers."
-msgstr ""
+msgstr "Soruyu cevap toplamak için bir ürüne atamanız gerekir."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Count"
@@ -8007,28 +8239,30 @@ msgstr "Saymak"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
 msgid "Question history"
-msgstr ""
+msgstr "Soru geçmişi"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:6
 msgid "Delete question"
-msgstr ""
+msgstr "Soruyu sil"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the question <strong>%(question)s</strong>?"
-msgstr ""
+msgstr "Soruyu silmek istediğinden emin misin <strong>%(question)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:11
 msgid ""
 "All answers to the question given by the buyers of the following products "
 "will be <strong>lost</strong>."
 msgstr ""
+"Aşağıdaki ürünlerin alıcıları tarafından verilen soruya verilen tüm cevaplar "
+"kaybolacak <strong></strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:31
 msgid "Apply to products"
-msgstr ""
+msgstr "Ürünlere uygula"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:35
 msgid ""
@@ -8036,27 +8270,32 @@ msgid ""
 "select Yes and No is not accepted. If you want to allow both options, do not "
 "make this field required."
 msgstr ""
+"Bir Evet / Hayır sorusunu gerektiği gibi işaretlerseniz, kullanıcının Evet'i "
+"seçmesi ve Hayır'ın kabul edilmemesi gerektiği anlamına gelir. Her iki "
+"seçeneğe de izin vermek istiyorsanız, bu alanı zorunlu hale getirmeyin."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:41
 msgid "Answer options"
-msgstr ""
+msgstr "Cevap seçenekleri"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:43
 msgid "Only applicable if you choose 'Choose one/multiple from a list' above."
 msgstr ""
+"Yalnızca yukarıdaki 'Bir listeden bir tane / çoklu seç' seçeneğini "
+"belirlerseniz uygulanabilir."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:59
 #, python-format
 msgid "Answer option %(id)s"
-msgstr ""
+msgstr "Cevap seçeneği %(id)s"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:90
 msgid "New answer option"
-msgstr ""
+msgstr "Yeni cevap seçeneği"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:109
 msgid "Add a new option"
-msgstr ""
+msgstr "Yeni bir seçenek ekle"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:7
 msgid ""
@@ -8064,15 +8303,18 @@ msgid ""
 "ticket. If you provide food, one example might be to ask your users about "
 "dietary requirements."
 msgstr ""
+"Sorular, katılımcılarınızın biletleriyle ilgili ek verileri doldurmalarına "
+"izin verir. Yiyecek sağlıyorsanız, kullanıcılarınıza diyet gereksinimleri "
+"hakkında soru sormak bir örnek olabilir."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:15
 msgid "You haven't created any questions yet."
-msgstr ""
+msgstr "Henüz hiç soru oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 #: pretix/control/templates/pretixcontrol/items/questions.html:25
 msgid "Create a new question"
-msgstr ""
+msgstr "Yeni bir soru oluştur"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:33
 msgid "Type"
@@ -8084,53 +8326,56 @@ msgstr "Tip"
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:13
 #, python-format
 msgid "Quota: %(name)s"
-msgstr ""
+msgstr "Kota: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:14
 msgid "Edit quota"
-msgstr ""
+msgstr "Kota düzenle"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:25
 msgid "Usage overview"
-msgstr ""
+msgstr "Kullanım genel bakış"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:32
 msgid "Availability calculation"
-msgstr ""
+msgstr "Kullanılabilirlik hesaplaması"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:54
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
-msgstr ""
+msgstr "Bu kota şu anda %(num)s kadar doludur."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:61
 msgid ""
 "Your event contains vouchers that affect products covered by this quota and "
 "that allow a user to buy products even if this quota is sold out."
 msgstr ""
+"Etkinliğiniz, bu kota kapsamındaki ürünleri etkileyen ve bu kotanın satılmış "
+"olsa bile bir kullanıcının ürünleri satın almalarına olanak tanıyan "
+"kuponları içerir."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:72
 msgid "Quota history"
-msgstr ""
+msgstr "Kota geçmişi"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:6
 msgid "Delete quota"
-msgstr ""
+msgstr "Kotayı sil"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr ""
+msgstr "Kotayı silmek istediğinizden emin misiniz <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:11
 msgid "The following products might be no longer available for sale:"
-msgstr ""
+msgstr "Aşağıdaki ürünler artık satılmayabilir:"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:27
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:52
 msgid "Items"
-msgstr ""
+msgstr "Öğeler"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:29
 msgid ""
@@ -8138,6 +8383,9 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
+"Lütfen bu kotanın uygulanması gereken ürünleri veya ürün çeşitlerini seçin. "
+"Aynı ürüne iki kota uygularsanız, yalnızca <strong></strong> kota kapasitesi "
+"kaldıysa kullanılabilir."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
@@ -8149,23 +8397,30 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
+"Ürünlerinizi gerçekten kullanılabilir hale getirmek için kotalara da "
+"ihtiyacınız var. Kotalar tanımla, ürününüzün kaç örneğinin satışını "
+"yapacağını tanımlar. Bu şekilde, etkinliğinizin sınırsız sayıda katılımcı "
+"alabileceğini veya katılımcı sayısının sınırlı olup olmadığını "
+"yapılandırabilirsiniz. Daha karmaşık gereksinimleri karşılamak için bir "
+"ürünü birden fazla kotaya atayabilirsiniz, ör. Satılan toplam bilet sayısını "
+"ve aynı anda belirli bir bilet tipinin sayısını sınırlamak istiyorsanız."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:24
 msgid "Your search did not match any quotas."
-msgstr ""
+msgstr "Aramanız herhangi bir kota ile eşleşmedi."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:26
 msgid "You haven't created any quotas yet."
-msgstr ""
+msgstr "Henüz herhangi bir kotayı oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:33
 #: pretix/control/templates/pretixcontrol/items/quotas.html:37
 msgid "Create a new quota"
-msgstr ""
+msgstr "Yeni bir kota oluştur"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:50
 msgid "Capacity left"
-msgstr ""
+msgstr "Kapasite kaldı"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:9
 msgid ""
@@ -8173,10 +8428,12 @@ msgid ""
 "currently only be selected on development installations of pretix, not in "
 "production."
 msgstr ""
+"Bu dilin çevirisi hala devam ediyor. Bu dil şu anda sadece üretimde değil, "
+"pretiks geliştirme tesislerinde seçilebilir."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:10
 msgid "Translation in development"
-msgstr ""
+msgstr "Çeviri geliştirme aşamasında"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:13
 msgid ""
@@ -8185,15 +8442,19 @@ msgid ""
 "and will show in English instead. You can help translating at translate."
 "pretix.eu."
 msgstr ""
+"Bu çevirinin bakımı pretix ekibi tarafından sürdürülmüyor. Doğruluğunu kefil "
+"edemeyiz ve yeni ya da yeni değiştirilen özellikler tercüme edilmeyebiliriz "
+"ve bunun yerine İngilizce olarak gösterilecektir. Translate.pretix.eu "
+"adresinden çeviri yapmanıza yardımcı olabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
 msgid "Unofficial translation"
-msgstr ""
+msgstr "Resmi olmayan çeviri"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
 msgid "Disable application"
-msgstr ""
+msgstr "Uygulamayı devre dışı bırak"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:9
 #, python-format
@@ -8201,30 +8462,32 @@ msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
 msgstr ""
+"Uygulamayı kalıcı şekilde <strong>%(application)s</strong> devre dışı "
+"bırakmak istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:6
 msgid "Your applications"
-msgstr ""
+msgstr "Uygulamalarınız"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:33
 msgid "Create new application"
-msgstr ""
+msgstr "Yeni uygulama oluştur"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:39
 msgid "No applications registered yet."
-msgstr ""
+msgstr "Henüz kayıtlı başvuru yok."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:46
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:6
 msgid "Register a new application"
-msgstr ""
+msgstr "Yeni bir başvuru kaydet"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:6
 msgid "Generate new application secret"
-msgstr ""
+msgstr "Yeni uygulama sırrı oluştur"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:9
 #, python-format
@@ -8232,21 +8495,24 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
+"Uygulama için yeni bir müşteri sırrı oluşturmak istediğinizden emin misiniz "
+"<strong>%(application)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
+#, fuzzy
 msgid "Roll secret"
-msgstr ""
+msgstr "Sırrı yolla"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:6
 msgid "Update an application"
-msgstr ""
+msgstr "Bir uygulamayı güncelle"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:4
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:49
 msgid "Revoke access"
-msgstr ""
+msgstr "Erişimi iptal et"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:9
 #, python-format
