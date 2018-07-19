@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-18 22:00+0000\n"
+"PO-Revision-Date: 2018-07-19 07:48+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -1453,7 +1453,7 @@ msgstr "Tarih"
 
 #: pretix/base/models/items.py:676 pretix/base/reldate.py:131
 msgid "Time"
-msgstr "Zaman"
+msgstr "zaman"
 
 #: pretix/base/models/items.py:677
 msgid "Date and time"
@@ -1672,7 +1672,7 @@ msgstr "Yerel"
 
 #: pretix/base/models/orders.py:137 pretix/base/models/orders.py:970
 msgid "Expiration date"
-msgstr "Geçerlilik sonu"
+msgstr "Son kullanma tarihi"
 
 #: pretix/base/models/orders.py:149 pretix/base/shredder.py:322
 #: pretix/control/templates/pretixcontrol/order/index.html:358
@@ -2325,7 +2325,7 @@ msgid "New order placed"
 msgstr "Yeni sipariş verildi"
 
 #: pretix/base/notifications.py:194
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new order has been placed: {order.code}"
 msgstr "Yeni bir sipariş verildi: {order.code}"
 
@@ -2334,7 +2334,7 @@ msgid "Order marked as paid"
 msgstr "Sipariş ödenmiş olarak işaretlendi"
 
 #: pretix/base/notifications.py:200
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {order.code} has been marked as paid."
 msgstr "Sipariş {order.code} ödenmiş olarak işaretlendi."
 
@@ -2344,7 +2344,7 @@ msgid "Order canceled"
 msgstr "Sipariş iptal edildi"
 
 #: pretix/base/notifications.py:206
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {order.code} has been canceled."
 msgstr "Sipariş {order.code} iptal edildi."
 
@@ -2353,7 +2353,7 @@ msgid "Order expired"
 msgstr "Siparişin süresi doldu"
 
 #: pretix/base/notifications.py:212
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {order.code} has been marked as expired."
 msgstr "Sipariş {order.code} süresi dolmuş olarak işaretlendi."
 
@@ -2362,18 +2362,18 @@ msgid "Order information changed"
 msgstr "Sipariş bilgisi değişti"
 
 #: pretix/base/notifications.py:218
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr "Siparişin bilet bilgisi {order.code} değiştirildi."
+msgstr "{order.code} siparişinin bilet bilgileri değiştirildi."
 
 #: pretix/base/notifications.py:223
 msgid "Order contact address changed"
-msgstr "Sipariş iletişim adresi değişti"
+msgstr "Siparişin iletişim adresi değişti"
 
 #: pretix/base/notifications.py:224
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr "Siparişin iletişim adresi {order.code} değiştirildi."
+msgstr "{order.code} siparişinin iletişim adresi değiştirildi."
 
 #: pretix/base/notifications.py:229
 #: pretix/control/templates/pretixcontrol/event/mail.html:31
@@ -2439,7 +2439,6 @@ msgstr ""
 "yönteminin uyguladığı ücretler dikkate alınmaksızın hesaplanabilir."
 
 #: pretix/base/payment.py:202
-#, fuzzy
 msgid "Maximum order total"
 msgstr "Maksimum sipariş toplamı"
 
@@ -2530,7 +2529,6 @@ msgid "The order has been marked as refunded."
 msgstr "Sipariş iade edildi olarak işaretlendi."
 
 #: pretix/base/payment.py:714
-#, fuzzy
 msgid "Box office"
 msgstr "Gişe"
 
@@ -2754,7 +2752,6 @@ msgid "You did not select any products."
 msgstr "Herhangi bir ürün seçmediniz."
 
 #: pretix/base/services/cart.py:46
-#, fuzzy
 msgid "Unknown cart position."
 msgstr "Bilinmeyen alışveriş sepeti konumu."
 
@@ -2934,7 +2931,7 @@ msgid "This ticket has already been redeemed."
 msgstr "Bu bilet zaten kullanıldı."
 
 #: pretix/base/services/invoices.py:54
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -2946,7 +2943,7 @@ msgstr ""
 "{i.company}\n"
 "{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {i.city}\n"
+"{i.zipcode}{i.city}\n"
 "{country}"
 
 #: pretix/base/services/invoices.py:65
@@ -3932,7 +3929,6 @@ msgid "This is an event series"
 msgstr "Bu bir olay serisi"
 
 #: pretix/control/forms/event.py:41
-#, fuzzy
 msgid ""
 "Only recommended for advanced users. If this feature is enabled, this will "
 "not only be a single event but a series of very similar events that are "
@@ -3944,9 +3940,9 @@ msgstr ""
 "Sadece ileri düzey kullanıcılar için önerilir. Bu özellik etkinleştirilirse, "
 "bu yalnızca tek bir olay değil, tek bir mağazada ele alınan çok benzer bir "
 "dizi olay olacaktır. Serinin içindeki tek olaylar yalnızca tarih, saat, yer, "
-"fiyatlar ve kotalarla farklılık gösterebilir, ancak başka ayarlarda "
-"göstermez, aynı anda bu etkinliklerin çoğunda bilet satın almak da "
-"mümkündür. Bu ayarı daha sonra bu etkinlik için değiştiremezsiniz."
+"fiyatlar ve kotalarla farklılık gösterebilir, ancak diğer ortamlarda değil, "
+"aynı anda bu etkinliklerin çoğunda bilet satın almak da mümkündür. Bu "
+"etkinliği daha sonra bu etkinlik için değiştiremezsiniz."
 
 #: pretix/control/forms/event.py:67
 msgid ""
@@ -5416,9 +5412,8 @@ msgstr ""
 "ürünü satın almayı imkansız kıldığını unutmayın."
 
 #: pretix/control/forms/orders.py:21
-#, fuzzy
 msgid "Overbook quota"
-msgstr "Fazla rezervasyon"
+msgstr "Çifte rezervasyon kotası"
 
 #: pretix/control/forms/orders.py:22
 msgid ""
@@ -5456,6 +5451,10 @@ msgid ""
 "care and only if you need to. Note that rounding differences might occur in "
 "this procedure."
 msgstr ""
+"Bu işlem, örn. ters şarj kurallarını yapılandırdı ve fiyatları ve vergi "
+"değerlerini buna göre değiştirdi. Bu faydalı örn. Bir fatura adres "
+"değişikliğinden sonra. Dikkatli kullanın ve sadece ihtiyacınız varsa. Bu "
+"işlemde yuvarlama farklılıklarının olabileceğini unutmayın."
 
 #: pretix/control/forms/orders.py:123
 msgid "Notify user"
@@ -8047,13 +8046,12 @@ msgid "You will be able to adjust further settings in the next step."
 msgstr "Bir sonraki adımda daha fazla ayar yapabileceksiniz."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:34
-#, fuzzy
 msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
-"Lütfen ürününüzün <strong> </strong> öğenizi mevcut veya yeni oluşturulmuş "
-"bir kotaya ekleyene kadar satışa sunulmadığını unutmayın"
+"Ürününüzü mevcut veya yeni oluşturulmuş bir kotaya ekleyene kadar ürününüzün "
+"<strong> not </ strong> satışa sunulacağını lütfen unutmayın."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -8499,9 +8497,8 @@ msgstr ""
 "<strong>%(application)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
-#, fuzzy
 msgid "Roll secret"
-msgstr "Sırrı yolla"
+msgstr "Sır Listesi"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:6
