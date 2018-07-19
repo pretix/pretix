@@ -100,7 +100,7 @@ class MetaDataEditorMixin:
             if f.cleaned_data.get('value'):
                 f.save()
             elif f.instance and f.instance.pk:
-                f.delete()
+                f.instance.delete()
 
 
 class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
