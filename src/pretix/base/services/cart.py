@@ -232,13 +232,17 @@ class CartManager:
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
                    subevent: Optional[SubEvent], cp_is_net: bool=None):
-        if custom_price and custom_price > 100000000:
-            raise CartError(error_messages['price_too_high'])
-        return get_price(
-            item, variation, voucher, custom_price, subevent,
-            custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
-            invoice_address=self.invoice_address
-        )
+        try:
+            return get_price(
+                item, variation, voucher, custom_price, subevent,
+                custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
+                invoice_address=self.invoice_address
+            )
+        except ValueError as e:
+            if str(e) == 'price_too_high':
+                raise CartError(error_messages['price_too_high'])
+            else:
+                raise e
 
     def extend_expired_positions(self):
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
