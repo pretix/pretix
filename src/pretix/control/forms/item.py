@@ -411,7 +411,10 @@ class ItemAddOnsFormSet(I18nFormSet):
                 if self._should_delete_form(form):
                     # This form is going to be deleted so any of its errors
                     # should not cause the entire formset to be invalid.
-                    categories.remove(form.cleaned_data['addon_category'].pk)
+                    try:
+                        categories.remove(form.cleaned_data['addon_category'].pk)
+                    except KeyError:
+                        pass
                     continue
 
             if form.cleaned_data['addon_category'].pk in categories:
