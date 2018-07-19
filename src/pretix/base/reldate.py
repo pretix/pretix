@@ -104,7 +104,7 @@ class RelativeDateWrapper:
                 timeparts = parts[2].split(':')
                 time = datetime.time(hour=int(timeparts[0]), minute=int(timeparts[1]), second=int(timeparts[2]))
             data = RelativeDate(
-                days_before=int(parts[1]),
+                days_before=int(parts[1] or 0),
                 base_date_name=parts[3],
                 time=time
             )
