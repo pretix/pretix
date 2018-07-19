@@ -417,10 +417,11 @@ class ItemAddOnsFormSet(I18nFormSet):
                         pass
                     continue
 
-            if form.cleaned_data['addon_category'].pk in categories:
-                raise ValidationError(_('You added the same add-on category twice'))
+            if 'addon_category' in form.cleaned_data:
+                if form.cleaned_data['addon_category'].pk in categories:
+                    raise ValidationError(_('You added the same add-on category twice'))
 
-            categories.add(form.cleaned_data['addon_category'].pk)
+                categories.add(form.cleaned_data['addon_category'].pk)
 
     @property
     def empty_form(self):
