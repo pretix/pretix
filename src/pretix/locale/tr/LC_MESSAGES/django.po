@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-19 14:10+0000\n"
-"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
+"PO-Revision-Date: 2018-07-19 14:45+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -103,7 +103,7 @@ msgstr ""
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr "\"{Application_name}\" uygulaması hesabınıza erişmeye yetkilidir."
+msgstr "\"{application_name}\" uygulaması hesabınıza erişmeye yetkilidir."
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -2024,12 +2024,12 @@ msgstr "Ülkenizi ters ücret özelliğini kullanacak şekilde ayarlamanız gere
 #: pretix/base/models/tax.py:121
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr "dahil. {oran}% {isim}"
+msgstr "dahil. {rate}% {name}"
 
 #: pretix/base/models/tax.py:123
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr "artı{oran}%{isim}"
+msgstr "artı {rate}% {name}"
 
 #: pretix/base/models/tax.py:125
 msgid "reverse charge enabled"
