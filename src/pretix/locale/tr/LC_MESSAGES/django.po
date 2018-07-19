@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-19 07:48+0000\n"
+"PO-Revision-Date: 2018-07-19 14:10+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -890,7 +890,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:215 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "Dizi sadece harf, sayı, nokta ve tire içerebilir."
+msgstr "Bu dizi sadece harf, sayı, nokta ve tire içerebilir."
 
 #: pretix/base/models/event.py:219 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -3154,8 +3154,7 @@ msgstr "Ürünün bir varyasyonunu seçmeniz gerekiyor."
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr ""
-"Kota {name}, işlemi gerçekleştirmek için yeterli kapasiteye sahip değil."
+msgstr "Kota {name} nın işlemi gerçekleştirmek için yeterli kapasitesi yok."
 
 #: pretix/base/services/orders.py:675
 msgid "There is no quota defined that allows this operation."
@@ -3798,7 +3797,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:363
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "<a %(a_attr)s > pretix </a> ile desteklenmektedir"
+msgstr "<a %(a_attr)s>pretix</a> ile desteklenmektedir"
 
 #: pretix/base/templates/pretixbase/email/notification.html:43
 #: pretix/base/templates/pretixbase/email/notification.txt:14
