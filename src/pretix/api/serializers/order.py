@@ -464,7 +464,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 raise ValidationError({'positions': errs})
 
             order = Order(event=self.context['event'], **validated_data)
-            order.set_expires(subevents=[p['subevent'] for p in positions_data])
+            order.set_expires(subevents=[p.get('subevent') for p in positions_data])
             order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
             order.meta_info = "{}"
             if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
@@ -480,8 +480,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 ia.save()
             pos_map = {}
             for pos_data in positions_data:
-                answers_data = pos_data.pop('answers')
-                addon_to = pos_data.pop('addon_to')
+                answers_data = pos_data.pop('answers', [])
+                addon_to = pos_data.pop('addon_to', None)
                 pos = OrderPosition(**pos_data)
                 pos.order = order
                 pos._calculate_tax()
@@ -490,7 +490,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos.save()
                 pos_map[pos.positionid] = pos
                 for answ_data in answers_data:
-                    options = answ_data.pop('options')
+                    options = answ_data.pop('options', [])
                     answ = pos.answers.create(**answ_data)
                     answ.options.add(*options)
 
