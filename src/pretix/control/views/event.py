@@ -255,9 +255,7 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
 
     @cached_property
     def provider(self):
-        provider = self.request.event.get_payment_providers()[self.kwargs['provider']]
-        if not provider:
-            raise Http404()
+        provider = self.request.event.get_payment_providers().get(self.kwargs['provider'])
         return provider
 
     @cached_property
@@ -275,6 +273,13 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
         )
         form.prepare_fields()
         return form
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.provider:
+            messages.error(self.request, _('This payment provider does not exist or the respective plugin is '
+                                           'disabled.'))
+            return redirect(self.get_success_url())
+        return super().dispatch(request, *args, **kwargs)
 
     @cached_property
     def settings_content(self):
