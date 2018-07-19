@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-06-07 15:19+0000\n"
+"PO-Revision-Date: 2018-07-16 16:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19.1\n"
+"X-Generator: Weblate 3.0.1\n"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -39,20 +39,14 @@ msgid "Client secret"
 msgstr "Cliëntgeheim"
 
 #: pretix/api/serializers/cart.py:55 pretix/api/serializers/order.py:444
-#, fuzzy
-#| msgid "This order is not assigned to a known payment provider."
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Deze bestelling is niet toegewezen aan een bekende betalingsprovider."
+msgstr "Het product \"{}\" is niet toegewezen aan een quotum."
 
 #: pretix/api/serializers/cart.py:63 pretix/api/serializers/order.py:456
-#, fuzzy
-#| msgid ""
-#| "The quota {name} does not have enough capacity left to perform the "
-#| "operation."
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
-"Het quotum {name} heeft niet genoeg beschikbare capaciteit om deze opdracht "
+"Er is niet genoeg capaciteit beschikbaar op quotum \"{}\" om deze opdracht "
 "uit te voeren."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:830
@@ -2470,10 +2464,8 @@ msgstr ""
 "een tekst weergegeven die aangeeft dat de bestelling al is betaald."
 
 #: pretix/base/payment.py:191
-#, fuzzy
-#| msgid "Order total"
 msgid "Minimum order total"
-msgstr "Totaal van bestelling"
+msgstr "Minimum totaalbedrag bestelling"
 
 #: pretix/base/payment.py:192
 msgid ""
@@ -2481,12 +2473,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Deze betalingsmethode zal alleen beschikbaar zijn als het totaalbedrag van "
+"de bestelling gelijk aan of hoger dan de gegeven waarde is. Het totaalbedrag "
+"voor deze vergelijking kan worden berekend zonder rekening te houden met de "
+"kosten die zijn ingesteld voor deze betalingsmethode."
 
 #: pretix/base/payment.py:202
-#, fuzzy
-#| msgid "Order total"
 msgid "Maximum order total"
-msgstr "Totaal van bestelling"
+msgstr "Maximum totaalbedrag bestelling"
 
 #: pretix/base/payment.py:203
 msgid ""
@@ -2494,6 +2488,10 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Deze betalingsmethode zal alleen beschikbaar zijn als het totaalbedrag van "
+"de bestelling gelijk aan of lager dan de gegeven waarde is. Het totaalbedrag "
+"voor deze vergelijking kan worden berekend zonder rekening te houden met de "
+"kosten die zijn ingesteld voor deze betalingsmethode."
 
 #: pretix/base/payment.py:213 pretix/base/payment.py:222
 msgid "Additional fee"
@@ -4658,10 +4656,8 @@ msgid "Sender address for outgoing emails"
 msgstr "Afzenderadres voor uitgaande e-mails"
 
 #: pretix/control/forms/event.py:667
-#, fuzzy
-#| msgid "Your address"
 msgid "Bcc address"
-msgstr "Uw adres"
+msgstr "BCC-adres"
 
 #: pretix/control/forms/event.py:668
 msgid "All emails will be sent to this address as a Bcc copy"

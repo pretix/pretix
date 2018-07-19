@@ -1,50 +1,51 @@
-# pretix translation file German
-# Copyright (C) 2016 the pretix authors
-# This file is distributed under the same license as the pretix package.
-# Raphael Michel <michel@rami.io>, 2016.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: French\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-08 13:49+0000\n"
-"PO-Revision-Date: 2018-07-13 06:00+0000\n"
-"Last-Translator: Claude <superoxyde@laposte.net>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
-"fr/>\n"
-"Language: fr\n"
+"PO-Revision-Date: 2018-07-18 22:00+0000\n"
+"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
+"Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.0.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr "Marqué comme payé"
+msgstr "Ödenmiş olarak işaretlendi"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr "Commentaire :"
+msgstr "Yorum:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
 msgid "Placed orders"
-msgstr "Commandes passées"
+msgstr "Verilen siparişler"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
 msgid "Paid orders"
-msgstr "Ordres payés"
+msgstr "Ücretli siparişler"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:21
 msgid "Total revenue"
-msgstr "Revenu total"
+msgstr "Toplam gelir"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
 msgid "Contacting Stripe …"
-msgstr "Contacter Stripe …"
+msgstr "İletişim Hattı …"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
@@ -54,21 +55,21 @@ msgid ""
 "this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"Votre demande a été mise en attente sur le serveur et sera traitée. Si cela "
-"prend plus de deux minutes, veuillez nous contacter ou retourner dans votre "
-"navigateur et réessayer."
+"İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Bu işlem iki dakikadan "
+"uzun sürerse lütfen bizimle iletişime geçin veya tarayıcınıza geri dönün ve "
+"tekrar deneyin."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:41
 #: pretix/static/pretixbase/js/asynctask.js:62
 #: pretix/static/pretixbase/js/asynctask.js:116
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
-msgstr "Une erreur de type {code} s'est produite."
+msgstr "{Code} türünde bir hata oluştu."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
 #: pretix/static/pretixbase/js/asynctask.js:137
 msgid "We are processing your request …"
-msgstr "Nous traitons votre demande …"
+msgstr "İsteğinizi işliyoruz…"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
 #: pretix/static/pretixbase/js/asynctask.js:138
@@ -77,9 +78,9 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"Nous envoyons actuellement votre demande au serveur. Si cela prend plus "
-"d'une minute, veuillez vérifier votre connexion Internet, puis recharger "
-"cette page et réessayer."
+"Şu anda isteğinizi sunucuya gönderiyoruz. Bu işlem bir dakikadan uzun "
+"sürerse, lütfen İnternet bağlantınızı kontrol edin ve ardından bu sayfayı "
+"tekrar yükleyin ve tekrar deneyin."
 
 #: pretix/static/pretixbase/js/asynctask.js:38
 #: pretix/static/pretixbase/js/asynctask.js:90
@@ -87,214 +88,217 @@ msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
-"Votre demande a été mise en attente sur le serveur et sera traitée. Selon la "
-"taille de votre événement, cela peut prendre jusqu' à quelques minutes."
+"İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Etkinliğinizin boyutuna "
+"bağlı olarak, bu birkaç dakika sürebilir."
 
 #: pretix/static/pretixbase/js/asynctask.js:65
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Nous ne pouvons actuellement pas atteindre le serveur, mais nous continuons "
-"d'essayer. Dernier code d'erreur: {code}"
+"Şu anda sunucuya ulaşamıyoruz, ancak denemeye devam ediyoruz. Son hata kodu: "
+"{code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:107
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
-msgstr "La requête a prit trop de temps. Veuillez réessayer."
+msgstr "İstek uzun sürdü. Lütfen tekrar deneyin."
 
 #: pretix/static/pretixbase/js/asynctask.js:119
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr ""
-"Actuellement, nous ne pouvons pas atteindre le serveur. Veuillez réessayer. "
-"Code d'erreur: {code}"
+msgstr "Şu anda sunucuya ulaşamıyoruz. Lütfen tekrar deneyin. Hata kodu: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:174
 #: pretix/static/pretixcontrol/js/ui/main.js:28
 msgid "Close message"
-msgstr "Fermer le message"
+msgstr "Mesajı kapat"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr "Copié !"
+msgstr "Kopyalanan!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr "Appuyez sur Ctrl-C pour copier !"
+msgstr "Kopyalamak için Ctrl-C tuşlarına basın!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:22
 msgid "Lead Scan QR"
-msgstr "Balayage du QR code"
+msgstr "Öncü Tarayıcı QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:24
 msgid "Check-in QR"
-msgstr "Enregistrement QR code"
+msgstr "Giriş QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:216
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
-"Le fichier PDF généré en arrière-plan n'a pas pu être chargé pour la raison "
-"suivante :"
+msgstr "PDF arka plan dosyası aşağıdaki nedenden dolayı yüklenemedi:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:365
 msgid "Group of objects"
-msgstr "Groupe d'objets"
+msgstr "Nesne grubu"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:371
 msgid "Text object"
-msgstr "Objet texte"
+msgstr "Metin nesnesi"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:373
 msgid "Barcode area"
-msgstr "Zone de code-barres"
+msgstr "Barkod alanı"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:375
 msgid "Object"
-msgstr "Objet"
+msgstr "Nesne"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:379
 msgid "Ticket design"
-msgstr "Conception des billets"
+msgstr "Bilet tasarımı"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:616
 msgid "Saving failed."
-msgstr "L'enregistrement a échoué."
+msgstr "Kaydetme başarısız oldu."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
-"Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"
+"Değişiklikleri kaydetmeden editörden gerçekten ayrılmak istiyor musunuz?"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:677
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
-"Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
+msgstr "PDF dosyanızı yüklerken hata oluştu, lütfen tekrar deneyin."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
-msgstr "Une erreur s'est produite."
+msgstr "Bir hata oluştu."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr "Création de messages …"
+msgstr "Mesaj oluşturuluyor…"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."
-msgstr "Erreur inconnue."
+msgstr "Bilinmeyen hata."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:246
 msgid "All"
-msgstr "Tous"
+msgstr "Herşey"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:247
 msgid "None"
-msgstr "Aucun"
+msgstr "Hiçbiri"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:527
 msgid "Use a different name internally"
-msgstr "Utiliser un nom différent en interne"
+msgstr "Dahili olarak farklı bir ad kullan"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
-msgstr "Autres"
+msgstr "Diğerleri"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:70
 msgid "Count"
-msgstr "Compter"
+msgstr "Saymak"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] "(une date en plus)"
-msgstr[1] "({num} plus de dates)"
+msgstr[0] ""
+"Bir\n"
+"(Bir başka tarih)"
+msgstr[1] ""
+"Diğer\n"
+"({num} daha fazla tarih)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr "Les articles de votre panier ne vous sont plus réservés."
+msgstr "Sepetinizdeki öğeler artık sizin için ayrılmamış."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr "Panier expiré"
+msgstr "Sepetin süresi doldu"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "Les articles de votre panier vous sont réservés pour une minute."
-msgstr[1] "Les articles de votre panier vous sont réservés pour {num} minutes."
+msgstr[0] ""
+"Bir\n"
+"Sepetinizdeki ürünler bir dakikalığına ayrılmıştır."
+msgstr[1] ""
+"Diğer\n"
+"Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:9
 msgctxt "widget"
 msgid "Sold out"
-msgstr "Epuisé"
+msgstr "Satıldı"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:10
 msgctxt "widget"
 msgid "Buy"
-msgstr "Acheter"
+msgstr "Satın al"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:11
 msgctxt "widget"
 msgid "Reserved"
-msgstr "Réservé"
+msgstr "Ayrılmış"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:12
 msgctxt "widget"
 msgid "FREE"
-msgstr "GRATUIT"
+msgstr "Ücretsiz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:13
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr "de %(currency)s %(price)s"
+msgstr "% (para birimi) s% (fiyat) s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr "dont %(rate)s% %(taxname)s"
+msgstr "dahil %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr "plus %(rate)s% %(taxname)s"
+msgstr "artı %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr "actuellement disponible: %s"
+msgstr "şu anda mevcut: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr "Disponible avec un bon de réduction"
+msgstr "Sadece bir kupon ile kullanılabilir"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr "quantité minimum à commander: %s"
+msgstr "sipariş için minimum miktar: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "Fermer la billetterie"
+msgstr "Bilet dükkanını kapat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr "La billetterie n' a pas pu être chargée."
+msgstr "Bilet mağazası yüklenemedi."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Le panier n' a pas pu être créé. Veuillez réessayer plus tard"
+msgstr "Sepet oluşturulamadı. Lütfen daha sonra tekrar deneyiniz"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Waiting list"
-msgstr "Liste d'attente"
+msgstr "Bekleme listesi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -303,9 +307,9 @@ msgid ""
 "products, they will be added to your existing cart. Click on this message to "
 "continue checkout with your cart."
 msgstr ""
-"Vous avez actuellement un panier actif pour cet événement. Si vous "
-"sélectionnez d'autres produits, ils seront ajoutés à votre panier. Cliquez "
-"sur ce message pour continuer votre commande avec votre panier."
+"Şu anda bu etkinlik için aktif bir sepetiniz var. Daha fazla ürün "
+"seçerseniz, mevcut sepetinize eklenir. Sepetinizle ödeme işlemine devam "
+"etmek için bu mesajı tıklayın."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
@@ -313,38 +317,35 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">Billetterie "
-"en ligne propulsée par Pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\"> etkinlik "
+"biletleme pretix tarafından desteklenmektedir </a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr "Utiliser un bon d'achat"
+msgstr "Bir kupon kullan"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Redeem"
-msgstr "Echanger"
+msgstr "Ödemek"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Voucher code"
-msgstr "Code de réduction"
+msgstr "Kupon kodu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "Close"
-msgstr "Fermer"
+msgstr "Kapalı"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "Continue"
-msgstr "Continuer"
+msgstr "Devam et"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "See variations"
-msgstr "Voir les variations"
-
-#~ msgid "QR Code"
-#~ msgstr "QR Code"
+msgstr "Varyasyonları gör"
