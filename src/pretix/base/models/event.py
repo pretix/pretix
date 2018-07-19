@@ -450,10 +450,8 @@ class Event(EventMixin, LoggedModel):
                     if int(s.value) in tax_map:
                         s.value = tax_map.get(int(s.value)).pk
                         s.save()
-                    else:
-                        s.delete()
                 except ValueError:
-                    s.delete()
+                    pass
             else:
                 s.save()
 
