@@ -613,7 +613,7 @@ class QuotaView(ChartContainingView, DetailView):
                 'sum': True,
             },
             {
-                'label': ugettext('Vouchers'),
+                'label': ugettext('Vouchers and waiting list reservations'),
                 'value': self.object.count_blocking_vouchers(),
                 'sum': True,
             },
@@ -623,7 +623,7 @@ class QuotaView(ChartContainingView, DetailView):
                 'sum': True,
             },
             {
-                'label': ugettext('Waiting list'),
+                'label': ugettext('Waiting list (pending)'),
                 'value': self.object.count_waiting_list_pending(),
                 'sum': False,
             },

@@ -42,7 +42,8 @@ class WaitingListEntry(LoggedModel):
     voucher = models.ForeignKey(
         'Voucher',
         verbose_name=_("Assigned voucher"),
-        null=True, blank=True
+        null=True, blank=True,
+        related_name='waitinglistentries'
     )
     item = models.ForeignKey(
         Item, related_name='waitinglistentries',

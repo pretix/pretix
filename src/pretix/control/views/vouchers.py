@@ -33,7 +33,7 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     permission = 'can_view_vouchers'
 
     def get_queryset(self):
-        qs = self.request.event.vouchers.all().select_related('item', 'variation')
+        qs = self.request.event.vouchers.filter(waitinglistentries__isnull=True).select_related('item', 'variation')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
@@ -97,7 +97,10 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        tags = self.request.event.vouchers.order_by('tag').filter(tag__isnull=False).values('tag').annotate(
+        tags = self.request.event.vouchers.order_by('tag').filter(
+            tag__isnull=False,
+            waitinglistentries__isnull=True
+        ).values('tag').annotate(
             total=Sum('max_usages'),
             redeemed=Sum('redeemed')
         )
