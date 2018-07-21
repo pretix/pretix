@@ -209,6 +209,18 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         canvas.restoreState()
 
+    def _draw_invoice_to(self, canvas):
+        p = Paragraph(self.invoice.invoice_to.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+        p.wrapOn(canvas, 85 * mm, 50 * mm)
+        p_size = p.wrap(85 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
+
+    def _draw_invoice_from(self, canvas):
+        p = Paragraph(self.invoice.invoice_from.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+        p.wrapOn(canvas, 70 * mm, 50 * mm)
+        p_size = p.wrap(70 * mm, 50 * mm)
+        p.drawOn(canvas, 25 * mm, (297 - 17) * mm - p_size[1])
+
     def _on_first_page(self, canvas: Canvas, doc):
         canvas.setCreator('pretix.eu')
         canvas.setTitle(pgettext('invoice', 'Invoice {num}').format(num=self.invoice.number))
@@ -225,20 +237,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         textobject.textLine(pgettext('invoice', 'Invoice from').upper())
         canvas.drawText(textobject)
 
-        p = Paragraph(self.invoice.invoice_from.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
-        p.wrapOn(canvas, 70 * mm, 50 * mm)
-        p_size = p.wrap(70 * mm, 50 * mm)
-        p.drawOn(canvas, 25 * mm, (297 - 17) * mm - p_size[1])
+        self._draw_invoice_from(canvas)
 
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
         textobject.setFont('OpenSansBd', 8)
         textobject.textLine(pgettext('invoice', 'Invoice to').upper())
         canvas.drawText(textobject)
 
-        p = Paragraph(self.invoice.invoice_to.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
-        p.wrapOn(canvas, 85 * mm, 50 * mm)
-        p_size = p.wrap(85 * mm, 50 * mm)
-        p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
+        self._draw_invoice_to(canvas)
 
         textobject = canvas.beginText(125 * mm, (297 - 38) * mm)
         textobject.setFont('OpenSansBd', 8)
