@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('pretixbase', '0088_auto_20180328_1217'),
+        ('pretixapi', '0001_initial')
     ]
 
     operations = [
