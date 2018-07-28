@@ -14,6 +14,11 @@ You can just clone our git repository::
     git clone https://github.com/pretix/pretix.git
     cd pretix/
 
+.. note:: If you are cloning pretix over a slow network, you can run
+          ``git clone --depth=1 https://github.com/pretix/pretix.git`` instead.
+          This will leave you with only the most recent commit, but reduces the
+          amount of data downloaded.
+
 External Dependencies
 ---------------------
 Your should install the following on your system:
