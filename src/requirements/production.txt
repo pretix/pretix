@@ -18,7 +18,7 @@ python-u2flib-server==4.*
 django-formtools==2.1
 celery>=4.1.1,<4.2.0
 kombu==4.2.*
-django-statici18n==1.5.*
+django-statici18n==1.8.*
 inlinestyler==0.2.*
 BeautifulSoup4
 slimit

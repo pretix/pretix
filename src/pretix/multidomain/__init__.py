@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 from django.urls import URLPattern
-from django.urls.conf import RegexPattern
+from django.urls.resolvers import RegexPattern
 
 
 class PretixMultidomainConfig(AppConfig):

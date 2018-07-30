@@ -830,7 +830,7 @@ class OrderPayment(models.Model):
     )
     fee = models.ForeignKey(
         'OrderFee',
-        null=True, blank=True, related_name='payments'
+        null=True, blank=True, related_name='payments', on_delete=models.SET_NULL
     )
     migrated = models.BooleanField(default=False)
 

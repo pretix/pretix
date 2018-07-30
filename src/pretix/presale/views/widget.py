@@ -75,8 +75,7 @@ def generate_widget_js(lang):
         code.append('var lang = "%s";\n' % lang)
 
         c = JavaScriptCatalog()
-        paths = c.get_paths(['pretix'])
-        c.translation = DjangoTranslation(lang, domain='djangojs', localedirs=paths)
+        c.translation = DjangoTranslation(lang, domain='djangojs')
         catalog, plural = c.get_catalog(), c.get_plural()
 
         catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))

@@ -84,9 +84,9 @@
       "%m/%d/%y"
     ],
     "DECIMAL_SEPARATOR": ".",
-    "FIRST_DAY_OF_WEEK": "0",
+    "FIRST_DAY_OF_WEEK": 0,
     "MONTH_DAY_FORMAT": "F j",
-    "NUMBER_GROUPING": "3",
+    "NUMBER_GROUPING": 3,
     "SHORT_DATETIME_FORMAT": "Y-m-d H:i",
     "SHORT_DATE_FORMAT": "Y-m-d",
     "THOUSAND_SEPARATOR": ",",
