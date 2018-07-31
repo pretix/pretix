@@ -139,7 +139,7 @@ class VoucherForm(I18nModelForm):
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
-            cnt = len(data['codes']) * data['max_usages']
+            cnt = len(data['codes']) * data.get('max_usages', 0)
         else:
             cnt = data['max_usages']
 
