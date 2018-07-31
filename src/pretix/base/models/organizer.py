@@ -42,6 +42,7 @@ class Organizer(LoggedModel):
             OrganizerSlugBlacklistValidator()
         ],
         verbose_name=_("Short form"),
+        unique=True
     )
 
     class Meta:
