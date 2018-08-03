@@ -150,7 +150,8 @@ Vue.component('availbox', {
         + '<input type="checkbox" value="1" v-bind:name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       v-bind:max="order_max" v-bind:name="input_name" v-if="order_max !== 1">'
+        + '       :value="$root.itemnum == 1 ? 1 : false" v-bind:max="order_max" v-bind:name="input_name"'
+        + '       v-if="order_max !== 1">'
         + '</div>'
         + '</div>'),
     props: {
@@ -705,7 +706,8 @@ var create_widget = function (element) {
                 error_message: null,
                 error_url_after: null,
                 vouchers_exist: false,
-                cart_exists: false
+                cart_exists: false,
+                itemcount: 0
             }
         },
         created: function () {
@@ -733,6 +735,7 @@ var create_widget = function (element) {
                 app.cart_id = cart_id;
                 app.cart_exists = data.cart_exists;
                 app.vouchers_exist = data.vouchers_exist;
+                app.itemnum = data.itemnum;
                 app.loading--;
             }, function (error) {
                 app.categories = [];
