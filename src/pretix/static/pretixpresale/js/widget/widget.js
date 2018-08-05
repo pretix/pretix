@@ -150,7 +150,7 @@ Vue.component('availbox', {
         + '<input type="checkbox" value="1" v-bind:name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       :value="$root.itemnum == 1 ? 1 : false" v-bind:max="order_max" v-bind:name="input_name"'
+        + '       :value="($root.itemnum == 1 && !item.has_variations) ? 1 : false" v-bind:max="order_max" v-bind:name="input_name"'
         + '       v-if="order_max !== 1">'
         + '</div>'
         + '</div>'),
