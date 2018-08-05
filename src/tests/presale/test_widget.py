@@ -192,6 +192,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     "name": "Everything"
                 }
             ],
+            "itemnum": 2,
             "display_add_to_cart": True,
             "cart_exists": False
         }
@@ -234,6 +235,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     "name": "Everything"
                 }
             ],
+            "itemnum": 1,
             "display_add_to_cart": True,
             "cart_exists": False
         }
@@ -252,7 +254,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "error": "This voucher is expired.",
             "items_by_category": [],
             "display_add_to_cart": False,
-            "cart_exists": False
+            "cart_exists": False,
+            "itemnum": 0,
         }
 
     def test_css_customized(self):
