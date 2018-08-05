@@ -15,13 +15,13 @@ if [ "$PRETIX_CONFIG_FILE" == "tests/travis_postgres.cfg" ]; then
 fi
 
 if [ "$1" == "style" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
+	XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt
 	cd src
     flake8 .
     isort -c -rc -df .
 fi
 if [ "$1" == "doctests" ]; then
-	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt -r src/requirements/py34.txt
+	XDG_CACHE_HOME=/cache pip3 install -Ur doc/requirements.txt
 	cd doc
 	make doctest
 fi
@@ -39,21 +39,21 @@ if [ "$1" == "translation-spelling" ]; then
 	potypo
 fi
 if [ "$1" == "tests" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt pytest-xdist
+	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt pytest-xdist
 	cd src
 	python manage.py check
 	make all compress
 	py.test --reruns 5 -n 2 tests
 fi
 if [ "$1" == "tests-cov" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
+	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
 	cd src
 	python manage.py check
 	make all compress
 	coverage run -m py.test --reruns 5 tests && codecov
 fi
 if [ "$1" == "plugins" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt -r src/requirements/py34.txt
+	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
 	cd src
 	python setup.py develop
 	make all compress
