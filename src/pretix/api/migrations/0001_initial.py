@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=255, verbose_name='Application name')),
                 ('redirect_uris', models.TextField(help_text='Allowed URIs list, space separated',
-                                                   validators=[oauth2_provider.validators.validate_uris],
+                                                   validators=[oauth2_provider.validators.URIValidator],
                                                    verbose_name='Redirection URIs')),
                 ('client_id',
                  models.CharField(db_index=True, default=oauth2_provider.generators.generate_client_id, max_length=100,

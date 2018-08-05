@@ -11,13 +11,13 @@ from oauth2_provider.models import (
     AbstractAccessToken, AbstractApplication, AbstractGrant,
     AbstractRefreshToken,
 )
-from oauth2_provider.validators import validate_uris
+from oauth2_provider.validators import URIValidator
 
 
 class OAuthApplication(AbstractApplication):
     name = models.CharField(verbose_name=_("Application name"), max_length=255, blank=False)
     redirect_uris = models.TextField(
-        blank=False, validators=[validate_uris],
+        blank=False, validators=[URIValidator],
         verbose_name=_("Redirection URIs"),
         help_text=_("Allowed URIs list, space separated")
     )

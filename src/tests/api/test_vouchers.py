@@ -1,3 +1,4 @@
+import copy
 import datetime
 from decimal import Decimal
 
@@ -51,6 +52,13 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     res['item'] = item.pk
     res['id'] = voucher.pk
     res['code'] = voucher.code
+    q2 = copy.copy(quota)
+    q2.pk = None
+    q2.save()
+    i2 = copy.copy(item)
+    i2.pk = None
+    i2.save()
+    var2 = i2.variations.create(value="foo")
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/vouchers/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
@@ -124,7 +132,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     )
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/vouchers/?item={}'.format(organizer.slug, event.slug, item.pk + 1)
+        '/api/v1/organizers/{}/events/{}/vouchers/?item={}'.format(organizer.slug, event.slug, i2.pk)
     )
     assert [] == resp.data['results']
 
@@ -137,7 +145,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     )
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/vouchers/?variation={}'.format(organizer.slug, event.slug, var.pk + 1)
+        '/api/v1/organizers/{}/events/{}/vouchers/?variation={}'.format(organizer.slug, event.slug, var2.pk)
     )
     assert [] == resp.data['results']
 
@@ -153,7 +161,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     )
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/vouchers/?quota={}'.format(organizer.slug, event.slug, quota.pk + 1)
+        '/api/v1/organizers/{}/events/{}/vouchers/?quota={}'.format(organizer.slug, event.slug, q2.pk)
     )
     assert [] == resp.data['results']
 
@@ -200,9 +208,10 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
+    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug,
-                                                                       subevent.pk + 1))
+                                                                       se2.pk))
     assert [] == resp.data['results']
 
 

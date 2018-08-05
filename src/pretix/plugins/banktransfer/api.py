@@ -47,7 +47,7 @@ class BankImportJobSerializer(serializers.ModelSerializer):
 
 
 class JobFilter(FilterSet):
-    event = django_filters.CharFilter(name='event', lookup_expr='slug')
+    event = django_filters.CharFilter(field_name='event', lookup_expr='slug')
 
     class Meta:
         model = BankImportJob
@@ -58,7 +58,7 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = BankImportJobSerializer
     queryset = BankImportJob.objects.none()
     filter_backends = (DjangoFilterBackend,)
-    filter_class = JobFilter
+    filterset_class = JobFilter
     permission = 'can_view_orders'
 
     def get_queryset(self):

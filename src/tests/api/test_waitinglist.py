@@ -1,3 +1,4 @@
+import copy
 import datetime
 from unittest import mock
 
@@ -43,9 +44,13 @@ TEST_WLE_RES = {
 @pytest.mark.django_db
 def test_wle_list(token_client, organizer, event, wle, item, subevent):
     var = item.variations.create(value="Children")
+    var2 = item.variations.create(value="Children")
     res = dict(TEST_WLE_RES)
     wle.variation = var
     wle.save()
+    i2 = copy.copy(item)
+    i2.pk = None
+    i2.save()
     res["id"] = wle.pk
     res["item"] = item.pk
     res["variation"] = var.pk
@@ -58,14 +63,14 @@ def test_wle_list(token_client, organizer, event, wle, item, subevent):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?item={}'.format(organizer.slug, event.slug, item.pk))
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/waitinglistentries/?item={}'.format(organizer.slug, event.slug, item.pk + 1))
+        '/api/v1/organizers/{}/events/{}/waitinglistentries/?item={}'.format(organizer.slug, event.slug, i2.pk))
     assert [] == resp.data['results']
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?variation={}'.format(organizer.slug, event.slug, var.pk))
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/waitinglistentries/?variation={}'.format(organizer.slug, event.slug, var.pk + 1))
+        '/api/v1/organizers/{}/events/{}/waitinglistentries/?variation={}'.format(organizer.slug, event.slug, var2.pk))
     assert [] == resp.data['results']
 
     resp = token_client.get(
@@ -106,9 +111,10 @@ def test_wle_list(token_client, organizer, event, wle, item, subevent):
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
+    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug,
-                                                                                 subevent.pk + 1))
+                                                                                 se2.pk))
     assert [] == resp.data['results']
 
 

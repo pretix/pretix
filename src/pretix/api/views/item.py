@@ -41,7 +41,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
-    filter_class = ItemFilter
+    filterset_class = ItemFilter
     permission = 'can_change_items'
     write_permission = 'can_change_items'
 
@@ -207,7 +207,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = ItemCategorySerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_class = ItemCategoryFilter
+    filterset_class = ItemCategoryFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = 'can_change_items'
@@ -261,7 +261,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_class = QuestionFilter
+    filterset_class = QuestionFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = 'can_change_items'
@@ -359,7 +359,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuotaSerializer
     queryset = Quota.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
-    filter_class = QuotaFilter
+    filterset_class = QuotaFilter
     ordering_fields = ('id', 'size')
     ordering = ('id',)
     permission = 'can_change_items'

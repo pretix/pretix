@@ -1,14 +1,14 @@
 # Functional requirements
-Django==2.0.*
-djangorestframework==3.7.*
+Django>=2.1,<2.2
+djangorestframework==3.8.*
 python-dateutil
 pytz
-django-bootstrap3==9.1.*
+django-bootstrap3==10.0.*
 django-formset-js-improved==0.5.0.2
 django-compressor==2.2.*
 django-hierarkey==1.0.*,>=1.0.3
-django-filter==1.1.*
-reportlab==3.4.*
+django-filter==2.0.*
+reportlab==3.5.*
 PyPDF2==1.26.*
 Pillow
 django-libsass
@@ -31,9 +31,9 @@ markdown
 bleach==2.*
 raven
 babel
-django-i18nfield>=1.2.1
+django-i18nfield>=1.4.0
 django-hijack==2.1.*
-django-oauth-toolkit==1.1.*
+django-oauth-toolkit==1.2.*
 # Stripe
 stripe==2.0.*
 # PayPal

@@ -73,7 +73,7 @@ class ReauthView(TemplateView):
             t = int(time.time())
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
-            if "next" in request.GET and is_safe_url(request.GET.get("next")):
+            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
                 return redirect(request.GET.get("next"))
             return redirect(reverse('control:index'))
         else:
@@ -544,7 +544,7 @@ class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMi
                 session_key=request.session.session_key
             )
 
-        if "next" in request.GET and is_safe_url(request.GET.get("next")):
+        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
             return redirect(request.GET.get("next"))
         else:
             return redirect(reverse("control:index"))

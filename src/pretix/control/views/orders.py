@@ -275,7 +275,7 @@ class OrderRefundCancel(OrderView):
             messages.success(self.request, _('The refund has been canceled.'))
         else:
             messages.error(self.request, _('This refund can not be canceled at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 
@@ -310,7 +310,7 @@ class OrderRefundProcess(OrderView):
             messages.success(self.request, _('The refund has been processed.'))
         else:
             messages.error(self.request, _('This refund can not be processed at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 
@@ -336,7 +336,7 @@ class OrderRefundDone(OrderView):
             messages.success(self.request, _('The refund has been marked as done.'))
         else:
             messages.error(self.request, _('This refund can not be processed at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 

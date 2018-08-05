@@ -15,6 +15,6 @@ def url_replace(request, *pairs):
                 if key in dict_:
                     del dict_[key]
             else:
-                dict_[key] = p
+                dict_[key] = str(p)
             key = None
     return dict_.urlencode(safe='[]')

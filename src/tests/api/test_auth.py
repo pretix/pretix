@@ -21,7 +21,7 @@ def test_session_auth_no_teams(client, user):
 @pytest.mark.django_db
 def test_session_auth_with_teams(client, user, team):
     team.members.add(user)
-    Organizer.objects.create(name='Other dummy', slug='dummy')
+    Organizer.objects.create(name='Other dummy', slug='dummy2')
     client.login(email=user.email, password='dummy')
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 200
@@ -37,7 +37,7 @@ def test_token_invalid(client):
 
 @pytest.mark.django_db
 def test_token_auth_valid(client, team):
-    Organizer.objects.create(name='Other dummy', slug='dummy')
+    Organizer.objects.create(name='Other dummy', slug='dummy2')
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
     resp = client.get('/api/v1/organizers/')
@@ -47,7 +47,7 @@ def test_token_auth_valid(client, team):
 
 @pytest.mark.django_db
 def test_token_auth_inactive(client, team):
-    Organizer.objects.create(name='Other dummy', slug='dummy')
+    Organizer.objects.create(name='Other dummy', slug='dummy2')
     t = team.tokens.create(name='Foo', active=False)
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
     resp = client.get('/api/v1/organizers/')

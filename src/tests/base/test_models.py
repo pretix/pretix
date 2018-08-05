@@ -1144,7 +1144,7 @@ class EventTest(TestCase):
         cl1.limit_products.add(i1)
 
         event2 = Event.objects.create(
-            organizer=self.organizer, name='Download', slug='ab1234',
+            organizer=self.organizer, name='Download', slug='ab54321',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc)
         )
         event2.copy_data_from(event1)

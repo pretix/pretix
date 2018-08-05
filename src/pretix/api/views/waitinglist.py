@@ -28,7 +28,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('created',)
     ordering_fields = ('id', 'created', 'email', 'item')
-    filter_class = WaitingListFilter
+    filterset_class = WaitingListFilter
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
 

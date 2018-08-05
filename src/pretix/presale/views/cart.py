@@ -36,7 +36,7 @@ from pretix.presale.views.robots import NoSearchIndexViewMixin
 class CartActionMixin:
 
     def get_next_url(self):
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             u = self.request.GET.get('next')
         else:
             kwargs = {}
