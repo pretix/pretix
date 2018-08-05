@@ -195,7 +195,7 @@ class WidgetAPIProductList(View):
                     } for item in g
                 ]
             })
-        return grps, display_add_to_cart
+        return grps, display_add_to_cart, len(items)
 
     def dispatch(self, request, *args, **kwargs):
         self.subevent = None
@@ -274,11 +274,12 @@ class WidgetAPIProductList(View):
                 fail = True
 
         if not fail and (ev.presale_is_running or request.event.settings.show_items_outside_presale_period):
-            data['items_by_category'], data['display_add_to_cart'] = self._get_items()
+            data['items_by_category'], data['display_add_to_cart'], data['itemnum'] = self._get_items()
             data['display_add_to_cart'] = data['display_add_to_cart'] and ev.presale_is_running
         else:
             data['items_by_category'] = []
             data['display_add_to_cart'] = False
+            data['itemnum'] = 0
 
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:
