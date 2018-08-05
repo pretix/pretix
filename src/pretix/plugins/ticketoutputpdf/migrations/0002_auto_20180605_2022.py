@@ -42,6 +42,7 @@ def convert_old_settings(app, schema_editor):
             l.background.name = es.value[7:]
             setattr(l, 'background', l.background.name)
             l.save()
+            es.delete()
 
 
 class Migration(migrations.Migration):
