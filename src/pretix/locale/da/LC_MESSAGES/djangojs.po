@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-08 13:49+0000\n"
+"POT-Creation-Date: 2018-08-06 10:49+0000\n"
 "PO-Revision-Date: 2018-04-24 14:22+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -122,48 +122,52 @@ msgstr "Kopieret!"
 msgid "Press Ctrl-C to copy!"
 msgstr "Tryk Ctrl-C eller ⌘-C for at kopiere!"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:22
+#: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:24
+#: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:216
+#: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Baggrunds-pdf'en kunne ikke hentes af følgende grund:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:365
+#: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
 msgstr "Gruppe af objekter"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:371
+#: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
 msgstr "Tekstobjekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:373
+#: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
 msgstr "QR-kode-område"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:375
+#: pretix/static/pretixcontrol/js/ui/editor.js:428
+msgid "Powered by pretix"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:379
+#: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
 msgstr "Billetdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:616
+#: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
 msgstr "Gem fejlede."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:735
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Er du sikker på at du vil forlade editoren uden at gemme dine ændringer?"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:677
+#: pretix/static/pretixcontrol/js/ui/editor.js:749
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Fejl under upload af pdf. Prøv venligt igen."
 

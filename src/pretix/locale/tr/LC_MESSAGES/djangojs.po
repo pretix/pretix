@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-08 13:49+0000\n"
+"POT-Creation-Date: 2018-08-06 10:49+0000\n"
 "PO-Revision-Date: 2018-07-18 22:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
-"Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/tr/>\n"
+"Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,7 +108,8 @@ msgstr "İstek uzun sürdü. Lütfen tekrar deneyin."
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr "Şu anda sunucuya ulaşamıyoruz. Lütfen tekrar deneyin. Hata kodu: {code}"
+msgstr ""
+"Şu anda sunucuya ulaşamıyoruz. Lütfen tekrar deneyin. Hata kodu: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:174
 #: pretix/static/pretixcontrol/js/ui/main.js:28
@@ -123,48 +124,52 @@ msgstr "Kopyalanan!"
 msgid "Press Ctrl-C to copy!"
 msgstr "Kopyalamak için Ctrl-C tuşlarına basın!"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:22
+#: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
 msgstr "Öncü Tarayıcı QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:24
+#: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
 msgstr "Giriş QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:216
+#: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "PDF arka plan dosyası aşağıdaki nedenden dolayı yüklenemedi:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:365
+#: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
 msgstr "Nesne grubu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:371
+#: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
 msgstr "Metin nesnesi"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:373
+#: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
 msgstr "Barkod alanı"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:375
+#: pretix/static/pretixcontrol/js/ui/editor.js:428
+msgid "Powered by pretix"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
 msgstr "Nesne"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:379
+#: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
 msgstr "Bilet tasarımı"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:616
+#: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
 msgstr "Kaydetme başarısız oldu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:735
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Değişiklikleri kaydetmeden editörden gerçekten ayrılmak istiyor musunuz?"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:677
+#: pretix/static/pretixcontrol/js/ui/editor.js:749
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDF dosyanızı yüklerken hata oluştu, lütfen tekrar deneyin."
 
