@@ -227,11 +227,11 @@ class Order(LoggedModel):
             pending_sum_rc=-1 * F('payment_sum') + Coalesce(F('refund_sum'), 0),
         ).annotate(
             is_overpaid=Case(
-                When(~Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_t__lt=0),
+                When(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0),
                      then=Value('1')),
-                When(Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_rc__lt=0),
+                When(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0),
                      then=Value('1')),
-                When(Q(status__in=[Order.STATUS_EXPIRED, Order.STATUS_PENDING]) & Q(pending_sum_t__lte=0),
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
