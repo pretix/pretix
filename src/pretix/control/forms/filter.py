@@ -273,9 +273,9 @@ class EventOrderFilterForm(OrderFilterForm):
 
         if fdata.get('status') == 'overpaid':
             qs = qs.filter(
-                Q(~Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_t__lt=0))
-                | Q(Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_rc__lt=0))
-                | Q(Q(status__in=[Order.STATUS_EXPIRED, Order.STATUS_PENDING]) & Q(pending_sum_rc__lte=0))
+                Q(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0))
+                | Q(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0))
+                | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0))
             )
         elif fdata.get('status') == 'underpaid':
             qs = qs.filter(
