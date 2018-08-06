@@ -16,8 +16,8 @@ class BankImportJob(models.Model):
         (STATE_COMPLETED, 'completed'),
     )
 
-    event = models.ForeignKey('pretixbase.Event', null=True)
-    organizer = models.ForeignKey('pretixbase.Organizer', null=True)
+    event = models.ForeignKey('pretixbase.Event', null=True, on_delete=models.CASCADE)
+    organizer = models.ForeignKey('pretixbase.Organizer', null=True, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_PENDING)
 
@@ -48,9 +48,9 @@ class BankTransaction(models.Model):
         (STATE_DISCARDED, 'manually discarded'),
     )
 
-    event = models.ForeignKey('pretixbase.Event', null=True)
-    organizer = models.ForeignKey('pretixbase.Organizer', null=True)
-    import_job = models.ForeignKey('BankImportJob', related_name='transactions')
+    event = models.ForeignKey('pretixbase.Event', null=True, on_delete=models.CASCADE)
+    organizer = models.ForeignKey('pretixbase.Organizer', null=True, on_delete=models.CASCADE)
+    import_job = models.ForeignKey('BankImportJob', related_name='transactions', on_delete=models.CASCADE)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_UNCHECKED)
     message = models.TextField()
     checksum = models.CharField(max_length=190, db_index=True)
@@ -58,7 +58,7 @@ class BankTransaction(models.Model):
     reference = models.TextField(blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.CharField(max_length=50)
-    order = models.ForeignKey('pretixbase.Order', null=True, blank=True)
+    order = models.ForeignKey('pretixbase.Order', null=True, blank=True, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)
 
     def calculate_checksum(self):

@@ -147,7 +147,7 @@ def test_event_permissions_multiple_teams(event, user):
     team2 = Team.objects.create(organizer=event.organizer, can_change_vouchers=True)
     team3 = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
     event2 = Event.objects.create(
-        organizer=event.organizer, name='Dummy', slug='dummy',
+        organizer=event.organizer, name='Dummy', slug='dummy2',
         date_from=now()
     )
     team1.members.add(user)

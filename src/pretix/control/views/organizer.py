@@ -2,11 +2,11 @@ from django import forms
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count
 from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (

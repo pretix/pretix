@@ -238,6 +238,7 @@ TEST_ITEM_RES = {
 
 @pytest.mark.django_db
 def test_item_list(token_client, organizer, event, team, item):
+    cat = event.categories.create(name="foo")
     res = dict(TEST_ITEM_RES)
     res["id"] = item.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug))
@@ -252,7 +253,8 @@ def test_item_list(token_client, organizer, event, team, item):
     assert resp.status_code == 200
     assert [] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?category=1'.format(organizer.slug, event.slug))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?category={}'.format(organizer.slug, event.slug,
+                                                                                        cat.pk))
     assert resp.status_code == 200
     assert [] == resp.data['results']
 
@@ -1074,8 +1076,9 @@ def test_quota_list(token_client, organizer, event, quota, item, subevent):
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
+    se2 = event.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, subevent.pk + 1))
+        '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, se2.pk))
     assert [] == resp.data['results']
 
 

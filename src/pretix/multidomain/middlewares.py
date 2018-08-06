@@ -7,9 +7,9 @@ from django.contrib.sessions.middleware import (
 )
 from django.core.cache import cache
 from django.core.exceptions import DisallowedHost
-from django.core.urlresolvers import set_urlconf
 from django.http.request import split_domain_port
 from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
+from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import cookie_date

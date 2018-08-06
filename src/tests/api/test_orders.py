@@ -535,6 +535,7 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     i2.pk = None
     i2.save()
     var = item.variations.create(value="Children")
+    var2 = item.variations.create(value="Children")
     res = dict(TEST_ORDERPOSITION_RES)
     op = order.positions.first()
     op.variation = var
@@ -564,14 +565,14 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
         ))
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/orderpositions/?item={}'.format(organizer.slug, event.slug, item.pk + 1))
+        '/api/v1/organizers/{}/events/{}/orderpositions/?item={}'.format(organizer.slug, event.slug, i2.pk))
     assert [] == resp.data['results']
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?variation={}'.format(organizer.slug, event.slug, var.pk))
     assert [res] == resp.data['results']
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/orderpositions/?variation={}'.format(organizer.slug, event.slug, var.pk + 1))
+        '/api/v1/organizers/{}/events/{}/orderpositions/?variation={}'.format(organizer.slug, event.slug, var2.pk))
     assert [] == resp.data['results']
 
     resp = token_client.get(

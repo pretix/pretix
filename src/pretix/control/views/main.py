@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import (
     F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery, Sum,
@@ -7,6 +6,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext, ugettext_lazy as _

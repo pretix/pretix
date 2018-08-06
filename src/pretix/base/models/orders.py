@@ -119,7 +119,8 @@ class Order(LoggedModel):
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
-        related_name="orders"
+        related_name="orders",
+        on_delete=models.CASCADE
     )
     email = models.EmailField(
         null=True, blank=True,
@@ -226,11 +227,11 @@ class Order(LoggedModel):
             pending_sum_rc=-1 * F('payment_sum') + Coalesce(F('refund_sum'), 0),
         ).annotate(
             is_overpaid=Case(
-                When(~Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_t__lt=0),
+                When(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0),
                      then=Value('1')),
-                When(Q(status__in=[Order.STATUS_REFUNDED, Order.STATUS_CANCELED]) & Q(pending_sum_rc__lt=0),
+                When(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0),
                      then=Value('1')),
-                When(Q(status__in=[Order.STATUS_EXPIRED, Order.STATUS_PENDING]) & Q(pending_sum_t__lte=0),
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
@@ -544,14 +545,14 @@ class QuestionAnswer(models.Model):
     """
     orderposition = models.ForeignKey(
         'OrderPosition', null=True, blank=True,
-        related_name='answers'
+        related_name='answers', on_delete=models.CASCADE
     )
     cartposition = models.ForeignKey(
         'CartPosition', null=True, blank=True,
-        related_name='answers'
+        related_name='answers', on_delete=models.CASCADE
     )
     question = models.ForeignKey(
-        Question, related_name='answers'
+        Question, related_name='answers', on_delete=models.CASCADE
     )
     options = models.ManyToManyField(
         QuestionOption, related_name='answers', blank=True
@@ -699,7 +700,7 @@ class AbstractPosition(models.Model):
         help_text=_("Empty, if this product is not an admission ticket")
     )
     voucher = models.ForeignKey(
-        'Voucher', null=True, blank=True
+        'Voucher', null=True, blank=True, on_delete=models.CASCADE
     )
     addon_to = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.CASCADE, related_name='addons'
@@ -829,7 +830,7 @@ class OrderPayment(models.Model):
     )
     fee = models.ForeignKey(
         'OrderFee',
-        null=True, blank=True, related_name='payments'
+        null=True, blank=True, related_name='payments', on_delete=models.SET_NULL
     )
     migrated = models.BooleanField(default=False)
 
@@ -1444,7 +1445,8 @@ class CartPosition(AbstractPosition):
     """
     event = models.ForeignKey(
         Event,
-        verbose_name=_("Event")
+        verbose_name=_("Event"),
+        on_delete=models.CASCADE
     )
     cart_id = models.CharField(
         max_length=255, null=True, blank=True, db_index=True,
@@ -1488,7 +1490,7 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
-    order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address')
+    order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)

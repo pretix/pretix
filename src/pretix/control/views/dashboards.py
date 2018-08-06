@@ -2,7 +2,6 @@ from decimal import Decimal
 
 import pytz
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
 from django.db.models import (
     Count, Exists, IntegerField, Max, Min, OuterRef, Q, Subquery, Sum,
 )
@@ -10,6 +9,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
 from django.shortcuts import render
 from django.template.loader import get_template
+from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape

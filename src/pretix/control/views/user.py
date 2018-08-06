@@ -7,8 +7,8 @@ from urllib.parse import quote
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
@@ -73,7 +73,7 @@ class ReauthView(TemplateView):
             t = int(time.time())
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
-            if "next" in request.GET and is_safe_url(request.GET.get("next")):
+            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
                 return redirect(request.GET.get("next"))
             return redirect(reverse('control:index'))
         else:
@@ -544,7 +544,7 @@ class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMi
                 session_key=request.session.session_key
             )
 
-        if "next" in request.GET and is_safe_url(request.GET.get("next")):
+        if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
             return redirect(request.GET.get("next"))
         else:
             return redirect(reverse("control:index"))

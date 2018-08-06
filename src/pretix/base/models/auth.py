@@ -340,7 +340,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
 
 class StaffSession(models.Model):
-    user = models.ForeignKey('User')
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
     date_start = models.DateTimeField(auto_now_add=True)
     date_end = models.DateTimeField(null=True, blank=True)
     session_key = models.CharField(max_length=255)
@@ -351,11 +351,11 @@ class StaffSession(models.Model):
 
 
 class StaffSessionAuditLog(models.Model):
-    session = models.ForeignKey('StaffSession', related_name='logs')
+    session = models.ForeignKey('StaffSession', related_name='logs', on_delete=models.PROTECT)
     datetime = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     method = models.CharField(max_length=255)
-    impersonating = models.ForeignKey('User', null=True, blank=True)
+    impersonating = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT)
 
     class Meta:
         ordering = ('datetime',)

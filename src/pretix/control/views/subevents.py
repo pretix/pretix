@@ -3,13 +3,13 @@ from datetime import datetime
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -424,7 +424,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         if self.copy_from:
-            i = copy.copy(self.copy_from)
+            i = copy.deepcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
         else:

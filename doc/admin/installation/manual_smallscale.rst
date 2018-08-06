@@ -121,8 +121,7 @@ command if you're running PostgreSQL::
 
     (venv)$ pip3 install "pretix[mysql]" gunicorn
 
-If you are running Python 3.4, you also need to ``pip3 install typing``. This is not required on 3.5 or newer.
-You can find out your Python version using ``python -V``.
+Note that you need Python 3.5 or newer. You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 

@@ -18,7 +18,7 @@ External Dependencies
 ---------------------
 Your should install the following on your system:
 
-* Python 3.4 or newer
+* Python 3.5 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``python-dev`` for Python 3 (Debian package: ``python3-dev``)
 * ``libffi`` (Debian package: ``libffi-dev``)
@@ -53,10 +53,6 @@ The first thing you need are all the main application's dependencies::
 
     cd src/
     pip3 install -r requirements.txt -r requirements/dev.txt
-
-If you are working with Python 3.4, you will also need (you can skip this for Python 3.5+)::
-
-    pip3 install -r requirements/py34.txt
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
 

@@ -265,6 +265,7 @@ class Event(EventMixin, LoggedModel):
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
         ordering = ("date_from", "name")
+        unique_together = (('organizer', 'slug'),)
 
     def __str__(self):
         return str(self.name)

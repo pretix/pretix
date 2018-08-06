@@ -137,14 +137,14 @@ class Voucher(LoggedModel):
     item = models.ForeignKey(
         Item, related_name='vouchers',
         verbose_name=_("Product"),
-        null=True, blank=True,
+        null=True, blank=True, on_delete=models.CASCADE,
         help_text=_(
             "This product is added to the user's cart if the voucher is redeemed."
         )
     )
     variation = models.ForeignKey(
         ItemVariation, related_name='vouchers',
-        null=True, blank=True,
+        null=True, blank=True, on_delete=models.CASCADE,
         verbose_name=_("Product variation"),
         help_text=_(
             "This variation of the product select above is being used."
@@ -152,7 +152,7 @@ class Voucher(LoggedModel):
     )
     quota = models.ForeignKey(
         Quota, related_name='quota',
-        null=True, blank=True,
+        null=True, blank=True, on_delete=models.CASCADE,
         verbose_name=_("Quota"),
         help_text=_(
             "If enabled, the voucher is valid for any product affected by this quota."

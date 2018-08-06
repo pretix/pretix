@@ -151,8 +151,9 @@ def test_list_list(token_client, organizer, event, clist, item, subevent):
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/checkinlists/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
+    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/checkinlists/?subevent={}'.format(organizer.slug, event.slug, subevent.pk + 1))
+        '/api/v1/organizers/{}/events/{}/checkinlists/?subevent={}'.format(organizer.slug, event.slug, se2.pk))
     assert [] == resp.data['results']
 
 

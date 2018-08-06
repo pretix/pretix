@@ -12,7 +12,7 @@ class LocaleSet(NoSearchIndexViewMixin, View):
 
     def get(self, request, *args, **kwargs):
         url = request.GET.get('next', request.META.get('HTTP_REFERER', '/'))
-        url = url if is_safe_url(url, host=request.get_host()) else '/'
+        url = url if is_safe_url(url, allowed_hosts=[request.get_host()]) else '/'
         resp = HttpResponseRedirect(url)
 
         locale = request.GET.get('locale')

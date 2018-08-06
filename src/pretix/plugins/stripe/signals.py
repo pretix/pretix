@@ -2,9 +2,9 @@ import json
 from collections import OrderedDict
 
 from django import forms
-from django.core.urlresolvers import resolve
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.settings import settings_hierarkey

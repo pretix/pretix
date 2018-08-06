@@ -4,11 +4,11 @@ import logging
 from datetime import timedelta
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.db.models import Count, Q
 from django.db.models.functions import Concat
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _

@@ -49,9 +49,9 @@ class CheckoutTestCase(TestCase):
         self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
         self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
         self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
-                                             category=self.workshopcat, default_price=12)
+                                             category=self.workshopcat, default_price=Decimal('12.00'))
         self.workshop2 = Item.objects.create(event=self.event, name='Workshop 2',
-                                             category=self.workshopcat, default_price=12)
+                                             category=self.workshopcat, default_price=Decimal('12.00'))
         self.workshop2a = ItemVariation.objects.create(item=self.workshop2, value='A')
         self.workshop2b = ItemVariation.objects.create(item=self.workshop2, value='B')
         self.workshopquota.items.add(self.workshop1)

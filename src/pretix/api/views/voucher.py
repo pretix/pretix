@@ -34,7 +34,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('id',)
     ordering_fields = ('id', 'code', 'max_usages', 'valid_until', 'value')
-    filter_class = VoucherFilter
+    filterset_class = VoucherFilter
     permission = 'can_view_vouchers'
     write_permission = 'can_change_vouchers'
 

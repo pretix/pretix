@@ -48,13 +48,13 @@ def login(request):
                 request.session['pretix_auth_2fa_user'] = form.user_cache.pk
                 request.session['pretix_auth_2fa_time'] = str(int(time.time()))
                 twofa_url = reverse('control:auth.login.2fa')
-                if "next" in request.GET and is_safe_url(request.GET.get("next")):
+                if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
                     twofa_url += '?next=' + quote(request.GET.get('next'))
                 return redirect(twofa_url)
             else:
                 auth_login(request, form.user_cache)
                 request.session['pretix_auth_login_time'] = int(time.time())
-                if "next" in request.GET and is_safe_url(request.GET.get("next")):
+                if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
                     return redirect(request.GET.get("next"))
                 return redirect(reverse('control:index'))
     else:
@@ -72,7 +72,7 @@ def logout(request):
     auth_logout(request)
     request.session['pretix_auth_login_time'] = 0
     next = reverse('control:auth.login')
-    if 'next' in request.GET and is_safe_url(request.GET.get('next')):
+    if 'next' in request.GET and is_safe_url(request.GET.get('next'), allowed_hosts=None):
         next += '?next=' + quote(request.GET.get('next'))
     return redirect(next)
 
@@ -94,7 +94,7 @@ def register(request):
                 locale=request.LANGUAGE_CODE,
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
-            user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
@@ -148,7 +148,7 @@ def invite(request, token):
                 locale=request.LANGUAGE_CODE,
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
-            user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
@@ -329,7 +329,7 @@ class Login2FAView(TemplateView):
             request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
-            if "next" in request.GET and is_safe_url(request.GET.get("next")):
+            if "next" in request.GET and is_safe_url(request.GET.get("next"), allowed_hosts=None):
                 return redirect(request.GET.get("next"))
             return redirect(reverse('control:index'))
         else:

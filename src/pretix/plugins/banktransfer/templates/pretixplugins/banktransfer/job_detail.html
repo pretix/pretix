@@ -1,6 +1,6 @@
 {% extends basetpl %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 {% block inner %}
     <h2>{% trans "Import result" %}</h2>
     {% if job.state == "running" or job.state == "pending" %}

@@ -2,12 +2,12 @@ import json
 
 from django.contrib import messages
 from django.core.files import File
-from django.core.urlresolvers import resolve, reverse
 from django.db import transaction
 from django.db.models import Count, F, Q
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext, ugettext_lazy as _

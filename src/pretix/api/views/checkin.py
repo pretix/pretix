@@ -32,7 +32,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     serializer_class = CheckinListSerializer
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend,)
-    filter_class = CheckinListFilter
+    filterset_class = CheckinListFilter
     permission = 'can_view_orders'
     write_permission = 'can_change_event_settings'
 
@@ -175,7 +175,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         },
     }
 
-    filter_class = CheckinOrderPositionFilter
+    filterset_class = CheckinOrderPositionFilter
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
 

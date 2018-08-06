@@ -1,29 +1,29 @@
 # Functional requirements
-Django==1.11.*
-djangorestframework==3.6.*
+Django>=2.1,<2.2
+djangorestframework==3.8.*
 python-dateutil
 pytz
-django-bootstrap3==8.2.*
+django-bootstrap3==10.0.*
 django-formset-js-improved==0.5.0.2
-django-compressor==2.1.1
+django-compressor==2.2.*
 django-hierarkey==1.0.*,>=1.0.3
-django-filter==1.0.*
-reportlab==3.4.*
+django-filter==2.0.*
+reportlab==3.5.*
 PyPDF2==1.26.*
 Pillow
 django-libsass
 libsass
-django-otp==0.3.*
+django-otp==0.4.*
 python-u2flib-server==4.*
-django-formtools==2.0
+django-formtools==2.1
 celery>=4.1.1,<4.2.0
 kombu==4.2.*
-django-statici18n==1.3.*
+django-statici18n==1.8.*
 inlinestyler==0.2.*
 BeautifulSoup4
 slimit
 lxml
-static3==0.6.1
+static3==0.7.*
 dj-static
 csscompressor
 django-markup
@@ -31,13 +31,13 @@ markdown
 bleach==2.*
 raven
 babel
-django-i18nfield>=1.2.1
+django-i18nfield>=1.4.0
 django-hijack==2.1.*
-django-oauth-toolkit==1.1.*
+django-oauth-toolkit==1.2.*
 # Stripe
 stripe==2.0.*
 # PayPal
-paypalrestsdk==1.12.*
+paypalrestsdk==1.13.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
 # Banktransfer
 chardet<3.1.0,>=3.0.2

@@ -1,8 +1,8 @@
 from django import template
-from django.core.urlresolvers import NoReverseMatch
 from django.template import TemplateSyntaxError
 from django.template.base import kwarg_re
 from django.template.defaulttags import URLNode
+from django.urls import NoReverseMatch
 from django.utils.encoding import smart_text
 from django.utils.html import conditional_escape
 

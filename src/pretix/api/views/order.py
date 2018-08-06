@@ -45,10 +45,10 @@ from pretix.base.signals import order_placed, register_ticket_outputs
 
 
 class OrderFilter(FilterSet):
-    email = django_filters.CharFilter(name='email', lookup_expr='iexact')
-    code = django_filters.CharFilter(name='code', lookup_expr='iexact')
-    status = django_filters.CharFilter(name='status', lookup_expr='iexact')
-    modified_since = django_filters.IsoDateTimeFilter(name='last_modified', lookup_expr='gte')
+    email = django_filters.CharFilter(field_name='email', lookup_expr='iexact')
+    code = django_filters.CharFilter(field_name='code', lookup_expr='iexact')
+    status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
+    modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
 
     class Meta:
         model = Order
@@ -61,7 +61,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'code', 'status')
-    filter_class = OrderFilter
+    filterset_class = OrderFilter
     lookup_field = 'code'
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
@@ -307,7 +307,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class OrderPositionFilter(FilterSet):
-    order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
+    order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
     has_checkin = django_filters.rest_framework.BooleanFilter(method='has_checkin_qs')
     attendee_name = django_filters.CharFilter(method='attendee_name_qs')
     search = django_filters.CharFilter(method='search_qs')
@@ -345,7 +345,7 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
-    filter_class = OrderPositionFilter
+    filterset_class = OrderPositionFilter
     permission = 'can_view_orders'
 
     def get_queryset(self):
@@ -590,7 +590,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 class InvoiceFilter(FilterSet):
     refers = django_filters.CharFilter(method='refers_qs')
     number = django_filters.CharFilter(method='nr_qs')
-    order = django_filters.CharFilter(name='order', lookup_expr='code__iexact')
+    order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
 
     def refers_qs(self, queryset, name, value):
         return queryset.annotate(
@@ -617,7 +617,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('nr',)
     ordering_fields = ('nr', 'date')
-    filter_class = InvoiceFilter
+    filterset_class = InvoiceFilter
     permission = 'can_view_orders'
     lookup_url_kwarg = 'number'
     lookup_field = 'nr'

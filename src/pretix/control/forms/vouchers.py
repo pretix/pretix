@@ -45,7 +45,7 @@ class VoucherForm(I18nModelForm):
         instance = kwargs.get('instance')
         initial = kwargs.get('initial')
         if instance:
-            self.initial_instance_data = copy.copy(instance)
+            self.initial_instance_data = copy.deepcopy(instance)
             try:
                 if instance.variation:
                     initial['itemvar'] = '%d-%d' % (instance.item.pk, instance.variation.pk)
@@ -139,7 +139,7 @@ class VoucherForm(I18nModelForm):
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
-            cnt = len(data['codes']) * data['max_usages']
+            cnt = len(data['codes']) * data.get('max_usages', 0)
         else:
             cnt = data['max_usages']
 
@@ -217,7 +217,7 @@ class VoucherBulkForm(VoucherForm):
     def save(self, event, *args, **kwargs):
         objs = []
         for code in self.cleaned_data['codes']:
-            obj = copy.copy(self.instance)
+            obj = copy.deepcopy(self.instance)
             obj.event = event
             obj.code = code
             data = dict(self.cleaned_data)

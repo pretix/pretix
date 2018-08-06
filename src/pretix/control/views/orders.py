@@ -10,11 +10,11 @@ import vat_moss.id
 from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count
 from django.http import FileResponse, Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -275,7 +275,7 @@ class OrderRefundCancel(OrderView):
             messages.success(self.request, _('The refund has been canceled.'))
         else:
             messages.error(self.request, _('This refund can not be canceled at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 
@@ -310,7 +310,7 @@ class OrderRefundProcess(OrderView):
             messages.success(self.request, _('The refund has been processed.'))
         else:
             messages.error(self.request, _('This refund can not be processed at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 
@@ -336,7 +336,7 @@ class OrderRefundDone(OrderView):
             messages.success(self.request, _('The refund has been marked as done.'))
         else:
             messages.error(self.request, _('This refund can not be processed at the moment.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next")):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(self.get_order_url())
 

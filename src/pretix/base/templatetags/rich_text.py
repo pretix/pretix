@@ -63,7 +63,7 @@ ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 
 def safelink_callback(attrs, new=False):
     url = attrs.get((None, 'href'), '/')
-    if not is_safe_url(url) and not url.startswith('mailto:') and not url.startswith('tel:'):
+    if not is_safe_url(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
         signer = signing.Signer(salt='safe-redirect')
         attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
         attrs[None, 'target'] = '_blank'

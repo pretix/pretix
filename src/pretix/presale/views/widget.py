@@ -14,11 +14,12 @@ from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import gettext
+from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import condition
 from django.views.i18n import (
-    get_formats, get_javascript_catalog, js_catalog_template,
+    JavaScriptCatalog, get_formats, js_catalog_template,
 )
 from lxml import etree
 
@@ -73,7 +74,10 @@ def generate_widget_js(lang):
         code.append('var module = {}, exports = {};\n')
         code.append('var lang = "%s";\n' % lang)
 
-        catalog, plural = get_javascript_catalog(lang, 'djangojs', ['pretix'])
+        c = JavaScriptCatalog()
+        c.translation = DjangoTranslation(lang, domain='djangojs')
+        catalog, plural = c.get_catalog(), c.get_plural()
+
         catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
         template = Engine().from_string(js_catalog_template)
         context = Context({

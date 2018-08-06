@@ -129,7 +129,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
     serializer_class = SubEventSerializer
     queryset = ItemCategory.objects.none()
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    filter_class = SubEventFilter
+    filterset_class = SubEventFilter
 
     def get_queryset(self):
         return self.request.event.subevents.prefetch_related(
