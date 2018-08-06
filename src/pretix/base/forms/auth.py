@@ -39,7 +39,7 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if email and password:
-            self.user_cache = authenticate(email=email.lower(), password=password)
+            self.user_cache = authenticate(request=self.request, email=email.lower(), password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],

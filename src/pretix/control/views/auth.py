@@ -94,7 +94,7 @@ def register(request):
                 locale=request.LANGUAGE_CODE,
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
-            user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
@@ -148,7 +148,7 @@ def invite(request, token):
                 locale=request.LANGUAGE_CODE,
                 timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
             )
-            user = authenticate(email=user.email, password=form.cleaned_data['password'])
+            user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
             user.log_action('pretix.control.auth.user.created', user=user)
             auth_login(request, user)
             request.session['pretix_auth_login_time'] = int(time.time())
