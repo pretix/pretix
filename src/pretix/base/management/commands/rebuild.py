@@ -8,10 +8,10 @@ class Command(BaseCommand):
     help = "Rebuild static files and language files"
 
     def handle(self, *args, **options):
-        call_command('compilemessages', verbosity=1, interactive=False)
-        call_command('compilejsi18n', verbosity=1, interactive=False)
+        call_command('compilemessages', verbosity=1)
+        call_command('compilejsi18n', verbosity=1)
         call_command('collectstatic', verbosity=1, interactive=False)
-        call_command('compress', verbosity=1, interactive=False)
+        call_command('compress', verbosity=1)
         try:
             gs = GlobalSettingsObject()
             del gs.settings.update_check_last
