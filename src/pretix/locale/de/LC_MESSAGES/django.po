@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-06 10:48+0000\n"
-"PO-Revision-Date: 2018-07-08 14:01+0000\n"
+"PO-Revision-Date: 2018-08-06 14:10+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -195,22 +195,15 @@ msgid "All payment providers"
 msgstr "Alle Zahlungsmethoden"
 
 #: pretix/base/exporters/invoices.py:97
-#, fuzzy
-#| msgid ""
-#| "Only include invoices for orders that are currently set to this payment "
-#| "provider. Note that this might include some invoices of other payment "
-#| "providers or misses some invoices if the payment provider of an order has "
-#| "been changed and a new invoice has been generated."
 msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
-"Nur Rechnungen für Bestellungen die aktuell dieser Zahlungsmethode "
-"zugeordnet sind. Achtung: Dies kann auch Rechnungen von andern "
-"Zahlungsanbietern enthalten oder Rechnungen von diesem Zahlungsanbieter "
-"können fehlen, wenn der Zahlungsanbieter einer Rechnung sich geändert hat "
-"und die Rechnung neu erstellt wurde."
+"Nur Rechnungen für Bestellungen, die mindestens einen Zahlungsversuch mit "
+"dieser Zahlungsmethode haben. Achtung: Dies kann auch Rechnungen für "
+"Bestellungen enthalten, die am Ende mit einem anderen Zahlungsanbieter "
+"bezahlt wurden."
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
@@ -342,10 +335,8 @@ msgid "VAT ID"
 msgstr "USt-ID"
 
 #: pretix/base/exporters/orderlist.py:78
-#, fuzzy
-#| msgid "Last date of payments"
 msgid "Date of last payment"
-msgstr "Datum des letzten möglichen Zahlungseingangs"
+msgstr "Datum der letzten Zahlung"
 
 #: pretix/base/exporters/orderlist.py:78 pretix/base/services/stats.py:163
 msgid "Fees"
@@ -376,14 +367,12 @@ msgid "Invoice numbers"
 msgstr "Rechnungsnummern"
 
 #: pretix/base/exporters/orderlist.py:157
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of payments and refunds (CSV)"
-msgstr "Liste der Bestellungen (CSV)"
+msgstr "Liste der Bezahlungen und Erstattungen (CSV)"
 
 #: pretix/base/exporters/orderlist.py:165
 msgid "Only successful payments"
-msgstr ""
+msgstr "Nur erfolgreiche Zahlungen"
 
 #: pretix/base/exporters/orderlist.py:200 pretix/base/models/orders.py:172
 #: pretix/base/models/orders.py:812 pretix/base/models/orders.py:1090
@@ -399,19 +388,13 @@ msgid "Payment ID"
 msgstr "Zahlungs-ID"
 
 #: pretix/base/exporters/orderlist.py:200
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgid "Creation date"
-msgstr "Termin erstellen"
+msgstr "Erstellungszeitpunkt"
 
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:459
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Completion date"
-msgstr "Korrekturdatum"
+msgstr "Abschlussdatum"
 
 #: pretix/base/exporters/orderlist.py:201 pretix/base/models/orders.py:808
 #: pretix/base/models/orders.py:1086
@@ -1903,42 +1886,31 @@ msgid "Empty, if this product is not an admission ticket"
 msgstr "Leer, wenn dies kein Eintrittsticket ist"
 
 #: pretix/base/models/orders.py:795
-#, fuzzy
-#| msgid "Create"
 msgctxt "payment_state"
 msgid "created"
-msgstr "Erstellen"
+msgstr "erstellt"
 
 #: pretix/base/models/orders.py:796
-#, fuzzy
-#| msgid "pending"
 msgctxt "payment_state"
 msgid "pending"
 msgstr "ausstehend"
 
 #: pretix/base/models/orders.py:797
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr "Bestellbestätigung"
+msgstr "bestätigt"
 
 #: pretix/base/models/orders.py:798
-#, fuzzy
-#| msgid "canceled"
 msgctxt "payment_state"
 msgid "canceled"
-msgstr "storniert"
+msgstr "abgebrochen"
 
 #: pretix/base/models/orders.py:799
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "fehlgeschlagen"
 
 #: pretix/base/models/orders.py:800
-#, fuzzy
-#| msgid "refunded"
 msgctxt "payment_state"
 msgid "refunded"
 msgstr "erstattet"
@@ -1956,57 +1928,47 @@ msgstr "Zahlung erhalten für die Bestellung: %(code)s"
 #: pretix/base/models/orders.py:1058
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "extern gestartet"
 
 #: pretix/base/models/orders.py:1059
-#, fuzzy
-#| msgid "Create"
 msgctxt "refund_state"
 msgid "created"
-msgstr "Erstellen"
+msgstr "erstellt"
 
 #: pretix/base/models/orders.py:1060
-#, fuzzy
-#| msgid "Bank transfer"
 msgctxt "refund_state"
 msgid "in transit"
-msgstr "Banküberweisung"
+msgstr "auf dem Weg"
 
 #: pretix/base/models/orders.py:1061
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "erledigt"
 
 #: pretix/base/models/orders.py:1062
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "fehlgeschlagen"
 
 #: pretix/base/models/orders.py:1064
-#, fuzzy
-#| msgid "canceled"
 msgctxt "refund_state"
 msgid "canceled"
-msgstr "storniert"
+msgstr "abgebrochen"
 
 #: pretix/base/models/orders.py:1072
-#, fuzzy
-#| msgid "Organizer"
 msgctxt "refund_source"
 msgid "Organizer"
 msgstr "Veranstalter"
 
 #: pretix/base/models/orders.py:1073
-#, fuzzy
-#| msgid "Any customer"
 msgctxt "refund_source"
 msgid "Customer"
-msgstr "Beliebiger Kunde"
+msgstr "Kunde"
 
 #: pretix/base/models/orders.py:1074
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "Extern"
 
 #: pretix/base/models/orders.py:1202
 msgid "Payment fee"
@@ -2622,16 +2584,15 @@ msgid "Order {order.code} has been changed."
 msgstr "Die Bestellung {order.code} wurde geändert."
 
 #: pretix/base/notifications.py:235
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "External refund of payment"
-msgstr "Zahlungsfrist verändern"
+msgstr "Externe Erstattung einer Zahlung"
 
 #: pretix/base/notifications.py:236
-#, fuzzy, python-brace-format
-#| msgid "An unexpected error has occurred."
+#, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "Ein unerwarteter Fehler ist aufgetreten."
+msgstr ""
+"Eine Zahlung für Bestellung {order.code} wurde in einem externen System "
+"erstattet."
 
 #: pretix/base/notifications.py:241
 msgid "Order refunded"
@@ -2746,6 +2707,8 @@ msgstr "Die Zahlung für diese Rechnung wurde bereits erhalten."
 #: pretix/base/payment.py:575
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
+"Automatische Rückbuchungen werden von dieser Zahlungsmethode nicht "
+"unterstützt."
 
 #: pretix/base/payment.py:601
 msgid ""
@@ -2819,16 +2782,13 @@ msgstr ""
 "werden."
 
 #: pretix/base/payment.py:742
-#, fuzzy
-#| msgid "Settings"
 msgid "Offsetting"
-msgstr "Einstellungen"
+msgstr "Verrechnung"
 
 #: pretix/base/payment.py:774
-#, fuzzy, python-format
-#| msgid "Placed orders"
+#, python-format
 msgid "Balanced against orders: %s"
-msgstr "Getätigte Bestellungen"
+msgstr "Verrechnet mit: %s"
 
 #: pretix/base/pdf.py:38
 msgid "Ticket code (barcode content)"
@@ -5395,16 +5355,12 @@ msgid "All dates"
 msgstr "Alle Termine"
 
 #: pretix/control/forms/filter.py:209
-#, fuzzy
-#| msgid "paid"
 msgid "Overpaid"
-msgstr "bezahlt"
+msgstr "Überzahlt"
 
 #: pretix/control/forms/filter.py:210
-#, fuzzy
-#| msgid "unpaid"
 msgid "Underpaid"
-msgstr "unbezahlt"
+msgstr "Unterzahlt"
 
 #: pretix/control/forms/filter.py:298 pretix/control/forms/filter.py:303
 #: pretix/control/forms/filter.py:466 pretix/control/forms/filter.py:471
@@ -5579,22 +5535,16 @@ msgid "Any product in quota \"{quota}\""
 msgstr "Beliebiges Produkt des Kontingents \"{quota}\""
 
 #: pretix/control/forms/filter.py:843
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Refund status"
-msgstr "Check-in-Status"
+msgstr "Erstattungs-Status"
 
 #: pretix/control/forms/filter.py:845
-#, fuzzy
-#| msgid "All entries"
 msgid "All open refunds"
-msgstr "Alle Einträge"
+msgstr "Alle offenen Erstattungen"
 
 #: pretix/control/forms/filter.py:846
-#, fuzzy
-#| msgid "All orders"
 msgid "All refunds"
-msgstr "Alle Bestellungen"
+msgstr "Alle Erstattungen"
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
@@ -5876,26 +5826,29 @@ msgid ""
 "Mark the complete order as refunded. The order will be canceled and all "
 "tickets will no longer work. This can not be reverted."
 msgstr ""
+"Markiere die komplette Bestellung als erstattet. Die Bestellung wird "
+"storniert und alle Tickets funktionieren nicht mehr. Dies kann nicht "
+"rückgängig gemacht werden."
 
 #: pretix/control/forms/orders.py:356
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr ""
+"Markiere die Bestellung als unbezahlt und erlaube dem Nutzer, den offenen "
+"Betrag mit einer anderen Zahlungsmethode zu begleichen."
 
 #: pretix/control/forms/orders.py:358
 msgid "Do nothing and keep the order as it is."
-msgstr ""
+msgstr "Tue nichts und belasse den Zustand der Bestellung wie gehabt."
 
 #: pretix/control/forms/orders.py:383
 msgid "The refund amount needs to be positive and less than {}."
-msgstr ""
+msgstr "Der Rückbuchungsbetrag muss positiv und geringer als {} sein."
 
 #: pretix/control/forms/orders.py:389
-#, fuzzy
-#| msgid "You need to specify either a quota or a product."
 msgid "You need to specify an amount for a partial refund."
-msgstr "Sie müssen entweder ein Kontingent oder ein Produkt auswählen."
+msgstr "Sie müssen für eine Teilrückerstattung auch einen Betrag angeben."
 
 #: pretix/control/forms/organizer.py:17
 msgid "This slug is already in use. Please choose a different one."
@@ -6295,6 +6248,7 @@ msgstr "Der interne Kommentar wurde geändert."
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
 msgstr ""
+"Ein neuer Zahlungsvorgang {local_id} wurde anstatt des vorherigen gestartet."
 
 #: pretix/control/logdisplay.py:177
 msgid "An unidentified type email has been sent."
@@ -6359,45 +6313,39 @@ msgstr ""
 "Eine E-Mail mit dem Link zur Bestellseite wurde an den Benutzer verschickt."
 
 #: pretix/control/logdisplay.py:189
-#, fuzzy, python-brace-format
-#| msgid "The payment method has been changed."
+#, python-brace-format
 msgid "Payment {local_id} has been confirmed."
-msgstr "Die Zahlungsmethode wurde geändert."
+msgstr "Die Zahlung {local_id} wurde bestätigt."
 
 #: pretix/control/logdisplay.py:190
-#, fuzzy, python-brace-format
-#| msgid "The order has been canceled."
+#, python-brace-format
 msgid "Payment {local_id} has been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Zahlung {local_id} wurde abgebrochen."
 
 #: pretix/control/logdisplay.py:191
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} has been scanned."
+#, python-brace-format
 msgid "Payment {local_id} has been started."
-msgstr "Ticket #{posid} wurde gescannt."
+msgstr "Die Zahlung {local_id} wurde gestartet."
 
 #: pretix/control/logdisplay.py:192
-#, fuzzy, python-brace-format
-#| msgid "The order has been created."
+#, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Die Erstattung {local_id} wurde erstellt."
 
 #: pretix/control/logdisplay.py:193
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr ""
+msgstr "Die Erstattung {local_id} wurde von einem externem System übermittelt."
 
 #: pretix/control/logdisplay.py:194
-#, fuzzy, python-brace-format
-#| msgid "The task has been completed."
+#, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr "Die Aufgabe wurde fertiggestellt."
+msgstr "Die Erstattung {local_id} wurde abgeschlossen."
 
 #: pretix/control/logdisplay.py:195
-#, fuzzy, python-brace-format
-#| msgid "The order has been canceled."
+#, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Erstattung {local_id} wurde abgebrochen."
 
 #: pretix/control/logdisplay.py:196
 msgid "The user has been created."
@@ -7510,10 +7458,8 @@ msgstr "Überblick"
 #: pretix/control/templates/pretixcontrol/order/index.html:449
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:7
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
-#, fuzzy
-#| msgid "Refunded"
 msgid "Refunds"
-msgstr "erstattet"
+msgstr "Erstattungen"
 
 #: pretix/control/templates/pretixcontrol/event/base.html:101
 msgid "Export"
@@ -7612,24 +7558,25 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
+"Diese Veranstaltung enthält <strong>überzahlte Bestellungen</strong>, z.B. "
+"durch doppelte Zahlungsversuche. Sie sollten sich diese Fälle genau "
+"anschauen und ggf. den zuviel bezahlten Betrag an den Kunden zurückerstatten."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:25
-#, fuzzy
-#| msgid "Only paid orders"
 msgid "Show overpaid orders"
-msgstr "Nur bezahlte Bestellungen"
+msgstr "Überzahlte Bestellungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:30
 msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
+"Diese Veranstaltung enthält <strong>ausstehende Erstattungen</strong>, um "
+"die Sie sich kümmern sollten."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:34
-#, fuzzy
-#| msgid "Sold out (pending orders)"
 msgid "Show pending refunds"
-msgstr "Ausverkauft (ausstehende Zahlungen)"
+msgstr "Ausstehende Erstattungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:41
 msgid "Your attention is required to resolve the following issues"
@@ -9260,11 +9207,8 @@ msgid "Mark as not paid"
 msgstr "Als nicht bezahlt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:46
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgid "Create a refund"
-msgstr "Termin erstellen"
+msgstr "Betrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:52
 msgid "View order as user"
@@ -9290,15 +9234,14 @@ msgstr ""
 "markieren."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:81
-#, fuzzy, python-format
-#| msgid "This quota is currently overbooked by %(num)s tickets."
+#, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "Dieses Kontingent ist derzeit um %(num)s Tickets überbucht."
+msgstr "Diese Bestellung ist derzeit um %(amount)s überzahlt."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:85
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr ""
+msgstr "%(amount)s zurückerstatten"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:98
 #: pretix/presale/templates/pretixpresale/event/order.html:7
@@ -9423,77 +9366,59 @@ msgid "Total"
 msgstr "Gesamt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:380
-#, fuzzy
-#| msgid "Payment"
 msgid "Payments"
-msgstr "Zahlung"
+msgstr "Zahlungen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:390
-#, fuzzy
-#| msgid "Confirmation text"
 msgid "Confirmation date"
-msgstr "Bestätigungs-Text"
+msgstr "Bestätigungsdatum"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:403
-#, fuzzy
-#| msgid ""
-#| "This email has been sent with an older version of pretix. We are "
-#| "therefore not able to display it here accurately."
 msgid ""
 "This payment was created with an older version of pretix, therefore accurate "
 "data might not be available."
 msgstr ""
-"Diese E-Mail wurde mit einer älteren pretix-Version versendet und kann daher "
-"hier nicht vollständig dargestellt werden."
+"Diese Zahlung wurde mit einer älteren pretix-Version erzeugt, daher sind "
+"vollständige und korrekte Daten gegebenenfalls nicht verfügbar."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:404
 msgid "MIGRATED"
-msgstr ""
+msgstr "MIGRIERT"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:416
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:8
-#, fuzzy
-#| msgid "Manual payment"
 msgid "Cancel payment"
-msgstr "Manuelle Zahlung"
+msgstr "Zahlung abbrechen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:421
-#, fuzzy
-#| msgid "Confirm password"
 msgid "Confirm as paid"
-msgstr "Passwort bestätigen"
+msgstr "Als bezahlt bestätigen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:460
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:44
 msgid "Source"
-msgstr ""
+msgstr "Quelle"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:493
-#, fuzzy
-#| msgid "Bank transfer"
 msgid "Cancel transfer"
-msgstr "Banküberweisung"
+msgstr "Abbrechen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:498
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:82
-#, fuzzy
-#| msgid "Confirmations"
 msgid "Confirm as done"
-msgstr "Bestätigungen"
+msgstr "Als erledigt bestätigen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:505
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:88
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorieren"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:511
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:50
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:93
-#, fuzzy
-#| msgid "Order refunded"
 msgid "Process refund"
-msgstr "Bestellung zurückerstattet"
+msgstr "Erstattung durchführen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:532
 msgid "Change"
@@ -9548,49 +9473,35 @@ msgid "Do you really want to mark this order as paid?"
 msgstr "Möchten Sie diese Bestellung wirklich als bezahlt markieren?"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
-#, fuzzy
-#| msgid ""
-#| "Do you really want to cancel this order? You cannot revert this action."
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
 msgstr ""
-"Möchten Sie diese Bestellung wirklich stornieren? Sie können diese Aktion "
-"nicht rückgängig machen."
+"Möchten Sie diese Zahlung wirklich abbrechen? Dies kann nicht rückgängig "
+"gemacht werden."
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Yes, cancel payment"
-msgstr "Ja, Bestellung stornieren"
+msgstr "Ja, Zahlung abbrechen"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Mark payment as complete"
-msgstr "Zahlung erfolgreich."
+msgstr "Zahlung als abgeschlossen bestätigen"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
-#, fuzzy
-#| msgid "Do you really want to mark this order as paid?"
 msgid "Do you really want to mark this payment as complete?"
-msgstr "Möchten Sie diese Bestellung wirklich als bezahlt markieren?"
+msgstr "Möchten Sie diese Zahlung wirklich als abgeschlossen bestätigen?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
-#, fuzzy
-#| msgid "Canceled"
 msgid "Cancel refund"
-msgstr "storniert"
+msgstr "Erstattung abbrechen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
-#, fuzzy
-#| msgid ""
-#| "Do you really want to cancel this order? You cannot revert this action."
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
-"Möchten Sie diese Bestellung wirklich stornieren? Sie können diese Aktion "
+"Möchten Sie diese Erstattung wirklich abbrechen? Sie können diese Aktion "
 "nicht rückgängig machen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
@@ -9599,12 +9510,14 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
+"Wenn das Geld bereits auf dem Rückweg ist, wird dies die Erstattung nicht "
+"aufhalten, es markiert diesen Prozess nur in pretix als abgebrochen. Die "
+"Bestellung wird dadurch auch nicht wieder aktiviert, Sie können nur eine "
+"neue Erstattungsmethode auswählen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Yes, cancel refund"
-msgstr "Ja, Bestellung stornieren"
+msgstr "Ja, Erstattung abbrechen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
@@ -9615,89 +9528,67 @@ msgstr "Bestellung erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:21
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "Wie soll die Erstattung durchgeführt werden?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:28
-#, fuzzy
-#| msgid "Payment information"
 msgid "Payment confirmation date"
-msgstr "Zahlungsinformationen"
+msgstr "Bestätigung der Zahlung"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
-#, fuzzy
-#| msgid "Payment refunded."
 msgid "Amount not refunded"
-msgstr "Zahlung erstattet."
+msgstr "Nicht erstatteter Betrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:31
-#, fuzzy
-#| msgid "Refunded"
 msgid "Refund"
-msgstr "erstattet"
+msgstr "Erstattung"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
-#, fuzzy
-#| msgid "Automatically on payment"
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr "Automatisch bei Zahlungseingang"
+msgstr "Automatisch erstatten:"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:59
-#, fuzzy
-#| msgid "Automatically on payment"
 msgid "Automatically refund full amount"
-msgstr "Automatisch bei Zahlungseingang"
+msgstr "Automatisch vollen Betrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:62
-#, fuzzy
-#| msgid "The payment method for this order cannot be changed."
 msgid "This payment method does not support automatic refunds."
-msgstr "Die Zahlungsmethode für diese Bestellung kann nicht geändert werden."
+msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:70
-#, fuzzy
-#| msgid "Add a new product to the order"
 msgid "Transfer to other order"
-msgstr "Neues Produkt zur Bestellung hinzufügen"
+msgstr "Mit anderer Bestellung verrechnen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:73
-#, fuzzy
-#| msgid "Bank transfer"
 msgctxt "amount_label"
 msgid "Transfer"
-msgstr "Banküberweisung"
+msgstr "Verrechne"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:81
 msgctxt "order_label"
 msgid "to"
-msgstr ""
+msgstr "mit Bestellung"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:90
-#, fuzzy
-#| msgid "Manual payment"
 msgid "Manual refund"
-msgstr "Manuelle Zahlung"
+msgstr "Manuelle Erstattung"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:93
-#, fuzzy
-#| msgid "Manual payment"
 msgctxt "amount_label"
 msgid "Manually refund"
-msgstr "Manuelle Zahlung"
+msgstr "Manuell erstatten:"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:104
 msgid "Keep transfer as to do"
-msgstr ""
+msgstr "Erstattung als unerledigt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:108
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:9
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
-#, fuzzy
-#| msgid "Mark order as paid"
 msgid "Mark refund as done"
-msgstr "Als bezahlt markieren"
+msgstr "Erstattung als erledigt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:118
 msgid ""
@@ -9706,24 +9597,23 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
+"Alle Zahlungen, die Sie für eine automatische Erstattung auswählen, werden "
+"sofort mit dem jeweiligen Zahlungsanbieter rückabgewickelt. Manuelle "
+"Erstattungen werden als offene Erstattungen erstellt, die Sie dann später "
+"als erledigt markieren können, wenn Sie das Geld tatsächlich zurückerstattet "
+"haben."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
-#, fuzzy
-#| msgid "Order refunded"
 msgid "Perform refund"
-msgstr "Bestellung zurückerstattet"
+msgstr "Erstattung durchführen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
-#, fuzzy
-#| msgid "Do you really want to mark this order as paid?"
 msgid "Do you really want to mark this refund as complete?"
-msgstr "Möchten Sie diese Bestellung wirklich als bezahlt markieren?"
+msgstr "Möchten Sie diese Erstattung wirklich als erledigt markieren?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
-#, fuzzy
-#| msgid "Mark as paid"
 msgid "Mark as done"
-msgstr "Als bezahlt markieren"
+msgstr "Als erledigt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -9733,38 +9623,43 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
+"Uns wurde mitgeteilt, dass <strong>%(amount)s</strong> über "
+"<strong>%(method)s</strong> erstattet wurden. Wenn diese Erstattung "
+"verarbeitet wird, wird die Bestellung einen ausstehenden Betrag von "
+"<strong>%(pending)s</strong> haben. Der Gesamtbetrag der Bestellung ist "
+"<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "Was soll mit der Ticketbestellung passieren?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
 msgstr ""
+"Bestellung als unbezahlt markieren und dem Nutzer die Zahlung mit anderer "
+"Zahlungsmethode erlauben."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:41
 msgid "Cancel the order irrevocably."
-msgstr ""
+msgstr "Bestellung unwiderruflich stornieren."
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr ""
+msgstr "Wie viel soll zurückerstattet werden?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr ""
+msgstr "Vollen Zahlungsbetrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund only"
-msgstr "Bestellung erstatten"
+msgstr "Nur diesen Betrag erstatten:"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:39
 msgid "What should happen to the order?"
-msgstr ""
+msgstr "Was soll mit der Bestellung geschehen?"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:4
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
@@ -9833,15 +9728,15 @@ msgstr "Positionen"
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/orders/index.html:134
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "ERSTATTUNG AUSSTEHEND"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
 msgid "OVERPAID"
-msgstr ""
+msgstr "ÜBERZAHLT"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:139
 msgid "UNDERPAID"
-msgstr ""
+msgstr "UNTERZAHLT"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
@@ -9880,13 +9775,11 @@ msgstr "Verkäufe"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "Im Moment sind keine Erstattungen offen."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:47
-#, fuzzy
-#| msgid "All actions"
 msgid "Actions"
-msgstr "Alle Aktionen"
+msgstr "Aktionen"
 
 #: pretix/control/templates/pretixcontrol/organizers/base.html:7
 #, python-format
@@ -10210,15 +10103,15 @@ msgstr "Textfarbe"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:293
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:295
 msgid "Dark"
-msgstr ""
+msgstr "Dunkel"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:296
 msgid "Light"
-msgstr ""
+msgstr "Hell"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:302
 msgid "Text content"
@@ -10245,10 +10138,8 @@ msgid "QR code for Lead Scanning"
 msgstr "QR-Code für Lead-Scanning"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:343
-#, fuzzy
-#| msgid "pretixdroid"
 msgid "pretix Logo"
-msgstr "pretixdroid"
+msgstr "pretix-Logo"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:80
 msgid ""
@@ -11450,6 +11341,8 @@ msgstr[1] "{num} Bestellungen"
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
+"Diese Zahlungsmethode existiert nicht oder die entsprechende Erweiterung ist "
+"deaktiviert."
 
 #: pretix/control/views/event.py:444 pretix/control/views/organizer.py:158
 msgid ""
@@ -11646,16 +11539,12 @@ msgid "The new quota has been created."
 msgstr "Ein neues Kontingent wurde erstellt."
 
 #: pretix/control/views/item.py:616
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Vouchers and waiting list reservations"
-msgstr "Auf der Liste seit"
+msgstr "Gutscheine und Wartelisten-Reservierungen"
 
 #: pretix/control/views/item.py:626
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list (pending)"
-msgstr "Wartelisten-Einträge"
+msgstr "Warteliste (ausstehend)"
 
 #: pretix/control/views/item.py:659 pretix/control/views/item.py:679
 #: pretix/control/views/item.py:733
@@ -11710,117 +11599,98 @@ msgid "Access for the selected application has been revoked."
 msgstr "Der Zugriff für die ausgewählte App zu Ihrem Konto wurde entfernt."
 
 #: pretix/control/views/orders.py:247
-#, fuzzy
-#| msgid "The payment term has been changed."
 msgid "This payment has been canceled."
-msgstr "Die Zahlungsfrist wurde geändert."
+msgstr "Die Zahlung wurde storniert."
 
 #: pretix/control/views/orders.py:249
-#, fuzzy
-#| msgid "This event can not be deleted."
 msgid "This payment can not be canceled at the moment."
-msgstr "Diese Veranstaltung kann nicht gelöscht werden."
+msgstr "Diese Zahlung kann im Moment nicht abgebrochen werden."
 
 #: pretix/control/views/orders.py:275
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The refund has been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Erstattung wurde abgebrochen."
 
 #: pretix/control/views/orders.py:277
-#, fuzzy
-#| msgid "This event can not be deleted."
 msgid "This refund can not be canceled at the moment."
-msgstr "Diese Veranstaltung kann nicht gelöscht werden."
+msgstr "Diese Erstattung kann momentan nicht abgebrochen werden."
 
 #: pretix/control/views/orders.py:310
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The refund has been processed."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Die Erstattung wurde verarbeitet."
 
 #: pretix/control/views/orders.py:312 pretix/control/views/orders.py:338
-#, fuzzy
-#| msgid "This event can not be deleted."
 msgid "This refund can not be processed at the moment."
-msgstr "Diese Veranstaltung kann nicht gelöscht werden."
+msgstr "Die Erstattung kann momentan nicht verarbeitet werden."
 
 #: pretix/control/views/orders.py:336
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The refund has been marked as done."
-msgstr "Die Bestellung wurde als bezahlt markiert."
+msgstr "Die Erstattung wurde als erledigt markiert."
 
 #: pretix/control/views/orders.py:380
-#, fuzzy
-#| msgid ""
-#| "The order has been marked as paid, but we were unable to send a "
-#| "confirmation mail."
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
 msgstr ""
-"Die Bestellung wurde als bezahlt markiert, aber die Bestätigungsmail konnte "
-"nicht verschickt werden."
+"Die Bezahlung wurde bestätigt, aber die Bestätigungsmail konnte nicht "
+"verschickt werden."
 
 #: pretix/control/views/orders.py:383
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The payment has been marked as complete."
-msgstr "Die Bestellung wurde als bezahlt markiert."
+msgstr "Die Bezahlung wurde bestätigt."
 
 #: pretix/control/views/orders.py:385
-#, fuzzy
-#| msgid "This event can not be deleted."
 msgid "This payment can not be confirmed at the moment."
-msgstr "Diese Veranstaltung kann nicht gelöscht werden."
+msgstr "Diese Zahlung kann im Moment nicht bestätigt werden."
 
 #: pretix/control/views/orders.py:471 pretix/control/views/orders.py:494
 #: pretix/control/views/orders.py:524
-#, fuzzy
-#| msgid "You requested an invalid ticket output type."
 msgid "You entered an invalid number."
-msgstr "Sie haben einen ungültigen Ausgabetyp gewählt."
+msgstr "Sie haben eine ungültige Zahl eingegeben."
 
 #: pretix/control/views/orders.py:502
-#, fuzzy
-#| msgid "Your changes could not be saved."
 msgid "You entered an order that could not be found."
-msgstr "Die Änderungen konnten nicht gespeichert werden."
+msgstr "Sie haben eine unbekannte Bestellnummer eingegeben."
 
 #: pretix/control/views/orders.py:530
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
+"Sie können nicht mehr Geld zurückerstatten als den noch nicht "
+"zurückerstatteten Zahlungsbetrag."
 
 #: pretix/control/views/orders.py:535
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
+"Sie haben eine Teilerstattung für eine Zahlungsmethode ausgewählt, die nur "
+"volle Erstattungen unterstützt."
 
 #: pretix/control/views/orders.py:560
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
+"Eine der Erstattungen konnte nicht verarbeitet werden. Sie sollten das Geld "
+"auf anderem Wege zurückerstatten. Die Fehlermeldung war: {}"
 
 #: pretix/control/views/orders.py:566
-#, fuzzy
-#| msgid "The invoice has been reissued."
 msgid "A refund of {} has been processed."
-msgstr "Die Rechnung wurde neu ausgestellt."
+msgstr "Eine Erstattung von {} wurde verarbeitet."
 
 #: pretix/control/views/orders.py:570
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
+"Eine Erstattung von {} wurde gespeichert, aber noch nicht voll ausgeführt. "
+"Sie können die Erstattung weiter unten als erledigt markieren."
 
 #: pretix/control/views/orders.py:596
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
+"Die eingegebenen Beträge passen nicht zum ausgewählten Erstattungsbetrag."
 
 #: pretix/control/views/orders.py:654
 msgid ""
@@ -12476,16 +12346,12 @@ msgstr ""
 "Name der Bank: Professional Banking Institute Ltd., London"
 
 #: pretix/plugins/banktransfer/payment.py:47
-#, fuzzy
-#| msgid "You need to select the column containing the payment reference."
 msgid "Do not include a hypen in the payment reference."
-msgstr "Sie müssen die Spalte auswählen, die den Verwendungszweck enthält."
+msgstr "Keinen Bindestrich im Verwendungszweck verwenden."
 
 #: pretix/plugins/banktransfer/payment.py:48
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is required in some countries."
-msgstr "Dies ist eine Veranstaltungsreihe"
+msgstr "Dies ist in manchen Ländern erforderlich."
 
 #: pretix/plugins/banktransfer/signals.py:24
 #: pretix/plugins/banktransfer/signals.py:44
@@ -12923,7 +12789,7 @@ msgstr "Es gab einen Fehler beim Versenden der Bestätigungs-E-Mail."
 
 #: pretix/plugins/paypal/payment.py:308
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "Die Rückerstattung über PayPal ist fehlgeschlagen: {}"
 
 #: pretix/plugins/paypal/signals.py:27
 msgid "Payment completed."
@@ -13391,6 +13257,8 @@ msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
 msgstr ""
+"Bestellungen, die in mehreren Zahlungen bezahlt wurden, werden mit dem Datum "
+"ihrer letzten Zahlung angezeigt."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:32
 msgid "Revenue over time"
@@ -13401,6 +13269,9 @@ msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
+"Nur vollständig bezahlte Bestellungen sind gezählt. Bestellungen, die in "
+"mehreren Zahlungen bezahlt wurden, werden mit dem Datum ihrer letzten "
+"Zahlung angezeigt."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:73
 msgid ""
@@ -13605,10 +13476,8 @@ msgid "Stripe reported an error: %s"
 msgstr "Stripe meldete einen Fehler: %s"
 
 #: pretix/plugins/stripe/payment.py:397
-#, fuzzy
-#| msgid "Payment information"
 msgid "No payment information found."
-msgstr "Zahlungsinformationen"
+msgstr "Keine Zahlungsinformationen gefunden."
 
 #: pretix/plugins/stripe/payment.py:413
 msgid ""
@@ -13620,10 +13489,8 @@ msgstr ""
 "wenn das Problem fortbesteht."
 
 #: pretix/plugins/stripe/payment.py:417
-#, fuzzy
-#| msgid "Stripe returned an error: {}"
 msgid "Stripe returned an error"
-msgstr "Stripe meldete einen Fehler: {}"
+msgstr "Stripe meldete einen Fehler"
 
 #: pretix/plugins/stripe/payment.py:509
 msgid "Credit card via Stripe"
@@ -14649,7 +14516,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Eine Zahlung von %(total)s steht für diese Bestellung noch aus."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 #, python-format
@@ -14658,7 +14525,7 @@ msgstr "Bitte schließen Sie Ihre Zahlung bis zum %(date)s ab."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:64
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Erneut versuchen oder andere Zahlungsmethode wählen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:72
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
@@ -14994,10 +14861,8 @@ msgid "The payment method for this order cannot be changed."
 msgstr "Die Zahlungsmethode für diese Bestellung kann nicht geändert werden."
 
 #: pretix/presale/views/order.py:344
-#, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "A payment is currently pending for this order."
-msgstr "Sie können für diese Bestellung keine Rechnung erzeugen."
+msgstr "Eine Zahlung für diese Bestellung ist noch offen."
 
 #: pretix/presale/views/order.py:557
 msgid "You cannot modify this order"
@@ -15092,7 +14957,7 @@ msgstr "Dänisch"
 
 #: pretix/settings.py:360
 msgid "Turkish"
-msgstr ""
+msgstr "Türkisch"
 
 #: pretix/settings.py:361
 msgid "Portuguese (Brazil)"
