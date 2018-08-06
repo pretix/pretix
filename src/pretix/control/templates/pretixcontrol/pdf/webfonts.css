@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 {% for family, styles in fonts.items %}
 {% for style, formats in styles.items %}
