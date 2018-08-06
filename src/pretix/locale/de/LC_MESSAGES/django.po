@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-06 10:48+0000\n"
-"PO-Revision-Date: 2018-08-06 13:19+0000\n"
+"PO-Revision-Date: 2018-08-06 14:10+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -11645,7 +11645,7 @@ msgstr "Diese Zahlung kann im Moment nicht bestätigt werden."
 #: pretix/control/views/orders.py:471 pretix/control/views/orders.py:494
 #: pretix/control/views/orders.py:524
 msgid "You entered an invalid number."
-msgstr "Sie haben einen ungültige Zahl eingegeben."
+msgstr "Sie haben eine ungültige Zahl eingegeben."
 
 #: pretix/control/views/orders.py:502
 msgid "You entered an order that could not be found."
@@ -11656,7 +11656,7 @@ msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
-"Sie können nicht mehr Geld zurückerstatten, als den noch nicht "
+"Sie können nicht mehr Geld zurückerstatten als den noch nicht "
 "zurückerstatteten Zahlungsbetrag."
 
 #: pretix/control/views/orders.py:535
