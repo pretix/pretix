@@ -21,7 +21,7 @@ def togglesum_filter(value, arg='EUR', autoescape=True):
 
     places = settings.CURRENCY_PLACES.get(arg, 2)
     return mark_safe('<span class="count">{0}</span><span class="sum-gross">{1}</span><span class="sum-net">{2}</span>'.format(
-        esc(value[0]),
-        esc(floatformat(value[1], places)),
-        esc(floatformat(value[2], places))
+        esc(value[0] if value[0] != 0 else ''),
+        esc(floatformat(value[1], places) if value[0] != 0 or value[1] != 0 else ''),
+        esc(floatformat(value[2], places) if value[0] != 0 or value[2] != 0 else '')
     ))
