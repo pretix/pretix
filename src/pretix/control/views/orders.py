@@ -497,7 +497,8 @@ class OrderRefundView(OrderView):
                     if offsetting_value:
                         refund_selected += offsetting_value
                         try:
-                            order = Order.objects.get(code=self.request.POST.get('order-offsetting'))
+                            order = Order.objects.get(code=self.request.POST.get('order-offsetting'),
+                                                      event__organizer=self.request.organizer)
                         except Order.DoesNotExist:
                             messages.error(self.request, _('You entered an order that could not be found.'))
                             is_valid = False

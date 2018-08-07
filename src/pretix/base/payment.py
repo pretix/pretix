@@ -750,7 +750,10 @@ class OffsettingProvider(BasePaymentProvider):
 
     def execute_refund(self, refund: OrderRefund):
         code = refund.info_data['orders'][0]
-        order = self.event.orders.get(code=code)
+        try:
+            order = Order.objects.get(code=code, event__organizer=self.event.organizer)
+        except Order.DoesNotExist:
+            raise PaymentException(_('You entered an order that could not be found.'))
         p = order.payments.create(
             state=OrderPayment.PAYMENT_STATE_PENDING,
             amount=refund.amount,
