@@ -1,4 +1,3 @@
-import copy
 import json
 import logging
 import urllib.error
@@ -27,6 +26,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
+from pretix.helpers.models import modelcopy
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +171,7 @@ def build_cancellation(invoice: Invoice):
 
 
 def generate_cancellation(invoice: Invoice, trigger_pdf=True):
-    cancellation = copy.deepcopy(invoice)
+    cancellation = modelcopy(invoice)
     cancellation.pk = None
     cancellation.invoice_no = None
     cancellation.prefix = None

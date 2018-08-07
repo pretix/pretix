@@ -394,6 +394,12 @@ class VoucherFormTest(SoupTest):
             'itemvar': '%d' % self.shirt.pk,
         })
 
+    def test_create_bulk_many(self):
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH\nIJKLM\nNOPQR\nSTUVW\nXYZ',
+            'itemvar': '%d' % self.ticket.pk,
+        })
+
     def test_create_blocking_bulk_quota_full(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()

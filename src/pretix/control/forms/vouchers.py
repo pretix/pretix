@@ -1,5 +1,3 @@
-import copy
-
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models.functions import Lower
@@ -11,6 +9,7 @@ from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import voucher_form_validation
+from pretix.helpers.models import modelcopy
 
 
 class FakeChoiceField(forms.ChoiceField):
@@ -45,7 +44,7 @@ class VoucherForm(I18nModelForm):
         instance = kwargs.get('instance')
         initial = kwargs.get('initial')
         if instance:
-            self.initial_instance_data = copy.deepcopy(instance)
+            self.initial_instance_data = modelcopy(instance)
             try:
                 if instance.variation:
                     initial['itemvar'] = '%d-%d' % (instance.item.pk, instance.variation.pk)
@@ -217,7 +216,7 @@ class VoucherBulkForm(VoucherForm):
     def save(self, event, *args, **kwargs):
         objs = []
         for code in self.cleaned_data['codes']:
-            obj = copy.deepcopy(self.instance)
+            obj = modelcopy(self.instance)
             obj.event = event
             obj.code = code
             data = dict(self.cleaned_data)

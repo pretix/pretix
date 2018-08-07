@@ -1,5 +1,3 @@
-import copy
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max
@@ -18,6 +16,7 @@ from pretix.base.models.items import ItemAddOn
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
 
 
@@ -78,7 +77,7 @@ class QuotaForm(I18nModelForm):
         self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
-        self.original_instance = copy.deepcopy(self.instance) if self.instance else None
+        self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk:
             initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [

@@ -1,3 +1,5 @@
+import copy
+
 from django.db import models
 
 
@@ -8,3 +10,14 @@ class Thumbnail(models.Model):
 
     class Meta:
         unique_together = (('source', 'size'),)
+
+
+def modelcopy(obj: models.Model):
+    n = copy.copy(obj)
+    for f in obj._meta.fields:
+        val = getattr(obj, f.name)
+        if isinstance(val, models.Model):
+            setattr(n, f.name, val)
+        else:
+            setattr(n, f.name, copy.deepcopy(val))
+    return n

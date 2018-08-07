@@ -33,6 +33,7 @@ from pretix.control.forms.subevents import (
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
+from pretix.helpers.models import modelcopy
 
 
 class SubEventList(EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -424,7 +425,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         if self.copy_from:
-            i = copy.deepcopy(self.copy_from)
+            i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
         else:
