@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-07 13:45+0000\n"
-"PO-Revision-Date: 2018-08-06 14:10+0000\n"
+"PO-Revision-Date: 2018-08-07 13:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -11074,10 +11074,8 @@ msgid "All entries"
 msgstr "Alle Einträge"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
-#, fuzzy
-#| msgid "Send a voucher"
 msgid "Waiting for a voucher"
-msgstr "Gutschein verschicken"
+msgstr "Wartet auf einen Gutschein"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
@@ -11086,24 +11084,18 @@ msgid "Voucher assigned"
 msgstr "Gutschein zugewiesen"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
-#, fuzzy
-#| msgid "Voucher redemption"
 msgid "Waiting for redemption"
-msgstr "Gutschein-Einlösung"
+msgstr "Wartet auf Einlösung"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
-#, fuzzy
-#| msgid "Fully redeemed"
 msgid "Successfully redeemed"
-msgstr "Voll eingelöst"
+msgstr "Erfolgreich eingelöst"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
 #: pretix/control/views/waitinglist.py:215
-#, fuzzy
-#| msgid "This voucher is expired."
 msgid "Voucher expired"
-msgstr "Dieser Gutschein ist abgelaufen."
+msgstr "Gutschein abgelaufen"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
@@ -11114,13 +11106,13 @@ msgid ""
 "This entry has a modified priority. The higher this number is, the earlier "
 "this person will be assigned a voucher."
 msgstr ""
+"Dieser Eintrag hat eine modifizierte Wichtigkeit. Je höher die Zahl, desto "
+"früher erhält diese Person einen Gutschein."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:213
-#, fuzzy
-#| msgid "Voucher redemption"
 msgid "Voucher redeemed"
-msgstr "Gutschein-Einlösung"
+msgstr "Gutschein eingelöst"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:174
 #, python-format
@@ -11142,14 +11134,12 @@ msgid "Send a voucher"
 msgstr "Gutschein verschicken"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
-#, fuzzy
-#| msgid "Add me to the list"
 msgid "Move to the top of the list"
-msgstr "Zur Liste hinzufügen"
+msgstr "Ganz nach oben schieben"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:200
 msgid "Move to the end of the list"
-msgstr ""
+msgstr "Ganz ans Ende schieben"
 
 #: pretix/control/templatetags/hierarkey_form.py:42
 msgid "Organizer-level settings"
@@ -11595,20 +11585,16 @@ msgid "Vouchers and waiting list reservations"
 msgstr "Gutscheine und Wartelisten-Reservierungen"
 
 #: pretix/control/views/item.py:631
-#, fuzzy
-#| msgid "Available until"
 msgid "Available quota"
-msgstr "Verfügbar bis"
+msgstr "Verfügbares Kontingent"
 
 #: pretix/control/views/item.py:637
 msgid "Waiting list (pending)"
 msgstr "Warteliste (ausstehend)"
 
 #: pretix/control/views/item.py:644
-#, fuzzy
-#| msgid "Currently unavailable"
 msgid "Currently for sale"
-msgstr "Aktuell nicht verfügbar"
+msgstr "Aktuell zum Verkauf"
 
 #: pretix/control/views/item.py:669 pretix/control/views/item.py:689
 #: pretix/control/views/item.py:743
@@ -12213,26 +12199,20 @@ msgid "Waiting list entry not found."
 msgstr "Wartelisten-Eintrag nicht gefunden."
 
 #: pretix/control/views/waitinglist.py:84
-#, fuzzy
-#| msgid "The new member has been invited to the team."
 msgid "The waiting list entry has been moved to the top."
-msgstr "Das neue Mitglied wurde per E-Mail zum Team eingeladen."
+msgstr "Der Eintrag wurde auf der Liste nach oben geschoben."
 
 #: pretix/control/views/waitinglist.py:97
-#, fuzzy
-#| msgid "An entry has been removed from the waiting list."
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr "Ein Eintrag wurde von der Warteliste entfernt."
+msgstr "Der Eintrag wurde ans Ende der Liste geschoben."
 
 #: pretix/control/views/waitinglist.py:198
-#, fuzzy
-#| msgid "On the list since"
 msgid "On list since"
 msgstr "Auf der Liste seit"
 
 #: pretix/control/views/waitinglist.py:199
 msgid "Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: pretix/control/views/waitinglist.py:219
 msgid "Waiting"
@@ -14527,14 +14507,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:127
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
-msgstr ""
+msgstr "Anzahl an %(item)s – %(var)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:453
 #: pretix/presale/templates/pretixpresale/event/voucher.html:204
-#, fuzzy, python-format
-#| msgid "Maximum number of items per order"
+#, python-format
 msgid "Amount of %(item)s to order"
-msgstr "Maximale Anzahl von Produkten pro Bestellung"
+msgstr "Anzahl an %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:470
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
