@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import F, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.http import is_safe_url
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
@@ -66,6 +68,8 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 else:
                     messages.success(request, _('An email containing a voucher code has been sent to the '
                                                 'specified address.'))
+                if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+                    return redirect(self.request.GET.get("next"))
                 return redirect(reverse('control:event.orders.waitinglist', kwargs={
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug
@@ -89,6 +93,23 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
             qs = qs.filter(voucher__isnull=False)
         elif s == 'a':
             pass
+        elif s == 'r':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__gte=F('voucher__max_usages'),
+            )
+        elif s == 'v':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__lt=F('voucher__max_usages'),
+            ).filter(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gt=now()))
+        elif s == 'e':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__lt=F('voucher__max_usages'),
+                voucher__valid_until__isnull=False,
+                voucher__valid_until__lte=now()
+            )
         else:
             qs = qs.filter(voucher__isnull=True)
 
@@ -160,6 +181,8 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
         self.object.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
         self.object.delete()
         messages.success(self.request, _('The selected entry has been deleted.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+            return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:

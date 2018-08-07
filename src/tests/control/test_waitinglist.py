@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import pytest
 from django.utils.timezone import now
 
@@ -29,8 +31,13 @@ def env():
     WaitingListEntry.objects.create(
         event=event, item=item1, email='success@example.org', voucher=v
     )
+    v = Voucher.objects.create(item=item1, event=event, block_quota=True, redeemed=0, valid_until=now() - timedelta(days=5))
     WaitingListEntry.objects.create(
-        event=event, item=item2, email='item2@example.org'
+        event=event, item=item2, email='expired@example.org', voucher=v
+    )
+    v = Voucher.objects.create(item=item1, event=event, block_quota=True, redeemed=0, valid_until=now() + timedelta(days=5))
+    WaitingListEntry.objects.create(
+        event=event, item=item2, email='valid@example.org', voucher=v
     )
 
     t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
@@ -45,17 +52,40 @@ def test_list(client, env):
 
     response = client.get('/control/event/dummy/dummy/waitinglist/')
     assert 'success@example.org' not in response.rendered_content
-    assert 'item2@example.org' in response.rendered_content
+    assert 'expired@example.org' not in response.rendered_content
     assert 'foo0@bar.com' in response.rendered_content
-    assert response.context['estimate'] == 23 * 6
+    assert 'valid@example.org' not in response.rendered_content
+    assert response.context['estimate'] == 23 * 5
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=a')
     assert 'success@example.org' in response.rendered_content
     assert 'foo0@bar.com' in response.rendered_content
+    assert 'expired@example.org' in response.rendered_content
+    assert 'valid@example.org' in response.rendered_content
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=s')
     assert 'success@example.org' in response.rendered_content
     assert 'foo0@bar.com' not in response.rendered_content
+    assert 'expired@example.org' in response.rendered_content
+    assert 'valid@example.org' in response.rendered_content
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/?status=v')
+    assert 'success@example.org' not in response.rendered_content
+    assert 'foo0@bar.com' not in response.rendered_content
+    assert 'expired@example.org' not in response.rendered_content
+    assert 'valid@example.org' in response.rendered_content
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/?status=r')
+    assert 'success@example.org' in response.rendered_content
+    assert 'foo0@bar.com' not in response.rendered_content
+    assert 'expired@example.org' not in response.rendered_content
+    assert 'valid@example.org' not in response.rendered_content
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/?status=e')
+    assert 'success@example.org' not in response.rendered_content
+    assert 'expired@example.org' in response.rendered_content
+    assert 'foo0@bar.com' not in response.rendered_content
+    assert 'valid@example.org' not in response.rendered_content
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?item=%d' % env[3].pk)
     assert 'item2@example.org' not in response.rendered_content
@@ -89,5 +119,5 @@ def test_dashboard(client, env):
     quota = Quota.objects.create(name="Test", size=2, event=env[0])
     quota.items.add(env[3])
     w = waitinglist_widgets(env[0])
-    assert '3' in w[0]['content']
-    assert '6' in w[1]['content']
+    assert '1' in w[0]['content']
+    assert '5' in w[1]['content']

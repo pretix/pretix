@@ -81,9 +81,19 @@
             <option value="a"
                     {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
             <option value="w"
-                    {% if request.GET.status == "w" or not request.GET.status %}selected="selected"{% endif %}>{% trans "Waiting" %}</option>
+                    {% if request.GET.status == "w" or not request.GET.status %}selected="selected"{% endif %}>
+                {% trans "Waiting for a voucher" %}</option>
             <option value="s"
                     {% if request.GET.status == "s" %}selected="selected"{% endif %}>{% trans "Voucher assigned" %}</option>
+            <option value="v"
+                    {% if request.GET.status == "v" %}selected="selected"{% endif %}>
+                {% trans "Waiting for redemption" %}</option>
+            <option value="r"
+                    {% if request.GET.status == "r" %}selected="selected"{% endif %}>
+                {% trans "Successfully redeemed" %}</option>
+            <option value="e"
+                    {% if request.GET.status == "e" %}selected="selected"{% endif %}>
+                {% trans "Voucher expired" %}</option>
         </select>
         <select name="item" class="form-control">
             <option value="">{% trans "All products" %}</option>
@@ -108,7 +118,7 @@
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
     </form>
     </p>
-    <form method="post" action="">
+    <form method="post" action="?next={{ request.get_full_path|urlencode }}">
         {% csrf_token %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
@@ -141,7 +151,13 @@
                         <td>{{ e.created|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>
                             {% if e.voucher %}
-                                <span class="label label-success">{% trans "Voucher assigned" %}</span>
+                                {% if e.voucher.redeemed >= e.voucher.max_usages %}
+                                    <span class="label label-success">{% trans "Voucher redeemed" %}</span>
+                                {% elif not e.voucher.is_active %}
+                                    <span class="label label-danger">{% trans "Voucher expired" %}</span>
+                                {% else %}
+                                    <span class="label label-warning">{% trans "Voucher assigned" %}</span>
+                                {% endif %}
                             {% elif e.availability.0 == 100 %}
                                 <span class="label label-warning">
                                 {% blocktrans with num=e.availability.1 %}
@@ -165,7 +181,7 @@
                         </td>
                         <td>
                             {% if not e.voucher %}
-                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% else %}
                                 <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>
                             {% endif %}
