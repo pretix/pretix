@@ -1,9 +1,9 @@
 {% load i18n %}
-{% if wrap_label %}
+{% if widget.wrap_label %}
     <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>
 {% endif %}
 {% include "django/forms/widgets/input.html" %}
-{% if wrap_label %}
+{% if widget.wrap_label %}
     {{ widget.label }}
     {% if widget.incubating %}
         <span class="label label-danger" data-toggle="tooltip" title="{% trans "The translation for this language is still in progress. This language can currently only be selected on development installations of pretix, not in production." %}">
