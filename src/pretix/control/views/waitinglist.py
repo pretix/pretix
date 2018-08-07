@@ -1,13 +1,16 @@
+import csv
+import io
+
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Q, Sum
 from django.db.models.functions import Coalesce
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext, ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
@@ -157,6 +160,55 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
             )
         )
         return qs['s']
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get("download", "") == "yes":
+            return self._download_csv()
+        return super().get(request, *args, **kwargs)
+
+    def _download_csv(self):
+        output = io.StringIO()
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+
+        headers = [
+            _('E-mail address'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
+            _('Language')
+        ]
+        if self.request.event.has_subevents:
+            headers.append(pgettext('subevent', 'Date'))
+        writer.writerow(headers)
+
+        for w in self.get_queryset():
+            if w.item:
+                if w.variation:
+                    prod = '%s – %s' % (str(w.item), str(w.variation))
+                else:
+                    prod = '%s' % str(w.item)
+            if w.voucher:
+                if w.voucher.redeemed >= w.voucher.max_usages:
+                    status = _('Voucher redeemed')
+                elif not w.voucher.is_active():
+                    status = _('Voucher expired')
+                else:
+                    status = _('Voucher assigned')
+            else:
+                status = _('Waiting')
+
+            row = [
+                w.email,
+                prod,
+                w.created.isoformat(),
+                status,
+                w.voucher.code if w.voucher else '',
+                w.locale,
+            ]
+            if self.request.event.has_subevents:
+                row.append(str(w.subevent))
+            writer.writerow(row)
+
+        r = HttpResponse(output.getvalue().encode("utf-8"), content_type='text/csv')
+        r['Content-Disposition'] = 'attachment; filename="waitinglist.csv"'
+        return r
 
 
 class EntryDelete(EventPermissionRequiredMixin, DeleteView):

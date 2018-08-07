@@ -116,6 +116,9 @@
             </select>
         {% endif %}
         <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
+        <a href="?{% url_replace request "download" "yes" %}"
+                class="btn btn-default"><i class="fa fa-download"></i>
+            {% trans "Download list" %}</a>
     </form>
     </p>
     <form method="post" action="?next={{ request.get_full_path|urlencode }}">
@@ -179,14 +182,12 @@
                                 </button>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="text-right">
                             {% if not e.voucher %}
                                 <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% else %}
                                 <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>
                             {% endif %}
-                        </td>
-                        <td class="text-right">
                         </td>
                     </tr>
                 {% endfor %}
