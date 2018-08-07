@@ -13,11 +13,11 @@ class Thumbnail(models.Model):
 
 
 def modelcopy(obj: models.Model):
-    n = copy.copy(obj)
+    n = obj.__class__()
     for f in obj._meta.fields:
         val = getattr(obj, f.name)
         if isinstance(val, models.Model):
-            setattr(n, f.name, val)
+            setattr(n, f.name, copy.copy(val))
         else:
             setattr(n, f.name, copy.deepcopy(val))
     return n
