@@ -65,11 +65,12 @@ class WaitingListEntry(LoggedModel):
         max_length=190,
         default='en'
     )
+    priority = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = _("Waiting list entry")
         verbose_name_plural = _("Waiting list entries")
-        ordering = ['created']
+        ordering = ('-priority', 'created')
 
     def __str__(self):
         return '%s waits for %s' % (str(self.email), str(self.item))

@@ -3,7 +3,7 @@ import io
 
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import F, Q, Sum
+from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -52,14 +52,12 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     permission = 'can_view_orders'
 
     def post(self, request, *args, **kwargs):
+        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
+                                                 request=request):
+            messages.error(request, _('You do not have permission to do this'))
+            return self._redirect_back()
+
         if 'assign' in request.POST:
-            if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
-                                                     request=request):
-                messages.error(request, _('You do not have permission to do this'))
-                return redirect(reverse('control:event.orders.waitinglist', kwargs={
-                    'event': request.event.slug,
-                    'organizer': request.event.organizer.slug
-                }))
             try:
                 wle = WaitingListEntry.objects.get(
                     pk=request.POST.get('assign'), event=self.request.event,
@@ -71,18 +69,44 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 else:
                     messages.success(request, _('An email containing a voucher code has been sent to the '
                                                 'specified address.'))
-                if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
-                    return redirect(self.request.GET.get("next"))
-                return redirect(reverse('control:event.orders.waitinglist', kwargs={
-                    'event': request.event.slug,
-                    'organizer': request.event.organizer.slug
-                }))
+                return self._redirect_back()
             except WaitingListEntry.DoesNotExist:
                 messages.error(request, _('Waiting list entry not found.'))
-                return redirect(reverse('control:event.orders.waitinglist', kwargs={
-                    'event': request.event.slug,
-                    'organizer': request.event.organizer.slug
-                }))
+                return self._redirect_back()
+
+        if 'move_top' in request.POST:
+            try:
+                wle = WaitingListEntry.objects.get(
+                    pk=request.POST.get('move_top'), event=self.request.event,
+                )
+                wle.priority = self.request.event.waitinglistentries.aggregate(m=Max('priority'))['m'] + 1
+                wle.save(update_fields=['priority'])
+                messages.success(request, _('The waiting list entry has been moved to the top.'))
+                return self._redirect_back()
+            except WaitingListEntry.DoesNotExist:
+                messages.error(request, _('Waiting list entry not found.'))
+                return self._redirect_back()
+
+        if 'move_end' in request.POST:
+            try:
+                wle = WaitingListEntry.objects.get(
+                    pk=request.POST.get('move_end'), event=self.request.event,
+                )
+                wle.priority = self.request.event.waitinglistentries.aggregate(m=Min('priority'))['m'] - 1
+                wle.save(update_fields=['priority'])
+                messages.success(request, _('The waiting list entry has been moved to the end of the list.'))
+                return self._redirect_back()
+            except WaitingListEntry.DoesNotExist:
+                messages.error(request, _('Waiting list entry not found.'))
+                return self._redirect_back()
+
+    def _redirect_back(self):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+            return redirect(self.request.GET.get("next"))
+        return redirect(reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        }))
 
     def get_queryset(self):
         qs = WaitingListEntry.objects.filter(
@@ -172,7 +196,7 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
         headers = [
             _('E-mail address'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
-            _('Language')
+            _('Language'), _('Priority')
         ]
         if self.request.event.has_subevents:
             headers.append(pgettext('subevent', 'Date'))
@@ -201,6 +225,7 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 status,
                 w.voucher.code if w.voucher else '',
                 w.locale,
+                str(w.priority)
             ]
             if self.request.event.has_subevents:
                 row.append(str(w.subevent))

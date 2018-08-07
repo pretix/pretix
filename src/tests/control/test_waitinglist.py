@@ -105,6 +105,29 @@ def test_assign_single(client, env):
 
 
 @pytest.mark.django_db
+def test_priority_single(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
+    assert wle.priority == 0
+
+    client.post('/control/event/dummy/dummy/waitinglist/', {
+        'move_top': wle.pk
+    })
+    wle.refresh_from_db()
+    assert wle.priority == 1
+    client.post('/control/event/dummy/dummy/waitinglist/', {
+        'move_top': wle.pk
+    })
+    wle.refresh_from_db()
+    assert wle.priority == 2
+    client.post('/control/event/dummy/dummy/waitinglist/', {
+        'move_end': wle.pk
+    })
+    wle.refresh_from_db()
+    assert wle.priority == -1
+
+
+@pytest.mark.django_db
 def test_delete_single(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     wle = WaitingListEntry.objects.first()

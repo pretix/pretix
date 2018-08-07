@@ -22,7 +22,9 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
 
     qs = WaitingListEntry.objects.filter(
         event=event, voucher__isnull=True
-    ).select_related('item', 'variation').prefetch_related('item__quotas', 'variation__quotas').order_by('created')
+    ).select_related('item', 'variation').prefetch_related(
+        'item__quotas', 'variation__quotas'
+    ).order_by('-priority', 'created')
 
     if subevent_id and event.has_subevents:
         subevent = event.subevents.get(id=subevent_id)
