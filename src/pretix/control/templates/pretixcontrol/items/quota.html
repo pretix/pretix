@@ -39,16 +39,18 @@
             </div>
             {% for row in quota_table_rows %}
                 <div class="row">
-                    <div class="col-xs-9">{{ row.label }}</div>
-                    <div class="col-xs-3 text-right"> – {{ row.value }}</div>
+                    <div class="col-xs-9">
+                        {% if row.strong %}<strong>{% endif %}
+                        {{ row.label }}
+                        {% if row.strong %}</strong>{% endif %}
+                    </div>
+                    <div class="col-xs-3 text-right">
+                        {% if row.strong %}<strong>{% endif %}
+                        {% if not row.strong %}–{% endif %} {{ row.value }}
+                        {% if row.strong %}</strong>{% endif %}
+                    </div>
                 </div>
             {% endfor %}
-            <div class="row">
-                <div class="col-xs-9"><strong>{% trans "Current availability" %}</strong></div>
-                <div class="col-xs-3 text-right">
-                    {% if quota.size == None %}{% trans "Infinite" %}{% else %}{{ avail.1 }}{% endif %}
-                </div>
-            </div>
             {% if quota_overbooked > 0 %}
                 <div class="alert alert-warning">
                     {% blocktrans trimmed with num=quota_overbooked %}

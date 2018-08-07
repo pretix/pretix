@@ -622,23 +622,33 @@ class QuotaView(ChartContainingView, DetailView):
                 'value': self.object.count_in_cart(),
                 'sum': True,
             },
-            {
-                'label': ugettext('Waiting list (pending)'),
-                'value': self.object.count_waiting_list_pending(),
-                'sum': False,
-            },
         ]
-        ctx['quota_table_rows'] = list(data)
 
         sum_values = sum([d['value'] for d in data if d['sum']])
+        s = self.object.size - sum_values if self.object.size is not None else 0
+
+        data.append({
+            'label': ugettext('Available quota'),
+            'value': s,
+            'sum': False,
+            'strong': True
+        })
+        data.append({
+            'label': ugettext('Waiting list (pending)'),
+            'value': self.object.count_waiting_list_pending(),
+            'sum': False,
+        })
 
         if self.object.size is not None:
             data.append({
-                'label': ugettext('Current availability'),
-                'value': avail[1]
+                'label': ugettext('Currently for sale'),
+                'value': avail[1],
+                'sum': False,
+                'strong': True
             })
 
-        ctx['quota_chart_data'] = json.dumps(data)
+        ctx['quota_chart_data'] = json.dumps([r for r in data if r.get('sum')])
+        ctx['quota_table_rows'] = list(data)
         ctx['quota_overbooked'] = sum_values - self.object.size if self.object.size is not None else 0
 
         ctx['has_ignore_vouchers'] = Voucher.objects.filter(
