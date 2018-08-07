@@ -123,7 +123,8 @@
                                                                 pattern="\d*"
                                                                 max="{{ item.order_max }}"
                                                                 id="variation_{{ item.id }}_{{ var.id }}"
-                                                                name="variation_{{ item.id }}_{{ var.id }}">
+                                                                name="variation_{{ item.id }}_{{ var.id }}"
+                                                                title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
                                                     {% else %}
                                                         <label>
                                                             <input type="radio" name="_voucher_item"
@@ -199,7 +200,8 @@
                                                     pattern="\d*"
                                                     max="{{ item.order_max }}"
                                                     id="item_{{ item.id }}"
-                                                    name="item_{{ item.id }}">
+                                                    name="item_{{ item.id }}"
+                                                    title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
                                         {% else %}
                                             <label>
                                                 <input type="radio" name="_voucher_item"

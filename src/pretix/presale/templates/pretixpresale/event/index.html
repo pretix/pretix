@@ -336,7 +336,8 @@
                                                             <label class="item-checkbox-label">
                                                                 <input type="checkbox" value="1"
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
-                                                                        name="variation_{{ item.id }}_{{ var.id }}">
+                                                                        name="variation_{{ item.id }}_{{ var.id }}"
+                                                                        title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
                                                             </label>
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -442,7 +443,8 @@
                                                         pattern="\d*" {% if itemnum == 1 %}value="1"{% endif %}
                                                         max="{{ item.order_max }}"
                                                         name="item_{{ item.id }}"
-                                                        id="item_{{ item.id }}">
+                                                        id="item_{{ item.id }}"
+                                                        title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
                                             {% endif %}
                                         </div>
                                     {% else %}
