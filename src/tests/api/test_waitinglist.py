@@ -37,6 +37,7 @@ TEST_WLE_RES = {
     "item": 2,
     "variation": None,
     "locale": "en",
+    "priority": 0,
     "subevent": None,
 }
 

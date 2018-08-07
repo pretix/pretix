@@ -126,6 +126,7 @@ def test_waitinglist_shredder(event, item):
             'voucher': wle.voucher.pk,
             'created': wle.created.isoformat().replace('+00:00', 'Z'),
             'locale': 'en',
+            'priority': 0,
             'email': 'foo@example.org'
         }
     ]
