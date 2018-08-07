@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-06 10:48+0000\n"
+"POT-Creation-Date: 2018-08-07 10:36+0000\n"
 "PO-Revision-Date: 2018-07-19 14:45+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -81,13 +81,13 @@ msgid "One or more items do not belong to this event."
 msgstr "Bir veya daha fazla öğe bu etkinliğe ait değil."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1152
-#: pretix/base/models/waitinglist.py:151
+#: pretix/base/models/waitinglist.py:152
 msgid "Subevent cannot be null for event series."
 msgstr "Etkinlik serisi için alt öğe boş olamaz."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1154 pretix/base/models/items.py:1157
-#: pretix/base/models/waitinglist.py:153 pretix/base/models/waitinglist.py:156
+#: pretix/base/models/waitinglist.py:154 pretix/base/models/waitinglist.py:157
 msgid "The subevent does not belong to this event."
 msgstr "Alt etkinlik bu etkinliğe ait değil."
 
@@ -125,7 +125,7 @@ msgstr ""
 "PATCH / PUT ile güncelleme seçenekleri desteklenmiyor. Lütfen özel "
 "yuvalanmış bitiş noktasını kullanın."
 
-#: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:207
+#: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:208
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
@@ -259,7 +259,8 @@ msgstr "Sipariş toplamı"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:45
 #: pretix/control/templates/pretixcontrol/search/orders.html:51
 #: pretix/control/templates/pretixcontrol/subevents/index.html:76
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:123
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:136
+#: pretix/control/views/waitinglist.py:198
 #: pretix/plugins/reports/exporters.py:356
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:40
 msgid "Status"
@@ -472,15 +473,12 @@ msgid "Waiting list"
 msgstr "Bekleme listesi"
 
 #: pretix/base/exporters/orderlist.py:236
-#: pretix/control/templates/pretixcontrol/items/quota.html:47
-#: pretix/control/views/item.py:637
 msgid "Current availability"
 msgstr "Mevcut uygunluk"
 
 #: pretix/base/exporters/orderlist.py:244
 #: pretix/base/exporters/orderlist.py:250
 #: pretix/control/templates/pretixcontrol/items/quota.html:37
-#: pretix/control/templates/pretixcontrol/items/quota.html:49
 msgid "Infinite"
 msgstr "Sonsuz"
 
@@ -858,6 +856,7 @@ msgid "Date joined"
 msgstr "Katılma tarihi"
 
 #: pretix/base/models/auth.py:90 pretix/control/forms/event.py:993
+#: pretix/control/views/waitinglist.py:199
 msgid "Language"
 msgstr "Dil"
 
@@ -885,7 +884,7 @@ msgstr "Kapatırsanız, herhangi bir bildirim almayacaksınız."
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:117
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:130
 #: pretix/control/views/organizer.py:57 tests/base/test_mail.py:86
 msgid "User"
 msgstr "kullanıcı"
@@ -927,7 +926,8 @@ msgstr "Sınırlı ürünler"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:6
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:11
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:96
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:120
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:133
+#: pretix/control/views/waitinglist.py:202
 #: pretix/plugins/checkinlists/exporters.py:310
 #: pretix/plugins/reports/exporters.py:264 pretix/plugins/sendmail/forms.py:69
 msgctxt "subevent"
@@ -1404,8 +1404,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/base.html:3
 #: pretix/control/templates/pretixcontrol/orders/overview.html:32
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:94
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:118
-#: pretix/control/views/vouchers.py:61
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:131
+#: pretix/control/views/vouchers.py:61 pretix/control/views/waitinglist.py:198
 #: pretix/plugins/checkinlists/exporters.py:163
 #: pretix/plugins/checkinlists/exporters.py:296
 #: pretix/plugins/reports/exporters.py:189
@@ -2225,7 +2225,7 @@ msgstr "Ürün fiyatını azalt(%)"
 #: pretix/base/models/vouchers.py:94
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:17
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:90
-#: pretix/control/views/vouchers.py:61
+#: pretix/control/views/vouchers.py:61 pretix/control/views/waitinglist.py:198
 #: pretix/presale/templates/pretixpresale/event/index.html:481
 msgid "Voucher code"
 msgstr "Kupon kodu"
@@ -2315,7 +2315,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:7
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:124
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
 msgstr "Kupon"
 
@@ -2403,6 +2403,7 @@ msgstr "Bekleme listesinde"
 
 #: pretix/base/models/waitinglist.py:40
 #: pretix/control/templates/pretixcontrol/users/index.html:37
+#: pretix/control/views/waitinglist.py:198
 msgid "E-mail address"
 msgstr "E-posta adresi"
 
@@ -2418,45 +2419,45 @@ msgstr "Kullanıcının beklediği ürün."
 msgid "The variation of the product selected above."
 msgstr "Yukarıda seçilen ürünün varyasyonu."
 
-#: pretix/base/models/waitinglist.py:70
+#: pretix/base/models/waitinglist.py:71
 msgid "Waiting list entry"
 msgstr "Liste girişi bekleniyor"
 
-#: pretix/base/models/waitinglist.py:71
+#: pretix/base/models/waitinglist.py:72
 msgid "Waiting list entries"
 msgstr "Liste girdileri bekleniyor"
 
-#: pretix/base/models/waitinglist.py:89
+#: pretix/base/models/waitinglist.py:90
 msgid "This product is currently not available."
 msgstr "Bu ürün şu an için ulaşılabilir değil."
 
-#: pretix/base/models/waitinglist.py:91
+#: pretix/base/models/waitinglist.py:92
 msgid "A voucher has already been sent to this person."
 msgstr "Bu kişiye bir kupon zaten gönderildi."
 
-#: pretix/base/models/waitinglist.py:93
+#: pretix/base/models/waitinglist.py:94
 msgid "This entry is anonymized and can no longer be used."
 msgstr "Bu giriş anonimleştirilmiş ve artık kullanılamaz."
 
-#: pretix/base/models/waitinglist.py:103
+#: pretix/base/models/waitinglist.py:104
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
 msgstr "{email} için bekleme listesi girişinden otomatik olarak oluşturulmuş"
 
-#: pretix/base/models/waitinglist.py:127
+#: pretix/base/models/waitinglist.py:128
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
 msgstr "{event} için bekleme listesinden seçildiniz"
 
-#: pretix/base/models/waitinglist.py:143
+#: pretix/base/models/waitinglist.py:144
 msgid "The selected item does not belong to this event."
 msgstr "Seçilen öğe bu etkinliğe ait değil."
 
-#: pretix/base/models/waitinglist.py:145
+#: pretix/base/models/waitinglist.py:146
 msgid "Please select a specific variation of this product."
 msgstr "Lütfen bu ürünün belirli bir varyasyonunu seçin."
 
-#: pretix/base/models/waitinglist.py:163
+#: pretix/base/models/waitinglist.py:164
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
@@ -5264,7 +5265,7 @@ msgstr "Geri Ödendi"
 #: pretix/control/forms/filter.py:182 pretix/control/forms/filter.py:586
 #: pretix/control/forms/filter.py:765
 #: pretix/control/templates/pretixcontrol/items/question.html:30
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:89
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:99
 msgid "All products"
 msgstr "Tüm ürünler"
 
@@ -5272,7 +5273,7 @@ msgstr "Tüm ürünler"
 #: pretix/control/forms/filter.py:738 pretix/control/forms/filter.py:758
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:47
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:99
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:109
 #: pretix/plugins/reports/exporters.py:266 pretix/plugins/sendmail/forms.py:25
 msgctxt "subevent"
 msgid "All dates"
@@ -5994,11 +5995,11 @@ msgstr "Bu kuponların her birinin kez kaç kez kullanılabileceği."
 msgid "A voucher with one of these codes already exists."
 msgstr "Bu kodlardan birine sahip bir kupon zaten var."
 
-#: pretix/control/logdisplay.py:26
+#: pretix/control/logdisplay.py:27
 msgid "The order has been changed:"
 msgstr "Sipariş değiştirildi:"
 
-#: pretix/control/logdisplay.py:34
+#: pretix/control/logdisplay.py:35
 #, python-brace-format
 msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
@@ -6007,7 +6008,7 @@ msgstr ""
 "Pozisyon #{posid}: {old_item} ({old_price}) lar buna değiştirildi {new_item} "
 "({new_price})."
 
-#: pretix/control/logdisplay.py:44
+#: pretix/control/logdisplay.py:45
 #, python-brace-format
 msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
@@ -6016,17 +6017,17 @@ msgstr ""
 "Pozisyon #{posid}: Etkinlik günü \"{old_event}\" ({old_price}) den "
 "\"{new_event}\" ({new_price}) değiştirildi."
 
-#: pretix/control/logdisplay.py:52
+#: pretix/control/logdisplay.py:53
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "{posid} pozisyonunun fiyatı {old_price}'dan {new_price}'a değişti."
 
-#: pretix/control/logdisplay.py:62
+#: pretix/control/logdisplay.py:63
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) removed."
 msgstr "Pozisyon {posid} ({old_item},{old_price}) kaldırıldı."
 
-#: pretix/control/logdisplay.py:73
+#: pretix/control/logdisplay.py:74
 #, python-brace-format
 msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
@@ -6035,45 +6036,45 @@ msgstr ""
 "Pozisyon {posid} oluşturuldu: {item}({price}) eklenti olarak pozisyon "
 "#{addon_to}'ya."
 
-#: pretix/control/logdisplay.py:80
+#: pretix/control/logdisplay.py:81
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
 msgstr "Poziyon #{posid} oluşturuldu: {item} ({price})."
 
-#: pretix/control/logdisplay.py:86
+#: pretix/control/logdisplay.py:87
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
 msgstr "Pozisyon #{posid} için yeni bir sır oluşturuldu"
 
-#: pretix/control/logdisplay.py:93
+#: pretix/control/logdisplay.py:94
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
 "Poziyons #{posid} ({old_item},{old_price}) yeni bir sipaşie bölündü: {order}"
 
-#: pretix/control/logdisplay.py:100
+#: pretix/control/logdisplay.py:101
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
 msgstr "Bu sipariş, {order} siparişinin bölünmesiyle oluşturuldu"
 
-#: pretix/control/logdisplay.py:119 pretix/control/logdisplay.py:121
-#: pretix/control/logdisplay.py:311 pretix/control/logdisplay.py:313
+#: pretix/control/logdisplay.py:120 pretix/control/logdisplay.py:122
+#: pretix/control/logdisplay.py:313 pretix/control/logdisplay.py:315
 msgid "(unknown)"
 msgstr "(Bilinmeyen)"
 
-#: pretix/control/logdisplay.py:125
+#: pretix/control/logdisplay.py:126
 #, python-brace-format
 msgid "Position #{posid} has been scanned at {datetime} for list \"{list}\"."
 msgstr ""
 "Pozisyon #{posid} {datetime} tarihinde \"{list}\" listesi için incelendi."
 
-#: pretix/control/logdisplay.py:131
+#: pretix/control/logdisplay.py:132
 #, python-brace-format
 msgid "Position #{posid} has been scanned for list \"{list}\"."
 msgstr "Pozisyon #{posid} \"{list}\" listesi için incelendi."
 
-#: pretix/control/logdisplay.py:138
+#: pretix/control/logdisplay.py:139
 #, python-brace-format
 msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
@@ -6082,7 +6083,7 @@ msgstr ""
 "Daha önceden incelenmesine rağmen #{posid} pzisyonu için {datetime}'da "
 "\"{list}\" listesi için incelenme yüklendi."
 
-#: pretix/control/logdisplay.py:146
+#: pretix/control/logdisplay.py:147
 #, python-brace-format
 msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
@@ -6091,129 +6092,129 @@ msgstr ""
 "Pozisyon #{posid} incelendi ve daha önceden \"{list}\" listesi için "
 "incelendiğinden reddedildi."
 
-#: pretix/control/logdisplay.py:157
+#: pretix/control/logdisplay.py:158
 msgid "The event's internal comment has been updated."
 msgstr "Etkinliğin dahili yorumu güncellendi."
 
-#: pretix/control/logdisplay.py:158
+#: pretix/control/logdisplay.py:159
 msgid "The order details have been changed."
 msgstr "Sipariş detayları değiştirildi."
 
-#: pretix/control/logdisplay.py:159
+#: pretix/control/logdisplay.py:160
 msgid "The order has been marked as unpaid."
 msgstr "Sipariş ödenmemiş olarak işaretlendi."
 
-#: pretix/control/logdisplay.py:160
+#: pretix/control/logdisplay.py:161
 msgid "The order's secret has been changed."
 msgstr "Siparişin sırrı değişti."
 
-#: pretix/control/logdisplay.py:161
+#: pretix/control/logdisplay.py:162
 msgid "The order's expiry date has been changed."
 msgstr "Siparişin sona erme tarihi değiştirildi."
 
-#: pretix/control/logdisplay.py:162 pretix/control/views/orders.py:668
+#: pretix/control/logdisplay.py:163 pretix/control/views/orders.py:668
 msgid "The order has been marked as expired."
 msgstr "Siparişin süresi dolmuş olarak işaretlendi."
 
-#: pretix/control/logdisplay.py:163 pretix/control/views/orders.py:657
+#: pretix/control/logdisplay.py:164 pretix/control/views/orders.py:657
 msgid "The order has been marked as paid."
 msgstr "Sipariş ödenmiş olarak işaretlendi."
 
-#: pretix/control/logdisplay.py:164
+#: pretix/control/logdisplay.py:165
 msgid "The order has been refunded."
 msgstr "Sipariş iade edildi."
 
-#: pretix/control/logdisplay.py:165 pretix/control/views/orders.py:660
+#: pretix/control/logdisplay.py:166 pretix/control/views/orders.py:660
 #: pretix/presale/views/order.py:610
 msgid "The order has been canceled."
 msgstr "Sipariş iptal edildi."
 
-#: pretix/control/logdisplay.py:166
+#: pretix/control/logdisplay.py:167
 msgid "The order has been created."
 msgstr "Sipariş oluşturuldu."
 
-#: pretix/control/logdisplay.py:167
+#: pretix/control/logdisplay.py:168
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
 "E-posta adresi \"{old_email}\" den \"{new_email}2\" adresine değiştirildi."
 
-#: pretix/control/logdisplay.py:169
+#: pretix/control/logdisplay.py:170
 msgid "The order locale has been changed."
 msgstr "Sipariş yerel ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:170 pretix/control/views/orders.py:699
+#: pretix/control/logdisplay.py:171 pretix/control/views/orders.py:699
 #: pretix/presale/views/order.py:513
 msgid "The invoice has been generated."
 msgstr "Fatura oluşturuldu."
 
-#: pretix/control/logdisplay.py:171 pretix/control/views/orders.py:772
+#: pretix/control/logdisplay.py:172 pretix/control/views/orders.py:772
 msgid "The invoice has been regenerated."
 msgstr "Fatura yeniden oluşturuldu."
 
-#: pretix/control/logdisplay.py:172 pretix/control/views/orders.py:801
+#: pretix/control/logdisplay.py:173 pretix/control/views/orders.py:801
 msgid "The invoice has been reissued."
 msgstr "Fatura yeniden yayınlandı."
 
-#: pretix/control/logdisplay.py:173
+#: pretix/control/logdisplay.py:174
 msgid "The order's internal comment has been updated."
 msgstr "Siparişin dahili yorumu güncellendi."
 
-#: pretix/control/logdisplay.py:174
+#: pretix/control/logdisplay.py:175
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr ""
 "Siparişin Check-in sırasında dikkat edilmesini gösteren bayrağı değiştirildi."
 
-#: pretix/control/logdisplay.py:176
+#: pretix/control/logdisplay.py:177
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
 msgstr ""
 
-#: pretix/control/logdisplay.py:177
+#: pretix/control/logdisplay.py:178
 msgid "An unidentified type email has been sent."
 msgstr "Tanımlanamayan bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:178
+#: pretix/control/logdisplay.py:179
 msgid "A custom email has been sent."
 msgstr "Özel bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:179
+#: pretix/control/logdisplay.py:180
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
 msgstr "Biletin indirilebileceğini hatırlatmak için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:181
+#: pretix/control/logdisplay.py:182
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
 msgstr ""
 "Siparişin süresinin dolmak üzere olduğu konusunda bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:183
+#: pretix/control/logdisplay.py:184
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
 msgstr ""
 "Siparişin iptal edildiğini kullanıcıya bildirmek için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:184
+#: pretix/control/logdisplay.py:185
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
 msgstr ""
 "Siparişin değiştirildiğini kullanıcıya bildirmek için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:185
+#: pretix/control/logdisplay.py:186
 msgid ""
 "An email has been sent to notify the user that the order has been received."
 msgstr ""
 "Siparişin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:186
+#: pretix/control/logdisplay.py:187
 msgid ""
 "An email has been sent to notify the user that payment has been received."
 msgstr "Ödemenin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:187
+#: pretix/control/logdisplay.py:188
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
@@ -6221,73 +6222,73 @@ msgstr ""
 "Kullanıcıya siparişin alındığını ve ödeme yapılmasını istediğini bildirmek "
 "için bir e-posta gönderildi."
 
-#: pretix/control/logdisplay.py:188
+#: pretix/control/logdisplay.py:189
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
 "Sipariş detay sayfasına bağlantı içeren bir e-posta kullanıcıya yeniden "
 "gönderilmiştir."
 
-#: pretix/control/logdisplay.py:189
+#: pretix/control/logdisplay.py:190
 #, fuzzy, python-brace-format
 #| msgid "The payment method has been changed."
 msgid "Payment {local_id} has been confirmed."
 msgstr "Ödeme şekli değiştirildi."
 
-#: pretix/control/logdisplay.py:190
+#: pretix/control/logdisplay.py:191
 #, fuzzy, python-brace-format
 #| msgid "The order has been canceled."
 msgid "Payment {local_id} has been canceled."
 msgstr "Sipariş iptal edildi."
 
-#: pretix/control/logdisplay.py:191
+#: pretix/control/logdisplay.py:192
 #, fuzzy, python-brace-format
 #| msgid "The payment method has been changed."
 msgid "Payment {local_id} has been started."
 msgstr "Ödeme şekli değiştirildi."
 
-#: pretix/control/logdisplay.py:192
+#: pretix/control/logdisplay.py:193
 #, fuzzy, python-brace-format
 #| msgid "The order has been created."
 msgid "Refund {local_id} has been created."
 msgstr "Sipariş oluşturuldu."
 
-#: pretix/control/logdisplay.py:193
+#: pretix/control/logdisplay.py:194
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
 msgstr ""
 
-#: pretix/control/logdisplay.py:194
+#: pretix/control/logdisplay.py:195
 #, fuzzy, python-brace-format
 #| msgid "The task has been completed."
 msgid "Refund {local_id} has been completed."
 msgstr "Görev tamamlandı."
 
-#: pretix/control/logdisplay.py:195
+#: pretix/control/logdisplay.py:196
 #, fuzzy, python-brace-format
 #| msgid "The order has been canceled."
 msgid "Refund {local_id} has been canceled."
 msgstr "Sipariş iptal edildi."
 
-#: pretix/control/logdisplay.py:196
+#: pretix/control/logdisplay.py:197
 msgid "The user has been created."
 msgstr "Kullanıcı oluşturuldu."
 
-#: pretix/control/logdisplay.py:197 pretix/control/views/user.py:290
+#: pretix/control/logdisplay.py:198 pretix/control/views/user.py:290
 #: pretix/control/views/user.py:348 pretix/control/views/user.py:383
 msgid "Two-factor authentication has been enabled."
 msgstr "İki faktörlü kimlik doğrulama etkinleştirildi."
 
-#: pretix/control/logdisplay.py:198 pretix/control/views/user.py:238
+#: pretix/control/logdisplay.py:199 pretix/control/views/user.py:238
 #: pretix/control/views/user.py:397
 msgid "Two-factor authentication has been disabled."
 msgstr "İki faktörlü kimlik doğrulama devre dışı bırakıldı."
 
-#: pretix/control/logdisplay.py:199 pretix/control/views/user.py:412
+#: pretix/control/logdisplay.py:200 pretix/control/views/user.py:412
 msgid "Your two-factor emergency codes have been regenerated."
 msgstr "İki faktörlü acil durum kodlarınız yeniden oluşturuldu."
 
-#: pretix/control/logdisplay.py:200
+#: pretix/control/logdisplay.py:201
 #, python-brace-format
 msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
@@ -6295,7 +6296,7 @@ msgid ""
 msgstr ""
 "Hesabınıza yeni bir iki faktörlü kimlik doğrulama cihazı \"{name}\" eklendi."
 
-#: pretix/control/logdisplay.py:202
+#: pretix/control/logdisplay.py:203
 #, python-brace-format
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
@@ -6303,273 +6304,273 @@ msgid ""
 msgstr ""
 "İki faktörlü kimlik doğrulama cihazı \"{name}\" hesabınızdan kaldırıldı."
 
-#: pretix/control/logdisplay.py:204
+#: pretix/control/logdisplay.py:205
 msgid "Notifications have been enabled."
 msgstr "Bildirimler etkinleştirildi."
 
-#: pretix/control/logdisplay.py:205
+#: pretix/control/logdisplay.py:206
 msgid "Notifications have been disabled."
 msgstr "Bildirimler devre dışı bırakıldı."
 
-#: pretix/control/logdisplay.py:206
+#: pretix/control/logdisplay.py:207
 msgid "Your notification settings have been changed."
 msgstr "Bildirim ayarlarınız değiştirildi."
 
-#: pretix/control/logdisplay.py:209
+#: pretix/control/logdisplay.py:210
 msgid "Password reset mail sent."
 msgstr "Şifre sıfırlama e-postası gönderildi."
 
-#: pretix/control/logdisplay.py:210
+#: pretix/control/logdisplay.py:211
 msgid "The password has been reset."
 msgstr "Şifre sıfırlandı."
 
-#: pretix/control/logdisplay.py:211
+#: pretix/control/logdisplay.py:212
 msgid "The voucher has been created."
 msgstr "Kupon oluşturuldu."
 
-#: pretix/control/logdisplay.py:212
+#: pretix/control/logdisplay.py:213
 msgid "The voucher has been created and sent to a person on the waiting list."
 msgstr "Kupon oluşturuldu ve bekleme listesinde bir kişiye gönderildi."
 
-#: pretix/control/logdisplay.py:213
+#: pretix/control/logdisplay.py:214
 msgid "The voucher has been changed."
 msgstr "Kupon değiştirildi."
 
-#: pretix/control/logdisplay.py:214
+#: pretix/control/logdisplay.py:215
 msgid "The voucher has been deleted."
 msgstr "Kupon silindi."
 
-#: pretix/control/logdisplay.py:215
+#: pretix/control/logdisplay.py:216
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
 msgstr "Kupon, {order_code} sırasına göre kullanıldı."
 
-#: pretix/control/logdisplay.py:216
+#: pretix/control/logdisplay.py:217
 msgid "The product has been created."
 msgstr "Ürün oluşturuldu."
 
-#: pretix/control/logdisplay.py:217
+#: pretix/control/logdisplay.py:218
 msgid "The product has been changed."
 msgstr "Ürün değiştirildi."
 
-#: pretix/control/logdisplay.py:218
+#: pretix/control/logdisplay.py:219
 msgid "The product has been deleted."
 msgstr "Ürün silindi."
 
-#: pretix/control/logdisplay.py:219
+#: pretix/control/logdisplay.py:220
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
 msgstr "\"{value}\" varyasyonu oluşturuldu."
 
-#: pretix/control/logdisplay.py:220
+#: pretix/control/logdisplay.py:221
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
 msgstr "\"{value}\" varyasyonu silindi."
 
-#: pretix/control/logdisplay.py:221
+#: pretix/control/logdisplay.py:222
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
 msgstr "\"{value}\" varyasyonu değiştirildi."
 
-#: pretix/control/logdisplay.py:222
+#: pretix/control/logdisplay.py:223
 msgid "An add-on has been added to this product."
 msgstr "Bu ürüne bir eklenti eklendi."
 
-#: pretix/control/logdisplay.py:223
+#: pretix/control/logdisplay.py:224
 msgid "An add-on has been removed from this product."
 msgstr "Bu üründen bir eklenti kaldırıldı."
 
-#: pretix/control/logdisplay.py:224
+#: pretix/control/logdisplay.py:225
 msgid "An add-on has been changed on this product."
 msgstr "Bu üründe bir eklenti değiştirildi."
 
-#: pretix/control/logdisplay.py:225
+#: pretix/control/logdisplay.py:226
 msgid "The quota has been added."
 msgstr "Kota eklendi."
 
-#: pretix/control/logdisplay.py:226
+#: pretix/control/logdisplay.py:227
 msgid "The quota has been deleted."
 msgstr "Kota silindi."
 
-#: pretix/control/logdisplay.py:227
+#: pretix/control/logdisplay.py:228
 msgid "The quota has been changed."
 msgstr "Kota değişti."
 
-#: pretix/control/logdisplay.py:228
+#: pretix/control/logdisplay.py:229
 msgid "The category has been added."
 msgstr "Kategori eklendi."
 
-#: pretix/control/logdisplay.py:229
+#: pretix/control/logdisplay.py:230
 msgid "The category has been deleted."
 msgstr "Kategori silindi."
 
-#: pretix/control/logdisplay.py:230
+#: pretix/control/logdisplay.py:231
 msgid "The category has been changed."
 msgstr "Kategori değiştirildi."
 
-#: pretix/control/logdisplay.py:231
+#: pretix/control/logdisplay.py:232
 msgid "The question has been added."
 msgstr "Soru eklendi."
 
-#: pretix/control/logdisplay.py:232
+#: pretix/control/logdisplay.py:233
 msgid "The question has been deleted."
 msgstr "Soru silindi."
 
-#: pretix/control/logdisplay.py:233
+#: pretix/control/logdisplay.py:234
 msgid "The question has been changed."
 msgstr "Soru değişti."
 
-#: pretix/control/logdisplay.py:234
+#: pretix/control/logdisplay.py:235
 msgid "The tax rule has been added."
 msgstr "Vergi kuralı eklendi."
 
-#: pretix/control/logdisplay.py:235
+#: pretix/control/logdisplay.py:236
 msgid "The tax rule has been deleted."
 msgstr "Vergi kuralı silindi."
 
-#: pretix/control/logdisplay.py:236
+#: pretix/control/logdisplay.py:237
 msgid "The tax rule has been changed."
 msgstr "Vergi kuralı değiştirildi."
 
-#: pretix/control/logdisplay.py:237
+#: pretix/control/logdisplay.py:238
 msgid "The check-in list has been added."
 msgstr "Check-in listesi eklendi."
 
-#: pretix/control/logdisplay.py:238
+#: pretix/control/logdisplay.py:239
 msgid "The check-in list has been deleted."
 msgstr "Check-in listesi silindi."
 
-#: pretix/control/logdisplay.py:239
+#: pretix/control/logdisplay.py:240
 msgid "The check-in list has been changed."
 msgstr "Check-in listesi değiştirildi."
 
-#: pretix/control/logdisplay.py:240 pretix/control/logdisplay.py:247
+#: pretix/control/logdisplay.py:241 pretix/control/logdisplay.py:248
 msgid "The event settings have been changed."
 msgstr "Etkinlik ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:241
+#: pretix/control/logdisplay.py:242
 msgid "The ticket download settings have been changed."
 msgstr "Bilet indirme ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:242
+#: pretix/control/logdisplay.py:243
 msgid "A plugin has been enabled."
 msgstr "Bir eklenti etkinleştirildi."
 
-#: pretix/control/logdisplay.py:243
+#: pretix/control/logdisplay.py:244
 msgid "A plugin has been disabled."
 msgstr "Bir eklenti devre dışı bırakıldı."
 
-#: pretix/control/logdisplay.py:244
+#: pretix/control/logdisplay.py:245
 msgid "The shop has been taken live."
 msgstr "Mağaza çevrimiçi duruma getirildi."
 
-#: pretix/control/logdisplay.py:245
+#: pretix/control/logdisplay.py:246
 msgid "The shop has been taken offline."
 msgstr "Mağaza çevrimdışı duruma getirildi."
 
-#: pretix/control/logdisplay.py:246
+#: pretix/control/logdisplay.py:247
 msgid "The event has been created."
 msgstr "Etkinlik oluşturuldu."
 
-#: pretix/control/logdisplay.py:248
+#: pretix/control/logdisplay.py:249
 msgid "An answer option has been added to the question."
 msgstr "Bu soruya bir cevap seçeneği eklendi."
 
-#: pretix/control/logdisplay.py:249
+#: pretix/control/logdisplay.py:250
 msgid "An answer option has been removed from the question."
 msgstr "Bir cevap seçeneği sorudan kaldırıldı."
 
-#: pretix/control/logdisplay.py:250
+#: pretix/control/logdisplay.py:251
 msgid "An answer option has been changed."
 msgstr "Bir cevap seçeneği değiştirildi."
 
-#: pretix/control/logdisplay.py:251
+#: pretix/control/logdisplay.py:252
 msgid "A user has been added to the event team."
 msgstr "Etkinlik ekibine bir kullanıcı eklendi."
 
-#: pretix/control/logdisplay.py:252
+#: pretix/control/logdisplay.py:253
 msgid "A user has been invited to the event team."
 msgstr "Etkinlik ekibine bir kullanıcı davet edildi."
 
-#: pretix/control/logdisplay.py:253
+#: pretix/control/logdisplay.py:254
 msgid "A user's permissions have been changed."
 msgstr "Bir kullanıcının izinleri değiştirildi."
 
-#: pretix/control/logdisplay.py:254
+#: pretix/control/logdisplay.py:255
 msgid "A user has been removed from the event team."
 msgstr "Etkinlik ekibinden bir kullanıcı kaldırıldı."
 
-#: pretix/control/logdisplay.py:255
+#: pretix/control/logdisplay.py:256
 msgid "A voucher has been sent to a person on the waiting list."
 msgstr "Bekleme listesinde bir kişiye bir makbuz gönderildi."
 
-#: pretix/control/logdisplay.py:256
+#: pretix/control/logdisplay.py:257
 msgid "An entry has been removed from the waiting list."
 msgstr "Bekleme listesinden bir giriş kaldırıldı."
 
-#: pretix/control/logdisplay.py:257
+#: pretix/control/logdisplay.py:258
 msgid "An entry has been changed on the waiting list."
 msgstr "Bekleme listesinde bir giriş değiştirildi."
 
-#: pretix/control/logdisplay.py:258
+#: pretix/control/logdisplay.py:259
 msgid "An entry has been added to the waiting list."
 msgstr "Bekleme listesine bir giriş eklendi."
 
-#: pretix/control/logdisplay.py:259
+#: pretix/control/logdisplay.py:260
 msgid "The team has been created."
 msgstr "Takım oluşturuldu."
 
-#: pretix/control/logdisplay.py:260
+#: pretix/control/logdisplay.py:261
 msgid "The team settings have been changed."
 msgstr "Takım ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:261
+#: pretix/control/logdisplay.py:262
 msgid "The team has been deleted."
 msgstr "Ekip silindi."
 
-#: pretix/control/logdisplay.py:262
+#: pretix/control/logdisplay.py:263
 msgctxt "subevent"
 msgid "The event date has been deleted."
 msgstr "Etkinlik tarihi silindi."
 
-#: pretix/control/logdisplay.py:263
+#: pretix/control/logdisplay.py:264
 msgctxt "subevent"
 msgid "The event date has been changed."
 msgstr "Etkinlik tarihi değiştirildi."
 
-#: pretix/control/logdisplay.py:264
+#: pretix/control/logdisplay.py:265
 msgctxt "subevent"
 msgid "The event date has been created."
 msgstr "Etkinlik tarihi oluşturuldu."
 
-#: pretix/control/logdisplay.py:265
+#: pretix/control/logdisplay.py:266
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
 msgstr "Etkinlik tarihine bir kota eklendi."
 
-#: pretix/control/logdisplay.py:266
+#: pretix/control/logdisplay.py:267
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
 msgstr "Etkinlik tarihinde bir kota değiştirildi."
 
-#: pretix/control/logdisplay.py:267
+#: pretix/control/logdisplay.py:268
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
 msgstr "Etkinlik tarihinden bir kota kaldırıldı."
 
-#: pretix/control/logdisplay.py:290
+#: pretix/control/logdisplay.py:292
 msgid "The settings of a payment provider have been changed."
 msgstr "Bir ödeme sağlayıcısının ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:293
+#: pretix/control/logdisplay.py:295
 msgid "The settings of a ticket output provider have been changed."
 msgstr "Bir ödeme sağlayıcısının ayarları değiştirildi."
 
-#: pretix/control/logdisplay.py:296
+#: pretix/control/logdisplay.py:298
 msgid "The user confirmed the following message: \"{}\""
 msgstr "Kullanıcı şu mesajı doğruladı: \"{}\""
 
-#: pretix/control/logdisplay.py:316
+#: pretix/control/logdisplay.py:318
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
@@ -6578,74 +6579,74 @@ msgstr ""
 "# {posid} konumu, \"{list}\" listesindeki {datetime}'da manuel olarak "
 "kontrol edildi."
 
-#: pretix/control/logdisplay.py:321
+#: pretix/control/logdisplay.py:323
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
 "# {posid} konumu tekrar {datetime} 'de \"{list}\" listesinde kontrol edildi."
 
-#: pretix/control/logdisplay.py:328
+#: pretix/control/logdisplay.py:330
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user} ekibe eklendi."
 
-#: pretix/control/logdisplay.py:331
+#: pretix/control/logdisplay.py:333
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user}, ekipten kaldırıldı."
 
-#: pretix/control/logdisplay.py:334
+#: pretix/control/logdisplay.py:336
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr "{user}, {email}'ye gönderilen davetiyeyi kullanarak ekibine katıldı."
 
-#: pretix/control/logdisplay.py:339
+#: pretix/control/logdisplay.py:341
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user} takıma davet edildi."
 
-#: pretix/control/logdisplay.py:342
+#: pretix/control/logdisplay.py:344
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "{user} için davetiye iptal edildi."
 
-#: pretix/control/logdisplay.py:345
+#: pretix/control/logdisplay.py:347
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "\"{name}\" simgesi oluşturuldu."
 
-#: pretix/control/logdisplay.py:348
+#: pretix/control/logdisplay.py:350
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "\"{name}\" jetonu iptal edildi."
 
-#: pretix/control/logdisplay.py:351
+#: pretix/control/logdisplay.py:353
 msgid "Your account settings have been changed."
 msgstr "Hesap ayarlarınız değiştirildi."
 
-#: pretix/control/logdisplay.py:353 pretix/control/views/user.py:135
+#: pretix/control/logdisplay.py:355 pretix/control/views/user.py:135
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "E-posta adresiniz {email} olarak değiştirildi."
 
-#: pretix/control/logdisplay.py:355 pretix/control/views/user.py:132
+#: pretix/control/logdisplay.py:357 pretix/control/views/user.py:132
 msgid "Your password has been changed."
 msgstr "Şifreniz değiştirildi."
 
-#: pretix/control/logdisplay.py:357
+#: pretix/control/logdisplay.py:359
 msgid "Your account has been enabled."
 msgstr "Hesabınız etkinleştirildi."
 
-#: pretix/control/logdisplay.py:359
+#: pretix/control/logdisplay.py:361
 msgid "Your account has been disabled."
 msgstr "Hesabınız engellendi."
 
-#: pretix/control/logdisplay.py:363
+#: pretix/control/logdisplay.py:365
 msgid "You impersonated {}."
 msgstr "{} Kimliğine büründün."
 
-#: pretix/control/logdisplay.py:366
+#: pretix/control/logdisplay.py:368
 msgid "You stopped impersonating {}."
 msgstr "{} Kimliğine bürünmeyi bıraktınız."
 
@@ -6996,7 +6997,7 @@ msgstr "CSV"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:38
 #: pretix/control/templates/pretixcontrol/users/index.html:22
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:52
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:108
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:118
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:65
 msgid "Filter"
 msgstr "Filtre"
@@ -7721,9 +7722,9 @@ msgstr "Yüklü eklentiler"
 #: pretix/control/views/event.py:712 pretix/control/views/event.py:1020
 #: pretix/control/views/global_settings.py:22
 #: pretix/control/views/global_settings.py:45 pretix/control/views/item.py:150
-#: pretix/control/views/item.py:497 pretix/control/views/item.py:683
-#: pretix/control/views/item.py:793 pretix/control/views/item.py:847
-#: pretix/control/views/item.py:933 pretix/control/views/item.py:1003
+#: pretix/control/views/item.py:497 pretix/control/views/item.py:693
+#: pretix/control/views/item.py:803 pretix/control/views/item.py:857
+#: pretix/control/views/item.py:943 pretix/control/views/item.py:1013
 #: pretix/control/views/organizer.py:125 pretix/control/views/organizer.py:217
 #: pretix/control/views/organizer.py:372 pretix/control/views/subevents.py:381
 #: pretix/control/views/user.py:119 pretix/control/views/users.py:62
@@ -8662,12 +8663,12 @@ msgstr "Kullanım genel bakış"
 msgid "Availability calculation"
 msgstr "Kullanılabilirlik hesaplaması"
 
-#: pretix/control/templates/pretixcontrol/items/quota.html:54
+#: pretix/control/templates/pretixcontrol/items/quota.html:56
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
 msgstr "Bu kota şu anda %(num)s kadar doludur."
 
-#: pretix/control/templates/pretixcontrol/items/quota.html:61
+#: pretix/control/templates/pretixcontrol/items/quota.html:63
 msgid ""
 "Your event contains vouchers that affect products covered by this quota and "
 "that allow a user to buy products even if this quota is sold out."
@@ -8676,7 +8677,7 @@ msgstr ""
 "olsa bile bir kullanıcının ürünleri satın almalarına olanak tanıyan "
 "kuponları içerir."
 
-#: pretix/control/templates/pretixcontrol/items/quota.html:72
+#: pretix/control/templates/pretixcontrol/items/quota.html:74
 msgid "Quota history"
 msgstr "Kota geçmişi"
 
@@ -10724,6 +10725,7 @@ msgid "Create multiple new vouchers"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:84
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
 msgid "Download list"
 msgstr ""
 
@@ -10814,20 +10816,56 @@ msgstr ""
 msgid "All entries"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:84
-msgid "Waiting"
-msgstr ""
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
+#, fuzzy
+#| msgid "Can change vouchers"
+msgid "Waiting for a voucher"
+msgstr "Kuponları görüntüleyebilir"
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:86
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:144
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
+#: pretix/control/views/waitinglist.py:217
 msgid "Voucher assigned"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:122
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
+#, fuzzy
+#| msgid "Category description"
+msgid "Waiting for redemption"
+msgstr "Kategori tanımı"
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
+#, fuzzy
+#| msgid "Fully redeemed"
+msgid "Successfully redeemed"
+msgstr "Tamamen kullanıldı"
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
+#: pretix/control/views/waitinglist.py:215
+#, fuzzy
+#| msgid "This voucher is expired."
+msgid "Voucher expired"
+msgstr "Bu kuponun kullanım süresi doldu."
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:147
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:158
+msgid ""
+"This entry has a modified priority. The higher this number is, the earlier "
+"this person will be assigned a voucher."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
+#: pretix/control/views/waitinglist.py:213
+#, fuzzy
+#| msgid "Voucher code"
+msgid "Voucher redeemed"
+msgstr "Kupon kodu"
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:174
 #, python-format
 msgid ""
 "\n"
@@ -10835,12 +10873,20 @@ msgid ""
 "                                "
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:152
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
 msgid "Waiting, product unavailable"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/waitinglist/index.html:162
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
+msgid "Move to the top of the list"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/waitinglist/index.html:200
+msgid "Move to the end of the list"
 msgstr ""
 
 #: pretix/control/templatetags/hierarkey_form.py:42
@@ -10947,9 +10993,9 @@ msgstr ""
 #: pretix/control/views/event.py:979 pretix/control/views/event.py:1039
 #: pretix/control/views/item.py:166 pretix/control/views/item.py:192
 #: pretix/control/views/item.py:507 pretix/control/views/item.py:533
-#: pretix/control/views/item.py:589 pretix/control/views/item.py:717
-#: pretix/control/views/item.py:814 pretix/control/views/item.py:871
-#: pretix/control/views/item.py:935 pretix/control/views/organizer.py:128
+#: pretix/control/views/item.py:589 pretix/control/views/item.py:727
+#: pretix/control/views/item.py:824 pretix/control/views/item.py:881
+#: pretix/control/views/item.py:945 pretix/control/views/organizer.py:128
 #: pretix/control/views/organizer.py:163 pretix/control/views/user.py:205
 #: pretix/plugins/badges/views.py:67
 #: pretix/plugins/ticketoutputpdf/views.py:109
@@ -11190,7 +11236,7 @@ msgstr ""
 msgid "Your changes have not been saved, see below for errors."
 msgstr ""
 
-#: pretix/control/views/item.py:66 pretix/control/views/item.py:1056
+#: pretix/control/views/item.py:66 pretix/control/views/item.py:1066
 msgid "The requested product does not exist."
 msgstr ""
 
@@ -11250,36 +11296,48 @@ msgstr ""
 msgid "Vouchers and waiting list reservations"
 msgstr "Bekleme listesinde"
 
-#: pretix/control/views/item.py:626
+#: pretix/control/views/item.py:631
+#, fuzzy
+#| msgid "Available until"
+msgid "Available quota"
+msgstr "Kadar mevcut"
+
+#: pretix/control/views/item.py:637
 #, fuzzy
 #| msgid "Waiting list entries"
 msgid "Waiting list (pending)"
 msgstr "Liste girdileri bekleniyor"
 
-#: pretix/control/views/item.py:659 pretix/control/views/item.py:679
-#: pretix/control/views/item.py:733
+#: pretix/control/views/item.py:644
+#, fuzzy
+#| msgid "Current issues"
+msgid "Currently for sale"
+msgstr "Güncel konular"
+
+#: pretix/control/views/item.py:669 pretix/control/views/item.py:689
+#: pretix/control/views/item.py:743
 msgid "The requested quota does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:746
+#: pretix/control/views/item.py:756
 msgid "The selected quota has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:769
+#: pretix/control/views/item.py:779
 msgid "The requested item does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:1009
+#: pretix/control/views/item.py:1019
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
 
-#: pretix/control/views/item.py:1067
+#: pretix/control/views/item.py:1077
 msgid "The selected product has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:1076
+#: pretix/control/views/item.py:1086
 msgid "The selected product has been deactivated."
 msgstr ""
 
@@ -11810,29 +11868,57 @@ msgstr ""
 msgid "The new vouchers have been created."
 msgstr ""
 
-#: pretix/control/views/waitinglist.py:27
+#: pretix/control/views/waitinglist.py:32
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
 msgstr ""
 
-#: pretix/control/views/waitinglist.py:53
+#: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
 msgstr ""
 
-#: pretix/control/views/waitinglist.py:67
+#: pretix/control/views/waitinglist.py:70
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
 
 #: pretix/control/views/waitinglist.py:74
+#: pretix/control/views/waitinglist.py:87
+#: pretix/control/views/waitinglist.py:100
 msgid "Waiting list entry not found."
 msgstr ""
 
-#: pretix/control/views/waitinglist.py:154
+#: pretix/control/views/waitinglist.py:84
+#, fuzzy
+#| msgid "An entry has been removed from the waiting list."
+msgid "The waiting list entry has been moved to the top."
+msgstr "Bekleme listesinden bir giriş kaldırıldı."
+
+#: pretix/control/views/waitinglist.py:97
+#, fuzzy
+#| msgid "An entry has been removed from the waiting list."
+msgid "The waiting list entry has been moved to the end of the list."
+msgstr "Bekleme listesinden bir giriş kaldırıldı."
+
+#: pretix/control/views/waitinglist.py:198
+#, fuzzy
+#| msgid "On waiting list since"
+msgid "On list since"
+msgstr "Bekleme listesinde"
+
+#: pretix/control/views/waitinglist.py:199
+msgid "Priority"
+msgstr ""
+
+#: pretix/control/views/waitinglist.py:219
+msgid "Waiting"
+msgstr ""
+
+#: pretix/control/views/waitinglist.py:252
 msgid "The requested entry does not exist."
 msgstr ""
 
-#: pretix/control/views/waitinglist.py:162
+#: pretix/control/views/waitinglist.py:260
 msgid "The selected entry has been deleted."
 msgstr ""
 
