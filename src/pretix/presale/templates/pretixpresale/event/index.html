@@ -296,6 +296,7 @@
                                                         <div class="input-group input-group-price">
                                                             <span class="input-group-addon">{{ event.currency }}</span>
                                                             <input type="number" class="form-control input-item-price"
+                                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                                     placeholder="0"
                                                                     min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                                     name="price_{{ item.id }}_{{ var.id }}"
@@ -335,12 +336,14 @@
                                                         {% if item.max_per_order == 1 %}
                                                             <label class="item-checkbox-label">
                                                                 <input type="checkbox" value="1"
+                                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
                                                                         name="variation_{{ item.id }}_{{ var.id }}"
                                                                         title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
                                                             </label>
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                                     max="{{ var.order_max }}"
                                                                     pattern="\d*"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
@@ -399,6 +402,7 @@
                                             <div class="input-group input-group-price">
                                                 <span class="input-group-addon">{{ event.currency }}</span>
                                                 <input type="number" class="form-control input-item-price" placeholder="0"
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                         min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="price_{{ item.id }}"
                                                         title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
@@ -436,10 +440,12 @@
                                             {% if item.max_per_order == 1 %}
                                                 <label class="item-checkbox-label">
                                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
+                                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                                             name="item_{{ item.id }}" id="item_{{ item.id }}">
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                         pattern="\d*" {% if itemnum == 1 %}value="1"{% endif %}
                                                         max="{{ item.order_max }}"
                                                         name="item_{{ item.id }}"
