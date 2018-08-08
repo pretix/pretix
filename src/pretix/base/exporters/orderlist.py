@@ -59,11 +59,11 @@ class OrderListExporter(BaseExporter):
             order=OuterRef('pk'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             payment_date__isnull=False
-        ).order_by().values('order').annotate(
+        ).values('order').annotate(
             m=Max('payment_date')
         ).values(
             'm'
-        )
+        ).order_by()
 
         qs = self.event.orders.annotate(
             payment_date=Subquery(p_date, output_field=DateTimeField())

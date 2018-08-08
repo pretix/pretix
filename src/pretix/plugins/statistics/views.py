@@ -41,20 +41,20 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             order=OuterRef('pk'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             payment_date__isnull=False
-        ).order_by().values('order').annotate(
+        ).values('order').annotate(
             m=Max('payment_date')
         ).values(
             'm'
-        )
+        ).order_by()
         op_date = OrderPayment.objects.filter(
             order=OuterRef('order'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             payment_date__isnull=False
-        ).order_by().values('order').annotate(
+        ).values('order').annotate(
             m=Max('payment_date')
         ).values(
             'm'
-        )
+        ).order_by()
 
         # Orders by day
         ctx['obd_data'] = cache.get('statistics_obd_data' + ckey)
