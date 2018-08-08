@@ -179,7 +179,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
         ).annotate(
             last_checked_in=Subquery(cqs)
         ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address').prefetch_related(
-            'answers', 'answers__question'
+            'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         )
 
         if not cl.all_products:
@@ -221,6 +221,9 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 money_filter(op.price, self.event.currency),
             ]
             acache = {}
+            if op.addon_to:
+                for a in op.addon_to.answers.all():
+                    acache[a.question_id] = str(a)
             for a in op.answers.all():
                 acache[a.question_id] = str(a)
             for q in questions:
@@ -278,7 +281,7 @@ class CSVCheckinList(BaseCheckinList):
         ).annotate(
             last_checked_in=Subquery(cqs)
         ).prefetch_related(
-            'answers', 'answers__question'
+            'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to')
 
         if not cl.all_products:
@@ -338,6 +341,9 @@ class CSVCheckinList(BaseCheckinList):
             if self.event.has_subevents:
                 row.append(str(op.subevent))
             acache = {}
+            if op.addon_to:
+                for a in op.addon_to.answers.all():
+                    acache[a.question_id] = str(a)
             for a in op.answers.all():
                 acache[a.question_id] = str(a)
             for q in questions:
