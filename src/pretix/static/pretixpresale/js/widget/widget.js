@@ -468,7 +468,7 @@ var shared_methods = {
         iframe.src = redirect_url;
     },
     resume: function () {
-        var redirect_url = this.$root.event_url + 'w/' + widget_id + '/checkout/start?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+        var redirect_url = this.$root.event_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
         if (this.$root.useIframe) {
             var iframe = this.$refs['frame-container'].children[0];
             this.$root.frame_loading = true;
@@ -647,7 +647,10 @@ var shared_root_computed = {
         return form_target;
     },
     formTarget: function () {
-        var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/checkout/start";
+        var checkout_url = "/" + this.event_url.replace(/^[^\/]+:\/\/([^\/]+)\//, "") + "w/" + widget_id + "/";
+        if (!this.$root.cart_exists) {
+            checkout_url += "checkout/start";
+        }
         var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + checkout_url;
         if (getCookie(this.cookieName)) {
             form_target += "&take_cart_id=" + getCookie(this.cookieName);
