@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-07 13:45+0000\n"
+"POT-Creation-Date: 2018-08-09 15:24+0000\n"
 "PO-Revision-Date: 2018-05-31 02:00+0000\n"
 "Last-Translator: Lorenzo Peña <lorinkoz@nauta.cu>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -305,15 +305,25 @@ msgid "Waiting list"
 msgstr "Lista de espera"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "You currently have an active cart for this event. If you select more "
+#| "products, they will be added to your existing cart. Click on this message "
+#| "to continue checkout with your cart."
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
-"products, they will be added to your existing cart. Click on this message to "
-"continue checkout with your cart."
+"products, they will be added to your existing cart."
 msgstr ""
 "Ya tiene un carrito de compras activo para este evento. Si selecciona más "
 "productos, estos serán añadidos al carrito actual. Haga clic en este mensaje "
 "para proceder al pago de su carrito."
+
+#: pretix/static/pretixpresale/js/widget/widget.js:25
+msgctxt "widget"
+msgid "Resume checkout"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"

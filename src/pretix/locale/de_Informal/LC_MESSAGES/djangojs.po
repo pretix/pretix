@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-07 13:45+0000\n"
+"POT-Creation-Date: 2018-08-09 15:24+0000\n"
 "PO-Revision-Date: 2018-08-07 13:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -302,16 +302,26 @@ msgid "Waiting list"
 msgstr "Warteliste"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
+#, fuzzy
+#| msgctxt "widget"
+#| msgid ""
+#| "You currently have an active cart for this event. If you select more "
+#| "products, they will be added to your existing cart. Click on this message "
+#| "to continue checkout with your cart."
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
-"products, they will be added to your existing cart. Click on this message to "
-"continue checkout with your cart."
+"products, they will be added to your existing cart."
 msgstr ""
 "Du hast einen aktiven Warenkorb für diese Veranstaltung. Wenn du mehr "
 "Produkte auswählst, werden diese zu deinem Warenkorb hinzugefügt. Klicke auf "
 "diese Meldung um den Kauf des bestehenden Warenkorbs fortzusetzen oder den "
 "Warenkorb zu verändern."
+
+#: pretix/static/pretixpresale/js/widget/widget.js:25
+msgctxt "widget"
+msgid "Resume checkout"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
