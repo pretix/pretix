@@ -205,50 +205,46 @@ class OverviewReport(Report):
 
         items_by_category, total = order_overview(self.event, subevent=self.form_data.get('subevent'))
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+        states = (
+            ('canceled', Order.STATUS_CANCELED),
+            ('refunded', Order.STATUS_REFUNDED),
+            ('expired', Order.STATUS_EXPIRED),
+            ('pending', Order.STATUS_PENDING),
+            ('paid', Order.STATUS_PAID),
+            ('total', None),
+        )
 
         for tup in items_by_category:
             if tup[0]:
                 tstyledata.append(('FONTNAME', (0, len(tdata)), (-1, len(tdata)), 'OpenSansBd'))
                 tdata.append([
                     tup[0].name,
-                    str(tup[0].num_canceled[0]), floatformat(tup[0].num_canceled[1], places),
-                    str(tup[0].num_refunded[0]), floatformat(tup[0].num_refunded[1], places),
-                    str(tup[0].num_expired[0]), floatformat(tup[0].num_expired[1], places),
-                    str(tup[0].num_pending[0]), floatformat(tup[0].num_pending[1], places),
-                    str(tup[0].num_paid[0]), floatformat(tup[0].num_paid[1], places),
-                    str(tup[0].num_total[0]), floatformat(tup[0].num_total[1], places),
                 ])
+                for l, s in states:
+                    tdata[-1].append(str(tup[0].num[l][0]))
+                    tdata[-1].append(floatformat(tup[0].num[l][1], places))
             for item in tup[1]:
                 tdata.append([
-                    "     " + str(item.name),
-                    str(item.num_canceled[0]), floatformat(item.num_canceled[1], places),
-                    str(item.num_refunded[0]), floatformat(item.num_refunded[1], places),
-                    str(item.num_expired[0]), floatformat(item.num_expired[1], places),
-                    str(item.num_pending[0]), floatformat(item.num_pending[1], places),
-                    str(item.num_paid[0]), floatformat(item.num_paid[1], places),
-                    str(item.num_total[0]), floatformat(item.num_total[1], places),
+                    str(item)
                 ])
+                for l, s in states:
+                    tdata[-1].append(str(item.num[l][0]))
+                    tdata[-1].append(floatformat(item.num[l][1], places))
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
                             "          " + str(var),
-                            str(var.num_canceled[0]), floatformat(var.num_canceled[1], places),
-                            str(var.num_refunded[0]), floatformat(var.num_refunded[1], places),
-                            str(var.num_expired[0]), floatformat(var.num_expired[1], places),
-                            str(var.num_pending[0]), floatformat(var.num_pending[1], places),
-                            str(var.num_paid[0]), floatformat(var.num_paid[1], places),
-                            str(var.num_total[0]), floatformat(var.num_total[1], places),
                         ])
+                        for l, s in states:
+                            tdata[-1].append(str(var.num[l][0]))
+                            tdata[-1].append(floatformat(var.num[l][1], places))
 
         tdata.append([
             _("Total"),
-            str(total['num_canceled'][0]), floatformat(total['num_canceled'][1], places),
-            str(total['num_refunded'][0]), floatformat(total['num_refunded'][1], places),
-            str(total['num_expired'][0]), floatformat(total['num_expired'][1], places),
-            str(total['num_pending'][0]), floatformat(total['num_pending'][1], places),
-            str(total['num_paid'][0]), floatformat(total['num_paid'][1], places),
-            str(total['num_total'][0]), floatformat(total['num_total'][1], places),
         ])
+        for l, s in states:
+            tdata[-1].append(str(total['num'][l][0]))
+            tdata[-1].append(floatformat(total['num'][l][1], places))
 
         table = Table(tdata, colWidths=colwidths, repeatRows=3)
         table.setStyle(TableStyle(tstyledata))

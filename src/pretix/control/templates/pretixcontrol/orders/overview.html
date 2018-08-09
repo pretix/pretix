@@ -50,12 +50,12 @@
                     {% if tup.0 %}
                         <tr class="category">
                             <th>{{ tup.0 }}</th>
-                            <th>{{ tup.0.num_canceled|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num_refunded|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num_expired|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num_pending|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num_paid|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num_total|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.canceled|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.refunded|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.expired|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.pending|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.paid|togglesum:request.event.currency }}</th>
+                            <th>{{ tup.0.num.total|togglesum:request.event.currency }}</th>
                         </tr>
                     {% endif %}
                     {% for item in tup.1 %}
@@ -63,43 +63,43 @@
                             <td>{{ item }}</td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
-                                    {{ item.num_canceled|togglesum:request.event.currency }}
+                                    {{ item.num.canceled|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=r&amp;provider={{ item.provider }}">
-                                    {{ item.num_refunded|togglesum:request.event.currency }}
+                                    {{ item.num.refunded|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=e&amp;provider={{ item.provider }}">
-                                    {{ item.num_expired|togglesum:request.event.currency }}
+                                    {{ item.num.expired|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=n&amp;provider={{ item.provider }}">
-                                    {{ item.num_pending|togglesum:request.event.currency }}
+                                    {{ item.num.pending|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=p&amp;provider={{ item.provider }}">
-                                    {{ item.num_paid|togglesum:request.event.currency }}
+                                    {{ item.num.paid|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
-                                {{ item.num_total|togglesum:request.event.currency }}
+                                {{ item.num.total|togglesum:request.event.currency }}
                             </td>
                         </tr>
                         {% if item.has_variations %}
                             {% for var in item.all_variations %}
                                 <tr class="variation {% if tup.0 %}categorized{% endif %}">
                                     <td>{{ var }}</td>
-                                    <td>{{ var.num_canceled|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num_refunded|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num_expired|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num_pending|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num_paid|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num_total|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.canceled|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.refunded|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.expired|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.pending|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.paid|togglesum:request.event.currency }}</td>
+                                    <td>{{ var.num.total|togglesum:request.event.currency }}</td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -109,12 +109,12 @@
             <tfoot>
                 <tr class="total">
                     <th>{% trans "Total" %}</th>
-                    <th>{{ total.num_canceled|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num_refunded|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num_expired|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num_pending|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num_paid|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num_total|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.canceled|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.refunded|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.expired|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.pending|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.paid|togglesum:request.event.currency }}</th>
+                    <th>{{ total.num.total|togglesum:request.event.currency }}</th>
                 </tr>
             </tfoot>
         </table>
