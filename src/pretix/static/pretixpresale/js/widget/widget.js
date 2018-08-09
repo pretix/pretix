@@ -21,8 +21,8 @@ var strings = {
     'cart_error': django.pgettext('widget', 'The cart could not be created. Please try again later'),
     'waiting_list': django.pgettext('widget', 'Waiting list'),
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
-        ' products, they will be added to your existing cart. Click on this message to continue checkout with your' +
-        ' cart.'),
+        ' products, they will be added to your existing cart.'),
+    'resume_checkout': django.pgettext('widget', 'Resume checkout'),
     'poweredby': django.pgettext('widget', '<a href="https://pretix.eu" target="_blank" rel="noopener">event' +
         ' ticketing powered by pretix</a>'),
     'redeem_voucher': django.pgettext('widget', 'Redeem a voucher'),
@@ -555,13 +555,17 @@ Vue.component('pretix-widget', {
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
-        + '<div class="pretix-widget-info-message pretix-widget-clickable" @click.prevent="resume"'
+        + '<div class="pretix-widget-info-message pretix-widget-clickable"'
         + '     v-if="$root.cart_exists">'
+        + '<button @click.prevent="resume" class="pretix-widget-resume-button" type="button">'
+        + strings['resume_checkout']
+        + '</button>'
         + strings['cart_exists']
+        + '<div class="pretix-widget-clear"></div>'
         + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
-        + '<button @click="buy">' + strings.buy + '</button>'
+        + '<button @click="buy" type="submit">' + strings.buy + '</button>'
         + '</div>'
         + '</form>'
         + '<form method="get" :action="$root.voucherFormTarget" target="_blank" v-if="$root.vouchers_exist && !$root.voucher_code">'

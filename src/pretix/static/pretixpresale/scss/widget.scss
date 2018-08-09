@@ -93,6 +93,10 @@
   min-height: 208px;
   border-radius: $input-border-radius;
 
+  .pretix-widget-resume-button {
+    float: right;
+    margin-left: 10px;
+  }
 
   .pretix-widget-clickable {
     cursor: pointer;
@@ -100,11 +104,11 @@
 
   .pretix-widget-info-message {
     padding: 10px;
-    text-align: center;
+    text-align: left;
     margin: 10px 0;
-    background-color: $alert-info-bg;
-    border-color: $alert-info-border;
-    color: $alert-info-text;
+    background-color: white;
+    border: 2px solid $brand-info;
+    color: $brand-info;
     border-radius: $alert-border-radius;
   }
 
