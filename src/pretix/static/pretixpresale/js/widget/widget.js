@@ -479,6 +479,7 @@ var shared_methods = {
     },
     close: function () {
         this.$root.frame_shown = false;
+        this.$root.reload();
     },
     iframeLoaded: function () {
         if (this.$root.frame_loading) {
@@ -629,6 +630,45 @@ var shared_root_methods = {
         } else {
             return;
         }
+    },
+    reload: function () {
+        var url;
+        if (this.$root.subevent) {
+            url = this.$root.event_url + this.$root.subevent + '/widget/product_list?lang=' + lang;
+        } else {
+            url = this.$root.event_url + 'widget/product_list?lang=' + lang;
+        }
+        var cart_id = getCookie(this.cookieName);
+        if (this.$root.voucher) {
+            url += '&voucher=' + escape(this.$root.voucher);
+        }
+        if (cart_id) {
+            url += "&cart_id=" + cart_id;
+        }
+        var root = this.$root;
+        api._getJSON(url, function (data) {
+            root.categories = data.items_by_category;
+            root.currency = data.currency;
+            root.display_net_prices = data.display_net_prices;
+            root.error = data.error;
+            root.display_add_to_cart = data.display_add_to_cart;
+            root.waiting_list_enabled = data.waiting_list_enabled;
+            root.show_variations_expanded = data.show_variations_expanded;
+            root.cart_id = cart_id;
+            root.cart_exists = data.cart_exists;
+            root.vouchers_exist = data.vouchers_exist;
+            root.itemnum = data.itemnum;
+            if (root.loading > 0) {
+                root.loading--;
+            }
+        }, function (error) {
+            root.categories = [];
+            root.currency = '';
+            root.error = strings['loading_error'];
+            if (root.loading > 0) {
+                root.loading--;
+            }
+        });
     }
 };
 
@@ -718,38 +758,7 @@ var create_widget = function (element) {
             }
         },
         created: function () {
-            var url;
-            if (subevent) {
-                url = event_url + subevent + '/widget/product_list?lang=' + lang;
-            } else {
-                url = event_url + 'widget/product_list?lang=' + lang;
-            }
-            var cart_id = getCookie(this.cookieName);
-            if (voucher) {
-                url += '&voucher=' + escape(voucher);
-            }
-            if (cart_id) {
-                url += "&cart_id=" + cart_id;
-            }
-            api._getJSON(url, function (data) {
-                app.categories = data.items_by_category;
-                app.currency = data.currency;
-                app.display_net_prices = data.display_net_prices;
-                app.error = data.error;
-                app.display_add_to_cart = data.display_add_to_cart;
-                app.waiting_list_enabled = data.waiting_list_enabled;
-                app.show_variations_expanded = data.show_variations_expanded;
-                app.cart_id = cart_id;
-                app.cart_exists = data.cart_exists;
-                app.vouchers_exist = data.vouchers_exist;
-                app.itemnum = data.itemnum;
-                app.loading--;
-            }, function (error) {
-                app.categories = [];
-                app.currency = '';
-                app.error = strings['loading_error'];
-                app.loading--;
-            });
+            this.reload();
         },
         computed: shared_root_computed,
         methods: shared_root_methods
