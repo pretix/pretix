@@ -456,7 +456,7 @@ var shared_methods = {
         this.$root.error_message = null;
         this.$root.error_url_after = null;
     },
-    redeem: function () {
+    redeem: function (event) {
         if (this.$root.useIframe) {
             event.preventDefault();
         } else {
