@@ -216,9 +216,9 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
-                name,
-                str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "\n" +
-                money_filter(op.price, self.event.currency),
+                Paragraph(name, self.get_style()),
+                Paragraph(str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "<br/>" +
+                          money_filter(op.price, self.event.currency), self.get_style()),
             ]
             acache = {}
             if op.addon_to:
@@ -227,7 +227,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
             for a in op.answers.all():
                 acache[a.question_id] = str(a)
             for q in questions:
-                row.append(acache.get(q.pk, ''))
+                row.append(Paragraph(acache.get(q.pk, ''), self.get_style()))
             if op.order.status != Order.STATUS_PAID:
                 tstyledata += [
                     ('BACKGROUND', (2, len(tdata)), (2, len(tdata)), '#990000'),
