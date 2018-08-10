@@ -199,6 +199,16 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
             if event.settings.invoice_name_required:
                 self.fields['name'].required = True
+        elif event.settings.invoice_address_company_required:
+            self.initial['is_business'] = True
+
+            self.fields['is_business'].widget = BusinessBooleanRadio(require_business=True)
+            self.fields['company'].required = True
+            self.fields['company'].widget.is_required = True
+            self.fields['company'].widget.attrs['required'] = 'required'
+            del self.fields['company'].widget.attrs['data-display-dependency']
+            if 'vat_id' in self.fields:
+                del self.fields['vat_id'].widget.attrs['data-display-dependency']
         else:
             self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
             self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'

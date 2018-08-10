@@ -518,6 +518,12 @@ class InvoiceSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
     )
+    invoice_address_company_required = forms.BooleanField(
+        label=_("Require a business addresses"),
+        help_text=_('This will require users to enter a company name.'),
+        required=False,
+        widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_required'}),
+    )
     invoice_name_required = forms.BooleanField(
         label=_("Require customer name"),
         required=False,

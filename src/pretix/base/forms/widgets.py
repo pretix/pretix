@@ -110,14 +110,22 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
 
 
 class BusinessBooleanRadio(forms.RadioSelect):
-    def __init__(self, attrs=None):
-        choices = (
-            ('individual', _('Individual customer')),
-            ('business', _('Business customer')),
-        )
+    def __init__(self, require_business=False, attrs=None):
+        self.require_business = require_business
+        if self.require_business:
+            choices = (
+                ('business', _('Business customer')),
+            )
+        else:
+            choices = (
+                ('individual', _('Individual customer')),
+                ('business', _('Business customer')),
+            )
         super().__init__(attrs, choices)
 
     def format_value(self, value):
+        if self.require_business:
+            return 'business'
         try:
             return {True: 'business', False: 'individual'}[value]
         except KeyError:
@@ -125,6 +133,8 @@ class BusinessBooleanRadio(forms.RadioSelect):
 
     def value_from_datadict(self, data, files, name):
         value = data.get(name)
+        if self.require_business:
+            return True
         return {
             'business': True,
             True: True,

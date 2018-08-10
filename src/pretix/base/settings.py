@@ -57,6 +57,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_address_company_required': {
+        'default': 'False',
+        'type': bool,
+    },
     'invoice_address_vatid': {
         'default': 'False',
         'type': bool,
