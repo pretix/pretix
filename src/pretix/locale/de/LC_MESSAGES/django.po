@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-11 08:14+0000\n"
-"PO-Revision-Date: 2018-08-07 13:57+0000\n"
+"PO-Revision-Date: 2018-08-11 08:18+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -4664,14 +4664,12 @@ msgid "Require invoice address"
 msgstr "Rechnungsadresse erforderlich"
 
 #: pretix/control/forms/event.py:522
-#, fuzzy
-#| msgid "Require invoice address"
 msgid "Require a business addresses"
-msgstr "Rechnungsadresse erforderlich"
+msgstr "Nur Firmenadressen akzeptieren"
 
 #: pretix/control/forms/event.py:523
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Diese Einstellung erzwingt die Eingabe eines Firmennamens."
 
 #: pretix/control/forms/event.py:528
 msgid "Require customer name"
