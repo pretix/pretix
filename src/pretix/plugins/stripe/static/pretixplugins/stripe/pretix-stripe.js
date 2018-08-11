@@ -157,6 +157,9 @@ $(function () {
 
     $('.stripe-container').closest("form").submit(
         function () {
+            if ($("input[name=card_new]").length && !$("input[name=card_new]").prop('checked')) {
+                return null;
+            }
             if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment][type=radio]").length === 0)
                 && $("#stripe_token").val() == "") {
                 if ($("#stripe-checkout").length) {
