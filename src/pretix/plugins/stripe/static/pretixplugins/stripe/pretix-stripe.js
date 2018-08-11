@@ -41,23 +41,27 @@ var pretixstripe = {
                 success: function () {
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     pretixstripe.elements = pretixstripe.stripe.elements();
-                    pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
-                      country: 'DE', // This obviously needs to be pulled from the backend
-                      currency: $("#stripe_currency").val().toLowerCase(),
-                      total: {
-                        label: gettext('Total'),
-                        amount: Math.round(
-                            parseFloat(
-                                $("#payment_stripe").parents("[data-total]").attr("data-total").replace(",", ".")
-                            ) * 100
-                        ),
-                      },
-                      displayItems: [], // In theory, we could provide an itemised breakdown of all billed items
-                      requestPayerName: false,
-                      requestPayerEmail: false,
-                      requestPayerPhone: false,
-                      requestShipping: false,
-                    });
+                    try {
+                        pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
+                          country: $("#stripe_merchantcountry").html(),
+                          currency: $("#stripe_currency").val().toLowerCase(),
+                          total: {
+                            label: gettext('Total'),
+                            amount: Math.round(
+                                parseFloat(
+                                    $("#payment_stripe").parents("[data-total]").attr("data-total").replace(",", ".")
+                                ) * 100
+                            ),
+                          },
+                          displayItems: [], // In theory, we could provide an itemised breakdown of all billed items
+                          requestPayerName: false,
+                          requestPayerEmail: false,
+                          requestPayerPhone: false,
+                          requestShipping: false,
+                        });
+                    } catch {
+                        pretixstripe.paymentRequest = null;
+                    }
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
                             'style': {
@@ -82,7 +86,7 @@ var pretixstripe = {
                         });
                         pretixstripe.card.mount("#stripe-card");
                     }
-                    if ($("#stripe-payment-request-button").length) {
+                    if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
                       pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
                         paymentRequest: pretixstripe.paymentRequest,
                       });
