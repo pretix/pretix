@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 import stripe
 from django import forms
+from django_countries import countries
 from django.conf import settings
 from django.contrib import messages
 from django.core import signing
@@ -109,6 +110,9 @@ class StripeSettingsHolder(BasePaymentProvider):
             else:
                 return {}
         else:
+            allcountries = list(countries)
+            allcountries.insert(0, ('', _('Select country')))
+
             fields = [
                 ('publishable_key',
                  forms.CharField(
@@ -128,6 +132,12 @@ class StripeSettingsHolder(BasePaymentProvider):
                          StripeKeyValidator(['sk_', 'rk_']),
                      ),
                  )),
+                ('merchant_country',
+                 forms.ChoiceField(
+                    choices=allcountries,
+                    label=_('Merchant country'),
+                    help_text=_('The country in which your Stripe-account is registred in. Usually, this is Your country of residence.'),
+                )),
             ]
         d = OrderedDict(
             fields + [
