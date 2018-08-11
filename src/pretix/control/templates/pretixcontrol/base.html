@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load hijack_tags %}
 {% load statici18n %}
+{% load eventsignal %}
 {% load eventurl %}
 <!DOCTYPE html>
 <html>
@@ -329,6 +330,7 @@
             {% endif %}
             <div id="page-wrapper">
                 <div class="container-fluid">
+                    {% signal "pretix.control.signals.html_page_start" request %}
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert {{ message.tags }}">

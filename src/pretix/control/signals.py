@@ -12,6 +12,16 @@ This signal is sent out to build configuration forms for all restriction formset
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+html_page_start = Signal(
+    providing_args=[]
+)
+"""
+This signal allows you to put code in the beginning of the main page for every
+page in the backend. You are expected to return HTML.
+
+The ``sender`` keyword argument will contain the request.
+"""
+
 html_head = EventPluginSignal(
     providing_args=["request"]
 )
