@@ -189,7 +189,11 @@ $(function () {
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
                 if (ev) {
-                    dependent.closest('.form-group').slideToggle(enabled);
+                    if (enabled) {
+                        dependent.closest('.form-group').stop().slideDown();
+                    } else {
+                        dependent.closest('.form-group').stop().slideUp();
+                    }
                 } else {
                     dependent.closest('.form-group').toggle(enabled);
                 }

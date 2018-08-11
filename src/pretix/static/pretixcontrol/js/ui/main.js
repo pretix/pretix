@@ -216,7 +216,11 @@ var form_handlers = function (el) {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
-                    $toggling.stop().slideToggle(enabled);
+                    if (enabled) {
+                        $toggling.stop().slideDown();
+                    } else {
+                        $toggling.stop().slideUp();
+                    }
                 } else {
                     $toggling.stop().toggle(enabled);
                 }
