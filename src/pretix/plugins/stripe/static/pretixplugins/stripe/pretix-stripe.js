@@ -62,6 +62,17 @@ var pretixstripe = {
                     } catch {
                         pretixstripe.paymentRequest = null;
                     }
+                    pretixstripe.paymentRequest.on('token', function(ev) {
+                      ev.complete('success');
+
+                      var $form = $("#stripe_token").closest("form");
+                      // Insert the token into the form so it gets submitted to the server
+                      $("#stripe_token").val(ev.token.id);
+                      $("#stripe_card_brand").val(ev.token.card.brand);
+                      $("#stripe_card_last4").val(ev.token.card.last4);
+                      // and submit
+                      $form.get(0).submit();
+                    });
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
                             'style': {
