@@ -6,16 +6,18 @@ import pytz
 from django import forms
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.db.models import Sum
+from django.db import models
+from django.db.models import Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
-from django.utils.formats import date_format
+from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
 
+from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.services.stats import order_overview
 
 
@@ -318,9 +320,9 @@ class OrderTaxListReport(Report):
         )
         tax_rates |= set(
             a for a
-            in OrderPosition.objects.filter(order__event=self.event)
-                                    .filter(order__status__in=self.form_data['status'])
-                                    .values_list('tax_rate', flat=True).distinct().order_by()
+            in OrderPosition.objects.filter(order__event=self.event).filter(
+                order__status__in=self.form_data['status']
+            ).values_list('tax_rate', flat=True).distinct().order_by()
         )
         tax_rates = sorted(tax_rates)
 
@@ -356,14 +358,23 @@ class OrderTaxListReport(Report):
             ] + sum(([_('Gross'), _('Tax')] for t in tax_rates), []),
         ]
 
+        op_date = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            payment_date__isnull=False
+        ).values('order').annotate(
+            m=Max('payment_date')
+        ).values(
+            'm'
+        ).order_by()
         qs = OrderPosition.objects.filter(
             order__status__in=self.form_data['status'],
             order__event=self.event,
-        ).values(
-            'order__code', 'order__datetime', 'order__payment_date', 'order__total', 'tax_rate', 'order__status',
+        ).annotate(payment_date=Subquery(op_date, output_field=models.DateTimeField())).values(
+            'order__code', 'order__datetime', 'payment_date', 'order__total', 'tax_rate', 'order__status',
             'order__id'
         ).annotate(prices=Sum('price'), tax_values=Sum('tax_value')).order_by(
-            'order__datetime' if self.form_data['sort'] == 'datetime' else 'order__payment_date',
+            'order__datetime' if self.form_data['sort'] == 'datetime' else 'payment_date',
             'order__datetime',
             'order__code'
         )
@@ -385,29 +396,34 @@ class OrderTaxListReport(Report):
                         op['order__code'],
                         date_format(op['order__datetime'].astimezone(tz), "SHORT_DATE_FORMAT"),
                         status_labels[op['order__status']],
-                        date_format(op['order__payment_date'], "SHORT_DATE_FORMAT") if op['order__payment_date'] else '',
-                        str(op['order__total'])
+                        date_format(op['payment_date'], "SHORT_DATE_FORMAT") if op['payment_date'] else '',
+                        localize(round_decimal(op['order__total'], self.event.currency))
                     ] + sum((['', ''] for t in tax_rates), []),
                 )
                 last_order_code = op['order__code']
                 for i, rate in enumerate(tax_rates):
                     odata = fee_sum_cache.get((op['order__id'], rate))
                     if odata:
-                        tdata[-1][5 + 2 * i] = str(odata['grosssum'] or '0.00')
-                        tdata[-1][6 + 2 * i] = str(odata['taxsum'] or '0.00')
+                        tdata[-1][5 + 2 * i] = str(odata['grosssum'] or 0)
+                        tdata[-1][6 + 2 * i] = str(odata['taxsum'] or 0)
                         tax_sums[rate] += odata['taxsum'] or 0
                         price_sums[rate] += odata['grosssum'] or 0
 
                 i = tax_rates.index(op['tax_rate'])
-                tdata[-1][5 + 2 * i] = str(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'])
-                tdata[-1][6 + 2 * i] = str(Decimal(tdata[-1][6 + 2 * i] or '0') + op['tax_values'])
+                tdata[-1][5 + 2 * i] = localize(
+                    round_decimal(Decimal(tdata[-1][5 + 2 * i] or '0') + op['prices'], self.event.currency))
+                tdata[-1][6 + 2 * i] = localize(
+                    round_decimal(Decimal(tdata[-1][6 + 2 * i] or '0') + op['tax_values'], self.event.currency))
                 tax_sums[op['tax_rate']] += op['tax_values']
                 price_sums[op['tax_rate']] += op['prices']
 
         tdata.append(
             [
                 _('Total'), '', '', '', ''
-            ] + sum(([str(price_sums.get(t)), str(tax_sums.get(t))] for t in tax_rates), []),
+            ] + sum(([
+                localize(round_decimal(price_sums.get(t), self.event.currency)),
+                localize(round_decimal(tax_sums.get(t), self.event.currency))
+            ] for t in tax_rates), []),
         )
 
         table = Table(tdata, colWidths=colwidths, repeatRows=2)
