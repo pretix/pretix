@@ -49,6 +49,7 @@ var pretixstripe = {
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     pretixstripe.elements = pretixstripe.stripe.elements();
                     try {
+
                         pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
                           country: $("#stripe_merchantcountry").html(),
                           currency: $("#stripe_currency").val().toLowerCase(),
@@ -56,7 +57,8 @@ var pretixstripe = {
                             label: gettext('Total'),
                             amount: Math.round(
                                 parseFloat(
-                                    $("#payment_stripe").parents("[data-total]").attr("data-total").replace(",", ".")
+                                    ( $("#payment_stripe").parents("[data-total]").attr("data-total") ||
+                                    $('.stripe-container').closest("form").attr("data-total") ).replace(",", ".")
                                 ) * 100
                             ),
                           },
@@ -66,20 +68,21 @@ var pretixstripe = {
                           requestPayerPhone: false,
                           requestShipping: false,
                         });
+
+                        pretixstripe.paymentRequest.on('token', function(ev) {
+                          ev.complete('success');
+
+                          var $form = $("#stripe_token").closest("form");
+                          // Insert the token into the form so it gets submitted to the server
+                          $("#stripe_token").val(ev.token.id);
+                          $("#stripe_card_brand").val(ev.token.card.brand);
+                          $("#stripe_card_last4").val(ev.token.card.last4);
+                          // and submit
+                          $form.get(0).submit();
+                        });
                     } catch {
                         pretixstripe.paymentRequest = null;
                     }
-                    pretixstripe.paymentRequest.on('token', function(ev) {
-                      ev.complete('success');
-
-                      var $form = $("#stripe_token").closest("form");
-                      // Insert the token into the form so it gets submitted to the server
-                      $("#stripe_token").val(ev.token.id);
-                      $("#stripe_card_brand").val(ev.token.card.brand);
-                      $("#stripe_card_last4").val(ev.token.card.last4);
-                      // and submit
-                      $form.get(0).submit();
-                    });
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
                             'style': {
