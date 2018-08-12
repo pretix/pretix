@@ -46,10 +46,8 @@ var pretixstripe = {
                     } else {
                         pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     }
-                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     pretixstripe.elements = pretixstripe.stripe.elements();
                     try {
-
                         pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
                           country: $("#stripe_merchantcountry").html(),
                           currency: $("#stripe_currency").val().toLowerCase(),
