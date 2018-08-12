@@ -207,7 +207,7 @@ $(function () {
                 pretixstripe.show_checkout();
             } else {
                 $("#stripe-current-card").slideUp();
-                $("#stripe-card").slideDown();
+                $("#stripe-elements").slideDown();
             }
             e.preventDefault();
             return false;
@@ -215,7 +215,7 @@ $(function () {
     );
 
     if ($("#stripe-current-card").length) {
-        $("#stripe-card").hide();
+        $("#stripe-elements").hide();
     }
 
     $('.stripe-container').closest("form").submit(
