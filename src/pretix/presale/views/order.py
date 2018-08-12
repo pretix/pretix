@@ -198,7 +198,10 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @cached_property
     def form(self):
-        return self.payment.payment_provider.payment_form_render(self.request)
+        try:
+            return self.payment.payment_provider.payment_form_render(self.request, self.payment.amount)
+        except TypeError:
+            return self.payment.payment_provider.payment_form_render(self.request)
 
     @cached_property
     def payment(self):
