@@ -26,7 +26,12 @@ from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.stripe.forms import StripeKeyValidator
-from pretix.plugins.stripe.models import ReferencedStripeObject
+from pretix.plugins.stripe.models import (
+    ReferencedStripeObject, RegisteredApplePayDomain,
+)
+from pretix.plugins.stripe.tasks import (
+    get_stripe_account_key, stripe_verify_domain,
+)
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -525,6 +530,10 @@ class StripeCC(StripeMethod):
     method = 'cc'
 
     def payment_form_render(self, request, total) -> str:
+        account = get_stripe_account_key(self)
+        if not RegisteredApplePayDomain.objects.filter(account=account, domain=request.host).exists():
+            stripe_verify_domain.apply_async(args=(self.event.pk, request.host))
+
         ui = self.settings.get('ui', default='pretix')
         if ui == 'checkout':
             template = get_template('pretixplugins/stripe/checkout_payment_form_stripe_checkout.html')

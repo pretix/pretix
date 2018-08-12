@@ -17,7 +17,7 @@ class StripeApp(AppConfig):
                         "via Stripe")
 
     def ready(self):
-        from . import signals  # NOQA
+        from . import signals, tasks  # NOQA
 
     @cached_property
     def compatibility_errors(self):

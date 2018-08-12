@@ -26,6 +26,9 @@ from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC
+from pretix.plugins.stripe.tasks import (
+    get_domain_for_event, stripe_verify_domain,
+)
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -125,6 +128,8 @@ def oauth_return(request, *args, **kwargs):
             if request.session.get('payment_stripe_oauth_enable', False):
                 event.settings.payment_stripe__enabled = True
                 del request.session['payment_stripe_oauth_enable']
+
+            stripe_verify_domain.apply_async(args=(event.pk, get_domain_for_event(event)))
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
