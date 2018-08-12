@@ -120,6 +120,8 @@ var pretixstripe = {
                           $('#stripe-payment-request-button').parent().show(500);
                           $('#stripe-payment-request-button').parent().next("div").show(500);
                         } else {
+                          $('#stripe-payment-request-button').hide();
+                          $('#stripe-card').parent().removeClass("col-md-5").addClass("col-md-12");
                           document.getElementById('stripe-payment-request-button').style.display = 'none';
                         }
                       });
