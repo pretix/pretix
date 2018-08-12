@@ -54,14 +54,9 @@ var pretixstripe = {
                                 currency: $("#stripe_currency").val().toLowerCase(),
                                 total: {
                                     label: gettext('Total'),
-                                    amount: Math.round(
-                                        parseFloat(
-                                            ($("#payment_stripe").parents("[data-total]").attr("data-total") ||
-                                                $('.stripe-container').closest("form").attr("data-total")).replace(",", ".")
-                                        ) * 100
-                                    ),
+                                    amount: parseInt($("#stripe_total").val())
                                 },
-                                displayItems: [], // In theory, we could provide an itemised breakdown of all billed items
+                                displayItems: [],
                                 requestPayerName: false,
                                 requestPayerEmail: false,
                                 requestPayerPhone: false,

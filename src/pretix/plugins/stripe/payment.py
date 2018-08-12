@@ -6,7 +6,6 @@ from collections import OrderedDict
 
 import stripe
 from django import forms
-from django_countries import countries
 from django.conf import settings
 from django.contrib import messages
 from django.core import signing
@@ -16,6 +15,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django_countries import countries
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
@@ -134,10 +134,10 @@ class StripeSettingsHolder(BasePaymentProvider):
                  )),
                 ('merchant_country',
                  forms.ChoiceField(
-                    choices=allcountries,
-                    label=_('Merchant country'),
-                    help_text=_('The country in which your Stripe-account is registred in. Usually, this is Your country of residence.'),
-                )),
+                     choices=allcountries,
+                     label=_('Merchant country'),
+                     help_text=_('The country in which your Stripe-account is registred in. Usually, this is Your country of residence.'),
+                 )),
             ]
         d = OrderedDict(
             fields + [
@@ -245,9 +245,12 @@ class StripeMethod(BasePaymentProvider):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return round_decimal(float(cents) / (10 ** places), self.event.currency)
 
-    def _get_amount(self, payment):
+    def _decimal_to_int(self, amount):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
-        return int(payment.amount * 10 ** places)
+        return int(amount * 10 ** places)
+
+    def _get_amount(self, payment):
+        return self._decimal_to_int(payment.amount)
 
     @property
     def api_kwargs(self):
@@ -520,7 +523,7 @@ class StripeCC(StripeMethod):
     public_name = _('Credit card')
     method = 'cc'
 
-    def payment_form_render(self, request) -> str:
+    def payment_form_render(self, request, total) -> str:
         ui = self.settings.get('ui', default='pretix')
         if ui == 'checkout':
             template = get_template('pretixplugins/stripe/checkout_payment_form_stripe_checkout.html')
@@ -529,6 +532,7 @@ class StripeCC(StripeMethod):
         ctx = {
             'request': request,
             'event': self.event,
+            'total': self._decimal_to_int(total),
             'settings': self.settings,
         }
         return template.render(ctx)

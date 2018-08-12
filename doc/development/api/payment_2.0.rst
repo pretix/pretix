@@ -69,6 +69,8 @@ Payment processing
   ``BasePaymentProvider.payment_pending_render(request, payment)`` method that is passed an ``OrderPayment``
   object instead of an ``Order``.
 
+* The method ``BasePaymentProvider.payment_form_render`` now receives a new ``total`` parameter.
+
 * The method ``BasePaymentProvider.payment_perform`` has been removed and replaced by a new method
   ``BasePaymentProvider.execute_payment(request, payment)`` that is passed an ``OrderPayment``
   object instead of an ``Order``.
