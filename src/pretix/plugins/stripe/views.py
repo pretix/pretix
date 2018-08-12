@@ -111,6 +111,7 @@ def oauth_return(request, *args, **kwargs):
             # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
             event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
             event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
+            event.settings.payment_stripe_merchant_country = account.get('country');
             if account.get('business_name') or account.get('display_name') or account.get('email'):
                 event.settings.payment_stripe_connect_user_name = (
                     account.get('business_name') or account.get('display_name') or account.get('email')

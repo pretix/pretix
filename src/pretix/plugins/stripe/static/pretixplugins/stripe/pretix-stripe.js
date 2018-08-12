@@ -39,6 +39,13 @@ var pretixstripe = {
                 url: 'https://js.stripe.com/v3/',
                 dataType: 'script',
                 success: function () {
+                    if ($.trim($("#stripe_connectedAccountId").html())) {
+                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
+                            stripeAccount: $.trim($("#stripe_connectedAccountId").html())
+                        });
+                    } else {
+                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
+                    }
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                     pretixstripe.elements = pretixstripe.stripe.elements();
                     try {
