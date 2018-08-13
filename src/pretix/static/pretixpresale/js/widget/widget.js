@@ -392,10 +392,14 @@ var shared_methods = {
         } else {
             return;
         }
-        var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
-        this.$root.frame_loading = true;
-        this.async_task_interval = 100;
-        api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
+        if (this.$root.is_button && this.$root.items.length === 0) {
+            this.resume();
+        } else {
+            var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
+            this.$root.frame_loading = true;
+            this.async_task_interval = 100;
+            api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
+        }
     },
     buy_error_callback: function (xhr, data) {
         this.$root.error_message = strings['cart_error'];
@@ -740,6 +744,7 @@ var create_widget = function (element) {
             return {
                 event_url: event_url,
                 subevent: subevent,
+                is_button: false,
                 categories: null,
                 currency: null,
                 voucher_code: voucher,
@@ -787,7 +792,7 @@ var create_button = function (element) {
     var itemsplit = raw_items.split(",");
     var items = [];
     for (var i = 0; i < itemsplit.length; i++) {
-        if (itemsplit[i].indexOf("=")) {
+        if (itemsplit[i].indexOf("=") > 0 ) {
             var splitthis = itemsplit[i].split("=");
             items.push({'item': splitthis[0], 'count': splitthis[1]})
         }
@@ -799,6 +804,7 @@ var create_button = function (element) {
             return {
                 event_url: event_url,
                 subevent: subevent,
+                is_button: true,
                 skip_ssl: skip_ssl,
                 voucher_code: voucher,
                 items: items,

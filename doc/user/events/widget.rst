@@ -143,7 +143,7 @@ resources. Then, instead of the ``pretix-widget`` tag, use the ``pretix-button``
 As you can see, the ``pretix-button`` element takes an additional ``items`` attribute that specifies the items that
 should be added to the cart. The syntax of this attribute is ``item_ITEMID=1,item_ITEMID=2,variation_ITEMID_VARID=4``
 where ``ITEMID`` are the internal IDs of items to be added and ``VARID`` are the internal IDs of variations of those
-items, if the items have variations.
+items, if the items have variations. If you omit the ``items`` attribute, the general start page will be presented.
 
 Just as the widget, the button supports the optional attributes ``voucher`` and ``skip-ssl-check``.
 
