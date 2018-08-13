@@ -691,7 +691,8 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
         pseudonymization_id="BAZ",
     )
     order.refresh_from_db()
-    assert order.total == Decimal('46')
+    order.total = Decimal('46')
+    order.save()
     assert order.positions.count() == 2
 
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
@@ -700,7 +701,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
     assert resp.status_code == 204
     assert order.positions.count() == 1
     order.refresh_from_db()
-    assert order.total == Decimal('23')
+    assert order.total == Decimal('23.25')
 
 
 @pytest.fixture
