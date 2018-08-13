@@ -1022,6 +1022,7 @@ List of all order positions
    :query string attendee_name: Only return positions with the given value in the attendee_name field. Also, add-on
                                 products positions are shown if they refer to an attendee with the given name.
    :query string secret: Only return positions with the given ticket secret.
+   :query string pseudonymization_id: Only return positions with the given pseudonymization ID.
    :query string order__status: Only return positions with the given order status.
    :query string order__status__in: Only return positions with one the given comma-separated order status.
    :query boolean has_checkin: If set to ``true`` or ``false``, only return positions that have or have not been

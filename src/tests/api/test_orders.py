@@ -594,6 +594,14 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     assert [] == resp.data['results']
 
     resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?pseudonymization_id=ABCDEFGHKL'.format(
+            organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/?pseudonymization_id=FOO'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?search=FO'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
     resp = token_client.get(

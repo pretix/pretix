@@ -335,7 +335,8 @@ class OrderPositionFilter(FilterSet):
             'secret': ['exact'],
             'order__status': ['exact', 'in'],
             'addon_to': ['exact', 'in'],
-            'subevent': ['exact', 'in']
+            'subevent': ['exact', 'in'],
+            'pseudonymization_id': ['exact'],
         }
 
 
