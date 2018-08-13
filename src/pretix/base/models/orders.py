@@ -471,7 +471,8 @@ class Order(LoggedModel):
 
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
-                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None):
+                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
+                  auth=None):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -508,6 +509,7 @@ class Order(LoggedModel):
                 self.log_action(
                     log_entry_type,
                     user=user,
+                    auth=auth,
                     data={
                         'subject': subject,
                         'message': email_content,

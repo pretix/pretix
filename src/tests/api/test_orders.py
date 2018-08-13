@@ -672,6 +672,37 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
     assert len(resp.data['downloads']) == 1
 
 
+@pytest.mark.django_db
+def test_orderposition_delete(token_client, organizer, event, order, item, question):
+    op = order.positions.first()
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+        organizer.slug, event.slug, op.pk
+    ))
+    assert resp.status_code == 400
+    assert resp.data == ['This operation would leave the order empty. Please cancel the order itself instead.']
+
+    op2 = OrderPosition.objects.create(
+        order=order,
+        item=item,
+        variation=None,
+        price=Decimal("23"),
+        attendee_name="Peter",
+        secret="foobar",
+        pseudonymization_id="BAZ",
+    )
+    order.refresh_from_db()
+    assert order.total == Decimal('46')
+    assert order.positions.count() == 2
+
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+        organizer.slug, event.slug, op2.pk
+    ))
+    assert resp.status_code == 204
+    assert order.positions.count() == 1
+    order.refresh_from_db()
+    assert order.total == Decimal('23')
+
+
 @pytest.fixture
 def invoice(order):
     testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC)

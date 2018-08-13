@@ -9,7 +9,7 @@ from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from rest_framework import serializers, status, viewsets
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
@@ -35,8 +35,8 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderError, cancel_order, extend_order, mark_order_expired,
-    mark_order_refunded,
+    OrderChangeManager, OrderError, cancel_order, extend_order,
+    mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,
@@ -340,7 +340,7 @@ class OrderPositionFilter(FilterSet):
         }
 
 
-class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
+class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -348,6 +348,7 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filterset_class = OrderPositionFilter
     permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
 
     def get_queryset(self):
         return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(
@@ -387,6 +388,21 @@ class OrderPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 provider.identifier, ct.extension
             )
             return resp
+
+    def perform_destroy(self, instance):
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False
+            )
+            ocm.cancel(instance)
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
 
 
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):

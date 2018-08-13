@@ -607,9 +607,10 @@ class OrderChangeManager:
     SplitOperation = namedtuple('SplitOperation', ('position',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
-    def __init__(self, order: Order, user, notify=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True):
         self.order = order
         self.user = user
+        self.auth = auth
         self.split_order = None
         self._committed = False
         self._totaldiff = 0
@@ -779,7 +780,7 @@ class OrderChangeManager:
                 fee=None
             )
             try:
-                p.confirm(send_mail=False, count_waitinglist=False, user=self.user)
+                p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
@@ -791,7 +792,7 @@ class OrderChangeManager:
                 fee=None
             )
             try:
-                p.confirm(send_mail=False, count_waitinglist=False, user=self.user)
+                p.confirm(send_mail=False, count_waitinglist=False, user=self.user, auth=self.auth)
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
@@ -801,7 +802,7 @@ class OrderChangeManager:
 
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
-                self.order.log_action('pretix.event.order.changed.item', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.item', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
@@ -820,7 +821,7 @@ class OrderChangeManager:
                 op.position.tax_rule = op.item.tax_rule
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
-                self.order.log_action('pretix.event.order.changed.subevent', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_subevent': op.position.subevent.pk,
@@ -835,7 +836,7 @@ class OrderChangeManager:
                 op.position.tax_rule = op.position.item.tax_rule
                 op.position.save()
             elif isinstance(op, self.PriceOperation):
-                self.order.log_action('pretix.event.order.changed.price', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_price': op.position.price,
@@ -849,7 +850,7 @@ class OrderChangeManager:
                 op.position.save()
             elif isinstance(op, self.CancelOperation):
                 for opa in op.position.addons.all():
-                    self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
+                    self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                         'position': opa.pk,
                         'positionid': opa.positionid,
                         'old_item': opa.item.pk,
@@ -857,7 +858,7 @@ class OrderChangeManager:
                         'addon_to': opa.addon_to_id,
                         'old_price': opa.price,
                     })
-                self.order.log_action('pretix.event.order.changed.cancel', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                     'old_item': op.position.item.pk,
@@ -874,7 +875,7 @@ class OrderChangeManager:
                     positionid=nextposid, subevent=op.subevent
                 )
                 nextposid += 1
-                self.order.log_action('pretix.event.order.changed.add', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
                     'position': pos.pk,
                     'item': op.item.pk,
                     'variation': op.variation.pk if op.variation else None,
@@ -890,7 +891,7 @@ class OrderChangeManager:
                 op.position.save()
                 CachedTicket.objects.filter(order_position__order=self.order).delete()
                 CachedCombinedTicket.objects.filter(order=self.order).delete()
-                self.order.log_action('pretix.event.order.changed.secret', user=self.user, data={
+                self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                 })
@@ -905,12 +906,12 @@ class OrderChangeManager:
         split_order.datetime = now()
         split_order.secret = generate_secret()
         split_order.save()
-        split_order.log_action('pretix.event.order.changed.split_from', user=self.user, data={
+        split_order.log_action('pretix.event.order.changed.split_from', user=self.user, auth=self.auth, data={
             'original_order': self.order.code
         })
 
         for op in split_positions:
-            self.order.log_action('pretix.event.order.changed.split', user=self.user, data={
+            self.order.log_action('pretix.event.order.changed.split', user=self.user, auth=self.auth, data={
                 'position': op.pk,
                 'positionid': op.positionid,
                 'old_item': op.item.pk,
@@ -1080,7 +1081,7 @@ class OrderChangeManager:
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_changed', self.user
+                    'pretix.event.order.email.order_changed', self.user, auth=self.auth
                 )
             except SendMailException:
                 logger.exception('Order changed email could not be sent')

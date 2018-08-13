@@ -1154,6 +1154,37 @@ Order position ticket download
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
 
+Manipulating individual positions
+---------------------------------
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
+
+   Deletes an order position, identified by its internal ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the order position to delete
+   :statuscode 204: no error
+   :statuscode 400: This position cannot be deleted (e.g. last position in order)
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position does not exist.
+
 
 Order payment endpoints
 -----------------------
