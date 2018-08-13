@@ -269,12 +269,18 @@ def event_index(request, organizer, event):
     ctx['has_overpaid_orders'] = Order.annotate_overpayments(request.event.orders).filter(
         Q(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0))
         | Q(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0))
-        | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0))
+        | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lt=0))
+        | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
+            & Q(require_approval=False))
     ).exists()
     ctx['has_pending_refunds'] = OrderRefund.objects.filter(
         order__event=request.event,
         state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_EXTERNAL)
-    )
+    ).exists()
+    ctx['has_pending_approvals'] = request.event.orders.filter(
+        status=Order.STATUS_PENDING,
+        require_approval=True
+    ).exists()
 
     for a in ctx['actions']:
         a.display = a.display(request)

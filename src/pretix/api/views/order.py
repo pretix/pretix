@@ -35,7 +35,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, cancel_order, extend_order,
+    OrderChangeManager, OrderError, approve_order, cancel_order, deny_order, extend_order,
     mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.tickets import (
@@ -52,7 +52,7 @@ class OrderFilter(FilterSet):
 
     class Meta:
         model = Order
-        fields = ['code', 'status', 'email', 'locale']
+        fields = ['code', 'status', 'email', 'locale', 'require_approval']
 
 
 class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
@@ -180,6 +180,42 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
             send_mail=send_mail
         )
+        return self.retrieve(request, [], **kwargs)
+
+    @detail_route(methods=['POST'])
+    def approve(self, request, **kwargs):
+        send_mail = request.data.get('send_email', True)
+
+        order = self.get_object()
+        try:
+            approve_order(
+                order,
+                user=request.user if request.user.is_authenticated else None,
+                auth=request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken)) else None,
+                send_mail=send_mail,
+            )
+        except Quota.QuotaExceededException as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except OrderError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return self.retrieve(request, [], **kwargs)
+
+    @detail_route(methods=['POST'])
+    def deny(self, request, **kwargs):
+        send_mail = request.data.get('send_email', True)
+        comment = request.data.get('comment', '')
+
+        order = self.get_object()
+        try:
+            deny_order(
+                order,
+                user=request.user if request.user.is_authenticated else None,
+                auth=request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken)) else None,
+                send_mail=send_mail,
+                comment=comment,
+            )
+        except OrderError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return self.retrieve(request, [], **kwargs)
 
     @detail_route(methods=['POST'])

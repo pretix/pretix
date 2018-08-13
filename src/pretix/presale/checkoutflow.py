@@ -503,6 +503,10 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def is_applicable(self, request):
         self.request = request
 
+        for cartpos in get_cart(self.request):
+            if cartpos.item.require_approval:
+                return False
+
         for p in self.request.event.get_payment_providers().values():
             if p.is_implicit:
                 if self._is_allowed(p, request):
@@ -530,8 +534,10 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
-        ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
-        ctx['payment_provider'] = self.payment_provider
+        if self.payment_provider:
+            ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
+            ctx['payment_provider'] = self.payment_provider
+        ctx['require_approval'] = any(cp.item.require_approval for cp in ctx['cart']['positions'])
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
@@ -566,6 +572,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @cached_property
     def payment_provider(self):
+        if 'payment' not in self.cart_session:
+            return None
         return self.request.event.get_payment_providers().get(self.cart_session['payment'])
 
     def get(self, request):
@@ -599,7 +607,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
 
-        return self.do(self.request.event.id, self.payment_provider.identifier,
+        return self.do(self.request.event.id, self.payment_provider.identifier if self.payment_provider else None,
                        [p.id for p in self.positions], self.cart_session.get('email'),
                        translation.get_language(), self.invoice_address.pk, meta_info)
 
@@ -620,10 +628,16 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_step_url(self.request)
 
     def get_order_url(self, order):
+        payment = order.payments.first()
+        if not payment:
+            return eventreverse(self.request.event, 'presale:event.order', kwargs={
+                'order': order.code,
+                'secret': order.secret,
+            })
         return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
             'order': order.code,
             'secret': order.secret,
-            'payment': order.payments.first().pk
+            'payment': payment.pk
         })
 
 

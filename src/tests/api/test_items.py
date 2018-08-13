@@ -230,6 +230,7 @@ TEST_ITEM_RES = {
     "max_per_order": None,
     "checkin_attention": False,
     "has_variations": False,
+    "require_approval": False,
     "variations": [],
     "addons": [],
     "original_price": None

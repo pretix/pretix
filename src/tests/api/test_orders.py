@@ -203,6 +203,7 @@ TEST_ORDER_RES = {
         "vat_id": "",
         "vat_id_validated": False
     },
+    "require_approval": False,
     "positions": [TEST_ORDERPOSITION_RES],
     "downloads": [],
     "payments": TEST_PAYMENTS_RES,

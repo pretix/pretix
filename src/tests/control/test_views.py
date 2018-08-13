@@ -146,6 +146,8 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/orders/{order_code}/comment', 405),
     ('/control/event/{orga}/{event}/orders/{order_code}/change', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/locale', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/approve', 200),
+    ('/control/event/{orga}/{event}/orders/{order_code}/deny', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/payments/{payment}/cancel', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/payments/{payment}/confirm', 200),
     ('/control/event/{orga}/{event}/orders/{order_code}/refund', 200),

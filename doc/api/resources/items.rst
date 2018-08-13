@@ -59,6 +59,9 @@ checkin_attention                     boolean                    If ``True``, th
                                                                  a product is being scanned.
 original_price                        money (string)             An original price, shown for comparison, not used
                                                                  for price calculations.
+require_approval                      boolean                    If ``True``, orders with this product will need to be
+                                                                 approved by the event organizer before they can be
+                                                                 paid.
 has_variations                        boolean                    Shows whether or not this item has variations.
 variations                            list of objects            A list with one object for each variation of this item.
                                                                  Can be empty. Only writable during creation,
@@ -96,7 +99,11 @@ addons                                list of objects            Definition of a
 
 .. versionchanged:: 1.16
 
-   The field ``internal_name`` and ``original_price`` fields have been added.
+   The ``internal_name`` and ``original_price`` fields have been added.
+
+.. versionchanged:: 2.0
+
+   The field ``require_approval`` has been added.
 
 Notes
 -----
@@ -160,6 +167,7 @@ Endpoints
             "max_per_order": null,
             "checkin_attention": false,
             "has_variations": false,
+            "require_approval": false,
             "variations": [
               {
                  "value": {"en": "Student"},
@@ -244,6 +252,7 @@ Endpoints
         "max_per_order": null,
         "checkin_attention": false,
         "has_variations": false,
+        "require_approval": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -308,6 +317,7 @@ Endpoints
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
+        "require_approval": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -361,6 +371,7 @@ Endpoints
         "max_per_order": null,
         "checkin_attention": false,
         "has_variations": true,
+        "require_approval": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -445,6 +456,7 @@ Endpoints
         "max_per_order": null,
         "checkin_attention": false,
         "has_variations": true,
+        "require_approval": false,
         "variations": [
           {
              "value": {"en": "Student"},

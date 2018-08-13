@@ -41,7 +41,7 @@
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
         <div class="clearfix"></div>
     </h2>
-    {% if order.status == "n" %}
+    {% if order.status == "n" and not order.require_approval %}
         <div class="panel panel-danger">
             <div class="panel-heading">
                 <h3 class="panel-title">

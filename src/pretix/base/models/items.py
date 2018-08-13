@@ -283,7 +283,7 @@ class Item(LoggedModel):
                     'either directly or via a quota.')
     )
     require_approval = models.BooleanField(
-        verbose_name=_('Buying this product requires approval.'),
+        verbose_name=_('Buying this product requires approval'),
         default=False,
         help_text=_('If this product is part of an order, the order will be put into an "approval" state and '
                     'will need to be confirmed by you before it can be paid and completed. You can use this e.g. for '

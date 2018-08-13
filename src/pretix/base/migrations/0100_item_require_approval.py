@@ -15,4 +15,9 @@ class Migration(migrations.Migration):
             name='require_approval',
             field=models.BooleanField(default=False, help_text='If this product is part of an order, the order will be put into an "approval" state and will need to be confirmed by you before it can be paid and completed. You can use this e.g. for discounted tickets that are only available to specific groups.', verbose_name='Buying this product requires approval.'),
         ),
+        migrations.AddField(
+            model_name='order',
+            name='require_approval',
+            field=models.BooleanField(default=False),
+        ),
     ]

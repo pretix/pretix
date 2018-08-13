@@ -206,6 +206,7 @@ class EventOrderFilterForm(OrderFilterForm):
             ('ne', _('Pending or expired')),
             ('c', _('Canceled')),
             ('r', _('Refunded')),
+            ('pa', _('Approval pending')),
             ('overpaid', _('Overpaid')),
             ('underpaid', _('Underpaid')),
         ),
@@ -275,12 +276,19 @@ class EventOrderFilterForm(OrderFilterForm):
             qs = qs.filter(
                 Q(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0))
                 | Q(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0))
-                | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0))
+                | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lt=0))
+                | Q(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
+                    & Q(require_approval=False))
             )
         elif fdata.get('status') == 'underpaid':
             qs = qs.filter(
                 status=Order.STATUS_PAID,
                 pending_sum_t__gt=0
+            )
+        elif fdata.get('status') == 'pa':
+            qs = qs.filter(
+                status=Order.STATUS_PENDING,
+                require_approval=True
             )
 
         return qs

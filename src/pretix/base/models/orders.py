@@ -88,6 +88,8 @@ class Order(LoggedModel):
     :type comment: str
     :param download_reminder_sent: A field to indicate whether a download reminder has been sent.
     :type download_reminder_sent: boolean
+    :param require_approval: If set to ``True``, this order is pending approval by an organizer
+    :type require_approval: bool
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
     """
@@ -167,6 +169,9 @@ class Order(LoggedModel):
     last_modified = models.DateTimeField(
         auto_now=True, db_index=True
     )
+    require_approval = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         verbose_name = _("Order")
@@ -231,7 +236,10 @@ class Order(LoggedModel):
                      then=Value('1')),
                 When(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0),
                      then=Value('1')),
-                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0),
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lt=0),
+                     then=Value('1')),
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
+                     & Q(require_approval=False),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
@@ -423,7 +431,10 @@ class Order(LoggedModel):
                                "payment settings is over."),
             'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
                       "payments should be accepted in the payment settings."),
+            'require_approval': _('This order is not yet approved by the event organizer.')
         }
+        if self.require_approval:
+            return error_messages['require_approval']
         term_last = self.payment_term_last
         if term_last:
             if now() > term_last:

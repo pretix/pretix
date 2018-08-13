@@ -237,7 +237,7 @@ def invoice_pdf_task(invoice: int):
 
 
 def invoice_qualified(order: Order):
-    if order.total == Decimal('0.00'):
+    if order.total == Decimal('0.00') or order.require_approval:
         return False
     return True
 

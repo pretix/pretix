@@ -784,6 +784,34 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This email will be sent out this many days before the order event starts. If the "
                     "field is empty, the mail will never be sent.")
     )
+    mail_text_order_placed_require_approval = I18nFormField(
+        label=_("Received order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {total_with_currency}, {total}, {currency}, {date}, "
+                    "{url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
+                                          '{url}', '{invoice_name}', '{invoice_company}'])]
+    )
+    mail_text_order_approved = I18nFormField(
+        label=_("Approved order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
+                    "template from above instead. Available placeholders: {event}, {total_with_currency}, {total}, "
+                    "{currency}, {date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
+                                          '{url}', '{invoice_name}', '{invoice_company}'])]
+    )
+    mail_text_order_denied = I18nFormField(
+        label=_("Denied order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {total_with_currency}, {total}, {currency}, {date}, "
+                    "{comment}, {url}, {invoice_name}, {invoice_company}"),
+        validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
+                                          '{comment}', '{url}', '{invoice_name}', '{invoice_company}'])]
+    )
     smtp_use_custom = forms.BooleanField(
         label=_("Use custom SMTP server"),
         help_text=_("All mail related to your event will be sent over the smtp server specified by you."),

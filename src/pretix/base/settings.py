@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from typing import Any
 
 from django.conf import settings
 from django.core.files import File
@@ -7,7 +8,6 @@ from django.db.models import Model
 from django.utils.translation import ugettext_noop
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
-from typing import Any
 
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
@@ -270,8 +270,22 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
-we successfully received your order for {event}. As you only ordered
-free products, no payment is required.
+your order for {event} was successful. As you only ordered free products,
+no payment is required.
+
+You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_placed_require_approval': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we successfully received your order for {event}. Since you ordered
+a product that requires approval by the event organizer, we ask you to
+be patient and wait for our next email.
 
 You can change your order details and view the status of your order at
 {url}
@@ -368,6 +382,37 @@ Your {event} team"""))
 your order {code} for {event} has been canceled.
 
 You can view the details of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_approved': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+we approved your order for {event} and will be happy to welcome you
+at our event.
+
+Please continue by paying for your order before {date}.
+
+You can select a payment method and perform the payment here:
+
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_text_order_denied': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+
+unfortunately, we denied your order request for {event}.
+
+{comment}
+
+You can view the details of your order here:
+
 {url}
 
 Best regards,
