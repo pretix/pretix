@@ -107,6 +107,13 @@ voucher's settings.
         </div>
     </noscript>
 
+Disabling the voucher input
+---------------------------
+
+If you want to disable voucher input in the widget, you can pass the ``disable-vouchers`` attribute::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" disable-vouchers></pretix-widget>
+
 pretix Button
 -------------
 

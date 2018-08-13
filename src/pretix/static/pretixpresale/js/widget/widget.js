@@ -569,7 +569,8 @@ Vue.component('pretix-widget', {
         + '<button @click="buy" type="submit">' + strings.buy + '</button>'
         + '</div>'
         + '</form>'
-        + '<form method="get" :action="$root.voucherFormTarget" target="_blank" v-if="$root.vouchers_exist && !$root.voucher_code">'
+        + '<form method="get" :action="$root.voucherFormTarget" target="_blank" '
+        + '      v-if="$root.vouchers_exist && !$root.disable_vouchers && !$root.voucher_code">'
         + '<div class="pretix-widget-voucher">'
         + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
         + '<div class="pretix-widget-voucher-input-wrap">'
@@ -727,6 +728,7 @@ var create_widget = function (element) {
     var voucher = element.attributes.voucher ? element.attributes.voucher.value : null;
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
+    var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
 
     if (element.tagName !== "pretix-widget") {
         element.innerHTML = "<pretix-widget></pretix-widget>";
@@ -753,6 +755,7 @@ var create_widget = function (element) {
                 error_message: null,
                 error_url_after: null,
                 vouchers_exist: false,
+                disable_vouchers: disable_vouchers,
                 cart_exists: false,
                 itemcount: 0
             }
