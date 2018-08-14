@@ -116,10 +116,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             require_answers
         )
     else:
-        ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
-            'datetime': dt,
-            'nonce': nonce,
-        })
+        try:
+            ci, created = Checkin.objects.get_or_create(position=op, list=clist, defaults={
+                'datetime': dt,
+                'nonce': nonce,
+            })
+        except Checkin.MultipleObjectsReturned:
+            ci, created = Checkin.objects.filter(position=op, list=clist).last(), False
 
     if created or (nonce and nonce == ci.nonce):
         if created:
