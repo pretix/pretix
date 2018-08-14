@@ -116,8 +116,8 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
                     var.num[l] = num[l].get((item.id, variid), (0, 0, 0))
                 var.num['total'] = num['total'].get((item.id, variid), (0, 0, 0))
             for l in states.keys():
-                item.num[l] = num[l].get((item.id, variid), (0, 0, 0))
-            item.num['total'] = num['total'].get((item.id, variid), (0, 0, 0))
+                item.num[l] = tuplesum(var.num[l] for var in item.all_variations)
+            item.num['total'] = tuplesum(var.num['total'] for var in item.all_variations)
         else:
             for l in states.keys():
                 item.num[l] = num[l].get((item.id, None), (0, 0, 0))
