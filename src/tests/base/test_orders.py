@@ -236,7 +236,7 @@ def test_approve(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=10, require_approval=True, locale='de'
+        total=10, require_approval=True, locale='en'
     )
     approve_order(o1)
     o1.refresh_from_db()
@@ -276,7 +276,7 @@ def test_deny(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=10, require_approval=True, locale='de'
+        total=10, require_approval=True, locale='en'
     )
     generate_invoice(o1)
     deny_order(o1)
