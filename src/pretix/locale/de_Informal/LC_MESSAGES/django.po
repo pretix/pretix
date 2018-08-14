@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-11 08:18+0000\n"
+"POT-Creation-Date: 2018-08-11 08:14+0000\n"
+"PO-Revision-Date: 2018-08-14 15:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1316,7 +1316,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:286
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Die Bestellung dieses Produktes erfordert eine manuelle Freigabe"
 
 #: pretix/base/models/items.py:288
 msgid ""
@@ -1325,6 +1325,10 @@ msgid ""
 "completed. You can use this e.g. for discounted tickets that are only "
 "available to specific groups."
 msgstr ""
+"Wenn dieses Produkt Teil einer Bestellung ist, wird die Bestellung nicht "
+"direkt freigegeben, sondern muss von dir bestätigt werden, bevor sie bezahlt "
+"und abgeschlossen werden kann. Du kannst das z.B. für Tickets nutzen, die "
+"nur für bestimmte Mitglieder zur Verfügung stehen."
 
 #: pretix/base/models/items.py:293
 msgid ""
@@ -1858,11 +1862,8 @@ msgstr ""
 "nicht akzeptiert werden sollen."
 
 #: pretix/base/models/orders.py:434
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This order is not yet approved by the event organizer."
-msgstr "Dieser Gutschein ist für diesen Termin nicht gültig."
+msgstr "Diese Bestellung wurde noch nicht vom Veranstalter freigegeben."
 
 #: pretix/base/models/orders.py:452
 #, python-brace-format
@@ -3401,28 +3402,23 @@ msgid "The new expiry date needs to be in the future."
 msgstr "Die neue Frist muss in der Zukunft liegen."
 
 #: pretix/base/services/orders.py:180 pretix/base/services/orders.py:256
-#, fuzzy
-#| msgid "This order is not marked as paid."
 msgid "This order is not pending approval."
-msgstr "Die Bestellung ist nicht als bezahlt markiert."
+msgstr "Diese Bestellung wartet nicht auf Freigabe."
 
 #: pretix/base/services/orders.py:219
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "Bestellung storniert: %(code)s"
+msgstr "Bestellung bestätigt: %(code)s"
 
 #: pretix/base/services/orders.py:222
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Deine Bestellung wurde noch nicht bezahlt: %(code)s"
+msgstr "Bestellung freigegeben und wartet auf Bezahlung: %(code)s"
 
 #: pretix/base/services/orders.py:296
-#, fuzzy, python-format
-#| msgid "Order details: %(code)s"
+#, python-format
 msgid "Order denied: %(code)s"
-msgstr "Bestellung: %(code)s"
+msgstr "Bestellung abgelehnt: %(code)s"
 
 #: pretix/base/services/orders.py:325 pretix/presale/views/order.py:573
 #: pretix/presale/views/order.py:601
@@ -3649,18 +3645,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:271
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event}. As you only ordered\n"
-#| "free products, no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3675,29 +3660,18 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben deine Bestellung für {event} erfolgreich erhalten. Vielen Dank! Da "
-"keine\n"
+"wir haben deine Bestellung für {event} erfolgreich abgeschlossen. Vielen "
+"Dank! Da keine\n"
 "kostenpflichtigen Artikel bestellt wurden, ist keine Zahlung erforderlich.\n"
 "\n"
-"Du kannst Bestellung unter folgender Adresse ändern und einsehen:\n"
+"Du kannst deine Bestellung unter folgender Adresse ändern und einsehen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
 "Das {event} Team"
 
 #: pretix/base/settings.py:284
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event}. As you only ordered\n"
-#| "free products, no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3713,11 +3687,14 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben deine Bestellung für {event} erfolgreich erhalten. Vielen Dank! Da "
-"keine\n"
-"kostenpflichtigen Artikel bestellt wurden, ist keine Zahlung erforderlich.\n"
+"wir haben deine Bestellung für {event} erhalten. Da du ein Produkt bestellt "
+"hast,\n"
+"das eine manuelle Freigabe vom Veranstalter erfordert, bitten wir dich um "
+"etwas\n"
+"Geduld. Wir werden dich per E-Mail über den Fortgang deiner Bestellung "
+"informieren.\n"
 "\n"
-"Du kannst Bestellung unter folgender Adresse ändern und einsehen:\n"
+"Du kannst deine Bestellung unter folgender Adresse ändern und einsehen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
@@ -3901,20 +3878,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:392
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before {date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3932,28 +3896,19 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben deine Bestellung für {event} mit einem Gesamtbetrag von\n"
-"{total_with_currency} erhalten. Bitte schließe die Bezahlung bis {date} ab.\n"
-"{payment_info}\n"
+"wir haben deine Bestellung für {event} freigegeben und freuen uns, dich auf "
+"unserer\n"
+"Veranstaltung zu begrüßen. Bitte fahre fort, indem du bis zum {date} die\n"
+"Bezahlung abschließt.\n"
 "\n"
-"Du kannst deine Bestellung unter folgender Adresse einsehen und ändern:\n"
+"Dies kannst du unter folgender Adresse tun:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
 "Das {event} Team"
 
 #: pretix/base/settings.py:408
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order {code} for {event} has been canceled.\n"
-#| "\n"
-#| "You can view the details of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3970,7 +3925,9 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"deine Bestellung {code} für {event} wurde storniert.\n"
+"deine Bestellung für {event} wurde leider abgelehnt.\n"
+"\n"
+"{comment}\n"
 "\n"
 "Du kannst deine Bestellung unter folgender Adresse einsehen:\n"
 "{url}\n"
@@ -5172,63 +5129,47 @@ msgstr ""
 "verschickt. Wenn das Feld leer ist, wird die Mail nicht verschickt."
 
 #: pretix/control/forms/event.py:788
-#, fuzzy
-#| msgid "Review order"
 msgid "Received order"
-msgstr "Bestellung prüfen"
+msgstr "Bestellung erhalten"
 
 #: pretix/control/forms/event.py:791
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "Available placeholders: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
 "Verfügbare Platzhalter: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"{date}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:797
-#, fuzzy
-#| msgid "Expire order"
 msgid "Approved order"
-msgstr "Als abgelaufen markieren"
+msgstr "Bestätigte Bestellung"
 
 #: pretix/control/forms/event.py:800
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from above instead. Available placeholders: {event}, "
 "{total_with_currency}, {total}, {currency}, {date}, {payment_info}, {url}, "
 "{invoice_name}, {invoice_company}"
 msgstr ""
+"Wird nur für kostenpflichtige Bestellungen verschickt. Für kostenlose "
+"Bestellung wird die E-Mail-Vorlage für den Bestelleingang verwendet. "
 "Verfügbare Platzhalter: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:807
-#, fuzzy
-#| msgid "Refund order"
 msgid "Denied order"
-msgstr "Bestellung erstatten"
+msgstr "Abgelehnte Bestellung"
 
 #: pretix/control/forms/event.py:810
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "Available placeholders: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {comment}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
 "Verfügbare Platzhalter: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"{date}, {comment}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:816
 msgid "Use custom SMTP server"
@@ -5592,10 +5533,8 @@ msgstr "Alle Termine"
 #: pretix/control/forms/filter.py:209
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
-#, fuzzy
-#| msgid "pending"
 msgid "Approval pending"
-msgstr "ausstehend"
+msgstr "Freigabe ausstehend"
 
 #: pretix/control/forms/filter.py:210
 msgid "Overpaid"
@@ -6454,16 +6393,12 @@ msgid "The order has been created."
 msgstr "Die Bestellung wurde erstellt."
 
 #: pretix/control/logdisplay.py:168 pretix/control/views/orders.py:241
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The order has been approved."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Die Bestellung wurde freigegeben."
 
 #: pretix/control/logdisplay.py:169
-#, fuzzy
-#| msgid "The order has been refunded."
 msgid "The order has been denied."
-msgstr "Die Bestellung wurde zurückerstattet."
+msgstr "Die Bestellung wurde abgelehnt."
 
 #: pretix/control/logdisplay.py:170
 #, python-brace-format
@@ -6553,25 +6488,17 @@ msgstr ""
 "hinweist."
 
 #: pretix/control/logdisplay.py:190
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received."
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
 msgstr ""
-"Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der "
+"Eine E-Mail wurde verschickt, die den Benutzer auf die Ablehnung der "
 "Bestellung hinweist."
 
 #: pretix/control/logdisplay.py:191
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received."
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
 msgstr ""
-"Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der "
+"Eine E-Mail wurde verschickt, die den Benutzer auf die Freigabe der "
 "Bestellung hinweist."
 
 #: pretix/control/logdisplay.py:193
@@ -6582,10 +6509,6 @@ msgstr ""
 "Eine E-Mail zur Bestätigung der Bestellung wurde an den Benutzer verschickt."
 
 #: pretix/control/logdisplay.py:194
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received and requires payment."
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
@@ -7860,20 +7783,16 @@ msgid "Show pending refunds"
 msgstr "Ausstehende Erstattungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:39
-#, fuzzy
-#| msgid ""
-#| "This event contains <strong>pending refunds</strong> that you should take "
-#| "care of."
 msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
-"Diese Veranstaltung enthält <strong>ausstehende Erstattungen</strong>, um "
-"die du dich kümmern solltest."
+"Diese Veranstaltung enthält <strong>Bestellungen, die auf Freigabe "
+"warten</strong>."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:43
 msgid "Show orders pending approval"
-msgstr ""
+msgstr "Alle Bestellungen ohne Freigabe"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:50
 msgid "Your attention is required to resolve the following issues"
@@ -8013,7 +7932,7 @@ msgstr "Ticket-Download-Erinnerung"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:49
 msgid "Order approval process"
-msgstr ""
+msgstr "Freigabeprozess"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:54
 msgid "SMTP settings"
@@ -9265,16 +9184,12 @@ msgstr "Derzeit haben keine Apps Zugriff auf dein pretix-Konto."
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:4
 #: pretix/control/templates/pretixcontrol/order/approve.html:8
-#, fuzzy
-#| msgid "Expire order"
 msgid "Approve order"
-msgstr "Als abgelaufen markieren"
+msgstr "Bestellung freigeben"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:10
-#, fuzzy
-#| msgid "Do you really want to mark this order as paid?"
 msgid "Do you really want to approve this order?"
-msgstr "Möchtest du diese Bestellung wirklich als bezahlt markieren?"
+msgstr "Möchten Sie diese Bestellung wirklich freigeben?"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:20
 #: pretix/control/templates/pretixcontrol/order/cancel.html:27
@@ -9286,10 +9201,8 @@ msgid "No, take me back"
 msgstr "Nein, lieber nicht"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Yes, approve order"
-msgstr "Ja, Bestellung stornieren"
+msgstr "Ja, Bestellung freigeben"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/cancel.html:8
@@ -9503,20 +9416,16 @@ msgstr "(optional)"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:4
 #: pretix/control/templates/pretixcontrol/order/deny.html:8
-#, fuzzy
-#| msgid "Pay order"
 msgid "Deny order"
-msgstr "Bestellung bezahlen"
+msgstr "Bestellung ablehnen"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:23
 msgid "Comment (will be sent to the user)"
-msgstr ""
+msgstr "Kommentar (wird an den Kunden übermittelt)"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:35
-#, fuzzy
-#| msgid "Yes, refund order"
 msgid "Yes, deny order"
-msgstr "Ja, Bestellung zurückerstatten"
+msgstr "Ja, Bestellung ablehnen"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html:5
 #: pretix/control/templates/pretixcontrol/order/extend.html:9
@@ -9537,11 +9446,11 @@ msgstr "Steuern"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:31
 msgid "Approve"
-msgstr ""
+msgstr "Freigeben"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:36
 msgid "Deny"
-msgstr ""
+msgstr "Ablehnen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:42
 #: pretix/control/templates/pretixcontrol/order/pay.html:31
@@ -11766,7 +11675,7 @@ msgstr "Musterfirma"
 
 #: pretix/control/views/event.py:575
 msgid "An individial text with a reason can be inserted here."
-msgstr ""
+msgstr "Hier kann ein Grund für den Nutzer angegeben werden."
 
 #: pretix/control/views/event.py:576
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
@@ -11988,10 +11897,8 @@ msgid "Access for the selected application has been revoked."
 msgstr "Der Zugriff für die ausgewählte App zu deinem Konto wurde entfernt."
 
 #: pretix/control/views/orders.py:262
-#, fuzzy
-#| msgid "The order has been changed and the user has been notified."
 msgid "The order has been denied and is therefore now canceled."
-msgstr "Die Bestellung wurde geändert und der Kunde benachrichtigt."
+msgstr "Die Bestellung wurde abgelehnt und daher storniert."
 
 #: pretix/control/views/orders.py:287
 msgid "This payment has been canceled."
@@ -13867,8 +13774,7 @@ msgid ""
 "with us if this problem persists."
 msgstr ""
 "Bei der Kommunikation mit Stripe ist ein Problem aufgetreten. Bitte versuche "
-"es erneut und setze dich sich mit uns in Verbindung, wenn das Problem "
-"fortbesteht."
+"es erneut und setze dich mit uns in Verbindung, wenn das Problem fortbesteht."
 
 #: pretix/plugins/stripe/payment.py:342
 msgid ""
@@ -14619,6 +14525,8 @@ msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
 msgstr ""
+"Deine Bestellung erfordert Freigabe durch den Veranstalter, bevor sie "
+"bestätigt werden kann und einen gültigen Vertrag darstellt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:165
 msgid ""
@@ -14626,6 +14534,9 @@ msgid ""
 "rejected your order. If your order was approved, we will send you a link "
 "that you can use to pay."
 msgstr ""
+"Wir informieren dich per E-Mail, sobald der Veranstalter deine Bestellung "
+"freigegeben oder abgelehnt hat. Wenn die Bestellung freigegeben wird, senden "
+"wir dir einen Link, über den du die Bestellung bezahlen kannst."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:181
 msgid "Place binding order"
@@ -14907,15 +14818,12 @@ msgstr ""
 "Deine Bestellung war erfolgreich! Du findest weiter unten alle Details."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
-#, fuzzy
-#| msgid ""
-#| "Please note that we still await your payment to complete the process."
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
-"Bitte beachte, dass der Bestellvorgang erst mit Eingang deiner Zahlung "
-"abgeschlossen ist."
+"Bitte beachten, dass wir noch auf eine Freigabe durch den Veranstalter "
+"warten, bevor du diese Bestellung bezahlen und damit abschließen kannst."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
