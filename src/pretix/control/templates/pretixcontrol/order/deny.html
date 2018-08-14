@@ -1,0 +1,41 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Deny order" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Deny order" %}
+    </h1>
+    <p>{% blocktrans trimmed %}
+        Do you really want to cancel this order? You cannot revert this action.
+    {% endblocktrans %}</p>
+
+    <form method="post" href="">
+        {% csrf_token %}
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="send_email" value="on" checked="checked">
+                {% trans "Notify user by e-mail" %}
+            </label>
+        </div>
+        <p>
+            <label>{% trans "Comment (will be sent to the user)" %}</label>
+            <textarea name="comment" class="form-control" rows="5"></textarea>
+        </p>
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, deny order" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}

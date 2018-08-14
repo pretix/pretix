@@ -213,7 +213,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'checkin_attention', 'last_modified', 'payments', 'refunds')
+                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

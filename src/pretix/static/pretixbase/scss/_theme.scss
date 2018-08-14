@@ -137,6 +137,12 @@
   font-size: 22px;
   padding-top: 14px;
 }
+.alert-primary::before {
+  background: $brand-primary !important;
+}
+.alert-primary {
+  border-color: $brand-primary !important;
+}
 
 .progress-bar {
   box-shadow: none;

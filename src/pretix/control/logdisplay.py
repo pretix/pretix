@@ -165,6 +165,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.refunded': _('The order has been refunded.'),
         'pretix.event.order.canceled': _('The order has been canceled.'),
         'pretix.event.order.placed': _('The order has been created.'),
+        'pretix.event.order.approved': _('The order has been approved.'),
+        'pretix.event.order.denied': _('The order has been denied.'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
         'pretix.event.order.locale.changed': _('The order locale has been changed.'),
@@ -185,7 +187,13 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.order_changed': _('An email has been sent to notify the user that the order has been changed.'),
         'pretix.event.order.email.order_free': _('An email has been sent to notify the user that the order has been received.'),
         'pretix.event.order.email.order_paid': _('An email has been sent to notify the user that payment has been received.'),
+        'pretix.event.order.email.order_denied': _('An email has been sent to notify the user that the order has been denied.'),
+        'pretix.event.order.email.order_approved': _('An email has been sent to notify the user that the order has '
+                                                     'been approved.'),
         'pretix.event.order.email.order_placed': _('An email has been sent to notify the user that the order has been received and requires payment.'),
+        'pretix.event.order.email.order_placed_require_approval': _('An email has been sent to notify the user that '
+                                                                    'the order has been received and requires '
+                                                                    'approval.'),
         'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
         'pretix.event.order.payment.confirmed': _('Payment {local_id} has been confirmed.'),
         'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),

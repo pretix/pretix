@@ -74,6 +74,10 @@ downloads                             list of objects            List of ticket 
                                                                  download options.
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
+require_approval                      boolean                    If ``True`` and the order is pending, this order
+                                                                 needs approval by an organizer before it can
+                                                                 continue. If ``True`` and the order is canceled,
+                                                                 this order has been denied by the event organizer.
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
 last_modified                         datetime                   Last modification of this object
@@ -113,7 +117,8 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 2.0
 
    The ``order.payment_date`` and ``order.payment_provider`` attributes have been deprecated in favor of the new
-   nested ``payments`` and ``refunds`` resources, but will still be served and removed in 2.2.
+   nested ``payments`` and ``refunds`` resources, but will still be served and removed in 2.2. The ``require_approval``
+   attribute has been added, as have been the ``…/approve/`` and ``…/deny/`` endpoints.
 
 .. _order-position-resource:
 
@@ -259,6 +264,7 @@ List of all orders
             "total": "23.00",
             "comment": "",
             "checkin_attention": false,
+            "require_approval": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": True,
@@ -339,6 +345,8 @@ List of all orders
                            ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
+   :query boolean require_approval: If set to ``true`` or ``false``, only categories with this value for the field
+                                    ``require_approval`` will be returned.
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
    :query datetime modified_since: Only return orders that have changed since the given date
@@ -388,6 +396,7 @@ Fetching individual orders
         "total": "23.00",
         "comment": "",
         "checkin_attention": false,
+        "require_approval": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
@@ -927,6 +936,85 @@ Order state operations
    :param code: The ``code`` field of the order to modify
    :statuscode 200: no error
    :statuscode 400: The order cannot be extended since the current order status does not allow it or no quota is available or the submitted date is invalid.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/approve/
+
+   Approve an order that is pending approval.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/approve/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "n",
+        "require_approval": false,
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be approved, likely because the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/deny/
+
+   Marks an order that is pending approval as denied.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/deny/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: text/json
+
+      {
+          "send_email": true,
+          "comment": "You're not a business customer!"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "code": "ABC12",
+        "status": "c",
+        "require_approval": true,
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to modify
+   :statuscode 200: no error
+   :statuscode 400: The order cannot be marked as denied since the current order status does not allow it.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.

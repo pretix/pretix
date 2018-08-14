@@ -321,6 +321,7 @@ class ItemUpdateForm(I18nModelForm):
             'available_from',
             'available_until',
             'require_voucher',
+            'require_approval',
             'hide_without_voucher',
             'allow_cancel',
             'max_per_order',

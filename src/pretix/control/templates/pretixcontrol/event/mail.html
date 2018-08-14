@@ -45,6 +45,9 @@
 
                 {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
                 {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder" exclude="mail_days_download_reminder" %}
+
+                {% blocktrans asvar title_require_approval %}Order approval process{% endblocktrans %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_require_approval  items="mail_text_order_placed_require_approval,mail_text_order_approved,mail_text_order_denied" %}
             </div>
         </fieldset>
         <fieldset>

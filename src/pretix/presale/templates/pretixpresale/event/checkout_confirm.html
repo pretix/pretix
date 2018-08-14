@@ -49,24 +49,26 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                {% if payment_provider.identifier != "free" %}
-                    <div class="pull-right">
-                        <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Modify" %}
-                        </a>
-                    </div>
-                {% endif %}
-                <h3 class="panel-title">
-                    {% trans "Payment" %}
-                </h3>
+        {% if payment_provider %}
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {% if payment_provider.identifier != "free" %}
+                        <div class="pull-right">
+                            <a href="{% eventurl request.event "presale:event.checkout" step="payment" cart_namespace=cart_namespace|default_if_none:"" %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Modify" %}
+                            </a>
+                        </div>
+                    {% endif %}
+                    <h3 class="panel-title">
+                        {% trans "Payment" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {{ payment }}
+                </div>
             </div>
-            <div class="panel-body">
-                {{ payment }}
-            </div>
-        </div>
+        {% endif %}
         {% eventsignal event "pretix.presale.signals.checkout_confirm_page_content" request=request %}
         <div class="row">
             {% if request.event.settings.invoice_address_asked %}
@@ -153,6 +155,17 @@
                         </div>
                     {% endfor %}
                 </div>
+            </div>
+        {% endif %}
+        {% if require_approval %}
+            <div class="alert alert-warning alert-primary">
+                <strong>
+                    {% trans "Your order requires approval by the event organizer before it can be confirmed and forms a valid contract." %}
+                </strong>
+                {% blocktrans trimmed %}
+                    We will sent you an email as soon as the event organizer approved or rejected your order. If your
+                    order was approved, we will send you a link that you can use to pay.
+                {% endblocktrans %}
             </div>
         {% endif %}
         <div class="row checkout-button-row clearfix">

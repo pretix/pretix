@@ -541,7 +541,13 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'mail_text_order_canceled': ['code', 'event', 'url'],
             'mail_text_order_custom_mail': ['expire_date', 'event', 'code', 'date', 'url',
                                             'invoice_name', 'invoice_company'],
-            'mail_text_download_reminder': ['event', 'url']
+            'mail_text_download_reminder': ['event', 'url'],
+            'mail_text_order_placed_require_approval': ['total', 'currency', 'date', 'invoice_company',
+                                                        'total_with_currency', 'event', 'url', 'invoice_name'],
+            'mail_text_order_approved': ['total', 'currency', 'date', 'invoice_company',
+                                         'total_with_currency', 'event', 'url', 'invoice_name'],
+            'mail_text_order_denied': ['total', 'currency', 'date', 'invoice_company',
+                                       'total_with_currency', 'event', 'url', 'invoice_name'],
         }
 
     @cached_property
@@ -566,6 +572,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'code': '68CYU2H6ZTP3WLK5',
             'invoice_name': _('John Doe'),
             'invoice_company': _('Sample Corporation'),
+            'common': _('An individial text with a reason can be inserted here.'),
             'payment_info': _('Please transfer money to this bank account: 9999-9999-9999-9999')
         }
 

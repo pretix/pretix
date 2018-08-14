@@ -14,7 +14,7 @@ from django_countries.fields import Country
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemCategory, Order,
+    CartPosition, Event, Invoice, InvoiceAddress, Item, ItemCategory, Order,
     OrderPosition, Organizer, Question, QuestionAnswer, Quota, Voucher,
 )
 from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
@@ -802,6 +802,43 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.first().subevent, se)
+
+    def test_require_approval_no_payment_step(self):
+        self.event.settings.invoice_generate = 'True'
+        self.ticket.require_approval = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=42, expires=now() + timedelta(minutes=10)
+        )
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        print(doc)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
+        self.assertTrue(Order.objects.first().require_approval)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+        self.assertEqual(Invoice.objects.count(), 0)
+
+    def test_require_approval_no_payment_step_free(self):
+        self.ticket.require_approval = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=0, expires=now() + timedelta(minutes=10)
+        )
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
+        self.assertTrue(Order.objects.first().require_approval)
+        self.assertEqual(OrderPosition.objects.count(), 1)
 
     def test_free_price(self):
         self.ticket.free_price = True

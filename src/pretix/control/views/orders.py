@@ -44,8 +44,8 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, cancel_order, extend_order,
-    mark_order_expired, mark_order_refunded,
+    OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
+    extend_order, mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.stats import order_overview
 from pretix.base.signals import register_data_exporters
@@ -226,6 +226,46 @@ class OrderComment(OrderView):
 
     def get(self, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
+
+class OrderApprove(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        if self.order.require_approval:
+            try:
+                approve_order(self.order, user=self.request.user)
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('The order has been approved.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/approve.html', {
+            'order': self.order,
+        })
+
+
+class OrderDeny(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        if self.order.require_approval:
+            try:
+                deny_order(self.order, user=self.request.user,
+                           comment=self.request.POST.get('comment'),
+                           send_mail=self.request.POST.get('send_email') == 'on')
+            except OrderError as e:
+                messages.error(self.request, str(e))
+            else:
+                messages.success(self.request, _('The order has been denied and is therefore now canceled.'))
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        return render(self.request, 'pretixcontrol/order/deny.html', {
+            'order': self.order,
+        })
 
 
 class OrderPaymentCancel(OrderView):

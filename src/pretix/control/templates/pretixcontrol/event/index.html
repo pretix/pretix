@@ -34,6 +34,15 @@
                     class="btn btn-primary">{% trans "Show pending refunds" %}</a>
         </div>
     {% endif %}
+    {% if has_pending_approvals %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                This event contains <strong>pending approvals</strong> that you should take care of.
+            {% endblocktrans %}
+            <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=pa"
+                    class="btn btn-primary">{% trans "Show orders pending approval" %}</a>
+        </div>
+    {% endif %}
     {% if actions|length > 0 %}
         <div class="panel panel-danger">
             <div class="panel-heading">

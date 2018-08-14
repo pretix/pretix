@@ -92,6 +92,13 @@ def test_order_list(client, env):
     response = client.get('/control/event/dummy/dummy/orders/?status=o')
     assert 'FOO' in response.rendered_content
 
+    response = client.get('/control/event/dummy/dummy/orders/?status=pa')
+    assert 'FOO' not in response.rendered_content
+    env[2].require_approval = True
+    env[2].save()
+    response = client.get('/control/event/dummy/dummy/orders/?status=pa')
+    assert 'FOO' in response.rendered_content
+
     q = Question.objects.create(event=env[0], question="Q", type="N", required=True)
     q.items.add(env[3])
     op = env[2].positions.first()
@@ -206,6 +213,40 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
     o = Order.objects.get(id=env[2].id)
     assert res.status_code < 400
     assert o.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_order_approve(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_PENDING
+    o.require_approval = True
+    o.save()
+    q = Quota.objects.create(event=env[0], size=10)
+    q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    res = client.post('/control/event/dummy/dummy/orders/FOO/approve', {
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert res.status_code < 400
+    assert o.status == Order.STATUS_PENDING
+    assert not o.require_approval
+
+
+@pytest.mark.django_db
+def test_order_deny(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_PENDING
+    o.require_approval = True
+    o.save()
+    q = Quota.objects.create(event=env[0], size=10)
+    q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    res = client.post('/control/event/dummy/dummy/orders/FOO/deny', {
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert res.status_code < 400
+    assert o.status == Order.STATUS_CANCELED
+    assert o.require_approval
 
 
 @pytest.mark.django_db
