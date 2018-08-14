@@ -644,8 +644,8 @@ var shared_root_methods = {
             url = this.$root.event_url + 'widget/product_list?lang=' + lang;
         }
         var cart_id = getCookie(this.cookieName);
-        if (this.$root.voucher) {
-            url += '&voucher=' + escape(this.$root.voucher);
+        if (this.$root.voucher_code) {
+            url += '&voucher=' + escape(this.$root.voucher_code);
         }
         if (cart_id) {
             url += "&cart_id=" + cart_id;
