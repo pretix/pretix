@@ -35,8 +35,8 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, approve_order, cancel_order, deny_order, extend_order,
-    mark_order_expired, mark_order_refunded,
+    OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
+    extend_order, mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.tickets import (
     get_cachedticket_for_order, get_cachedticket_for_position,

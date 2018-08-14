@@ -73,6 +73,8 @@ event_permission_sub_urls = [
     ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_canceled/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/approve/', 404),
+    ('post', 'can_change_orders', 'orders/ABC12/deny/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/extend/', 400),
     ('get', 'can_view_orders', 'orders/ABC12/payments/', 404),
     ('get', 'can_view_orders', 'orders/ABC12/payments/1/', 404),

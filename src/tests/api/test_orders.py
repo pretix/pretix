@@ -1143,6 +1143,80 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     assert order.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
 
 
+@pytest.mark.django_db
+def test_order_pending_approve(token_client, organizer, event, order):
+    order.require_approval = True
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/approve/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_PENDING
+    assert not resp.data['require_approval']
+
+
+@pytest.mark.django_db
+def test_order_invalid_state_approve(token_client, organizer, event, order):
+    order.require_approval = True
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/approve/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+
+    order.require_approval = False
+    order.status = Order.STATUS_PENDING
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/approve/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_order_pending_deny(token_client, organizer, event, order):
+    order.require_approval = True
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/deny/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_CANCELED
+    assert resp.data['require_approval']
+
+
+@pytest.mark.django_db
+def test_order_invalid_state_deny(token_client, organizer, event, order):
+    order.require_approval = True
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/deny/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+
+    order.require_approval = False
+    order.status = Order.STATUS_PENDING
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/deny/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 400
+
+
 ORDER_CREATE_PAYLOAD = {
     "email": "dummy@dummy.test",
     "locale": "en",

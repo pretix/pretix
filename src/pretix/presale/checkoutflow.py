@@ -633,7 +633,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             return eventreverse(self.request.event, 'presale:event.order', kwargs={
                 'order': order.code,
                 'secret': order.secret,
-            })
+            }) + '?thanks=1'
         return eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
             'order': order.code,
             'secret': order.secret,

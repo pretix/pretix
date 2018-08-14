@@ -18,8 +18,8 @@ from pretix.base.payment import FreeOrderProvider
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _create_order, expire_orders,
-    send_download_reminders,
+    OrderChangeManager, OrderError, _create_order, approve_order, deny_order,
+    expire_orders, send_download_reminders,
 )
 
 
@@ -205,6 +205,88 @@ def test_expiring_auto_disabled(event):
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_do_not_expire_if_approval_pending(event):
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0, require_approval=True
+    )
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0,
+    )
+    expire_orders(None)
+    o1 = Order.objects.get(id=o1.id)
+    assert o1.status == Order.STATUS_PENDING
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_approve(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = 'True'
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='de'
+    )
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert o1.expires > now()
+    assert o1.status == Order.STATUS_PENDING
+    assert not o1.require_approval
+    assert o1.invoices.count() == 1
+    assert len(djmail.outbox) == 1
+    assert 'awaiting payment' in djmail.outbox[0].subject
+
+
+@pytest.mark.django_db
+def test_approve_free(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = 'True'
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0, require_approval=True
+    )
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert o1.expires > now()
+    assert o1.status == Order.STATUS_PAID
+    assert not o1.require_approval
+    assert o1.invoices.count() == 0
+    assert len(djmail.outbox) == 1
+    assert 'confirmed' in djmail.outbox[0].subject
+
+
+@pytest.mark.django_db
+def test_deny(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = 'True'
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='de'
+    )
+    generate_invoice(o1)
+    deny_order(o1)
+    o1.refresh_from_db()
+    assert o1.expires < now()
+    assert o1.status == Order.STATUS_CANCELED
+    assert o1.require_approval
+    assert o1.invoices.count() == 2
+    assert len(djmail.outbox) == 1
+    assert 'denied' in djmail.outbox[0].subject
 
 
 class DownloadReminderTests(TestCase):
