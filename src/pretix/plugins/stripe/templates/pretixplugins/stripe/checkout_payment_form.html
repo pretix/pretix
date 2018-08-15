@@ -31,25 +31,25 @@
     {% endif %}
 
     <div class="row equal" id="stripe-elements">
-      <div class="col-md-5 vcenter hidden">
-        <div id="stripe-payment-request-button">
-          <span class="fa fa-spinner fa-spin"></span>
-          <!-- A Stripe Element will be inserted here. -->
+        <div class="col-md-5 vcenter stripe-card-holder">
+            <div id="stripe-card" class="form-control">
+                <span class="fa fa-spinner fa-spin"></span>
+                <!-- a Stripe Element will be inserted here. -->
+            </div>
         </div>
-      </div>
-      <div class="col-md-1 hidden">
-        <div class="hr">
-          <div class="sep">
-            <div class="sepText">{% trans "OR" %}</div>
-          </div>
+        <div class="col-md-1 hidden stripe-or">
+            <div class="hr">
+                <div class="sep">
+                    <div class="sepText">{% trans "OR" %}</div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-5 vcenter">
-        <div id="stripe-card" class="form-control">
-          <span class="fa fa-spinner fa-spin"></span>
-          <!-- a Stripe Element will be inserted here. -->
+        <div class="col-md-5 vcenter hidden stripe-payment-request-button-container">
+            <div id="stripe-payment-request-button">
+                <span class="fa fa-spinner fa-spin"></span>
+                <!-- A Stripe Element will be inserted here. -->
+            </div>
         </div>
-      </div>
     </div>
 
     <p class="help-block">

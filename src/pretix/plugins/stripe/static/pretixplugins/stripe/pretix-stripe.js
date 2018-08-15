@@ -74,7 +74,7 @@ var pretixstripe = {
                                 // and submit
                                 $form.get(0).submit();
                             });
-                        } catch {
+                        } catch (e) {
                             pretixstripe.paymentRequest = null;
                         }
                     } else {
@@ -112,15 +112,10 @@ var pretixstripe = {
                       pretixstripe.paymentRequest.canMakePayment().then(function(result) {
                         if (result) {
                           pretixstripe.paymentRequestButton.mount('#stripe-payment-request-button');
-                          $('#stripe-payment-request-button').parent().hide();
-                          $('#stripe-payment-request-button').parent().next("div").hide();
+                          $('#stripe-elements .stripe-or').removeClass("hidden");
                           $('#stripe-payment-request-button').parent().removeClass("hidden");
-                          $('#stripe-payment-request-button').parent().next("div").removeClass("hidden");
-                          $('#stripe-payment-request-button').parent().show(500);
-                          $('#stripe-payment-request-button').parent().next("div").show(500);
                         } else {
                           $('#stripe-payment-request-button').hide();
-                          $('#stripe-card').parent().removeClass("col-md-5").addClass("col-md-12");
                           document.getElementById('stripe-payment-request-button').style.display = 'none';
                         }
                       });
