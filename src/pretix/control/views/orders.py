@@ -1286,7 +1286,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 'invoice_company': invoice_company,
             }
         email_template = LazyI18nString(form.cleaned_data['message'])
-        email_content = render_mail(email_template, email_context)[0]
+        email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = []
             self.preview_output.append(

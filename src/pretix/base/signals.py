@@ -124,6 +124,16 @@ subclass of pretix.base.payment.BasePaymentProvider or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+register_html_mail_renderers = EventPluginSignal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known HTML email renderers. Receivers should return a
+subclass of pretix.base.email.BaseHTMLMailRenderer or a list of these
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 register_invoice_renderers = EventPluginSignal(
     providing_args=[]
 )

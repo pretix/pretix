@@ -47,6 +47,7 @@ from pretix.control.forms.event import (
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import nav_event_settings
+from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
@@ -462,6 +463,11 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
             'event': self.request.event.slug
         })
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['renderers'] = self.request.event.get_html_mail_renderers()
+        return ctx
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -514,7 +520,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
             'expire_date': date_format(now() + timedelta(days=15), 'SHORT_DATE_FORMAT'),
             'payment_info': _('{} has been transferred to account <9999-9999-9999-9999> at {}').format(
-                money_filter(Decimal('42.23'), self.request.event.currency), date_format(now(), 'SHORT_DATETIME_FORMAT'))
+                money_filter(Decimal('42.23'), self.request.event.currency),
+                date_format(now(), 'SHORT_DATETIME_FORMAT'))
         }
 
     # create index-language mapping
@@ -612,6 +619,36 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'item': preview_item,
             'msgs': msgs
         })
+
+
+class MailSettingsRendererPreview(MailSettingsPreview):
+    permission = 'can_change_event_settings'
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    def get(self, request, *args, **kwargs):
+        v = str(request.event.settings.mail_text_order_placed)
+        v = v.format_map(self.placeholders('mail_text_order_placed'))
+        renderers = request.event.get_html_mail_renderers()
+        if request.GET.get('renderer') in renderers:
+            with rolledback_transaction():
+                order = request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                                    expires=now(), code="PREVIEW", total=119)
+                item = request.event.items.create(name=ugettext("Sample product"), default_price=42.23,
+                                                  description=ugettext("Sample product description"))
+                order.positions.create(item=item, attendee_name=ugettext("John Doe"), price=item.default_price)
+                v = renderers[request.GET.get('renderer')].render(
+                    v,
+                    request.event.settings.mail_text_signature,
+                    ugettext('Your order: %(code)s') % {'code': order.code},
+                    order
+                )
+                r = HttpResponse(v, content_type='text/html')
+                r._csp_ignore = True
+                return r
+        else:
+            raise Http404(_('Unknown e-mail renderer.'))
 
 
 class TicketSettingsPreview(EventPermissionRequiredMixin, View):
@@ -1169,7 +1206,8 @@ class QuickSetupView(FormView):
                                               data={'plugin': 'pretix.plugins.banktransfer'})
                 plugins_active.append('pretix.plugins.banktransfer')
             self.request.event.settings.payment_banktransfer__enabled = True
-            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data['payment_banktransfer_bank_details']
+            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data[
+                'payment_banktransfer_bank_details']
 
         if form.cleaned_data.get('payment_stripe__enabled', None):
             if 'pretix.plugins.stripe' not in plugins_active:

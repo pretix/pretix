@@ -19,7 +19,6 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
-from pretix.base.email import CustomSMTPBackend
 from pretix.base.models.base import LoggedModel
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBlacklistValidator
@@ -327,6 +326,8 @@ class Event(EventMixin, LoggedModel):
         Returns an email server connection, either by using the system-wide connection
         or by returning a custom one based on the event's settings.
         """
+        from pretix.base.email import CustomSMTPBackend
+
         if self.settings.smtp_use_custom or force_custom:
             return CustomSMTPBackend(host=self.settings.smtp_host,
                                      port=self.settings.smtp_port,
@@ -478,6 +479,31 @@ class Event(EventMixin, LoggedModel):
                 providers[pp.identifier] = pp
 
         return OrderedDict(sorted(providers.items(), key=lambda v: str(v[1].verbose_name)))
+
+    def get_html_mail_renderer(self):
+        """
+        Returns the currently selected HTML email renderer
+        """
+        return self.get_html_mail_renderers()[
+            self.settings.mail_html_renderer
+        ]
+
+    def get_html_mail_renderers(self) -> dict:
+        """
+        Returns a dictionary of initialized HTML email renderers mapped by their identifiers.
+        """
+        from ..signals import register_html_mail_renderers
+
+        responses = register_html_mail_renderers.send(self)
+        renderers = {}
+        for receiver, response in responses:
+            if not isinstance(response, list):
+                response = [response]
+            for p in response:
+                pp = p(self)
+                if pp.is_available:
+                    renderers[pp.identifier] = pp
+        return renderers
 
     def get_invoice_renderers(self) -> dict:
         """

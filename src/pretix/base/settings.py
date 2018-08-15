@@ -225,6 +225,10 @@ DEFAULTS = {
         'default': None,
         'type': LazyI18nString
     },
+    'mail_html_renderer': {
+        'default': 'classic',
+        'type': str
+    },
     'mail_prefix': {
         'default': None,
         'type': str

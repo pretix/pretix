@@ -14,6 +14,26 @@
             {% bootstrap_field form.mail_bcc layout="control" %}
         </fieldset>
         <fieldset>
+            <legend>{% trans "E-mail design" %}</legend>
+            <div class="row">
+                {% for r in renderers.values %}
+                    <div class="col-md-3">
+                        <div class="well text-center">
+                            <label class="radio">
+                                <input type="radio" name="mail_html_renderer" value="{{ r.identifier }}"
+                                    {% if request.event.settings.mail_html_renderer == r.identifier %}checked{% endif %}>
+                                {{ r.verbose_name }}
+                            </label>
+                            <a class="btn btn-default btn-sm" target="_blank"
+                                href="{% url "control:event.settings.mail.preview.layout" event=request.event.slug organizer=request.event.organizer.slug %}?renderer={{ r.identifier }}">
+                                {% trans "Preview" %}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+        <fieldset>
             <legend>{% trans "E-mail content" %}</legend>
             <div class="panel-group" id="questions_group">
                 {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}

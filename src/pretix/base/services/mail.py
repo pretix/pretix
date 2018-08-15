@@ -2,9 +2,7 @@ import logging
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
 
-import bleach
 import cssutils
-import markdown
 from celery import chain
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
@@ -13,11 +11,11 @@ from django.utils.translation import ugettext as _
 from i18nfield.strings import LazyI18nString
 from inlinestyler.utils import inline_css
 
+from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import Event, Invoice, InvoiceAddress, Order
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import email_filter
-from pretix.base.templatetags.rich_text import markdown_compile
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -88,7 +86,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     'invoice_name': '',
                     'invoice_company': ''
                 })
-        body, body_md = render_mail(template, context)
+        renderer = ClassicMailRenderer(None)
+        body_plain = render_mail(template, context)
         subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
         if event:
@@ -97,19 +96,11 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
         subject = str(subject)
-        body_plain = body
-
-        htmlctx = {
-            'site': settings.PRETIX_INSTANCE_NAME,
-            'site_url': settings.SITE_URL,
-            'body': body_md,
-            'color': '#8E44B3'
-        }
+        signature = ""
 
         bcc = []
         if event:
-            htmlctx['event'] = event
-            htmlctx['color'] = event.settings.primary_color
+            renderer = event.get_html_mail_renderer()
             if event.settings.mail_bcc:
                 bcc.append(event.settings.mail_bcc)
 
@@ -127,9 +118,6 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             signature = str(event.settings.get('mail_text_signature'))
             if signature:
                 signature = signature.format(event=event.name)
-                signature_md = signature.replace('\n', '<br>\n')
-                signature_md = bleach.linkify(bleach.clean(markdown.markdown(signature_md), tags=bleach.ALLOWED_TAGS + ['p', 'br']))
-                htmlctx['signature'] = signature_md
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
 
@@ -137,7 +125,6 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 body_plain += _(
                     "You are receiving this email because you placed an order for {event}."
                 ).format(event=event.name)
-                htmlctx['order'] = order
                 body_plain += "\r\n"
                 body_plain += _(
                     "You can view your order details at the following URL:\n{orderurl}."
@@ -151,8 +138,11 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 )
             body_plain += "\r\n"
 
-        tpl = get_template('pretixbase/email/plainwrapper.html')
-        body_html = tpl.render(htmlctx)
+        try:
+            body_html = renderer.render(body_plain, signature, subject, order)
+        except:
+            logger.exception('Could not render HTML body')
+            body_html = None
 
         send_task = mail_send_task.si(
             to=[email],
@@ -225,5 +215,4 @@ def render_mail(template, context):
     else:
         tpl = get_template(template)
         body = tpl.render(context)
-    body_md = bleach.linkify(markdown_compile(body))
-    return body, body_md
+    return body
