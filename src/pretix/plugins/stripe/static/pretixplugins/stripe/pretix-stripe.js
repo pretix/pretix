@@ -104,11 +104,7 @@ var pretixstripe = {
                         });
                         pretixstripe.card.mount("#stripe-card");
                     }
-<<<<<<< 4536f964932c20fddbd70175bc7d01c6117f1814
                     if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
-=======
-                    if ($("#stripe-payment-request-button").length) {
->>>>>>> Rough implementation of paymentrequest-buttons via Stripe
                       pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
                         paymentRequest: pretixstripe.paymentRequest,
                       });
@@ -116,20 +112,10 @@ var pretixstripe = {
                       pretixstripe.paymentRequest.canMakePayment().then(function(result) {
                         if (result) {
                           pretixstripe.paymentRequestButton.mount('#stripe-payment-request-button');
-<<<<<<< 4536f964932c20fddbd70175bc7d01c6117f1814
                           $('#stripe-elements .stripe-or').removeClass("hidden");
                           $('#stripe-payment-request-button').parent().removeClass("hidden");
                         } else {
                           $('#stripe-payment-request-button').hide();
-=======
-                          $('#stripe-payment-request-button').parent().hide();
-                          $('#stripe-payment-request-button').parent().next("div").hide();
-                          $('#stripe-payment-request-button').parent().removeClass("hidden");
-                          $('#stripe-payment-request-button').parent().next("div").removeClass("hidden");
-                          $('#stripe-payment-request-button').parent().show(500);
-                          $('#stripe-payment-request-button').parent().next("div").show(500);
-                        } else {
->>>>>>> Rough implementation of paymentrequest-buttons via Stripe
                           document.getElementById('stripe-payment-request-button').style.display = 'none';
                         }
                       });
