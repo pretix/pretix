@@ -30,20 +30,39 @@
         </div>
     {% endif %}
 
-    <div id="stripe-card" class="form-control">
-        <span class="fa fa-spinner fa-spin"></span>
-        <!-- a Stripe Element will be inserted here. -->
+    <div class="row equal" id="stripe-elements">
+      <div class="col-md-5 vcenter hidden">
+        <div id="stripe-payment-request-button">
+          <span class="fa fa-spinner fa-spin"></span>
+          <!-- A Stripe Element will be inserted here. -->
+        </div>
+      </div>
+      <div class="col-md-1 hidden">
+        <div class="hr">
+          <div class="sep">
+            <div class="sepText">{% trans "OR" %}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 vcenter">
+        <div id="stripe-card" class="form-control">
+          <span class="fa fa-spinner fa-spin"></span>
+          <!-- a Stripe Element will be inserted here. -->
+        </div>
+      </div>
     </div>
+
     <p class="help-block">
         {% blocktrans trimmed %}
             Your payment will be processed by Stripe, Inc. Your credit card data will be transmitted directly to
             Stripe and never touches our servers.
         {% endblocktrans %}
+        <input type="hidden" name="stripe_total" value="{{ total }}" id="stripe_total"/>
         <input type="hidden" name="stripe_token" value="{{ request.session.payment_stripe_token }}" id="stripe_token"/>
         <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_last4 }}"
                 id="stripe_card_last4"/>
         <input type="hidden" name="stripe_card_brand" value="{{ request.session.payment_stripe_brand }}"
                 id="stripe_card_brand"/>
+        <input type="hidden" id="stripe_currency" value="{{ event.currency }}"/>
     </p>
 </div>
-

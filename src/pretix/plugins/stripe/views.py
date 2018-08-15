@@ -26,6 +26,9 @@ from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC
+from pretix.plugins.stripe.tasks import (
+    get_domain_for_event, stripe_verify_domain,
+)
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -111,6 +114,7 @@ def oauth_return(request, *args, **kwargs):
             # event.settings.payment_stripe_connect_access_token = data['access_token'] we don't need it, right?
             event.settings.payment_stripe_connect_refresh_token = data['refresh_token']
             event.settings.payment_stripe_connect_user_id = data['stripe_user_id']
+            event.settings.payment_stripe_merchant_country = account.get('country')
             if account.get('business_name') or account.get('display_name') or account.get('email'):
                 event.settings.payment_stripe_connect_user_name = (
                     account.get('business_name') or account.get('display_name') or account.get('email')
@@ -124,6 +128,8 @@ def oauth_return(request, *args, **kwargs):
             if request.session.get('payment_stripe_oauth_enable', False):
                 event.settings.payment_stripe__enabled = True
                 del request.session['payment_stripe_oauth_enable']
+
+            stripe_verify_domain.apply_async(args=(event.pk, get_domain_for_event(event)))
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
@@ -338,6 +344,13 @@ def oauth_disconnect(request, **kwargs):
         'event': request.event.slug,
         'provider': 'stripe_settings'
     }))
+
+
+@xframe_options_exempt
+def applepay_association(request, *args, **kwargs):
+    r = render(request, 'pretixplugins/stripe/apple-developer-merchantid-domain-association')
+    r._csp_ignore = True
+    return r
 
 
 class StripeOrderView:

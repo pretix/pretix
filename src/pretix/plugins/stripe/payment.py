@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django_countries import countries
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
@@ -25,7 +26,12 @@ from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.stripe.forms import StripeKeyValidator
-from pretix.plugins.stripe.models import ReferencedStripeObject
+from pretix.plugins.stripe.models import (
+    ReferencedStripeObject, RegisteredApplePayDomain,
+)
+from pretix.plugins.stripe.tasks import (
+    get_stripe_account_key, stripe_verify_domain,
+)
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -109,6 +115,9 @@ class StripeSettingsHolder(BasePaymentProvider):
             else:
                 return {}
         else:
+            allcountries = list(countries)
+            allcountries.insert(0, ('', _('Select country')))
+
             fields = [
                 ('publishable_key',
                  forms.CharField(
@@ -127,6 +136,13 @@ class StripeSettingsHolder(BasePaymentProvider):
                      validators=(
                          StripeKeyValidator(['sk_', 'rk_']),
                      ),
+                 )),
+                ('merchant_country',
+                 forms.ChoiceField(
+                     choices=allcountries,
+                     label=_('Merchant country'),
+                     help_text=_('The country in which your Stripe-account is registred in. Usually, this is your '
+                                 'country of residence.'),
                  )),
             ]
         d = OrderedDict(
@@ -235,9 +251,12 @@ class StripeMethod(BasePaymentProvider):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         return round_decimal(float(cents) / (10 ** places), self.event.currency)
 
-    def _get_amount(self, payment):
+    def _decimal_to_int(self, amount):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
-        return int(payment.amount * 10 ** places)
+        return int(amount * 10 ** places)
+
+    def _get_amount(self, payment):
+        return self._decimal_to_int(payment.amount)
 
     @property
     def api_kwargs(self):
@@ -510,7 +529,11 @@ class StripeCC(StripeMethod):
     public_name = _('Credit card')
     method = 'cc'
 
-    def payment_form_render(self, request) -> str:
+    def payment_form_render(self, request, total) -> str:
+        account = get_stripe_account_key(self)
+        if not RegisteredApplePayDomain.objects.filter(account=account, domain=request.host).exists():
+            stripe_verify_domain.apply_async(args=(self.event.pk, request.host))
+
         ui = self.settings.get('ui', default='pretix')
         if ui == 'checkout':
             template = get_template('pretixplugins/stripe/checkout_payment_form_stripe_checkout.html')
@@ -519,6 +542,7 @@ class StripeCC(StripeMethod):
         ctx = {
             'request': request,
             'event': self.event,
+            'total': self._decimal_to_int(total),
             'settings': self.settings,
         }
         return template.render(ctx)

@@ -5,6 +5,8 @@ var pretixstripe = {
     stripe: null,
     elements: null,
     card: null,
+    paymentRequest: null,
+    paymentRequestButton: null,
 
     'cc_request': function () {
         waitingDialog.show(gettext("Contacting Stripe …"));
@@ -37,8 +39,47 @@ var pretixstripe = {
                 url: 'https://js.stripe.com/v3/',
                 dataType: 'script',
                 success: function () {
-                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
+                    if ($.trim($("#stripe_connectedAccountId").html())) {
+                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
+                            stripeAccount: $.trim($("#stripe_connectedAccountId").html())
+                        });
+                    } else {
+                        pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
+                    }
                     pretixstripe.elements = pretixstripe.stripe.elements();
+                    if ($.trim($("#stripe_merchantcountry").html()) !== "") {
+                        try {
+                            pretixstripe.paymentRequest = pretixstripe.stripe.paymentRequest({
+                                country: $("#stripe_merchantcountry").html(),
+                                currency: $("#stripe_currency").val().toLowerCase(),
+                                total: {
+                                    label: gettext('Total'),
+                                    amount: parseInt($("#stripe_total").val())
+                                },
+                                displayItems: [],
+                                requestPayerName: false,
+                                requestPayerEmail: false,
+                                requestPayerPhone: false,
+                                requestShipping: false,
+                            });
+
+                            pretixstripe.paymentRequest.on('token', function (ev) {
+                                ev.complete('success');
+
+                                var $form = $("#stripe_token").closest("form");
+                                // Insert the token into the form so it gets submitted to the server
+                                $("#stripe_token").val(ev.token.id);
+                                $("#stripe_card_brand").val(ev.token.card.brand);
+                                $("#stripe_card_last4").val(ev.token.card.last4);
+                                // and submit
+                                $form.get(0).submit();
+                            });
+                        } catch {
+                            pretixstripe.paymentRequest = null;
+                        }
+                    } else {
+                        pretixstripe.paymentRequest = null;
+                    }
                     if ($("#stripe-card").length) {
                         pretixstripe.card = pretixstripe.elements.create('card', {
                             'style': {
@@ -62,6 +103,27 @@ var pretixstripe = {
                             }
                         });
                         pretixstripe.card.mount("#stripe-card");
+                    }
+                    if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
+                      pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
+                        paymentRequest: pretixstripe.paymentRequest,
+                      });
+
+                      pretixstripe.paymentRequest.canMakePayment().then(function(result) {
+                        if (result) {
+                          pretixstripe.paymentRequestButton.mount('#stripe-payment-request-button');
+                          $('#stripe-payment-request-button').parent().hide();
+                          $('#stripe-payment-request-button').parent().next("div").hide();
+                          $('#stripe-payment-request-button').parent().removeClass("hidden");
+                          $('#stripe-payment-request-button').parent().next("div").removeClass("hidden");
+                          $('#stripe-payment-request-button').parent().show(500);
+                          $('#stripe-payment-request-button').parent().next("div").show(500);
+                        } else {
+                          $('#stripe-payment-request-button').hide();
+                          $('#stripe-card').parent().removeClass("col-md-5").addClass("col-md-12");
+                          document.getElementById('stripe-payment-request-button').style.display = 'none';
+                        }
+                      });
                     }
                     $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
                 }
@@ -144,7 +206,7 @@ $(function () {
                 pretixstripe.show_checkout();
             } else {
                 $("#stripe-current-card").slideUp();
-                $("#stripe-card").slideDown();
+                $("#stripe-elements").slideDown();
             }
             e.preventDefault();
             return false;
@@ -152,7 +214,7 @@ $(function () {
     );
 
     if ($("#stripe-current-card").length) {
-        $("#stripe-card").hide();
+        $("#stripe-elements").hide();
     }
 
     $('.stripe-container').closest("form").submit(

@@ -373,7 +373,7 @@ class BasePaymentProvider:
 
         return timing and pricing
 
-    def payment_form_render(self, request: HttpRequest) -> str:
+    def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
         """
         When the user selects this provider as their preferred payment method,
         they will be shown the HTML you return from this method.

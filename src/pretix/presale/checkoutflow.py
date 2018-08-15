@@ -440,11 +440,15 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             if not provider.is_enabled or not self._is_allowed(provider, self.request):
                 continue
             fee = provider.calculate_fee(self._total_order_value)
+            try:
+                form = provider.payment_form_render(self.request, self._total_order_value + fee)
+            except TypeError:
+                form = provider.payment_form_render(self.request)
             providers.append({
                 'provider': provider,
                 'fee': fee,
                 'total': self._total_order_value + fee,
-                'form': provider.payment_form_render(self.request)
+                'form': form
             })
         return providers
 

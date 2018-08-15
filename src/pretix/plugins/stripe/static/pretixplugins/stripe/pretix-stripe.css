@@ -1,0 +1,45 @@
+.sep {
+}
+
+.sepText {
+  width: 75px;
+  background: #FFFFFF;
+  margin: -15px 0 0 -38px;
+  padding: 5px 0;
+  position: absolute;
+  top: 50%;
+  text-align: center;
+}
+
+.hr {
+  width:2px;
+  height:100px;
+  background-color: #DDDDDD;
+  position:inherit;
+  top:0px;
+  left:50%;
+  z-index:10;
+}
+
+@media only screen and (max-width: 999px) {
+  .hr {
+    width: 100%;
+    height: 2px;
+    left: 0px;
+    margin: 15px 0 15px 0;
+  }
+  .sepText {
+    left: 50%;
+  }
+}
+
+@media only screen and (min-width: 999px) {
+  .row.equal {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.vcenter {
+  margin: auto;
+}

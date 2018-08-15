@@ -199,7 +199,10 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @cached_property
     def form(self):
-        return self.payment.payment_provider.payment_form_render(self.request)
+        try:
+            return self.payment.payment_provider.payment_form_render(self.request, self.payment.amount)
+        except TypeError:
+            return self.payment.payment_provider.payment_form_render(self.request)
 
     @cached_property
     def payment(self):
@@ -384,13 +387,17 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 continue
             current_fee = sum(f.value for f in self.open_fees) or Decimal('0.00')
             fee = provider.calculate_fee(pending_sum - current_fee)
+            try:
+                form = provider.payment_form_render(self.request, abs(pending_sum + fee - current_fee))
+            except TypeError:
+                form = provider.payment_form_render(self.request)
             providers.append({
                 'provider': provider,
                 'fee': fee,
                 'fee_diff': fee - current_fee,
                 'fee_diff_abs': abs(fee - current_fee),
                 'total': abs(pending_sum + fee - current_fee),
-                'form': provider.payment_form_render(self.request)
+                'form': form
             })
         return providers
 
