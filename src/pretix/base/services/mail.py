@@ -9,7 +9,6 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
 from i18nfield.strings import LazyI18nString
-from inlinestyler.utils import inline_css
 
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
@@ -172,7 +171,7 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
                    order: int=None) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
-        email.attach_alternative(inline_css(html), "text/html")
+        email.attach_alternative(html, "text/html")
     if invoices:
         invoices = Invoice.objects.filter(pk__in=invoices)
         for inv in invoices:

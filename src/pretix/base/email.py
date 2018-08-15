@@ -8,6 +8,7 @@ from django.core.mail.backends.smtp import EmailBackend
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+from inlinestyler.utils import inline_css
 
 from pretix.base.models import Event, Order
 from pretix.base.signals import register_html_mail_renderers
@@ -111,7 +112,7 @@ class ClassicMailRenderer(BaseHTMLMailRenderer):
             htmlctx['order'] = order
 
         tpl = get_template('pretixbase/email/plainwrapper.html')
-        body_html = tpl.render(htmlctx)
+        body_html = inline_css(tpl.render(htmlctx))
         return body_html
 
 
