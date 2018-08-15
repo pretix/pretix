@@ -22,8 +22,12 @@ class Command(BaseCommand):
                 if uid in cache:
                     e.settings.payment_stripe_merchant_country = cache[uid]
                 else:
-                    account = stripe.Account.retrieve(
-                        uid,
-                        api_key=api_key
-                    )
-                    e.settings.payment_stripe_merchant_country = cache[uid] = account.get('country')
+                    try:
+                        account = stripe.Account.retrieve(
+                            uid,
+                            api_key=api_key
+                        )
+                    except Exception as e:
+                        print(e)
+                    else:
+                        e.settings.payment_stripe_merchant_country = cache[uid] = account.get('country')
