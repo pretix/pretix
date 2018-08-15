@@ -156,3 +156,10 @@ class BaseTicketOutput:
         The text on the download button in the frontend.
         """
         return _('Download ticket')
+
+    @property
+    def download_button_icon(self) -> str:
+        """
+        The Font Awesome icon on the download button in the frontend.
+        """
+        return 'fa-download'
