@@ -38,14 +38,15 @@ def stripe_verify_domain(event_id, domain):
         return
 
     try:
-        stripe.ApplePayDomain.create(
+        resp = stripe.ApplePayDomain.create(
             domain_name=domain,
             **prov.api_kwargs
         )
     except stripe.error.StripeError:
         logger.exception('Could not verify domain with Stripe')
     else:
-        RegisteredApplePayDomain.objects.create(
-            domain=domain,
-            account=account
-        )
+        if resp.livemode:
+            RegisteredApplePayDomain.objects.create(
+                domain=domain,
+                account=account
+            )
