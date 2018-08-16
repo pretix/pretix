@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.template.loader import get_template
+from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import language
 from pretix.base.models import LogEntry, NotificationSetting, User
@@ -91,7 +92,7 @@ def send_notification_mail(notification: Notification, user: User):
     }
 
     tpl_html = get_template('pretixbase/email/notification.html')
-    body_html = tpl_html.render(ctx)
+    body_html = inline_css(tpl_html.render(ctx))
     tpl_plain = get_template('pretixbase/email/notification.txt')
     body_plain = tpl_plain.render(ctx)
 

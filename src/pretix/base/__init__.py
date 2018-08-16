@@ -12,6 +12,7 @@ class PretixBaseConfig(AppConfig):
         from . import exporters  # NOQA
         from . import invoice  # NOQA
         from . import notifications  # NOQA
+        from . import email  # NOQA
         from .services import auth, export, mail, tickets, cart, orders, invoices, cleanup, update_check, quotas, notifications  # NOQA
 
         try:

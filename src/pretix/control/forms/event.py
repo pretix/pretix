@@ -688,6 +688,11 @@ class MailSettingsForm(SettingsForm):
             )
         }}
     )
+    mail_html_renderer = forms.ChoiceField(
+        label=_("HTML mail renderer"),
+        required=True,
+        choices=[]
+    )
 
     mail_text_order_placed = I18nFormField(
         label=_("Text"),
@@ -849,6 +854,13 @@ class MailSettingsForm(SettingsForm):
         help_text=_("Commonly enabled on port 465."),
         required=False
     )
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        self.fields['mail_html_renderer'].choices = [
+            (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
+        ]
 
     def clean(self):
         data = self.cleaned_data

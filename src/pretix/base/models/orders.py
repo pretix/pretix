@@ -508,7 +508,7 @@ class Order(LoggedModel):
         with language(self.locale):
             recipient = self.email
             try:
-                email_content = render_mail(template, context)[0]
+                email_content = render_mail(template, context)
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers, sender,

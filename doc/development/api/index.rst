@@ -11,6 +11,7 @@ Contents:
    ticketoutput
    payment
    payment_2.0
+   email
    invoice
    shredder
    customview

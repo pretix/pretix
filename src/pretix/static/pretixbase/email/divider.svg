@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="600"
+   height="40"
+   viewBox="0 0 158.75 10.583334"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 2405546, 2018-03-11"
+   sodipodi:docname="divider.svg"
+   inkscape:export-filename="/home/raphael/proj/pretix/src/pretix/static/pretixbase/email/divider.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="270.51214"
+     inkscape:cy="55.592654"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     inkscape:window-width="1916"
+     inkscape:window-height="1023"
+     inkscape:window-x="1920"
+     inkscape:window-y="36"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-286.41665)">
+    <rect
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.27458763;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4.54917542, 9.09835082000000028;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="rect1448"
+       width="158.75"
+       height="10.583334"
+       x="0"
+       y="286.41666" />
+    <path
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#eeeeee;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.39300003;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:8.78600006, 17.57200011000000117;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       d="M 0 17.986328 L 0 22.009766 L 22.455078 22.009766 L 22.455078 17.986328 L 0 17.986328 z M 46.601562 17.986328 L 46.601562 22.009766 L 70.755859 22.009766 L 70.755859 17.986328 L 46.601562 17.986328 z M 94.908203 17.986328 L 94.908203 22.009766 L 119.05469 22.009766 L 119.05469 17.986328 L 94.908203 17.986328 z M 143.20898 17.986328 L 143.20898 22.009766 L 167.36133 22.009766 L 167.36133 17.986328 L 143.20898 17.986328 z M 191.50781 17.986328 L 191.50781 22.009766 L 215.66211 22.009766 L 215.66211 17.986328 L 191.50781 17.986328 z M 239.81641 17.986328 L 239.81641 22.009766 L 263.96094 22.009766 L 263.96094 17.986328 L 239.81641 17.986328 z M 288.11523 17.986328 L 288.11523 22.009766 L 312.26953 22.009766 L 312.26953 17.986328 L 288.11523 17.986328 z M 336.42188 17.986328 L 336.42188 22.009766 L 360.56836 22.009766 L 360.56836 17.986328 L 336.42188 17.986328 z M 384.72266 17.986328 L 384.72266 22.009766 L 408.875 22.009766 L 408.875 17.986328 L 384.72266 17.986328 z M 433.02148 17.986328 L 433.02148 22.009766 L 457.17578 22.009766 L 457.17578 17.986328 L 433.02148 17.986328 z M 481.32812 17.986328 L 481.32812 22.009766 L 505.47461 22.009766 L 505.47461 17.986328 L 481.32812 17.986328 z M 529.62891 17.986328 L 529.62891 22.009766 L 553.78125 22.009766 L 553.78125 17.986328 L 529.62891 17.986328 z M 577.92773 17.986328 L 577.92773 22.009766 L 600 22.009766 L 600 17.986328 L 577.92773 17.986328 z "
+       transform="matrix(0.26458334,0,0,0.26458334,0,286.41665)"
+       id="path1445" />
+  </g>
+</svg>
