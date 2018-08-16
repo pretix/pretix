@@ -305,7 +305,7 @@ class Paypal(BasePaymentProvider):
             }
         })
         if not pp_refund.success():
-            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(refund.error))
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(pp_refund.error))
         else:
             sale = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
             refund.payment.info = json.dumps(sale.to_dict())
