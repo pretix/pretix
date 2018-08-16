@@ -86,7 +86,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     'invoice_company': ''
                 })
         renderer = ClassicMailRenderer(None)
-        body_plain = render_mail(template, context)
+        content_plain = body_plain = render_mail(template, context)
         subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
         if event:
@@ -138,7 +138,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             body_plain += "\r\n"
 
         try:
-            body_html = renderer.render(body_plain, signature, str(subject), order)
+            body_html = renderer.render(content_plain, signature, str(subject), order)
         except:
             logger.exception('Could not render HTML body')
             body_html = None
