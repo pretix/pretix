@@ -97,6 +97,7 @@ class ClassicMailRenderer(BaseHTMLMailRenderer):
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,
             'body': body_md,
+            'subject': str(subject),
             'color': '#8E44B3'
         }
         if self.event:
