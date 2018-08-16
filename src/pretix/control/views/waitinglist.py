@@ -18,7 +18,7 @@ from django.views.generic.edit import DeleteView
 from pretix.base.models import Item, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
-from pretix.base.views.async import AsyncAction
+from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 

@@ -34,7 +34,7 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.views import CartMixin, EventViewMixin
-from pretix.presale.views.async import AsyncAction
+from pretix.presale.views.tasks import AsyncAction
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 

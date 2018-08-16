@@ -13,7 +13,7 @@ from django.dispatch import Signal
 from django.templatetags.static import static as _static
 
 from pretix.base.models import Event, Event_SettingsStore, Organizer
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_domain
 

@@ -32,7 +32,7 @@ from pretix.base.models.orders import (
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )

@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_noop
 
 from pretix.base.i18n import language
 from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
-from pretix.base.services.async import TransactionAwareTask
+from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.celery_app import app

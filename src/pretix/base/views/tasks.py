@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 from pretix.celery_app import app
 
-logger = logging.getLogger('pretix.base.async')
+logger = logging.getLogger('pretix.base.tasks')
 
 
 class AsyncAction:

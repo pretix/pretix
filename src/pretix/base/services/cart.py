@@ -17,7 +17,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
 from pretix.base.templatetags.rich_text import rich_text

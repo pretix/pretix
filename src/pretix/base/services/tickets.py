@@ -10,7 +10,7 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
     OrderPosition,
 )
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
