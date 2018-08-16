@@ -138,7 +138,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             body_plain += "\r\n"
 
         try:
-            body_html = renderer.render(body_plain, signature, subject, order)
+            body_html = renderer.render(body_plain, signature, str(subject), order)
         except:
             logger.exception('Could not render HTML body')
             body_html = None

@@ -48,9 +48,15 @@ class BaseHTMLMailRenderer:
     def __str__(self):
         return self.identifier
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order: str) -> str:
+    def render(self, plain_body: str, plain_signature: str, subject: str, order: Order=None) -> str:
         """
         This method should generate the HTML part of the email.
+
+        :param plain_body: The body of the email in plain text.
+        :param plain_signature: The signature with event organizer contact details in plain text.
+        :param subject: The email subject.
+        :param order: The order if this email is connected to one, otherwise ``None``.
+        :return: An HTML string
         """
         raise NotImplementedError()
 
@@ -65,7 +71,8 @@ class BaseHTMLMailRenderer:
     def identifier(self) -> str:
         """
         A short and unique identifier for this renderer.
-        This should only contain lowercase letters and in most cases will be the same as your package name.
+        This should only contain lowercase letters and in most cases will be the same as your package name or prefixed
+        with your package name.
         """
         raise NotImplementedError()  # NOQA
 
@@ -80,8 +87,8 @@ class BaseHTMLMailRenderer:
     @property
     def is_available(self) -> bool:
         """
-        This renderer will only be available if this returns True. You can use this to limit this renderer
-        to certain events.
+        This renderer will only be available if this returns ``True``. You can use this to limit this renderer
+        to certain events. Defaults to ``True``.
         """
         return True
 
