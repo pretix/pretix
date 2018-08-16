@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -176,7 +177,12 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get(self, request, *args, **kwargs):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
         self.subevent = None
+        if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
+            get_or_create_cart_id(request)
+            return redirect(reverse('presale:event.index', kwargs=kwargs))
         if request.event.has_subevents:
             if 'subevent' in kwargs:
                 self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()

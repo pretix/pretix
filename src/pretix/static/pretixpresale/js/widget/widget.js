@@ -696,7 +696,7 @@ var shared_root_computed = {
         if (!this.$root.cart_exists) {
             checkout_url += "checkout/start";
         }
-        var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + checkout_url;
+        var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + encodeURIComponent(checkout_url);
         if (getCookie(this.cookieName)) {
             form_target += "&take_cart_id=" + getCookie(this.cookieName);
         }

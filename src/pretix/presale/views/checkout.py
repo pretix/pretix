@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect
@@ -30,11 +32,11 @@ class CheckoutView(View):
 
         if not cart_exists(request) and "async_id" not in request.GET:
             messages.error(request, _("Your cart is empty"))
-            return redirect(self.get_index_url(self.request))
+            return self.redirect(self.get_index_url(self.request))
 
         if not request.event.presale_is_running:
             messages.error(request, _("The presale for this event is over or has not yet started."))
-            return redirect(self.get_index_url(self.request))
+            return self.redirect(self.get_index_url(self.request))
 
         cart_error = None
         try:
@@ -49,14 +51,13 @@ class CheckoutView(View):
                 continue
             if step.requires_valid_cart and cart_error:
                 messages.error(request, str(cart_error))
-                return redirect(previous_step.get_step_url(request) if previous_step
-                                else self.get_index_url(request))
+                return self.redirect(previous_step.get_step_url(request) if previous_step else self.get_index_url(request))
 
             if 'step' not in kwargs:
-                return redirect(step.get_step_url(request))
+                return self.redirect(step.get_step_url(request))
             is_selected = (step.identifier == kwargs.get('step', ''))
             if "async_id" not in request.GET and not is_selected and not step.is_completed(request, warn=not is_selected):
-                return redirect(step.get_step_url(request))
+                return self.redirect(step.get_step_url(request))
             if is_selected:
                 if request.method.lower() in self.http_method_names:
                     handler = getattr(step, request.method.lower(), self.http_method_not_allowed)
@@ -68,3 +69,8 @@ class CheckoutView(View):
                 step.c_is_before = True
                 step.c_resolved_url = step.get_step_url(request)
         raise Http404()
+
+    def redirect(self, url):
+        if 'cart_id' in self.request.GET:
+            url += ('&' if '?' in url else '?') + 'cart_id=' + quote(self.request.GET.get('cart_id'))
+        return redirect(url)

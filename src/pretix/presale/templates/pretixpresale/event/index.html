@@ -115,7 +115,8 @@
                     browser settings.
                 {% endblocktrans %}
                 <br>
-                <a href="{% eventurl event "presale:event.index" %}" class="btn btn-default" target="_blank">
+                <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}{% if "cart_id" in request.GET %}?src=widget&take_cart_id={{ request.GET.cart_id }}{% endif %}"
+                        class="btn btn-primary" target="_blank">
                     {% trans "Open ticket shop in new tab" %}
                 </a>
                 <div class="clearfix"></div>
