@@ -73,7 +73,7 @@ class BaseHTMLMailRenderer:
     def thumbnail_filename(self) -> str:
         """
         A file name discoverable in the static file storage that contains a preview of your renderer. This should
-        be a square.
+        be with aspect resolution 4:3.
         """
         raise NotImplementedError()  # NOQA
 
@@ -86,10 +86,11 @@ class BaseHTMLMailRenderer:
         return True
 
 
-class ClassicMailRenderer(BaseHTMLMailRenderer):
-    verbose_name = _('Classic pretix design')
-    identifier = 'classic'
-    thumbnail_filename = ''
+class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
+
+    @property
+    def template_name(self):
+        raise NotImplemented
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order: Order) -> str:
         body_md = bleach.linkify(markdown_compile(plain_body))
@@ -112,9 +113,16 @@ class ClassicMailRenderer(BaseHTMLMailRenderer):
         if order:
             htmlctx['order'] = order
 
-        tpl = get_template('pretixbase/email/plainwrapper.html')
+        tpl = get_template(self.template_name)
         body_html = inline_css(tpl.render(htmlctx))
         return body_html
+
+
+class ClassicMailRenderer(TemplateBasedMailRenderer):
+    verbose_name = _('pretix default')
+    identifier = 'classic'
+    thumbnail_filename = 'pretixbase/email/thumb.png'
+    template_name = 'pretixbase/email/plainwrapper.html'
 
 
 @receiver(register_html_mail_renderers, dispatch_uid="pretixbase_email_renderers")

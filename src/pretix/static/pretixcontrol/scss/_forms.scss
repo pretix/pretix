@@ -354,3 +354,15 @@ table td > .checkbox input[type="checkbox"] {
     top: 2px;
   }
 }
+.maildesignpreview {
+  label {
+    display: block;
+  }
+  img {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    height: auto;
+    box-shadow: 0 1px 3px 0 #aaa;
+  }
+}
