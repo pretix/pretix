@@ -740,7 +740,6 @@ def send_download_reminders(sender, **kwargs):
 
 class OrderChangeManager:
     error_messages = {
-        'free_to_paid': _('You cannot change a free order to a paid order.'),
         'product_without_variation': _('You need to select a variation of the product.'),
         'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
         'quota_missing': _('There is no quota defined that allows this operation.'),
@@ -904,10 +903,6 @@ class OrderChangeManager:
             avail = quota.availability()
             if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < diff):
                 raise OrderError(self.error_messages['quota'].format(name=quota.name))
-
-    def _check_free_to_paid(self):
-        if self.order.total == Decimal('0.00') and self._totaldiff > 0:
-            raise OrderError(self.error_messages['free_to_paid'])
 
     def _check_paid_price_change(self):
         if self.order.status == Order.STATUS_PAID and self._totaldiff > 0:
@@ -1257,7 +1252,6 @@ class OrderChangeManager:
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
                     raise OrderError(self.error_messages['not_pending_or_paid'])
-                self._check_free_to_paid()
                 self._check_quotas()
                 self._check_complete_cancel()
                 self._perform_operations()
