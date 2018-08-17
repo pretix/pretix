@@ -555,16 +555,19 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op2.price
 
     def test_free_to_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
         self.op1.price = Decimal('0.00')
         self.op1.save()
         self.op2.delete()
         self.order.total = Decimal('0.00')
         self.order.save()
         self.ocm.change_price(self.op1, Decimal('24.00'))
-        with self.assertRaises(OrderError):
-            self.ocm.commit()
+        self.ocm.commit()
         self.op1.refresh_from_db()
-        assert self.op1.price == Decimal('0.00')
+        self.order.refresh_from_db()
+        assert self.op1.price == Decimal('24.00')
+        assert self.order.status == Order.STATUS_PENDING
 
     def test_cancel_all_in_order(self):
         self.ocm.cancel(self.op1)
