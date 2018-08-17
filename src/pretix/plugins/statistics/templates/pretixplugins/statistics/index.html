@@ -63,7 +63,8 @@
         <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
         <script type="application/json" id="obp-data">{{ obp_data|escapejson }}</script>
         <script type="application/text" id="currency">{{ request.event.currency }}</script>
-        <script type="application/javascript" src="{% static "pretixplugins/statistics/statistics.js" %}"></script>
+        <script type="application/javascript" src="{% static "pretixplugins/statistics/statistics.js" %}"
+                defer></script>
     {% else %}
         <div class="empty-collection">
             <p>

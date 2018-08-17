@@ -14,7 +14,8 @@
     		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
 		{% endcompress %}
         {% if DEBUG %}
-            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"
+                    defer></script>
         {% else %}
             <script src="{% statici18n LANGUAGE_CODE %}" async></script>
         {% endif %}

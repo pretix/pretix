@@ -1,4 +1,10 @@
-/*globals $, Morris, gettext*/
+/*globals $, Morris, gettext, django*/
+function gettext(msgid) {
+    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
+        return django.gettext(msgid);
+    }
+    return msgid;
+}
 $(function () {
     $(".chart").css("height", "250px");
     new Morris.Area({
