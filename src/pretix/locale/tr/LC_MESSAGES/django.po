@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-07-19 14:45+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2018-08-17 09:03+0000\n"
+"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -194,21 +194,14 @@ msgid "All payment providers"
 msgstr "Bütün ödeme sağlayıcıları"
 
 #: pretix/base/exporters/invoices.py:97
-#, fuzzy
-#| msgid ""
-#| "Only include invoices for orders that are currently set to this payment "
-#| "provider. Note that this might include some invoices of other payment "
-#| "providers or misses some invoices if the payment provider of an order has "
-#| "been changed and a new invoice has been generated."
 msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
-"Yalnızca şu anda bu ödeme sağlayıcısına ayarlanmış siparişler için faturalar "
-"ekleyin. Diğer ödeme sağlayıcılarının bazı faturalarını kapsayabileceğini "
-"veya siparişin ödeme sağlayıcısı değiştirilmiş ve yeni bir fatura "
-"oluşturulmuşsa bazı faturaları kaçırabileceğini unutmayın."
+"Yalnızca bu ödeme sağlayıcısına en az bir ödeme girişimi olan siparişler "
+"için faturalar ekleyin. Bunun, sonunda, farklı bir sağlayıcıyla tamamen veya "
+"kısmen ödenmiş olan bazı sipariş faturalarını içerebileceğini unutmayın."
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
@@ -341,8 +334,6 @@ msgid "VAT ID"
 msgstr "KDV kimliği"
 
 #: pretix/base/exporters/orderlist.py:78
-#, fuzzy
-#| msgid "Last date of payments"
 msgid "Date of last payment"
 msgstr "Son ödeme tarihi"
 
@@ -375,14 +366,12 @@ msgid "Invoice numbers"
 msgstr "Fatura numaraları"
 
 #: pretix/base/exporters/orderlist.py:157
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of payments and refunds (CSV)"
-msgstr "Siparişlerin listesi (CSV)"
+msgstr "Ödeme ve geri ödeme listesi (CSV)"
 
 #: pretix/base/exporters/orderlist.py:165
 msgid "Only successful payments"
-msgstr ""
+msgstr "Sadece başarılı ödemeler"
 
 #: pretix/base/exporters/orderlist.py:200 pretix/base/models/orders.py:177
 #: pretix/base/models/orders.py:825 pretix/base/models/orders.py:1103
@@ -395,22 +384,16 @@ msgstr "Sipariş"
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "Ödeme numarası"
 
 #: pretix/base/exporters/orderlist.py:200
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Creation date"
-msgstr "İptal tarihi"
+msgstr "Oluşturulma tarihi"
 
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:472
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Completion date"
-msgstr "İptal tarihi"
+msgstr "Tamamlama tarihi"
 
 #: pretix/base/exporters/orderlist.py:201 pretix/base/models/orders.py:821
 #: pretix/base/models/orders.py:1099
@@ -420,7 +403,7 @@ msgstr "İptal tarihi"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "Miktar"
 
 #: pretix/base/exporters/orderlist.py:201
 #: pretix/control/templates/pretixcontrol/order/index.html:404
@@ -428,7 +411,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
-msgstr ""
+msgstr "Ödeme şekli"
 
 #: pretix/base/exporters/orderlist.py:228
 msgid "Quota availabilities (CSV)"
@@ -1311,7 +1294,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:286
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Bu ürünü satın almak onay gerektiriyor"
 
 #: pretix/base/models/items.py:288
 msgid ""
@@ -1320,6 +1303,9 @@ msgid ""
 "completed. You can use this e.g. for discounted tickets that are only "
 "available to specific groups."
 msgstr ""
+"Bu ürün bir siparişin parçasıysa, sipariş \"onay\" durumuna getirilecek ve "
+"ödeme ve tamamlanmadan önce tarafınızdan onaylanması gerekecektir. Bu örn. "
+"Yalnızca belirli gruplara sunulan indirimli biletler için."
 
 #: pretix/base/models/items.py:293
 msgid ""
@@ -1837,11 +1823,8 @@ msgstr ""
 "ödemelerin kabul edilmemesi gerektiğini yapılandırmıştınız."
 
 #: pretix/base/models/orders.py:434
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This order is not yet approved by the event organizer."
-msgstr "Bu kupon, bu etkinlik tarihi için geçerli değil."
+msgstr "Bu sipariş etkinlik düzenleyici tarafından henüz onaylanmadı."
 
 #: pretix/base/models/orders.py:452
 #, python-brace-format
@@ -1888,11 +1871,9 @@ msgstr "Boş, eğer bu ürün giriş bileti değilse"
 #: pretix/base/models/orders.py:808
 msgctxt "payment_state"
 msgid "created"
-msgstr ""
+msgstr "Oluşturuldu"
 
 #: pretix/base/models/orders.py:809
-#, fuzzy
-#| msgid "pending"
 msgctxt "payment_state"
 msgid "pending"
 msgstr "bekleniyor"
@@ -1900,11 +1881,9 @@ msgstr "bekleniyor"
 #: pretix/base/models/orders.py:810
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr ""
+msgstr "onaylandı"
 
 #: pretix/base/models/orders.py:811
-#, fuzzy
-#| msgid "canceled"
 msgctxt "payment_state"
 msgid "canceled"
 msgstr "iptal edildi"
@@ -1912,11 +1891,9 @@ msgstr "iptal edildi"
 #: pretix/base/models/orders.py:812
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "başarısız oldu"
 
 #: pretix/base/models/orders.py:813
-#, fuzzy
-#| msgid "refunded"
 msgctxt "payment_state"
 msgid "refunded"
 msgstr "iade edildi"
@@ -1934,27 +1911,27 @@ msgstr "Siparişiniz için ödeme alındı: %(code)s"
 #: pretix/base/models/orders.py:1071
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "dışarıdan başladı"
 
 #: pretix/base/models/orders.py:1072
 msgctxt "refund_state"
 msgid "created"
-msgstr ""
+msgstr "oluşturuldu"
 
 #: pretix/base/models/orders.py:1073
 msgctxt "refund_state"
 msgid "in transit"
-msgstr ""
+msgstr "transit olarak"
 
 #: pretix/base/models/orders.py:1074
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "tamam"
 
 #: pretix/base/models/orders.py:1075
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "başarısız oldu"
 
 #: pretix/base/models/orders.py:1077
 #, fuzzy
@@ -1971,16 +1948,14 @@ msgid "Organizer"
 msgstr "Organizatör"
 
 #: pretix/base/models/orders.py:1086
-#, fuzzy
-#| msgid "Any customer"
 msgctxt "refund_source"
 msgid "Customer"
-msgstr "Herhangi bir müşteri"
+msgstr "Müşteri"
 
 #: pretix/base/models/orders.py:1087
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "Harici"
 
 #: pretix/base/models/orders.py:1215
 msgid "Payment fee"
@@ -2580,13 +2555,12 @@ msgstr "Sipariş {order.code} değiştirildi."
 
 #: pretix/base/notifications.py:235
 msgid "External refund of payment"
-msgstr ""
+msgstr "Harici ödemenin iadesi"
 
 #: pretix/base/notifications.py:236
-#, fuzzy, python-brace-format
-#| msgid "An unexpected error has occurred."
+#, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "Beklenmeyen bir hata oluştu."
+msgstr "{Order.code} için harici bir geri ödeme gerçekleşti."
 
 #: pretix/base/notifications.py:241
 msgid "Order refunded"
@@ -2698,7 +2672,7 @@ msgstr "Bu faturanın ödemesi zaten alındı."
 
 #: pretix/base/payment.py:575
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr ""
+msgstr "Otomatik ödeme bu ödeme sağlayıcısı tarafından desteklenmez."
 
 #: pretix/base/payment.py:601
 msgid ""
@@ -2718,25 +2692,27 @@ msgstr "Gişe"
 #: pretix/base/payment.py:656 pretix/plugins/manualpayment/__init__.py:9
 #: pretix/plugins/manualpayment/__init__.py:12
 msgid "Manual payment"
-msgstr ""
+msgstr "Manuel ödeme"
 
 #: pretix/base/payment.py:677
 msgid "Payment method name"
-msgstr ""
+msgstr "Ödeme yöntemi adı"
 
 #: pretix/base/payment.py:681
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Ödeme sırasında ödeme işlemi açıklaması"
 
 #: pretix/base/payment.py:682
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Bu metin, kullanıcı ödeme yöntemini seçtiğinde ödeme sırasında gösterilir. "
+"Bu ödeme yöntemi hakkında kısa bir açıklama yapmalıdır."
 
 #: pretix/base/payment.py:687
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Sipariş onay e-postalarında ödeme süreci açıklaması"
 
 #: pretix/base/payment.py:688
 #, python-brace-format
@@ -2746,10 +2722,14 @@ msgid ""
 "payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
+"Bu metin, ödeme onay postaları için {payment_info} yer tutucuya dahil "
+"edilecektir. Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat "
+"vermelidir.{İnsert}, {total}, {currency} ve {total_with_currency} yer "
+"tutucularını kullanabilirsiniz"
 
 #: pretix/base/payment.py:695
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Bekleyen siparişler için ödeme süreci açıklaması"
 
 #: pretix/base/payment.py:696
 #, python-brace-format
@@ -2758,21 +2738,23 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can "
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
+"Bu metin, bekleyen siparişler için sipariş onay sayfasında gösterilecektir. "
+"Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat "
+"vermelidir.{İnsert},{total},{currency} ve {total_with_currency} yer "
+"tutucularını kullanabilirsiniz"
 
 #: pretix/base/payment.py:742
-#, fuzzy
-#| msgid "Settings"
 msgid "Offsetting"
-msgstr "Ayarlar"
+msgstr "Denkleştirme"
 
 #: pretix/base/payment.py:756 pretix/control/views/orders.py:543
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Bulunamayan bir sipariş girdiniz."
 
 #: pretix/base/payment.py:777
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Siparişlere göre dengelendi:%"
 
 #: pretix/base/pdf.py:38
 msgid "Ticket code (barcode content)"
@@ -3349,28 +3331,23 @@ msgid "The new expiry date needs to be in the future."
 msgstr "Yeni sona erme tarihinin gelecekte olması gerekiyor."
 
 #: pretix/base/services/orders.py:180 pretix/base/services/orders.py:256
-#, fuzzy
-#| msgid "This order is not marked as paid."
 msgid "This order is not pending approval."
-msgstr "Bu sipariş ödenmiş olarak işaretlenmez."
+msgstr "Bu sipariş onay bekliyor değil."
 
 #: pretix/base/services/orders.py:219
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "Sipariş iptal edildi: %(code)s"
+msgstr "Sipariş onaylandı ve onaylandı: %(code)"
 
 #: pretix/base/services/orders.py:222
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Siparişiniz ödemeyi bekliyor: %(code)s"
+msgstr "Sipariş onaylandı ve ödeme bekleniyor:%(code)"
 
 #: pretix/base/services/orders.py:296
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Order denied: %(code)s"
-msgstr "Sipariş iptal edildi: %(code)s"
+msgstr "Sipariş reddedildi: %(code)"
 
 #: pretix/base/services/orders.py:325 pretix/presale/views/order.py:573
 #: pretix/presale/views/order.py:601
@@ -3591,18 +3568,7 @@ msgstr ""
 "{event} ekibiniz"
 
 #: pretix/base/settings.py:271
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event}. As you only ordered\n"
-#| "free products, no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3617,29 +3583,19 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"{event} için siparişinizi başarılı bir şekilde aldık. Sadece ücretsiz \n"
-"ürünler sipariş ettiğiniz için bir ödeme gerekmemektedir.\n"
+"{event} siparişiniz başarılı oldu. Sadece bedava ürünler sipariş ettiğin "
+"gibi\n"
+"ödeme gerekli değildir.\n"
 "\n"
-"Bu adresten sipariş ayrıntılarınızı değiştirebilir ve siparişinizin durumunu "
-"görebilirsiniz\n"
-"{url}\n"
+"Sipariş ayrıntılarınızı değiştirebilir ve siparişinizin durumunu "
+"görebilirsiniz.\n"
+"{URL}\n"
 "\n"
 "En iyi dileklerimizle,\n"
 "{event} ekibiniz"
 
 #: pretix/base/settings.py:284
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event}. As you only ordered\n"
-#| "free products, no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3655,8 +3611,9 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"{event} için siparişinizi başarılı bir şekilde aldık. Sadece ücretsiz \n"
-"ürünler sipariş ettiğiniz için bir ödeme gerekmemektedir.\n"
+"{event} için siparişinizi başarıyla aldık. Sipariş ettiğinden beri\n"
+"Etkinlik organizatörünün onayını gerektiren bir ürün, size\n"
+"sabırlı olun ve bir sonraki e-postamızı bekleyin.\n"
 "\n"
 "Bu adresten sipariş ayrıntılarınızı değiştirebilir ve siparişinizin durumunu "
 "görebilirsiniz\n"
@@ -3847,20 +3804,7 @@ msgstr ""
 "{event} ekibiniz"
 
 #: pretix/base/settings.py:392
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we successfully received your order for {event} with a total value\n"
-#| "of {total_with_currency}. Please complete your payment before {date}.\n"
-#| "\n"
-#| "{payment_info}\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3878,31 +3822,20 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"{event} için {total_with_currency} tutarındaki siparşinizi başarılı bir "
-"şekilde aldık. \n"
-"Lütfen ödemenizi {date} tarihinden önce tamamlayınız.\n"
+"{event} 1 için siparişinizi onayladık ve sizi memnuniyetle karşılayacağız\n"
+"bizim etkinliğimizde.\n"
 "\n"
-"{payment_info}\n"
+"Lütfen {date}'den önce siparişiniz için ödeme yaparak devam edin.\n"
 "\n"
-"Bu adresten sipariş detaylarınızı görebilir ve siparişinizin durumunu "
-"değiştirebilirsiniz\n"
+"Bir ödeme yöntemi seçebilir ve ödeme işlemini buradan yapabilirsiniz:\n"
+"\n"
 "{url}\n"
 "\n"
 "En iyi dileklerimizle,\n"
 "{event} ekibiniz"
 
 #: pretix/base/settings.py:408
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order {code} for {event} has been canceled.\n"
-#| "\n"
-#| "You can view the details of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -3919,9 +3852,12 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"{event} için {code} sipraşiniz iptal edilmiştir.\n"
+"Maalesef, {event} için sipariş isteğinizi reddettik.\n"
 "\n"
-"Sipraşinizinin detaylarını bu adresten inceleyebilirsiniz\n"
+"{comment}\n"
+"\n"
+"Siparişinizin ayrıntılarını buradan görebilirsiniz:\n"
+"\n"
 "{url}\n"
 "\n"
 "En iyi dileklerimizle\n"
@@ -4766,14 +4702,12 @@ msgid "Require invoice address"
 msgstr "Fatura adresi iste"
 
 #: pretix/control/forms/event.py:522
-#, fuzzy
-#| msgid "Require invoice address"
 msgid "Require a business addresses"
-msgstr "Fatura adresi iste"
+msgstr "Bir işletme adresi gerekmektedir"
 
 #: pretix/control/forms/event.py:523
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Bu, kullanıcıların bir şirket adı girmesini gerektirir."
 
 #: pretix/control/forms/event.py:528
 msgid "Require customer name"
@@ -5107,63 +5041,47 @@ msgstr ""
 "gönderilecektir. Alan boşsa, posta asla gönderilmez."
 
 #: pretix/control/forms/event.py:788
-#, fuzzy
-#| msgid "Placed order"
 msgid "Received order"
-msgstr "Yerleştirilen sipariş"
+msgstr "Alınan sipariş"
 
 #: pretix/control/forms/event.py:791
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "Available placeholders: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
-"Mevcut yer tutucuları: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"Kullanılabilir yer tutucuları: {event}, {total_with_currency}, {total}, "
+"{currency}, {date}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:797
-#, fuzzy
-#| msgid "Free order"
 msgid "Approved order"
-msgstr "Bedava sipariş"
+msgstr "Onaylanan sipariş"
 
 #: pretix/control/forms/event.py:800
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from above instead. Available placeholders: {event}, "
 "{total_with_currency}, {total}, {currency}, {date}, {payment_info}, {url}, "
 "{invoice_name}, {invoice_company}"
 msgstr ""
-"Mevcut yer tutucuları: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"Bu sadece ücretsiz olmayan siparişler için gönderilecektir. Ücretsiz "
+"siparişler, bunun yerine ücretsiz sipariş şablonunu alır. Kullanılabilir yer "
+"tutucuları: {event}, {total_with_currency}, {total}, {currency}, {date}, "
+"{payment_info}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:807
-#, fuzzy
-#| msgid "Paid order"
 msgid "Denied order"
-msgstr "Ödenmiş sipariş"
+msgstr "Sipariş reddedildi"
 
 #: pretix/control/forms/event.py:810
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Available placeholders: {event}, {total_with_currency}, {total}, "
-#| "{currency}, {date}, {payment_info}, {url}, {invoice_name}, "
-#| "{invoice_company}"
+#, python-brace-format
 msgid ""
 "Available placeholders: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {comment}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
-"Mevcut yer tutucuları: {event}, {total_with_currency}, {total}, {currency}, "
-"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
+"Uygun yer tutucuları: {event}, {total_with_currency}, {total}, {currency}, "
+"{date}, {comment}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:816
 msgid "Use custom SMTP server"
@@ -5529,22 +5447,16 @@ msgstr "Tüm tarihler"
 #: pretix/control/forms/filter.py:209
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
-#, fuzzy
-#| msgid "pending"
 msgid "Approval pending"
-msgstr "bekleniyor"
+msgstr "Onay Bekliyor"
 
 #: pretix/control/forms/filter.py:210
-#, fuzzy
-#| msgid "paid"
 msgid "Overpaid"
-msgstr "ödenmiş"
+msgstr "Fazla ödenmiş"
 
 #: pretix/control/forms/filter.py:211
-#, fuzzy
-#| msgid "unpaid"
 msgid "Underpaid"
-msgstr "ödenmemiş"
+msgstr "Az ödenmiş"
 
 #: pretix/control/forms/filter.py:306 pretix/control/forms/filter.py:311
 #: pretix/control/forms/filter.py:474 pretix/control/forms/filter.py:479
@@ -5719,10 +5631,8 @@ msgid "Any product in quota \"{quota}\""
 msgstr "Kotadaki herhangi bir ürün \"{quota}\""
 
 #: pretix/control/forms/filter.py:851
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Refund status"
-msgstr "Check-in durumu"
+msgstr "İade durumu"
 
 #: pretix/control/forms/filter.py:853
 #, fuzzy
@@ -13453,7 +13363,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:309
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe, kartınızda bir hata bildirdi: %"
 
 #: pretix/plugins/stripe/payment.py:324 pretix/plugins/stripe/payment.py:438
 #: pretix/plugins/stripe/payment.py:602
@@ -13461,6 +13371,8 @@ msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Stripe ile iletişimde sorun vardı. Lütfen tekrar deneyin ve bu sorun devam "
+"ederse bizimle iletişime geçin."
 
 #: pretix/plugins/stripe/payment.py:342
 msgid ""
@@ -13682,7 +13594,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "Kredi kartı ödemesi için lütfen JavaScript'i açın."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:10
@@ -13702,6 +13614,8 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Ödemeniz Stripe, Inc. tarafından işlenecektir. Kredi kartı verileriniz "
+"doğrudan Stripe'e iletilecek ve sunucularımıza asla dokunmayacaktır."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:28
 msgid "Please continue below to start the credit card payment."
@@ -14847,11 +14761,11 @@ msgstr ""
 
 #: pretix/settings.py:355
 msgid "English"
-msgstr ""
+msgstr "İngilizce"
 
 #: pretix/settings.py:356
 msgid "German"
-msgstr ""
+msgstr "Almanca"
 
 #: pretix/settings.py:357
 msgid "German (informal)"
