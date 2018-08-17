@@ -396,26 +396,27 @@ var shared_methods = {
             this.resume();
         } else {
             var url = this.$root.formTarget + "&locale=" + lang + "&ajax=1";
-            this.$root.frame_loading = true;
+            this.$root.overlay.frame_loading = true;
+
             this.async_task_interval = 100;
             api._postFormJSON(url, this.$refs.form, this.buy_callback, this.buy_error_callback);
         }
     },
     buy_error_callback: function (xhr, data) {
-        this.$root.error_message = strings['cart_error'];
-        this.$root.frame_loading = false;
+        this.$root.overlay.error_message = strings['cart_error'];
+        this.$root.overlay.frame_loading = false;
     },
     buy_check_error_callback: function (xhr, data) {
         if (xhr.status == 200 || (xhr.status >= 400 && xhr.status < 500)) {
-            this.$root.error_message = strings['cart_error'];
-            this.$root.frame_loading = false;
+            this.$root.overlay.error_message = strings['cart_error'];
+            this.$root.overlay.frame_loading = false;
         } else {
             this.async_task_timeout = window.setTimeout(this.buy_check, 1000);
         }
     },
     buy_callback: function (data) {
         if (data.redirect) {
-            var iframe = this.$refs['frame-container'].children[0];
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
             this.$root.cart_id = data.cart_id;
             setCookie(this.$root.cookieName, data.cart_id, 30);
             if (data.redirect.substr(0, 1) === '/') {
@@ -429,11 +430,11 @@ var shared_methods = {
             }
             if (data.success === false) {
                 url = url.replace(/checkout\/start/g, "");
-                this.$root.error_message = data.message;
+                this.$root.overlay.error_message = data.message;
                 if (data.has_cart) {
-                    this.$root.error_url_after = url;
+                    this.$root.overlay.error_url_after = url;
                 }
-                this.$root.frame_loading = false;
+                this.$root.overlay.frame_loading = false;
             } else {
                 iframe.src = url;
             }
@@ -449,17 +450,6 @@ var shared_methods = {
     buy_check: function () {
         api._getJSON(this.async_task_check_url, this.buy_callback, this.buy_check_error_callback);
     },
-    errorContinue: function () {
-        var iframe = this.$refs['frame-container'].children[0];
-        iframe.src = this.$root.error_url_after;
-        this.$root.frame_loading = true;
-        this.$root.error_message = null;
-        this.$root.error_url_after = null;
-    },
-    errorClose: function () {
-        this.$root.error_message = null;
-        this.$root.error_url_after = null;
-    },
     redeem: function (event) {
         if (this.$root.useIframe) {
             event.preventDefault();
@@ -467,30 +457,20 @@ var shared_methods = {
             return;
         }
         var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
-        var iframe = this.$refs['frame-container'].children[0];
-        this.$root.frame_loading = true;
+        var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+        this.$root.overlay.frame_loading = true;
         iframe.src = redirect_url;
     },
     resume: function () {
         var redirect_url = this.$root.event_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
         if (this.$root.useIframe) {
-            var iframe = this.$refs['frame-container'].children[0];
-            this.$root.frame_loading = true;
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            this.$root.overlay.frame_loading = true;
             iframe.src = redirect_url;
         } else {
             window.open(redirect_url);
         }
     },
-    close: function () {
-        this.$root.frame_shown = false;
-        this.$root.reload();
-    },
-    iframeLoaded: function () {
-        if (this.$root.frame_loading) {
-            this.$root.frame_loading = false;
-            this.$root.frame_shown = true;
-        }
-    }
 };
 
 var shared_widget_data = function () {
@@ -501,21 +481,6 @@ var shared_widget_data = function () {
         async_task_interval: 100,
         voucher: null,
     }
-};
-
-var shared_widget_computed = {
-    frameClasses: function () {
-        return {
-            'pretix-widget-frame-holder': true,
-            'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
-        };
-    },
-    alertClasses: function () {
-        return {
-            'pretix-widget-alert-holder': true,
-            'pretix-widget-alert-shown': this.$root.error_message,
-        };
-    },
 };
 
 var shared_loading_fragment = (
@@ -531,7 +496,7 @@ var shared_iframe_fragment = (
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
     + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
-    + '        :name="$root.widget_id" src="about:blank" v-once>'
+    + '        :name="$root.parent.widget_id" src="about:blank" v-once>'
     + 'Please enable frames in your browser!'
     + '</iframe>'
     + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">X</a></div>'
@@ -551,6 +516,51 @@ var shared_alert_fragment = (
     + '<svg width="64" height="64" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg" class="pretix-widget-alert-icon"><path style="fill:#ffffff;" d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z" /><path class="pretix-widget-primary-color" d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z"/></svg>'
     + '</div>'
 );
+
+Vue.component('pretix-overlay', {
+    template: ('<div class="pretix-widget-overlay">'
+        + shared_iframe_fragment
+        + shared_alert_fragment
+        + '</div>'
+    ),
+    computed: {
+        frameClasses: function () {
+            return {
+                'pretix-widget-frame-holder': true,
+                'pretix-widget-frame-shown': this.$root.frame_shown || this.$root.frame_loading,
+            };
+        },
+        alertClasses: function () {
+            return {
+                'pretix-widget-alert-holder': true,
+                'pretix-widget-alert-shown': this.$root.error_message,
+            };
+        },
+    },
+    methods: {
+        errorClose: function () {
+            this.$root.error_message = null;
+            this.$root.error_url_after = null;
+        },
+        errorContinue: function () {
+            var iframe = this.$refs['frame-container'].children[0];
+            iframe.src = this.$root.error_url_after;
+            this.$root.frame_loading = true;
+            this.$root.error_message = null;
+            this.$root.error_url_after = null;
+        },
+        close: function () {
+            this.$root.frame_shown = false;
+            this.$root.parent.reload();
+        },
+        iframeLoaded: function () {
+            if (this.$root.frame_loading) {
+                this.$root.frame_loading = false;
+                this.$root.frame_shown = true;
+            }
+        }
+    }
+});
 
 Vue.component('pretix-widget', {
     template: ('<div class="pretix-widget-wrapper">'
@@ -592,14 +602,11 @@ Vue.component('pretix-widget', {
         + strings.poweredby
         + '</div>'
         + '</div>'
-        + shared_iframe_fragment
-        + shared_alert_fragment
         + '</div>'
         + '</div>'
     ),
     data: shared_widget_data,
     methods: shared_methods,
-    computed: shared_widget_computed,
 });
 
 Vue.component('pretix-button', {
@@ -613,14 +620,11 @@ Vue.component('pretix-button', {
         + '</form>'
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
-        + shared_iframe_fragment
-        + shared_alert_fragment
         + '</div>'
         + '</div>'
     ),
     data: shared_widget_data,
     methods: shared_methods,
-    computed: shared_widget_computed,
 });
 
 /* Function to create the actual Vue instances */
@@ -630,8 +634,8 @@ var shared_root_methods = {
         if (this.$root.useIframe) {
             event.preventDefault();
             var url = event.target.attributes.href.value;
-            this.$children[0].$refs['frame-container'].children[0].src = url;
-            this.frame_loading = true;
+            this.$root.overlay.$children[0].$refs['frame-container'].children[0].src = url;
+            this.$root.overlay.frame_loading = true;
         } else {
             return;
         }
@@ -724,6 +728,27 @@ var shared_root_computed = {
     }
 };
 
+var create_overlay = function (app) {
+    var elem = document.createElement('pretix-overlay');
+    document.body.appendChild(elem);
+
+    var framechild = new Vue({
+        el: elem,
+        data: function () {
+            return {
+                parent: app,
+                frame_loading: false,
+                frame_shown: false,
+                error_url_after: null,
+                error_message: null,
+            }
+        },
+        methods: {
+        }
+    });
+    app.$root.overlay = framechild;
+};
+
 var create_widget = function (element) {
     var event_url = element.attributes.event.value;
     if (!event_url.match(/\/$/)) {
@@ -755,14 +780,11 @@ var create_widget = function (element) {
                 display_add_to_cart: false,
                 loading: 1,
                 widget_id: 'pretix-widget-' + widget_id,
-                frame_loading: false,
-                frame_shown: false,
-                error_message: null,
-                error_url_after: null,
                 vouchers_exist: false,
                 disable_vouchers: disable_vouchers,
                 cart_exists: false,
-                itemcount: 0
+                itemcount: 0,
+                overlay: null
             }
         },
         created: function () {
@@ -771,6 +793,7 @@ var create_widget = function (element) {
         computed: shared_root_computed,
         methods: shared_root_methods
     });
+    create_overlay(app);
     return app;
 };
 
@@ -810,10 +833,6 @@ var create_button = function (element) {
                 items: items,
                 error: null,
                 widget_id: 'pretix-widget-' + widget_id,
-                frame_loading: false,
-                frame_shown: false,
-                error_message: null,
-                error_url_after: null,
                 button_text: button_text
             }
         },
@@ -822,6 +841,7 @@ var create_button = function (element) {
         computed: shared_root_computed,
         methods: shared_root_methods
     });
+    create_overlay(app);
     return app;
 };
 
