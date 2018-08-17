@@ -30,11 +30,11 @@ from pretix.base.services.tickets import (
 )
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.base.views.mixins import OrderQuestionsViewMixin
+from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.views import CartMixin, EventViewMixin
-from pretix.presale.views.tasks import AsyncAction
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 

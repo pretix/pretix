@@ -21,12 +21,12 @@ from pretix.base.models import (
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, clear_cart, remove_cart_position,
 )
+from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     EventViewMixin, allow_cors_if_namespaced, allow_frame_if_namespaced,
     iframe_entry_view_wrapper,
 )
-from pretix.presale.views.tasks import AsyncAction
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )

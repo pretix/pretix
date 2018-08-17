@@ -4,8 +4,8 @@ from django.template.loader import get_template
 from pretix.base.i18n import language
 from pretix.base.models import LogEntry, NotificationSetting, User
 from pretix.base.notifications import Notification, get_all_notification_types
-from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.services.mail import mail_send_task
+from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.celery_app import app
 from pretix.helpers.urls import build_absolute_uri
 

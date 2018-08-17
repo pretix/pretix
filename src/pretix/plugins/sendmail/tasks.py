@@ -4,8 +4,8 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import Event, InvoiceAddress, Order, User
-from pretix.base.services.tasks import ProfiledTask
 from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.tasks import ProfiledTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
