@@ -42,7 +42,8 @@ class EventPluginSignal(django.dispatch.Signal):
                 searchpath, _ = searchpath.rsplit(".", 1)
 
         # Only fire receivers from active plugins and core modules
-        if core_module or (sender and app and app.name in sender.get_plugins()):
+        excluded = settings.PRETIX_PLUGINS_EXCLUDE
+        if core_module or (sender and app and app.name in sender.get_plugins() and app.name not in excluded):
             if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                 return True
         return False

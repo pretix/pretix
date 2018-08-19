@@ -99,6 +99,7 @@ CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists')
+PRETIX_PLUGINS_EXCLUDE = config.get('pretix', 'plugins_exclude', fallback='').split(',')
 
 FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 

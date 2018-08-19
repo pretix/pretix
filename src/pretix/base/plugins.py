@@ -2,6 +2,7 @@ from enum import Enum
 from typing import List
 
 from django.apps import apps
+from django.conf import settings
 
 
 class PluginType(Enum):
@@ -26,5 +27,7 @@ def get_all_plugins() -> List[type]:
             meta = app.PretixPluginMeta
             meta.module = app.name
             meta.app = app
+            if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
+                continue
             plugins.append(meta)
     return plugins
