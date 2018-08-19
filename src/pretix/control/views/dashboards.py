@@ -16,6 +16,7 @@ from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext_lazy as _, ungettext
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     Item, Order, OrderPosition, OrderRefund, RequiredAction, SubEvent, Voucher,
     WaitingListEntry,
@@ -89,7 +90,7 @@ def base_widgets(sender, subevent=None, **kwargs):
         },
         {
             'content': NUM_WIDGET.format(
-                num=formats.localize(rev), text=_('Total revenue ({currency})').format(currency=sender.currency)),
+                num=formats.localize(round_decimal(rev, sender.currency)), text=_('Total revenue ({currency})').format(currency=sender.currency)),
             'display_size': 'small',
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
