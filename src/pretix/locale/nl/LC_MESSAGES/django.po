@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-20 11:47+0000\n"
+"PO-Revision-Date: 2018-08-20 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -4983,7 +4983,7 @@ msgstr "BCC-adres"
 
 #: pretix/control/forms/event.py:674
 msgid "All emails will be sent to this address as a Bcc copy"
-msgstr "Alle e-mails zullen als BCC-kopie worden verstuurd naar dit adres."
+msgstr "Alle e-mails zullen als BCC-kopie worden verstuurd naar dit adres"
 
 #: pretix/control/forms/event.py:679
 msgid "Signature"
@@ -9714,7 +9714,7 @@ msgstr "Ja, annuleer betaling"
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
 msgid "Mark payment as complete"
-msgstr "Markeer betaling als voltooid."
+msgstr "Markeer betaling als voltooid"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
 msgid "Do you really want to mark this payment as complete?"
@@ -11417,7 +11417,7 @@ msgstr "Welkom bij pretix! U bent nu lid van het team \"{}\"."
 
 #: pretix/control/views/auth.py:199 pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
-msgstr "We hebben u in de afgelopen 24 uur al een email verstuurd."
+msgstr "We hebben u in de afgelopen 24 uur al een email gestuurd."
 
 #: pretix/control/views/auth.py:207 pretix/control/views/orders.py:877
 #: pretix/control/views/users.py:90
@@ -13728,7 +13728,7 @@ msgstr "{event}-{code}"
 #: pretix/plugins/stripe/payment.py:309
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripe meldde een probleem met uw kaart: %s"
+msgstr "Stripe meldde een fout met uw kaart: %s"
 
 #: pretix/plugins/stripe/payment.py:324 pretix/plugins/stripe/payment.py:438
 #: pretix/plugins/stripe/payment.py:602
@@ -14821,7 +14821,7 @@ msgstr "Voltooi uw betaling vóór %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:70
 msgid "Re-try payment or choose another payment method"
-msgstr "Probeer het opnieuw of probeer een andere betalingsmethode."
+msgstr "Probeer het opnieuw of probeer een andere betalingsmethode"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
