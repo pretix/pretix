@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:13+0000\n"
-"PO-Revision-Date: 2018-08-20 11:54+0000\n"
+"PO-Revision-Date: 2018-08-20 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -309,7 +309,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr "Afrekenen voortzetten"
+msgstr "Doorgaan met afrekenen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
