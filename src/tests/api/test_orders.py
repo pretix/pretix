@@ -2269,6 +2269,29 @@ def test_refund_create(token_client, organizer, event, order):
     assert r.source == "admin"
     assert r.info_data == {"foo": "bar"}
     assert r.payment.local_id == 2
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_refund_create_mark_refunded(token_client, organizer, event, order):
+    res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
+    res['mark_refunded'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    r = order.refunds.get(local_id=resp.data['local_id'])
+    assert r.provider == "manual"
+    assert r.amount == Decimal("23.00")
+    assert r.state == "created"
+    assert r.source == "admin"
+    assert r.info_data == {"foo": "bar"}
+    assert r.payment.local_id == 2
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_REFUNDED
 
 
 @pytest.mark.django_db

@@ -617,6 +617,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return ctx
 
     def create(self, request, *args, **kwargs):
+        mark_refunded = request.data.pop('mark_refunded', False)
         serializer = OrderRefundCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -632,6 +633,12 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 user=request.user if request.user.is_authenticated else None,
                 auth=request.auth
             )
+            if mark_refunded:
+                mark_order_refunded(
+                    r.order,
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=(request.auth if request.auth else None),
+                )
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

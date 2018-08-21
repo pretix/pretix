@@ -1594,7 +1594,8 @@ Order refund endpoints
         "amount": "23.00",
         "payment": 1,
         "execution_date": null,
-        "provider": "manual"
+        "provider": "manual",
+        "mark_refunded": false
       }
 
    **Example response**:
