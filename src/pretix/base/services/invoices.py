@@ -21,7 +21,7 @@ from pretix.base.models import (
     Invoice, InvoiceAddress, InvoiceLine, Order, OrderPayment,
 )
 from pretix.base.models.tax import EU_CURRENCIES
-from pretix.base.services.async import TransactionAwareTask
+from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app

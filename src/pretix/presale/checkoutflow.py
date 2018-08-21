@@ -17,6 +17,7 @@ from pretix.base.services.cart import (
     get_fees, set_cart_addons, update_tax_rates,
 )
 from pretix.base.services.orders import perform_order
+from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     AddOnsForm, ContactForm, InvoiceAddressForm, InvoiceNameForm,
@@ -26,7 +27,6 @@ from pretix.presale.signals import (
     order_meta_from_request, question_form_fields,
 )
 from pretix.presale.views import CartMixin, get_cart, get_cart_total
-from pretix.presale.views.async import AsyncAction
 from pretix.presale.views.cart import (
     cart_session, create_empty_cart_id, get_or_create_cart_id,
 )

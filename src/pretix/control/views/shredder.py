@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from pretix.base.models import CachedFile
 from pretix.base.services.shredder import export, shred
 from pretix.base.shredder import ShredError, shred_constraints
-from pretix.base.views.async import AsyncAction
+from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 logger = logging.getLogger(__name__)

@@ -5,7 +5,7 @@ from django.utils.timezone import override
 
 from pretix.base.i18n import language
 from pretix.base.models import CachedFile, Event, cachedfile_name
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.signals import register_data_exporters
 from pretix.celery_app import app
 

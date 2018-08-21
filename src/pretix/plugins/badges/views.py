@@ -21,7 +21,7 @@ from reportlab.pdfgen import canvas
 
 from pretix.base.models import CachedFile, OrderPosition
 from pretix.base.pdf import Renderer
-from pretix.base.views.async import AsyncAction
+from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.pdf import BaseEditorView
 from pretix.plugins.badges.forms import BadgeLayoutForm

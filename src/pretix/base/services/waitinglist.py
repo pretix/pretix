@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 from pretix.base.models import Event, User, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 

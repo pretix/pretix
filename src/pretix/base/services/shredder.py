@@ -11,7 +11,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
-from pretix.base.services.async import ProfiledTask
+from pretix.base.services.tasks import ProfiledTask
 from pretix.base.shredder import ShredError
 from pretix.celery_app import app
 
