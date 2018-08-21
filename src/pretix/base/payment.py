@@ -609,7 +609,7 @@ class FreeOrderProvider(BasePaymentProvider):
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
-            payment.confirm()
+            payment.confirm(send_mail=False)
         except Quota.QuotaExceededException as e:
             raise PaymentException(str(e))
 
@@ -636,7 +636,7 @@ class BoxOfficeProvider(BasePaymentProvider):
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
-            payment.confirm()
+            payment.confirm(send_mail=False)
         except Quota.QuotaExceededException as e:
             raise PaymentException(str(e))
 

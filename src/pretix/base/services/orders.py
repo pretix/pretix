@@ -532,7 +532,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         if payment_provider:
             order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider=payment_provider,
+                provider=payment_provider.identifier,
                 amount=total,
                 fee=pf
             )
