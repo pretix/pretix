@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-17 23:00+0000\n"
+"PO-Revision-Date: 2018-08-24 01:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -1934,15 +1934,11 @@ msgid "failed"
 msgstr "başarısız oldu"
 
 #: pretix/base/models/orders.py:1077
-#, fuzzy
-#| msgid "canceled"
 msgctxt "refund_state"
 msgid "canceled"
 msgstr "iptal edildi"
 
 #: pretix/base/models/orders.py:1085
-#, fuzzy
-#| msgid "Organizer"
 msgctxt "refund_source"
 msgid "Organizer"
 msgstr "Organizatör"
@@ -6406,15 +6402,11 @@ msgstr ""
 "için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:194
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received and requires payment."
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
-"Kullanıcıya siparişin alındığını ve ödeme yapılmasını istediğini bildirmek "
+"Kullanıcıya siparişin alındığını ve ödeme yapılması gerektiğini bildirmek "
 "için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:197
@@ -10332,6 +10324,9 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"Lütfen <strong>% (etkinlik)</ strong>etkinliğinden seçilen kategorileri "
+"silmek istediğinizden emin olduğunuzdan emin olun. Bu durumda, lütfen "
+"kullanıcı şifrenizi buraya girin:"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -10341,12 +10336,19 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"Bu özellik, kişisel verilerin bu etkinlikten kaldırılmasına izin verir. Önce "
+"hangi tür verilerin parçalanmasını istediğinizi seçeceksiniz, ardından "
+"etkilenen verileri indirebileceksiniz ve indirme işlemini onayladıktan "
+"sonra, veriler sunucunun veritabanından kaldırılacaktır. Veriler, sınırlı "
+"bir süre için yedeklemelerde mevcut olabilir."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
 msgstr ""
+"Bunun kullanılması, etkinliğiniz için siparişleri kaldırmayacak, yalnızca "
+"kişisel kişilere bağlanabilecek verileri temizler."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
 msgid ""
@@ -10354,6 +10356,10 @@ msgid ""
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
+"Mevzuatınızdaki etkilenen verileri silmenize izin verilip verilmediğini "
+"kontrol etmek sizin sorumluluğunuzdadır, örn. vergilendirme sebeplerinden "
+"dolayı. Birçok ülkede, bir denetim durumunda bazı verileri canlı sistemde "
+"tutmanız gerekir."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -10361,26 +10367,31 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
+"Çoğu veri kategorisi için, verileri çevrimdışı depolamak için kısmen "
+"indirebileceksiniz. Bazı veri türleri (bazı ödeme bilgileri gibi) ve geçmiş "
+"günlük verileri şu anda indirilemez."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 msgid "Data selection"
-msgstr ""
+msgstr "Veri seçimi"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:63
 msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
 msgstr ""
+"Vergi denetiminde ihtiyaç duyabileceğiniz için bu verileri kaldırmamanızı "
+"öneririz."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr ""
+msgstr "Birden çok tarih oluştur"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
 msgid "Repetition rule"
-msgstr ""
+msgstr "Tekrarlama kuralı"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:80
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
