@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-24 01:00+0000\n"
+"PO-Revision-Date: 2018-08-25 00:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -10397,67 +10397,67 @@ msgstr "Tekrarlama kuralı"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "%(Başlangıç) başlayarak her %(aralık)%(aralıkla) tekrarlayın."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:88
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:199
 msgid "At the same date every year"
-msgstr ""
+msgstr "Her yıl aynı tarihte"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:92
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:203
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "%(Setpos)%(hafta içi)%(ay) tarihinde"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:102
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:213
 msgid "At the same date every month"
-msgstr ""
+msgstr "Her ay aynı tarihte"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "%(Setpos) %(hafta içi)üzerinde"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "%(Sayım) kez tekrarlayın"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:125
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:236
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "%(Kadar) kadar tekrarlayın"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
 msgctxt "subevent"
 msgid "Preview"
-msgstr ""
+msgstr "Ön izleme"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:359
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:117
 msgid "Add a new quota"
-msgstr ""
+msgstr "Yeni bir kota ekle"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:363
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:121
 msgid "Item prices"
-msgstr ""
+msgstr "Ürün fiyatları"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:432
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:190
 msgid "Add a new check-in list"
-msgstr ""
+msgstr "Yeni bir check-in listesi ekle"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
 msgctxt "subevent"
 msgid "Delete date"
-msgstr ""
+msgstr "Tarihi sil"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:9
 #, python-format
