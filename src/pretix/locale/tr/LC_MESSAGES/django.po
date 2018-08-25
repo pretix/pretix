@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-25 00:00+0000\n"
+"PO-Revision-Date: 2018-08-26 04:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -10463,74 +10463,77 @@ msgstr "Tarihi sil"
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
 msgstr ""
+"<Strong>%(subevent)</ strong>tarihini silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
 msgctxt "subevent"
 msgid "Delete dates"
-msgstr ""
+msgstr "Tarihleri sil"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:10
 msgid "Are you sure you want to delete the following dates?"
-msgstr ""
+msgstr "Aşağıdaki tarihleri silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
 msgstr ""
+"Aşağıdaki tarihler zaten siparişleri olduğu için silinemez, ancak bunun "
+"yerine devre dışı bırakılır."
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 msgctxt "subevent"
 msgid "Create date"
-msgstr ""
+msgstr "Oluşturma Tarihi"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:200
 msgctxt "subevent"
 msgid "Date history"
-msgstr ""
+msgstr "Tarih geçmişi"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:11
 msgid "You haven't created any dates for this event series yet."
-msgstr ""
+msgstr "Bu etkinlik dizisi için henüz bir tarih oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:18
 #: pretix/control/templates/pretixcontrol/subevents/index.html:46
 msgctxt "subevent"
 msgid "Create a new date"
-msgstr ""
+msgstr "Yeni bir tarih oluştur"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:21
 #: pretix/control/templates/pretixcontrol/subevents/index.html:49
 msgctxt "subevent"
 msgid "Create many new dates"
-msgstr ""
+msgstr "Birçok yeni tarih oluştur"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:66
 msgid "Begin"
-msgstr ""
+msgstr "Başla"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:129
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr ""
+msgstr "Yeni bir tarih için şablon olarak kullan"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:134
 msgctxt "subevent"
 msgid "Use as a template for many new dates"
-msgstr ""
+msgstr "Birçok yeni tarih için şablon olarak kullan"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:148
 msgid "Delete selected"
-msgstr ""
+msgstr "Silme seçildi"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:151
 msgid "Enable selected"
-msgstr ""
+msgstr "Seçilenleri etkinleştir"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Disable selected"
-msgstr ""
+msgstr "Seçilenleri devre dışı bırak"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -10539,140 +10542,156 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:6
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:8
 msgid "Add a two-factor authentication device"
-msgstr ""
+msgstr "İki faktörlü bir kimlik doğrulama cihazı ekle"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
-msgstr ""
+msgstr "Bu cihazı kurmak için lütfen aşağıdaki adımları izleyin:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
 msgid "Download the Google Authenticator application to your phone:"
-msgstr ""
+msgstr "Google Authenticator uygulamasını telefonunuza indirin:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 msgid "Android (Google Play)"
-msgstr ""
+msgstr "Android (Google Play)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:23
 msgid "Android (F-Droid)"
-msgstr ""
+msgstr "Android (F-Droid)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:28
 msgid "iOS (iTunes)"
-msgstr ""
+msgstr "iOS (iTunes)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:33
 msgid "Blackberry (Link via Google)"
-msgstr ""
+msgstr "Blackberry (Link via Google)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
-msgstr ""
+msgstr "Aşağıdaki barkodu tarayarak uygulamaya yeni bir hesap ekleyin:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 msgid "Can't scan the barcode?"
-msgstr ""
+msgstr "Barkodu tarayamıyor musunuz?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:49
 msgid "Use the \"provide a key\" option of your authenticator app."
 msgstr ""
+"Kimlik doğrulama uygulamanızın \"bir anahtar sağlama\" seçeneğini kullanın."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:52
 msgid "In \"Account name\", type your login name for pretix."
-msgstr ""
+msgstr "\"Hesap adı\" nda, pretix için giriş adınızı yazın."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:55
 msgid "In \"Secret\"/\"Account Key\", enter the following code:"
-msgstr ""
+msgstr "\"Gizli\" / \"Hesap Anahtarı\" nda, aşağıdaki kodu girin:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:60
 msgid "copy"
-msgstr ""
+msgstr "Kopyala"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:68
 msgid ""
 "If present, make sure \"Time-based\"/\"TOTP\" and 6 digit codes are selected."
 msgstr ""
+"Varsa, \"Zamana bağlı\" / \"TOTP\" ve 6 haneli kodların seçildiğinden emin "
+"olun."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:74
 msgid "Enter the displayed code here:"
-msgstr ""
+msgstr "Görüntülenen kodu buraya girin:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr ""
+msgstr "Gelecekteki girişler için ikinci faktör gerektir"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
 "Please connect your U2F device. If it has a button, touch it now. You might "
 "have to unplug the device and plug it back in again."
 msgstr ""
+"Lütfen U2F cihazınızı bağlayın. Bir tuşa sahipse, şimdi ona dokunun. Cihazı "
+"fişten çekip tekrar takmanız gerekebilir."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:26
 msgid "Device registration failed."
-msgstr ""
+msgstr "Cihaz kaydı başarısız."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:6
 msgid "Delete a two-factor authentication device"
-msgstr ""
+msgstr "İki faktörlü bir kimlik doğrulama cihazını sil"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
+"\"%(Cihaz)\" kimlik doğrulama cihazını silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
-msgstr ""
+msgstr "Artık bu cihazı pretix'e giriş yapmak için kullanamazsınız."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:14
 msgid ""
 "If this is the only device connected to your account, we will disable two-"
 "factor authentication."
 msgstr ""
+"Bu, hesabınıza bağlı tek cihazsa, iki faktörlü kimlik doğrulamayı devre dışı "
+"bırakırız."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:6
 msgid "Disable two-factor authentication"
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulamayı devre dışı bırak"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:10
 msgid "Do you really want to disable two-factor authentication?"
 msgstr ""
+"İki faktörlü kimlik doğrulamayı gerçekten devre dışı bırakmak istiyor "
+"musunuz?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:13
 msgid "You will no longer require a second device to log in to your account."
 msgstr ""
+"Artık hesabınıza giriş yapmak için ikinci bir cihaza ihtiyacınız olmayacak."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:6
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulamayı etkinleştir"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:10
 msgid "Do you really want to enable two-factor authentication?"
 msgstr ""
+"İki faktörlü kimlik doğrulamayı gerçekten etkinleştirmek istiyor musunuz?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:13
 msgid ""
 "You will no longer be able to log in to pretix without one of your "
 "configured devices."
 msgstr ""
+"Artık yapılandırılmış cihazlarınızdan hiçbiri için pretix'e giriş "
+"yapamazsınız."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:14
 msgid ""
 "Please make sure to print out or copy the emergency tokens and store them in "
 "a safe place."
 msgstr ""
+"Lütfen acil durum belirteçlerini yazdırdığınızdan veya kopyaladığınızdan "
+"emin olun ve bunları güvenli bir yerde saklayın."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:41
 msgid "Two-factor authentication"
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
 msgid ""
@@ -10681,35 +10700,41 @@ msgid ""
 "but also an additional token that is generated e.g. by an app on your "
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
+"İki faktörlü kimlik doğrulama, hesabınıza ek güvenlik eklemenin bir yoludur. "
+"Bu özelliği etkinleştirirseniz, giriş yapmak için yalnızca şifrenize değil, "
+"aynı zamanda oluşturulan ek bir belirtecinize de sahip olursunuz. Akıllı "
+"telefonunuzdaki bir uygulama veya bir donanım belirteç üreteci ile düzenli "
+"olarak değişir."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:31
 msgid "Two-factor status"
-msgstr ""
+msgstr "İki faktörlü durum"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
 msgid "Two-factor authentication is currently enabled."
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama şu anda etkin."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:40
 msgid "Two-factor authentication is currently disabled."
-msgstr ""
+msgstr "İki faktörlü kimlik doğrulama şu anda devre dışı."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:43
 msgid "To enable it, you need to configure at least one device below."
 msgstr ""
+"Bunu etkinleştirmek için, aşağıda en az bir cihaz yapılandırmanız gerekir."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:50
 msgid "Registered devices"
-msgstr ""
+msgstr "Kayıtlı cihaz"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:71
 msgid "Add a new device"
-msgstr ""
+msgstr "Yeni bir cihaz ekle"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:78
 msgid "Emergency tokens"
-msgstr ""
+msgstr "Acil durum simgeleri"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:82
 msgid ""
@@ -10717,162 +10742,168 @@ msgid ""
 "log in. We recommend to store them in a safe place, e.g. printed out or in a "
 "password manager. Every token can be used at most once."
 msgstr ""
+"Cihazlarınıza erişimi kaybederseniz, giriş yapmak için aşağıdaki tuşlardan "
+"birini kullanabilirsiniz. Bunları güvenli bir yerde saklamanızı öneririz. "
+"yazdırılmış veya bir şifre yöneticisinde. Her simge en çok bir kez "
+"kullanılabilir."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:84
 msgid "Unused tokens:"
-msgstr ""
+msgstr "Kullanılmayan simgeler:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:92
 msgid "Generate new emergency tokens"
-msgstr ""
+msgstr "Yeni acil durum simgeleri oluştur"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:6
 msgid "Regenerate emergency codes"
-msgstr ""
+msgstr "Acil durum kodlarını yeniden oluştur"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
-msgstr ""
+msgstr "Acil durum kodlarını gerçekten yenilemek istiyor musun?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
-msgstr ""
+msgstr "Eski kodlar artık çalışmayacak."
 
 #: pretix/control/templates/pretixcontrol/user/history.html:4
 #: pretix/control/templates/pretixcontrol/user/history.html:6
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:66
 msgid "Account history"
-msgstr ""
+msgstr "Hesap geçmişi"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
 msgid "Notification settings"
-msgstr ""
+msgstr "Bildirim ayarları"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:16
 msgid "Notifications are turned on according to the settings below."
-msgstr ""
+msgstr "Bildirimler aşağıdaki ayarlara göre açılır."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:25
 msgid "All notifications are turned off globally."
-msgstr ""
+msgstr "Tüm bildirimler global olarak kapatılmıştır."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:33
 msgid "Choose event"
-msgstr ""
+msgstr "Etkinlik seçin"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:37
 msgid "All my events"
-msgstr ""
+msgstr "Benim tüm etkinliklerim"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:45
 msgid "Save your modifications before switching events."
-msgstr ""
+msgstr "Etkinlikleri değiştirmeden önce değişikliklerinizi kaydedin."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:52
 msgid "Choose notifications to get"
-msgstr ""
+msgstr "Bildirimleri almak için seçin"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:56
 msgid "Notification type"
-msgstr ""
+msgstr "Bildirim türü"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:57
 msgid "E-Mail notification"
-msgstr ""
+msgstr "E-posta bildirimi"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
-msgstr ""
+msgstr "Dünya çapında"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
 #: pretix/control/templates/pretixcontrol/user/settings.html:20
 msgid "On"
-msgstr ""
+msgstr "Üzerinde"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
 #: pretix/control/templates/pretixcontrol/user/settings.html:24
 msgid "Off"
-msgstr ""
+msgstr "Kapalı"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
-msgstr ""
+msgstr "Bu bildirimi almak için izniniz yok"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:11
 msgid ""
 "We just want to make sure it's really you. Please re-enter your password to "
 "continue."
 msgstr ""
+"Sadece gerçekten emin olmak istiyoruz. Devam etmek için lütfen şifrenizi "
+"tekrar girin."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "Alternatif olarak, U2F cihazınızı kullanabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
-msgstr ""
+msgstr "Başka biri olarak giriş yaptınız"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
-msgstr ""
+msgstr "Hesap ayarları"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:11
 msgid "General settings"
-msgstr ""
+msgstr "Genel ayarlar"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "Bildirimler"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "Bildirim ayarlarını değiştir"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:35
 msgid "Login settings"
-msgstr ""
+msgstr "Giriş ayarları"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:46
 msgid "Change two-factor settings"
-msgstr ""
+msgstr "İki faktör ayarlarını değiştir"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
 msgid "Show applications"
-msgstr ""
+msgstr "Uygulamaları göster"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Show account history"
-msgstr ""
+msgstr "Hesap geçmişini göster"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
-msgstr ""
+msgstr "Personel oturumu"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
 msgid "Session notes"
-msgstr ""
+msgstr "Oturum notları"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "Denetim kaydı"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "Yöntem"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "Adına"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
@@ -10880,93 +10911,97 @@ msgid ""
 "Everything you do in that session will be logged and you will later be asked "
 "to fill in a comment on what you did in your session for later reference."
 msgstr ""
+"Bu eylemi gerçekleştirmek için bir yönetim oturumu başlatmanız gerekir. Bu "
+"oturumda yaptığınız her şey günlüğe kaydedilir ve daha sonra, daha sonra "
+"başvurmak üzere oturumunuzda yaptığınız şey hakkında bir yorum doldurmanız "
+"istenir."
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
 msgid "Start session"
-msgstr ""
+msgstr "Oturumu başlat"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "Kullanıcı oluştur"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:23
 msgid "Base settings"
-msgstr ""
+msgstr "Temel ayarlar"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:31
 msgid "Log-in settings"
-msgstr ""
+msgstr "Giriş ayarları"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:10
 msgid "Send password reset email"
-msgstr ""
+msgstr "Şifre sıfırlama e-postası gönder"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:14
 msgid "Impersonate user"
-msgstr ""
+msgstr "Kullanıcı kimliğine bürün"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:38
 msgid "Team memberships"
-msgstr ""
+msgstr "Takım üyelikleri"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 #, python-format
 msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
-msgstr ""
+msgstr "Takım \"%(takım)\" organizatör \"%(organizatör)\""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:62
 msgid "User history"
-msgstr ""
+msgstr "Kullanıcı geçmişi"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:71
 msgid "User created."
-msgstr ""
+msgstr "Kullanıcı oluşturuldu."
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "Yeni bir kullanıcı oluştur"
 
 #: pretix/control/templates/pretixcontrol/vouchers/base.html:10
 msgid "All vouchers"
-msgstr ""
+msgstr "Tüm kuponlar"
 
 #: pretix/control/templates/pretixcontrol/vouchers/base.html:15
 msgid "Tags"
-msgstr ""
+msgstr "Etiketler"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple voucher"
-msgstr ""
+msgstr "Birden çok kupon oluştur"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr ""
+msgstr "Kupon kodları"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr ""
+msgstr "Prefix (isteğe bağlı)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "Rastgele kod üret"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
-msgstr ""
+msgstr "Kodları kopyala"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:40
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:26
 msgid "Voucher details"
-msgstr ""
+msgstr "Kupon bilgileri"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:45
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:33
 #: pretix/control/views/vouchers.py:62
 msgid "Price effect"
-msgstr ""
+msgstr "Fiyat etkisi"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:58
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:46
@@ -10975,82 +11010,90 @@ msgid ""
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
 msgstr ""
+"Belirli bir kota için \"herhangi bir ürün\" seçerseniz ve yukarıdaki bu "
+"kupon için kota ayırmayı seçerseniz, ürünle ilişkili başka bir kota "
+"satıldığında ürün yine de kupon sahibi için kullanılamaz!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr ""
+msgstr "Kuponu sil"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr ""
+msgstr "Kuponu <strong>%(makbuz)</ strong> silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:10
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "Bu kupon zaten kullanılmış. Değiştirilmesi önerilmez."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:14
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "Sipariş %(kod)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:67
 msgid "Voucher history"
-msgstr ""
+msgstr "Kupon geçmişi"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid ""
 "Vouchers allow you to assign tickets to specific persons for a lower price. "
 "They also enable you to reserve some quota for your very special guests."
 msgstr ""
+"Kuponlar, belirli kişilere daha düşük bir fiyat karşılığında bilet atamanıza "
+"izin verir. Ayrıca çok özel misafirleriniz için bir miktar kota ayırmanıza "
+"da izin veriyorlar."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:62
 msgid "Your search did not match any vouchers."
-msgstr ""
+msgstr "Aramanız hiçbir makbuzla eşleşmedi."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:64
 msgid "You haven't created any vouchers yet."
-msgstr ""
+msgstr "Henüz hiç kupon oluşturmadınız."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:71
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:78
 msgid "Create a new voucher"
-msgstr ""
+msgstr "Yeni bir kupon oluştur"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:73
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:81
 msgid "Create multiple new vouchers"
-msgstr ""
+msgstr "Birden çok yeni kupon oluştur"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:84
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
 msgid "Download list"
-msgstr ""
+msgstr "İndirme listesi"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:91
 msgid "Redemptions"
-msgstr ""
+msgstr "Ödeme"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:92
 msgid "Expiry"
-msgstr ""
+msgstr "vade"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:120
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr ""
+msgstr "Kotadaki herhangi bir ürün \"%(kota)\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
 msgstr ""
+"Bir kupona \"etiket\" eklerseniz, burada kullanımlarına ilişkin "
+"istatistikleri görebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:12
 msgid "You haven't added any tags to vouchers yet."
-msgstr ""
+msgstr "Kuponlara henüz etiket eklemediniz."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:23
 msgid "Redeemed vouchers"
