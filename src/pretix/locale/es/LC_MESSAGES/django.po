@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
 "PO-Revision-Date: 2018-08-25 08:22+0000\n"
-"Last-Translator: Dimas 3r1ck Rivas <rivas7676@gmail.com>\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -11653,7 +11653,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:160
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "pagado"
 
 #: pretix/plugins/checkinlists/exporters.py:248
 msgid "Check-in list (CSV)"
@@ -11923,11 +11923,11 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:53
 msgid "Show info"
-msgstr ""
+msgstr "Mostrar información"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:54
 msgid "Allow search"
@@ -12358,7 +12358,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:510
 msgid "Credit card"
-msgstr ""
+msgstr "Tarjeta de crédito"
 
 #: pretix/plugins/stripe/payment.py:535
 msgid "You may need to enable JavaScript for Stripe payments."
@@ -12396,19 +12396,19 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:860
 msgid "Country of your bank"
-msgstr ""
+msgstr "País de tu banco"
 
 #: pretix/plugins/stripe/payment.py:861
 msgid "Germany"
-msgstr ""
+msgstr "Alemania"
 
 #: pretix/plugins/stripe/payment.py:862
 msgid "Austria"
-msgstr ""
+msgstr "Austria"
 
 #: pretix/plugins/stripe/payment.py:863
 msgid "Belgium"
-msgstr ""
+msgstr "Bélgica"
 
 #: pretix/plugins/stripe/payment.py:864
 msgid "Netherlands"
@@ -12416,7 +12416,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:865
 msgid "Spain"
-msgstr ""
+msgstr "España"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Charge succeeded."
@@ -12583,11 +12583,11 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:31
 msgid "Bank"
-msgstr ""
+msgstr "Banco"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:46
 msgid "Error message"
-msgstr ""
+msgstr "Mensaje de error"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
@@ -12768,7 +12768,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:50
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "Paso"
 
 #: pretix/presale/checkoutflow.py:181
 msgctxt "checkoutflow"
@@ -12956,7 +12956,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:45
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:99
 msgid "Go back"
-msgstr ""
+msgstr "Regresar"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
@@ -13002,7 +13002,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:81
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:117
 msgid "Modify"
-msgstr ""
+msgstr "Modificar"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:121
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:17
@@ -13068,7 +13068,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:16
 msgid "Reserved"
-msgstr ""
+msgstr "Reservado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "All remaining products are reserved but might become available again."
@@ -13076,25 +13076,25 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
 msgid "Remove one"
-msgstr ""
+msgstr "Quitar uno"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:109
 msgid "Add one more"
-msgstr ""
+msgstr "Agregar uno más"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Orden confirmada"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr ""
+msgstr "Pago pendiente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
 msgid "Go"
-msgstr ""
+msgstr "Ir"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:20
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:42
@@ -13112,12 +13112,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
-msgstr ""
+msgstr "Preventa"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:55
 #: pretix/presale/templates/pretixpresale/event/index.html:73
 msgid "Empty cart"
-msgstr ""
+msgstr "Carrito vacío"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Proceed with checkout"
@@ -13168,12 +13168,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:165
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Inicio: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:170
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Fin: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:178
 #, python-format
@@ -13209,7 +13209,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:180
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "GRATIS"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 msgid "Show variants"
@@ -13250,7 +13250,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:470
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
 msgid "Add to cart"
-msgstr ""
+msgstr "Añadir al carro"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:482
 msgid "Redeem a voucher"
@@ -13280,7 +13280,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
-msgstr ""
+msgstr "Gracias!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been placed successfully. See below for details."
@@ -13371,7 +13371,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:4
 msgid "Modify order"
-msgstr ""
+msgstr "Modificar orden"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:7
 #, python-format
@@ -13386,7 +13386,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:78
 msgid "Save changes"
-msgstr ""
+msgstr "Guardar cambios"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:4
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
@@ -13425,7 +13425,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "Total: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid ""
@@ -13473,7 +13473,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
-msgstr ""
+msgstr "Agregar a la lista"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:47
 #, python-format
@@ -13485,7 +13485,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:17
 msgid "Hello!"
-msgstr ""
+msgstr "Hola!"
 
 #: pretix/presale/templates/pretixpresale/index.html:19
 msgid "There is nothing to see here yet."
@@ -13504,7 +13504,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:37
 #: pretix/presale/templates/pretixpresale/organizers/index.html:34
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
 msgid "Note that the events in this view are in different timezones."
@@ -13512,11 +13512,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:6
 msgid "Event list"
-msgstr ""
+msgstr "Lista de eventos"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:14
 msgid "Past events"
-msgstr ""
+msgstr "Eventos pasados"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:16
 msgid "Upcoming events"
@@ -13532,11 +13532,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:60
 msgid "Buy tickets"
-msgstr ""
+msgstr "Comprar tickets"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "More info"
-msgstr ""
+msgstr "Más información"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:70
 msgid "No archived events found."
@@ -13549,7 +13549,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Página %(page)s de %(of)s"
 
 #: pretix/presale/utils.py:30 pretix/presale/utils.py:100
 msgid "The selected event was not found."
@@ -13644,11 +13644,11 @@ msgstr ""
 
 #: pretix/presale/views/order.py:558
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "No puedes modificar esta orden"
 
 #: pretix/presale/views/order.py:679
 msgid "Order is not paid."
-msgstr ""
+msgstr "La orden no está pagada."
 
 #: pretix/presale/views/order.py:683
 msgid "Ticket download is not (yet) enabled."
@@ -13668,7 +13668,7 @@ msgstr ""
 
 #: pretix/presale/views/user.py:53
 msgid "Your orders for {}"
-msgstr ""
+msgstr "Tus ordenes para {}"
 
 #: pretix/presale/views/user.py:64
 msgid "We have trouble sending emails right now, please check back later."
@@ -13691,7 +13691,7 @@ msgstr ""
 #: pretix/presale/views/waiting.py:70
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Necesitas seleccionar una fecha."
 
 #: pretix/presale/views/waiting.py:82
 msgid ""
@@ -13707,15 +13707,15 @@ msgstr ""
 
 #: pretix/settings.py:355
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
 #: pretix/settings.py:356
 msgid "German"
-msgstr ""
+msgstr "Alemán"
 
 #: pretix/settings.py:357
 msgid "German (informal)"
-msgstr ""
+msgstr "Alemán (informal)"
 
 #: pretix/settings.py:358
 msgid "Dutch"
@@ -13723,23 +13723,23 @@ msgstr ""
 
 #: pretix/settings.py:359
 msgid "Danish"
-msgstr ""
+msgstr "Danés"
 
 #: pretix/settings.py:360
 msgid "Turkish"
-msgstr ""
+msgstr "Turko"
 
 #: pretix/settings.py:361
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugués (Brasil)"
 
 #: pretix/settings.py:603
 msgid "Read access"
-msgstr ""
+msgstr "Acceso de lectura"
 
 #: pretix/settings.py:604
 msgid "Write access"
-msgstr ""
+msgstr "Acceso de escritura"
 
 #~ msgid "Payment type"
 #~ msgstr "Tipo de pago"
