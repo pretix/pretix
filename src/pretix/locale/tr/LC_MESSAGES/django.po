@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:21+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -2976,8 +2976,7 @@ msgstr "Bu hesap aktif değildir."
 #: pretix/base/forms/auth.py:145
 msgid ""
 "You already registered with that email address, please use the login form."
-msgstr ""
-"Bu e-posta adresiyle zaten kaydoldunuz, lütfen giriş panelini kullanın."
+msgstr "Bu e-posta adresiyle zaten kaydoldunuz, lütfen giriş panelini kullanın."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
@@ -6130,8 +6129,7 @@ msgstr ""
 #: pretix/base/models/vouchers.py:383 pretix/base/models/vouchers.py:441
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
-msgstr ""
-"Bu makbuzun kotayı engellemesi için belirli bir tarih seçmeniz gerekir."
+msgstr "Bu makbuzun kotayı engellemesi için belirli bir tarih seçmeniz gerekir."
 
 #: pretix/base/models/vouchers.py:385
 msgid "You can not select a subevent if your event is not an event series."
@@ -6584,8 +6582,7 @@ msgstr "Ödeme yöntemini etkinleştir"
 #: pretix/base/payment.py:326
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
-msgstr ""
-"Kullanıcılar, bu ödeme sağlayıcısını belirtilen tarihten sonra seçemez."
+msgstr "Kullanıcılar, bu ödeme sağlayıcısını belirtilen tarihten sonra seçemez."
 
 #: pretix/base/payment.py:331
 msgid "Minimum order total"
@@ -6640,10 +6637,9 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Kullanıcılarınızın ödeme sağlayıcınızın ödeme ücretlerini ödemesini "
-"istiyorsanız bunu etkinleştirmenizi öneririz. <a href=\"{docs_url}\" "
-"target=\"_blank\" rel=\"noopener\"> Bunun ne işe yaradığına dair ayrıntılı "
-"bilgi için buraya tıklayın. </a> Yukarıdaki doğru ücretleri ayarlamayı "
-"unutmayın!"
+"istiyorsanız bunu etkinleştirmenizi öneririz. <a href=\"{docs_url}\" target="
+"\"_blank\" rel=\"noopener\"> Bunun ne işe yaradığına dair ayrıntılı bilgi "
+"için buraya tıklayın. </a> Yukarıdaki doğru ücretleri ayarlamayı unutmayın!"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -11555,8 +11551,8 @@ msgstr ""
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
-"Varsayılan yerel ayarınız etkinliğiniz için de etkinleştirilmelidir "
-"(yukarıdaki kutuya bakın)."
+"Varsayılan yerel ayarınız etkinliğiniz için de etkinleştirilmelidir ("
+"yukarıdaki kutuya bakın)."
 
 #: pretix/base/settings.py:3603
 msgid ""
@@ -11891,8 +11887,7 @@ msgstr "Tüm bildirimleri hemen devre dışı bırakmak için buraya tıklayın.
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr ""
-"Bildirim ayarlarınızı görüntülemek ve değiştirmek için buraya tıklayın:"
+msgstr "Bildirim ayarlarınızı görüntülemek ve değiştirmek için buraya tıklayın:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
@@ -15135,8 +15130,8 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Pozisyon #{posid}: Etkinlik günü \"{old_event}\" ({old_price}) den "
-"\"{new_event}\" ({new_price}) değiştirildi."
+"Pozisyon #{posid}: Etkinlik günü \"{old_event}\" ({old_price}) den \""
+"{new_event}\" ({new_price}) değiştirildi."
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
@@ -15341,8 +15336,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
-"Daha önceden incelenmesine rağmen #{posid} pzisyonu için {datetime}'da "
-"\"{list}\" listesi için incelenme yüklendi."
+"Daha önceden incelenmesine rağmen #{posid} pzisyonu için {datetime}'da \""
+"{list}\" listesi için incelenme yüklendi."
 
 #: pretix/control/logdisplay.py:322
 #, python-brace-format
@@ -15803,8 +15798,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:421
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr ""
-"Siparişin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
+msgstr "Siparişin alındığını kullanıcıya bildirmek için bir e-posta gönderildi."
 
 #: pretix/control/logdisplay.py:422
 msgid ""
@@ -17167,8 +17161,7 @@ msgstr "geliştirme modunda çalışıyor"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
-"Bu işlem birkaç dakikadan uzun sürerse, lütfen bizimle iletişime geçin."
+msgstr "Bu işlem birkaç dakikadan uzun sürerse, lütfen bizimle iletişime geçin."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -17929,8 +17922,8 @@ msgid ""
 msgstr ""
 "Merhaba,\n"
 "\n"
-"Etkinliklere bilet satma platformu olan pretix'te bir ekibe davet "
-"edildiniz.\n"
+"Etkinliklere bilet satma platformu olan pretix'te bir ekibe davet edildiniz."
+"\n"
 "\n"
 "Organizatör: %(organizer)s\n"
 "Takım: %(team)s\n"
@@ -18253,8 +18246,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
-msgstr ""
-"Bu işlem geri alınamaz ve verilerinizi geri getirmenin bir yolu yoktur."
+msgstr "Bu işlem geri alınamaz ve verilerinizi geri getirmenin bir yolu yoktur."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
 #, python-format
@@ -18992,10 +18984,10 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
-"pretix, iş akışınıza en uygun ödeme yöntemlerini seçmenizi sağlayan <a "
-"href=\"https://pretix.eu/about/en/features/payment\" target=\"_blank\"> "
-"geniş çaplı ödeme sağlayıcılarını </a> desteklemektedir. Örnek olarak "
-"bunlardan sadece ikisidir, etkinliğinizin \"Ayarlar\" bölümüne daha fazla "
+"pretix, iş akışınıza en uygun ödeme yöntemlerini seçmenizi sağlayan <a href="
+"\"https://pretix.eu/about/en/features/payment\" target=\"_blank\"> geniş "
+"çaplı ödeme sağlayıcılarını </a> desteklemektedir. Örnek olarak bunlardan "
+"sadece ikisidir, etkinliğinizin \"Ayarlar\" bölümüne daha fazla "
 "ekleyebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
@@ -19276,10 +19268,10 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
-"Bu ayarlar ileri düzey kullanıcılar içindir. Daha fazla bilgi için <a "
-"href=\"%(docs)s\"> belgelerine </a> bakın. Bilet mağazanızda vergilerin "
-"doğru şekilde ele alınmasından sorumlu olmadığımızı unutmayın. Şüpheniz "
-"varsa, lütfen bir avukata veya vergi danışmanına başvurun."
+"Bu ayarlar ileri düzey kullanıcılar içindir. Daha fazla bilgi için <a href=\""
+"%(docs)s\"> belgelerine </a> bakın. Bilet mağazanızda vergilerin doğru "
+"şekilde ele alınmasından sorumlu olmadığımızı unutmayın. Şüpheniz varsa, "
+"lütfen bir avukata veya vergi danışmanına başvurun."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
 msgid "Custom taxation rules"
@@ -19427,8 +19419,8 @@ msgid ""
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
 "Tarayıcınızda JavaScript devre dışı bırakıldı. JavaScript olmadan bilet "
-"mağazamıza erişmek için lütfen &lt;a %(a_attr)s &gt; buraya tıklayın &lt; /"
-"a&gt;."
+"mağazamıza erişmek için lütfen &lt;a %(a_attr)s &gt; buraya tıklayın &lt; "
+"/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
@@ -20984,8 +20976,8 @@ msgid ""
 "order completely and create a new one."
 msgstr ""
 "Lütfen bu aleti dikkatli kullanın. Burada yaptığınız değişiklikler tersine "
-"çevrilemez. Ayrıca, bir siparişi manuel değiştirirseniz, tüm kısıtlamalara "
-"(örneğin gerekli eklentilere) bakılmayacaktır. Bu nedenle, başka türlü "
+"çevrilemez. Ayrıca, bir siparişi manuel değiştirirseniz, tüm kısıtlamalara ("
+"örneğin gerekli eklentilere) bakılmayacaktır. Bu nedenle, başka türlü "
 "varolmayacak bir düzen inşa edebilirsiniz. Çoğu durumda siparişi tamamen "
 "iptal etmek ve yeni bir tane oluşturmak daha kolaydır."
 
@@ -25207,8 +25199,7 @@ msgstr ""
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
-msgstr ""
-"Bu ekibin bir parçası olduğunuz için \"{}\" davetini kabul edemezsiniz."
+msgstr "Bu ekibin bir parçası olduğunuz için \"{}\" davetini kabul edemezsiniz."
 
 #: pretix/control/views/auth.py:207
 msgid "You are now part of the team \"{}\"."
