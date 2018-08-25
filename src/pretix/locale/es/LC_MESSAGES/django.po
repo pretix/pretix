@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-25 08:03+0000\n"
+"PO-Revision-Date: 2018-08-25 08:22+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -622,11 +622,11 @@ msgstr "Tipo de dispositivo"
 
 #: pretix/base/forms/user.py:117
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Celular con aplicación de autenticación"
 
 #: pretix/base/forms/user.py:118
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "Hardware compatible con U2F token (ej. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
@@ -651,7 +651,7 @@ msgstr "Cliente individual"
 #: pretix/base/invoice.py:200
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Versión clásica (pretix 1.0)"
 
 #: pretix/base/invoice.py:205 pretix/base/invoice.py:230
 #, python-format
