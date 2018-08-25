@@ -865,23 +865,23 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:130
 #: pretix/control/views/organizer.py:57 tests/base/test_mail.py:86
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: pretix/base/models/auth.py:113
 #: pretix/control/templates/pretixcontrol/base.html:249
 #: pretix/control/templates/pretixcontrol/users/index.html:5
 #: pretix/control/templates/pretixcontrol/users/index.html:7
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: pretix/base/models/auth.py:161
 msgid "Account information changed"
-msgstr ""
+msgstr "La información de la cuenta ha cambiado"
 
 #: pretix/base/models/auth.py:178
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
 msgid "Password recovery"
-msgstr ""
+msgstr "Recuperar contraseña"
 
 #: pretix/base/models/checkin.py:13
 msgid "All products (including newly created ones)"
@@ -910,12 +910,12 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:262 pretix/plugins/sendmail/forms.py:69
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: pretix/base/models/checkin.py:17
 msgctxt "checkin"
 msgid "Include pending orders"
-msgstr ""
+msgstr "Incluir ordenes pendientes"
 
 #: pretix/base/models/checkin.py:19
 msgid ""
@@ -938,7 +938,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:52
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:13
 msgid "Event name"
-msgstr ""
+msgstr "Nombre del evento"
 
 #: pretix/base/models/event.py:208
 msgid ""
@@ -956,34 +956,34 @@ msgstr ""
 #: pretix/base/models/event.py:219 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
 msgid "Short form"
-msgstr ""
+msgstr "Forma corta"
 
 #: pretix/base/models/event.py:221
 msgid "Shop is live"
-msgstr ""
+msgstr "La tienda esta disponible"
 
 #: pretix/base/models/event.py:223
 msgid "Event currency"
-msgstr ""
+msgstr "Moneda del evento"
 
 #: pretix/base/models/event.py:226 pretix/base/models/event.py:729
 #: pretix/control/forms/event.py:901 pretix/control/forms/subevents.py:57
 msgid "Event start time"
-msgstr ""
+msgstr "Hora de inicio del evento"
 
 #: pretix/base/models/event.py:228 pretix/base/models/event.py:731
 #: pretix/base/pdf.py:121 pretix/control/forms/subevents.py:61
 msgid "Event end time"
-msgstr ""
+msgstr "Hora de finalización del evento"
 
 #: pretix/base/models/event.py:230 pretix/base/models/event.py:733
 #: pretix/control/forms/subevents.py:66
 msgid "Admission time"
-msgstr ""
+msgstr "Fecha de admisión"
 
 #: pretix/base/models/event.py:232
 msgid "Visible in public lists"
-msgstr ""
+msgstr "Visible en listas públicas"
 
 #: pretix/base/models/event.py:233
 msgid ""
@@ -994,7 +994,7 @@ msgstr ""
 #: pretix/base/models/event.py:237 pretix/base/models/event.py:736
 #: pretix/control/forms/subevents.py:77
 msgid "End of presale"
-msgstr ""
+msgstr "Finalización de preventa"
 
 #: pretix/base/models/event.py:238 pretix/base/models/event.py:737
 #: pretix/control/forms/subevents.py:78
@@ -1006,7 +1006,7 @@ msgstr ""
 #: pretix/base/models/event.py:243 pretix/base/models/event.py:742
 #: pretix/control/forms/subevents.py:71
 msgid "Start of presale"
-msgstr ""
+msgstr "Inicio de preventa"
 
 #: pretix/base/models/event.py:244 pretix/base/models/event.py:743
 #: pretix/control/forms/subevents.py:72
@@ -1015,24 +1015,24 @@ msgstr ""
 
 #: pretix/base/models/event.py:249 pretix/base/models/event.py:748
 msgid "Location"
-msgstr ""
+msgstr "Localización"
 
 #: pretix/base/models/event.py:253
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:45
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: pretix/base/models/event.py:256
 #: pretix/control/templates/pretixcontrol/event/index.html:106
 #: pretix/control/templates/pretixcontrol/order/index.html:593
 msgid "Internal comment"
-msgstr ""
+msgstr "Comentario interno"
 
 #: pretix/base/models/event.py:260 pretix/control/forms/filter.py:466
 #: pretix/control/templates/pretixcontrol/event/index.html:12
 #: pretix/control/views/dashboards.py:375
 msgid "Event series"
-msgstr ""
+msgstr "Serie de eventos"
 
 #: pretix/base/models/event.py:265 pretix/base/models/items.py:204
 #: pretix/base/models/items.py:936 pretix/base/models/orders.py:123
@@ -1050,7 +1050,7 @@ msgstr "Evento"
 #: pretix/control/templates/pretixcontrol/organizers/base.html:19
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:17
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: pretix/base/models/event.py:583
 msgid ""
@@ -1088,7 +1088,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:654
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #: pretix/base/models/event.py:723
 msgid ""
@@ -1118,7 +1118,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:44
 msgid "Category name"
-msgstr ""
+msgstr "Nombre de la categoría"
 
 #: pretix/base/models/items.py:47 pretix/base/models/items.py:219
 msgid "Internal name"
@@ -1131,7 +1131,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:52
 msgid "Category description"
-msgstr ""
+msgstr "Descripción de la categoría"
 
 #: pretix/base/models/items.py:59
 msgid "Products in this category are add-on products"
@@ -1148,14 +1148,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Categoría del producto"
 
 #: pretix/base/models/items.py:67
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:31
 msgid "Product categories"
-msgstr ""
+msgstr "Categorías de los productos"
 
 #: pretix/base/models/items.py:73
 #, python-brace-format
@@ -1190,7 +1190,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:233 pretix/base/models/items.py:482
 msgid "Default price"
-msgstr ""
+msgstr "Precio predefinido"
 
 #: pretix/base/models/items.py:234
 msgid ""
@@ -1214,7 +1214,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:249
 msgid "Sales tax"
-msgstr ""
+msgstr "Impuesto de ventas"
 
 #: pretix/base/models/items.py:254
 msgid "Is an admission ticket"
@@ -1226,11 +1226,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:265
 msgid "Product picture"
-msgstr ""
+msgstr "Imagen del producto"
 
 #: pretix/base/models/items.py:270
 msgid "Available from"
-msgstr ""
+msgstr "Disponible desde"
 
 #: pretix/base/models/items.py:272
 msgid "This product will not be sold before the given date."
@@ -1238,7 +1238,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:275 pretix/base/payment.py:190
 msgid "Available until"
-msgstr ""
+msgstr "Disponible hasta"
 
 #: pretix/base/models/items.py:277
 msgid "This product will not be sold after the given date."
@@ -1292,7 +1292,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:306
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Cantidad mínima por orden"
 
 #: pretix/base/models/items.py:308
 msgid ""
@@ -1303,7 +1303,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:312
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Cantidad máxima por orden"
 
 #: pretix/base/models/items.py:314
 msgid ""
@@ -1315,7 +1315,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:319 pretix/base/models/orders.py:152
 msgid "Requires special attention"
-msgstr ""
+msgstr "Requiere atención especial"
 
 #: pretix/base/models/items.py:321
 msgid ""
@@ -1327,7 +1327,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:326
 msgid "Original price"
-msgstr ""
+msgstr "Precio original"
 
 #: pretix/base/models/items.py:329
 msgid ""
@@ -1364,7 +1364,7 @@ msgstr "Producto"
 #: pretix/control/templates/pretixcontrol/items/questions.html:34
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Products"
-msgstr ""
+msgstr "Productos"
 
 #: pretix/base/models/items.py:421
 msgid ""
@@ -1391,24 +1391,24 @@ msgstr ""
 #: pretix/base/models/items.py:477 pretix/base/models/items.py:600
 #: pretix/base/models/items.py:729
 msgid "Position"
-msgstr ""
+msgstr "Posición"
 
 #: pretix/base/models/items.py:486 pretix/base/models/vouchers.py:148
 #: pretix/base/models/waitinglist.py:59
 msgid "Product variation"
-msgstr ""
+msgstr "Variación del producto"
 
 #: pretix/base/models/items.py:487
 msgid "Product variations"
-msgstr ""
+msgstr "Variaciones de los productos"
 
 #: pretix/base/models/items.py:586
 msgid "Minimum number"
-msgstr ""
+msgstr "Número mínimo"
 
 #: pretix/base/models/items.py:590
 msgid "Maximum number"
-msgstr ""
+msgstr "Número máximo"
 
 #: pretix/base/models/items.py:594
 msgid "Add-Ons are included in the price"
@@ -1443,31 +1443,31 @@ msgstr ""
 #: pretix/base/models/items.py:680
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgid "Number"
-msgstr ""
+msgstr "Número"
 
 #: pretix/base/models/items.py:681
 msgid "Text (one line)"
-msgstr ""
+msgstr "Texto (una línea)"
 
 #: pretix/base/models/items.py:682
 msgid "Multiline text"
-msgstr ""
+msgstr "Texto multilíneas"
 
 #: pretix/base/models/items.py:683
 msgid "Yes/No"
-msgstr ""
+msgstr "Sí/No"
 
 #: pretix/base/models/items.py:684
 msgid "Choose one from a list"
-msgstr ""
+msgstr "Seleccione uno de la lista"
 
 #: pretix/base/models/items.py:685
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "Seleccione varios de la lista"
 
 #: pretix/base/models/items.py:686
 msgid "File upload"
-msgstr ""
+msgstr "Subir archivos"
 
 #: pretix/base/models/items.py:687 pretix/base/models/orders.py:137
 #: pretix/base/models/orders.py:1469
@@ -1475,15 +1475,15 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: pretix/base/models/items.py:688 pretix/base/reldate.py:131
 msgid "Time"
-msgstr ""
+msgstr "Hora"
 
 #: pretix/base/models/items.py:689
 msgid "Date and time"
-msgstr ""
+msgstr "Fecha y hora"
 
 #: pretix/base/models/items.py:698 pretix/base/models/items.py:739
 #: pretix/control/forms/item.py:37
@@ -1491,11 +1491,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:16
 #: pretix/control/templates/pretixcontrol/items/questions.html:32
 msgid "Question"
-msgstr ""
+msgstr "Pregunta"
 
 #: pretix/base/models/items.py:702
 msgid "Internal identifier"
-msgstr ""
+msgstr "Identificador interno"
 
 #: pretix/base/models/items.py:703
 msgid ""
@@ -1505,7 +1505,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:707
 msgid "Help text"
-msgstr ""
+msgstr "Texto de ayuda"
 
 #: pretix/base/models/items.py:708
 msgid "If the question needs to be explained or clarified, do it here!"
@@ -1513,7 +1513,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:714
 msgid "Question type"
-msgstr ""
+msgstr "Tipo de pregunta"
 
 #: pretix/base/models/items.py:718
 #: pretix/control/templates/pretixcontrol/items/questions.html:49
@@ -1582,7 +1582,7 @@ msgstr ""
 #: pretix/base/models/items.py:950 pretix/control/forms/event.py:1143
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Total capacity"
-msgstr ""
+msgstr "Capacidad total"
 
 #: pretix/base/models/items.py:952 pretix/control/forms/item.py:211
 msgid "Leave empty for an unlimited number of tickets."
@@ -1591,18 +1591,18 @@ msgstr ""
 #: pretix/base/models/items.py:956 pretix/base/models/orders.py:691
 #: pretix/control/templates/pretixcontrol/checkin/index.html:67
 msgid "Item"
-msgstr ""
+msgstr "Item"
 
 #: pretix/base/models/items.py:964
 #: pretix/control/templates/pretixcontrol/item/base.html:16
 msgid "Variations"
-msgstr ""
+msgstr "Variaciones"
 
 #: pretix/base/models/items.py:972 pretix/base/models/vouchers.py:156
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr ""
+msgstr "Cuota"
 
 #: pretix/base/models/items.py:973
 #: pretix/control/templates/pretixcontrol/event/base.html:51
@@ -1611,7 +1611,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:298
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:56
 msgid "Quotas"
-msgstr ""
+msgstr "Cuotas"
 
 #: pretix/base/models/items.py:1145
 msgid "All variations must belong to an item contained in the items list."
@@ -1666,19 +1666,19 @@ msgstr ""
 
 #: pretix/base/models/orders.py:103
 msgid "pending"
-msgstr ""
+msgstr "pendiente"
 
 #: pretix/base/models/orders.py:104
 msgid "paid"
-msgstr ""
+msgstr "pagado"
 
 #: pretix/base/models/orders.py:105
 msgid "expired"
-msgstr ""
+msgstr "expirado"
 
 #: pretix/base/models/orders.py:106
 msgid "canceled"
-msgstr ""
+msgstr "cancelado"
 
 #: pretix/base/models/orders.py:107
 msgid "refunded"
@@ -1686,11 +1686,11 @@ msgstr ""
 
 #: pretix/base/models/orders.py:133
 msgid "Locale"
-msgstr ""
+msgstr "Localización"
 
 #: pretix/base/models/orders.py:140 pretix/base/models/orders.py:1473
 msgid "Expiration date"
-msgstr ""
+msgstr "Fecha de expiración"
 
 #: pretix/base/models/orders.py:144
 msgid "Total amount"
@@ -1699,7 +1699,7 @@ msgstr ""
 #: pretix/base/models/orders.py:147 pretix/base/models/vouchers.py:170
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
 msgid "Comment"
-msgstr ""
+msgstr "Comentario"
 
 #: pretix/base/models/orders.py:148 pretix/base/models/vouchers.py:171
 msgid ""
@@ -1725,7 +1725,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr ""
+msgstr "Ordenes"
 
 #: pretix/base/models/orders.py:430
 msgid ""
@@ -1755,7 +1755,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:558
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: pretix/base/models/orders.py:618 pretix/control/forms/event.py:563
 #: pretix/control/views/item.py:442 pretix/control/views/vouchers.py:78
@@ -1765,7 +1765,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:560
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: pretix/base/models/orders.py:620
 msgid "<file>"
@@ -1773,13 +1773,13 @@ msgstr ""
 
 #: pretix/base/models/orders.py:697
 msgid "Variation"
-msgstr ""
+msgstr "Variacion"
 
 #: pretix/base/models/orders.py:702 pretix/base/pdf.py:78
 #: pretix/plugins/checkinlists/exporters.py:163
 #: pretix/plugins/checkinlists/exporters.py:299
 msgid "Price"
-msgstr ""
+msgstr "Precio"
 
 #: pretix/base/models/orders.py:708 pretix/base/models/orders.py:713
 msgid "Empty, if this product is not an admission ticket"
