@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-26 04:00+0000\n"
+"PO-Revision-Date: 2018-08-27 00:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -11097,12 +11097,12 @@ msgstr "Kuponlara henüz etiket eklemediniz."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:23
 msgid "Redeemed vouchers"
-msgstr ""
+msgstr "Kullanılan kuponlar"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
 msgid "Delete entry"
-msgstr ""
+msgstr "Girişi sil"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
@@ -11110,16 +11110,21 @@ msgid ""
 "Are you sure you want to delete the following waiting list entry <strong>"
 "%(entry)s</strong>?"
 msgstr ""
+"Aşağıdaki bekleme listesi girişini silmek istediğinizden emin misiniz? "
+"<Strong>%(giriş)</ strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
 "The waiting list is disabled, so if the event is sold out, people cannot add "
 "themselves to this list. If you want to enable it, go to the event settings."
 msgstr ""
+"Bekleme listesi devre dışı bırakıldı, bu yüzden etkinlik satılırsa, "
+"kullanıcılar kendilerini bu listeye ekleyemez. Etkinleştirmek isterseniz "
+"etkinlik ayarlarına gidin."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr ""
+msgstr "Makbuz gönder"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -11129,6 +11134,11 @@ msgid ""
 "capacity is available, so don't worry if entries do not disappear here "
 "immediately. If you want, you can also send them out manually right now."
 msgstr ""
+"Kuponların bu listedeki kişilere otomatik olarak gönderileceğini ve kapasite "
+"hazır olduğunda en kısa süreyi bekleyecek şekilde yapılandırdınız. "
+"Kapasiteler kullanılabilir olduktan sonra makbuzların gönderilmesi yarım "
+"saat kadar sürebilir, bu nedenle girişler derhal burada kaybolmazsa "
+"endişelenmeyin. İsterseniz, bunları hemen şimdi de gönderebilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid ""
@@ -11138,14 +11148,19 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
+"Kuponların otomatik olarak <strong>not </ strong>gönderileceğini "
+"yapılandırdınız. Bu tablodaki bir satırın yanındaki düğmeleri tıklayarak ("
+"istediğiniz kota mevcutsa) tek tek gönderebilirsiniz ya da bu metnin "
+"altındaki büyük düğmeye basarak çok sayıda kupon gönderebilirsiniz. en uzun "
+"süre beklemiş olanlara şu anda mümkün."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
-msgstr ""
+msgstr "Mümkün olduğu kadar çok makbuz gönder"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
-msgstr ""
+msgstr "Tahmini satış"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:69
 #, python-format
@@ -11154,59 +11169,54 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional <strong>"
 "%(amount)s</strong>."
 msgstr ""
+"Etkinliğinizde bekleme listesinde bulunan tüm kişilere uyacak kadar yer "
+"açabilirseniz, ek bir <strong>%(miktar)</ strong>değerinde bilet "
+"satabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
-msgstr ""
+msgstr "Tüm girişler"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
-#, fuzzy
-#| msgid "Can change vouchers"
 msgid "Waiting for a voucher"
-msgstr "Kuponları görüntüleyebilir"
+msgstr "Bir kupon bekleniyor"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
 #: pretix/control/views/waitinglist.py:217
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Kupon atandı"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
-#, fuzzy
-#| msgid "Category description"
 msgid "Waiting for redemption"
-msgstr "Kategori tanımı"
+msgstr "Ödeme bekleniyor"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
-#, fuzzy
-#| msgid "Fully redeemed"
 msgid "Successfully redeemed"
-msgstr "Tamamen kullanıldı"
+msgstr "Başarıyla ödendi"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
 #: pretix/control/views/waitinglist.py:215
-#, fuzzy
-#| msgid "This voucher is expired."
 msgid "Voucher expired"
-msgstr "Bu kuponun kullanım süresi doldu."
+msgstr "Kuponun kullanım süresi doldu"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
-msgstr ""
+msgstr "O zamandan beri listede"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:158
 msgid ""
 "This entry has a modified priority. The higher this number is, the earlier "
 "this person will be assigned a voucher."
 msgstr ""
+"Bu girdinin değiştirilmiş bir önceliği var. Bu sayı ne kadar yüksekse, bu "
+"kişiye daha önce bir kupon verilecektir."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:213
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher redeemed"
-msgstr "Kupon kodu"
+msgstr "Fiş kullanılmış"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:174
 #, python-format
@@ -11215,26 +11225,31 @@ msgid ""
 "                                    Waiting, product %(num)sx available\n"
 "                                "
 msgstr ""
+"\n"
+"                                    …………………………………………Bekliyor, ürün %(sayı)x "
+"mevcut\n"
+"……………………………………\n"
+"                                "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
 msgid "Waiting, product unavailable"
-msgstr ""
+msgstr "Beklemede, ürün kullanılamıyor"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
-msgstr ""
+msgstr "Makbuz gönder"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
 msgid "Move to the top of the list"
-msgstr ""
+msgstr "Listenin en üstüne git"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:200
 msgid "Move to the end of the list"
-msgstr ""
+msgstr "Listenin sonuna taşı"
 
 #: pretix/control/templatetags/hierarkey_form.py:42
 msgid "Organizer-level settings"
-msgstr ""
+msgstr "Organizatör düzeyinde ayarlar"
 
 #: pretix/control/templatetags/hierarkey_form.py:45
 msgid ""
@@ -11243,22 +11258,26 @@ msgid ""
 "go to the organizer settings to change them or decouple them from the "
 "organizer account to change them for this event individually."
 msgstr ""
+"Bu ayarlar şu anda düzenleyici düzeyinde ayarlanmıştır. Bu sayede, tüm "
+"etkinlikleriniz için aynı anda kolayca değiştirebilirsiniz. Bu etkinlik için "
+"bunları ayrı ayrı değiştirmek üzere düzenleyici ayarlarına gidebilir veya "
+"bunları düzenleyici hesabından ayırabilirsiniz."
 
 #: pretix/control/templatetags/hierarkey_form.py:49
 msgid "Change only for this event"
-msgstr ""
+msgstr "Sadece bu etkinlik için değiştir"
 
 #: pretix/control/templatetags/hierarkey_form.py:50
 msgid "Change for all events"
-msgstr ""
+msgstr "Tüm etkinlik için değiştir"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
-msgstr ""
+msgstr "Bu sayfa numarası bir tam sayı değil"
 
 #: pretix/control/views/__init__.py:147
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "Sayfa numarası 1'den küçük"
 
 #: pretix/control/views/auth.py:120
 msgid ""
@@ -11266,33 +11285,37 @@ msgid ""
 "address bar and make sure it is correct and that the link has not been used "
 "before."
 msgstr ""
+"Geçersiz bir bağlantı kullandınız. Lütfen linki e-posta adresinizden adres "
+"çubuğuna kopyalayın ve doğru olduğundan ve bağlantının daha önce "
+"kullanılmadığından emin olun."
 
 #: pretix/control/views/auth.py:126
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
-msgstr ""
+msgstr "Bu ekibin bir parçası olduğunuz için \"{}\" davetini kabul edemezsiniz."
 
 #: pretix/control/views/auth.py:140
 msgid "You are now part of the team \"{}\"."
-msgstr ""
+msgstr "Artık \"{}\" ekibinin bir parçasısınız."
 
 #: pretix/control/views/auth.py:169
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
-msgstr ""
+msgstr "Pretix'e hoş geldiniz! Artık \"{}\" ekibinin bir parçasısınız."
 
 #: pretix/control/views/auth.py:199 pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
-msgstr ""
+msgstr "Son 24 saat içinde size bir e-posta gönderdik."
 
 #: pretix/control/views/auth.py:207 pretix/control/views/orders.py:877
 #: pretix/control/views/users.py:90
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"Postayı gönderirken bir hata oluştu. Lütfen daha sonra tekrar deneyiniz."
 
 #: pretix/control/views/auth.py:211
 msgid "We sent you an e-mail containing further instructions."
-msgstr ""
+msgstr "Size daha fazla talimat içeren bir e-posta gönderdik."
 
 #: pretix/control/views/auth.py:230
 msgid ""
@@ -11300,34 +11323,38 @@ msgid ""
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
+"Geçersiz bir bağlantıyı tıkladınız. Lütfen tam web adresini adres çubuğuna "
+"kopyaladığınızdan emin olun. Bağlantının sadece üç gün boyunca geçerli "
+"olduğunu ve bağlantının yalnızca bir kez kullanılabileceğini lütfen "
+"unutmayın."
 
 #: pretix/control/views/auth.py:233
 msgid "We were unable to find the user you requested a new password for."
-msgstr ""
+msgstr "Yeni bir şifre isteğinde bulunduğunuz kullanıcıyı bulamadık."
 
 #: pretix/control/views/auth.py:266
 msgid "You can now login using your new password."
-msgstr ""
+msgstr "Şimdi yeni şifrenizi kullanarak giriş yapabilirsiniz."
 
 #: pretix/control/views/auth.py:307
 msgid "Please try again."
-msgstr ""
+msgstr "Lütfen yeniden deneyin."
 
 #: pretix/control/views/auth.py:336
 msgid "Invalid code, please try again."
-msgstr ""
+msgstr "Geçersiz kod, lütfen tekrar deneyiniz."
 
 #: pretix/control/views/checkin.py:83
 msgid "You do not have permission to perform this action."
-msgstr ""
+msgstr "Bu eylemi gerçekleştirme izniniz yok."
 
 #: pretix/control/views/checkin.py:107
 msgid "The selected tickets have been marked as checked in."
-msgstr ""
+msgstr "Seçilen biletler check in olarak işaretlendi."
 
 #: pretix/control/views/checkin.py:147
 msgid "The new check-in list has been created."
-msgstr ""
+msgstr "Yeni check-in listesi oluşturuldu."
 
 #: pretix/control/views/checkin.py:154 pretix/control/views/checkin.py:192
 #: pretix/control/views/event.py:167 pretix/control/views/event.py:308
@@ -11343,15 +11370,15 @@ msgstr ""
 #: pretix/plugins/badges/views.py:67
 #: pretix/plugins/ticketoutputpdf/views.py:109
 msgid "We could not save your changes. See below for details."
-msgstr ""
+msgstr "Değişikliklerinizi kaydedemedik. Detaylar için aşağıya bakın."
 
 #: pretix/control/views/checkin.py:171 pretix/control/views/checkin.py:208
 msgid "The requested list does not exist."
-msgstr ""
+msgstr "İstenen liste mevcut değil."
 
 #: pretix/control/views/checkin.py:217
 msgid "The selected list has been deleted."
-msgstr ""
+msgstr "Seçilen liste silinmiştir."
 
 #: pretix/control/views/dashboards.py:73
 msgid "Attendees (ordered)"
