@@ -301,16 +301,40 @@ class Login2FAFormTest(TestCase):
         m.undo()
 
 
+class FakeRedis(object):
+    def get_redis_connection(self, connection_string):
+        return self
+
+    def __init__(self):
+        self.storage = {}
+
+    def exists(self, rkey):
+        print(rkey in self.storage)
+        return rkey in self.storage
+            
+    def setex(self, rkey, value, expiration):
+        self.storage[rkey] = value 
+
+    def execute(self):
+        pass
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class PasswordRecoveryFormTest(TestCase):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('demo@demo.dummy', 'demo')
 
+
     def test_unknown(self):
+        djmail.outbox = []
+
         response = self.client.post('/control/forgot', {
             'email': 'dummy@dummy.dummy',
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
+        assert len(djmail.outbox) == 0
+
 
     def test_email_sent(self):
         djmail.outbox = []
@@ -323,6 +347,36 @@ class PasswordRecoveryFormTest(TestCase):
         assert len(djmail.outbox) == 1
         assert djmail.outbox[0].to == [self.user.email]
         assert "recover?id=%d&token=" % self.user.id in djmail.outbox[0].body
+        assert self.user.all_logentries[0].action_type == 'pretix.control.auth.user.forgot_password.mail_sent'
+
+
+    @override_settings(HAS_REDIS=True)
+    def test_email_reset_twice_redis(self):
+        fake_redis = FakeRedis()
+        m = self.monkeypatch
+        m.setattr('django_redis.get_redis_connection', fake_redis.get_redis_connection, raising=False)
+
+        djmail.outbox = []
+
+        response = self.client.post('/control/forgot', {
+            'email': 'demo@demo.dummy',
+        })
+        self.assertEqual(response.status_code, 302)
+
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == [self.user.email]
+        assert "recover?id=%d&token=" % self.user.id in djmail.outbox[0].body
+        assert self.user.all_logentries[0].action_type == 'pretix.control.auth.user.forgot_password.mail_sent'
+
+        response = self.client.post('/control/forgot', {
+            'email': 'demo@demo.dummy',
+        })
+        self.assertEqual(response.status_code, 302)
+        
+        assert len(djmail.outbox) == 1
+        assert self.user.all_logentries[0].action_type == 'pretix.control.auth.user.forgot_password.denied.repeated'
+        
+        
 
     def test_recovery_unknown_user(self):
         response = self.client.get('/control/forgot/recover?id=0&token=foo')
