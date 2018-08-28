@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-27 00:00+0000\n"
+"PO-Revision-Date: 2018-08-28 20:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -11382,121 +11382,128 @@ msgstr "Seçilen liste silinmiştir."
 
 #: pretix/control/views/dashboards.py:73
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "Katılımcılar (sıra)"
 
 #: pretix/control/views/dashboards.py:82
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "Katılımcılar (ücretli)"
 
 #: pretix/control/views/dashboards.py:92
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr ""
+msgstr "Toplam gelir ({ücret})"
 
 #: pretix/control/views/dashboards.py:101
 msgid "Active products"
-msgstr ""
+msgstr "Aktif ürünler"
 
 #: pretix/control/views/dashboards.py:135
 msgid "available to give to people on waiting list"
-msgstr ""
+msgstr "bekleyenler listesi insanlara verilebilir"
 
 #: pretix/control/views/dashboards.py:143
 msgid "total waiting list length"
-msgstr ""
+msgstr "toplam bekleme listesi uzunluğu"
 
 #: pretix/control/views/dashboards.py:163
 #, python-brace-format
 msgid "{quota} left"
-msgstr ""
+msgstr "{kota} tane kaldı"
 
 #: pretix/control/views/dashboards.py:181
 msgid "Your ticket shop is"
-msgstr ""
+msgstr "Bilet dükkanınız"
 
 #: pretix/control/views/dashboards.py:181
 msgid "Click here to change"
-msgstr ""
+msgstr "Değiştirmek için buraya tıklayın"
 
 #: pretix/control/views/dashboards.py:182
 msgid "live"
-msgstr ""
+msgstr "canlı"
 
 #: pretix/control/views/dashboards.py:182
 msgid "not yet public"
-msgstr ""
+msgstr "henüz satışa açık değil"
 
 #: pretix/control/views/dashboards.py:201
 #, python-brace-format
 msgid "Checked in – {list}"
-msgstr ""
+msgstr "Kontrol edildi - {list}"
 
 #: pretix/control/views/dashboards.py:217
 msgid "Welcome to pretix!"
-msgstr ""
+msgstr "Pretix'e hoş geldiniz!"
 
 #: pretix/control/views/dashboards.py:223
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "Kurulum aracımızla başlayın"
 
 #: pretix/control/views/dashboards.py:224
 msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
+"Bilet satmaya başlamak için, ürünler veya kotalar oluşturmanız gerekir. Bunu "
+"oluşturmanın en hızlı yolu kurulum aracımızı kullanmaktır."
 
 #: pretix/control/views/dashboards.py:226
 msgid "Set up event"
-msgstr ""
+msgstr "Etkinlik ayarla"
 
 #: pretix/control/views/dashboards.py:349 pretix/control/views/typeahead.py:43
 msgctxt "subevent"
 msgid "No dates"
-msgstr ""
+msgstr "Tarih yok"
 
 #: pretix/control/views/dashboards.py:362
 msgid "Action required"
-msgstr ""
+msgstr "Eylem Gerekli"
 
 #: pretix/control/views/dashboards.py:366
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:22
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:44
 msgid "Sale over"
-msgstr ""
+msgstr "Satış bitti"
 
 #: pretix/control/views/dashboards.py:368
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:51
 msgid "Soon"
-msgstr ""
+msgstr "Yakında"
 
 #: pretix/control/views/dashboards.py:390
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{sayı} sipariş"
+msgstr[1] "{sayı} sipariş"
 
 #: pretix/control/views/event.py:279
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
+"Bu ödeme sağlayıcısı mevcut değil veya ilgili eklenti devre dışı bırakıldı."
 
 #: pretix/control/views/event.py:444 pretix/control/views/organizer.py:158
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
 msgstr ""
+"Değişiklikleriniz kaydedildi. Değişiklikleriniz etkinleşene kadar kısa bir "
+"süre alabileceğini lütfen unutmayın."
 
 #: pretix/control/views/event.py:482
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr ""
+msgstr "SMTP sunucusuyla iletişim kurulurken bir hata oluştu:%"
 
 #: pretix/control/views/event.py:485
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
 msgstr ""
+"Değişiklikleriniz kaydedildi ve SMTP sunucunuza bağlantı denemesi başarılı "
+"oldu."
 
 #: pretix/control/views/event.py:488
 msgid ""
@@ -11504,157 +11511,164 @@ msgid ""
 "the \"use custom SMTP server\" checkbox, otherwise your SMTP server will not "
 "be used."
 msgstr ""
+"Yapılandırdığınız SMTP sunucusuna ulaşabildik. \"Özel SMTP sunucusu kullan\" "
+"onay kutusunu işaretlemeyi unutmayın, aksi halde SMTP sunucunuz "
+"kullanılmayacaktır."
 
 #: pretix/control/views/event.py:516
 msgid "{} has been transferred to account <9999-9999-9999-9999> at {}"
-msgstr ""
+msgstr "{}, {} numaralı hesaptan <9999-9999-9999-9999> hesabına aktarıldı"
 
 #: pretix/control/views/event.py:571
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Örnek Giriş Bileti"
 
 #: pretix/control/views/event.py:574
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Örnek Kurum"
 
 #: pretix/control/views/event.py:575
 msgid "An individial text with a reason can be inserted here."
-msgstr ""
+msgstr "Bir nedeni olan tek bir metin buraya eklenebilir."
 
 #: pretix/control/views/event.py:576
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Lütfen bu banka hesabına havale gönderin: 9999-9999-9999-9999"
 
 #: pretix/control/views/event.py:598
 msgid "invalid item"
-msgstr ""
+msgstr "geçersiz öğe"
 
 #: pretix/control/views/event.py:630 pretix/presale/views/order.py:675
 msgid "You requested an invalid ticket output type."
-msgstr ""
+msgstr "Geçersiz bir bilet çıkış türü talep ettiniz."
 
 #: pretix/control/views/event.py:775
 msgid "Your shop is live now!"
-msgstr ""
+msgstr "Mağazanız artık yayında!"
 
 #: pretix/control/views/event.py:782
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
-msgstr ""
+msgstr "Dükkanını indirdik. İstediğiniz zaman yeniden etkinleştirebilirsiniz!"
 
 #: pretix/control/views/event.py:799
 msgid "This event can not be deleted."
-msgstr ""
+msgstr "Bu etkinlik silinemedi."
 
 #: pretix/control/views/event.py:822
 msgid "The event has been deleted."
-msgstr ""
+msgstr "Etkinlik silindi."
 
 #: pretix/control/views/event.py:825
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"Bazı kısıtlamalar (ör. Eklentiler tarafından oluşturulan veriler) izin "
+"vermediğinden, etkinlik silinemedi."
 
 #: pretix/control/views/event.py:892
 msgid "The issue has been marked as resolved!"
-msgstr ""
+msgstr "Sorun çözülmüş olarak işaretlendi!"
 
 #: pretix/control/views/event.py:913 pretix/control/views/orders.py:222
 msgid "The comment has been updated."
-msgstr ""
+msgstr "Yorum güncellendi."
 
 #: pretix/control/views/event.py:915 pretix/control/views/orders.py:224
 msgid "Could not update the comment."
-msgstr ""
+msgstr "Yorum güncellenemedi."
 
 #: pretix/control/views/event.py:953 pretix/control/views/main.py:181
 msgid "VAT"
-msgstr ""
+msgstr "değer katkı vergisi"
 
 #: pretix/control/views/event.py:980
 msgid "The new tax rule has been created."
-msgstr ""
+msgstr "Yeni vergi kuralı oluşturuldu."
 
 #: pretix/control/views/event.py:1003 pretix/control/views/event.py:1062
 msgid "The requested tax rule does not exist."
-msgstr ""
+msgstr "İstenen vergi kuralı mevcut değil."
 
 #: pretix/control/views/event.py:1071
 msgid "The selected tax rule has been deleted."
-msgstr ""
+msgstr "Seçilen vergi kuralı silindi."
 
 #: pretix/control/views/event.py:1073
 msgid "The selected tax rule can not be deleted."
-msgstr ""
+msgstr "Seçilen vergi kuralı silinemez."
 
 #: pretix/control/views/event.py:1123
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "Etkinliğiniz boş değil, manuel olarak ayarlamanız gerekiyor."
 
 #: pretix/control/views/event.py:1238
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
+"Değişiklikleriniz kaydedildi. Artık ayrıntılara bakarak devam edebilir veya "
+"satışa başlamak için etkinliğinizi canlı olarak yapabilirsiniz!"
 
 #: pretix/control/views/event.py:1257
 msgid "Regular ticket"
-msgstr ""
+msgstr "Düzenli bilet"
 
 #: pretix/control/views/event.py:1262
 msgid "Reduced ticket"
-msgstr ""
+msgstr "İndirimli bilet"
 
 #: pretix/control/views/global_settings.py:26
 #: pretix/control/views/global_settings.py:49
 msgid "Your changes have not been saved, see below for errors."
-msgstr ""
+msgstr "Değişiklikleriniz kaydedilmedi, hatalar için aşağıya bakın."
 
 #: pretix/control/views/item.py:66 pretix/control/views/item.py:1066
 msgid "The requested product does not exist."
-msgstr ""
+msgstr "İstenen ürün mevcut değil."
 
 #: pretix/control/views/item.py:79
 msgid "The order of items has been updated."
-msgstr ""
+msgstr "Öğelerin sırası güncellendi."
 
 #: pretix/control/views/item.py:111 pretix/control/views/item.py:146
 #: pretix/control/views/item.py:216
 msgid "The requested product category does not exist."
-msgstr ""
+msgstr "İstenen ürün kategorisi mevcut değil."
 
 #: pretix/control/views/item.py:122
 msgid "The selected category has been deleted."
-msgstr ""
+msgstr "Seçilen kategori silindi."
 
 #: pretix/control/views/item.py:186
 msgid "The new category has been created."
-msgstr ""
+msgstr "Yeni kategori oluşturuldu."
 
 #: pretix/control/views/item.py:229
 msgid "The order of categories has been updated."
-msgstr ""
+msgstr "Kategorilerin sırası güncellendi."
 
 #: pretix/control/views/item.py:268
 msgid "The selected question does not exist."
-msgstr ""
+msgstr "Seçilen soru mevcut değil."
 
 #: pretix/control/views/item.py:281
 msgid "The order of questions has been updated."
-msgstr ""
+msgstr "Soruların sırası güncellendi."
 
 #: pretix/control/views/item.py:312 pretix/control/views/item.py:461
 #: pretix/control/views/item.py:483
 msgid "The requested question does not exist."
-msgstr ""
+msgstr "İstenen soru mevcut değil."
 
 #: pretix/control/views/item.py:325
 msgid "The selected question has been deleted."
-msgstr ""
+msgstr "Seçilen soru silindi."
 
 #: pretix/control/views/item.py:418
 msgid "File uploaded"
-msgstr ""
+msgstr "Dosya yüklendi"
 
 #: pretix/control/views/item.py:542
 msgid "The new question has been created."
