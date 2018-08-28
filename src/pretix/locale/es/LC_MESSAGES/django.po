@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-25 08:22+0000\n"
+"PO-Revision-Date: 2018-08-28 03:01+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -1098,7 +1098,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:752 pretix/control/forms/event.py:890
 msgid "Frontpage text"
-msgstr ""
+msgstr "Texto de pagina principal"
 
 #: pretix/base/models/event.py:759
 msgid "Date in event series"
@@ -1186,7 +1186,7 @@ msgstr "Descripción"
 
 #: pretix/base/models/items.py:229
 msgid "This is shown below the product name in lists."
-msgstr ""
+msgstr "Esto es mostrado debajo del nombre del producto en listas."
 
 #: pretix/base/models/items.py:233 pretix/base/models/items.py:482
 msgid "Default price"
@@ -1201,7 +1201,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:241
 msgid "Free price input"
-msgstr ""
+msgstr "Entrada de precio gratuita"
 
 #: pretix/base/models/items.py:242
 msgid ""
@@ -1218,7 +1218,7 @@ msgstr "Impuesto de ventas"
 
 #: pretix/base/models/items.py:254
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "Es un ticket de admision"
 
 #: pretix/base/models/items.py:256
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -1518,7 +1518,7 @@ msgstr "Tipo de pregunta"
 #: pretix/base/models/items.py:718
 #: pretix/control/templates/pretixcontrol/items/questions.html:49
 msgid "Required question"
-msgstr ""
+msgstr "Pregunta requerida"
 
 #: pretix/base/models/items.py:725
 msgid "This question will be asked to buyers of the selected products"
@@ -1552,15 +1552,15 @@ msgstr "Selección de número inválida."
 
 #: pretix/base/models/items.py:818
 msgid "Invalid date input."
-msgstr ""
+msgstr "Fecha ingresada inválida."
 
 #: pretix/base/models/items.py:825
 msgid "Invalid time input."
-msgstr ""
+msgstr "Hora ingresada inválida."
 
 #: pretix/base/models/items.py:835
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "Fecha-Hora ingresada invalida."
 
 #: pretix/base/models/items.py:849
 #: pretix/control/templates/pretixcontrol/items/question.html:69
@@ -1626,43 +1626,43 @@ msgstr ""
 #: pretix/base/models/log.py:80
 #, python-brace-format
 msgid "Order {val}"
-msgstr ""
+msgstr "Orden {val}"
 
 #: pretix/base/models/log.py:90
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr ""
+msgstr "Comprobante {val}…"
 
 #: pretix/base/models/log.py:100
 #, python-brace-format
 msgid "Product {val}"
-msgstr ""
+msgstr "Producto {val}"
 
 #: pretix/base/models/log.py:110
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr ""
+msgstr "Fecha {val}"
 
 #: pretix/base/models/log.py:120
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Cuota {val}"
 
 #: pretix/base/models/log.py:130
 #, python-brace-format
 msgid "Category {val}"
-msgstr ""
+msgstr "Categoría {val}"
 
 #: pretix/base/models/log.py:140
 #, python-brace-format
 msgid "Question {val}"
-msgstr ""
+msgstr "Pregunta {val}"
 
 #: pretix/base/models/log.py:150
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr ""
+msgstr "Regla de impuesto {val}"
 
 #: pretix/base/models/orders.py:103
 msgid "pending"
@@ -1694,7 +1694,7 @@ msgstr "Fecha de expiración"
 
 #: pretix/base/models/orders.py:144
 msgid "Total amount"
-msgstr ""
+msgstr "Cantidad total"
 
 #: pretix/base/models/orders.py:147 pretix/base/models/vouchers.py:170
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
@@ -2104,11 +2104,11 @@ msgstr "Sin efecto"
 
 #: pretix/base/models/vouchers.py:76
 msgid "Set product price to"
-msgstr ""
+msgstr "Establecer el precio del producto en "
 
 #: pretix/base/models/vouchers.py:77
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Restar del precio del producto"
 
 #: pretix/base/models/vouchers.py:78
 msgid "Reduce product price by (%)"
@@ -2124,7 +2124,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:100 pretix/control/views/vouchers.py:62
 msgid "Maximum usages"
-msgstr ""
+msgstr "Usos máximos"
 
 #: pretix/base/models/vouchers.py:101
 msgid "Number of times this voucher can be redeemed."
@@ -2200,7 +2200,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:7
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr ""
+msgstr "Comprobante"
 
 #: pretix/base/models/vouchers.py:177
 #: pretix/control/templates/pretixcontrol/event/base.html:118
@@ -2208,7 +2208,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/base.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
 msgid "Vouchers"
-msgstr ""
+msgstr "Comprobantes"
 
 #: pretix/base/models/vouchers.py:202
 msgid "You cannot select a quota that belongs to a different event."
@@ -2274,7 +2274,7 @@ msgstr ""
 
 #: pretix/base/models/waitinglist.py:36
 msgid "On waiting list since"
-msgstr ""
+msgstr "En lista de espera desde"
 
 #: pretix/base/models/waitinglist.py:40
 #: pretix/control/templates/pretixcontrol/users/index.html:37
@@ -2351,7 +2351,7 @@ msgstr ""
 
 #: pretix/base/notifications.py:139
 msgid "View all unresolved problems"
-msgstr ""
+msgstr "Ver todos los problemas sin resolver"
 
 #: pretix/base/notifications.py:181 pretix/control/forms/filter.py:97
 #: pretix/control/forms/filter.py:198
@@ -2614,7 +2614,7 @@ msgstr "Nombre del producto"
 #: pretix/base/pdf.py:49 pretix/base/services/tickets.py:77
 #: pretix/control/views/pdf.py:58
 msgid "Sample product"
-msgstr ""
+msgstr "Producto de muestra"
 
 #: pretix/base/pdf.py:53
 msgid "Variation name"
@@ -2626,7 +2626,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:58
 msgid "Product description"
-msgstr ""
+msgstr "Descripción del producto"
 
 #: pretix/base/pdf.py:59 pretix/base/services/tickets.py:78
 #: pretix/control/views/pdf.py:59
@@ -2643,7 +2643,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:72
 msgid "Ticket category"
-msgstr ""
+msgstr "Categoría del ticket"
 
 #: pretix/base/pdf.py:79
 msgid "123.45 EUR"
@@ -2656,7 +2656,7 @@ msgstr ""
 #: pretix/control/views/pdf.py:69 pretix/control/views/pdf.py:70
 #: pretix/control/views/pdf.py:72 pretix/plugins/sendmail/views.py:92
 msgid "John Doe"
-msgstr ""
+msgstr "Juan Pérez"
 
 #: pretix/base/pdf.py:89
 msgid "Sample event name"
@@ -2664,11 +2664,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:93
 msgid "Event date"
-msgstr ""
+msgstr "Fecha del evento"
 
 #: pretix/base/pdf.py:94
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "31 de Mayo, 2017"
 
 #: pretix/base/pdf.py:98
 msgid "Event date range"
@@ -2692,7 +2692,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:109
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:113
 msgid "Event end date and time"
@@ -2773,15 +2773,15 @@ msgstr ""
 
 #: pretix/base/pdf.py:308 pretix/plugins/ticketoutputpdf/ticketoutput.py:107
 msgid "Ticket"
-msgstr ""
+msgstr "Ticker"
 
 #: pretix/base/reldate.py:13
 msgid "Event start"
-msgstr ""
+msgstr "Inicio del evento"
 
 #: pretix/base/reldate.py:14
 msgid "Event end"
-msgstr ""
+msgstr "Fin del evento"
 
 #: pretix/base/reldate.py:15
 msgid "Event admission"
@@ -5240,7 +5240,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:217
 msgctxt "subevent"
 msgid "New date"
-msgstr ""
+msgstr "plugin-bitpay"
 
 #: pretix/control/forms/orders.py:225
 msgid "New price (gross)"
