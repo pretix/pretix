@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-28 03:01+0000\n"
+"PO-Revision-Date: 2018-08-28 14:00+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -446,7 +446,7 @@ msgstr "Comprobantes bloqueados"
 
 #: pretix/base/exporters/orderlist.py:236 pretix/control/views/item.py:621
 msgid "Current user's carts"
-msgstr ""
+msgstr "Carrito actual del usuario"
 
 #: pretix/base/exporters/orderlist.py:236 pretix/base/shredder.py:170
 #: pretix/control/forms/event.py:1114
@@ -562,6 +562,9 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"Tu TAX ID no puede ser chequeado, porque el verificador para tu país no está "
+"disponible actualmente. Nosotros deberemos de cargar el TAX en tu compra. "
+"Puedes obtener el total del tax mediante el proceso de reembolso."
 
 #: pretix/base/forms/questions.py:249
 msgid ""
@@ -637,7 +640,7 @@ msgstr ""
 #: pretix/base/forms/validators.py:39
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr ""
+msgstr "Persona(s) interesada inválida(s): %(value)s"
 
 #: pretix/base/forms/widgets.py:117 pretix/base/forms/widgets.py:122
 #: pretix/base/models/orders.py:1507
@@ -844,15 +847,15 @@ msgstr "Zona horaria"
 
 #: pretix/base/models/auth.py:96
 msgid "Two-factor authentication is required to log in"
-msgstr ""
+msgstr "Autenticación de 2 pasos es necesaria para iniciar sesión"
 
 #: pretix/base/models/auth.py:100
 msgid "Receive notifications according to my settings below"
-msgstr ""
+msgstr "Recibir notificaciones de acuerdo a mi configuración inferior"
 
 #: pretix/base/models/auth.py:101
 msgid "If turned off, you will not get any notifications."
-msgstr ""
+msgstr "Si apagado, no recibirás ninguna notificación."
 
 #: pretix/base/models/auth.py:112
 #: pretix/control/templates/pretixcontrol/order/index.html:131
@@ -885,11 +888,11 @@ msgstr "Recuperar contraseña"
 
 #: pretix/base/models/checkin.py:13
 msgid "All products (including newly created ones)"
-msgstr ""
+msgstr "Todos los productos (incluidos los creados recientemente)"
 
 #: pretix/base/models/checkin.py:14 pretix/plugins/badges/exporters.py:75
 msgid "Limit to products"
-msgstr ""
+msgstr "Limitar a productos"
 
 #: pretix/base/models/checkin.py:16 pretix/base/models/items.py:943
 #: pretix/base/models/orders.py:687 pretix/base/models/vouchers.py:91
@@ -927,10 +930,11 @@ msgstr ""
 #: pretix/base/models/event.py:37
 msgid "The end of the presale period has to be later than its start."
 msgstr ""
+"La finalización del periodo de preventa tiene que ser superior al inicio."
 
 #: pretix/base/models/event.py:39
 msgid "The end of the event has to be later than its start."
-msgstr ""
+msgstr "La finalización del evento tiene que ser después de su inicio."
 
 #: pretix/base/models/event.py:203 pretix/base/pdf.py:88
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:372
@@ -1011,7 +1015,7 @@ msgstr "Inicio de preventa"
 #: pretix/base/models/event.py:244 pretix/base/models/event.py:743
 #: pretix/control/forms/subevents.py:72
 msgid "Optional. No products will be sold before this date."
-msgstr ""
+msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
 
 #: pretix/base/models/event.py:249 pretix/base/models/event.py:748
 msgid "Location"
@@ -1060,7 +1064,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:586
 msgid "You need to configure at least one quota to sell anything."
-msgstr ""
+msgstr "Tienes que configurar al menos una cuota para vender algo."
 
 #: pretix/base/models/event.py:675
 msgid ""
@@ -1081,7 +1085,7 @@ msgstr "El evento no puede terminar antes de que empiece."
 
 #: pretix/base/models/event.py:696
 msgid "The event's presale cannot end before it starts."
-msgstr ""
+msgstr "La preventa del evento no puede terminar antes de empezar."
 
 #: pretix/base/models/event.py:722 pretix/base/models/items.py:225
 #: pretix/base/models/items.py:468 pretix/control/forms/filter.py:347
@@ -1102,19 +1106,21 @@ msgstr "Texto de pagina principal"
 
 #: pretix/base/models/event.py:759
 msgid "Date in event series"
-msgstr ""
+msgstr "Fecha en una serie de eventos"
 
 #: pretix/base/models/event.py:760
 msgid "Dates in event series"
-msgstr ""
+msgstr "Fechas en una serie de eventos"
 
 #: pretix/base/models/event.py:892
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
+"No puede tener caracteres espacios o caracteres especiales excepto guión bajo"
 
 #: pretix/base/models/event.py:897
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
+"El nombre de la propiedad puede solo contener letras, números y guión bajo."
 
 #: pretix/base/models/items.py:44
 msgid "Category name"
@@ -1234,7 +1240,7 @@ msgstr "Disponible desde"
 
 #: pretix/base/models/items.py:272
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "Este producto no será vendido antes de la fecha dada."
 
 #: pretix/base/models/items.py:275 pretix/base/payment.py:190
 msgid "Available until"
@@ -1242,21 +1248,23 @@ msgstr "Disponible hasta"
 
 #: pretix/base/models/items.py:277
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "Este producto no será vendido después de la fecha dada."
 
 #: pretix/base/models/items.py:280
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Este producto solo se puede comprar usando un comprobante."
 
 #: pretix/base/models/items.py:282
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
+"Para comprar este productos, el usuario necesita un comprobante para aplicar "
+"a este producto ya sea directamente o por una cuota."
 
 #: pretix/base/models/items.py:286
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Para comprar este producto se requiere aprobación"
 
 #: pretix/base/models/items.py:288
 msgid ""
@@ -1280,7 +1288,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:299
 msgid "Allow product to be canceled"
-msgstr ""
+msgstr "Permitir que todos los productos puedan ser cancelados"
 
 #: pretix/base/models/items.py:301
 msgid ""
@@ -1371,6 +1379,7 @@ msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"El número máximo por orden no puede ser menor que el mínimo numero por orden."
 
 #: pretix/base/models/items.py:427
 msgid "The item's category must belong to the same event as the item."
@@ -1925,7 +1934,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1508
 msgid "Company name"
-msgstr "Nombre de la compañía"
+msgstr "Nombre de la Compañía"
 
 #: pretix/base/models/orders.py:1514
 msgid "Select country"
@@ -2104,7 +2113,7 @@ msgstr "Sin efecto"
 
 #: pretix/base/models/vouchers.py:76
 msgid "Set product price to"
-msgstr "Establecer el precio del producto en "
+msgstr "Establecer el precio en"
 
 #: pretix/base/models/vouchers.py:77
 msgid "Subtract from product price"
@@ -10352,7 +10361,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:22
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:44
 msgid "Sale over"
-msgstr ""
+msgstr "Venta finalizada"
 
 #: pretix/control/views/dashboards.py:368
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:51
@@ -13099,7 +13108,7 @@ msgstr "Ir"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:20
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:42
 msgid "Tickets on sale"
-msgstr ""
+msgstr "Tickets a la venta"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #, python-format
