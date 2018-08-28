@@ -1,0 +1,15 @@
+[
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_email_reset_twice_redis",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_email_sent",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_expired_token",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_invalid_token",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_unknown_user",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_common_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_different_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_empty_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_numeric_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_short_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_success",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_recovery_valid_token_user_attribute_similarity_passwords",
+  "tests/control/test_auth.py::PasswordRecoveryFormTest::test_unknown"
+]
