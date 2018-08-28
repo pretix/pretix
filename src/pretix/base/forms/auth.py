@@ -180,12 +180,4 @@ class PasswordForgotForm(forms.Form):
         super().__init__(*args, **kwargs)
 
     def clean_email(self):
-        email = self.cleaned_data['email']
-        try:
-            self.cleaned_data['user'] = User.objects.get(email=email)
-            return email
-        except User.DoesNotExist:
-            raise forms.ValidationError(
-                _("We are unable to find a user matching the data you provided."),
-                code='unknown_user'
-            )
+        return self.cleaned_data['email']

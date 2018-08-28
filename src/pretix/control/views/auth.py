@@ -189,27 +189,43 @@ class Forgot(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
-            user = self.form.cleaned_data['user']
+            email = self.form.cleaned_data['email']
 
-            if settings.HAS_REDIS:
-                from django_redis import get_redis_connection
-                rc = get_redis_connection("redis")
-                if rc.exists('pretix_pwreset_%s' % (user.id)):
-                    user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
-                    messages.error(request, _('We already sent you an email in the last 24 hours.'))
-                    return redirect('control:auth.forgot')
-                else:
-                    rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
+            has_redis = settings.HAS_REDIS
 
             try:
-                user.send_password_reset()
-            except SendMailException:
-                messages.error(request, _('There was an error sending the mail. Please try again later.'))
-                return self.get(request, *args, **kwargs)
+                user = User.objects.get(email=email)
 
-            user.log_action('pretix.control.auth.user.forgot_password.mail_sent')
-            messages.success(request, _('We sent you an e-mail containing further instructions.'))
-            return redirect('control:auth.forgot')
+                if has_redis:
+                    from django_redis import get_redis_connection
+                    rc = get_redis_connection("redis")
+                    if rc.exists('pretix_pwreset_%s' % (user.id)):
+                        user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
+                        raise Warning
+                    else:
+                        rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
+
+            except User.DoesNotExist:
+                logger.exception('Password reset for unregistered e-mail \"' + email + '\"requested.')
+
+            except SendMailException:
+                logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')
+
+            except Warning:
+                pass
+
+            else:
+                user.send_password_reset()
+                user.log_action('pretix.control.auth.user.forgot_password.mail_sent')
+
+            finally:
+                if has_redis:
+                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions.'
+                                             'You can reset your password once every 24hours'))
+                else:
+                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions.'))
+
+                return redirect('control:auth.forgot')
         else:
             return self.get(request, *args, **kwargs)
 
