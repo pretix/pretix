@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-28 20:00+0000\n"
+"PO-Revision-Date: 2018-08-29 23:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -11672,67 +11672,60 @@ msgstr "Dosya yüklendi"
 
 #: pretix/control/views/item.py:542
 msgid "The new question has been created."
-msgstr ""
+msgstr "Yeni soru oluşturuldu."
 
 #: pretix/control/views/item.py:583
 msgid "The new quota has been created."
-msgstr ""
+msgstr "Yeni kota oluşturuldu."
 
 #: pretix/control/views/item.py:616
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "Vouchers and waiting list reservations"
-msgstr "Bekleme listesinde"
+msgstr "Kuponlar ve bekleme listesi rezervasyonları"
 
 #: pretix/control/views/item.py:631
-#, fuzzy
-#| msgid "Available until"
 msgid "Available quota"
-msgstr "Kadar mevcut"
+msgstr "Mevcut kota"
 
 #: pretix/control/views/item.py:637
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list (pending)"
-msgstr "Liste girdileri bekleniyor"
+msgstr "Bekleme listesi (beklemede)"
 
 #: pretix/control/views/item.py:644
-#, fuzzy
-#| msgid "Current issues"
 msgid "Currently for sale"
-msgstr "Güncel konular"
+msgstr "Şu anda satılık"
 
 #: pretix/control/views/item.py:669 pretix/control/views/item.py:689
 #: pretix/control/views/item.py:743
 msgid "The requested quota does not exist."
-msgstr ""
+msgstr "İstenen kota mevcut değil."
 
 #: pretix/control/views/item.py:756
 msgid "The selected quota has been deleted."
-msgstr ""
+msgstr "Seçilen kota silindi."
 
 #: pretix/control/views/item.py:779
 msgid "The requested item does not exist."
-msgstr ""
+msgstr "İstenen öğe mevcut değil."
 
 #: pretix/control/views/item.py:1019
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
+"Yalnızca bir eklenti olarak kullanılabilen bir ürüne eklenti ekleyemezsiniz."
 
 #: pretix/control/views/item.py:1077
 msgid "The selected product has been deleted."
-msgstr ""
+msgstr "Seçilen ürün silindi."
 
 #: pretix/control/views/item.py:1086
 msgid "The selected product has been deactivated."
-msgstr ""
+msgstr "Seçilen ürün devre dışı bırakıldı."
 
 #: pretix/control/views/main.py:160
 #, python-brace-format
 msgid "Team {event}"
-msgstr ""
+msgstr "Ekip {etkinlik}"
 
 #: pretix/control/views/main.py:203 pretix/plugins/badges/__init__.py:23
 #: pretix/plugins/badges/models.py:27
@@ -11742,134 +11735,123 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Varsayılan"
 
 #: pretix/control/views/oauth.py:85
 msgid "A new client secret has been generated and is now effective."
-msgstr ""
+msgstr "Yeni bir müşteri sırrı oluşturuldu ve şimdi etkili."
 
 #: pretix/control/views/oauth.py:143
 msgid "Access for the selected application has been revoked."
-msgstr ""
+msgstr "Seçilen uygulama için erişim iptal edildi."
 
 #: pretix/control/views/orders.py:262
-#, fuzzy
-#| msgid "The order has been marked as refunded."
 msgid "The order has been denied and is therefore now canceled."
-msgstr "Sipariş iade edildi olarak işaretlendi."
+msgstr "Sipariş reddedildi ve bu nedenle şimdi iptal edildi."
 
 #: pretix/control/views/orders.py:287
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "This payment has been canceled."
-msgstr "Sipariş iptal edildi."
+msgstr "Bu ödeme iptal edildi."
 
 #: pretix/control/views/orders.py:289
-#, fuzzy
-#| msgid "This product will not be sold after the given date."
 msgid "This payment can not be canceled at the moment."
-msgstr "Bu ürün belirtilen tarihten sonra satılmayacaktır."
+msgstr "Bu ödeme şu anda iptal edilemez."
 
 #: pretix/control/views/orders.py:315
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The refund has been canceled."
-msgstr "Sipariş iptal edildi."
+msgstr "Geri ödeme iptal edildi."
 
 #: pretix/control/views/orders.py:317
-#, fuzzy
-#| msgid "This product will not be sold after the given date."
 msgid "This refund can not be canceled at the moment."
-msgstr "Bu ürün belirtilen tarihten sonra satılmayacaktır."
+msgstr "Bu geri ödeme şu anda iptal edilemez."
 
 #: pretix/control/views/orders.py:350
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The refund has been processed."
-msgstr "Sipariş oluşturuldu."
+msgstr "Para iadesi yapıldı."
 
 #: pretix/control/views/orders.py:352 pretix/control/views/orders.py:378
-#, fuzzy
-#| msgid "This product will not be sold after the given date."
 msgid "This refund can not be processed at the moment."
-msgstr "Bu ürün belirtilen tarihten sonra satılmayacaktır."
+msgstr "Bu geri ödeme şu anda işleme alınamaz."
 
 #: pretix/control/views/orders.py:376
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The refund has been marked as done."
-msgstr "Sipariş ödenmiş olarak işaretlendi."
+msgstr "Geri ödeme yapıldı olarak işaretlendi."
 
 #: pretix/control/views/orders.py:420
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
 msgstr ""
+"Ödeme tamamlandı olarak işaretlendi, ancak bir onay postası gönderemedik."
 
 #: pretix/control/views/orders.py:423
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The payment has been marked as complete."
-msgstr "Sipariş ödenmiş olarak işaretlendi."
+msgstr "Ödeme eksiksiz olarak işaretlendi."
 
 #: pretix/control/views/orders.py:425
-#, fuzzy
-#| msgid "The last payment date cannot be before the end of presale."
 msgid "This payment can not be confirmed at the moment."
-msgstr "Son ödeme tarihi, ön satışın sona ermesinden önce olamaz."
+msgstr "Bu ödeme şu anda teyit edilemez."
 
 #: pretix/control/views/orders.py:511 pretix/control/views/orders.py:534
 #: pretix/control/views/orders.py:565
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Geçersiz bir numara girdiniz."
 
 #: pretix/control/views/orders.py:571
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr ""
+"Henüz geri ödenmeyen bir ödemenin tutarından daha fazla geri ödeme "
+"yapamazsınız."
 
 #: pretix/control/views/orders.py:576
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
+"Yalnızca tam para iadelerini destekleyen bir ödeme yöntemi için kısmi geri "
+"ödeme seçtiniz."
 
 #: pretix/control/views/orders.py:601
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
+"İadelerden biri işlenemedi. Farklı bir şekilde geri ödemeyi tekrar "
+"denemelisiniz. Hata mesajı: {}"
 
 #: pretix/control/views/orders.py:607
-#, fuzzy
-#| msgid "The invoice has been reissued."
 msgid "A refund of {} has been processed."
-msgstr "Fatura yeniden yayınlandı."
+msgstr "{} Tutarında geri ödeme yapıldı."
 
 #: pretix/control/views/orders.py:611
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
+"{} Para iadesi kaydedildi, ancak henüz tam olarak çalıştırılmadı. Aşağıda "
+"eksiksiz olarak işaretleyebilirsiniz."
 
 #: pretix/control/views/orders.py:637
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
+"Seçtiğiniz geri ödemeler seçilen toplam geri ödeme tutarıyla eşleşmiyor."
 
 #: pretix/control/views/orders.py:695
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
+"Sipariş ödenmiş olarak işaretlendi, ancak bir onay postası gönderemedik."
 
 #: pretix/control/views/orders.py:706
 msgid "The order has been marked as not paid."
-msgstr ""
+msgstr "Sipariş ödenmemiş olarak işaretlendi."
 
 #: pretix/control/views/orders.py:732 pretix/presale/views/order.py:506
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Bu sipariş için fatura oluşturamazsınız."
 
 #: pretix/control/views/orders.py:734 pretix/presale/views/order.py:508
 msgid "An invoice for this order already exists."
@@ -11877,210 +11859,221 @@ msgstr ""
 
 #: pretix/control/views/orders.py:754 pretix/control/views/orders.py:758
 msgid "No VAT ID specified."
-msgstr ""
+msgstr "KDV numarası belirtilmemiş."
 
 #: pretix/control/views/orders.py:762
 msgid "No country specified."
-msgstr ""
+msgstr "Ülke belirtilmedi."
 
 #: pretix/control/views/orders.py:766
 msgid "VAT ID could not be checked since a non-EU country has been specified."
 msgstr ""
+"AB üyesi olmayan bir ülke belirtildiği için KDV Kimliği kontrol edilemedi."
 
 #: pretix/control/views/orders.py:782
 msgid "This VAT ID is not valid."
-msgstr ""
+msgstr "Bu KDV numarası geçerli değil."
 
 #: pretix/control/views/orders.py:785
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
+"Ülkenin KDV kontrol servisi şu anda mevcut olmadığı için KDV Kimliği kontrol "
+"edilemedi."
 
 #: pretix/control/views/orders.py:788
 msgid "This VAT ID is valid."
-msgstr ""
+msgstr "Bu KDV numarası geçerlidir."
 
 #: pretix/control/views/orders.py:802 pretix/control/views/orders.py:827
 msgid "Unknown invoice."
-msgstr ""
+msgstr "Bilinmeyen fatura."
 
 #: pretix/control/views/orders.py:805 pretix/control/views/orders.py:830
 msgid "The invoice has already been canceled."
-msgstr ""
+msgstr "Fatura zaten iptal edildi."
 
 #: pretix/control/views/orders.py:807 pretix/control/views/orders.py:832
 msgid "The invoice has been cleaned of personal data."
-msgstr ""
+msgstr "Fatura kişisel verilerden temizlendi."
 
 #: pretix/control/views/orders.py:880
 msgid "The email has been queued to be sent."
-msgstr ""
+msgstr "E-posta gönderilmek üzere sıraya alındı."
 
 #: pretix/control/views/orders.py:904 pretix/presale/views/order.py:746
 msgid "This invoice has not been found"
-msgstr ""
+msgstr "Bu fatura bulunamadı"
 
 #: pretix/control/views/orders.py:911 pretix/presale/views/order.py:753
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Fatura dosyası artık sunucuda saklanmaz."
 
 #: pretix/control/views/orders.py:916 pretix/presale/views/order.py:758
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
+"Fatura dosyası henüz oluşturulmadı, sizin için şimdi oluşturacağız. Lütfen "
+"birkaç saniye içinde tekrar deneyin."
 
 #: pretix/control/views/orders.py:942
 msgid "The payment term has been changed."
-msgstr ""
+msgstr "Ödeme süresi değiştirildi."
 
 #: pretix/control/views/orders.py:947
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
-msgstr ""
+msgstr "Sunucu çok meşgul olduğu için isteği tamamen işleme koyamadık."
 
 #: pretix/control/views/orders.py:955
 msgid "This action is only allowed for pending orders."
-msgstr ""
+msgstr "Bu işlem yalnızca bekleyen siparişlerde kullanılabilir."
 
 #: pretix/control/views/orders.py:983
 msgid "This action is only allowed for pending or paid orders."
-msgstr ""
+msgstr "Bu işlem yalnızca bekleyen veya ödenen siparişler için izinlidir."
 
 #: pretix/control/views/orders.py:1096
 msgid "An error occurred. Please see the details below."
-msgstr ""
+msgstr "Bir hata oluştu. Lütfen aşağıdaki detaylara bakınız."
 
 #: pretix/control/views/orders.py:1104
 msgid "The order has been changed and the user has been notified."
-msgstr ""
+msgstr "Sipariş değiştirildi ve kullanıcı bilgilendirildi."
 
 #: pretix/control/views/orders.py:1106 pretix/control/views/orders.py:1184
 #: pretix/control/views/orders.py:1220
 msgid "The order has been changed."
-msgstr ""
+msgstr "Sipariş değiştirildi."
 
 #: pretix/control/views/orders.py:1121 pretix/presale/checkoutflow.py:346
 #: pretix/presale/views/order.py:528
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
+"Girişinizi işlerken zorluklar yaşadık. Lütfen aşağıdaki hataları inceleyin."
 
 #: pretix/control/views/orders.py:1186
 msgid "Nothing about the order had to be changed."
-msgstr ""
+msgstr "Siparişle ilgili hiçbir şey değişmemişti."
 
 #: pretix/control/views/orders.py:1259 pretix/plugins/sendmail/views.py:58
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "E-postayı gönderemedik. Detaylar için aşağıya bakın."
 
 #: pretix/control/views/orders.py:1293 pretix/plugins/sendmail/views.py:101
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr ""
+msgstr "Konu: {konu}"
 
 #: pretix/control/views/orders.py:1304
 msgid "Your message has been queued and will be sent to {}."
-msgstr ""
+msgstr "Mesajınız kuyruğa alındı ve {} adresine gönderilecek."
 
 #: pretix/control/views/orders.py:1308
 msgid "Failed to send mail to the following user: {}"
-msgstr ""
+msgstr "Aşağıdaki kullanıcıya posta gönderilemedi: {}"
 
 #: pretix/control/views/orders.py:1355 pretix/presale/views/order.py:624
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
 msgstr ""
+"Bu bağlantı artık geçerli değil. Lütfen geri dönün, sayfayı yenileyin ve "
+"tekrar deneyin."
 
 #: pretix/control/views/orders.py:1409
 msgid "There is no order with the given order code."
-msgstr ""
+msgstr "Verilen sipariş kodu ile sipariş yok."
 
 #: pretix/control/views/orders.py:1465
 msgid "The selected exporter was not found."
-msgstr ""
+msgstr "Seçilen ihracatçı bulunamadı."
 
 #: pretix/control/views/orders.py:1472
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
+"Girişinizi işlerken bir sorun oluştu. Hata detayları için aşağıya bakın."
 
 #: pretix/control/views/organizer.py:61
 msgid "Token name"
-msgstr ""
+msgstr "Simge adı"
 
 #: pretix/control/views/organizer.py:280
 msgid "The new organizer has been created."
-msgstr ""
+msgstr "Yeni organizatör oluşturuldu."
 
 #: pretix/control/views/organizer.py:283
 msgid "Administrators"
-msgstr ""
+msgstr "Yöneticiler"
 
 #: pretix/control/views/organizer.py:330
 msgid "The team has been created. You can now add members to the team."
-msgstr ""
+msgstr "Takım oluşturuldu. Artık üyelere ekip ekleyebilirsin."
 
 #: pretix/control/views/organizer.py:341 pretix/control/views/organizer.py:376
 #: pretix/control/views/organizer.py:571
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "Değişiklikleriniz kaydedilemedi."
 
 #: pretix/control/views/organizer.py:411
 msgid "The selected team has been deleted."
-msgstr ""
+msgstr "Seçilen takım silindi."
 
 #: pretix/control/views/organizer.py:414
 msgid "The selected team cannot be deleted."
-msgstr ""
+msgstr "Seçilen takım silinemez."
 
 #: pretix/control/views/organizer.py:447
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix hesap davetiyesi"
 
 #: pretix/control/views/organizer.py:477
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
 msgstr ""
+"Ekipleri değiştirmek için izin alınamayacağı için bu üyenin son üyesini "
+"kaldıramazsınız."
 
 #: pretix/control/views/organizer.py:488
 msgid "The member has been removed from the team."
-msgstr ""
+msgstr "Üye ekipten kaldırıldı."
 
 #: pretix/control/views/organizer.py:495
 msgid "Invalid invite selected."
-msgstr ""
+msgstr "Geçersiz davet seçildi."
 
 #: pretix/control/views/organizer.py:504
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "Davet iptal edildi."
 
 #: pretix/control/views/organizer.py:511
 msgid "Invalid token selected."
-msgstr ""
+msgstr "Geçersiz simge seçildi."
 
 #: pretix/control/views/organizer.py:521
 msgid "The token has been revoked."
-msgstr ""
+msgstr "Simge iptal edildi."
 
 #: pretix/control/views/organizer.py:530
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Bu kullanıcı bu takım için zaten davet edildi."
 
 #: pretix/control/views/organizer.py:540
 msgid "The new member has been invited to the team."
-msgstr ""
+msgstr "Yeni üye takımına davet edildi."
 
 #: pretix/control/views/organizer.py:544
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Bu kullanıcının zaten bu takım için izinleri var."
 
 #: pretix/control/views/organizer.py:555
 msgid "The new member has been added to the team."
-msgstr ""
+msgstr "Yeni üye ekledi."
 
 #: pretix/control/views/organizer.py:566
 msgid ""
@@ -12088,81 +12081,85 @@ msgid ""
 "Please copy this secret to a safe place. You will not be able to view it "
 "again here."
 msgstr ""
+"Aşağıdaki sırrıyla yeni bir API simgesi oluşturuldu: {}\n"
+"Lütfen bu sırrı güvenli bir yere kopyalayın. Burada tekrar "
+"görüntüleyemezsiniz."
 
 #: pretix/control/views/pdf.py:47
 msgid "The uploaded PDF file is to large."
-msgstr ""
+msgstr "Yüklenen PDF dosyası büyüktür."
 
 #: pretix/control/views/pdf.py:49
 msgid "The uploaded PDF file is to small."
-msgstr ""
+msgstr "Yüklenen PDF dosyası küçüktür."
 
 #: pretix/control/views/pdf.py:51
 msgid "Please only upload PDF files."
-msgstr ""
+msgstr "Sadece PDF dosyası yükleyin."
 
 #: pretix/control/views/shredder.py:92
 msgid "The selected data was deleted successfully."
-msgstr ""
+msgstr "Seçilen veriler başarıyla silindi."
 
 #: pretix/control/views/subevents.py:100 pretix/control/views/subevents.py:370
 msgctxt "subevent"
 msgid "The requested date does not exist."
-msgstr ""
+msgstr "İstenen tarih mevcut değil."
 
 #: pretix/control/views/subevents.py:104 pretix/control/views/subevents.py:115
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
-msgstr ""
+msgstr "Siparişler zaten yerleştirilmişse tarih silinemez."
 
 #: pretix/control/views/subevents.py:121
 msgctxt "subevent"
 msgid "The selected date has been deleted."
-msgstr ""
+msgstr "Seçilen tarih silinmiştir."
 
 #: pretix/control/views/subevents.py:438
 msgctxt "subevent"
 msgid "The new date has been created."
-msgstr ""
+msgstr "Yeni tarih oluşturuldu."
 
 #: pretix/control/views/subevents.py:494 pretix/control/views/subevents.py:504
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr ""
+msgstr "Seçilen tarihler devre dışı bırakıldı."
 
 #: pretix/control/views/subevents.py:523
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr ""
+msgstr "Seçilen tarihler silinmiş veya devre dışı bırakılmıştır."
 
 #: pretix/control/views/subevents.py:730
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr ""
+msgstr "{} yeni tarihler oluşturuldu."
 
 #: pretix/control/views/typeahead.py:46
 msgid "Series:"
-msgstr ""
+msgstr "Seri:"
 
 #: pretix/control/views/user.py:80
 msgid "The password you entered was invalid, please try again."
-msgstr ""
+msgstr "Girdiğiniz şifre geçersiz, lütfen tekrar deneyin."
 
 #: pretix/control/views/user.py:197
 msgid "U2F devices are only available if pretix is served via HTTPS."
 msgstr ""
+"U2F cihazları sadece pretiks HTTPS üzerinden sunulduğunda kullanılabilir."
 
 #: pretix/control/views/user.py:232
 msgid "A two-factor authentication device has been removed from your account."
-msgstr ""
+msgstr "İki faktörlü bir kimlik doğrulama cihazı hesabınızdan kaldırıldı."
 
 #: pretix/control/views/user.py:241
 msgid "The device has been removed."
-msgstr ""
+msgstr "Cihaz kaldırıldı."
 
 #: pretix/control/views/user.py:282 pretix/control/views/user.py:341
 msgid "A new two-factor authentication device has been added to your account."
-msgstr ""
+msgstr "Hesabınıza yeni bir iki faktörlü kimlik doğrulama cihazı eklendi."
 
 #: pretix/control/views/user.py:296 pretix/control/views/user.py:354
 msgid ""
@@ -12170,155 +12167,159 @@ msgid ""
 "account using the buttons below to make a second factor required for logging "
 "into your account."
 msgstr ""
+"Hesabınıza giriş yapmak için gerekli ikinci bir faktörü oluşturmak için "
+"aşağıdaki düğmeleri kullanarak hesabınız için hala iki faktörlü kimlik "
+"doğrulamayı etkinleştirmeniz gerektiğini unutmayın."
 
 #: pretix/control/views/user.py:299 pretix/control/views/user.py:357
 msgid "The device has been verified and can now be used."
-msgstr ""
+msgstr "Cihaz doğrulandı ve şimdi kullanılabilir."
 
 #: pretix/control/views/user.py:302
 msgid "The registration could not be completed. Please try again."
-msgstr ""
+msgstr "Kayıt tamamlanamadı. Lütfen tekrar deneyin."
 
 #: pretix/control/views/user.py:360
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
+"Girdiğiniz kod geçerli değildi. Bu sorun devam ederse, lütfen telefonunuzun "
+"tarih ve saatinin doğru şekilde yapılandırıldığını kontrol edin."
 
 #: pretix/control/views/user.py:372
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr ""
+"Lütfen iki faktörlü kimlik doğrulamayı etkinleştirmeden önce en az bir cihaz "
+"yapılandırın."
 
 #: pretix/control/views/user.py:381
 msgid "Two-factor authentication is now enabled for your account."
-msgstr ""
+msgstr "Hesabınız için iki faktörlü kimlik doğrulama etkinleştirildi."
 
 #: pretix/control/views/user.py:395
 msgid "Two-factor authentication is now disabled for your account."
 msgstr ""
+"Hesabınız için iki faktörlü kimlik doğrulama artık devre dışı bırakıldı."
 
 #: pretix/control/views/user.py:414
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
 msgstr ""
+"Acil durum kodlarınız yeni oluşturuldu. Cihazlarınıza erişimi kaybederseniz "
+"bunları güvenli bir yerde saklamayı unutmayın."
 
 #: pretix/control/views/user.py:424
 msgid "Your notifications have been disabled."
-msgstr ""
+msgstr "Bildirimleriniz devre dışı bırakıldı."
 
 #: pretix/control/views/user.py:473 pretix/control/views/user.py:513
 msgid "Your notification settings have been saved."
-msgstr ""
+msgstr "Bildirim ayarlarınız kaydedildi."
 
 #: pretix/control/views/user.py:591
 msgid "Your comment has been saved."
-msgstr ""
+msgstr "Yorumunuz kaydedildi."
 
 #: pretix/control/views/users.py:95
 msgid "We sent out an e-mail containing further instructions."
-msgstr ""
+msgstr "Daha fazla talimat içeren bir e-posta gönderdik."
 
 #: pretix/control/views/users.py:162
 msgid "The new user has been created."
-msgstr ""
+msgstr "Yeni kullanıcı oluşturuldu."
 
 #: pretix/control/views/vouchers.py:61
 msgid "Reserve quota"
-msgstr ""
+msgstr "Rezerv kotası"
 
 #: pretix/control/views/vouchers.py:61
 msgid "Bypass quota"
-msgstr ""
+msgstr "Baypas kotası"
 
 #: pretix/control/views/vouchers.py:126 pretix/control/views/vouchers.py:174
 msgid "The requested voucher does not exist."
-msgstr ""
+msgstr "İstenen kupon mevcut değil."
 
 #: pretix/control/views/vouchers.py:130 pretix/control/views/vouchers.py:140
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr ""
+msgstr "Bir kupon, zaten kullanılmışsa silinemez."
 
 #: pretix/control/views/vouchers.py:144
 msgid "The selected voucher has been deleted."
-msgstr ""
+msgstr "Seçilen kupon silindi."
 
 #: pretix/control/views/vouchers.py:221
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr ""
+msgstr "Yeni kupon oluşturuldu: {kod}"
 
 #: pretix/control/views/vouchers.py:245
 msgid "There is no voucher with the given voucher code."
-msgstr ""
+msgstr "Verilen kupon koduyla fiş yok."
 
 #: pretix/control/views/vouchers.py:277
 msgid "The new vouchers have been created."
-msgstr ""
+msgstr "Yeni kuponlar oluşturuldu."
 
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr ""
+msgstr "{sayı} kupon oluşturuldu ve e-postayla gönderildi."
 
 #: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
-msgstr ""
+msgstr "Bunu yapmaya izniniz yok"
 
 #: pretix/control/views/waitinglist.py:70
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
-msgstr ""
+msgstr "Belirtilen adrese bir kupon kodu içeren bir e-posta gönderildi."
 
 #: pretix/control/views/waitinglist.py:74
 #: pretix/control/views/waitinglist.py:87
 #: pretix/control/views/waitinglist.py:100
 msgid "Waiting list entry not found."
-msgstr ""
+msgstr "Bekleme listesi girişi bulunamadı."
 
 #: pretix/control/views/waitinglist.py:84
-#, fuzzy
-#| msgid "An entry has been removed from the waiting list."
 msgid "The waiting list entry has been moved to the top."
-msgstr "Bekleme listesinden bir giriş kaldırıldı."
+msgstr "Bekleme listesi girişi en üste taşındı."
 
 #: pretix/control/views/waitinglist.py:97
-#, fuzzy
-#| msgid "An entry has been removed from the waiting list."
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr "Bekleme listesinden bir giriş kaldırıldı."
+msgstr "Bekleme listesi girişi listenin sonuna taşındı."
 
 #: pretix/control/views/waitinglist.py:198
-#, fuzzy
-#| msgid "On waiting list since"
 msgid "On list since"
-msgstr "Bekleme listesinde"
+msgstr "O zamandan beri liste"
 
 #: pretix/control/views/waitinglist.py:199
 msgid "Priority"
-msgstr ""
+msgstr "Öncelik"
 
 #: pretix/control/views/waitinglist.py:219
 msgid "Waiting"
-msgstr ""
+msgstr "Bekleme"
 
 #: pretix/control/views/waitinglist.py:252
 msgid "The requested entry does not exist."
-msgstr ""
+msgstr "İstenen giriş mevcut değil."
 
 #: pretix/control/views/waitinglist.py:260
 msgid "The selected entry has been deleted."
-msgstr ""
+msgstr "Seçilen giriş silinmiştir."
 
 #: pretix/multidomain/models.py:13
 msgid "Known domain"
-msgstr ""
+msgstr "Bilinen alan"
 
 #: pretix/multidomain/models.py:14
 msgid "Known domains"
-msgstr ""
+msgstr "Bilinen alanlar"
 
 #: pretix/plugins/badges/__init__.py:9 pretix/plugins/badges/__init__.py:12
 #: pretix/plugins/badges/signals.py:30
@@ -12328,7 +12329,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
 msgid "Badges"
-msgstr ""
+msgstr "Rozetler"
 
 #: pretix/plugins/badges/__init__.py:13
 #: pretix/plugins/banktransfer/__init__.py:14
@@ -12341,110 +12342,114 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:14
 #: pretix/plugins/ticketoutputpdf/__init__.py:14
 msgid "the pretix team"
-msgstr ""
+msgstr "pretix takımı"
 
 #: pretix/plugins/badges/__init__.py:15
 msgid ""
 "This plugin allows you to generate badges or name tags for your attendees."
 msgstr ""
+"Bu eklenti, katılımcılarınız için rozet veya ad etiketi oluşturmanıza olanak "
+"tanır."
 
 #: pretix/plugins/badges/exporters.py:66
 msgid "Attendee badges"
-msgstr ""
+msgstr "Katılımcı rozetleri"
 
 #: pretix/plugins/badges/exporters.py:83
 msgid "Include pending orders"
-msgstr ""
+msgstr "Bekleyen siparişleri dahil et"
 
 #: pretix/plugins/badges/exporters.py:88
 #: pretix/plugins/checkinlists/exporters.py:45
 #: pretix/plugins/reports/exporters.py:288
 msgid "Sort by"
-msgstr ""
+msgstr "Göre sırala"
 
 #: pretix/plugins/badges/exporters.py:91
 msgid "Last part of attendee name"
-msgstr ""
+msgstr "Katılımcı adının son kısmı"
 
 #: pretix/plugins/badges/forms.py:21
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "Rozet düzeni"
 
 #: pretix/plugins/badges/forms.py:22 pretix/plugins/ticketoutputpdf/forms.py:24
 msgid "(Event default)"
-msgstr ""
+msgstr "(Etkinlik varsayılan)"
 
 #: pretix/plugins/badges/signals.py:108
 msgid "Badge layout created."
-msgstr ""
+msgstr "Rozet düzeni oluşturuldu."
 
 #: pretix/plugins/badges/signals.py:109
 msgid "Badge layout deleted."
-msgstr ""
+msgstr "Rozet yerleşimi silindi."
 
 #: pretix/plugins/badges/signals.py:110
 msgid "Badge layout changed."
-msgstr ""
+msgstr "Rozet düzeni değişti."
 
 #: pretix/plugins/badges/signals.py:123
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr ""
+msgstr "Rozet düzeni {değer}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "Rozetleri yazdır"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Rozet yerleşimini <strong>%(düzen)</ strong> silmek istediğinizden emin "
+"misiniz?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Rozet düzeni: %(isim)"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
-msgstr ""
+msgstr "Rozet tasarımı"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr ""
+msgstr "Bu sayfayı kaydettikten sonra tasarımı değiştirebilirsiniz."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "Henüz herhangi bir rozet düzeni oluşturmadınız."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Yeni bir rozet düzeni oluştur"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
 msgid "Make default"
-msgstr ""
+msgstr "Varsayılan yap"
 
 #: pretix/plugins/badges/views.py:56
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "Yeni rozet düzeni oluşturuldu."
 
 #: pretix/plugins/badges/views.py:84 pretix/plugins/badges/views.py:114
 #: pretix/plugins/badges/views.py:144
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "İstenen rozet düzeni mevcut değil."
 
 #: pretix/plugins/badges/views.py:126
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "Seçilen rozet düzeni silinmiştir."
 
 #: pretix/plugins/badges/views.py:148
 msgid "Badge layout: {}"
