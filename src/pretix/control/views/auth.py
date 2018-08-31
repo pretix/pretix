@@ -174,6 +174,10 @@ def invite(request, token):
     return render(request, 'pretixcontrol/auth/invite.html', ctx)
 
 
+class RepeatedResetDenied(Exception):
+    pass
+
+
 class Forgot(TemplateView):
     template_name = 'pretixcontrol/auth/forgot.html'
 
@@ -201,7 +205,7 @@ class Forgot(TemplateView):
                     rc = get_redis_connection("redis")
                     if rc.exists('pretix_pwreset_%s' % (user.id)):
                         user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
-                        raise Warning
+                        raise RepeatedResetDenied()
                     else:
                         rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
@@ -211,7 +215,7 @@ class Forgot(TemplateView):
             except SendMailException:
                 logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')
 
-            except Warning:
+            except RepeatedResetDenied:
                 pass
 
             else:
@@ -220,8 +224,8 @@ class Forgot(TemplateView):
 
             finally:
                 if has_redis:
-                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions.'
-                                             'You can reset your password once every 24hours'))
+                    messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions. '
+                                             'Please note that we will send at most one email every 24 hours.'))
                 else:
                     messages.info(request, _('If the adress is registred to valid account, then we have sent you an e-mail containing further instructions.'))
 
