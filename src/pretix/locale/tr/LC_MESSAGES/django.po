@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-31 07:16+0000\n"
+"PO-Revision-Date: 2018-08-31 08:28+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -12782,124 +12782,138 @@ msgstr "Bilinmeyen sipariş kodu"
 
 #: pretix/plugins/banktransfer/views.py:292
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Tüm çözümlenmemiş işlemler iptal edildi."
 
 #: pretix/plugins/banktransfer/views.py:311
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "İçe aktarılacak bir dosya seçmelisiniz."
 
 #: pretix/plugins/banktransfer/views.py:315
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Bu içe aktarmanın dosya türünü tespit edemedik. Lütfen yardım için destekle "
+"iletişime geçin."
 
 #: pretix/plugins/banktransfer/views.py:328
 #: pretix/plugins/banktransfer/views.py:372
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Girişinizi işleyemedik."
 
 #: pretix/plugins/banktransfer/views.py:337
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Üzgünüm, ancak bu CSV dosyasını içe aktaramadık. Lütfen yardım için destekle "
+"iletişime geçin."
 
 #: pretix/plugins/banktransfer/views.py:342
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"Üzgünüm, ancak bu dosyayı boş olarak algıladık. Lütfen yardım için destekle "
+"iletişime geçin."
 
 #: pretix/plugins/banktransfer/views.py:362
 msgid "Invalid input data."
-msgstr ""
+msgstr "Geçersiz giriş verileri."
 
 #: pretix/plugins/banktransfer/views.py:366
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Ödeme referansını içeren sütunu seçmeniz gerekiyor."
 
 #: pretix/plugins/banktransfer/views.py:466
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
 msgstr ""
+"Bu organizatörün birden fazla para birimine sahip etkinlikleri olduğundan "
+"lütfen etkinlik başına banka havalesi yapın."
 
 #: pretix/plugins/checkinlists/__init__.py:13
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "Check-in listesini dışa aktar"
 
 #: pretix/plugins/checkinlists/__init__.py:17
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
+"Bu eklenti, konferansınız için check-in listeleri oluşturmanıza olanak tanır."
 
 #: pretix/plugins/checkinlists/exporters.py:40
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "QR kodunun sırrını dahil et"
 
 #: pretix/plugins/checkinlists/exporters.py:57
 msgid "Include questions"
-msgstr ""
+msgstr "Soruları dahil et"
 
 #: pretix/plugins/checkinlists/exporters.py:109
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Check-in listesi (PDF)"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:160
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "ücretli"
 
 #: pretix/plugins/checkinlists/exporters.py:248
 msgid "Check-in list (CSV)"
-msgstr ""
+msgstr "Check-in listesi (CSV)"
 
 #: pretix/plugins/checkinlists/exporters.py:254
 msgid "CSV dialect"
-msgstr ""
+msgstr "CSV lehçesi"
 
 #: pretix/plugins/checkinlists/exporters.py:308
 #: pretix/plugins/paypal/payment.py:56
 msgid "Secret"
-msgstr ""
+msgstr "Sır"
 
 #: pretix/plugins/manualpayment/__init__.py:15
 msgid "This plugin adds a customizable payment method for manual processing."
 msgstr ""
+"Bu eklenti, manuel işleme için özelleştirilebilir bir ödeme yöntemi ekler."
 
 #: pretix/plugins/paypal/__init__.py:10 pretix/plugins/paypal/__init__.py:13
 #: pretix/plugins/paypal/payment.py:27
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/__init__.py:16
 msgid "This plugin allows you to receive payments via PayPal"
-msgstr ""
+msgstr "Bu eklenti PayPal üzerinden ödeme almanızı sağlar"
 
 #: pretix/plugins/paypal/payment.py:37 pretix/plugins/stripe/payment.py:101
 msgid "Endpoint"
-msgstr ""
+msgstr "Son nokta"
 
 #: pretix/plugins/paypal/payment.py:49 pretix/plugins/stripe/payment.py:116
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:50 pretix/plugins/stripe/payment.py:117
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
+"Gerekli anahtarların nasıl elde edileceğiyle ilgili bir eğitim için buraya "
+"tıklayın"
 
 #: pretix/plugins/paypal/payment.py:67
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"Ödemeler harici olarak iade edildiğinde siparişleri otomatik olarak iptal "
+"etmek için lütfen bir PayPal Webhook'u aşağıdaki uç noktaya yapılandırın."
 
 #: pretix/plugins/paypal/payment.py:161 pretix/plugins/paypal/payment.py:176
 #: pretix/plugins/paypal/payment.py:179
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "PayPal ile iletişimde sorun yaşadık"
 
 #: pretix/plugins/paypal/payment.py:193 pretix/plugins/paypal/payment.py:202
 #: pretix/plugins/paypal/payment.py:249
@@ -12907,40 +12921,44 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Ödemenizi işleme koyamadık. Nasıl devam edeceğiniz hakkında ayrıntılar için "
+"aşağıya bakın."
 
 #: pretix/plugins/paypal/payment.py:238
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal henüz ödemeyi onaylamadı. Ödeme tamamlanır tamamlanmaz sizi "
+"bilgilendireceğiz."
 
 #: pretix/plugins/paypal/payment.py:264 pretix/plugins/stripe/payment.py:339
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "Onay postası gönderilirken bir hata oluştu."
 
 #: pretix/plugins/paypal/payment.py:308
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "Tutarı PayPal üzerinden iade etme başarısız oldu: {}"
 
 #: pretix/plugins/paypal/signals.py:27
 msgid "Payment completed."
-msgstr ""
+msgstr "Ödeme tamamlandı."
 
 #: pretix/plugins/paypal/signals.py:28
 msgid "Payment denied."
-msgstr ""
+msgstr "Ödeme reddedildi."
 
 #: pretix/plugins/paypal/signals.py:29
 msgid "Payment refunded."
-msgstr ""
+msgstr "Ödeme iade edildi."
 
 #: pretix/plugins/paypal/signals.py:30
 msgid "Payment reversed."
-msgstr ""
+msgstr "Ödeme tersine döndü."
 
 #: pretix/plugins/paypal/signals.py:37
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPal bir etkinlik bildirdi: {}"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -12949,6 +12967,9 @@ msgid ""
 "has already been paid by other means. Please double check and refund the "
 "money via PayPal's interface."
 msgstr ""
+"PayPal işlemi %(payment)s başarılı olmuştur, ancak %(order)s siparişi zaten "
+"başka yollarla ödenmiştir. Lütfen PayPal'ın arayüzü üzerinden paranızı iki "
+"kez kontrol edip iade edin."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_overpaid.html:5
 #, python-format
