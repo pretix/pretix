@@ -422,6 +422,8 @@ Order position endpoints
    :query integer addon_to: Only return positions that are add-ons to the position with the given ID.
    :query integer addon_to__in: Only return positions that are add-ons to one of the positions with the given
                                       comma-separated IDs.
+   :query string voucher: Only return positions with a specific voucher.
+   :query string voucher__code: Only return positions with a specific voucher code.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param list: The ID of the check-in list to look for

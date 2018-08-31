@@ -1029,6 +1029,10 @@ List of all order positions
    ``order__status__in``, ``subevent__in``, ``addon_to__in`` and ``search``. The search for attendee names and order
    codes is now case-insensitive.
 
+.. versionchanged:: 2.0
+
+   The order positions endpoint has been extended by the filter queries ``voucher`` and ``voucher__code``.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
    Returns a list of all order positions within a given event.
@@ -1120,6 +1124,8 @@ List of all order positions
    :query integer addon_to: Only return positions that are add-ons to the position with the given ID.
    :query integer addon_to__in: Only return positions that are add-ons to one of the positions with the given
                                 comma-separated IDs.
+   :query string voucher: Only return positions with a specific voucher.
+   :query string voucher__code: Only return positions with a specific voucher code.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error

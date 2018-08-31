@@ -373,6 +373,8 @@ class OrderPositionFilter(FilterSet):
             'addon_to': ['exact', 'in'],
             'subevent': ['exact', 'in'],
             'pseudonymization_id': ['exact'],
+            'voucher__code': ['exact'],
+            'voucher': ['exact'],
         }
 
 
