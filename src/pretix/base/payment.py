@@ -660,10 +660,10 @@ class ManualPayment(BasePaymentProvider):
         return 'pretix.plugins.manualpayment' not in self.event.plugins
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None):
-        return 'pretix.plugins.manualpayment' in self.event.plugins
+        return 'pretix.plugins.manualpayment' in self.event.plugins and super().is_allowed(request, total)
 
     def order_change_allowed(self, order: Order):
-        return 'pretix.plugins.manualpayment' in self.event.plugins
+        return 'pretix.plugins.manualpayment' in self.event.plugins and super().order_change_allowed(order)
 
     @property
     def public_name(self):
