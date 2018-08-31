@@ -568,6 +568,48 @@ class OrdersTest(TestCase):
         p.refresh_from_db()
         assert p.state == OrderPayment.PAYMENT_STATE_CREATED
 
+    def test_change_paymentmethod_delete_fee(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_testdummy__enabled', True)
+        self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
+        self.event.settings.set('payment_testdummy__fee_percent', '0.00')
+        f = self.order.fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT,
+            value='1.40'
+        )
+        self.order.total += Decimal('1.4')
+        self.order.save()
+        p0 = self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            amount=Decimal('24.40'),
+            fee=f
+        )
+
+        generate_invoice(self.order)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Test dummy' in response.rendered_content
+        assert '- €1.40' in response.rendered_content
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'testdummy'
+            }
+        )
+        self.order.refresh_from_db()
+        assert self.order.payments.last().provider == 'testdummy'
+        assert not self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).exists()
+        assert self.order.total == Decimal('23.00')
+        assert self.order.invoices.count() == 3
+        p0.refresh_from_db()
+        assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
+        p = self.order.payments.last()
+        assert p.provider == 'testdummy'
+        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+        assert p.amount == Decimal('23.00')
+
     def test_change_paymentmethod_available(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)

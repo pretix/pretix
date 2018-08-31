@@ -428,8 +428,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 else:
                     if fee.pk:
                         fee.delete()
-                    else:
-                        fee = None
+                    fee = None
 
                 if self.open_payment and self.open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
                                                                      OrderPayment.PAYMENT_STATE_CREATED):
