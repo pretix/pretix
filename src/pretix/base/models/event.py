@@ -576,7 +576,12 @@ class Event(EventMixin, LoggedModel):
                 | Q(date_to__gte=now())
             )
         )  # order_by doesn't make sense with I18nField
-        return sorted(subevs, key=attrgetter(*orderfields))
+        for f in reversed(orderfields):
+            if f.startswith('-'):
+                subevs = sorted(subevs, key=attrgetter(f[1:]), reverse=True)
+            else:
+                subevs = sorted(subevs, key=attrgetter(f))
+        return subevs
 
     @property
     def meta_data(self):

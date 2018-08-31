@@ -172,6 +172,10 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertLess(content.index('Epic SE'), content.index('Cool SE'))
 
+        self.event.settings.frontpage_subevent_ordering = 'date_descending'
+        content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertLess(content.index('Cool SE'), content.index('Epic SE'))
+
         self.event.settings.frontpage_subevent_ordering = 'name_ascending'
         content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertLess(content.index('Cool SE'), content.index('Epic SE'))
