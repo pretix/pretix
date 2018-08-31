@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db.models import Count, F, Max, OuterRef, Prefetch, Subquery
 from django.db.models.functions import Coalesce
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -181,7 +182,10 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
     @cached_property
     def checkinlist(self):
-        return get_object_or_404(CheckinList, event=self.request.event, pk=self.kwargs.get("list"))
+        try:
+            return get_object_or_404(CheckinList, event=self.request.event, pk=self.kwargs.get("list"))
+        except ValueError:
+            raise Http404()
 
     def get_queryset(self):
         cqs = Checkin.objects.filter(
