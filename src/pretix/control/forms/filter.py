@@ -614,6 +614,7 @@ class CheckInFilterForm(FilterForm):
                 | Q(order__email__icontains=u)
                 | Q(attendee_name__icontains=u)
                 | Q(attendee_email__icontains=u)
+                | Q(voucher__code__istartswith=u)
                 | Q(order__invoice_address__name__icontains=u)
                 | Q(order__invoice_address__company__icontains=u)
             )
