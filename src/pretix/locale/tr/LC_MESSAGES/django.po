@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-29 23:00+0000\n"
+"PO-Revision-Date: 2018-08-31 07:16+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -1069,7 +1069,7 @@ msgstr "Etkinlik"
 #: pretix/control/templates/pretixcontrol/organizers/base.html:19
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:17
 msgid "Events"
-msgstr "Olaylar"
+msgstr "Etkinlik"
 
 #: pretix/base/models/event.py:583
 msgid ""
@@ -11855,7 +11855,7 @@ msgstr "Bu sipariş için fatura oluşturamazsınız."
 
 #: pretix/control/views/orders.py:734 pretix/presale/views/order.py:508
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Bu sipariş için bir fatura zaten mevcut."
 
 #: pretix/control/views/orders.py:754 pretix/control/views/orders.py:758
 msgid "No VAT ID specified."
@@ -12453,26 +12453,27 @@ msgstr "Seçilen rozet düzeni silinmiştir."
 
 #: pretix/plugins/badges/views.py:148
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Rozet düzeni: {}"
 
 #: pretix/plugins/banktransfer/__init__.py:10
 #: pretix/plugins/banktransfer/__init__.py:13
 #: pretix/plugins/banktransfer/payment.py:18
 msgid "Bank transfer"
-msgstr ""
+msgstr "banka transferi"
 
 #: pretix/plugins/banktransfer/__init__.py:16
 msgid "This plugin allows you to receive payments via bank transfer "
-msgstr ""
+msgstr "Bu eklenti banka havalesi yoluyla ödeme almanızı sağlar "
 
 #: pretix/plugins/banktransfer/__init__.py:29
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr ""
+"Daha iyi CSV içe aktarma yetenekleri için python paketini 'chardet' takın."
 
 #: pretix/plugins/banktransfer/payment.py:24
 msgid "Bank account details"
-msgstr ""
+msgstr "Banka hesap detayları"
 
 #: pretix/plugins/banktransfer/payment.py:26
 msgid ""
@@ -12481,6 +12482,10 @@ msgid ""
 "If you have lots of international customers, they might also need your full "
 "address and your bank's full address."
 msgstr ""
+"Müşterilerinizin size bir banka havalesi ödemesi göndermesi gereken her şeyi "
+"ekleyin. SEPA ülkeleri içinde IBAN, BIC ve hesap sahibi yeterli olmalıdır. "
+"Çok sayıda uluslararası müşteriniz varsa, tam adresinize ve bankanızın tam "
+"adresine de ihtiyaçları olabilir."
 
 #: pretix/plugins/banktransfer/payment.py:32
 msgid ""
@@ -12489,16 +12494,18 @@ msgid ""
 "Account owner: John Doe\n"
 "Name of Bank: Professional Banking Institute Ltd., London"
 msgstr ""
+"örneğin IBAN:  DE12 1234 5678 8765 4321\n"
+"BIC: GENEXAMPLE1\n"
+"Hesap sahibi: John Doe\n"
+"Banka Adı: Professional Banking Institute Ltd., İngiltere"
 
 #: pretix/plugins/banktransfer/payment.py:47
 msgid "Do not include a hypen in the payment reference."
-msgstr ""
+msgstr "Ödeme referansında kısa çizgi eklemeyin."
 
 #: pretix/plugins/banktransfer/payment.py:48
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is required in some countries."
-msgstr "Bu bir olay serisi"
+msgstr "Bu bazı ülkelerde gereklidir."
 
 #: pretix/plugins/banktransfer/signals.py:24
 #: pretix/plugins/banktransfer/signals.py:44
@@ -12506,40 +12513,44 @@ msgstr "Bu bir olay serisi"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 msgid "Import bank data"
-msgstr ""
+msgstr "Banka verilerini içe aktar"
 
 #: pretix/plugins/banktransfer/tasks.py:55
 #: pretix/plugins/banktransfer/views.py:60
 msgid "The order has already been refunded."
-msgstr ""
+msgstr "Sipariş zaten iade edildi."
 
 #: pretix/plugins/banktransfer/tasks.py:58
 #: pretix/plugins/banktransfer/views.py:65
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "Sipariş zaten iptal edildi."
 
 #: pretix/plugins/banktransfer/tasks.py:81
 #: pretix/plugins/banktransfer/views.py:92
 msgid "Problem sending email."
-msgstr ""
+msgstr "E-posta gönderme sorunu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:3
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"Satın alma işleminizi tamamladıktan sonra, kişisel bir referans kodu "
+"kullanarak parayı aşağıdaki banka hesabına aktarmanızı rica ederiz:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Siparişi tamamladıktan sonra kullanmanız için size kişisel bir referans kodu "
+"atayacağız."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 msgid "Payer"
-msgstr ""
+msgstr "Ödeyici"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:7
 #: pretix/plugins/reports/exporters.py:292
@@ -12550,11 +12561,11 @@ msgstr "Ödeme tarihi"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr ""
+msgstr "Referans"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Reference code"
-msgstr ""
+msgstr "Referans Kodu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/email/order_pending.txt:1
 #, python-format
@@ -12566,6 +12577,11 @@ msgid ""
 "    Amount: %(total)s\n"
 "%(bank)s\n"
 msgstr ""
+"\n"
+"Lütfen tüm tutarı aşağıdaki banka hesabına aktarın.\n"
+"…Referans: %(kod)\n"
+"…Miktar: %(toplam)\n"
+"%(banka)\n"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -12573,11 +12589,13 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"Dosyanızdaki sütunların nasıl hizalandığını otomatik olarak belirleyemedik. "
+"Hangi sütunun hangi veriyi içerdiğini seçerek bize yardımcı olun."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:63
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
-msgstr ""
+msgstr "Daha fazla veri yüklendi ancak burada gösterilmiyor. Hala işlenecek"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -12585,171 +12603,182 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"Etkinliğinizin ödeme ayarlarında, %(tarih) değerini herhangi bir ödemenin "
+"son tarihi olarak ayarlarsınız. Bu nedenle, herhangi bir siparişi burada "
+"ödenmiş olarak işaretleyemezsiniz."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
-msgstr ""
+msgstr "Yeni bir dosya yükle"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Bu sayfa, gelen ödemeleri işlemek için banka ekstresi dosyalarını "
+"yüklemenizi sağlar."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Şu anda, bu özellik MT940 biçimindeki <code> csv </ code>dosya ve dosyaları "
+"desteklemektedir."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
 #: pretix/plugins/banktransfer/views.py:429
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
+"Bir ithalat şu anda işleniyor, lütfen birkaç dakika içinde tekrar deneyin."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:34
 msgid "Import file"
-msgstr ""
+msgstr "Önemli dosya"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:38
 msgid "Start upload"
-msgstr ""
+msgstr "Yüklemeyi başlat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:48
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Çözümlenmemiş işlemler"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:53
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Bu sayfada, bankacılık verilerini etkinlik bazında alabilirsiniz. Ayrıca, bu "
+"etkinlik için doğrudan içe aktarılan benzersiz işlemleri de görürsünüz."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:58
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Organizatör düzeyinde içe aktarma sayfasına git"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:63
 msgid "Search"
-msgstr ""
+msgstr "Arama"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:72
 msgid "Discard all"
-msgstr ""
+msgstr "Hepsini at"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:83
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Aramanız hiçbir işlemle eşleşmedi."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "İthalat sonucu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"İçe aktarımınızın sonucu devam ediyor. Verileri işlerken lütfen sabırlı olun…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Verilerinizi işlerken bir iç hata oluştu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:22
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "İçe aktarma işleminiz, daha önce almadığınız işlemler içermiyordu."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:29
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Ödeme olarak işaretlenmiş siparişler"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:33
 msgid "Invalid payments"
-msgstr ""
+msgstr "Geçersiz ödemeler"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:37
 msgid "Ignored payments"
-msgstr ""
+msgstr "Göz ardı edilen ödemeler"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:43
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Geçersiz ve ihmal edilen ödemeleri gözden geçirin"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:5
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Lütfen tüm tutarı aşağıdaki banka hesabına aktarın:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:11
 msgid "Amount:"
-msgstr ""
+msgstr "Miktar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:12
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Referans kodu (önemli):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Ödeyici ve referans"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr ""
+msgstr "Sonuç"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Yine de kabul et"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:41
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:52
 msgid "Discard"
-msgstr ""
+msgstr "at"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 msgid "Assign to order"
-msgstr ""
+msgstr "Siparişe atama"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:48
 msgid "Retry"
-msgstr ""
+msgstr "Tekrarla"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Yorum:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
-msgstr ""
+msgstr "Sipariş kodu bulunamadı"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:77
 msgid "Invalid for this order"
-msgstr ""
+msgstr "Bu sipariş için geçersiz"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:79
 msgid "Error while processing"
-msgstr ""
+msgstr "İşleme sırasında hata oluştu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:81
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "Sipariş zaten ödenmiş olarak işaretlendi"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:83
 msgid "Order already paid"
-msgstr ""
+msgstr "Sipariş zaten ödenmiş"
 
 #: pretix/plugins/banktransfer/views.py:47
 msgid "The transaction amount is incorrect."
-msgstr ""
+msgstr "İşlem tutarı yanlış."
 
 #: pretix/plugins/banktransfer/views.py:55
 msgid "The order is already marked as paid."
-msgstr ""
+msgstr "Sipariş zaten ödenmiş olarak işaretlenmiştir."
 
 #: pretix/plugins/banktransfer/views.py:114
 msgid "Unknown order code"
-msgstr ""
+msgstr "Bilinmeyen sipariş kodu"
 
 #: pretix/plugins/banktransfer/views.py:292
 msgid "All unresolved transactions have been discarded."
@@ -13037,6 +13066,8 @@ msgid ""
 "If disabled, the device can not search for attendees by name. pretixdroid "
 "1.6 or pretixdesk only."
 msgstr ""
+"If disabled, the device can not search for attendees by name. pretixDroid "
+"1.6 or pretixdesk only."
 
 #: pretix/plugins/pretixdroid/models.py:19
 msgid "Scan software"
