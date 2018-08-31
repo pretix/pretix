@@ -164,8 +164,15 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
             ],
         ]
 
+        headrowstyle = self.get_style()
+        headrowstyle.fontName = 'OpenSansBd'
         for q in questions:
-            tdata[0].append(str(q.question))
+            txt = str(q.question)
+            p = Paragraph(txt, headrowstyle)
+            while p.wrap(colwidths[len(tdata[0])], 5000)[1] > 30 * mm:
+                txt = txt[:len(txt) - 50] + "..."
+                p = Paragraph(txt, headrowstyle)
+            tdata[0].append(p)
 
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
@@ -227,7 +234,12 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
             for a in op.answers.all():
                 acache[a.question_id] = str(a)
             for q in questions:
-                row.append(Paragraph(acache.get(q.pk, ''), self.get_style()))
+                txt = acache.get(q.pk, '')
+                p = Paragraph(txt, self.get_style())
+                while p.wrap(colwidths[len(row)], 5000)[1] > 50 * mm:
+                    txt = txt[:len(txt) - 50] + "..."
+                    p = Paragraph(txt, self.get_style())
+                row.append(p)
             if op.order.status != Order.STATUS_PAID:
                 tstyledata += [
                     ('BACKGROUND', (2, len(tdata)), (2, len(tdata)), '#990000'),
