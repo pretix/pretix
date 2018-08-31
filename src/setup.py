@@ -121,7 +121,7 @@ setup(
         'babel',
         'paypalrestsdk==1.13.*',
         'pycparser==2.13',
-        'django-redis==4.7.*',
+        'django-redis==4.8.*',
         'redis==2.10.5',
         'stripe==2.0.*',
         'chardet<3.1.0,>=3.0.2',
