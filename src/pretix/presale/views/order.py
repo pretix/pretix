@@ -433,7 +433,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 if self.open_payment and self.open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
                                                                      OrderPayment.PAYMENT_STATE_CREATED):
                     self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                    self.open_payment.save()
+                    self.open_payment.save(update_fields=['state'])
 
                 self.order.total = self._position_sum + (self.order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
                 newpayment = self.order.payments.create(
