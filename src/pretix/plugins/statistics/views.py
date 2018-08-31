@@ -132,8 +132,8 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 ).filter(order__event=self.request.event,
                          subevent=subevent,
                          order__status=Order.STATUS_PAID,
-                         order__payment_date__isnull=False).values('order__payment_date', 'price'):
-                    day = o['order__payment_date'].astimezone(tz).date()
+                         payment_date__isnull=False).values('payment_date', 'price'):
+                    day = o['payment_date'].astimezone(tz).date()
                     rev_by_day[day] = rev_by_day.get(day, 0) + o['price']
             else:
                 for o in Order.objects.annotate(
