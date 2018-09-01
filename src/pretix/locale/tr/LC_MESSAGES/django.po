@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-08-31 08:28+0000\n"
+"PO-Revision-Date: 2018-09-01 19:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -12979,6 +12979,10 @@ msgid ""
 "could not be accepted. Please contact the user and refund the money via "
 "PayPal's interface."
 msgstr ""
+"PayPal işlemi %(payment)s başarılı oldu, ancak siparişin %(order)s süresi "
+"doldu ve bu süre içinde ürün satıldı. Bu nedenle ödeme kabul edilemedi. "
+"Lütfen kullanıcıyla iletişime geçin ve PayPal'ın arayüzü üzerinden para "
+"iadesi yapın."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:5
 #, python-format
@@ -12986,12 +12990,17 @@ msgid ""
 "PayPal reported that the payment %(payment)s has been refunded or reversed. "
 "Do you want to mark the matching order (%(order)s) as refunded?"
 msgstr ""
+"PayPal, ödeme %(payment)s'in geri ödendiğini veya geri çevrildiğini "
+"bildirdi. Eşleşen siparişi (%(order)s) iade edildi olarak işaretlemek ister "
+"misiniz?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Yukarıda listelenen toplam tutar, satın alma işleminizin onaylanmasından "
+"sonra PayPal hesabınızdan çekilecektir."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -12999,88 +13008,99 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Tıklamaya devam ettikten sonra, ödeme bilgilerinizi doldurmak için sizi "
+"PayPal'a yönlendireceğiz. Daha sonra siparişinizi incelemek ve onaylamak "
+"için buraya yönlendirileceksiniz."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
 msgid "Last update"
-msgstr ""
+msgstr "Son Güncelleme"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:36
 msgid "Total value"
-msgstr ""
+msgstr "Toplam değer"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:38
 msgid "Currency"
-msgstr ""
+msgstr "Para birimi"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Ödemenizi PayPal üzerinden gerçekleştirme girişimimiz başarısız oldu. Lütfen "
+"tekrar deneyin veya bizimle iletişime geçin."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Ödemeniz için PayPal'dan bir cevap bekliyoruz. Bu birkaç saatten fazla "
+"sürerse, lütfen bize ulaşın."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Ödeme işlemi yeni bir pencerede başladı."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
+msgstr "Ödeme verilerinizi girmek için pencere açılmamış veya kapatılmamış mı?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Pencereyi açmak için buraya tıklayın."
 
 #: pretix/plugins/paypal/views.py:68
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "PayPal'dan geçersiz yanıt alındı."
 
 #: pretix/plugins/paypal/views.py:84
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "PayPal ödemesini iptal ettiniz gibi görünüyor"
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
 msgid "Check-in device API"
-msgstr ""
+msgstr "Check-in cihazı API'sı"
 
 #: pretix/plugins/pretixdroid/__init__.py:16
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
+"Bu eklenti, etkinliğiniz için pretixdroid ve pretixdesk uygulamalarını "
+"kullanmanıza izin verir."
 
 #: pretix/plugins/pretixdroid/models.py:11
 msgid "Can scan all products"
-msgstr ""
+msgstr "Tüm ürünleri tarayabilir"
 
 #: pretix/plugins/pretixdroid/models.py:12
 msgid "Can scan these products"
-msgstr ""
+msgstr "Tüm ürünleri tarayabilir"
 
 #: pretix/plugins/pretixdroid/models.py:13
 msgid "Show information"
-msgstr ""
+msgstr "Bilgi göster"
 
 #: pretix/plugins/pretixdroid/models.py:14
 msgid ""
 "If disabled, the device can not see how many tickets exist and how many are "
 "already scanned. pretixdroid 1.6 or pretixdesk only."
 msgstr ""
+"Devre dışı bırakılırsa, cihaz kaç tane bilet olduğunu ve daha önce kaçının "
+"tarandığını göremez. Sadece pretixdroid 1.6 veya pretixdesk."
 
 #: pretix/plugins/pretixdroid/models.py:16
 msgid "Search allowed"
-msgstr ""
+msgstr "Aramaya izin ver"
 
 #: pretix/plugins/pretixdroid/models.py:17
 msgid ""
@@ -13092,24 +13112,24 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/models.py:19
 msgid "Scan software"
-msgstr ""
+msgstr "Tarama yazılımı"
 
 #: pretix/plugins/pretixdroid/models.py:20
 msgid "pretixdroid – for Android smartphones"
-msgstr ""
+msgstr "pretixdroid - Android akıllı telefonlar için"
 
 #: pretix/plugins/pretixdroid/models.py:21
 msgid "pretixdesk – for desktop computers"
-msgstr ""
+msgstr "pretixdesk - masaüstü bilgisayarlar için"
 
 #: pretix/plugins/pretixdroid/signals.py:18
 msgid "Check-in devices"
-msgstr ""
+msgstr "Check-in cihazları"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:5
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:7
 msgid "Check-in device configuration"
-msgstr ""
+msgstr "Check-in cihaz yapılandırması"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:8
 msgid ""
@@ -13117,99 +13137,106 @@ msgid ""
 "entrance of your event. pretixdesk is the corresponding app for desktop "
 "computers."
 msgstr ""
+"pretixdroid, etkinliğinizin girişindeki biletleri kontrol etmek için "
+"kullanabileceğiniz bir Android uygulamasıdır. pretixdesk, masaüstü "
+"bilgisayarlar için karşılık gelen bir uygulamadır."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:14
 msgid "Create app configuration"
-msgstr ""
+msgstr "Uygulama yapılandırması oluştur"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:16
 msgid ""
 "To start scanning tickets with our apps, first create a configuration code "
 "here:"
 msgstr ""
+"Biletlerimizi uygulamalarımızla taramaya başlamak için önce burada bir "
+"yapılandırma kodu oluşturun:"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
 msgid "Create configuration"
-msgstr ""
+msgstr "Yapılandırma oluştur"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:41
 msgid "Existing app configurations"
-msgstr ""
+msgstr "Mevcut uygulama yapılandırmaları"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:43
 msgid "Create a new configuration"
-msgstr ""
+msgstr "Yeni bir yapılandırma oluştur"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
 msgid "ID"
-msgstr ""
+msgstr "Kimlik"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:53
 msgid "Show info"
-msgstr ""
+msgstr "Bilgi göster"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:54
 msgid "Allow search"
-msgstr ""
+msgstr "Aramaya izin ver"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:86
 msgid "Configure device"
-msgstr ""
+msgstr "Cihazı yapılandır"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:5
 msgid "Device configuration"
-msgstr ""
+msgstr "Cihaz konfigürasyonu"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:9
 msgid "pretixdroid configuration"
-msgstr ""
+msgstr "pretixdroid konfigürasyonu"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:11
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:40
 msgid "Back to overview"
-msgstr ""
+msgstr "Genel bakışa geri dön"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:14
 msgid "1. Download app"
-msgstr ""
+msgstr "1. uygulamayı indirin"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:18
 msgid "Download the app from the Google Play Store"
-msgstr ""
+msgstr "Uygulamayı Google Play Store'dan indirin"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:23
 msgid ""
 "Android, Google Play and the Google Play logo are trademarks of Google Inc."
 msgstr ""
+"Android, Google Play ve Google Play logosu, Google Inc.'in ticari "
+"markalarıdır."
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:28
 msgid "2. Scan code"
-msgstr ""
+msgstr "2. Tarama kodu"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:34
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:64
 msgid "3. Start scanning tickets"
-msgstr ""
+msgstr "3. Tarama biletlerini başlatın"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:38
 msgid "pretixdesk configuration"
-msgstr ""
+msgstr "pretixdesk yapılandırması"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:43
 msgid "1. Download pretixdesk"
-msgstr ""
+msgstr "1. pretixdesk indir"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:46
 msgid "Open download page"
-msgstr ""
+msgstr "İndirme sayfasını aç"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:49
 msgid "2. Connect device"
-msgstr ""
+msgstr "2. Cihazı bağla"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:52
 msgid "Connect with pretixdesk"
-msgstr ""
+msgstr "Pretixdesk ile iletişime geç"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:56
 msgid ""
@@ -13217,42 +13244,46 @@ msgid ""
 "the application up on a separate device, copy the following code and paste "
 "it into the application:"
 msgstr ""
+"Bu bağlantı pretixdesk uygulamasını açmazsa veya uygulamayı ayrı bir cihaza "
+"kurmak istiyorsanız, aşağıdaki kodu kopyalayın ve uygulamaya yapıştırın:"
 
 #: pretix/plugins/pretixdroid/views.py:46
 #: pretix/plugins/pretixdroid/views.py:109
 msgid "The selected configuration does not exist."
-msgstr ""
+msgstr "Seçilen yapılandırma mevcut değil."
 
 #: pretix/plugins/pretixdroid/views.py:107
 msgid "The selected configuration has been deleted."
-msgstr ""
+msgstr "Seçilen yapılandırma silinmiştir."
 
 #: pretix/plugins/reports/__init__.py:10 pretix/plugins/reports/__init__.py:13
 msgid "Report exporter"
-msgstr ""
+msgstr "İhracatçı raporu"
 
 #: pretix/plugins/reports/__init__.py:16
 msgid "This plugin allows you to generate printable reports about your sales."
 msgstr ""
+"Bu eklenti, satışlarınız hakkında yazdırılabilir raporlar oluşturmanızı "
+"sağlar."
 
 #: pretix/plugins/reports/exporters.py:111
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "Sayfa %d"
 
 #: pretix/plugins/reports/exporters.py:113
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Oluşturuldu: %s"
 
 #: pretix/plugins/reports/exporters.py:144
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "Siparişe genel bakış (PDF)"
 
 #: pretix/plugins/reports/exporters.py:179
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
 msgid "Orders by product"
-msgstr ""
+msgstr "Ürüne göre siparişler"
 
 #: pretix/plugins/reports/exporters.py:199
 #: pretix/plugins/reports/exporters.py:200
@@ -13261,24 +13292,24 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:203
 #: pretix/plugins/reports/exporters.py:204
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:272
 msgid "List of orders with taxes (PDF)"
-msgstr ""
+msgstr "Vergili siparişlerin listesi (PDF)"
 
 #: pretix/plugins/reports/exporters.py:349
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr ""
+msgstr "Vergi oranına göre siparişler ({currency})"
 
 #: pretix/plugins/reports/exporters.py:358
 msgid "Gross"
-msgstr ""
+msgstr "Brüt"
 
 #: pretix/plugins/reports/exporters.py:358
 msgid "Tax"
-msgstr ""
+msgstr "Vergi"
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
@@ -13286,59 +13317,59 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:6
 msgid "Send out emails"
-msgstr ""
+msgstr "E-posta gönder"
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."
-msgstr ""
+msgstr "Bu eklenti, tüm müşterilerinize e-posta göndermenizi sağlar."
 
 #: pretix/plugins/sendmail/forms.py:17
 msgid "Only send to people who bought"
-msgstr ""
+msgstr "Yalnızca satın alan kişilere gönderin"
 
 #: pretix/plugins/sendmail/forms.py:19
 msgid "Any product"
-msgstr ""
+msgstr "Herhangi bir ürün"
 
 #: pretix/plugins/sendmail/forms.py:23
 msgid "Only send to customers of"
-msgstr ""
+msgstr "Sadece müşterilere gönderin"
 
 #: pretix/plugins/sendmail/forms.py:52 pretix/plugins/sendmail/views.py:153
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "Ödemenin gecikmesi bekleniyor"
 
 #: pretix/plugins/sendmail/forms.py:55
 msgid "Send to customers with order status"
-msgstr ""
+msgstr "Sipariş durumuyla müşterilere gönder"
 
 #: pretix/plugins/sendmail/signals.py:48
 msgid "Email was sent"
-msgstr ""
+msgstr "E-posta gönderildi"
 
 #: pretix/plugins/sendmail/signals.py:49
 msgid "The order received a mass email."
-msgstr ""
+msgstr "Sipariş kitle bir e-posta aldı."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:19
 msgid "Sent to orders:"
-msgstr ""
+msgstr "Emirlere gönderildi:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "Buna dayanarak yeni bir e-posta gönder"
 
 #: pretix/plugins/sendmail/views.py:54
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "Geçersiz bir günlük girişi kimliği sağladınız"
 
 #: pretix/plugins/sendmail/views.py:75
 msgid "There are no orders matching this selection."
-msgstr ""
+msgstr "Bu seçimle eşleşen sipariş yok."
 
 #: pretix/plugins/sendmail/views.py:93
 msgid "Sample Company LLC"
-msgstr ""
+msgstr "Örnek Şirket LLC"
 
 #: pretix/plugins/sendmail/views.py:121
 #, python-format
@@ -13346,6 +13377,7 @@ msgid ""
 "Your message has been queued and will be sent to %d users in the next "
 "minutes."
 msgstr ""
+"Mesajınız sıraya alındı ve sonraki dakikalarda %d kullanıcıya gönderilecek."
 
 #: pretix/plugins/statistics/__init__.py:9
 #: pretix/plugins/statistics/__init__.py:12
@@ -13353,46 +13385,52 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:6
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 msgid "Statistics"
-msgstr ""
+msgstr "istatistik"
 
 #: pretix/plugins/statistics/__init__.py:15
 msgid "This plugin shows you various statistics."
-msgstr ""
+msgstr "Bu eklenti size çeşitli istatistikleri gösterir."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:17
 msgid "Orders by day"
-msgstr ""
+msgstr "Güne göre Siparişler"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:23
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
 msgstr ""
+"Birden fazla ödemede ödenen siparişler, son ödeme tarihleriyle birlikte "
+"gösterilir."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:32
 msgid "Revenue over time"
-msgstr ""
+msgstr "Zaman içinde gelir"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:46
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
+"Sadece tam ödeme emirleri sayılır. Birden fazla ödemede ödenen siparişler, "
+"son ödeme tarihleriyle birlikte gösterilir."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:73
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
 msgstr ""
+"İlk siparişler gönderilir gönderilmez, satışlarınızla ilgili çeşitli "
+"istatistikler göstereceğiz!"
 
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
 #: pretix/plugins/stripe/payment.py:35
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/__init__.py:16
 msgid "This plugin allows you to receive credit card payments via Stripe"
-msgstr ""
+msgstr "Bu eklenti, Stripe ile kredi kartı ödemeleri almanızı sağlar"
 
 #: pretix/plugins/stripe/forms.py:17
 #, python-format
@@ -13400,6 +13438,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
+"Sağlanan \"%(value)s\" anahtarı geçerli görünmüyor. \"%(prefix)s\" ile "
+"başlamalıdır."
 
 #: pretix/plugins/stripe/payment.py:64
 msgid ""
@@ -13407,14 +13447,17 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Stripe ile ödeme kabul etmek için Stripe'de bir hesaba ihtiyacınız olacak. "
+"Aşağıdaki düğmeye tıklayarak, varolan birine yeni bir Stripe hesabı "
+"takabilirsiniz."
 
 #: pretix/plugins/stripe/payment.py:68
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "Stripe ile iletişime geç"
 
 #: pretix/plugins/stripe/payment.py:78
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "Stripe ile bağlantısını kes"
 
 #: pretix/plugins/stripe/payment.py:82
 msgid ""
@@ -13423,74 +13466,78 @@ msgid ""
 "cancel orders when charges are refunded externally and to process "
 "asynchronous payment methods like SOFORT."
 msgstr ""
+"Ödemeler harici olarak iade edildiğinde ve asenkron ödemelerin işlenmesi "
+"durumunda siparişlerin otomatik olarak iptal edilmesi için lütfen bir <a "
+"href=\"https://dashboard.stripe.com/account/webhooks\"> Stripe Webhook </a>"
+"'yi aşağıdaki uç noktaya yapılandırın. SOFORT gibi yöntemler."
 
 #: pretix/plugins/stripe/payment.py:96
 msgid "Stripe account"
-msgstr ""
+msgstr "Stripe hesabı"
 
 #: pretix/plugins/stripe/payment.py:104
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Canlı"
 
 #: pretix/plugins/stripe/payment.py:105
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "Test yapmak"
 
 #: pretix/plugins/stripe/payment.py:115
 msgid "Publishable key"
-msgstr ""
+msgstr "Yayılabilir anahtar"
 
 #: pretix/plugins/stripe/payment.py:126
 msgid "Secret key"
-msgstr ""
+msgstr "Gizli anahtar"
 
 #: pretix/plugins/stripe/payment.py:136
 msgid "User interface"
-msgstr ""
+msgstr "Kullanıcı arayüzü"
 
 #: pretix/plugins/stripe/payment.py:138
 msgid "Simple (pretix design)"
-msgstr ""
+msgstr "Basit (pretix tasarımı)"
 
 #: pretix/plugins/stripe/payment.py:139
 msgid "Stripe Checkout"
-msgstr ""
+msgstr "Stripe'tan çıkış yap"
 
 #: pretix/plugins/stripe/payment.py:141
 msgid "Only relevant for credit card payments."
-msgstr ""
+msgstr "Sadece kredi kartı ödemeleri ile ilgilidir."
 
 #: pretix/plugins/stripe/payment.py:145
 msgid "Credit card payments"
-msgstr ""
+msgstr "Kredi kartı ödemeleri"
 
 #: pretix/plugins/stripe/payment.py:150 pretix/plugins/stripe/payment.py:614
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:152 pretix/plugins/stripe/payment.py:159
 #: pretix/plugins/stripe/payment.py:166 pretix/plugins/stripe/payment.py:173
 #: pretix/plugins/stripe/payment.py:181
 msgid "Needs to be enabled in your Stripe account first."
-msgstr ""
+msgstr "İlk önce Stripe hesabınızda etkinleştirilmiş olması gerekir."
 
 #: pretix/plugins/stripe/payment.py:157 pretix/plugins/stripe/payment.py:683
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:164 pretix/plugins/stripe/payment.py:732
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:171 pretix/plugins/stripe/payment.py:775
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:178 pretix/plugins/stripe/payment.py:844
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:183
 msgid ""
@@ -13499,10 +13546,14 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"İsminden de anlaşılacağı gibi, Stripe üzerinden Sofort ödemeleri anında "
+"işlenen <strong>not</ strong> dir, ancak bazı durumlarda onaylanmak üzere "
+"<strong>14 güne kadar</ strong> alabilir. Ödeme süreniz bu gecikmeye izin "
+"veriyorsa lütfen yalnızca bu ödeme yöntemini etkinleştirin."
 
 #: pretix/plugins/stripe/payment.py:192
 msgid "3D Secure mode"
-msgstr ""
+msgstr "3D Güvenli mod"
 
 #: pretix/plugins/stripe/payment.py:193
 msgid ""
@@ -13511,33 +13562,37 @@ msgid ""
 "SecureCode) reduces the risk of fraud but makes the payment process a bit "
 "longer."
 msgstr ""
+"Bu, kredi kartı ödemeleri için 3D Secure yöntemlerini ne zaman "
+"kullanacağımızı belirler. 3D Secure'u (VISA veya MasterCard SecureCode ile "
+"Doğrulanmış olarak da bilinir) kullanmak, sahtekarlık riskini azaltır, ancak "
+"ödeme sürecini biraz daha uzatır."
 
 #: pretix/plugins/stripe/payment.py:197
 msgctxt "stripe 3dsecure"
 msgid "Only when required by the card"
-msgstr ""
+msgstr "Sadece kartın gerektirdiği durumlarda"
 
 #: pretix/plugins/stripe/payment.py:198
 msgctxt "stripe 3dsecure"
 msgid "Always when recommended by Stripe"
-msgstr ""
+msgstr "Her zaman Stripe tarafından tavsiye edildiğinde"
 
 #: pretix/plugins/stripe/payment.py:199
 msgctxt "stripe 3dsecure"
 msgid "Always when supported by the card"
-msgstr ""
+msgstr "Her zaman kart tarafından desteklendiğinde"
 
 #: pretix/plugins/stripe/payment.py:277 pretix/plugins/stripe/payment.py:562
 #: pretix/plugins/stripe/payment.py:648 pretix/plugins/stripe/payment.py:706
 #: pretix/plugins/stripe/payment.py:809 pretix/plugins/stripe/payment.py:881
 #, python-brace-format
 msgid "{event}-{code}"
-msgstr ""
+msgstr "{event}-{code}"
 
 #: pretix/plugins/stripe/payment.py:309
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripe, kartınızda bir hata bildirdi: %"
+msgstr "Stripe, kartınızda bir hata bildirdi: %s"
 
 #: pretix/plugins/stripe/payment.py:324 pretix/plugins/stripe/payment.py:438
 #: pretix/plugins/stripe/payment.py:602
@@ -13553,163 +13608,162 @@ msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Ödemeniz tamamlandı. Ödeme tamamlanır tamamlanmaz sizi bilgilendireceğiz."
 
 #: pretix/plugins/stripe/payment.py:353
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripe bir hata bildirdi: %s"
 
 #: pretix/plugins/stripe/payment.py:397
-#, fuzzy
-#| msgid "Payment information"
 msgid "No payment information found."
-msgstr "Ödeme bilgileri"
+msgstr "Ödeme bilgisi bulunamadı."
 
 #: pretix/plugins/stripe/payment.py:413
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"Stripe ile iletişimde sorun vardı. Lütfen tekrar deneyin ve sorun devam "
+"ederse desteğe başvurun."
 
 #: pretix/plugins/stripe/payment.py:417
-#, fuzzy
-#| msgid "The pretix.eu server returned an error code."
 msgid "Stripe returned an error"
-msgstr "Pretix.eu sunucusu bir hata kodu verdi."
+msgstr "Stripe bir hata verdi"
 
 #: pretix/plugins/stripe/payment.py:509
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Stripe üzerinden kredi kartı"
 
 #: pretix/plugins/stripe/payment.py:510
 msgid "Credit card"
-msgstr ""
+msgstr "Kredi kartı"
 
 #: pretix/plugins/stripe/payment.py:535
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "Stripe ödemelerinde JavaScript'i etkinleştirmeniz gerekebilir."
 
 #: pretix/plugins/stripe/payment.py:613
 msgid "giropay via Stripe"
-msgstr ""
+msgstr "Stripe ile giropay"
 
 #: pretix/plugins/stripe/payment.py:630 pretix/plugins/stripe/payment.py:791
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
 msgid "Account holder"
-msgstr ""
+msgstr "Hesap sahibi"
 
 #: pretix/plugins/stripe/payment.py:645 pretix/plugins/stripe/payment.py:806
 msgid "unknown name"
-msgstr ""
+msgstr "Bilinmeyen isim"
 
 #: pretix/plugins/stripe/payment.py:682
 msgid "iDEAL via Stripe"
-msgstr ""
+msgstr "Stripe ile iDEAL"
 
 #: pretix/plugins/stripe/payment.py:731
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "Stripe ile Alipay"
 
 #: pretix/plugins/stripe/payment.py:774
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "Stripe ile Bancontact"
 
 #: pretix/plugins/stripe/payment.py:843
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "Stripe ile SOFORT"
 
 #: pretix/plugins/stripe/payment.py:860
 msgid "Country of your bank"
-msgstr ""
+msgstr "Ülkenizin bankası"
 
 #: pretix/plugins/stripe/payment.py:861
 msgid "Germany"
-msgstr ""
+msgstr "Almanya"
 
 #: pretix/plugins/stripe/payment.py:862
 msgid "Austria"
-msgstr ""
+msgstr "Avusturya"
 
 #: pretix/plugins/stripe/payment.py:863
 msgid "Belgium"
-msgstr ""
+msgstr "Belçika"
 
 #: pretix/plugins/stripe/payment.py:864
 msgid "Netherlands"
-msgstr ""
+msgstr "Hollanda"
 
 #: pretix/plugins/stripe/payment.py:865
 msgid "Spain"
-msgstr ""
+msgstr "İspanya"
 
 #: pretix/plugins/stripe/signals.py:52
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Ücret başarılı oldu."
 
 #: pretix/plugins/stripe/signals.py:53
 msgid "Charge refunded."
-msgstr ""
+msgstr "Ücret iade edildi."
 
 #: pretix/plugins/stripe/signals.py:54
 msgid "Charge updated."
-msgstr ""
+msgstr "Ücret güncellendi."
 
 #: pretix/plugins/stripe/signals.py:55
 msgid "Charge pending"
-msgstr ""
+msgstr "Ücret beklemede"
 
 #: pretix/plugins/stripe/signals.py:56
 msgid "Payment authorized."
-msgstr ""
+msgstr "Ödeme yetkili."
 
 #: pretix/plugins/stripe/signals.py:57
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Ödeme talimatı iptal edildi."
 
 #: pretix/plugins/stripe/signals.py:58
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Ödeme yetkisi başarısız oldu."
 
 #: pretix/plugins/stripe/signals.py:64
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Ücret başarısız oldu. Sebep: {}"
 
 #: pretix/plugins/stripe/signals.py:66
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Anlaşmazlık oluşturuldu. Sebep: {}"
 
 #: pretix/plugins/stripe/signals.py:68
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Anlaşmazlık güncellendi. Sebep: {}"
 
 #: pretix/plugins/stripe/signals.py:70
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Uyuşmazlık kapalı. Durum: {}"
 
 #: pretix/plugins/stripe/signals.py:73
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe bir etkinlik bildirdi: {}"
 
 #: pretix/plugins/stripe/signals.py:84
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Bağlantısı: Müşteri Kimliği"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Bağlantısı: Gizli anahtar"
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Stripe Bağlantısı: Yayılabilir anahtar"
 
 #: pretix/plugins/stripe/signals.py:105
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Bağlantısı: Gizli anahtar (test)"
 
 #: pretix/plugins/stripe/signals.py:112
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Bağlantısı: Yayılabilir anahtar (test)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -13718,6 +13772,9 @@ msgid ""
 "the order %(order)s has already been paid by other means. Please double-"
 "check and refund the money via Stripe's interface."
 msgstr ""
+"Stripe işlemi <a %(stripe_href)s> %(charge)s </a> başardı, ancak %(order)s "
+"başka yollarla zaten ödendi. Lütfen Stripe'in arayüzü ile parayı iki kez "
+"kontrol edin ve para iadesi yapın."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -13727,6 +13784,10 @@ msgid ""
 "Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
+"Stripe işlemi <a %(stripe_href)s> %(charge)s </a> başardı, ancak %(order)s "
+"süresi doldu ve bu sırada ürün satıldı. Bu nedenle ödeme kabul edilemedi. "
+"Lütfen kullanıcıyla iletişime geçin ve Stripe'in arayüzü ile paranızı iade "
+"edin."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:5
 #, python-format
@@ -13735,24 +13796,27 @@ msgid ""
 "been refunded. Do you want to refund mark the matching order (%(order)s) as "
 "refunded?"
 msgstr ""
+"Stripe, <a %(stripe_href)s> %(charge)s </a> işleminin iade edildiğini "
+"bildirdi. Eşleşen siparişi (% (order)s) iadeli olarak işaretlemek mi "
+"istiyorsunuz?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Toplam tutar kredi kartınızdan çekilecektir."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:9
 msgid "Card type"
-msgstr ""
+msgstr "Kart türü"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:21
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:16
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:11
 msgid "Card number"
-msgstr ""
+msgstr "Kart numarası"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
@@ -13764,6 +13828,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Siparişinizi gönderdikten sonra, ödemenizi tamamlamak için sizi ödeme "
+"hizmeti sağlayıcısına yönlendireceğiz. Biletlerinizi almak için buraya geri "
+"yönlendirileceksiniz."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
@@ -13776,11 +13843,12 @@ msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
 msgstr ""
+"Ödeme tutarını ödemek için kullanacağımız bir kart numarası zaten girdiniz."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:20
 msgid "Use a different card"
-msgstr ""
+msgstr "Farklı bir kart kullan"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:38
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:34
@@ -13793,115 +13861,123 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:28
 msgid "Please continue below to start the credit card payment."
-msgstr ""
+msgstr "Kredi kartı ödemesini başlatmak için lütfen aşağıya devam edin."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
-msgstr ""
+msgstr "Ücret numarası"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:21
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:27
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:33
 msgid "Payer name"
-msgstr ""
+msgstr "Ödeyenin adı"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:31
 msgid "Bank"
-msgstr ""
+msgstr "Banka"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:46
 msgid "Error message"
-msgstr ""
+msgstr "Hata mesajı"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Ödemenizle ilgili olarak ödeme sağlayıcısından cevap bekliyoruz. Bu, birkaç "
+"günden fazla sürerse lütfen bizimle iletişime geçin."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Ödeme işlemi aşağıdaki nedenlerden dolayı tamamlanamadı:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:16
 msgid "Unknown reason"
-msgstr ""
+msgstr "Bilinmeyen sebep"
 
 #: pretix/plugins/stripe/views.py:50 pretix/plugins/stripe/views.py:56
 #: pretix/plugins/stripe/views.py:83 pretix/plugins/stripe/views.py:95
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "Stripe ile bağlantı sırasında bir hata oluştu, lütfen tekrar deneyin."
 
 #: pretix/plugins/stripe/views.py:103 pretix/plugins/stripe/views.py:105
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe bir hata verdi: {}"
 
 #: pretix/plugins/stripe/views.py:108
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Stripe hesabınız artık pretix'e bağlı. Ayarları aşağıda ayrıntılı olarak "
+"değiştirebilirsiniz."
 
 #: pretix/plugins/stripe/views.py:334
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "Stripe hesabınızın bağlantısı kesildi."
 
 #: pretix/plugins/stripe/views.py:375 pretix/plugins/stripe/views.py:406
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Üzgünüz, ödeme sürecinde bir hata oluştu. Devam etmek için lütfen e-"
+"postalarınızdaki bağlantıyı kontrol edin."
 
 #: pretix/plugins/stripe/views.py:400
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
 msgstr ""
+"Kart ödemeniz için yetkilendirme konusunda sorun yaşadık. Lütfen tekrar "
+"deneyin ve bu sorun devam ederse bizimle iletişime geçin."
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
 msgid "PDF ticket output"
-msgstr ""
+msgstr "PDF bilet çıkışı"
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:16
 msgid "This plugin allows you to print out tickets as PDF files"
-msgstr ""
+msgstr "Bu eklenti, biletleri PDF dosyaları olarak yazdırmanızı sağlar"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:16
 msgid "All paid PDF tickets in one file"
-msgstr ""
+msgstr "Tek bir dosyada tüm ücretli PDF biletleri"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:23
 msgid "PDF ticket layout"
-msgstr ""
+msgstr "PDF bilet düzeni"
 
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:185
 msgid "Default layout"
-msgstr ""
+msgstr "Varsayılan düzen"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:50
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "Soru: {question}"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:51
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<Cevap: {question}>"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:116
 msgid "Ticket layout created."
-msgstr ""
+msgstr "Bilet düzeni oluşturuldu."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:117
 msgid "Ticket layout deleted."
-msgstr ""
+msgstr "Bilet düzeni silindi."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:118
 msgid "Ticket layout changed."
