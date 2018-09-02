@@ -193,7 +193,7 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             # Cookies are in fact not supported
             r = render(request, 'pretixpresale/event/cookies.html', {
                 'url': eventreverse(
-                    request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace')}
+                    request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
                 ) + (
                     "?src=widget&take_cart_id={}".format(request.GET.get('cart_id'))
                     if "cart_id" in request.GET else ""

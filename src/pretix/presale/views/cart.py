@@ -48,7 +48,10 @@ class CartActionMixin:
             u += '&require_cookie=true'
         else:
             u += '?require_cookie=true'
-        if 'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES:
+        disclose_cart_id = (
+            'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+        ) and self.kwargs.get('cart_namespace')
+        if disclose_cart_id:
             cart_id = get_or_create_cart_id(self.request)
             u += '&cart_id={}'.format(cart_id)
         return u
