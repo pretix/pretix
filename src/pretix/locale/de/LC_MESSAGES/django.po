@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-08-14 16:08+0000\n"
+"PO-Revision-Date: 2018-09-02 14:27+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/models.py:18
@@ -107,10 +107,8 @@ msgstr ""
 "erlaubt."
 
 #: pretix/base/email.py:129
-#, fuzzy
-#| msgid "Make default"
 msgid "pretix default"
-msgstr "Zum Standard machen"
+msgstr "pretix-Standard"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -5015,7 +5013,7 @@ msgstr "z.B. Ihre Kontaktdaten"
 
 #: pretix/control/forms/event.py:692
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "HTML-E-Mail-Renderer"
 
 #: pretix/control/forms/event.py:698 pretix/control/forms/event.py:707
 #: pretix/control/forms/event.py:714 pretix/control/forms/event.py:721
@@ -7899,10 +7897,8 @@ msgid "E-mail settings"
 msgstr "E-Mail-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:18
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail design"
-msgstr "E-Mail-Adresse"
+msgstr "E-Mail-Design"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:31
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
@@ -11481,14 +11477,17 @@ msgid ""
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
+"Wenn die Adresse mit einem uns bekannten Konto verknüpft ist, haben wir "
+"soeben eine E-Mail mit weiteren Instruktionen verschickt. Bitte beachten "
+"Sie, dass wir maximal eine E-Mail alle 24 Stunden schicken."
 
 #: pretix/control/views/auth.py:230
-#, fuzzy
-#| msgid "We sent you an e-mail containing further instructions."
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions."
-msgstr "Wir haben Ihnen eine E-Mail mit weiteren Instruktionen geschickt."
+msgstr ""
+"Wenn die Adresse mit einem uns bekannten Konto verknüpft ist, haben wir "
+"soeben eine E-Mail mit weiteren Instruktionen verschickt."
 
 #: pretix/control/views/auth.py:250
 msgid ""
@@ -11718,10 +11717,8 @@ msgid "invalid item"
 msgstr "Ungültiges Produkt"
 
 #: pretix/control/views/event.py:651
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown e-mail renderer."
-msgstr "Unbekannte Bestellnummer"
+msgstr "Unbekannter E-Mail-Renderer."
 
 #: pretix/control/views/event.py:667 pretix/presale/views/order.py:682
 msgid "You requested an invalid ticket output type."
@@ -13719,6 +13716,8 @@ msgid ""
 "The country in which your Stripe-account is registred in. Usually, this is "
 "your country of residence."
 msgstr ""
+"Das Land, in dem Ihr Stripe-Account registriert ist. Normalerweise ist dies "
+"das Land Ihres Wohn- bzw. Firmensitzes."
 
 #: pretix/plugins/stripe/payment.py:152
 msgid "User interface"
@@ -14087,7 +14086,7 @@ msgstr "Andere Kreditkarte verwenden"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
 msgid "OR"
-msgstr ""
+msgstr "ODER"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:56
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:34
@@ -14647,40 +14646,31 @@ msgstr "Gewählte Zusatzprodukte"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Bitte in neuem Tab fortfahren"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:9
-#, fuzzy
-#| msgid ""
-#| "Your browser does not accept cookies from us. However, we need to set a "
-#| "cookie to remember who you are and what is in your cart. Please try to "
-#| "open the ticket shop in a new tab or change your browser settings."
 msgid ""
 "Your browser is configured to block cookies from third-party website "
 "elements. Unfortunately, this means we cannot show you this ticket shop "
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
-"Ihr Browser hat Cookies von uns blockiert. Wir müssen allerdings ein Cookie "
-"setzen um zu erkennen, wer Sie sind und was in Ihrem Warenkorb liegt. Bitte "
-"probieren Sie, den Shop in einem neuen Tab zu öffnen oder ändern Sie Ihre "
-"Browsereinstellungen."
+"Wir können Ihnen diesen Ticketshop nicht in die Website eingebettet "
+"darstellen, da Ihr Browser so eingestellt ist, dass er Cookies von "
+"eingebundenen Website-Elementen blockiert. Bitte probieren Sie, den Shop in "
+"einem neuen Tab zu öffnen oder änderen Sie Ihre Browsereinstellungen."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:16
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Wir entschuldigen uns für die Unannehmlichkeiten!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:23
-#, fuzzy
-#| msgid "Open ticket shop in new tab"
 msgid "Continue in new tab"
-msgstr "Ticket-Shop in neuem Tab öffnen"
+msgstr "Weiter in neuem Tab"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Cookies not supported"
-msgstr "noch nicht gestartet"
+msgstr "Cookies nicht unterstützt"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
