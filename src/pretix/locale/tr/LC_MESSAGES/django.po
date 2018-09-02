@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2019-10-31 14:39+0000\n"
+"PO-Revision-Date: 2023-05-30 21:21+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -24773,8 +24773,7 @@ msgstr "Kuponu sil"
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr ""
-"Kuponu <strong>%(voucher)s</strong> silmek istediğinizden emin misiniz?"
+msgstr "Kuponu <strong>%(voucher)s</strong> silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
@@ -25020,8 +25019,8 @@ msgid ""
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
 "Kuponların otomatik olarak <strong>not</strong>gönderileceğini "
-"yapılandırdınız. Bu tablodaki bir satırın yanındaki düğmeleri tıklayarak "
-"(istediğiniz kota mevcutsa) tek tek gönderebilirsiniz ya da bu metnin "
+"yapılandırdınız. Bu tablodaki bir satırın yanındaki düğmeleri tıklayarak ("
+"istediğiniz kota mevcutsa) tek tek gönderebilirsiniz ya da bu metnin "
 "altındaki büyük düğmeye basarak çok sayıda kupon gönderebilirsiniz. en uzun "
 "süre beklemiş olanlara şu anda mümkün."
 
