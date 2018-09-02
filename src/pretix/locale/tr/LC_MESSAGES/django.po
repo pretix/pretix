@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
 "PO-Revision-Date: 2018-09-02 13:46+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -14092,11 +14092,11 @@ msgstr "Geçerli bir e-posta adresi giriniz."
 
 #: pretix/presale/checkoutflow.py:377
 msgid "Please enter your invoicing address."
-msgstr ""
+msgstr "Lütfen fatura adresinizi giriniz."
 
 #: pretix/presale/checkoutflow.py:381
 msgid "Please enter your name."
-msgstr ""
+msgstr "Lütfen adınızı giriniz."
 
 #: pretix/presale/checkoutflow.py:391 pretix/presale/checkoutflow.py:396
 #: pretix/presale/checkoutflow.py:401
