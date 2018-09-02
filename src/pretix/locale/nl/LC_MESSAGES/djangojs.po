@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-14 15:13+0000\n"
+"POT-Creation-Date: 2018-09-02 13:50+0000\n"
 "PO-Revision-Date: 2018-08-20 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -28,23 +28,27 @@ msgstr "Gemarkeerd als betaald"
 msgid "Comment:"
 msgstr "Opmerking:"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
 msgstr "Gemaakte bestellingen"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
 msgstr "Betaalde bestellingen"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:21
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
 msgstr "Volledige omzet"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
 msgstr "Verbinding maken met Stripe …"
+
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
+msgid "Total"
+msgstr ""
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42

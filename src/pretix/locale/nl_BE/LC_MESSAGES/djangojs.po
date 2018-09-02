@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-14 15:13+0000\n"
+"POT-Creation-Date: 2018-09-02 13:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -27,22 +27,26 @@ msgstr ""
 msgid "Comment:"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:9
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:33
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:21
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:10
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
+msgstr ""
+
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
+msgid "Total"
 msgstr ""
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
