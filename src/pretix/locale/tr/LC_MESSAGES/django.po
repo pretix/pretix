@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-09-02 13:25+0000\n"
-"Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
+"PO-Revision-Date: 2018-09-02 13:46+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -2556,7 +2556,7 @@ msgstr "Harici ödemenin iadesi"
 #: pretix/base/notifications.py:236
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "{Order.code} için harici bir geri ödeme gerçekleşti."
+msgstr "{order.code} için harici bir geri ödeme gerçekleşti."
 
 #: pretix/base/notifications.py:241
 msgid "Order refunded"
@@ -2720,7 +2720,7 @@ msgid ""
 msgstr ""
 "Bu metin, ödeme onay postaları için {payment_info} yer tutucuya dahil "
 "edilecektir. Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat "
-"vermelidir.{İnsert}, {total}, {currency} ve {total_with_currency} yer "
+"vermelidir. {order}, {total}, {currency} ve {total_with_currency} yer "
 "tutucularını kullanabilirsiniz"
 
 #: pretix/base/payment.py:695
@@ -2735,9 +2735,9 @@ msgid ""
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
 "Bu metin, bekleyen siparişler için sipariş onay sayfasında gösterilecektir. "
-"Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat "
-"vermelidir.{İnsert},{total},{currency} ve {total_with_currency} yer "
-"tutucularını kullanabilirsiniz"
+"Ödemeye nasıl devam edileceği konusunda kullanıcıya talimat vermelidir. "
+"{order}, {total},{currency} ve {total_with_currency} yer tutucularını "
+"kullanabilirsiniz"
 
 #: pretix/base/payment.py:742
 msgid "Offsetting"
@@ -2750,7 +2750,7 @@ msgstr "Bulunamayan bir sipariş girdiniz."
 #: pretix/base/payment.py:777
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr "Siparişlere göre dengelendi:%"
+msgstr "Siparişlere göre dengelendi: %s"
 
 #: pretix/base/pdf.py:38
 msgid "Ticket code (barcode content)"
@@ -3333,17 +3333,17 @@ msgstr "Bu sipariş onay bekliyor değil."
 #: pretix/base/services/orders.py:219
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "Sipariş onaylandı ve onaylandı: %(code)"
+msgstr "Sipariş onaylandı ve onaylandı: %(code)s"
 
 #: pretix/base/services/orders.py:222
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Sipariş onaylandı ve ödeme bekleniyor:%(code)"
+msgstr "Sipariş onaylandı ve ödeme bekleniyor: %(code)s"
 
 #: pretix/base/services/orders.py:296
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr "Sipariş reddedildi: %(code)"
+msgstr "Sipariş reddedildi: %(code)s"
 
 #: pretix/base/services/orders.py:325 pretix/presale/views/order.py:573
 #: pretix/presale/views/order.py:601
@@ -3585,7 +3585,7 @@ msgstr ""
 "\n"
 "Sipariş ayrıntılarınızı değiştirebilir ve siparişinizin durumunu "
 "görebilirsiniz.\n"
-"{URL}\n"
+"{url}\n"
 "\n"
 "En iyi dileklerimizle,\n"
 "{event} ekibiniz"
@@ -7646,7 +7646,7 @@ msgid ""
 "refunding the overpaid amount to the user."
 msgstr ""
 "Bu etkinlik, örneğin yinelenen ödeme girişimleri nedeniyle <strong> ödemeli "
-"siparişler</ strong> içeriyor. Vakaları gözden geçirmeli ve fazla ödenmiş "
+"siparişler</strong> içeriyor. Vakaları gözden geçirmeli ve fazla ödenmiş "
 "miktarı kullanıcıya iade etmeyi düşünmelisiniz."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:25
@@ -7658,7 +7658,7 @@ msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
-"Bu etkinlik, ilgilenmeniz gereken <strong> pending refunds</ strong>içeriyor."
+"Bu etkinlik, ilgilenmeniz gereken <strong>pending refunds</strong> içeriyor."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:34
 msgid "Show pending refunds"
@@ -7669,8 +7669,7 @@ msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
-"Bu etkinlik, ilgilenmeniz gereken <strong>pending onayları</ strong> "
-"içeriyor."
+"Bu etkinlik, ilgilenmeniz gereken <strong>pending onayları</strong> içeriyor."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:43
 msgid "Show orders pending approval"
@@ -8571,7 +8570,7 @@ msgid ""
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
 "Ürününüzü mevcut veya yeni oluşturulmuş bir kotaya ekleyene kadar ürününüzün "
-"<strong> not </ strong> satışa sunulacağını lütfen unutmayın."
+"<strong>not</strong> satışa sunulacağını lütfen unutmayın."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -9037,7 +9036,7 @@ msgid ""
 "Are you sure you want to revoke access to your account for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"<Strong> %(uygulama)</ strong>için hesabınıza erişiminizi iptal etmek "
+"<strong>%(application)s</strong>için hesabınıza erişiminizi iptal etmek "
 "istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:15
@@ -9110,7 +9109,7 @@ msgstr "Evet, siparişi iptal et"
 #: pretix/control/templates/pretixcontrol/order/change.html:11
 #, python-format
 msgid "Change order: %(code)s"
-msgstr "Siparişi değiştir:%(kod)"
+msgstr "Siparişi değiştir: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:16
 #: pretix/control/templates/pretixcontrol/order/change_contact.html:12
@@ -9127,7 +9126,7 @@ msgstr "Siparişi değiştir:%(kod)"
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:10
 #, python-format
 msgid "Back to order %(order)s"
-msgstr "Siparişe geri dön %(sipariş)"
+msgstr "Siparişe geri dön %(order)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:22
 msgid ""
@@ -9182,7 +9181,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:66
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr "Eklenti konumu#%(posid)"
+msgstr "Eklenti konumu #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:82
 msgid "Ticket secret:"
@@ -9211,12 +9210,12 @@ msgstr "Fiyatı değiştir"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:187
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr "<strong>artı</ strong> %(oran)%% %(isim)"
+msgstr "<strong>artı</strong> %(rate)s%% %(name)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:121
 #, python-format
 msgid "<strong>incl.</strong> %(rate)s%% %(name)s"
-msgstr "<strong>dahil etmek</strong> %(oran) %% %(isim)"
+msgstr "<strong>dahil etmek</strong> %(rate)s %% %(name)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:126
 msgid "no taxes apply"
@@ -9307,7 +9306,7 @@ msgstr "Ödeme süresini uzatın"
 #: pretix/control/templates/pretixcontrol/order/index.html:16
 #, python-format
 msgid "Order details: %(code)s"
-msgstr "Sipariş detayı: %(kod)"
+msgstr "Sipariş detayı: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:14
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:5
@@ -9361,12 +9360,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:94
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "Bu sipariş şu anda%(miktar) ile fazla ödeniyor."
+msgstr "Bu sipariş şu anda %(amount)s ile fazla ödeniyor."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:98
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr "%(Miktar) tutarında geri ödeme başlat"
+msgstr "%(amount)s tutarında geri ödeme başlat"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:111
 #: pretix/presale/templates/pretixpresale/event/order.html:7
@@ -9420,7 +9419,7 @@ msgstr "Sipariş edilen ürünler"
 #: pretix/control/templates/pretixcontrol/order/index.html:234
 #, python-format
 msgid "First scanned: %(date)s"
-msgstr "İlk taranan:%(tarih)"
+msgstr "İlk taranan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:238
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:17
@@ -9460,7 +9459,7 @@ msgstr "Güvenli Değil"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:173
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr "<strong>artı</strong> %(oran)%% %(vergi adı)"
+msgstr "<strong>artı</strong> %(rate)s%% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
 #: pretix/control/templates/pretixcontrol/order/index.html:346
@@ -9468,7 +9467,7 @@ msgstr "<strong>artı</strong> %(oran)%% %(vergi adı)"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:183
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "dahil et %(oran)%%%(vergi adı)"
+msgstr "dahil et %(rate)s%% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:359
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
@@ -9739,17 +9738,17 @@ msgid "Mark as done"
 msgstr "tamamlandı olarak işaretle"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We recevied notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
-"<Strong> %(miktar)</ strong> <strong> %(yöntem)</ strong> üzerinden geri "
-"çevrildiğini bildirdik. Bu geri ödeme işleme koyulursa, sipariş <strong> "
-"%(beklemede)</ strong> tarafından düşük ücretlendirilir. Sipariş toplamı "
-"<strong> %(toplam)</ strong>."
+"<strong>%(amount)s</strong> <strong>%(method)s</strong> üzerinden geri "
+"çevrildiğini bildirdik. Bu geri ödeme işleme koyulursa, sipariş "
+"<strong>%(pending)s</strong> tarafından düşük ücretlendirilir. Sipariş "
+"toplamı <strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
 msgid "What should happen to the ticket order?"
@@ -9837,7 +9836,7 @@ msgstr "Gitmek !"
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr "Liste \"% (soru)\" sorusuna cevap olarak filtrelenmiştir."
+msgstr "Liste \"%(question)s\" sorusuna cevap olarak filtrelenmiştir."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
 msgid "Remove filter"
@@ -9906,7 +9905,7 @@ msgstr "Eylemler"
 #: pretix/control/templates/pretixcontrol/organizers/base.html:7
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr "Organizatör:%(ad)"
+msgstr "Organizatör: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:8
 msgid "Organizer page"
@@ -10047,18 +10046,18 @@ msgstr "Üyeler"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:32
 #, python-format
 msgid "+ %(count)s invited"
-msgstr "+%(sayı) davet edildi"
+msgstr "+%(count)s davet edildi"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s (%(count)s elements)"
-msgstr "Sayfa%(sayfa) arasında %(arasında)(%(sayı) elemanlar)"
+msgstr "Sayfa %(page)s arasında %(of)s (%(count)s elemanlar)"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:28
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
-msgstr "%(sayı)elemanlar"
+msgstr "%(count)s elemanlar"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:38
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
@@ -10068,7 +10067,7 @@ msgstr "Sayfa başına göster:"
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
 msgid "Page %(page)s"
-msgstr "Sayfa %(sayfa)"
+msgstr "Sayfa %(page)s"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:5
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
@@ -10324,9 +10323,9 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
-"Lütfen <strong>% (etkinlik)</ strong>etkinliğinden seçilen kategorileri "
-"silmek istediğinizden emin olduğunuzdan emin olun. Bu durumda, lütfen "
-"kullanıcı şifrenizi buraya girin:"
+"Lütfen <strong>%(event)s</strong>etkinliğinden seçilen kategorileri silmek "
+"istediğinizden emin olduğunuzdan emin olun. Bu durumda, lütfen kullanıcı "
+"şifrenizi buraya girin:"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -10397,7 +10396,7 @@ msgstr "Tekrarlama kuralı"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr "%(Başlangıç) başlayarak her %(aralık)%(aralıkla) tekrarlayın."
+msgstr "%(interval)s başlayarak her %(freq)s%(start)s tekrarlayın."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:88
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:199
@@ -10408,7 +10407,7 @@ msgstr "Her yıl aynı tarihte"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:203
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr "%(Setpos)%(hafta içi)%(ay) tarihinde"
+msgstr "%(setpos)s %(weekday)s%(month)s tarihinde"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:102
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:213
@@ -10417,21 +10416,21 @@ msgstr "Her ay aynı tarihte"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
-#, python-format
+#, fuzzy, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr "%(Setpos) %(hafta içi)üzerinde"
+msgstr "%(setpos)s %(weekday)s üzerinde"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr "%(Sayım) kez tekrarlayın"
+msgstr "%(count)s kez tekrarlayın"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:125
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:236
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr "%(Kadar) kadar tekrarlayın"
+msgstr "%(until)s kadar tekrarlayın"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
 msgctxt "subevent"
@@ -10463,7 +10462,7 @@ msgstr "Tarihi sil"
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
 msgstr ""
-"<Strong>%(subevent)</ strong>tarihini silmek istediğinizden emin misiniz?"
+"<strong>%(subevent)s</strong> tarihini silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
@@ -10631,7 +10630,7 @@ msgstr "İki faktörlü bir kimlik doğrulama cihazını sil"
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
-"\"%(Cihaz)\" kimlik doğrulama cihazını silmek istediğinizden emin misiniz?"
+"\"%(device)s\" kimlik doğrulama cihazını silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -10950,7 +10949,7 @@ msgstr "Takım üyelikleri"
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 #, python-format
 msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
-msgstr "Takım \"%(takım)\" organizatör \"%(organizatör)\""
+msgstr "Takım \"%(team)s\" organizatör \"%(organizer)s\""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:62
 msgid "User history"
@@ -11023,7 +11022,7 @@ msgstr "Kuponu sil"
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr "Kuponu <strong>%(makbuz)</ strong> silmek istediğinizden emin misiniz?"
+msgstr "Kuponu <strong>%(voucher)s</strong> silmek istediğinizden emin misiniz?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:10
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -11032,7 +11031,7 @@ msgstr "Bu kupon zaten kullanılmış. Değiştirilmesi önerilmez."
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:14
 #, python-format
 msgid "Order %(code)s"
-msgstr "Sipariş %(kod)"
+msgstr "Sipariş %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:67
 msgid "Voucher history"
@@ -11081,7 +11080,7 @@ msgstr "vade"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:120
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "Kotadaki herhangi bir ürün \"%(kota)\""
+msgstr "Kotadaki herhangi bir ürün \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
 msgid ""
@@ -11111,7 +11110,7 @@ msgid ""
 "%(entry)s</strong>?"
 msgstr ""
 "Aşağıdaki bekleme listesi girişini silmek istediğinizden emin misiniz? "
-"<Strong>%(giriş)</ strong>?"
+"<strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -11148,7 +11147,7 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
-"Kuponların otomatik olarak <strong>not </ strong>gönderileceğini "
+"Kuponların otomatik olarak <strong>not</strong>gönderileceğini "
 "yapılandırdınız. Bu tablodaki bir satırın yanındaki düğmeleri tıklayarak ("
 "istediğiniz kota mevcutsa) tek tek gönderebilirsiniz ya da bu metnin "
 "altındaki büyük düğmeye basarak çok sayıda kupon gönderebilirsiniz. en uzun "
@@ -11170,7 +11169,7 @@ msgid ""
 "%(amount)s</strong>."
 msgstr ""
 "Etkinliğinizde bekleme listesinde bulunan tüm kişilere uyacak kadar yer "
-"açabilirseniz, ek bir <strong>%(miktar)</ strong>değerinde bilet "
+"açabilirseniz, ek bir <strong>%(amount)s</strong>değerinde bilet "
 "satabilirsiniz."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
@@ -11226,9 +11225,7 @@ msgid ""
 "                                "
 msgstr ""
 "\n"
-"                                    …………………………………………Bekliyor, ürün %(sayı)x "
-"mevcut\n"
-"……………………………………\n"
+"                                    Bekliyor, ürün %(num)sx mevcut\n"
 "                                "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
@@ -11391,7 +11388,7 @@ msgstr "Katılımcılar (ücretli)"
 #: pretix/control/views/dashboards.py:92
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr "Toplam gelir ({ücret})"
+msgstr "Toplam gelir ({currency})"
 
 #: pretix/control/views/dashboards.py:101
 msgid "Active products"
@@ -11408,7 +11405,7 @@ msgstr "toplam bekleme listesi uzunluğu"
 #: pretix/control/views/dashboards.py:163
 #, python-brace-format
 msgid "{quota} left"
-msgstr "{kota} tane kaldı"
+msgstr "{quota} tane kaldı"
 
 #: pretix/control/views/dashboards.py:181
 msgid "Your ticket shop is"
@@ -11475,8 +11472,8 @@ msgstr "Yakında"
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] "{sayı} sipariş"
-msgstr[1] "{sayı} sipariş"
+msgstr[0] "{num} sipariş"
+msgstr[1] "{num} sipariş"
 
 #: pretix/control/views/event.py:279
 msgid ""
@@ -11495,7 +11492,7 @@ msgstr ""
 #: pretix/control/views/event.py:482
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr "SMTP sunucusuyla iletişim kurulurken bir hata oluştu:%"
+msgstr "SMTP sunucusuyla iletişim kurulurken bir hata oluştu: %s"
 
 #: pretix/control/views/event.py:485
 msgid ""
@@ -11725,7 +11722,7 @@ msgstr "Seçilen ürün devre dışı bırakıldı."
 #: pretix/control/views/main.py:160
 #, python-brace-format
 msgid "Team {event}"
-msgstr "Ekip {etkinlik}"
+msgstr "Ekip {event}"
 
 #: pretix/control/views/main.py:203 pretix/plugins/badges/__init__.py:23
 #: pretix/plugins/badges/models.py:27
@@ -11967,7 +11964,7 @@ msgstr "E-postayı gönderemedik. Detaylar için aşağıya bakın."
 #: pretix/control/views/orders.py:1293 pretix/plugins/sendmail/views.py:101
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr "Konu: {konu}"
+msgstr "Konu: {subject}"
 
 #: pretix/control/views/orders.py:1304
 msgid "Your message has been queued and will be sent to {}."
@@ -12255,7 +12252,7 @@ msgstr "Seçilen kupon silindi."
 #: pretix/control/views/vouchers.py:221
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr "Yeni kupon oluşturuldu: {kod}"
+msgstr "Yeni kupon oluşturuldu: {code}"
 
 #: pretix/control/views/vouchers.py:245
 msgid "There is no voucher with the given voucher code."
@@ -12268,7 +12265,7 @@ msgstr "Yeni kuponlar oluşturuldu."
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr "{sayı} kupon oluşturuldu ve e-postayla gönderildi."
+msgstr "{num} kupon oluşturuldu ve e-postayla gönderildi."
 
 #: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
@@ -12394,7 +12391,7 @@ msgstr "Rozet düzeni değişti."
 #: pretix/plugins/badges/signals.py:123
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr "Rozet düzeni {değer}"
+msgstr "Rozet düzeni {val}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
@@ -12406,14 +12403,14 @@ msgstr "Rozetleri yazdır"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Rozet yerleşimini <strong>%(düzen)</ strong> silmek istediğinizden emin "
+"Rozet yerleşimini <strong>%(layout)s</strong> silmek istediğinizden emin "
 "misiniz?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr "Rozet düzeni: %(isim)"
+msgstr "Rozet düzeni: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
@@ -12579,9 +12576,9 @@ msgid ""
 msgstr ""
 "\n"
 "Lütfen tüm tutarı aşağıdaki banka hesabına aktarın.\n"
-"…Referans: %(kod)\n"
-"…Miktar: %(toplam)\n"
-"%(banka)\n"
+"Referans: %(code)s\n"
+"Miktar: %(total)s\n"
+"%(bank)s\n"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -12603,7 +12600,7 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
-"Etkinliğinizin ödeme ayarlarında, %(tarih) değerini herhangi bir ödemenin "
+"Etkinliğinizin ödeme ayarlarında, %(date)s değerini herhangi bir ödemenin "
 "son tarihi olarak ayarlarsınız. Bu nedenle, herhangi bir siparişi burada "
 "ödenmiş olarak işaretleyemezsiniz."
 
@@ -12624,7 +12621,7 @@ msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
-"Şu anda, bu özellik MT940 biçimindeki <code> csv </ code>dosya ve dosyaları "
+"Şu anda, bu özellik MT940 biçimindeki <code>.csv</code>dosya ve dosyaları "
 "desteklemektedir."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
@@ -13547,8 +13544,8 @@ msgid ""
 "payment term allows for this lag."
 msgstr ""
 "İsminden de anlaşılacağı gibi, Stripe üzerinden Sofort ödemeleri anında "
-"işlenen <strong>not</ strong> dir, ancak bazı durumlarda onaylanmak üzere "
-"<strong>14 güne kadar</ strong> alabilir. Ödeme süreniz bu gecikmeye izin "
+"işlenen <strong>not</strong> dir, ancak bazı durumlarda onaylanmak üzere "
+"<strong>14 güne kadar</strong> alabilir. Ödeme süreniz bu gecikmeye izin "
 "veriyorsa lütfen yalnızca bu ödeme yöntemini etkinleştirin."
 
 #: pretix/plugins/stripe/payment.py:192
@@ -13796,8 +13793,8 @@ msgid ""
 "been refunded. Do you want to refund mark the matching order (%(order)s) as "
 "refunded?"
 msgstr ""
-"Stripe, <a %(stripe_href)s> %(charge)s </a> işleminin iade edildiğini "
-"bildirdi. Eşleşen siparişi (% (order)s) iadeli olarak işaretlemek mi "
+"Stripe, <a %(stripe_href)s>%(charge)s</a> işleminin iade edildiğini "
+"bildirdi. Eşleşen siparişi (%(order)s) iadeli olarak işaretlemek mi "
 "istiyorsunuz?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
@@ -13998,8 +13995,7 @@ msgstr "Bilet düzeni"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
-msgstr ""
-"Düzeni <strong> %(layout) </ strong> silmek istediğinizden emin misiniz?"
+msgstr "Düzeni <strong>%(layout)s</strong> silmek istediğinizden emin misiniz?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
