@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-09-02 13:46+0000\n"
+"PO-Revision-Date: 2018-09-03 04:00+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -106,10 +106,8 @@ msgid ""
 msgstr "\"{application_name}\" uygulaması hesabınıza erişmeye yetkilidir."
 
 #: pretix/base/email.py:129
-#, fuzzy
-#| msgid "Make default"
 msgid "pretix default"
-msgstr "Varsayılan yap"
+msgstr "pretix varsayılan"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -4916,7 +4914,7 @@ msgstr "Örneğin. iletişim bilgilerin"
 
 #: pretix/control/forms/event.py:692
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "HTML posta oluşturucu"
 
 #: pretix/control/forms/event.py:698 pretix/control/forms/event.py:707
 #: pretix/control/forms/event.py:714 pretix/control/forms/event.py:721
@@ -7764,10 +7762,8 @@ msgid "E-mail settings"
 msgstr "E-posta ayarları"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:18
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail design"
-msgstr "E-posta adresi"
+msgstr "E-posta tasarımı"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:31
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
@@ -9746,16 +9742,16 @@ msgid "Mark as done"
 msgstr "tamamlandı olarak işaretle"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "We recevied notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
-"<strong>%(amount)s</strong> <strong>%(method)s</strong> üzerinden geri "
-"çevrildiğini bildirdik. Bu geri ödeme işleme koyulursa, sipariş <strong>"
-"%(pending)s</strong> tarafından düşük ücretlendirilir. Sipariş toplamı "
+"Farkettik ki <strong>%(amount)s</strong> üzerinden iade "
+"edildi<strong>%(method)s</strong>. Bu geri ödeme işleniyorsa, "
+"sipariş,<strong>%(pending)s</strong>.Sipariş toplamı "
 "<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
@@ -10424,9 +10420,9 @@ msgstr "Her ay aynı tarihte"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
-#, fuzzy, python-format
+#, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr "%(setpos)s %(weekday)s üzerinde"
+msgstr "Üzerinde%(setpos)s%(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
@@ -11316,6 +11312,8 @@ msgid ""
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
+"Adres geçerli bir hesaba kayıtlıysa, size daha fazla talimat içeren bir e-"
+"posta gönderdik. Lütfen her 24 saatte bir e-posta göndereceğimizi unutmayın."
 
 #: pretix/control/views/auth.py:230
 #, fuzzy
@@ -14133,231 +14131,242 @@ msgstr "Lütfen adınızı giriniz."
 #: pretix/presale/checkoutflow.py:391 pretix/presale/checkoutflow.py:396
 #: pretix/presale/checkoutflow.py:401
 msgid "Please fill in answers to all required questions."
-msgstr ""
+msgstr "Lütfen gerekli tüm soruların cevaplarını doldurun."
 
 #: pretix/presale/checkoutflow.py:427
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Ödeme"
 
 #: pretix/presale/checkoutflow.py:470 pretix/presale/views/order.py:478
 msgid "Please select a payment method."
-msgstr ""
+msgstr "Lütfen bir ödeme yöntemi seçin."
 
 #: pretix/presale/checkoutflow.py:494 pretix/presale/checkoutflow.py:500
 #: pretix/presale/views/order.py:242 pretix/presale/views/order.py:299
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "Girdiğiniz ödeme bilgileri eksik."
 
 #: pretix/presale/checkoutflow.py:526
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Siparişi gözden geçir"
 
 #: pretix/presale/checkoutflow.py:592
 msgid "You need to check all checkboxes on the bottom of the page."
-msgstr ""
+msgstr "Sayfanın altındaki tüm onay kutularını işaretlemeniz gerekir."
 
 #: pretix/presale/checkoutflow.py:625
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
+"Onay postası gönderilirken bir hata oluştu. Lütfen daha sonra tekrar "
+"deneyiniz."
 
 #: pretix/presale/forms/checkout.py:25
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Geçerli bir e-posta adresi girdiğinizden emin olun. Siparişinize daha sonra "
+"erişmek için ihtiyacınız olan bir bağlantıyı içeren bir sipariş onayı "
+"göndereceğiz."
 
 #: pretix/presale/forms/checkout.py:37
 msgid "E-mail address (repeated)"
-msgstr ""
+msgstr "E-posta adresi (tekrarlanan)"
 
 #: pretix/presale/forms/checkout.py:38
 msgid ""
 "Please enter the same email address again to make sure you typed it "
 "correctly."
 msgstr ""
+"Doğru yazdığınızdan emin olmak için lütfen aynı e-posta adresini tekrar "
+"girin."
 
 #: pretix/presale/forms/checkout.py:56
 msgid "Please enter the same email address twice."
-msgstr ""
+msgstr "Lütfen aynı e-posta adresini iki kez girin."
 
 #: pretix/presale/forms/checkout.py:152
 #, python-brace-format
 msgid "{name} (+ {price})"
-msgstr ""
+msgstr "{name} (+ {price})"
 
 #: pretix/presale/forms/checkout.py:156
 #, python-brace-format
 msgid "{name} (+ {price} plus {taxes}% {taxname})"
-msgstr ""
+msgstr "{name}(+ {price} artı {taxes}%{taxname})"
 
 #: pretix/presale/forms/checkout.py:161
 #, python-brace-format
 msgid "{name} (+ {price} incl. {taxes}% {taxname})"
-msgstr ""
+msgstr "{name} (+{price} dahil {taxes}%{taxname})"
 
 #: pretix/presale/forms/checkout.py:167
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:5
 msgid "SOLD OUT"
-msgstr ""
+msgstr "SATILDI"
 
 #: pretix/presale/forms/checkout.py:169
 msgid "Currently unavailable"
-msgstr ""
+msgstr "Şu anda müsait değil"
 
 #: pretix/presale/forms/checkout.py:172
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s Şu anda mevcut"
 
 #: pretix/presale/forms/checkout.py:234
 msgid "no selection"
-msgstr ""
+msgstr "seçim yok"
 
 #: pretix/presale/ical.py:52
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr ""
+msgstr "Biletler: {url}"
 
 #: pretix/presale/ical.py:55
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr ""
+msgstr "kabul:{datetime}"
 
 #: pretix/presale/ical.py:59
 #, python-brace-format
 msgid "Organizer: {organizer}"
-msgstr ""
+msgstr "Organizatör: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
 msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<%(a_attr)s>pretix tarafından desteklenen etkinlik biletleme</a>"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:16
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "Bu mağaza şu anda yalnızca siz ve ekibiniz tarafından görülebilir."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:18
 msgid "Take it live now"
-msgstr ""
+msgstr "Şimdi canlı al"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:29
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr ""
+msgstr "Tüm olayları göster %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:75
 msgid "Contact event organizer"
-msgstr ""
+msgstr "Etkinlik düzenleyicisi ile iletişime geç"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 msgid "Imprint"
-msgstr ""
+msgstr "damga"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:6
 msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Alışveriş sepetinizdeki bazı ürünler için, devam etmeden önce ek seçenekleri "
+"belirleyebilirsiniz."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu kategoriden tam olarak bir seçenek seçmeniz gerekiyor."
+msgstr[1] "Bu kategoriden %(min_count)s seçmelisin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:34
 #, python-format
 msgid "You can choose at most one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu kategoriden en fazla bir seçeneği seçebilirsiniz."
+msgstr[1] "Bu kategoriden %(max_count)s seçeneği seçebilirsin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:40
 #, python-format
 msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
-msgstr ""
+msgstr "Bu kategoriden %(min_count)s ve %(max_count)s seçenek seçebilirsin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:50
 msgid "There are no add-ons available for this product."
-msgstr ""
+msgstr "Bu ürün için herhangi bir eklenti bulunmamaktadır."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:175
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:45
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:99
 msgid "Go back"
-msgstr ""
+msgstr "Geri dön"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
 msgid "Checkout"
-msgstr ""
+msgstr "Çıkış yapmak"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:31
 #: pretix/presale/templates/pretixpresale/event/index.html:24
 msgid "Your cart"
-msgstr ""
+msgstr "Sepetiniz"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:18
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:26
 #: pretix/presale/templates/pretixpresale/event/index.html:31
 msgid "Cart expired"
-msgstr ""
+msgstr "Sepetinizin süresi doldu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:40
 #: pretix/presale/templates/pretixpresale/event/index.html:43
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr ""
+msgstr "Sepetinizdeki öğeler %(minutes)s dakika için size ayrılmıştır."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:47
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Sepetinizdeki öğeler artık sizin için ayrılmamış."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 msgid "Review order"
-msgstr ""
+msgstr "Siparişi gözden geçir"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Please review the details below and confirm your order."
-msgstr ""
+msgstr "Lütfen aşağıdaki ayrıntıları gözden geçirin ve siparişinizi onaylayın."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:18
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:59
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:81
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:117
 msgid "Modify"
-msgstr ""
+msgstr "değiştirmek"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:121
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:17
 #: pretix/presale/templates/pretixpresale/event/order.html:193
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:32
 msgid "Contact information"
-msgstr ""
+msgstr "İletişim bilgileri"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:145
 msgid "Confirmations"
-msgstr ""
+msgstr "Onaylar"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:163
 msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
 msgstr ""
+"Siparişiniz onaylanmadan önce etkinlik düzenleyicisinin onayını gerektirir "
+"ve geçerli bir sözleşme oluşturur."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:165
 msgid ""
@@ -14365,44 +14374,51 @@ msgid ""
 "rejected your order. If your order was approved, we will send you a link "
 "that you can use to pay."
 msgstr ""
+"Etkinlik düzenleyicisinin siparişinizi onayladığı veya reddettiği anda size "
+"bir e-posta göndereceğiz. Siparişiniz onaylandıysa size ödeme yapmak için "
+"kullanabileceğiniz bir bağlantı göndeririz."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:181
 msgid "Place binding order"
-msgstr ""
+msgstr "Yer bağlama sırası"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:183
 msgid "Submit registration"
-msgstr ""
+msgstr "Kayıt gönder"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:6
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "Lütfen nasıl ödemek istediğinizi seçin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:35
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "Ödeme sağlayıcıları etkin değil."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:37
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
 msgstr ""
+"Lütfen ödeme ayarlarına gidin ve bir veya daha fazla ödeme sağlayıcısını "
+"etkinleştirin."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:5
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Devam etmeden önce, bazı sorulara cevap vermeniz gerekiyor."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:7
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Devam etmek için <span>*</span>İle işaretlenmiş tüm alanları doldurmanız "
+"gerekiyor."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:59
 msgid "Copy answers from above"
-msgstr ""
+msgstr "Yukarıdaki cevapları kopyala"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:72
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Seçilen eklentiler"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
@@ -14441,120 +14457,121 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:16
 msgid "Reserved"
-msgstr ""
+msgstr "Ayrılmış"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "All remaining products are reserved but might become available again."
 msgstr ""
+"Geri kalan tüm ürünler saklıdır, ancak tekrar kullanılabilir hale gelebilir."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
 msgid "Remove one"
-msgstr ""
+msgstr "Birini kaldır"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:109
 msgid "Add one more"
-msgstr ""
+msgstr "Bir tane daha ekle"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Sipariş onaylandı"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr ""
+msgstr "Ödeme bekleniyor"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
 msgid "Go"
-msgstr ""
+msgstr "Git"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:20
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:42
 msgid "Tickets on sale"
-msgstr ""
+msgstr "Satış biletleri"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "Satış başlar %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Henüz satışta değil"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
-msgstr ""
+msgstr "Ön satış"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:55
 #: pretix/presale/templates/pretixpresale/event/index.html:73
 msgid "Empty cart"
-msgstr ""
+msgstr "Boş sepet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "Ödeme ile devam et"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
-msgstr ""
+msgstr "Diğer tarihi görüntüle"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:89
 msgid "Choose date to buy a ticket"
-msgstr ""
+msgstr "Bir bilet almak için tarih seçin"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:113
 #: pretix/presale/views/widget.py:241
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "Bu etkinlik için presale süresi bitti."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:117
 #: pretix/presale/views/widget.py:243
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Bu etkinlik için satış öncesi %(date)s %(time)s ile başlayacaktır."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:121
 #: pretix/presale/views/widget.py:248
 msgid "The presale for this event has not yet started."
-msgstr ""
+msgstr "Bu etkinlik için önceden teklif henüz başlamamıştır."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:143
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Başlangıç: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:148
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Bitiş:%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:156
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "Giriş: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:160
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "Giriş: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:171
 msgid "Add to Calendar"
-msgstr ""
+msgstr "Takvime ekle"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/index.html:366
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "sipariş için minimum miktar: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:232
 #: pretix/presale/templates/pretixpresale/event/voucher.html:64
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "itibaren %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/index.html:287
@@ -14564,11 +14581,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:182
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "ÜCRETSİZ"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:244
 msgid "Show variants"
-msgstr ""
+msgstr "Varyantları göster"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:281
 #: pretix/presale/templates/pretixpresale/event/index.html:386
@@ -14576,49 +14593,48 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:177
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "%(item)s İçin fiyatı değiştir"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:301
 #: pretix/presale/templates/pretixpresale/event/index.html:405
 #: pretix/presale/templates/pretixpresale/event/voucher.html:193
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr ""
+msgstr "%(rate)s%% dahil %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:413
 msgid "Enter a voucher code below to buy this ticket."
-msgstr ""
+msgstr "Bu bileti almak için aşağıda bir kupon kodu girin."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:320
 #: pretix/presale/templates/pretixpresale/event/voucher.html:129
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
-msgstr ""
+msgstr "%(item)s -%(var)s sipariş vermek için  miktar"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:431
 #: pretix/presale/templates/pretixpresale/event/voucher.html:206
-#, fuzzy, python-format
-#| msgid "Maximum number of items per order"
+#, python-format
 msgid "Amount of %(item)s to order"
-msgstr "Sipariş başına maksimum öğe sayısı"
+msgstr "Sipariş için %(item)s miktarı"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:448
 #: pretix/presale/templates/pretixpresale/event/voucher.html:230
 msgid "Add to cart"
-msgstr ""
+msgstr "Sepete ekle"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:460
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Bir kuponu kullan"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:473
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Kuponu kullan"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:484
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Zaten bir bilet sipariş ettiyseniz"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:488
 msgid ""
@@ -14627,38 +14643,45 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Siparişinizin durumunu ve ayrıntılarını görmek veya değiştirmek isterseniz, "
+"sipariş sırasında size gönderdiğimiz e-postalardan birindeki bağlantıyı "
+"tıklayın. Bağlantıyı bulamıyorsanız, siparişinizin size tekrar "
+"gönderilmesini istediğiniz bağlantıyı istemek için aşağıdaki düğmeyi "
+"tıklayın."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:497
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
-msgstr ""
+msgstr "Sipariş bağlantılarını tekrar gönder"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
-msgstr ""
+msgstr "Teşekkür ederim!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "Siparişiniz başarıyla yerleştirildi. Detaylar için aşağıya bakın."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"Bu siparişin ödemesini yapabilmeniz ve tamamlayabilmeniz için etkinlik "
+"organizatörü tarafından onaylanmasını beklediğimizi lütfen unutmayın."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
+msgstr "İşlemi tamamlamak için ödemenizi hala beklediğimizi lütfen unutmayın."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Siparişiniz başarıyla işlendi! Detaylar için aşağıya bakın."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Ödemenizi başarıyla aldık. Detaylar için aşağıya bakın."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
@@ -14666,26 +14689,32 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Siparişinize daha sonra erişmek istiyorsanız, lütfen bu sayfaya tam olarak "
+"yer işareti koyun veya bağlantıyı kaydedin. Ayrıca, belirttiğiniz adresin "
+"bağlantısını içeren bir e-posta da gönderdik."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Siparişinize daha sonra erişmek istiyorsanız lütfen aşağıdaki bağlantıyı "
+"kaydedin. Ayrıca, belirttiğiniz adresin bağlantısını içeren bir e-posta da "
+"gönderdik."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Bu sipariş için %(total)s ödemesi halen beklemede."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:61
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Lütfen ödemenizi daha önce tamamlayın %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:70
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Ödemeyi tekrar deneyin veya başka bir ödeme yöntemi seçin"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
