@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-14 15:12+0000\n"
-"PO-Revision-Date: 2018-09-01 19:00+0000\n"
+"PO-Revision-Date: 2018-09-02 13:25+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -13981,35 +13981,36 @@ msgstr "Bilet düzeni silindi."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:118
 msgid "Ticket layout changed."
-msgstr ""
+msgstr "Bilet düzeni değişti."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:131
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr ""
+msgstr "Bilet düzeni {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "Bilet düzeni"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Düzeni <strong> %(layout) </ strong> silmek istediğinizden emin misiniz?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
 #, python-format
 msgid "Ticket layout: %(name)s"
-msgstr ""
+msgstr "Bilet düzeni:%(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Bilet tasarımı"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -14019,73 +14020,79 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
+"Bilet tasarımını PDF bilet düzenleyicimizle özelleştirebilirsiniz. Orada, "
+"biletler için arka plan olarak kullanılan bir PDF dosyasını yükleyebilir ve "
+"ardından seçtiğiniz metinlerde arka plan üzerine çeşitli metinler ve QR "
+"kodları yerleştirebilirsiniz. Editör, sürükle ve bırak kullanıcı arayüzü "
+"sayesinde kullanımı kolaydır, ancak modern bir tarayıcı ve iyi bir internet "
+"bağlantısı gerektirir."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Change default layout in a new tab"
-msgstr ""
+msgstr "Varsayılan düzeni yeni sekmede değiştir"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:22
 msgid "Advanced mode (multiple layouts)"
-msgstr ""
+msgstr "Gelişmiş mod (çoklu düzenler)"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
 msgid "Ticket layouts"
-msgstr ""
+msgstr "Bilet düzenleri"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
 msgid "You haven't created any layouts yet."
-msgstr ""
+msgstr "Henüz herhangi bir düzen oluşturmadınız."
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
 msgid "Create a new layout"
-msgstr ""
+msgstr "Yeni bir düzen oluştur"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:29
 msgid "PDF output"
-msgstr ""
+msgstr "PDF çıktı"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
-msgstr ""
+msgstr "Varsayılan bilet düzeni"
 
 #: pretix/plugins/ticketoutputpdf/views.py:98
 msgid "The new ticket layout has been created."
-msgstr ""
+msgstr "Yeni bilet düzeni oluşturuldu."
 
 #: pretix/plugins/ticketoutputpdf/views.py:126
 #: pretix/plugins/ticketoutputpdf/views.py:156
 #: pretix/plugins/ticketoutputpdf/views.py:204
 msgid "The requested layout does not exist."
-msgstr ""
+msgstr "İstenen düzen mevcut değil."
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 msgid "The selected ticket layout been deleted."
-msgstr ""
+msgstr "Seçilen bilet düzeni silinmiştir."
 
 #: pretix/plugins/ticketoutputpdf/views.py:208
 msgid "Ticket PDF layout: {}"
-msgstr ""
+msgstr "Bilet PDF düzeni: {}"
 
 #: pretix/presale/checkoutflow.py:50
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "Aşama"
 
 #: pretix/presale/checkoutflow.py:181
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "Eklenti ürünler"
 
 #: pretix/presale/checkoutflow.py:304
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Bilgin"
 
 #: pretix/presale/checkoutflow.py:368 pretix/presale/checkoutflow.py:373
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Geçerli bir e-posta adresi giriniz."
 
 #: pretix/presale/checkoutflow.py:377
 msgid "Please enter your invoicing address."
