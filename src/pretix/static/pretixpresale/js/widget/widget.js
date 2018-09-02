@@ -166,7 +166,7 @@ Vue.component('availbox', {
                 return 'item_' + this.item.id;
             }
         },
-        order_max: function () {
+    order_max: function () {
             return this.item.has_variations ? this.variation.order_max : this.item.order_max;
         },
         avail: function () {
@@ -462,7 +462,10 @@ var shared_methods = {
         iframe.src = redirect_url;
     },
     resume: function () {
-        var redirect_url = this.$root.event_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
+        var redirect_url = this.$root.event_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
+        if (this.$root.cart_id) {
+            redirect_url += '&take_cart_id=' + this.$root.cart_id;
+        }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
             this.$root.overlay.frame_loading = true;
@@ -634,6 +637,11 @@ var shared_root_methods = {
         if (this.$root.useIframe) {
             event.preventDefault();
             var url = event.target.attributes.href.value;
+            if (url.indexOf('?')) {
+                url += '&iframe=1';
+            } else {
+                url += '?iframe=1';
+            }
             this.$root.overlay.$children[0].$refs['frame-container'].children[0].src = url;
             this.$root.overlay.frame_loading = true;
         } else {
@@ -704,7 +712,7 @@ var shared_root_computed = {
         if (getCookie(this.cookieName)) {
             form_target += "&take_cart_id=" + getCookie(this.cookieName);
         }
-        return form_target;
+        return form_target
     },
     useIframe: function () {
         return Math.min(screen.width, window.innerWidth) >= 800 && (this.skip_ssl || site_is_secure());

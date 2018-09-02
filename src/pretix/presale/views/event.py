@@ -9,8 +9,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -181,8 +180,28 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
 
         self.subevent = None
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
+            # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
-            return redirect(reverse('presale:event.index', kwargs=kwargs))
+            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs))
+        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
+            # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
+            get_or_create_cart_id(request)
+            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
+                request.GET.get('take_cart_id')
+            ))
+        elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES:
+            # Cookies are in fact not supported
+            r = render(request, 'pretixpresale/event/cookies.html', {
+                'url': eventreverse(
+                    request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace')}
+                ) + (
+                    "?src=widget&take_cart_id={}".format(request.GET.get('cart_id'))
+                    if "cart_id" in request.GET else ""
+                )
+            })
+            r._csp_ignore = True
+            return r
+
         if request.event.has_subevents:
             if 'subevent' in kwargs:
                 self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()
@@ -284,11 +303,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 'cart_namespace' not in self.kwargs
                 or not self.subevent
             )
-        )
-
-        context['cookie_warning'] = (
-            'require_cookie' in self.request.GET and
-            settings.SESSION_COOKIE_NAME not in self.request.COOKIES
         )
 
         return context

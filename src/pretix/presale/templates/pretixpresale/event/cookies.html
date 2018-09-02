@@ -1,0 +1,38 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load eventurl %}
+
+{% block content %}
+    {% if cart_namespace %}
+        <h1>{% trans "Please continue in a new tab" %}</h1>
+        <p class="larger">
+            {% blocktrans trimmed %}
+                Your browser is configured to block cookies from third-party website elements. Unfortunately, this
+                means we cannot show you this ticket shop embedded into the website. Please try to open the ticket
+                shop in a new tab or change your browser settings.
+            {% endblocktrans %}
+        </p>
+        <p class="larger">
+            {% blocktrans trimmed %}
+                We apologize for the inconvenience!
+            {% endblocktrans %}
+        </p>
+        <div class="text-center">
+            <a href="{{ url }}"
+               class="btn btn-primary btn-lg" target="_blank">
+                {% trans "Continue in new tab" %}
+            </a>
+            <script>
+                window.open('{{ url|escapejs }}');
+            </script>
+        </div>
+    {% else %}
+        <h1>{% trans "Cookies not supported" %}</h1>
+        <div class="alert alert-error">
+            {% blocktrans trimmed %}
+                Your browser does not accept cookies from us. However, we need to set a cookie to remember who
+                you are and what is in your cart. Please change your browser settings accordingly.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,7 @@
 import mimetypes
 import os
 
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
@@ -47,7 +48,7 @@ class CartActionMixin:
             u += '&require_cookie=true'
         else:
             u += '?require_cookie=true'
-        if 'iframe' in self.request.GET:
+        if 'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES:
             cart_id = get_or_create_cart_id(self.request)
             u += '&cart_id={}'.format(cart_id)
         return u
@@ -383,6 +384,12 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
 
         context['subevent'] = self.subevent
 
+        context['new_tab'] = (
+            'require_cookie' in self.request.GET and
+            settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+            # Cookies are not supported! Lets just make the form open in a new tab
+        )
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -435,6 +442,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
             return redirect(self.get_index_url())
 
         return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if 'iframe' in request.GET and 'require_cookie' not in request.GET:
+            return redirect(request.get_full_path() + '&require_cookie=1')
+        return super().get(request, *args, **kwargs)
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

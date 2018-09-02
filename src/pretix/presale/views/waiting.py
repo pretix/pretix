@@ -1,5 +1,6 @@
+from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import translation
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -7,6 +8,8 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views.generic import FormView
 
 from pretix.base.models.event import SubEvent
+from pretix.base.templatetags.urlreplace import url_replace
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 
 from . import allow_frame_if_namespaced
@@ -35,6 +38,23 @@ class WaitingView(EventViewMixin, FormView):
         ctx['subevent'] = self.subevent
         ctx['item'], ctx['variation'] = self.item_and_variation
         return ctx
+
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('iframe', '') == '1' and 'require_cookie' not in request.GET:
+            # Widget just opened. Let's to a stupid redirect to check if cookies are disabled
+            return redirect(request.get_full_path() + '&require_cookie=true')
+        elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES:
+            # Cookies are in fact not supported. We can't even display the form, since we can't get CSRF right without
+            # cookies.
+            r = render(request, 'pretixpresale/event/cookies.html', {
+                'url': eventreverse(
+                    request.event, "presale:event.waitinglist", kwargs={'cart_namespace': kwargs.get('cart_namespace')}
+                ) + '?' + url_replace(request, 'require_cookie', '', 'iframe', '')
+            })
+            r._csp_ignore = True
+            return r
+
+        return super().get(request, *args, **kwargs)
 
     @cached_property
     def item_and_variation(self):
