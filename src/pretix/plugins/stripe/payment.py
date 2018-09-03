@@ -14,6 +14,7 @@ from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
+from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 from django_countries import countries
 
@@ -417,7 +418,7 @@ class StripeMethod(BasePaymentProvider):
 
         try:
             ch = stripe.Charge.retrieve(payment_info['id'], **self.api_kwargs)
-            ch.refunds.create(
+            r = ch.refunds.create(
                 amount=self._get_amount(refund),
             )
             ch.refresh()
@@ -435,7 +436,13 @@ class StripeMethod(BasePaymentProvider):
             logger.error('Stripe error: %s' % str(err))
             raise PaymentException(_('Stripe returned an error'))
         else:
-            refund.done()
+            refund.info = str(r)
+            if r.status in ('succeeded', 'pending'):
+                refund.done()
+            elif r.status in ('failed', 'canceled'):
+                refund.state = OrderRefund.REFUND_STATE_FAILED
+                refund.execution_date = now()
+                refund.save()
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         self._init_api()
