@@ -35,10 +35,12 @@
             </div>
         </fieldset>
         <p>&nbsp;</p>
-        <fieldset class="form-inline form-order-change">
-            <legend>{% trans "What should happen to the order?" %}</legend>
-            {% bootstrap_field form.action layout='horizontal' horizontal_label_class='sr-only' horizontal_field_class='' %}
-        </fieldset>
+        {% if form.action %}
+            <fieldset class="form-inline form-order-change">
+                <legend>{% trans "What should happen to the order?" %}</legend>
+                {% bootstrap_field form.action layout='horizontal' horizontal_label_class='sr-only' horizontal_field_class='' %}
+            </fieldset>
+        {% endif %}
         <p>&nbsp;</p>
 
         {% csrf_token %}

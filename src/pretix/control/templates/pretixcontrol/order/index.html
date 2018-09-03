@@ -50,10 +50,7 @@
                                 {% trans "Cancel order" %}
                             </a>
                         {% endif %}
-                        {% if order.status == 'p' %}
-                            <button name="status" value="n" class="btn btn-default">{% trans "Mark as not paid" %}</button>
-                        {% endif %}
-                        {% if overpaid|add:order.total != 0 %}
+                        {% if order.payment_refund_sum > 0 %}
                             <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
                                 {% trans "Create a refund" %}
                             </a>

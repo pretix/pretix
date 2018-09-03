@@ -189,6 +189,17 @@ class Order(LoggedModel):
             return None
 
     @property
+    def payment_refund_sum(self):
+        payment_sum = self.payments.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        refund_sum = self.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED)
+        ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+        return payment_sum - refund_sum
+
+    @property
     def pending_sum(self):
         total = self.total
         if self.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):

@@ -1402,7 +1402,10 @@ def test_refund_paid_order_automatically(client, env, monkeypatch):
 
     def charge_retr(*args, **kwargs):
         def refund_create(amount):
-            pass
+            r = MockedCharge()
+            r.id = 'foo'
+            r.status = 'succeeded'
+            return r
 
         c = MockedCharge()
         c.refunds.create = refund_create

@@ -442,7 +442,7 @@ class OrderRefundView(OrderView):
             data=self.request.POST if self.request.method == "POST" else None,
             prefix='start',
             initial={
-                'partial_amount': self.order.total - self.order.pending_sum,
+                'partial_amount': self.order.payment_refund_sum,
                 'action': (
                     'mark_pending' if self.order.status == Order.STATUS_PAID
                     else 'do_nothing'
@@ -465,7 +465,7 @@ class OrderRefundView(OrderView):
 
             # Algorithm to choose which payments are to be refunded to create the least hassle
             if self.start_form.cleaned_data.get('mode') == 'full':
-                to_refund = full_refund = self.order.total - self.order.pending_sum
+                to_refund = full_refund = self.order.payment_refund_sum
             else:
                 to_refund = full_refund = self.start_form.cleaned_data.get('partial_amount')
 

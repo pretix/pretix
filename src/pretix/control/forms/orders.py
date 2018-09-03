@@ -375,9 +375,11 @@ class OrderRefundForm(forms.Form):
         self.order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['partial_amount'], self.order.event.currency)
+        if self.order.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
+            del self.fields['action']
 
     def clean_partial_amount(self):
-        max_amount = self.order.total - self.order.pending_sum
+        max_amount = self.order.payment_refund_sum
         val = self.cleaned_data.get('partial_amount')
         if val is not None and (val > max_amount or val <= 0):
             raise ValidationError(_('The refund amount needs to be positive and less than {}.').format(max_amount))
