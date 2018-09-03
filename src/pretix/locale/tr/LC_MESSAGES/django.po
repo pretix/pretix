@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-09-03 04:00+0000\n"
+"PO-Revision-Date: 2018-09-03 05:58+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -11316,12 +11316,12 @@ msgstr ""
 "posta gönderdik. Lütfen her 24 saatte bir e-posta göndereceğimizi unutmayın."
 
 #: pretix/control/views/auth.py:230
-#, fuzzy
-#| msgid "We sent you an e-mail containing further instructions."
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions."
-msgstr "Size daha fazla talimat içeren bir e-posta gönderdik."
+msgstr ""
+"Adres geçerli bir hesaba kayıtlıysa, size daha fazla talimat içeren bir e-"
+"posta gönderdik."
 
 #: pretix/control/views/auth.py:250
 msgid ""
@@ -11546,10 +11546,8 @@ msgid "invalid item"
 msgstr "geçersiz öğe"
 
 #: pretix/control/views/event.py:651
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown e-mail renderer."
-msgstr "Bilinmeyen sipariş kodu"
+msgstr "Bilinmeyen e-posta oluşturucu."
 
 #: pretix/control/views/event.py:667 pretix/presale/views/order.py:682
 msgid "You requested an invalid ticket output type."
@@ -13515,6 +13513,8 @@ msgid ""
 "The country in which your Stripe-account is registred in. Usually, this is "
 "your country of residence."
 msgstr ""
+"Stripe hesabınızın kayıtlı olduğu ülke. Genellikle burası sizin ikamet "
+"ettiğiniz ülkedir."
 
 #: pretix/plugins/stripe/payment.py:152
 msgid "User interface"
@@ -13875,7 +13875,7 @@ msgstr "Farklı bir kart kullan"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
 msgid "OR"
-msgstr ""
+msgstr "VEYA"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:56
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:34
@@ -14422,7 +14422,7 @@ msgstr "Seçilen eklentiler"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Lütfen yeni bir sekmede devam edin"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:9
 msgid ""
@@ -14431,22 +14431,23 @@ msgid ""
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
+"Tarayıcınız üçüncü taraf web sitesi öğelerinden gelen çerezleri engelleyecek "
+"şekilde yapılandırılmıştır. Maalesef, bu, web sitesine yerleştirilmiş olan "
+"bu bilet mağazasını size gösteremediğimiz anlamına geliyor. Lütfen yeni bir "
+"sekmede bilet dükkanını açmayı veya tarayıcı ayarlarınızı değiştirmeyi "
+"deneyin."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:16
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Verdiğimiz rahatsızlık için özür dileriz!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:23
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Continue in new tab"
-msgstr "Yeni ekip yarat"
+msgstr "Yeni sekmede devam et"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Cookies not supported"
-msgstr "Ön satış başlamadı"
+msgstr "Çerezler desteklenmiyor"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
@@ -14454,6 +14455,9 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"Tarayıcınız bizden çerez kabul etmiyor. Ancak, kim olduğunuzu ve sepetinizde "
+"ne olduğunu hatırlamak için bir çerez belirlememiz gerekir. Lütfen tarayıcı "
+"ayarlarınızı uygun şekilde değiştirin."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:16
 msgid "Reserved"
@@ -14719,98 +14723,104 @@ msgstr "Ödemeyi tekrar deneyin veya başka bir ödeme yöntemi seçin"
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
 msgid "Pay now"
-msgstr ""
+msgstr "Şimdi öde"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
 msgstr ""
+"Biletlerinizi aşağıdaki düğmeleri kullanarak indirebilirsiniz. Etkinliğe "
+"girerken lütfen biletinizi hazır bulundurun."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:96
 msgid "Download all tickets at once:"
-msgstr ""
+msgstr "Tüm biletleri bir kerede indirin:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:110
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "Biletlerinizi buradan başlatabilirsiniz %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:122
 #: pretix/presale/templates/pretixpresale/event/order.html:185
 msgid "Change details"
-msgstr ""
+msgstr "Detayları değiştir"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:170
 msgid "Request invoice"
-msgstr ""
+msgstr "Fatura talep et"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:216
 msgid "Internal Reference"
-msgstr ""
+msgstr "İç Referans"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Siparişi iptal et: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:4
 msgid "Modify order"
-msgstr ""
+msgstr "Siparişi değiştir"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:7
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "Siparişi değiştir: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:17
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
+"Fatura adresinizi değiştirmek otomatik olarak yeni bir fatura oluşturmaz. "
+"Yeni bir faturaya ihtiyacınız varsa lütfen bize ulaşın."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:78
 msgid "Save changes"
-msgstr ""
+msgstr "Değişiklikleri Kaydet"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:4
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr ""
+msgstr "Ödeme emri"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:7
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "Ödeme emri: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "Ödeme yöntemini değiştir"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
 #, python-format
 msgid "Change payment method: %(code)s"
-msgstr ""
+msgstr "Ödeme yöntemini değiştir: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
+"Lütfen dikkat: Ödeme yönteminizi değiştirirseniz, sipariş toplamınız her bir "
+"yöntemin sağında görüntülenen tutar kadar değişecektir."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:44
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
+msgstr "Bu sipariş için alternatif ödeme sağlayıcıları bulunmamaktadır."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "Lütfen aşağıdaki ödeme bilgilerini doğrulayın."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "Toplam: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid ""
@@ -14818,35 +14828,41 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Siparişinizin veya siparişinizin bağlantısını kaybettiyseniz, lütfen "
+"siparişiniz için kullandığınız e-posta adresini girin. Bu e-posta adresini "
+"kullanarak verdiğiniz tüm siparişlerin bağlantılarını içeren bir e-posta "
+"göndereceğiz."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
-msgstr ""
+msgstr "Linkleri gönder"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
 msgid "Voucher redemption"
-msgstr ""
+msgstr "Kupon geri ödeme"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Belirtilen fiyattan aşağıdaki ürünleri satın almanıza olanak tanıyan bir "
+"kupon kodu girdiniz:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:112
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% taxes"
-msgstr ""
+msgstr "<strong>artı</strong> %(rate)s%%vergi"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:116
 #, python-format
 msgid "incl. %(rate)s%% taxes"
-msgstr ""
+msgstr "dahil edilen %(rate)s%% vergi"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "Beni bekleme listesine ekle"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:29
 #, python-format
@@ -14855,10 +14871,13 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Biletler tekrar müsait olursa, ilk kişileri bekleme listesinden "
+"bilgilendiririz. Size bildirirsek, listeyi bir sonraki kişiye atayana kadar "
+"bir bilet almak için %(hours)s saat süreniz vardır."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
-msgstr ""
+msgstr "Beni listeye ekleyin"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:47
 #, python-format
@@ -14867,138 +14886,144 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        ……………………………………………"
+"itibaren %(start_date)s\n"
+"………………………………………\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:17
 msgid "Hello!"
-msgstr ""
+msgstr "Merhaba!"
 
 #: pretix/presale/templates/pretixpresale/index.html:19
 msgid "There is nothing to see here yet."
-msgstr ""
+msgstr "Henüz burada görülecek bir şey yok."
 
 #: pretix/presale/templates/pretixpresale/index.html:23
 #, python-format
 msgid ""
 "<a %(a_attr)s>pretix – your free and open source ticket sales software</a>."
 msgstr ""
+"<a %(a_attr)s> pretix - ücretsiz ve açık kaynak bilet satış yazılımınız</a>."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Etkinliğe genel bakış"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:37
 #: pretix/presale/templates/pretixpresale/organizers/index.html:34
 msgid "iCal"
-msgstr ""
+msgstr "Takvim"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
 msgid "Note that the events in this view are in different timezones."
-msgstr ""
+msgstr "Bu görünümdeki olayların farklı saat dilimlerinde olduğunu unutmayın."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:6
 msgid "Event list"
-msgstr ""
+msgstr "Etkinlik Listesi"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:14
 msgid "Past events"
-msgstr ""
+msgstr "Geçmiş etkinlikler"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:16
 msgid "Upcoming events"
-msgstr ""
+msgstr "Gelecek etkinlikler"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:37
 msgid "Show upcoming"
-msgstr ""
+msgstr "Yaklaşanları göster"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
 msgid "Show past events"
-msgstr ""
+msgstr "Geçmiş etkinlikleri göster"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:60
 msgid "Buy tickets"
-msgstr ""
+msgstr "Bilet satın alın"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "More info"
-msgstr ""
+msgstr "Daha fazla bilgi"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:70
 msgid "No archived events found."
-msgstr ""
+msgstr "Arşivlenmiş etkinlik bulunamadı."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:76
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Yaklaşan hiçbir etkinlik bulunamadı."
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Sayfa %(page)s arasında %(of)s"
 
 #: pretix/presale/utils.py:30 pretix/presale/utils.py:100
 msgid "The selected event was not found."
-msgstr ""
+msgstr "Seçilen etkinlik bulunamadı."
 
 #: pretix/presale/utils.py:88
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "Seçilen bilet dükkanı şu anda mevcut değil."
 
 #: pretix/presale/utils.py:93
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Bu özellik etkin değil."
 
 #: pretix/presale/utils.py:102
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "Seçilen düzen bulunamadı."
 
 #: pretix/presale/views/cart.py:88 pretix/presale/views/cart.py:106
 #: pretix/presale/views/cart.py:118
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "Lütfen sadece rakam giriniz."
 
 #: pretix/presale/views/cart.py:90
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Lütfen sadece pozitif sayıları giriniz."
 
 #: pretix/presale/views/cart.py:301
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "Alışveriş sepetiniz güncellendi."
 
 #: pretix/presale/views/cart.py:304 pretix/presale/views/cart.py:325
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Sepetiniz artık boş."
 
 #: pretix/presale/views/cart.py:339
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Ürünler sepetinize başarıyla eklendi."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
-msgstr ""
+msgstr "Sepetiniz boş"
 
 #: pretix/presale/views/checkout.py:38
 msgid "The presale for this event is over or has not yet started."
-msgstr ""
+msgstr "Bu etkinliğin satış fiyatı bitti veya henüz başlamadı."
 
 #: pretix/presale/views/event.py:314
 msgid "Unknown event code or not authorized to access this event."
-msgstr ""
+msgstr "Bilinmeyen etkinlik kodu veya bu etkinliğe erişim yetkisi yok."
 
 #: pretix/presale/views/event.py:321
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Tarih seçilmedi."
 
 #: pretix/presale/views/event.py:324
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Bilinmeyen tarih seçildi."
 
 #: pretix/presale/views/event.py:347 pretix/presale/views/event.py:355
 #: pretix/presale/views/event.py:358
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Lütfen geri dön ve tekrar dene."
 
 #: pretix/presale/views/order.py:71 pretix/presale/views/order.py:169
 #: pretix/presale/views/order.py:236 pretix/presale/views/order.py:293
@@ -15007,49 +15032,49 @@ msgstr ""
 #: pretix/presale/views/order.py:606 pretix/presale/views/order.py:684
 #: pretix/presale/views/order.py:744
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
+msgstr "Bilinmeyen sipariş kodu veya bu siparişe erişim yetkisi yok."
 
 #: pretix/presale/views/order.py:174 pretix/presale/views/order.py:238
 #: pretix/presale/views/order.py:295
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "Bu sipariş için ödeme yapılamaz."
 
 #: pretix/presale/views/order.py:179 pretix/presale/views/order.py:247
 #: pretix/presale/views/order.py:304 pretix/presale/views/order.py:343
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "Ödeme kabul edilmek için çok geç."
 
 #: pretix/presale/views/order.py:338
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "Bu sipariş için ödeme yöntemi değiştirilemez."
 
 #: pretix/presale/views/order.py:349
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Bu sipariş için şu anda bir ödeme beklemede."
 
 #: pretix/presale/views/order.py:565
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Bu siparişi değiştiremezsiniz"
 
 #: pretix/presale/views/order.py:686
 msgid "Order is not paid."
-msgstr ""
+msgstr "Sipariş ödenmez."
 
 #: pretix/presale/views/order.py:690
 msgid "Ticket download is not (yet) enabled."
-msgstr ""
+msgstr "Bilet indirmesi (henüz) etkin değil."
 
 #: pretix/presale/views/order.py:692
 msgid "Ticket download is not enabled for add-on products."
-msgstr ""
+msgstr "Eklenti ürünleri için bilet indirme etkin değil."
 
 #: pretix/presale/views/order.py:694
 msgid "Ticket download is not enabled for non-admission products."
-msgstr ""
+msgstr "Giriş kabul edilmeyen ürünler için bilet indirmesi etkinleştirilmemiş."
 
 #: pretix/presale/views/user.py:25
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Girişinizi işlerken zorluklar yaşadık."
 
 #: pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
@@ -15057,42 +15082,50 @@ msgstr "Son 24 saat içinde size bir e-posta gönderdik."
 
 #: pretix/presale/views/user.py:53
 msgid "Your orders for {}"
-msgstr ""
+msgstr "{} İçin siparişleriniz"
 
 #: pretix/presale/views/user.py:64
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Şu anda e-posta göndermede sorun yaşıyoruz, lütfen daha sonra tekrar kontrol "
+"edin."
 
 #: pretix/presale/views/user.py:67
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
+"Bu kullanıcı tarafından herhangi bir sipariş varsa, sipariş kodlarıyla "
+"birlikte bir e-posta alacaklar."
 
 #: pretix/presale/views/waiting.py:77
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Bekleme listeleri bu etkinlik için devre dışı bırakıldı."
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
-msgstr ""
+msgstr "Seçtiğiniz ürünü tanımlayamadık."
 
 #: pretix/presale/views/waiting.py:90
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Bir tarih seçmeniz gerekiyor."
 
 #: pretix/presale/views/waiting.py:102
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Bu ürün şu anda hazır bulunduğundan kendinizi bekleme listesine "
+"ekleyemezsiniz."
 
 #: pretix/presale/views/waiting.py:107
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Seni bekleme listesine ekledik. Biletler tekrar kullanılabilir hale gelir "
+"gelmez bir e-posta alacaksınız."
 
 #: pretix/settings.py:356
 msgid "English"
@@ -15104,31 +15137,31 @@ msgstr "Almanca"
 
 #: pretix/settings.py:358
 msgid "German (informal)"
-msgstr ""
+msgstr "Almanca (gayri resmi)"
 
 #: pretix/settings.py:359
 msgid "Dutch"
-msgstr ""
+msgstr "Flemenkçe"
 
 #: pretix/settings.py:360
 msgid "Danish"
-msgstr ""
+msgstr "Danimarkalı"
 
 #: pretix/settings.py:361
 msgid "Turkish"
-msgstr ""
+msgstr "Türkçe"
 
 #: pretix/settings.py:362
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portekizce (Brezilya)"
 
 #: pretix/settings.py:604
 msgid "Read access"
-msgstr ""
+msgstr "Okuma erişimi"
 
 #: pretix/settings.py:605
 msgid "Write access"
-msgstr ""
+msgstr "Yazma erişimi"
 
 #~ msgid "We are unable to find a user matching the data you provided."
 #~ msgstr "Sağladığınız veriler ile eşleşen bir kullanıcı bulamıyoruz."
