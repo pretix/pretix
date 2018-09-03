@@ -699,11 +699,6 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c':
             cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
             messages.success(self.request, _('The order has been canceled.'))
-        elif self.order.status == Order.STATUS_PAID and to == 'n':
-            self.order.status = Order.STATUS_PENDING
-            self.order.save()
-            self.order.log_action('pretix.event.order.unpaid', user=self.request.user)
-            messages.success(self.request, _('The order has been marked as not paid.'))
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
             mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))

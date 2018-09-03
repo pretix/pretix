@@ -257,7 +257,7 @@ def test_order_deny(client, env):
     (Order.STATUS_CANCELED, Order.STATUS_REFUNDED, False),
     (Order.STATUS_CANCELED, Order.STATUS_EXPIRED, False),
 
-    (Order.STATUS_PAID, Order.STATUS_PENDING, True),
+    (Order.STATUS_PAID, Order.STATUS_PENDING, False),
     (Order.STATUS_PAID, Order.STATUS_CANCELED, False),
     (Order.STATUS_PAID, Order.STATUS_REFUNDED, False),
     (Order.STATUS_PAID, Order.STATUS_EXPIRED, False),
