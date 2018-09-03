@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-09-03 05:58+0000\n"
+"PO-Revision-Date: 2018-09-03 14:30+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
@@ -8626,7 +8626,7 @@ msgstr "Kullanılabilirlik"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:38
 msgid "Check-in"
-msgstr "Check-in"
+msgstr "Giriş"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:42
 msgid "Additional settings"
@@ -10569,7 +10569,7 @@ msgstr "iOS (iTunes)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:33
 msgid "Blackberry (Link via Google)"
-msgstr "Blackberry (Link via Google)"
+msgstr "Blackberry (Google Bağlantısı)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
