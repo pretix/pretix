@@ -382,7 +382,10 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
 def test_payment_refund_success(token_client, organizer, event, order, monkeypatch):
     def charge_retr(*args, **kwargs):
         def refund_create(amount):
-            pass
+            r = MockedCharge()
+            r.id = 'foo'
+            r.status = 'succeeded'
+            return r
 
         c = MockedCharge()
         c.refunds.create = refund_create

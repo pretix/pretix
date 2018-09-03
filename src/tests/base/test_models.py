@@ -1019,7 +1019,7 @@ class OrderTestCase(BaseQuotaTestCase):
         o = Order.annotate_overpayments(Order.objects.all()).first()
         assert not o.is_underpaid
         assert not o.is_overpaid
-        assert not o.is_pending_with_full_payment
+        assert o.is_pending_with_full_payment
         assert not o.has_pending_refund
         assert not o.has_external_refund
 
