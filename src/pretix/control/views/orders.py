@@ -592,6 +592,10 @@ class OrderRefundView(OrderView):
                 if refund_selected == full_refund and is_valid:
                     for r in refunds:
                         r.save()
+                        self.order.log_action('pretix.event.order.refund.created', {
+                            'local_id': r.local_id,
+                            'provider': r.provider,
+                        }, user=self.request.user)
                         if r.payment or r.provider == "offsetting":
                             try:
                                 r.payment_provider.execute_refund(r)
@@ -616,10 +620,6 @@ class OrderRefundView(OrderView):
                         else:
                             any_success = True
 
-                    self.order.log_action('pretix.event.order.refund.created', {
-                        'local_id': r.local_id,
-                        'provider': r.provider,
-                    }, user=self.request.user)
                     if any_success:
                         if self.start_form.cleaned_data.get('action') == 'mark_refunded':
                             mark_order_refunded(self.order, user=self.request.user)
