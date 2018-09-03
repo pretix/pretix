@@ -1018,7 +1018,8 @@ class OrderTestCase(BaseQuotaTestCase):
         assert self.order.pending_sum == Decimal('0.00')
         o = Order.annotate_overpayments(Order.objects.all()).first()
         assert not o.is_underpaid
-        assert o.is_overpaid
+        assert not o.is_overpaid
+        assert not o.is_pending_with_full_payment
         assert not o.has_pending_refund
         assert not o.has_external_refund
 
