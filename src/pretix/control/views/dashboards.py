@@ -128,7 +128,10 @@ def waitinglist_widgets(sender, subevent=None, **kwargs):
                     else wle.item.check_quotas(subevent=wle.subevent, count_waitinglist=False, _cache=quota_cache)
                 )
             row = itemvar_cache.get((wle.item, wle.variation))
-            if row[1] > 0:
+            if row[1] is None:
+                itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1])
+                happy += 1
+            elif row[1] > 0:
                 itemvar_cache[(wle.item, wle.variation)] = (row[0], row[1] - 1)
                 happy += 1
 
