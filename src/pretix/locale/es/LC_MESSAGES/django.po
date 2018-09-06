@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-08-28 14:00+0000\n"
+"PO-Revision-Date: 2018-09-07 05:24+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -21,11 +21,11 @@ msgstr ""
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr "Nombre de Aplicacion"
+msgstr "Nombre de Aplicación"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr "URI de Redireccion"
+msgstr "URI de Redirección"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: pretix/base/email.py:129
 msgid "pretix default"
-msgstr ""
+msgstr "pretix estándar"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -927,7 +927,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:214 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "La ficha solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:218 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -6991,10 +6991,8 @@ msgid "E-mail settings"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:18
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail design"
-msgstr "Correo electrónico"
+msgstr "Diseño de Correo electrónico"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:31
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
@@ -8552,7 +8550,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:422
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:215
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:393
 msgid "Payments"
@@ -13119,10 +13117,8 @@ msgid "Continue in new tab"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Cookies not supported"
-msgstr "Pre venta no iniciada"
+msgstr "Cookies no soportadas"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
