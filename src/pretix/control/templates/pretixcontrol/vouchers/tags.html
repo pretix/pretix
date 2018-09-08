@@ -27,10 +27,17 @@
                 {% for t in tags %}
                     <tr>
                         <td>
-                            <strong><a
-                                    href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ t.tag|urlencode }}">
-                                {{ t.tag }}
-                            </a></strong> <small>({{ t.redeemed }} / {{ t.total }})</small>
+                            <strong>
+                            {% if t.tag %}
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ t.tag|urlencode }}">
+                                    {{ t.tag }}
+                                </a>
+                            {% else %}
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ '<>'|urlencode }}">
+                                    {% trans "Empty tag" %}
+                                </a>
+                            {% endif %}
+                            </strong> <small>({{ t.redeemed }} / {{ t.total }})</small>
                         </td>
                         <td>
                             <div class="progress">
