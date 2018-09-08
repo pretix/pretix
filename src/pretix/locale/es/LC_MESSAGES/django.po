@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-02-15 07:46+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"PO-Revision-Date: 2023-05-30 21:20+0000\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3036,8 +3036,8 @@ msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
-"Sintaxis de marcador de posición no válida: Usaste un número diferente de "
-"\"{\" que de \"}\"."
+"Sintaxis de marcador de posición no válida: Usaste un número diferente de \"{"
+"\" que de \"}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
@@ -4612,8 +4612,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:879
 msgid "The item's availability cannot end before it starts."
-msgstr ""
-"La disponibilidad del artículo no puede terminar antes de que comience."
+msgstr "La disponibilidad del artículo no puede terminar antes de que comience."
 
 #: pretix/base/models/items.py:1001
 msgid "This is shown below the variation name in lists."
@@ -5908,8 +5907,7 @@ msgstr "Vales"
 
 #: pretix/base/models/vouchers.py:338
 msgid "You cannot select a quota that belongs to a different event."
-msgstr ""
-"No se puede seleccionar una cuota que pertenezca a un evento diferente."
+msgstr "No se puede seleccionar una cuota que pertenezca a un evento diferente."
 
 #: pretix/base/models/vouchers.py:340
 msgid "You cannot select a quota and a specific product at the same time."
@@ -6486,8 +6484,8 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Recomendamos activar esta opción si desea que sus usuarios paguen las "
-"tarifas de pago de su proveedor de pago. <a href=\"{docs_url}\" "
-"target=\"_blank\" rel=\"noopener\">Haga clic aquí para obtener información "
+"tarifas de pago de su proveedor de pago. <a href=\"{docs_url}\" target="
+"\"_blank\" rel=\"noopener\">Haga clic aquí para obtener información "
 "detallada sobre lo que hace. </a> ¡No olvide establecer las tarifas "
 "correctas arriba!"
 
@@ -8519,8 +8517,8 @@ msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
-"Mostrar precios netos en lugar de precios brutos en la lista de productos "
-"(¡no recomendado!)"
+"Mostrar precios netos en lugar de precios brutos en la lista de productos (¡"
+"no recomendado!)"
 
 #: pretix/base/settings.py:284
 #, fuzzy
@@ -8563,8 +8561,7 @@ msgstr "Requieren nombres de participantes"
 
 #: pretix/base/settings.py:325
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
-"Exigir a los clientes que rellenen los nombres de todos los asistentes."
+msgstr "Exigir a los clientes que rellenen los nombres de todos los asistentes."
 
 #: pretix/base/settings.py:335
 msgid "Ask for email addresses per ticket"
@@ -9149,8 +9146,7 @@ msgstr "Generar facturas"
 
 #: pretix/base/settings.py:979
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
-"Las facturas nunca se generarán automáticamente para pedidos gratuitos."
+msgstr "Las facturas nunca se generarán automáticamente para pedidos gratuitos."
 
 #: pretix/base/settings.py:988
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -11322,8 +11318,8 @@ msgstr ""
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
-"Su localización por defecto también debe estar habilitada para su evento "
-"(ver cuadro de arriba)."
+"Su localización por defecto también debe estar habilitada para su evento ("
+"ver cuadro de arriba)."
 
 #: pretix/base/settings.py:3603
 msgid ""
@@ -11664,8 +11660,7 @@ msgstr "Haga clic aquí para ver y cambiar su configuración de notificación"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr ""
-"Haga clic aquí para desactivar todas las notificaciones inmediatamente."
+msgstr "Haga clic aquí para desactivar todas las notificaciones inmediatamente."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
@@ -11673,8 +11668,7 @@ msgstr "Haga clic aquí para ver y cambiar su configuración de notificación:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
-"Haga clic aquí para desactivar todas las notificaciones inmediatamente:"
+msgstr "Haga clic aquí para desactivar todas las notificaciones inmediatamente:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
@@ -13480,8 +13474,7 @@ msgstr "Texto de pie de página adicional"
 
 #: pretix/control/forms/global_settings.py:60
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr ""
-"Se incluirá como texto adicional en el pie de página, en todo el sitio."
+msgstr "Se incluirá como texto adicional en el pie de página, en todo el sitio."
 
 #: pretix/control/forms/global_settings.py:65
 msgid "Additional footer link"
@@ -15481,8 +15474,8 @@ msgstr "La orden ha sido denegada."
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
-"La dirección de correo electrónico se ha cambiado de \"{old_email}\" a "
-"\"{new_email}\"."
+"La dirección de correo electrónico se ha cambiado de \"{old_email}\" a \""
+"{new_email}\"."
 
 #: pretix/control/logdisplay.py:391
 msgid ""
@@ -15756,8 +15749,8 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
-"Se ha añadido un nuevo dispositivo de autenticación de dos factores "
-"\"{name}\" a su cuenta."
+"Se ha añadido un nuevo dispositivo de autenticación de dos factores \"{name}"
+"\" a su cuenta."
 
 #: pretix/control/logdisplay.py:455
 #, python-brace-format
@@ -16236,16 +16229,16 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"La posición #{posid} se ha registrado manualmente a {datetime} en la lista "
-"\"{list}\"."
+"La posición #{posid} se ha registrado manualmente a {datetime} en la lista \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:632
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"La posición #{posid} ha sido comprobada de nuevo a {datetime} en la lista "
-"\"{list}\"."
+"La posición #{posid} ha sido comprobada de nuevo a {datetime} en la lista \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:639
 #, python-brace-format
@@ -17357,8 +17350,8 @@ msgstr "Borrar lista de registro"
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"¿Está seguro de que desea eliminar la lista de registro <strong>%(name)s</"
-"strong>?"
+"¿Está seguro de que desea eliminar la lista de registro "
+"<strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
@@ -19073,10 +19066,10 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
-"Esta configuración está pensada para usuarios avanzados. Ver la <a "
-"href=\"%(docs)s\">documentación</a> para más información. Tenga en cuenta "
-"que no nos hacemos responsables de la correcta gestión de los impuestos en "
-"su taquilla. En caso de duda, póngase en contacto con un abogado o asesor "
+"Esta configuración está pensada para usuarios avanzados. Ver la <a href=\""
+"%(docs)s\">documentación</a> para más información. Tenga en cuenta que no "
+"nos hacemos responsables de la correcta gestión de los impuestos en su "
+"taquilla. En caso de duda, póngase en contacto con un abogado o asesor "
 "fiscal."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
@@ -20269,8 +20262,7 @@ msgstr "No se encontraron respuestas coincidentes."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:51
 msgid "You need to assign the question to a product to collect answers."
-msgstr ""
-"Es necesario asignar la pregunta a un producto para obtener respuestas."
+msgstr "Es necesario asignar la pregunta a un producto para obtener respuestas."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Count"
@@ -20462,8 +20454,7 @@ msgstr "Borrar cuota"
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr ""
-"¿Está seguro de que desea eliminar la cuota <strong>%(quota)s</strong>?"
+msgstr "¿Está seguro de que desea eliminar la cuota <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:12
 msgid "The following products might be no longer available for sale:"
@@ -20809,9 +20800,9 @@ msgid ""
 msgstr ""
 "Por favor, utilice esta herramienta con cuidado. Los cambios que realice "
 "aquí no son reversibles. Además, si se modifica una orden manualmente, no se "
-"verificarán todas las restricciones (por ejemplo, en los add-ons "
-"necesarios). Por lo tanto, puede construir una orden que no podría existir "
-"de otra manera. En la mayoría de los casos es más fácil cancelar la orden "
+"verificarán todas las restricciones (por ejemplo, en los add-ons necesarios)"
+". Por lo tanto, puede construir una orden que no podría existir de otra "
+"manera. En la mayoría de los casos es más fácil cancelar la orden "
 "completamente y crear una nueva."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:68
@@ -24137,8 +24128,8 @@ msgstr "Eliminar un dispositivo de autenticación de dos factores"
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
-"¿Está seguro de que desea eliminar el dispositivo de autenticación "
-"\"%(device)s\"?"
+"¿Está seguro de que desea eliminar el dispositivo de autenticación \""
+"%(device)s\"?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -26649,8 +26640,7 @@ msgstr "La autenticación de dos factores ahora está habilitada para su cuenta.
 
 #: pretix/control/views/user.py:590
 msgid "Two-factor authentication is now disabled for your account."
-msgstr ""
-"La autenticación de dos factores ahora está desactivada para su cuenta."
+msgstr "La autenticación de dos factores ahora está desactivada para su cuenta."
 
 #: pretix/control/views/user.py:613
 msgid ""
@@ -27547,8 +27537,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
-"Se ha producido un error interno durante el procesamiento de los datos."
+msgstr "Se ha producido un error interno durante el procesamiento de los datos."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
@@ -29574,8 +29563,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"La clave \"%(value)s\" suministrada no parece válida. Debería comenzar con "
-"\"%(prefix)s\"."
+"La clave \"%(value)s\" suministrada no parece válida. Debería comenzar con \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 #, fuzzy
