@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-02 13:49+0000\n"
-"PO-Revision-Date: 2018-09-08 22:09+0000\n"
+"PO-Revision-Date: 2018-09-08 22:27+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -2125,7 +2125,7 @@ msgstr "Puede cambiar recibos"
 #: pretix/base/models/organizer.py:172
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s de %(object)s"
 
 #: pretix/base/models/organizer.py:204
 msgid "Team"
@@ -8813,7 +8813,7 @@ msgstr "Agotado (pedidos pendientes)"
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:6
 #, python-format
 msgid "%(num)s available"
-msgstr ""
+msgstr "%(num)s disponible"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:9
 msgid "Unlimited"
@@ -10194,7 +10194,7 @@ msgstr "Miembros"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:32
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+ %(count)s invitados"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
@@ -10205,7 +10205,7 @@ msgstr "Página %(page)s de %(of)s (%(count)s elementos)"
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
-msgstr ""
+msgstr "%(count)s elementos"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:38
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
@@ -11636,8 +11636,8 @@ msgstr "Pronto"
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} orden"
+msgstr[1] "{num} ordenes"
 
 #: pretix/control/views/event.py:280
 msgid ""
@@ -14409,7 +14409,7 @@ msgstr "Temporalmente no disponible"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s actualmente disponible"
 
 #: pretix/presale/forms/checkout.py:234
 msgid "no selection"
@@ -14468,15 +14468,15 @@ msgstr ""
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Necesitas elegir exactamente una opción para esta categoría."
+msgstr[1] "Necesitas elegir %(min_count)s opciones para esta categoría."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:34
 #, python-format
 msgid "You can choose at most one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Puedes elegir como máximo una opción en esta categoría."
+msgstr[1] "Puedes elegir como máximo %(max_count)s opciones en esta categoría."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:40
 #, python-format
