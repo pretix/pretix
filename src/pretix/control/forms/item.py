@@ -405,7 +405,7 @@ class ItemAddOnsFormSet(I18nFormSet):
 
     def clean(self):
         super().clean()
-        categories = set(self.queryset.values_list('addon_category_id', flat=True))
+        categories = set()
         for i in range(0, self.total_form_count()):
             form = self.forms[i]
             if self.can_delete:
