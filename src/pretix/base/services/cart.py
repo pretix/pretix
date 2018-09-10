@@ -64,6 +64,10 @@ error_messages = {
     'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
     'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
+    'voucher_redeemed_cart': _('This voucher code is currently locked since it is already contained in a cart. This '
+                               'might mean that someone else is redeeming this voucher right now, or that you tried '
+                               'to redeem it before but did not complete the checkout process. You can try to use it '
+                               'again in %d minutes.'),
     'voucher_redeemed_partial': _('This voucher code can only be redeemed %d more times.'),
     'voucher_double': _('You already used this voucher code. Remove the associated line from your '
                         'cart if you want to use it for a different product.'),
@@ -497,6 +501,7 @@ class CartManager:
 
     def _get_voucher_availability(self):
         vouchers_ok = {}
+        self._voucher_depend_on_cart = set()
         for voucher, count in self._voucher_use_diff.items():
             voucher.refresh_from_db()
 
@@ -509,7 +514,10 @@ class CartManager:
             ).exclude(pk__in=[
                 op.position.voucher_id for op in self._operations if isinstance(op, self.ExtendOperation)
             ])
-            v_avail = voucher.max_usages - voucher.redeemed - redeemed_in_carts.count()
+            cart_count = redeemed_in_carts.count()
+            v_avail = voucher.max_usages - voucher.redeemed - cart_count
+            if cart_count > 0:
+                self._voucher_depend_on_cart.add(voucher)
             vouchers_ok[voucher] = v_avail
 
         return vouchers_ok
@@ -580,7 +588,10 @@ class CartManager:
                     err = err or error_messages['in_part']
 
                 if voucher_available_count < 1:
-                    err = err or error_messages['voucher_redeemed']
+                    if op.voucher in self._voucher_depend_on_cart:
+                        err = err or error_messages['voucher_redeemed_cart'] % self.event.settings.reservation_time
+                    else:
+                        err = err or error_messages['voucher_redeemed']
                 elif voucher_available_count < requested_count:
                     err = err or error_messages['voucher_redeemed_partial'] % voucher_available_count
 

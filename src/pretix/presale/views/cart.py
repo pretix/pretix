@@ -417,8 +417,8 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
                     (Q(expires__gte=now()) | Q(cart_id=get_or_create_cart_id(request)))
                 )
                 v_avail = self.voucher.max_usages - self.voucher.redeemed - redeemed_in_carts.count()
-                if v_avail < 1:
-                    err = error_messages['voucher_redeemed']
+                if v_avail < 1 and not err:
+                    err = error_messages['voucher_redeemed_cart'] % self.request.event.settings.reservation_time
             except Voucher.DoesNotExist:
                 err = error_messages['voucher_invalid']
         else:
