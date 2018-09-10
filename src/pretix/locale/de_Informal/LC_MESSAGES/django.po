@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-10 16:04+0000\n"
-"PO-Revision-Date: 2018-09-02 14:26+0000\n"
+"PO-Revision-Date: 2018-09-10 16:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3134,6 +3134,10 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Dieser Gutscheincode ist im Moment gesperrt, da er bereits in einem "
+"Warenkorb ist. Das bedeutet entweder, dass gerade jemand anderes diesen "
+"Gutschein einlöst, oder dass du ihn bereits zuvor eingegeben hast, aber den "
+"Kauf nicht abgeschlossen hast. Du kannst es in %d Minuten erneut versuchen."
 
 #: pretix/base/services/cart.py:71
 #, python-format
@@ -5562,10 +5566,8 @@ msgid "Underpaid"
 msgstr "Unterzahlt"
 
 #: pretix/control/forms/filter.py:212
-#, fuzzy
-#| msgid "Pending or paid"
 msgid "Pending (but fully paid)"
-msgstr "ausstehend oder bezahlt"
+msgstr "ausstehend (aber voll bezahlt)"
 
 #: pretix/control/forms/filter.py:309 pretix/control/forms/filter.py:314
 #: pretix/control/forms/filter.py:477 pretix/control/forms/filter.py:482
@@ -7812,26 +7814,21 @@ msgid "Show orders pending approval"
 msgstr "Alle Bestellungen ohne Freigabe"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:48
-#, fuzzy
-#| msgid ""
-#| "This event contains <strong>overpaid orders</strong>, for example due to "
-#| "duplicate payment attempts. You should review the cases and consider "
-#| "refunding the overpaid amount to the user."
 msgid ""
 "This event contains <strong>fully paid orders</strong> that are not marked "
 "as paid, probably because no quota was left at the time their payment "
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Diese Veranstaltung enthält <strong>überzahlte Bestellungen</strong>, z.B. "
-"durch doppelte Zahlungsversuche. Du solltest dir diese Fälle genau anschauen "
-"und ggf. den zuviel bezahlten Betrag an den Kunden zurückerstatten."
+"Diese Veranstaltung enthält <strong>voll bezahlte Bestellungen</strong>, die "
+"trotzdem nicht als bezahlt markiert sind. Vermutlich ging die Zahlung "
+"verspätet ein und bei Zahlungseingang war kein Kontingent mehr frei. Du "
+"solltest dir diese Fälle genau anschauen und entweder die Bestellung "
+"bestätigen oder den bezahlten Betrag an den Kunden zurückerstatten."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:54
-#, fuzzy
-#| msgid "Show overpaid orders"
 msgid "Show affected orders"
-msgstr "Überzahlte Bestellungen anzeigen"
+msgstr "Betroffene Bestellungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:61
 msgid "Your attention is required to resolve the following issues"
@@ -8801,16 +8798,12 @@ msgid "Product history"
 msgstr "Produkt-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:39
-#, fuzzy
-#| msgid ""
-#| "Please note that your product will <strong>not</strong> be available for "
-#| "sale until you have added your item to an existing or newly created quota."
 msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
-"Bitte beachte, dass das Produkt <strong>nicht</strong> verkauft wird, bevor "
-"du es zu einem Kontingent hinzugefügt hast."
+"Bitte beachte, dass die Variante <strong>nicht</strong> verkauft wird, bevor "
+"du sie zu einem Kontingent hinzugefügt hast."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:88
 msgid "Add a new variation"
@@ -10046,7 +10039,7 @@ msgstr "UNTERZAHLT"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:141
 msgid "FULLY PAID"
-msgstr ""
+msgstr "VOLL BEZAHLT"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
