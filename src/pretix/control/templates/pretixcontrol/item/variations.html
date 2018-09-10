@@ -34,6 +34,14 @@
                             </h4>
                         </div>
                         <div class="panel-body form-horizontal">
+                            {% if form.instance.pk and not form.instance.quotas.exists %}
+                                <div class="alert alert-warning">
+                                    {% blocktrans trimmed %}
+                                        Please note that your variation will <strong>not</strong> be available for sale
+                                    until you have added it to an existing or newly created quota.
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
                             {% bootstrap_form_errors form %}
                             {% bootstrap_field form.active layout="control" %}
                             {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
