@@ -133,7 +133,7 @@ setup(
         'pyuca',
         'defusedcsv',
         'vat_moss==0.11.0',
-        'django-hijack==2.1.*',
+        'django-hijack>=2.1.10,<2.2.0',
         'django-oauth-toolkit==1.2.*',
         'idna==2.6',  # required by current requests
     ],
@@ -152,7 +152,6 @@ setup(
             'isort',
             'pytest-mock==1.6.*',
             'pytest-rerunfailures',
-            'pytest-warnings',
             'responses'
         ],
         'memcached': ['pylibmc'],
