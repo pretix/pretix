@@ -1189,7 +1189,7 @@ class CartTest(CartTestMixin, TestCase):
             '_voucher_code': v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertIn('currently locked', doc.select('.alert-danger')[0].text)
         self.assertEqual(1, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
 
     def test_require_voucher(self):
@@ -1348,7 +1348,7 @@ class CartTest(CartTestMixin, TestCase):
             '_voucher_code': v.code,
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertIn('already been used', doc.select('.alert-danger')[0].text)
+        self.assertIn('currently locked', doc.select('.alert-danger')[0].text)
         positions = CartPosition.objects.filter(cart_id=self.session_key, event=self.event)
         assert not positions.exists()
 
