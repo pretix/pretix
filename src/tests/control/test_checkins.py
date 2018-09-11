@@ -266,6 +266,26 @@ def test_manual_checkins(client, checkin_list_env):
     ).exists()
 
 
+@pytest.mark.django_db
+def test_manual_checkins_revert(client, checkin_list_env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    assert not checkin_list_env[5][3].checkins.exists()
+    client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
+        'checkin': [checkin_list_env[5][3].pk]
+    })
+    client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
+        'checkin': [checkin_list_env[5][3].pk],
+        'revert': 'true'
+    })
+    assert not checkin_list_env[5][3].checkins.exists()
+    assert LogEntry.objects.filter(
+        action_type='pretix.control.views.checkin', object_id=checkin_list_env[5][3].order.pk
+    ).exists()
+    assert LogEntry.objects.filter(
+        action_type='pretix.control.views.checkin.reverted', object_id=checkin_list_env[5][3].order.pk
+    ).exists()
+
+
 @pytest.fixture
 def checkin_list_with_addon_env():
     # permission

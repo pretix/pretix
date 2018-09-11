@@ -90,21 +90,34 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             pk__in=request.POST.getlist('checkin')
         )
 
-        for op in positions:
-            created = False
-            if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
-                ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
-                    'datetime': now(),
-                })
-            op.order.log_action('pretix.control.views.checkin', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'first': created,
-                'datetime': now(),
-                'list': self.list.pk
-            }, user=request.user)
+        if request.POST.get('revert') == 'true':
+            for op in positions:
+                if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
+                    Checkin.objects.filter(position=op, list=self.list).delete()
+                    op.order.log_action('pretix.control.views.checkin.reverted', data={
+                        'position': op.id,
+                        'positionid': op.positionid,
+                        'list': self.list.pk
+                    }, user=request.user)
 
-        messages.success(request, _('The selected tickets have been marked as checked in.'))
+            messages.success(request, _('The selected check-ins have been reverted.'))
+        else:
+            for op in positions:
+                created = False
+                if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
+                    ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
+                        'datetime': now(),
+                    })
+                    op.order.log_action('pretix.control.views.checkin', data={
+                        'position': op.id,
+                        'positionid': op.positionid,
+                        'first': created,
+                        'datetime': now(),
+                        'list': self.list.pk
+                    }, user=request.user)
+
+            messages.success(request, _('The selected tickets have been marked as checked in.'))
+
         return redirect(reverse('control:event.orders.checkinlists.show', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,

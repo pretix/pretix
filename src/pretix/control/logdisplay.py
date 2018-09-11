@@ -334,6 +334,20 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             list=checkin_list
         )
 
+    if logentry.action_type == 'pretix.control.views.checkin.reverted':
+        if 'list' in data:
+            try:
+                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                checkin_list = _("(unknown)")
+        else:
+            checkin_list = _("(unknown)")
+
+        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
+            posid=data.get('positionid'),
+            list=checkin_list,
+        )
+
     if logentry.action_type == 'pretix.team.member.added':
         return _('{user} has been added to the team.').format(user=data.get('email'))
 
