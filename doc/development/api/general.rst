@@ -48,7 +48,8 @@ Backend
 -------
 
 .. automodule:: pretix.control.signals
-   :members: nav_event, html_head, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings, order_info, event_settings_widget, oauth_application_registered
+   :members: nav_event, html_head, html_page_start, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings,
+   order_info, event_settings_widget, oauth_application_registered
 
 
 .. automodule:: pretix.base.signals

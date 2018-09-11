@@ -197,6 +197,10 @@ payment_date                          datetime                   Date and time o
 provider                              string                     Identification string of the payment provider
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 2.0
+
+  This resource has been added.
+
 .. _order-payment-resource:
 
 Order refund resource
@@ -215,6 +219,10 @@ created                               datetime                   Date and time o
 payment_date                          datetime                   Date and time of completion of this payment (or ``null``)
 provider                              string                     Identification string of the payment provider
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 2.0
+
+  This resource has been added.
 
 List of all orders
 ------------------
@@ -1031,7 +1039,8 @@ List of all order positions
 
 .. versionchanged:: 2.0
 
-   The order positions endpoint has been extended by the filter queries ``voucher`` and ``voucher__code``.
+   The order positions endpoint has been extended by the filter queries ``voucher``, ``voucher__code`` and
+   ``pseudonymization_id``.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
@@ -1283,6 +1292,10 @@ Manipulating individual positions
 Order payment endpoints
 -----------------------
 
+.. versionchanged:: 2.0
+
+  These endpoints have been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/payments/
 
    Returns a list of all payments for an order.
@@ -1490,6 +1503,10 @@ Order payment endpoints
 
 Order refund endpoints
 ----------------------
+
+.. versionchanged:: 2.0
+
+  These endpoints have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/refunds/
 

@@ -332,6 +332,10 @@ Order position endpoints
 
    The ``.../redeem/`` endpoint has been added.
 
+.. versionchanged:: 2.0
+
+   The order positions endpoint has been extended by the filter queries ``voucher`` and ``voucher__code``.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/
 
    Returns a list of all order positions within a given event. The result is the same as
