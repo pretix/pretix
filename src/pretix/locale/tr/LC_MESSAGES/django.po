@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-10 16:04+0000\n"
+"POT-Creation-Date: 2018-09-11 14:42+0000\n"
 "PO-Revision-Date: 2018-09-03 14:30+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -6243,6 +6243,7 @@ msgstr "Bu sipariş, {order} siparişinin bölünmesiyle oluşturuldu"
 
 #: pretix/control/logdisplay.py:120 pretix/control/logdisplay.py:122
 #: pretix/control/logdisplay.py:321 pretix/control/logdisplay.py:323
+#: pretix/control/logdisplay.py:342 pretix/control/logdisplay.py:344
 msgid "(unknown)"
 msgstr "(Bilinmeyen)"
 
@@ -6791,67 +6792,73 @@ msgid ""
 msgstr ""
 "# {posid} konumu tekrar {datetime} 'de \"{list}\" listesinde kontrol edildi."
 
-#: pretix/control/logdisplay.py:338
+#: pretix/control/logdisplay.py:346
+#, fuzzy, python-brace-format
+#| msgid "The check-in list has been deleted."
+msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
+msgstr "Check-in listesi silindi."
+
+#: pretix/control/logdisplay.py:352
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user} ekibe eklendi."
 
-#: pretix/control/logdisplay.py:341
+#: pretix/control/logdisplay.py:355
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user}, ekipten kaldırıldı."
 
-#: pretix/control/logdisplay.py:344
+#: pretix/control/logdisplay.py:358
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr "{user}, {email}'ye gönderilen davetiyeyi kullanarak ekibine katıldı."
 
-#: pretix/control/logdisplay.py:349
+#: pretix/control/logdisplay.py:363
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user} takıma davet edildi."
 
-#: pretix/control/logdisplay.py:352
+#: pretix/control/logdisplay.py:366
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "{user} için davetiye iptal edildi."
 
-#: pretix/control/logdisplay.py:355
+#: pretix/control/logdisplay.py:369
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "\"{name}\" simgesi oluşturuldu."
 
-#: pretix/control/logdisplay.py:358
+#: pretix/control/logdisplay.py:372
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "\"{name}\" jetonu iptal edildi."
 
-#: pretix/control/logdisplay.py:361
+#: pretix/control/logdisplay.py:375
 msgid "Your account settings have been changed."
 msgstr "Hesap ayarlarınız değiştirildi."
 
-#: pretix/control/logdisplay.py:363 pretix/control/views/user.py:135
+#: pretix/control/logdisplay.py:377 pretix/control/views/user.py:135
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "E-posta adresiniz {email} olarak değiştirildi."
 
-#: pretix/control/logdisplay.py:365 pretix/control/views/user.py:132
+#: pretix/control/logdisplay.py:379 pretix/control/views/user.py:132
 msgid "Your password has been changed."
 msgstr "Şifreniz değiştirildi."
 
-#: pretix/control/logdisplay.py:367
+#: pretix/control/logdisplay.py:381
 msgid "Your account has been enabled."
 msgstr "Hesabınız etkinleştirildi."
 
-#: pretix/control/logdisplay.py:369
+#: pretix/control/logdisplay.py:383
 msgid "Your account has been disabled."
 msgstr "Hesabınız engellendi."
 
-#: pretix/control/logdisplay.py:373
+#: pretix/control/logdisplay.py:387
 msgid "You impersonated {}."
 msgstr "{} Kimliğine büründün."
 
-#: pretix/control/logdisplay.py:376
+#: pretix/control/logdisplay.py:390
 msgid "You stopped impersonating {}."
 msgstr "{} Kimliğine bürünmeyi bıraktınız."
 
@@ -7217,6 +7224,12 @@ msgstr "ödenmemiş"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 msgid "Check-In selected attendees"
 msgstr "Seçilen katılımcıları check-in'le"
+
+#: pretix/control/templates/pretixcontrol/checkin/index.html:124
+#, fuzzy
+#| msgid "Delete check-in list"
+msgid "Revert selected check-ins"
+msgstr "Check-in listesini sil"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -7955,7 +7968,7 @@ msgid "Installed plugins"
 msgstr "Yüklü eklentiler"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
-#: pretix/control/views/checkin.py:175 pretix/control/views/event.py:147
+#: pretix/control/views/checkin.py:188 pretix/control/views/event.py:147
 #: pretix/control/views/event.py:228 pretix/control/views/event.py:306
 #: pretix/control/views/event.py:357 pretix/control/views/event.py:498
 #: pretix/control/views/event.py:756 pretix/control/views/event.py:1064
@@ -11406,15 +11419,21 @@ msgstr "Geçersiz kod, lütfen tekrar deneyiniz."
 msgid "You do not have permission to perform this action."
 msgstr "Bu eylemi gerçekleştirme izniniz yok."
 
-#: pretix/control/views/checkin.py:107
+#: pretix/control/views/checkin.py:103
+#, fuzzy
+#| msgid "The selected list has been deleted."
+msgid "The selected check-ins have been reverted."
+msgstr "Seçilen liste silinmiştir."
+
+#: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
 msgstr "Seçilen biletler check in olarak işaretlendi."
 
-#: pretix/control/views/checkin.py:147
+#: pretix/control/views/checkin.py:160
 msgid "The new check-in list has been created."
 msgstr "Yeni check-in listesi oluşturuldu."
 
-#: pretix/control/views/checkin.py:154 pretix/control/views/checkin.py:192
+#: pretix/control/views/checkin.py:167 pretix/control/views/checkin.py:205
 #: pretix/control/views/event.py:168 pretix/control/views/event.py:309
 #: pretix/control/views/event.py:360 pretix/control/views/event.py:450
 #: pretix/control/views/event.py:501 pretix/control/views/event.py:720
@@ -11430,11 +11449,11 @@ msgstr "Yeni check-in listesi oluşturuldu."
 msgid "We could not save your changes. See below for details."
 msgstr "Değişikliklerinizi kaydedemedik. Detaylar için aşağıya bakın."
 
-#: pretix/control/views/checkin.py:171 pretix/control/views/checkin.py:208
+#: pretix/control/views/checkin.py:184 pretix/control/views/checkin.py:221
 msgid "The requested list does not exist."
 msgstr "İstenen liste mevcut değil."
 
-#: pretix/control/views/checkin.py:217
+#: pretix/control/views/checkin.py:230
 msgid "The selected list has been deleted."
 msgstr "Seçilen liste silinmiştir."
 

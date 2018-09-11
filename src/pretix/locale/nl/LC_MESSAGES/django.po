@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-10 16:04+0000\n"
+"POT-Creation-Date: 2018-09-11 14:42+0000\n"
 "PO-Revision-Date: 2018-08-20 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -6321,6 +6321,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:120 pretix/control/logdisplay.py:122
 #: pretix/control/logdisplay.py:321 pretix/control/logdisplay.py:323
+#: pretix/control/logdisplay.py:342 pretix/control/logdisplay.py:344
 msgid "(unknown)"
 msgstr "(onbekend)"
 
@@ -6881,68 +6882,74 @@ msgid ""
 msgstr ""
 "Positie #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
 
-#: pretix/control/logdisplay.py:338
+#: pretix/control/logdisplay.py:346
+#, fuzzy, python-brace-format
+#| msgid "The check-in list has been deleted."
+msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
+msgstr "De inchecklijst is verwijderd."
+
+#: pretix/control/logdisplay.py:352
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user} is toegevoegd aan het team."
 
-#: pretix/control/logdisplay.py:341
+#: pretix/control/logdisplay.py:355
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user} is verwijderd uit het team."
 
-#: pretix/control/logdisplay.py:344
+#: pretix/control/logdisplay.py:358
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr ""
 "{user} is bij het team gekomen via de uitnodiging verstuurd naar {email}."
 
-#: pretix/control/logdisplay.py:349
+#: pretix/control/logdisplay.py:363
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user} is uitgenodigd voor het team."
 
-#: pretix/control/logdisplay.py:352
+#: pretix/control/logdisplay.py:366
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "De uitnodiging voor {user} is ingetrokken."
 
-#: pretix/control/logdisplay.py:355
+#: pretix/control/logdisplay.py:369
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "Het token \"{name}\" is aangemaakt."
 
-#: pretix/control/logdisplay.py:358
+#: pretix/control/logdisplay.py:372
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "Het token \"{name}\" is ingetrokken."
 
-#: pretix/control/logdisplay.py:361
+#: pretix/control/logdisplay.py:375
 msgid "Your account settings have been changed."
 msgstr "Uw accountinstellingen zijn aangepast."
 
-#: pretix/control/logdisplay.py:363 pretix/control/views/user.py:135
+#: pretix/control/logdisplay.py:377 pretix/control/views/user.py:135
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "Uw e-mailadres is veranderd naar {email}."
 
-#: pretix/control/logdisplay.py:365 pretix/control/views/user.py:132
+#: pretix/control/logdisplay.py:379 pretix/control/views/user.py:132
 msgid "Your password has been changed."
 msgstr "Uw wachtwoord is veranderd."
 
-#: pretix/control/logdisplay.py:367
+#: pretix/control/logdisplay.py:381
 msgid "Your account has been enabled."
 msgstr "Uw account is ingeschakeld."
 
-#: pretix/control/logdisplay.py:369
+#: pretix/control/logdisplay.py:383
 msgid "Your account has been disabled."
 msgstr "Uw account is uitgeschakeld."
 
-#: pretix/control/logdisplay.py:373
+#: pretix/control/logdisplay.py:387
 msgid "You impersonated {}."
 msgstr "U heeft als de gebruiker {} gewerkt."
 
-#: pretix/control/logdisplay.py:376
+#: pretix/control/logdisplay.py:390
 msgid "You stopped impersonating {}."
 msgstr "U bent gestopt met werken als {}."
 
@@ -7311,6 +7318,12 @@ msgstr "onbetaald"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 msgid "Check-In selected attendees"
 msgstr "Geselecteerde gasten inchecken"
+
+#: pretix/control/templates/pretixcontrol/checkin/index.html:124
+#, fuzzy
+#| msgid "Delete check-in list"
+msgid "Revert selected check-ins"
+msgstr "Verwijder inchecklijst"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -8056,7 +8069,7 @@ msgid "Installed plugins"
 msgstr "Geïnstalleerde plugins"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
-#: pretix/control/views/checkin.py:175 pretix/control/views/event.py:147
+#: pretix/control/views/checkin.py:188 pretix/control/views/event.py:147
 #: pretix/control/views/event.py:228 pretix/control/views/event.py:306
 #: pretix/control/views/event.py:357 pretix/control/views/event.py:498
 #: pretix/control/views/event.py:756 pretix/control/views/event.py:1064
@@ -11521,15 +11534,21 @@ msgstr "Ongeldige code, probeer het opnieuw."
 msgid "You do not have permission to perform this action."
 msgstr "U heeft geen toestemming om deze actie uit te voeren."
 
-#: pretix/control/views/checkin.py:107
+#: pretix/control/views/checkin.py:103
+#, fuzzy
+#| msgid "The selected list has been deleted."
+msgid "The selected check-ins have been reverted."
+msgstr "De gekozen lijst is verwijderd."
+
+#: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
 msgstr "De geselecteerde tickets zijn aangemerkt als ingecheckt."
 
-#: pretix/control/views/checkin.py:147
+#: pretix/control/views/checkin.py:160
 msgid "The new check-in list has been created."
 msgstr "De nieuwe inchecklijst is aangemaakt."
 
-#: pretix/control/views/checkin.py:154 pretix/control/views/checkin.py:192
+#: pretix/control/views/checkin.py:167 pretix/control/views/checkin.py:205
 #: pretix/control/views/event.py:168 pretix/control/views/event.py:309
 #: pretix/control/views/event.py:360 pretix/control/views/event.py:450
 #: pretix/control/views/event.py:501 pretix/control/views/event.py:720
@@ -11545,11 +11564,11 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 msgid "We could not save your changes. See below for details."
 msgstr "We konden uw wijzigingen niet opslaan. Zie hieronder voor details."
 
-#: pretix/control/views/checkin.py:171 pretix/control/views/checkin.py:208
+#: pretix/control/views/checkin.py:184 pretix/control/views/checkin.py:221
 msgid "The requested list does not exist."
 msgstr "De gevraagde lijst bestaat niet."
 
-#: pretix/control/views/checkin.py:217
+#: pretix/control/views/checkin.py:230
 msgid "The selected list has been deleted."
 msgstr "De gekozen lijst is verwijderd."
 
