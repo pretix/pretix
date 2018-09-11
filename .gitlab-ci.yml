@@ -17,7 +17,7 @@ pypi:
         - virtualenv env
         - source env/bin/activate
         - pip install -U pip wheel setuptools
-        - XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt -r src/requirements/py34.txt
+        - XDG_CACHE_HOME=/cache pip3 install -Ur src/requirements.txt -r src/requirements/dev.txt
         - cd src
         - python setup.py sdist
         - pip install dist/pretix-*.tar.gz
