@@ -8,6 +8,8 @@ recursive-include pretix/control/templates *
 recursive-include pretix/presale/templates *
 recursive-include pretix/plugins/banktransfer/templates *
 recursive-include pretix/plugins/banktransfer/static *
+recursive-include pretix/plugins/manualpayment/templates *
+recursive-include pretix/plugins/manualpayment/static *
 recursive-include pretix/plugins/paypal/templates *
 recursive-include pretix/plugins/pretixdroid/templates *
 recursive-include pretix/plugins/pretixdroid/static *
