@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-09-10 16:14+0000\n"
+"PO-Revision-Date: 2018-09-11 14:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6900,10 +6900,9 @@ msgstr ""
 "eingecheckt."
 
 #: pretix/control/logdisplay.py:346
-#, fuzzy, python-brace-format
-#| msgid "The check-in list has been deleted."
+#, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "Der Check-in-Liste wurde gelöscht."
+msgstr "Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
 
 #: pretix/control/logdisplay.py:352
 #, python-brace-format
@@ -7339,10 +7338,8 @@ msgid "Check-In selected attendees"
 msgstr "Ausgewählte Teilnehmer einchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Revert selected check-ins"
-msgstr "Check-in-Liste löschen"
+msgstr "Ausgewählte Check-ins löschen"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -11558,10 +11555,8 @@ msgid "You do not have permission to perform this action."
 msgstr "Du hast keine Berechtigung, um diese Aktion durchzuführen."
 
 #: pretix/control/views/checkin.py:103
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected check-ins have been reverted."
-msgstr "Das ausgewählte List wurde gelöscht."
+msgstr "Der ausgewählte Check-In wurde gelöscht."
 
 #: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
