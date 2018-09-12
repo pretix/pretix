@@ -128,7 +128,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/questions/1/options/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "identifier": "LVETRWVU",
