@@ -176,11 +176,15 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
         invoices = Invoice.objects.filter(pk__in=invoices)
         for inv in invoices:
             if inv.file:
-                email.attach(
-                    '{}.pdf'.format(inv.number),
-                    inv.file.file.read(),
-                    'application/pdf'
-                )
+                try:
+                    email.attach(
+                        '{}.pdf'.format(inv.number),
+                        inv.file.file.read(),
+                        'application/pdf'
+                    )
+                except:
+                    logger.exception('Could not attach invoice to email')
+                    pass
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
