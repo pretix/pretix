@@ -237,7 +237,8 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None):
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_approved', user
+                    'pretix.event.order.email.order_approved', user,
+                    invoices=[invoice] if invoice and order.event.settings.invoice_email_attachment else []
                 )
             except SendMailException:
                 logger.exception('Order approved email could not be sent')
