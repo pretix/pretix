@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-08-20 20:00+0000\n"
+"PO-Revision-Date: 2018-09-17 11:04+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -135,10 +135,8 @@ msgstr ""
 "De applicatie \"{application_name}\" is toegang gegeven tot uw account."
 
 #: pretix/base/email.py:129
-#, fuzzy
-#| msgid "Make default"
 msgid "pretix default"
-msgstr "Maak standaard"
+msgstr "pretix-standaard"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -3119,6 +3117,11 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Deze vouchercode is momenteel vergrendeld, omdat de voucher al is gebruikt "
+"in een winkelwagen. Dit kan betekenen dat iemand anders op dit moment de "
+"voucher aan het verzilveren is, of dat u eerder de voucher heeft geprobeerd "
+"te verzilveren, maar het afrekenproces niet heeft voltooid. U kunt over %d "
+"minuten opnieuw proberen om de voucher te gebruiken."
 
 #: pretix/base/services/cart.py:71
 #, python-format
@@ -5016,7 +5019,7 @@ msgstr "bijv. uw contactgegevens"
 
 #: pretix/control/forms/event.py:692
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "HTML-e-mail-renderer"
 
 #: pretix/control/forms/event.py:698 pretix/control/forms/event.py:707
 #: pretix/control/forms/event.py:714 pretix/control/forms/event.py:721
@@ -5543,10 +5546,8 @@ msgid "Underpaid"
 msgstr "Onderbetaald"
 
 #: pretix/control/forms/filter.py:212
-#, fuzzy
-#| msgid "Pending or paid"
 msgid "Pending (but fully paid)"
-msgstr "In afwachting of betaald"
+msgstr "In afwachting (maar volledig betaald)"
 
 #: pretix/control/forms/filter.py:309 pretix/control/forms/filter.py:314
 #: pretix/control/forms/filter.py:477 pretix/control/forms/filter.py:482
@@ -6883,10 +6884,9 @@ msgstr ""
 "Positie #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:346
-#, fuzzy, python-brace-format
-#| msgid "The check-in list has been deleted."
+#, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "De inchecklijst is verwijderd."
+msgstr "De check-in van positie #{posid} op lijst \"{list}\" is teruggedraaid."
 
 #: pretix/control/logdisplay.py:352
 #, python-brace-format
@@ -7320,10 +7320,8 @@ msgid "Check-In selected attendees"
 msgstr "Geselecteerde gasten inchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Revert selected check-ins"
-msgstr "Verwijder inchecklijst"
+msgstr "Draai gekozen check-ins terug"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
