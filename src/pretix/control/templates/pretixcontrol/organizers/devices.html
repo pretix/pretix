@@ -1,0 +1,90 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <legend>
+        {% trans "Connected devices" %}
+    </legend>
+    {% if devices|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't connected any hardware devices yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Device ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Hardware model" %}</th>
+                    <th>{% trans "Software" %}</th>
+                    <th>{% trans "Setup date" %}</th>
+                    <th>{% trans "Events" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in devices %}
+                    <tr>
+                        <td>
+                            {{ d.device_id }}
+                        </td>
+                        <td>
+                            {{ d.name }}
+                        </td>
+                        <td>
+                            {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
+                        </td>
+                        <td>
+                            {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
+                        </td>
+                        <td>
+                            {% if d.initialized %}
+                                {{ d.initialized|date:"SHORT_DATETIME_FORMAT" }}
+                            {% else %}
+                                <em>{% trans "Not yet initialized" %}</em>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if d.all_events %}
+                                {% trans "All" %}
+                            {% else %}
+                                <ul>
+                                    {% for e in d.limit_events.all %}
+                                        <li>
+                                            <a href="{% url "control:event.index" organizer=request.organizer.slug event=e.slug %}">
+                                                {{ e }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            {% if not d.initialized %}
+                                <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
+                                        class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
+                                    {% trans "Connect" %}</a>
+                            {% endif %}
+                            <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
+                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

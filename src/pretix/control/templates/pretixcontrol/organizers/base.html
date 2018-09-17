@@ -33,6 +33,13 @@
                 </a>
             </li>
         {% endif %}
+        {% if 'can_change_organizer_settings' in request.orgapermset %}
+            <li {% if "organizer.device" in url_name %}class="active"{% endif %}>
+                <a href="{% url "control:organizer.devices" organizer=organizer.slug %}">
+                    {% trans "Devices" %}
+                </a>
+            </li>
+        {% endif %}
         {% for nav in nav_organizer %}
             <li {% if nav.active %}class="active"{% endif %}>
                 <a href="{{ nav.url }}">
