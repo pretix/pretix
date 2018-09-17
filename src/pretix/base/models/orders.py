@@ -882,6 +882,22 @@ class OrderPayment(models.Model):
         """
         return self.order.event.get_payment_providers().get(self.provider)
 
+    def _mark_paid(self, force, count_waitinglist, user, auth):
+        from pretix.base.signals import order_paid
+        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
+        if not force and can_be_paid is not True:
+            raise Quota.QuotaExceededException(can_be_paid)
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        self.order.log_action('pretix.event.order.paid', {
+            'provider': self.provider,
+            'info': self.info,
+            'date': self.payment_date,
+            'force': force
+        }, user=user, auth=auth)
+        order_paid.send(self.order.event, order=self.order)
+
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text=''):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
@@ -901,7 +917,6 @@ class OrderPayment(models.Model):
         :type mail_text: str
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
-        from pretix.base.signals import order_paid
         from pretix.base.services.invoices import generate_invoice, invoice_qualified
         from pretix.base.services.mail import SendMailException
         from pretix.multidomain.urlreverse import build_absolute_uri
@@ -928,20 +943,14 @@ class OrderPayment(models.Model):
         if payment_sum - refund_sum < self.order.total:
             return
 
-        with self.order.event.lock():
-            can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
-            if not force and can_be_paid is not True:
-                raise Quota.QuotaExceededException(can_be_paid)
-            self.order.status = Order.STATUS_PAID
-            self.order.save()
-
-            self.order.log_action('pretix.event.order.paid', {
-                'provider': self.provider,
-                'info': self.info,
-                'date': self.payment_date,
-                'force': force
-            }, user=user, auth=auth)
-            order_paid.send(self.order.event, order=self.order)
+        if self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12):
+            # Performance optimization. In this case, there's really no reason to lock everything and an atomic
+            # database transaction is more than enough.
+            with transaction.atomic():
+                self._mark_paid(force, count_waitinglist, user, auth)
+        else:
+            with self.order.event.lock():
+                self._mark_paid(force, count_waitinglist, user, auth)
 
         invoice = None
         if invoice_qualified(self.order):
