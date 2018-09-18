@@ -5419,7 +5419,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1165
 msgid "Payment via Stripe"
-msgstr "Pago a través de Banda"
+msgstr "Pago a través de Stripe"
 
 #: pretix/control/forms/event.py:1166
 msgid ""
@@ -7220,7 +7220,7 @@ msgstr "Salir"
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr "Tablero de mandos"
+msgstr "Tablero"
 
 #: pretix/control/templates/pretixcontrol/base.html:222
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
@@ -13710,7 +13710,7 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
 #: pretix/plugins/stripe/payment.py:42
 msgid "Stripe"
-msgstr "Rayas"
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/__init__.py:16
 msgid "This plugin allows you to receive credit card payments via Stripe"
@@ -13739,11 +13739,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:75
 msgid "Connect with Stripe"
-msgstr "Conectar con Banda"
+msgstr "Conectar con Stripe"
 
 #: pretix/plugins/stripe/payment.py:85
 msgid "Disconnect from Stripe"
-msgstr "Desconectar de la Banda"
+msgstr "Desconectar de Stripe"
 
 #: pretix/plugins/stripe/payment.py:89
 msgid ""
@@ -13759,12 +13759,12 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:103
 msgid "Stripe account"
-msgstr "Cuenta a rayas"
+msgstr "Cuenta de Stripe"
 
 #: pretix/plugins/stripe/payment.py:111
 msgctxt "stripe"
 msgid "Live"
-msgstr "en directo"
+msgstr "En Vivo"
 
 #: pretix/plugins/stripe/payment.py:112
 msgctxt "stripe"
@@ -13797,7 +13797,7 @@ msgstr "Simple (diseño pretix)"
 
 #: pretix/plugins/stripe/payment.py:156
 msgid "Stripe Checkout"
-msgstr "Pago con franjas"
+msgstr "Pago con Stripe"
 
 #: pretix/plugins/stripe/payment.py:158
 msgid "Only relevant for credit card payments."
@@ -13815,7 +13815,7 @@ msgstr "giropay"
 #: pretix/plugins/stripe/payment.py:183 pretix/plugins/stripe/payment.py:190
 #: pretix/plugins/stripe/payment.py:198
 msgid "Needs to be enabled in your Stripe account first."
-msgstr "Debe habilitarse primero en su cuenta de Banda."
+msgstr "Debe habilitarse primero en su cuenta de Stripe."
 
 #: pretix/plugins/stripe/payment.py:174 pretix/plugins/stripe/payment.py:714
 msgid "iDEAL"
@@ -13886,7 +13886,7 @@ msgstr "{event}-{code}"
 #: pretix/plugins/stripe/payment.py:329
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "La raya reportó un error con su tarjeta: %s"
+msgstr "Stripe reportó un error con su tarjeta: %s"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:464
 #: pretix/plugins/stripe/payment.py:633
@@ -13908,7 +13908,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:373
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr "La raya reportó un error: %s"
+msgstr "Stripe reportó un error: %s"
 
 #: pretix/plugins/stripe/payment.py:417
 msgid "No payment information found."
@@ -13925,7 +13925,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:437
 msgid "Stripe returned an error"
-msgstr "La banda ha devuelto un error"
+msgstr "Stripe ha devuelto un error"
 
 #: pretix/plugins/stripe/payment.py:535
 msgid "Credit card via Stripe"
@@ -13937,7 +13937,7 @@ msgstr "Tarjeta de crédito"
 
 #: pretix/plugins/stripe/payment.py:566
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr "Es posible que necesite habilitar JavaScript para pagos con banda."
+msgstr "Es posible que necesite habilitar JavaScript para pagos con Stripe."
 
 #: pretix/plugins/stripe/payment.py:644
 msgid "giropay via Stripe"
@@ -13959,15 +13959,15 @@ msgstr "iDEAL a través de Stripe"
 
 #: pretix/plugins/stripe/payment.py:762
 msgid "Alipay via Stripe"
-msgstr "Alipay vía Banda"
+msgstr "Alipay vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:805
 msgid "Bancontact via Stripe"
-msgstr "Bancontact vía Bancontact"
+msgstr "Bancontact vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:874
 msgid "SOFORT via Stripe"
-msgstr "SOFORT vía Banda"
+msgstr "SOFORT vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:891
 msgid "Country of your bank"
@@ -14043,23 +14043,23 @@ msgstr "Stripe reportó un evento: {}"
 
 #: pretix/plugins/stripe/signals.py:84
 msgid "Stripe Connect: Client ID"
-msgstr "Conexiones a rayas: ID de cliente"
+msgstr "Conexiones a Stripe: ID de cliente"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Stripe Connect: Secret key"
-msgstr "Conexiones a rayas: Clave secreta"
+msgstr "Conexiones a Stripe: Clave secreta"
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Stripe Connect: Publishable key"
-msgstr "Conexiones a rayas: Clave publicable"
+msgstr "Conexiones a Stripe: Clave publicable"
 
 #: pretix/plugins/stripe/signals.py:105
 msgid "Stripe Connect: Secret key (test)"
-msgstr "Conexiones a rayas: Clave secreta (test)"
+msgstr "Conexiones a Stripe: Clave secreta (test)"
 
 #: pretix/plugins/stripe/signals.py:112
 msgid "Stripe Connect: Publishable key (test)"
-msgstr "Conexiones a rayas: Clave publicable (test)"
+msgstr "Conexiones a Stripe: Clave publicable (test)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -14218,7 +14218,7 @@ msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Su cuenta de Banda está ahora conectada a pretix. A continuación, puede "
+"Su cuenta de Stripe está ahora conectada a pretix. A continuación, puede "
 "modificar los ajustes de forma detallada."
 
 #: pretix/plugins/stripe/views.py:353
