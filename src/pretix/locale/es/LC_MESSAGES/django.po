@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-09-18 14:38+0000\n"
+"PO-Revision-Date: 2018-09-19 14:11+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3118,6 +3118,11 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Este código de descuento está actualmente bloqueado ya que está contenido en "
+"un carrito de la compra. Esto puede significar que otra persona está "
+"canjeando este vale ahora mismo, o que usted intentó canjearlo antes pero no "
+"completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
+"minutos."
 
 #: pretix/base/services/cart.py:71
 #, python-format
@@ -5563,10 +5568,8 @@ msgid "Underpaid"
 msgstr "Pago menor al esperado"
 
 #: pretix/control/forms/filter.py:212
-#, fuzzy
-#| msgid "Pending or paid"
 msgid "Pending (but fully paid)"
-msgstr "Pendiente o pagado"
+msgstr "Pendiente (pero pagado completamente)"
 
 #: pretix/control/forms/filter.py:309 pretix/control/forms/filter.py:314
 #: pretix/control/forms/filter.py:477 pretix/control/forms/filter.py:482
@@ -7355,10 +7358,8 @@ msgid "Check-In selected attendees"
 msgstr "Registro de participantes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Revert selected check-ins"
-msgstr "Borrar lista de check-in"
+msgstr "Revertir los check-in seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -7855,10 +7856,8 @@ msgstr ""
 "considerar el reembolso de la cantidad pagada en exceso al usuario."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:54
-#, fuzzy
-#| msgid "Show overpaid orders"
 msgid "Show affected orders"
-msgstr "Mostrar ordenes pagadas de más"
+msgstr "Mostrar ordenes afectadas"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:61
 msgid "Your attention is required to resolve the following issues"
@@ -8838,17 +8837,12 @@ msgid "Product history"
 msgstr "Historia del producto"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:39
-#, fuzzy
-#| msgid ""
-#| "Please note that your product will <strong>not</strong> be available for "
-#| "sale until you have added your item to an existing or newly created quota."
 msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
-"Tenga en cuenta que su producto <strong>no</strong> estará disponible para "
-"la venta hasta que haya añadido su producto a una cuota existente o recién "
-"creada."
+"Tenga en cuenta que su varicación <strong>no</strong> estará disponible para "
+"la venta hasta que lo haya añadido a una cuota existente o recién creada."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:88
 msgid "Add a new variation"
@@ -11593,10 +11587,8 @@ msgid "You do not have permission to perform this action."
 msgstr "Usted no tiene permiso para realizar esta acción."
 
 #: pretix/control/views/checkin.py:103
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected check-ins have been reverted."
-msgstr "Se ha borrado la lista seleccionada."
+msgstr "El check-in seleccionado ha sido revertido."
 
 #: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
