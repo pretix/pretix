@@ -58,7 +58,7 @@ class Organizer(LoggedModel):
         self.get_cache().clear()
         return obj
 
-    def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
+    def get_cache(self):
         """
         Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
         Django's built-in cache backends, but puts you into an isolated environment for

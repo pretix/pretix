@@ -281,7 +281,7 @@ class Event(EventMixin, LoggedModel):
         self.cache.clear()
         return obj
 
-    def get_plugins(self) -> "list[str]":
+    def get_plugins(self):
         """
         Returns the names of the plugins activated for this event as a list.
         """
