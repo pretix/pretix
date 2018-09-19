@@ -57,7 +57,7 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         kwargs['locales'] = self.locales
         kwargs['initial'] = self.obj.settings.freeze()
         super().__init__(*args, **kwargs)
-        for f in self.fields.values():
+        for k, f in self.fields.items():
             if isinstance(f, (RelativeDateTimeField, RelativeDateField)):
                 f.set_event(self.obj)
 

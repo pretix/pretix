@@ -14,12 +14,14 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries import Countries
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import (
-    CartPosition, Event, Order, OrderPayment, OrderRefund, Quota,
+    CartPosition, Event, InvoiceAddress, Order, OrderPayment, OrderRefund,
+    Quota,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -28,7 +30,7 @@ from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.money import DecimalTextInput
 from pretix.presale.views import get_cart_total
-from pretix.presale.views.cart import get_or_create_cart_id
+from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
 
@@ -179,7 +181,7 @@ class BasePaymentProvider:
                      implementation.
         """
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
-        return OrderedDict([
+        d = OrderedDict([
             ('_enabled',
              forms.BooleanField(
                  label=_('Enable payment method'),
@@ -250,7 +252,20 @@ class BasePaymentProvider:
                              'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
                  required=False
              )),
+            ('_restricted_countries',
+             forms.MultipleChoiceField(
+                 label=_('Restrict to countries'),
+                 choices=Countries(),
+                 help_text=_('Only allow choosing this payment provider for invoice addresses in the selected '
+                             'countries. If you don\'t select any country, all countries are allowed.'),
+                 widget=forms.CheckboxSelectMultiple(
+                     attrs={'class': 'scrolling-multiple-choice'}
+                 ),
+                 required=False
+             )),
         ])
+        d['_restricted_countries']._as_type = list
+        return d
 
     def settings_content_render(self, request: HttpRequest) -> str:
         """
@@ -350,7 +365,8 @@ class BasePaymentProvider:
         during checkout, not on retrying.
 
         The default implementation checks for the _availability_date setting to be either unset or in the future
-        and for the _total_max and _total_min requirements to be met.
+        and for the _total_max and _total_min requirements to be met. It also checks the ``_restrict_countries``
+        setting.
 
         :param total: The total value without the payment method fee, after taxes.
 
@@ -370,6 +386,25 @@ class BasePaymentProvider:
 
         if self.settings._total_min is not None:
             pricing = pricing and total >= Decimal(self.settings._total_min)
+
+        def get_invoice_address():
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
+
+        restricted_countries = self.settings.get('_restricted_countries', as_type=list)
+        if restricted_countries:
+            ia = get_invoice_address()
+            if str(ia.country) not in restricted_countries:
+                return False
 
         return timing and pricing
 
@@ -503,7 +538,8 @@ class BasePaymentProvider:
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
 
-        The default implementation checks for the _availability_date setting to be either unset or in the future.
+        The default implementation checks for the _availability_date setting to be either unset or in the future,
+        as well as for the _total_max, _total_min and _restricted_countries settings.
 
         :param order: The order object
         """
@@ -513,6 +549,16 @@ class BasePaymentProvider:
 
         if self.settings._total_min is not None and ps < Decimal(self.settings._total_min):
             return False
+
+        restricted_countries = self.settings.get('_restricted_countries', as_type=list)
+        if restricted_countries:
+            try:
+                ia = order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                return True
+            else:
+                if str(ia.country) not in restricted_countries:
+                    return False
 
         return self._is_still_available(order=order)
 

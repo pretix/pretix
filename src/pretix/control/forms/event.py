@@ -497,6 +497,9 @@ class ProviderForm(SettingsForm):
             elif isinstance(v, (RelativeDateTimeField, RelativeDateField)):
                 v.set_event(self.obj)
 
+            if hasattr(v, '_as_type'):
+                self.initial[k] = self.obj.settings.get(k, as_type=v._as_type)
+
     def clean(self):
         cleaned_data = super().clean()
         enabled = cleaned_data.get(self.settingspref + '_enabled')
