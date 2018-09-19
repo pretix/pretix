@@ -41,7 +41,9 @@
                             {{ d.device_id }}
                         </td>
                         <td>
+                            {% if d.initialized and not d.api_token %}<del>{% endif %}
                             {{ d.name }}
+                            {% if d.initialized and not d.api_token %}</del>{% endif %}
                         </td>
                         <td>
                             {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
@@ -54,6 +56,9 @@
                                 {{ d.initialized|date:"SHORT_DATETIME_FORMAT" }}
                             {% else %}
                                 <em>{% trans "Not yet initialized" %}</em>
+                            {% endif %}
+                            {% if d.initialized and not d.api_token %}
+                                <span class="label label-danger">{% trans "Revoked" %}</span>
                             {% endif %}
                         </td>
                         <td>

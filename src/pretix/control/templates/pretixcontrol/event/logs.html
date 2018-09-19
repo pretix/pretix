@@ -54,6 +54,9 @@
                                 <br><span class="fa fa-plug fa-fw"></span>
                                 {{ log.oauth_application.name }}
                             {% endif %}
+                        {% elif log.device %}
+                            <span class="fa fa-mobile fa-fw"></span>
+                            {{ log.device.name }}
                         {% elif log.api_token %}
                             <span class="fa fa-key fa-fw"></span>
                             {{ log.api_token.name }}

@@ -37,4 +37,9 @@ class Migration(migrations.Migration):
             name='device',
             unique_together={('organizer', 'device_id')},
         ),
+        migrations.AddField(
+            model_name='logentry',
+            name='device',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='pretixbase.Device'),
+        ),
     ]

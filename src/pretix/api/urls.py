@@ -67,5 +67,8 @@ urlpatterns = [
     url(r"^oauth/authorize$", oauth.AuthorizationView.as_view(), name="authorize"),
     url(r"^oauth/token$", oauth.TokenView.as_view(), name="token"),
     url(r"^oauth/revoke_token$", oauth.RevokeTokenView.as_view(), name="revoke-token"),
-    url(r"^device/initialize", device.InitializeView.as_view(), name="device.initialize"),
+    url(r"^device/initialize$", device.InitializeView.as_view(), name="device.initialize"),
+    url(r"^device/update$", device.UpdateView.as_view(), name="device.update"),
+    url(r"^device/roll$", device.RollKeyView.as_view(), name="device.roll"),
+    url(r"^device/revoke$", device.RevokeKeyView.as_view(), name="device.revoke"),
 ]

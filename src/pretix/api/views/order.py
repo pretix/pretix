@@ -25,7 +25,7 @@ from pretix.api.serializers.order import (
     OrderRefundSerializer, OrderSerializer,
 )
 from pretix.base.models import (
-    Invoice, Order, OrderPayment, OrderPosition, OrderRefund, Quota,
+    Device, Invoice, Order, OrderPayment, OrderPosition, OrderRefund, Quota,
     TeamAPIToken,
 )
 from pretix.base.payment import PaymentException
@@ -177,6 +177,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             order,
             user=request.user if request.user.is_authenticated else None,
             api_token=request.auth if isinstance(request.auth, TeamAPIToken) else None,
+            device=request.auth if isinstance(request.auth, Device) else None,
             oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
             send_mail=send_mail
         )
@@ -191,7 +192,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             approve_order(
                 order,
                 user=request.user if request.user.is_authenticated else None,
-                auth=request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken)) else None,
+                auth=request.auth if isinstance(request.auth, (Device, TeamAPIToken, OAuthAccessToken)) else None,
                 send_mail=send_mail,
             )
         except Quota.QuotaExceededException as e:
@@ -210,7 +211,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             deny_order(
                 order,
                 user=request.user if request.user.is_authenticated else None,
-                auth=request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken)) else None,
+                auth=request.auth if isinstance(request.auth, (Device, TeamAPIToken, OAuthAccessToken)) else None,
                 send_mail=send_mail,
                 comment=comment,
             )
@@ -267,7 +268,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         mark_order_refunded(
             order,
             user=request.user if request.user.is_authenticated else None,
-            api_token=(request.auth if isinstance(request.auth, TeamAPIToken) else None),
+            auth=(request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken, Device)) else None),
         )
         return self.retrieve(request, [], **kwargs)
 
