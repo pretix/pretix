@@ -1,10 +1,14 @@
+import json
+
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Count
 from django.forms import inlineformset_factory
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -608,7 +612,6 @@ class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def form_valid(self, form):
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
-        form.instance.members.add(self.request.user)
         form.instance.log_action('pretix.device.created', user=self.request.user, data={
             k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
             for k in form.changed_data
@@ -666,9 +669,22 @@ class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        if 'ajax' in request.GET:
+            return JsonResponse({
+                'initialized': bool(self.object.initialized)
+            })
         if self.object.initialized:
-            messages.error(request, _('This device already has been connected.'))
+            messages.success(request, _('This device has been set up successfully.'))
             return redirect(reverse('control:organizer.devices', kwargs={
                 'organizer': self.request.organizer.slug,
             }))
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['qrdata'] = json.dumps({
+            'handshake_version': 1,
+            'url': settings.SITE_URL,
+            'token': self.object.initialization_token,
+        })
+        return ctx

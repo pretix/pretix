@@ -278,6 +278,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'pretix.api.auth.token.TeamTokenAuthentication',
+        'pretix.api.auth.device.DeviceTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),

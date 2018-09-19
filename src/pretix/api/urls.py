@@ -7,7 +7,8 @@ from rest_framework import routers
 from pretix.api.views import cart
 
 from .views import (
-    checkin, event, item, oauth, order, organizer, voucher, waitinglist,
+    checkin, device, event, item, oauth, order, organizer, voucher,
+    waitinglist,
 )
 
 router = routers.DefaultRouter()
@@ -66,4 +67,5 @@ urlpatterns = [
     url(r"^oauth/authorize$", oauth.AuthorizationView.as_view(), name="authorize"),
     url(r"^oauth/token$", oauth.TokenView.as_view(), name="token"),
     url(r"^oauth/revoke_token$", oauth.RevokeTokenView.as_view(), name="revoke-token"),
+    url(r"^device/initialize", device.InitializeView.as_view(), name="device.initialize"),
 ]
