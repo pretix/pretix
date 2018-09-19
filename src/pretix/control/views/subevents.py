@@ -217,6 +217,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             if form in self.cl_formset.deleted_forms:
                 if not form.instance.pk:
                     continue
+                form.instance.checkins.all().delete()
                 form.instance.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user)
                 form.instance.delete()
                 form.instance.pk = None
