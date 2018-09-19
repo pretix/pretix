@@ -311,7 +311,7 @@ class EventSettingsForm(SettingsForm):
         help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
                     "number of hours until it expires and can be re-assigned to the next person on the list."),
         required=False,
-        widget=forms.NumberInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
+        widget=forms.NumberInput(),
     )
     waiting_list_auto = forms.BooleanField(
         label=_("Automatic waiting list assignments"),
@@ -319,7 +319,7 @@ class EventSettingsForm(SettingsForm):
                     "on the waiting list for that product. If this is not active, mails will not be send automatically "
                     "but you can send them manually via the control panel."),
         required=False,
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-waiting_list_enabled'}),
+        widget=forms.CheckboxInput(),
     )
     attendee_names_asked = forms.BooleanField(
         label=_("Ask for attendee names"),
