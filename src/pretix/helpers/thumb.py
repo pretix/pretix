@@ -27,7 +27,11 @@ def get_sizes(size, imgsize):
     if crop:
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
-        if wfactor > hfactor:
+        if wfactor == hfactor:
+            return (int(imgsize[0] * wfactor), int(imgsize[1] * hfactor)), \
+                   (0, int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
+                    imgsize[0] * hfactor, int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2))
+        elif wfactor > hfactor:
             return (int(size[0]), int(imgsize[1] * hfactor)), \
                    (0, int((imgsize[1] * wfactor - size[1]) / 2), size[0], int((imgsize[1] * wfactor + size[1]) / 2))
         else:
@@ -36,7 +40,9 @@ def get_sizes(size, imgsize):
     else:
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
-        if wfactor < hfactor:
+        if wfactor == hfactor:
+            return (int(imgsize[0] * hfactor), int(imgsize[1] * wfactor)), None
+        elif wfactor < hfactor:
             return (size[0], int(imgsize[1] * wfactor)), None
         else:
             return (int(imgsize[0] * hfactor), size[1]), None
