@@ -107,7 +107,7 @@ class RevokeKeyView(APIView):
         device = request.auth
         device.api_token = None
         device.save()
-        device.log_action('pretix.device.keyroll', auth=device)
+        device.log_action('pretix.device.revoked', auth=device)
 
         serializer = DeviceSerializer(device)
         return Response(serializer.data)
