@@ -751,13 +751,13 @@ msgstr "Rechnungskorrektur"
 #: pretix/base/invoice.py:382
 #, python-brace-format
 msgctxt "invoice"
-msgid "Your reference: {reference}"
-msgstr "Deine Referenz: {reference}"
+msgid "Customer reference: {reference}"
+msgstr "Kundenseitige Referenz: {reference}"
 
 #: pretix/base/invoice.py:403 pretix/base/invoice.py:411
 msgctxt "invoice"
 msgid "Description"
-msgstr "Beschreibung"
+msgstr "Position"
 
 #: pretix/base/invoice.py:404 pretix/base/invoice.py:412
 msgctxt "invoice"

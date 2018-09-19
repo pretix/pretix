@@ -379,7 +379,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.internal_reference:
             story.append(Paragraph(
-                pgettext('invoice', 'Your reference: {reference}').format(reference=self.invoice.internal_reference),
+                pgettext('invoice', 'Customer reference: {reference}').format(reference=self.invoice.internal_reference),
                 self.stylesheet['Normal']
             ))
 
