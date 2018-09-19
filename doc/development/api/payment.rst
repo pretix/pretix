@@ -96,8 +96,6 @@ The provider class
 
    .. automethod:: order_change_allowed
 
-   .. automethod:: order_can_retry
-
    .. automethod:: payment_prepare
 
    .. automethod:: payment_control_render
