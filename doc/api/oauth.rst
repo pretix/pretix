@@ -1,7 +1,7 @@
 .. _`rest-oauth`:
 
-OAuth support / "Connect with pretix"
-=====================================
+OAuth authentication / "Connect with pretix"
+============================================
 
 In addition to static tokens, pretix supports `OAuth2`_-based authentication starting with
 pretix 1.16. This allows you to put a "Connect with pretix" button into your website or tool

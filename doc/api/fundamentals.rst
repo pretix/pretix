@@ -9,44 +9,20 @@ with pretix' REST API, such as authentication, pagination and similar definition
 Authentication
 --------------
 
-If you're building an application for end users, we strongly recommend that you use our
-:ref:`OAuth-based authentication progress <rest-oauth>`. However, for simpler needs, you
-can also go with static API tokens that you can create on a per-team basis (see below).
+To access the API, you need to present valid authentication credentials. pretix currently
+supports the following authorization schemes:
 
-You need to include the API token with every request to pretix' API in the ``Authorization`` header
-like the following:
-
-.. sourcecode:: http
-   :emphasize-lines: 3
-
-   GET /api/v1/organizers/ HTTP/1.1
-   Host: pretix.eu
-   Authorization: Token e1l6gq2ye72thbwkacj7jbri7a7tvxe614ojv8ybureain92ocub46t5gab5966k
-
-.. note:: The API currently also supports authentication via browser sessions, i.e. the
-          same way that you authenticate with pretix when using the browser interface.
-          Using this type of authentication is *not* officially supported for use by
-          third-party clients and might change or be removed at any time. We plan on
-          adding OAuth2 support in the future for user-level authentication. If you want
-          to use session authentication, be sure to comply with Django's `CSRF policies`_.
-
-Obtaining an API token
-----------------------
-
-To authenticate your API requests, you need to obtain an API token. You can create a
-token in the pretix web interface on the level of organizer teams. Create a new team
-or choose an existing team that has the level of permissions the token should have and
-create a new token using the form below the list of team members:
-
-.. image:: img/token_form.png
-    :class: screenshot
-
-You can enter a description for the token to distinguish from other tokens later on.
-Once you click "Add", you will be provided with an API token in the success message.
-Copy this token, as you won't be able to retrieve it again.
-
-.. image:: img/token_success.png
-    :class: screenshot
+* :ref:`rest-tokenauth`: This is the simplest way and recommended for server-side applications
+  that interact with pretix without user interaction.
+* :ref:`rest-oauth`: This is the recommended way to use if you write a third-party application
+  that users can connect with their pretix account. It provides the best user experience, but
+  requires user interaction and slightly more implementation effort.
+* :ref:`rest-deviceauth`: This is the recommended way if you build apps or hardware devices that can
+  connect to pretix, e.g. for processing check-ins or to sell tickets offline. It provides a way
+  to uniquely identify devices and allows for a quick configuration flow inside your software.
+* Authentication using browser sessions: This is used by the pretix web interface and it is *not*
+  officially supported for use by third-party applications. It might change or be removed at any
+  time without prior notice. If you use it, you need to comply with Django's `CSRF policies`_.
 
 Permissions
 -----------

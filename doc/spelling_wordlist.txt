@@ -23,6 +23,7 @@ cronjob
 cryptographic
 debian
 deduplication
+deprovision
 discoverable
 django
 dockerfile
