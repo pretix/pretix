@@ -662,7 +662,6 @@ class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     template_name = 'pretixcontrol/organizers/device_connect.html'
     permission = 'can_change_organizer_settings'
     context_object_name = 'device'
-    form_class = DeviceForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
@@ -688,3 +687,32 @@ class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
             'token': self.object.initialization_token,
         })
         return ctx
+
+
+class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/device_revoke.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'device'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.api_token:
+            messages.success(request, _('This device currently does not have access.'))
+            return redirect(reverse('control:organizer.devices', kwargs={
+                'organizer': self.request.organizer.slug,
+            }))
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.api_token = None
+        self.object.save()
+        self.object.log_action('pretix.device.revoked', user=self.request.user)
+        messages.success(request, _('Access for this device has been revoked.'))
+        return redirect(reverse('control:organizer.devices', kwargs={
+            'organizer': self.request.organizer.slug,
+        }))

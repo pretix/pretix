@@ -274,6 +274,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.subevent.quota.added': pgettext_lazy('subevent', 'A quota has been added to the event date.'),
         'pretix.subevent.quota.changed': pgettext_lazy('subevent', 'A quota has been changed on the event date.'),
         'pretix.subevent.quota.deleted': pgettext_lazy('subevent', 'A quota has been removed from the event date.'),
+        'pretix.device.created': _('The device has been created.'),
+        'pretix.device.changed': _('The device has been changed.'),
+        'pretix.device.revoked': _('Access of the device has been revoked.'),
+        'pretix.device.initialized': _('The device has been initialized.'),
+        'pretix.device.keyroll': _('The access token of the device has been regenerated.'),
+        'pretix.device.updated': _('The device has notified the server of an hardware or software update.'),
     }
 
     data = json.loads(logentry.data)

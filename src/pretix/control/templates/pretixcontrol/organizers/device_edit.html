@@ -8,6 +8,10 @@
         <legend>{% trans "Connect a new device" %}</legend>
     {% endif %}
     <form class="form-horizontal" action="" method="post">
+        {% if device %}
+            <div class="row">
+            <div class="col-xs-12 col-lg-10">
+        {% endif %}
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout="control" %}
@@ -19,5 +23,19 @@
             </button>
         </div>
 
+        {% if device %}
+            </div>
+            <div class="col-xs-12 col-lg-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "Device history" %}
+                        </h3>
+                    </div>
+                    {% include "pretixcontrol/includes/logs.html" with obj=device %}
+                </div>
+            </div>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}

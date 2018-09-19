@@ -81,6 +81,10 @@
                                 <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
                                         class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
                                     {% trans "Connect" %}</a>
+                            {% elif d.api_token %}
+                                <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
+                                        class="btn btn-default btn-sm">
+                                    {% trans "Revoke access" %}</a>
                             {% endif %}
                             <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
                                     class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
