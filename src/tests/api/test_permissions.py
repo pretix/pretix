@@ -128,6 +128,13 @@ def test_organizer_not_allowed(token_client, organizer):
 
 
 @pytest.mark.django_db
+def test_organizer_not_allowed_device(device_client, organizer):
+    o2 = Organizer.objects.create(slug='o2', name='Organizer 2')
+    resp = device_client.get('/api/v1/organizers/{}/events/'.format(o2.slug))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
 def test_organizer_not_existing(token_client, organizer):
     resp = token_client.get('/api/v1/organizers/{}/events/'.format('o2'))
     assert resp.status_code == 403
@@ -144,6 +151,13 @@ def test_event_allowed_all_events(token_client, team, organizer, event, url):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", event_urls)
+def test_event_allowed_all_events_device(device_client, device, organizer, event, url):
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
 def test_event_allowed_limit_events(token_client, organizer, team, event, url):
     team.all_events = False
     team.save()
@@ -154,10 +168,29 @@ def test_event_allowed_limit_events(token_client, organizer, team, event, url):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", event_urls)
+def test_event_allowed_limit_events_device(device_client, organizer, device, event, url):
+    device.all_events = False
+    device.save()
+    device.limit_events.add(event)
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
 def test_event_not_allowed(token_client, organizer, team, event, url):
     team.all_events = False
     team.save()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
+def test_event_not_allowed_device(device_client, organizer, device, event, url):
+    device.all_events = False
+    device.save()
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
     assert resp.status_code == 403
 
 

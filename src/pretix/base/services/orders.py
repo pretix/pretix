@@ -1301,10 +1301,11 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None):
+def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
+                 device=None):
     try:
         try:
-            return _cancel_order(order, user, send_mail, api_token, oauth_application)
+            return _cancel_order(order, user, send_mail, api_token, device, oauth_application)
         except LockTimeoutException:
             self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
