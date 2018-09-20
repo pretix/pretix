@@ -98,6 +98,8 @@ def logged_in_client(client, event):
     ('/control/organizers/', 200),
     ('/control/organizers/add', 200),
     ('/control/organizer/{orga}/edit', 200),
+    ('/control/organizer/{orga}/teams', 200),
+    ('/control/organizer/{orga}/devices', 200),
 
     ('/control/events/', 200),
     ('/control/events/add', 200),
