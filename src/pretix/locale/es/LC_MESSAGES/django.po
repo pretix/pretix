@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-09-19 14:11+0000\n"
+"PO-Revision-Date: 2018-09-20 08:08+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -9433,7 +9433,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 #: pretix/control/templates/pretixcontrol/order/change.html:121
 #, python-format
 msgid "<strong>incl.</strong> %(rate)s%% %(name)s"
-msgstr "<strong>incl.</strong> %(rate)s%% %(name)s"
+msgstr "<strong>incl.</strong> %(name)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:126
 msgid "no taxes apply"
@@ -9685,7 +9685,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:183
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "incl. %(rate)s%% %(taxname)s"
+msgstr "incl. %(taxname)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:356
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
@@ -14473,7 +14473,7 @@ msgstr "{name} (+ {price} más {taxes}% {taxname})"
 #: pretix/presale/forms/checkout.py:161
 #, python-brace-format
 msgid "{name} (+ {price} incl. {taxes}% {taxname})"
-msgstr "{name} (+ {price} incl. {taxes}% {taxname})"
+msgstr "{name} (+ {price} incl. {taxname} {taxes}%)"
 
 #: pretix/presale/forms/checkout.py:167
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:5
