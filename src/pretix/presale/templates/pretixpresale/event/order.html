@@ -236,16 +236,4 @@
             </div>
         </div>
     {% endif %}
-    {% if order.status == "p" and payment %}
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Payment" %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                {{ payment }}
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}
