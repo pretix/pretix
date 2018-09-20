@@ -1,0 +1,32 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Transfer order" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed with code=order.code %}
+            Transfer order: {{ code }}
+        {% endblocktrans %}
+    </h2>
+
+    <form method="post" action="" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                   href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, transfer order" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+
+{% endblock %}

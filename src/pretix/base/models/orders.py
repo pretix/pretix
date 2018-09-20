@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Union
 import dateutil
 import pytz
 from django.conf import settings
+from django.contrib import messages
 from django.db import models, transaction
 from django.db.models import (
     Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
@@ -17,6 +18,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
@@ -459,6 +461,47 @@ class Order(LoggedModel):
             return error_messages['late']
 
         return self._is_still_available(count_waitinglist=count_waitinglist)
+
+    def regenerate_secrets(self, user=None):
+        self.secret = generate_secret()
+        for op in self.positions.all():
+            op.secret = generate_position_secret()
+            op.save(update_fields=['secret'])
+        CachedTicket.objects.filter(order_position__order=self).delete()
+        CachedCombinedTicket.objects.filter(order=self).delete()
+        self.log_action('pretix.event.order.secret.changed', user=user)
+        self.save(update_fields=['secret'])
+
+    def resend_link(self, user=None):
+        from pretix.base.services.mail import SendMailException
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        with language(self.locale):
+            try:
+                try:
+                    invoice_name = self.invoice_address.name
+                    invoice_company = self.invoice_address.company
+                except InvoiceAddress.DoesNotExist:
+                    invoice_name = ""
+                    invoice_company = ""
+                email_template = self.event.settings.mail_text_resend_link
+                email_context = {
+                    'event': self.event.name,
+                    'url': build_absolute_uri(self.event, 'presale:event.order', kwargs={
+                        'order': self.code,
+                        'secret': self.secret
+                    }),
+                    'invoice_name': invoice_name,
+                    'invoice_company': invoice_company,
+                }
+                email_subject = _('Your order: %(code)s') % {'code': self.code}
+                self.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.resend', user=user
+                )
+            except SendMailException:
+                messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
+                return redirect(self.get_order_url())
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True) -> Union[bool, str]:
         error_messages = {

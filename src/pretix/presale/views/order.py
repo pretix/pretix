@@ -13,7 +13,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import FormView, TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
 from pretix.base.models.orders import (
@@ -34,6 +34,7 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
+from pretix.presale.forms.order import ChangeContactForm
 from pretix.presale.views import CartMixin, EventViewMixin
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
@@ -773,3 +774,40 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
             return self.get(request, *args, **kwargs)
         resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
         return resp
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderTransfer(EventViewMixin, OrderDetailMixin, FormView):
+    template_name = "pretixpresale/event/order_transfer.html"
+    form_class = ChangeContactForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        return ctx
+
+    def form_valid(self, form):
+        with transaction.atomic():
+            self.order.email = form.cleaned_data['email']
+            self.order.log_action(
+                'pretix.event.order.contact.changed',
+                data={
+                    'old_email': self.order.email,
+                    'new_email': form.cleaned_data['email'],
+                },
+                user=self.request.user,
+            )
+            self.order.regenerate_secrets()
+        self.order.resend_link()
+        messages.success(self.request, _('The ticket order has been transfered and an email will be sent to the '
+                                         'new owner.'))
+        return redirect(
+            eventreverse(self.request.event, 'presale:event.index')
+        )

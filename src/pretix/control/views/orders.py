@@ -30,7 +30,6 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
     Item, ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
@@ -845,33 +844,7 @@ class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        with language(self.order.locale):
-            try:
-                try:
-                    invoice_name = self.order.invoice_address.name
-                    invoice_company = self.order.invoice_address.company
-                except InvoiceAddress.DoesNotExist:
-                    invoice_name = ""
-                    invoice_company = ""
-                email_template = self.order.event.settings.mail_text_resend_link
-                email_context = {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                }
-                email_subject = _('Your order: %(code)s') % {'code': self.order.code}
-                self.order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.resend', user=self.request.user
-                )
-            except SendMailException:
-                messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
-                return redirect(self.get_order_url())
-
+        self.order.resend_link(self.request.user)
         messages.success(self.request, _('The email has been queued to be sent.'))
         return redirect(self.get_order_url())
 
@@ -1166,13 +1139,7 @@ class OrderContactChange(OrderView):
                 )
             if self.form.cleaned_data['regenerate_secrets']:
                 changed = True
-                self.order.secret = generate_secret()
-                for op in self.order.positions.all():
-                    op.secret = generate_position_secret()
-                    op.save()
-                CachedTicket.objects.filter(order_position__order=self.order).delete()
-                CachedCombinedTicket.objects.filter(order=self.order).delete()
-                self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
+                self.order.regenerate_secrets(self.request.user)
 
             self.form.save()
             if changed:

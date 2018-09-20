@@ -223,17 +223,24 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
-    {% if order.can_user_cancel %}
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <p>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <p>
+                {% if order.status == "p" or order.status == "n" or order.status == "e" %}
+                    <a href="{% eventurl event 'presale:event.order.transfer' secret=order.secret order=order.code %}"
+                       class="btn btn-default">
+                        <span class="fa fa-mail-forward"></span>
+                        {% trans "Transfer order" %}
+                    </a>
+                {% endif %}
+                {% if order.can_user_cancel %}
                     <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                             class="btn btn-danger">
                         <span class="fa fa-remove"></span>
                         {% trans "Cancel order" %}
                     </a>
-                </p>
-            </div>
+                {% endif %}
+            </p>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}
