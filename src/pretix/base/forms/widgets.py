@@ -2,6 +2,7 @@ import os
 
 from django import forms
 from django.utils.formats import get_format
+from django.utils.functional import lazy
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -92,14 +93,20 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         date_attrs['class'] += ' datepickerfield'
         time_attrs['class'] += ' timepickerfield'
 
-        df = date_format or get_format('DATE_INPUT_FORMATS')[0]
-        date_attrs['placeholder'] = now().replace(
-            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
-        ).strftime(df)
-        tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
-        time_attrs['placeholder'] = now().replace(
-            year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
-        ).strftime(tf)
+        def date_placeholder():
+            df = date_format or get_format('DATE_INPUT_FORMATS')[0]
+            return now().replace(
+                year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
+            ).strftime(df)
+
+        def time_placeholder():
+            tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
+            return now().replace(
+                year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+            ).strftime(tf)
+
+        date_attrs['placeholder'] = lazy(date_placeholder, str)
+        time_attrs['placeholder'] = lazy(time_placeholder, str)
 
         widgets = (
             forms.DateInput(attrs=date_attrs, format=date_format),
