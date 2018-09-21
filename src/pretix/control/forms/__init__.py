@@ -1,7 +1,10 @@
+import datetime
 import os
 
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.forms.utils import from_current_timezone
 from django.utils.html import conditional_escape
 from django.utils.translation import ugettext_lazy as _
 
@@ -168,3 +171,17 @@ class SingleLanguageWidget(forms.Select):
     def optgroups(self, name, value, attrs=None):
         self.modify()
         return super().optgroups(name, value, attrs)
+
+
+class SplitDateTimeField(forms.SplitDateTimeField):
+
+    def compress(self, data_list):
+        # Differs from the default implementation: If only a time is given and no date, we consider the field empty
+        if data_list:
+            if data_list[0] in self.empty_values:
+                return None
+            if data_list[1] in self.empty_values:
+                raise ValidationError(self.error_messages['invalid_date'], code='invalid_date')
+            result = datetime.datetime.combine(*data_list)
+            return from_current_timezone(result)
+        return None

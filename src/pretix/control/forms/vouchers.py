@@ -6,7 +6,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, Voucher
-from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import voucher_form_validation
 from pretix.helpers.models import modelcopy
@@ -34,7 +34,7 @@ class VoucherForm(I18nModelForm):
             'comment', 'max_usages', 'price_mode', 'subevent'
         ]
         field_classes = {
-            'valid_until': forms.SplitDateTimeField,
+            'valid_until': SplitDateTimeField,
         }
         widgets = {
             'valid_until': SplitDateTimePickerWidget(),
@@ -190,7 +190,7 @@ class VoucherBulkForm(VoucherForm):
             'max_usages', 'price_mode', 'subevent'
         ]
         field_classes = {
-            'valid_until': forms.SplitDateTimeField,
+            'valid_until': SplitDateTimeField,
         }
         widgets = {
             'valid_until': SplitDateTimePickerWidget(),

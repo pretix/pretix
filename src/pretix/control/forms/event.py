@@ -22,7 +22,7 @@ from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.control.forms import (
     ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
-    SplitDateTimePickerWidget,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
@@ -95,10 +95,10 @@ class EventWizardBasicsForm(I18nModelForm):
             'location',
         ]
         field_classes = {
-            'date_from': forms.SplitDateTimeField,
-            'date_to': forms.SplitDateTimeField,
-            'presale_start': forms.SplitDateTimeField,
-            'presale_end': forms.SplitDateTimeField,
+            'date_from': SplitDateTimeField,
+            'date_to': SplitDateTimeField,
+            'presale_start': SplitDateTimeField,
+            'presale_end': SplitDateTimeField,
         }
         widgets = {
             'date_from': SplitDateTimePickerWidget(),
@@ -229,11 +229,11 @@ class EventUpdateForm(I18nModelForm):
             'location',
         ]
         field_classes = {
-            'date_from': forms.SplitDateTimeField,
-            'date_to': forms.SplitDateTimeField,
-            'date_admission': forms.SplitDateTimeField,
-            'presale_start': forms.SplitDateTimeField,
-            'presale_end': forms.SplitDateTimeField,
+            'date_from': SplitDateTimeField,
+            'date_to': SplitDateTimeField,
+            'date_admission': SplitDateTimeField,
+            'presale_start': SplitDateTimeField,
+            'presale_end': SplitDateTimeField,
         }
         widgets = {
             'date_from': SplitDateTimePickerWidget(),

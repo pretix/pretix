@@ -12,7 +12,7 @@ from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import SubEventItem
 from pretix.base.reldate import RelativeDateTimeField
 from pretix.base.templatetags.money import money_filter
-from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
 
 
@@ -37,11 +37,11 @@ class SubEventForm(I18nModelForm):
             'frontpage_text'
         ]
         field_classes = {
-            'date_from': forms.SplitDateTimeField,
-            'date_to': forms.SplitDateTimeField,
-            'date_admission': forms.SplitDateTimeField,
-            'presale_start': forms.SplitDateTimeField,
-            'presale_end': forms.SplitDateTimeField,
+            'date_from': SplitDateTimeField,
+            'date_to': SplitDateTimeField,
+            'date_admission': SplitDateTimeField,
+            'presale_start': SplitDateTimeField,
+            'presale_end': SplitDateTimeField,
         }
         widgets = {
             'date_from': SplitDateTimePickerWidget(),

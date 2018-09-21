@@ -14,7 +14,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import ItemAddOn
 from pretix.base.signals import item_copy_data
-from pretix.control.forms import SplitDateTimePickerWidget
+from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
@@ -330,8 +330,8 @@ class ItemUpdateForm(I18nModelForm):
             'original_price'
         ]
         field_classes = {
-            'available_from': forms.SplitDateTimeField,
-            'available_until': forms.SplitDateTimeField,
+            'available_from': SplitDateTimeField,
+            'available_until': SplitDateTimeField,
         }
         widgets = {
             'available_from': SplitDateTimePickerWidget(),

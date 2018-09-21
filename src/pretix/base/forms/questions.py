@@ -16,6 +16,7 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import InvoiceAddress, Question
 from pretix.base.models.tax import EU_COUNTRIES
+from pretix.control.forms import SplitDateTimeField
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
 
@@ -143,7 +144,7 @@ class BaseQuestionsForm(forms.Form):
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
-                field = forms.SplitDateTimeField(
+                field = SplitDateTimeField(
                     label=q.question, required=q.required,
                     help_text=q.help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
