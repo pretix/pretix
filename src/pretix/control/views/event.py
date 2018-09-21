@@ -1197,8 +1197,20 @@ class QuickSetupView(FormView):
                 self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                               data={'plugin': 'pretix.plugins.ticketoutputpdf'})
                 plugins_active.append('pretix.plugins.ticketoutputpdf')
+
             self.request.event.settings.ticket_download = True
             self.request.event.settings.ticketoutput_pdf__enabled = True
+
+            try:
+                import pretix_passbook  # noqa
+            except ImportError:
+                pass
+            else:
+                if 'pretix_passbook' not in plugins_active:
+                    self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                                  data={'plugin': 'pretix_passbook'})
+                    plugins_active.append('pretix_passbook')
+                self.request.event.settings.ticketoutput_passbook__enabled = True
 
         if form.cleaned_data['payment_banktransfer__enabled']:
             if 'pretix.plugins.banktransfer' not in plugins_active:
