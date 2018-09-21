@@ -16,6 +16,7 @@
                                 <strong class="pull-right">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
+                                        title="{{ p.provider.public_name }}"
                                         data-parent="#payment_accordion"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                         data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
