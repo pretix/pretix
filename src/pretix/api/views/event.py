@@ -1,5 +1,7 @@
+import django_filters
 from django.db import transaction
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Q
+from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import filters, viewsets
 from rest_framework.exceptions import PermissionDenied
@@ -15,12 +17,60 @@ from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
 
 
+class EventFilter(FilterSet):
+    is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')
+    is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
+    ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
+
+    class Meta:
+        model = Event
+        fields = ['is_public', 'live', 'has_subevents']
+
+    def ends_after_qs(self, queryset, name, value):
+        expr = (
+            Q(has_subevents=False) &
+            Q(
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=value))
+                | Q(Q(date_to__isnull=False) & Q(date_to__gte=value))
+            )
+        )
+        return queryset.filter(expr)
+
+    def is_past_qs(self, queryset, name, value):
+        expr = (
+            Q(has_subevents=False) &
+            Q(
+                Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+                | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
+            )
+        )
+        if value:
+            return queryset.filter(expr)
+        else:
+            return queryset.exclude(expr)
+
+    def is_future_qs(self, queryset, name, value):
+        expr = (
+            Q(has_subevents=False) &
+            Q(
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+                | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
+            )
+        )
+        if value:
+            return queryset.filter(expr)
+        else:
+            return queryset.exclude(expr)
+
+
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     permission_classes = (EventCRUDPermission,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filterset_class = EventFilter
 
     def get_queryset(self):
         return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')

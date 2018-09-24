@@ -115,8 +115,35 @@ def free_quota(event, free_item):
 def test_event_list(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug))
     assert resp.status_code == 200
-    print(resp.data)
     assert TEST_EVENT_RES == resp.data['results'][0]
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?live=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/?live=false'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?is_public=false'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/?is_public=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?has_subevents=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/?has_subevents=false'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?ends_after=2017-12-27T10:01:00Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/?ends_after=2017-12-27T09:59:59Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
 
 
 @pytest.mark.django_db
