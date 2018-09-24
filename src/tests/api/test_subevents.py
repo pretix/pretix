@@ -2,6 +2,7 @@ import pytest
 
 TEST_SUBEVENT_RES = {
     'active': False,
+    'event': 'dummy',
     'presale_start': None,
     'date_to': None,
     'date_admission': None,
@@ -23,12 +24,29 @@ def test_subevent_list(token_client, organizer, event, subevent):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/subevents/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/subevents/?active=false'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/subevents/?active=true'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?event__live=false'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?event__live=true'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?ends_after=2017-12-27T09:59:59Z'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?ends_after=2017-12-27T10:01:01Z'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
 

@@ -4,6 +4,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django_countries.serializers import CountryFieldMixin
 from rest_framework.fields import Field
+from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Event, TaxRule
@@ -190,12 +191,13 @@ class SubEventItemVariationSerializer(I18nAwareModelSerializer):
 class SubEventSerializer(I18nAwareModelSerializer):
     item_price_overrides = SubEventItemSerializer(source='subeventitem_set', many=True)
     variation_price_overrides = SubEventItemVariationSerializer(source='subeventitemvariation_set', many=True)
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     meta_data = MetaDataField(source='*')
 
     class Meta:
         model = SubEvent
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
-                  'presale_start', 'presale_end', 'location',
+                  'presale_start', 'presale_end', 'location', 'event',
                   'item_price_overrides', 'variation_price_overrides', 'meta_data')
 
 

@@ -37,6 +37,9 @@ class ConditionalListView:
         if_unmodified_since = request.META.get('HTTP_IF_UNMODIFIED_SINCE')
         if if_unmodified_since:
             if_unmodified_since = parse_http_date_safe(if_unmodified_since)
+        if not hasattr(request, 'event'):
+            return super().list(request, **kwargs)
+
         lmd = request.event.logentry_set.filter(
             content_type__model=self.queryset.model._meta.model_name,
             content_type__app_label=self.queryset.model._meta.app_label,

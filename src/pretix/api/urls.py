@@ -15,6 +15,7 @@ router.register(r'organizers', organizer.OrganizerViewSet)
 
 orga_router = routers.DefaultRouter()
 orga_router.register(r'events', event.EventViewSet)
+orga_router.register(r'subevents', event.SubEventViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)

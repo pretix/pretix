@@ -74,7 +74,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if isinstance(self.request.auth, TeamAPIToken):
-            qs = self.request.auth.team.get_events_with_any_permission()
+            qs = self.request.auth.get_events_with_any_permission()
         elif self.request.user.is_authenticated:
             qs = self.request.user.get_events_with_any_permission(self.request).filter(
                 organizer=self.request.organizer
@@ -179,9 +179,40 @@ class CloneEventViewSet(viewsets.ModelViewSet):
 
 
 class SubEventFilter(FilterSet):
+    is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')
+    is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
+    ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
+
     class Meta:
         model = SubEvent
-        fields = ['active']
+        fields = ['active', 'event__live']
+
+    def ends_after_qs(self, queryset, name, value):
+        expr = Q(
+            Q(Q(date_to__isnull=True) & Q(date_from__gte=value))
+            | Q(Q(date_to__isnull=False) & Q(date_to__gte=value))
+        )
+        return queryset.filter(expr)
+
+    def is_past_qs(self, queryset, name, value):
+        expr = Q(
+            Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
+            | Q(Q(date_to__isnull=False) & Q(date_to__lt=now()))
+        )
+        if value:
+            return queryset.filter(expr)
+        else:
+            return queryset.exclude(expr)
+
+    def is_future_qs(self, queryset, name, value):
+        expr = Q(
+            Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
+            | Q(Q(date_to__isnull=False) & Q(date_to__gte=now()))
+        )
+        if value:
+            return queryset.filter(expr)
+        else:
+            return queryset.exclude(expr)
 
 
 class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
@@ -191,7 +222,19 @@ class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
     filterset_class = SubEventFilter
 
     def get_queryset(self):
-        return self.request.event.subevents.prefetch_related(
+        if getattr(self.request, 'event', None):
+            qs = self.request.event.subevents
+        elif isinstance(self.request.auth, TeamAPIToken):
+            qs = SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.auth.get_events_with_any_permission()
+            )
+        elif self.request.user.is_authenticated:
+            qs = SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.user.get_events_with_any_permission()
+            )
+        return qs.prefetch_related(
             'subeventitem_set', 'subeventitemvariation_set'
         )
 

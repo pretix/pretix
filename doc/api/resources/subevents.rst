@@ -17,6 +17,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the sub-event
 name                                  multi-lingual string       The sub-event's full name
+event                                 string                     The slug of the parent event
 active                                boolean                    If ``true``, the sub-event ticket shop is publicly
                                                                  available.
 date_from                             datetime                   The sub-event's start date
@@ -39,6 +40,10 @@ meta_data                             dict                       Values set for 
 .. versionchanged:: 1.7
 
    The ``meta_data`` field has been added.
+
+.. versionchanged:: 2.1
+
+   The ``event`` field has been added, together with filters on the list of dates and an organizer-level list.
 
 
 Endpoints
@@ -72,6 +77,7 @@ Endpoints
           {
             "id": 1,
             "name": {"en": "First Sample Conference"},
+            "event": "sampleconf",
             "active": false,
             "date_from": "2017-12-27T10:00:00Z",
             "date_to": null,
@@ -92,6 +98,10 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
+   :query active: If set to ``true``/``false``, only events with a matching value of ``active`` are returned.
+   :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
+   :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
+   :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
@@ -121,6 +131,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "First Sample Conference"},
+        "event": "sampleconf",
         "active": false,
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -144,3 +155,63 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+
+.. http:get:: /api/v1/organizers/(organizer)/subevents/
+
+   Returns a list of all sub-events of any event series you have access to within an organizer account.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/subevents/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "name": {"en": "First Sample Conference"},
+            "event": "sampleconf",
+            "active": false,
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": null,
+            "date_admission": null,
+            "presale_start": null,
+            "presale_end": null,
+            "location": null,
+            "item_price_overrides": [
+              {
+                "item": 2,
+                "price": "12.00"
+              }
+            ],
+            "variation_price_overrides": [],
+            "meta_data": {}
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :query active: If set to ``true``/``false``, only events with a matching value of ``active`` are returned.
+   :query event__live: If set to ``true``/``false``, only events with a matching value of ``live`` on the parent event are returned.
+   :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
+   :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
+   :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the event to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
