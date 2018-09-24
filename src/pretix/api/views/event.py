@@ -12,7 +12,7 @@ from pretix.api.serializers.event import (
     TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
-from pretix.base.models import Event, ItemCategory, TaxRule
+from pretix.base.models import Event, ItemCategory, TaxRule, TeamAPIToken
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
 
@@ -73,7 +73,16 @@ class EventViewSet(viewsets.ModelViewSet):
     filterset_class = EventFilter
 
     def get_queryset(self):
-        return self.request.organizer.events.prefetch_related('meta_values', 'meta_values__property')
+        if isinstance(self.request.auth, TeamAPIToken):
+            qs = self.request.auth.team.get_events_with_any_permission()
+        elif self.request.user.is_authenticated:
+            qs = self.request.user.get_events_with_any_permission(self.request).filter(
+                organizer=self.request.organizer
+            )
+
+        return qs.prefetch_related(
+            'meta_values', 'meta_values__property'
+        )
 
     def perform_update(self, serializer):
         current_live_value = serializer.instance.live
