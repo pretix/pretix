@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-09-17 11:04+0000\n"
+"PO-Revision-Date: 2018-09-24 20:07+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -7803,26 +7803,20 @@ msgid "Show orders pending approval"
 msgstr "Toon bestellingen in afwachting van goedkeuring"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:48
-#, fuzzy
-#| msgid ""
-#| "This event contains <strong>overpaid orders</strong>, for example due to "
-#| "duplicate payment attempts. You should review the cases and consider "
-#| "refunding the overpaid amount to the user."
 msgid ""
 "This event contains <strong>fully paid orders</strong> that are not marked "
 "as paid, probably because no quota was left at the time their payment "
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"Dit evenement bevat <strong>overbetaalde bestellingen</strong>, bijvoorbeeld "
-"door dubbele betalingspogingen. Controleer deze gevallen, en overweeg het te "
-"veel betaalde bedrag terug te betalen aan de gebruiker."
+"Dit evenement bevat <strong>volledig betaalde bestellingen</strong> die niet "
+"zijn gemarkeerd als betaald, waarschijnlijk doordat er geen quotum over was "
+"op het moment dat de betaling aankwam. Controleer deze gevallen, en overweeg "
+"de getroffen klanten terug te betalen, of meer ruimte te maken."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:54
-#, fuzzy
-#| msgid "Show overpaid orders"
 msgid "Show affected orders"
-msgstr "Toon overbetaalde bestellingen"
+msgstr "Toon getroffen bestellingen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:61
 msgid "Your attention is required to resolve the following issues"
@@ -7923,10 +7917,8 @@ msgid "E-mail settings"
 msgstr "E-mailinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:18
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail design"
-msgstr "E-mailadres"
+msgstr "E-mailontwerp"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:31
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
@@ -8792,15 +8784,11 @@ msgid "Product history"
 msgstr "Productgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:39
-#, fuzzy
-#| msgid ""
-#| "Please note that your product will <strong>not</strong> be available for "
-#| "sale until you have added your item to an existing or newly created quota."
 msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
-"Merk op dat uw product <strong>niet</strong> beschikbaar zal zijn om te "
+"Merk op dat uw variant <strong>niet</strong> beschikbaar zal zijn om te "
 "kopen tot u het aan een bestaand of nieuw aangemaakt quotum heeft toegevoegd."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:88
@@ -10033,7 +10021,7 @@ msgstr "ONDERBETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:141
 msgid "FULLY PAID"
-msgstr ""
+msgstr "VOLLEDIG BETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
@@ -11491,14 +11479,17 @@ msgid ""
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
+"Als het adres gekoppeld is aan een geldig account zullen we u een e-mail "
+"sturen met verdere instructies. Merk op dat we ten hoogste één e-mail per 24 "
+"uur zullen sturen."
 
 #: pretix/control/views/auth.py:230
-#, fuzzy
-#| msgid "We sent you an e-mail containing further instructions."
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions."
-msgstr "We hebben u een e-mail verstuurd met verdere instructies."
+msgstr ""
+"Als het adres gekoppeld is aan een geldig account zullen we u een e-mail "
+"sturen met verdere instructies."
 
 #: pretix/control/views/auth.py:250
 msgid ""
@@ -11533,10 +11524,8 @@ msgid "You do not have permission to perform this action."
 msgstr "U heeft geen toestemming om deze actie uit te voeren."
 
 #: pretix/control/views/checkin.py:103
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected check-ins have been reverted."
-msgstr "De gekozen lijst is verwijderd."
+msgstr "De gekozen check-ins zijn teruggedraaid."
 
 #: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
@@ -11731,10 +11720,8 @@ msgid "invalid item"
 msgstr "ongeldig item"
 
 #: pretix/control/views/event.py:651
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown e-mail renderer."
-msgstr "Onbekende bestelcode"
+msgstr "Onbekende e-mail-renderer."
 
 #: pretix/control/views/event.py:667 pretix/presale/views/order.py:682
 msgid "You requested an invalid ticket output type."
@@ -13718,6 +13705,8 @@ msgid ""
 "The country in which your Stripe-account is registred in. Usually, this is "
 "your country of residence."
 msgstr ""
+"Het land waarin uw Stripe-account is geregistreerd. Dit is meestal het land "
+"waarin u woont of gevestigd bent."
 
 #: pretix/plugins/stripe/payment.py:153
 msgid "User interface"
@@ -14081,7 +14070,7 @@ msgstr "Gebruik een andere kaart"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
 msgid "OR"
-msgstr ""
+msgstr "OF"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:56
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:34
@@ -14630,40 +14619,31 @@ msgstr "Geselecteerde add-ons"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Ga verder in een nieuw tabblad"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:9
-#, fuzzy
-#| msgid ""
-#| "Your browser does not accept cookies from us. However, we need to set a "
-#| "cookie to remember who you are and what is in your cart. Please try to "
-#| "open the ticket shop in a new tab or change your browser settings."
 msgid ""
 "Your browser is configured to block cookies from third-party website "
 "elements. Unfortunately, this means we cannot show you this ticket shop "
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
-"Uw browser accepteert geen cookies van ons. We moeten echter een cookie "
-"instellen om te onthouden wie u bent en wat er in uw winkelwagen zit. "
-"Probeer om de ticketwinkel in een nieuw tabblad te openen, of verander uw "
-"browserinstellingen."
+"Uw browser is ingesteld om cookies van derde partijen te weigeren. Helaas "
+"betekent dit dat we u deze ticketwinkel niet geïntegreerd in deze website "
+"kunnen tonen. Probeer om de ticketwinkel in een nieuw tabblad te openen, of "
+"verander uw browserinstellingen."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:16
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Excuses voor het ongemak!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:23
-#, fuzzy
-#| msgid "Open ticket shop in new tab"
 msgid "Continue in new tab"
-msgstr "Open ticketwinkel in nieuw tabblad"
+msgstr "Ga verder in een nieuw tabblad"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Cookies not supported"
-msgstr "Voorverkoop nog niet begonnen"
+msgstr "Cookies niet ondersteund"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
