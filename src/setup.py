@@ -115,7 +115,7 @@ setup(
         'dj-static',
         'csscompressor',
         'django-markup',
-        'markdown',
+        'markdown<=2.2',
         'bleach==2.*',
         'raven',
         'babel',

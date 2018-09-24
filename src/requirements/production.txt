@@ -27,7 +27,7 @@ static3==0.7.*
 dj-static
 csscompressor
 django-markup
-markdown
+markdown<=2.2
 bleach==2.*
 raven
 babel
