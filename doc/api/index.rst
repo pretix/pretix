@@ -14,5 +14,5 @@ in functionality over time.
    :maxdepth: 2
 
    fundamentals
-   oauth
+   auth
    resources/index

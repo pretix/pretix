@@ -131,6 +131,11 @@ organizer_urls = [
     'organizer/abc/team/1/edit',
     'organizer/abc/team/1/delete',
     'organizer/abc/team/add',
+    'organizer/abc/devices',
+    'organizer/abc/device/add',
+    'organizer/abc/device/1/edit',
+    'organizer/abc/device/1/connect',
+    'organizer/abc/device/1/revoke',
 ]
 
 

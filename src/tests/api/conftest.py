@@ -1,10 +1,12 @@
 from datetime import datetime
 
 import pytest
+from django.utils.timezone import now
 from pytz import UTC
 from rest_framework.test import APIClient
 
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import Device, Event, Organizer, Team, User
+from pretix.base.models.devices import generate_api_token
 
 
 @pytest.fixture
@@ -70,6 +72,17 @@ def team(organizer):
 
 
 @pytest.fixture
+def device(organizer):
+    return Device.objects.create(
+        organizer=organizer,
+        all_events=True,
+        name='Foo',
+        initialized=now(),
+        api_token=generate_api_token()
+    )
+
+
+@pytest.fixture
 def user():
     return User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
@@ -93,6 +106,12 @@ def token_client(client, team):
     team.save()
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+    return client
+
+
+@pytest.fixture
+def device_client(client, device):
+    client.credentials(HTTP_AUTHORIZATION='Device ' + device.api_token)
     return client
 
 

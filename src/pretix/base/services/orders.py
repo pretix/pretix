@@ -21,7 +21,7 @@ from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyLocaleException, LazyNumber, language,
 )
 from pretix.base.models import (
-    CartPosition, Event, Item, ItemVariation, Order, OrderPayment,
+    CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
     OrderPosition, Quota, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
@@ -307,7 +307,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 @transaction.atomic
-def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, oauth_application=None):
+def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -319,6 +319,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, oauth_
         user = User.objects.get(pk=user)
     if isinstance(api_token, int):
         api_token = TeamAPIToken.objects.get(pk=api_token)
+    if isinstance(device, int):
+        device = Device.objects.get(pk=device)
     if isinstance(oauth_application, int):
         oauth_application = OAuthApplication.objects.get(pk=oauth_application)
     with order.event.lock():
@@ -327,7 +329,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, oauth_
         order.status = Order.STATUS_CANCELED
         order.save()
 
-    order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application)
+    order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device)
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
@@ -1299,10 +1301,11 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None):
+def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
+                 device=None):
     try:
         try:
-            return _cancel_order(order, user, send_mail, api_token, oauth_application)
+            return _cancel_order(order, user, send_mail, api_token, device, oauth_application)
         except LockTimeoutException:
             self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):

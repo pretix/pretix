@@ -23,5 +23,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
                 )
             else:
                 return Organizer.objects.filter(pk__in=self.request.user.teams.values_list('organizer', flat=True))
+        elif hasattr(self.request.auth, 'organizer_id'):
+            return Organizer.objects.filter(pk=self.request.auth.organizer_id)
         else:
             return Organizer.objects.filter(pk=self.request.auth.team.organizer_id)

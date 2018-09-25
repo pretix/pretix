@@ -1,0 +1,116 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <legend>
+        {% trans "Connected devices" %}
+    </legend>
+    <div class="alert alert-info">
+        {% blocktrans trimmed %}
+            This menu allows you to connect hardware devices such as box office terminals or scanning terminals to
+            your account.
+        {% endblocktrans %}
+        <strong>
+            {% blocktrans trimmed %}
+                Please note that this is a new feature that currently only works for beta-stage software, such as
+                pretixPOS. pretixdroid 1.x and pretixdesk 0.x are not supported by this feature. Future versions of
+                pretixdroid and pretixdesk will be supported through this menu.
+            {% endblocktrans %}
+        </strong>
+        <br><br>
+        {% blocktrans trimmed %}
+            To set up pretixdroid or pretixdesk, please go to the <strong>Check-in devices</strong> section of an event.
+        {% endblocktrans %}
+    </div>
+    {% if devices|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't connected any hardware devices yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Device ID" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Hardware model" %}</th>
+                    <th>{% trans "Software" %}</th>
+                    <th>{% trans "Setup date" %}</th>
+                    <th>{% trans "Events" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in devices %}
+                    <tr>
+                        <td>
+                            {{ d.device_id }}
+                        </td>
+                        <td>
+                            {% if d.initialized and not d.api_token %}<del>{% endif %}
+                            {{ d.name }}
+                            {% if d.initialized and not d.api_token %}</del>{% endif %}
+                        </td>
+                        <td>
+                            {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
+                        </td>
+                        <td>
+                            {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
+                        </td>
+                        <td>
+                            {% if d.initialized %}
+                                {{ d.initialized|date:"SHORT_DATETIME_FORMAT" }}
+                            {% else %}
+                                <em>{% trans "Not yet initialized" %}</em>
+                            {% endif %}
+                            {% if d.initialized and not d.api_token %}
+                                <span class="label label-danger">{% trans "Revoked" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if d.all_events %}
+                                {% trans "All" %}
+                            {% else %}
+                                <ul>
+                                    {% for e in d.limit_events.all %}
+                                        <li>
+                                            <a href="{% url "control:event.index" organizer=request.organizer.slug event=e.slug %}">
+                                                {{ e }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            {% if not d.initialized %}
+                                <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
+                                        class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
+                                    {% trans "Connect" %}</a>
+                            {% elif d.api_token %}
+                                <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
+                                        class="btn btn-default btn-sm">
+                                    {% trans "Revoke access" %}</a>
+                            {% endif %}
+                            <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
+                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

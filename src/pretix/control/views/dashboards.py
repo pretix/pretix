@@ -254,7 +254,8 @@ def event_index(request, organizer, event):
 
     can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
                                                           request=request)
-    qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application').order_by('-datetime')
+    qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application',
+                                                         'device').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BLACKLIST)
     if not request.user.has_event_permission(request.organizer, request.event, 'can_view_orders', request=request):
         qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))

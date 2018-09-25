@@ -6,18 +6,18 @@ from django.test import override_settings
 from pretix.base.models import Organizer
 
 event_urls = [
-    'categories/',
-    'invoices/',
-    'items/',
-    'orders/',
-    'orderpositions/',
-    'questions/',
-    'quotas/',
-    'vouchers/',
-    'subevents/',
-    'taxrules/',
-    'waitinglistentries/',
-    'checkinlists/',
+    (None, 'categories/'),
+    ('can_view_orders', 'invoices/'),
+    (None, 'items/'),
+    ('can_view_orders', 'orders/'),
+    ('can_view_orders', 'orderpositions/'),
+    (None, 'questions/'),
+    (None, 'quotas/'),
+    ('can_view_vouchers', 'vouchers/'),
+    (None, 'subevents/'),
+    (None, 'taxrules/'),
+    ('can_view_orders', 'waitinglistentries/'),
+    ('can_view_orders', 'checkinlists/'),
 ]
 
 event_permission_sub_urls = [
@@ -36,38 +36,63 @@ event_permission_sub_urls = [
     ('patch', 'can_change_orders', 'waitinglistentries/1/', 404),
     ('put', 'can_change_orders', 'waitinglistentries/1/', 404),
     ('post', 'can_change_orders', 'waitinglistentries/1/send_voucher/', 404),
-    ('get', 'can_change_items', 'categories/', 200),
-    ('get', 'can_change_items', 'items/', 200),
-    ('get', 'can_change_items', 'questions/', 200),
-    ('get', 'can_change_items', 'quotas/', 200),
+    ('get', None, 'categories/', 200),
+    ('get', None, 'items/', 200),
+    ('get', None, 'questions/', 200),
+    ('get', None, 'quotas/', 200),
     ('post', 'can_change_items', 'items/', 400),
+    ('get', None, 'items/1/', 404),
     ('put', 'can_change_items', 'items/1/', 404),
     ('patch', 'can_change_items', 'items/1/', 404),
     ('delete', 'can_change_items', 'items/1/', 404),
     ('post', 'can_change_items', 'categories/', 400),
+    ('get', None, 'categories/1/', 404),
     ('put', 'can_change_items', 'categories/1/', 404),
     ('patch', 'can_change_items', 'categories/1/', 404),
     ('delete', 'can_change_items', 'categories/1/', 404),
     ('post', 'can_change_items', 'items/1/variations/', 404),
+    ('get', None, 'items/1/variations/', 404),
+    ('get', None, 'items/1/variations/1/', 404),
     ('put', 'can_change_items', 'items/1/variations/1/', 404),
     ('patch', 'can_change_items', 'items/1/variations/1/', 404),
     ('delete', 'can_change_items', 'items/1/variations/1/', 404),
+    ('get', None, 'items/1/addons/', 404),
+    ('get', None, 'items/1/addons/1/', 404),
     ('post', 'can_change_items', 'items/1/addons/', 404),
     ('put', 'can_change_items', 'items/1/addons/1/', 404),
     ('patch', 'can_change_items', 'items/1/addons/1/', 404),
     ('delete', 'can_change_items', 'items/1/addons/1/', 404),
+    ('get', None, 'subevents/', 200),
+    ('get', None, 'subevents/1/', 404),
+    ('get', None, 'taxrules/', 200),
+    ('get', None, 'taxrules/1/', 404),
     ('post', 'can_change_event_settings', 'taxrules/', 400),
     ('put', 'can_change_event_settings', 'taxrules/1/', 404),
     ('patch', 'can_change_event_settings', 'taxrules/1/', 404),
     ('delete', 'can_change_event_settings', 'taxrules/1/', 404),
+    ('get', 'can_view_vouchers', 'vouchers/', 200),
+    ('get', 'can_view_vouchers', 'vouchers/1/', 404),
     ('post', 'can_change_vouchers', 'vouchers/', 400),
     ('put', 'can_change_vouchers', 'vouchers/1/', 404),
     ('patch', 'can_change_vouchers', 'vouchers/1/', 404),
     ('delete', 'can_change_vouchers', 'vouchers/1/', 404),
+    ('get', None, 'quotas/', 200),
+    ('get', None, 'quotas/1/', 404),
     ('post', 'can_change_items', 'quotas/', 400),
     ('put', 'can_change_items', 'quotas/1/', 404),
     ('patch', 'can_change_items', 'quotas/1/', 404),
     ('delete', 'can_change_items', 'quotas/1/', 404),
+    ('get', None, 'questions/', 200),
+    ('get', None, 'questions/1/', 404),
+    ('post', 'can_change_items', 'questions/', 400),
+    ('put', 'can_change_items', 'questions/1/', 404),
+    ('patch', 'can_change_items', 'questions/1/', 404),
+    ('delete', 'can_change_items', 'questions/1/', 404),
+    ('get', None, 'questions/1/options/', 404),
+    ('get', None, 'questions/1/options/1/', 404),
+    ('put', 'can_change_items', 'questions/1/options/1/', 404),
+    ('patch', 'can_change_items', 'questions/1/options/1/', 404),
+    ('delete', 'can_change_items', 'questions/1/options/1/', 404),
     ('post', 'can_change_orders', 'orders/', 400),
     ('post', 'can_change_orders', 'orders/ABC12/mark_paid/', 404),
     ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
@@ -92,6 +117,10 @@ event_permission_sub_urls = [
     ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('delete', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('post', 'can_create_events', 'clone/', 400),
+    ('get', 'can_view_orders', 'cartpositions/', 200),
+    ('get', 'can_view_orders', 'cartpositions/1/', 404),
+    ('post', 'can_change_orders', 'cartpositions/', 400),
+    ('delete', 'can_change_orders', 'cartpositions/1/', 404),
 ]
 
 
@@ -128,6 +157,13 @@ def test_organizer_not_allowed(token_client, organizer):
 
 
 @pytest.mark.django_db
+def test_organizer_not_allowed_device(device_client, organizer):
+    o2 = Organizer.objects.create(slug='o2', name='Organizer 2')
+    resp = device_client.get('/api/v1/organizers/{}/events/'.format(o2.slug))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
 def test_organizer_not_existing(token_client, organizer):
     resp = token_client.get('/api/v1/organizers/{}/events/'.format('o2'))
     assert resp.status_code == 403
@@ -138,8 +174,18 @@ def test_organizer_not_existing(token_client, organizer):
 def test_event_allowed_all_events(token_client, team, organizer, event, url):
     team.all_events = True
     team.save()
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
+def test_event_allowed_all_events_device(device_client, device, organizer, event, url):
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
+    if url[0] is None or url[0] in device.permission_set():
+        assert resp.status_code == 200
+    else:
+        assert resp.status_code == 403
 
 
 @pytest.mark.django_db
@@ -148,8 +194,21 @@ def test_event_allowed_limit_events(token_client, organizer, team, event, url):
     team.all_events = False
     team.save()
     team.limit_events.add(event)
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
+def test_event_allowed_limit_events_device(device_client, organizer, device, event, url):
+    device.all_events = False
+    device.save()
+    device.limit_events.add(event)
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
+    if url[0] is None or url[0] in device.permission_set():
+        assert resp.status_code == 200
+    else:
+        assert resp.status_code == 403
 
 
 @pytest.mark.django_db
@@ -157,14 +216,23 @@ def test_event_allowed_limit_events(token_client, organizer, team, event, url):
 def test_event_not_allowed(token_client, organizer, team, event, url):
     team.all_events = False
     team.save()
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
+def test_event_not_allowed_device(device_client, organizer, device, event, url):
+    device.all_events = False
+    device.save()
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
     assert resp.status_code == 403
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", event_urls)
 def test_event_not_existing(token_client, organizer, url, event):
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
     assert resp.status_code == 403
 
 
@@ -172,7 +240,8 @@ def test_event_not_existing(token_client, organizer, url, event):
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_token_event_subresources_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    setattr(team, urlset[1], True)
+    if urlset[1]:
+        setattr(team, urlset[1], True)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -182,8 +251,11 @@ def test_token_event_subresources_permission_allowed(token_client, team, organiz
 @pytest.mark.django_db
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_token_event_subresources_permission_not_allowed(token_client, team, organizer, event, urlset):
-    team.all_events = True
-    setattr(team, urlset[1], False)
+    if urlset[1] is None:
+        team.all_events = False
+    else:
+        team.all_events = True
+        setattr(team, urlset[1], False)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -313,3 +385,17 @@ def test_update_session_activity(user_client, team, organizer, event):
     assert response.status_code == 200
 
     assert user_client.session['pretix_auth_last_used'] > t1
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("urlset", event_permission_sub_urls)
+def test_device_subresource_permission_check(device_client, device, organizer, event, urlset):
+    resp = getattr(device_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
+        organizer.slug, event.slug, urlset[2]))
+    if urlset[1] is None or urlset[1] in device.permission_set():
+        assert resp.status_code == urlset[3]
+    else:
+        if urlset[3] == 404:
+            assert resp.status_code == 403
+        else:
+            assert resp.status_code in (404, 403)

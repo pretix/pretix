@@ -5,6 +5,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
+from pretix.base.models import Device
 from pretix.base.models.organizer import TeamAPIToken
 
 from .models import BankImportJob, BankTransaction
@@ -68,7 +69,7 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return serializer.save()
 
     def create(self, request, *args, **kwargs):
-        perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken) else request.user)
+        perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user)
         if not perm_holder.has_organizer_permission(request.organizer, 'can_change_orders'):
             raise PermissionDenied('Invalid set of permissions')
         serializer = self.get_serializer(data=request.data)

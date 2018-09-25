@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.forms import I18nModelForm, SettingsForm
-from pretix.base.models import Organizer, Team
+from pretix.base.models import Device, Organizer, Team
 from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
@@ -107,12 +107,29 @@ class TeamForm(forms.ModelForm):
         data = super().clean()
         if self.instance.pk and not data['can_change_teams']:
             if not self.instance.organizer.teams.exclude(pk=self.instance.pk).filter(
-                can_change_teams=True, members__isnull=False
+                    can_change_teams=True, members__isnull=False
             ).exists():
                 raise ValidationError(_('The changes could not be saved because there would be no remaining team with '
                                         'the permission to change teams and permissions.'))
 
         return data
+
+
+class DeviceForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+        self.fields['limit_events'].queryset = organizer.events.all()
+
+    class Meta:
+        model = Device
+        fields = ['name', 'all_events', 'limit_events']
+        widgets = {
+            'limit_events': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_events'
+            }),
+        }
 
 
 class OrganizerSettingsForm(SettingsForm):

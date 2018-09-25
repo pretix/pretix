@@ -2,6 +2,7 @@ from ..settings import GlobalSettingsObject_SettingsStore
 from .auth import U2FDevice, User
 from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin, CheckinList
+from .devices import Device
 from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,

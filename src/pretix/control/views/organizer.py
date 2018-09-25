@@ -1,10 +1,14 @@
+import json
+
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Count
 from django.forms import inlineformset_factory
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -13,14 +17,14 @@ from django.views.generic import (
     CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
 )
 
-from pretix.base.models import Organizer, Team, TeamInvite, User
+from pretix.base.models import Device, Organizer, Team, TeamInvite, User
 from pretix.base.models.event import EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
-    EventMetaPropertyForm, OrganizerDisplaySettingsForm, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
+    DeviceForm, EventMetaPropertyForm, OrganizerDisplaySettingsForm,
+    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
 )
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.signals import nav_organizer
@@ -576,3 +580,139 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             'organizer': self.request.organizer.slug,
             'team': self.object.pk
         })
+
+
+class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/devices.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'devices'
+
+    def get_queryset(self):
+        return self.request.organizer.devices.prefetch_related('limit_events')
+
+
+class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/device_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = DeviceForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('control:organizer.device.connect', kwargs={
+            'organizer': self.request.organizer.slug,
+            'device': self.object.pk
+        })
+
+    def form_valid(self, form):
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.device.created', user=self.request.user, data={
+            k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+            for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/device_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'device'
+    form_class = DeviceForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.devices', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.device.changed', user=self.request.user, data={
+                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/device_connect.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'device'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if 'ajax' in request.GET:
+            return JsonResponse({
+                'initialized': bool(self.object.initialized)
+            })
+        if self.object.initialized:
+            messages.success(request, _('This device has been set up successfully.'))
+            return redirect(reverse('control:organizer.devices', kwargs={
+                'organizer': self.request.organizer.slug,
+            }))
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['qrdata'] = json.dumps({
+            'handshake_version': 1,
+            'url': settings.SITE_URL,
+            'token': self.object.initialization_token,
+        })
+        return ctx
+
+
+class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/device_revoke.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'device'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.api_token:
+            messages.success(request, _('This device currently does not have access.'))
+            return redirect(reverse('control:organizer.devices', kwargs={
+                'organizer': self.request.organizer.slug,
+            }))
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.api_token = None
+        self.object.save()
+        self.object.log_action('pretix.device.revoked', user=self.request.user)
+        messages.success(request, _('Access for this device has been revoked.'))
+        return redirect(reverse('control:organizer.devices', kwargs={
+            'organizer': self.request.organizer.slug,
+        }))

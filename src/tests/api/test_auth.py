@@ -52,3 +52,27 @@ def test_token_auth_inactive(client, team):
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 401
+
+
+@pytest.mark.django_db
+def test_device_invalid(client):
+    client.credentials(HTTP_AUTHORIZATION='Device ABCDE')
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 401
+
+
+@pytest.mark.django_db
+def test_device_auth_valid(client, device):
+    client.credentials(HTTP_AUTHORIZATION='Device ' + device.api_token)
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_device_auth_revoked(client, device):
+    client.credentials(HTTP_AUTHORIZATION='Device ' + device.api_token)
+    device.api_token = None
+    device.save()
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 401

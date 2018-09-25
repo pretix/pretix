@@ -276,6 +276,18 @@ class Event(EventMixin, LoggedModel):
         else:
             return super().presale_has_ended
 
+    def delete_all_orders(self, really=False):
+        from .orders import OrderRefund, OrderPayment, OrderPosition, OrderFee
+
+        if not really:
+            raise TypeError("Pass really=True as a parameter.")
+
+        OrderPosition.objects.all().delete(order__event=self)
+        OrderFee.objects.all().delete(order__event=self)
+        OrderPayment.objects.all().delete(order__event=self)
+        OrderRefund.objects.all().delete(order__event=self)
+        self.orders.all().delete()
+
     def save(self, *args, **kwargs):
         obj = super().save(*args, **kwargs)
         self.cache.clear()

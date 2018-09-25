@@ -366,6 +366,16 @@ var form_handlers = function (el) {
     el.find("input[name=basics-slug]").bind("keyup keydown change", function () {
         $(this).closest(".form-group").find(".slug-length").toggle($(this).val().length > 16);
     });
+
+    el.find("script[data-replace-with-qr]").each(function () {
+        var $div = $("<div>");
+        $div.insertBefore($(this));
+        $div.qrcode(
+            {
+                text: $(this).html()
+            }
+        );
+    });
 };
 
 $(function () {

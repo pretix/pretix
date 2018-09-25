@@ -1,7 +1,7 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from pretix.api.models import OAuthAccessToken
-from pretix.base.models import Event
+from pretix.base.models import Device, Event
 from pretix.base.models.organizer import Organizer, TeamAPIToken
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
@@ -9,10 +9,9 @@ from pretix.helpers.security import (
 
 
 class EventPermission(BasePermission):
-    model = TeamAPIToken
 
     def has_permission(self, request, view):
-        if not request.user.is_authenticated and not isinstance(request.auth, TeamAPIToken):
+        if not request.user.is_authenticated and not isinstance(request.auth, (Device, TeamAPIToken)):
             return False
 
         if request.method not in SAFE_METHODS and hasattr(view, 'write_permission'):
@@ -31,7 +30,7 @@ class EventPermission(BasePermission):
             except SessionReauthRequired:
                 return False
 
-        perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken)
+        perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken))
                        else request.user)
         if 'event' in request.resolver_match.kwargs and 'organizer' in request.resolver_match.kwargs:
             request.event = Event.objects.filter(
