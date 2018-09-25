@@ -42,7 +42,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     filterset_class = ItemFilter
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):
@@ -92,7 +92,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('id',)
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):
@@ -154,7 +154,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('id',)
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):
@@ -210,7 +210,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     filterset_class = ItemCategoryFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):
@@ -264,7 +264,8 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     filterset_class = QuestionFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
-    permission = 'can_change_items'
+    permission = None
+    write_permission = 'can_change_items'
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('options').all()
@@ -307,7 +308,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('position',)
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):
@@ -362,7 +363,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     filterset_class = QuotaFilter
     ordering_fields = ('id', 'size')
     ordering = ('id',)
-    permission = 'can_change_items'
+    permission = None
     write_permission = 'can_change_items'
 
     def get_queryset(self):

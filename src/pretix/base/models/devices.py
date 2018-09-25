@@ -85,10 +85,8 @@ class Device(LoggedModel):
 
     def permission_set(self) -> set:
         return {
-            'can_change_items',  # TODO: Remove, after read operations are allowed without
             'can_view_orders',
             'can_change_orders',
-            'can_view_vouchers',  # TODO: Really required
         }
 
     def get_event_permission_set(self, organizer, event) -> set:
