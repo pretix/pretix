@@ -36,7 +36,7 @@ def register_data(sender, **kwargs):
 
 def get_answer(op, order, event, question_id):
     try:
-        if 'answers' in op._prefetched_objects_cache:
+        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
             a = [a for a in op.answers.all() if a.question_id == question_id][0]
         else:
             a = op.answers.get(question_id=question_id)

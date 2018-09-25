@@ -162,7 +162,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: "<br/>".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
             for p in (
-                op.addons.all() if 'addons' in op._prefetched_objects_cache
+                op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
                 else op.addons.select_related('item', 'variation')
             )
         ])
