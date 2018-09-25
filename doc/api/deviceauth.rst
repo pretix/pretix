@@ -125,3 +125,13 @@ invalidate your API key. There is no way to reverse this operation.
    Authorization: Device 1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd
 
 This can also be done by the user through the web interface.
+
+Permissions
+-----------
+
+Device authentication is currently hardcoded to grant the following permissions:
+
+* View event meta data and products etc.
+* View and change orders
+
+Devices cannot change events or products and cannot access vouchers.
