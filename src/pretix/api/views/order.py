@@ -3,7 +3,7 @@ import datetime
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from django.db.models.functions import Concat
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
@@ -72,12 +72,33 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return ctx
 
     def get_queryset(self):
-        return self.request.event.orders.prefetch_related(
-            'positions', 'positions__checkins', 'positions__item', 'positions__answers', 'positions__answers__options',
-            'positions__answers__question', 'fees', 'payments', 'refunds', 'refunds__payment'
+        qs = self.request.event.orders.prefetch_related(
+            'fees', 'payments', 'refunds', 'refunds__payment'
         ).select_related(
             'invoice_address'
         )
+
+        if self.request.query_params.get('pdf_data', 'false') == 'true':
+            qs = qs.prefetch_related(
+                Prefetch(
+                    'positions',
+                    OrderPosition.objects.all().prefetch_related(
+                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
+                    )
+                )
+            )
+        else:
+            qs = qs.prefetch_related(
+                Prefetch(
+                    'positions',
+                    OrderPosition.objects.all().prefetch_related(
+                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                    )
+                )
+            )
+
+        return qs
 
     def _get_output_provider(self, identifier):
         responses = register_ticket_outputs.send(self.request.event)

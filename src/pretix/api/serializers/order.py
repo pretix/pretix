@@ -129,12 +129,19 @@ class PdfDataSerializer(serializers.Field):
         res = {}
 
         ev = instance.subevent or instance.order.event
+        # This needs to have some extra performance improvements to avoid creating hundreds of queries when
+        # we serialize a list.
 
-        pdfvars = get_variables(instance.order.event)
-        for k, f in pdfvars.items():
+        if 'vars' not in self.context:
+            self.context['vars'] = get_variables(self.context['request'].event)
+
+        for k, f in self.context['vars'].items():
             res[k] = f['evaluate'](instance, instance.order, ev)
 
-        for k, v in ev.meta_data.items():
+        if not hasattr(ev, '_cached_meta_data'):
+            ev._cached_meta_data = ev.meta_data
+
+        for k, v in ev._cached_meta_data.items():
             res['meta:' + k] = v
 
         return res

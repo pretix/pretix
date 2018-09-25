@@ -161,7 +161,10 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Addon 1\nAddon 2"),
         "evaluate": lambda op, order, ev: "<br/>".join([
             '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
-            for p in op.addons.select_related('item', 'variation')
+            for p in (
+                op.addons.all() if 'addons' in op._prefetched_objects_cache
+                else op.addons.select_related('item', 'variation')
+            )
         ])
     }),
     ("organizer", {
