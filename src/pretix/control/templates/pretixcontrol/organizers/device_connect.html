@@ -17,6 +17,19 @@
             </li>
         </ol>
     </div>
+    <div class="alert alert-warning">
+        <strong>
+            {% blocktrans trimmed %}
+                Please note that this is a new feature that currently only works for beta-stage software, such as
+                pretixPOS. pretixdroid 1.x and pretixdesk 0.x are not supported by this feature. Future versions of
+                pretixdroid and pretixdesk will be supported through this menu.
+            {% endblocktrans %}
+        </strong>
+        <br><br>
+        {% blocktrans trimmed %}
+            To set up pretixdroid or pretixdesk, please go to the <strong>Check-in devices</strong> section of an event.
+        {% endblocktrans %}
+    </div>
     <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
             class="btn btn-default"><i class="fa fa-arrow-left"></i>
         {% trans "Device overview" %}
