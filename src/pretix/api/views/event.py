@@ -12,7 +12,9 @@ from pretix.api.serializers.event import (
     TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
-from pretix.base.models import Event, ItemCategory, TaxRule, TeamAPIToken
+from pretix.base.models import (
+    Device, Event, ItemCategory, TaxRule, TeamAPIToken,
+)
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
 
@@ -73,7 +75,7 @@ class EventViewSet(viewsets.ModelViewSet):
     filterset_class = EventFilter
 
     def get_queryset(self):
-        if isinstance(self.request.auth, TeamAPIToken):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
             qs = self.request.auth.get_events_with_any_permission()
         elif self.request.user.is_authenticated:
             qs = self.request.user.get_events_with_any_permission(self.request).filter(
@@ -224,7 +226,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if getattr(self.request, 'event', None):
             qs = self.request.event.subevents
-        elif isinstance(self.request.auth, TeamAPIToken):
+        elif isinstance(self.request.auth, (TeamAPIToken, Device)):
             qs = SubEvent.objects.filter(
                 event__organizer=self.request.organizer,
                 event__in=self.request.auth.get_events_with_any_permission()
