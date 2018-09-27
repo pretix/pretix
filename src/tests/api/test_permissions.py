@@ -6,6 +6,7 @@ from django.test import override_settings
 from pretix.base.models import Organizer
 
 event_urls = [
+    (None, ''),
     (None, 'categories/'),
     ('can_view_orders', 'invoices/'),
     (None, 'items/'),

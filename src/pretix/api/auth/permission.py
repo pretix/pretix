@@ -75,7 +75,7 @@ class EventCRUDPermission(EventPermission):
             return False
         elif view.action == 'destroy' and 'can_change_event_settings' not in request.eventpermset:
             return False
-        elif view.action in ['retrieve', 'update', 'partial_update'] \
+        elif view.action in ['update', 'partial_update'] \
                 and 'can_change_event_settings' not in request.eventpermset:
             return False
 
