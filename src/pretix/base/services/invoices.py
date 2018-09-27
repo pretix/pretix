@@ -200,10 +200,10 @@ def regenerate_invoice(invoice: Invoice):
 
 
 def generate_invoice(order: Order, trigger_pdf=True):
-    locale = order.event.settings.get('invoice_language')
+    locale = order.event.settings.get('invoice_language', order.event.settings.locale)
     if locale:
         if locale == '__user__':
-            locale = order.locale
+            locale = order.locale or order.event.settings.locale
 
     invoice = Invoice(
         order=order,

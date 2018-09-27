@@ -514,6 +514,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             if any(errs):
                 raise ValidationError({'positions': errs})
 
+            if validated_data.get('locale', None) is None:
+                validated_data['locale'] = self.context['event'].settings.locale
             order = Order(event=self.context['event'], **validated_data)
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
             order.total = sum([p['price'] for p in positions_data]) + sum([f['value'] for f in fees_data], Decimal('0.00'))
