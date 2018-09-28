@@ -74,8 +74,8 @@ class Device(LoggedModel):
         unique_together = (('organizer', 'device_id'),)
 
     def __str__(self):
-        return '#{} ({} {})'.format(
-            self.device_id, self.hardware_brand, self.hardware_model
+        return '#{}: {} ({} {})'.format(
+            self.device_id, self.name, self.hardware_brand, self.hardware_model
         )
 
     def save(self, *args, **kwargs):
