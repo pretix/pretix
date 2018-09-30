@@ -633,7 +633,8 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             order.send_mail(
                 email_subject, email_template, email_context,
                 log_entry,
-                invoices=[invoice] if invoice and event.settings.invoice_email_attachment else []
+                invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
+                attach_tickets=(payment_provider == 'free')
             )
         except SendMailException:
             logger.exception('Order received email could not be sent')
@@ -735,7 +736,8 @@ def send_download_reminders(sender, **kwargs):
                 try:
                     o.send_mail(
                         email_subject, email_template, email_context,
-                        'pretix.event.order.email.download_reminder_sent'
+                        'pretix.event.order.email.download_reminder_sent',
+                        attach_tickets=True
                     )
                 except SendMailException:
                     logger.exception('Reminder email could not be sent')

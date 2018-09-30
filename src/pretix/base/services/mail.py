@@ -14,6 +14,7 @@ from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import Event, Invoice, InvoiceAddress, Order
 from pretix.base.services.invoices import invoice_pdf_task
+from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -35,7 +36,8 @@ class SendMailException(Exception):
 
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None, headers: dict=None, sender: str=None, invoices: list=None):
+         order: Order=None, headers: dict=None, sender: str=None, invoices: list=None,
+         attach_tickets=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -64,6 +66,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         otherwise the system default.
 
     :param invoices: A list of invoices to attach to this email.
+
+    :param attach_tickets: Whether to attach tickets to this email, if they are available to download.
 
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
@@ -153,7 +157,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             event=event.id if event else None,
             headers=headers,
             invoices=[i.pk for i in invoices] if invoices else [],
-            order=order.pk if order else None
+            order=order.pk if order else None,
+            attach_tickets=attach_tickets
         )
 
         if invoices:
@@ -168,7 +173,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 @app.task
 def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
-                   order: int=None) -> bool:
+                   order: int=None, attach_tickets=False) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(html, "text/html")
@@ -185,6 +190,7 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
                 except:
                     logger.exception('Could not attach invoice to email')
                     pass
+
     if event:
         event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
@@ -197,6 +203,15 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
                 order = event.orders.get(pk=order)
             except Order.DoesNotExist:
                 order = None
+            else:
+                if attach_tickets:
+                    for name, ct in get_tickets_for_order(order):
+                        email.attach(
+                            name,
+                            ct.file.read(),
+                            ct.type
+                        )
+
         email = email_filter.send_chained(event, 'message', message=email, order=order)
 
     try:

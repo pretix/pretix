@@ -1,5 +1,7 @@
+import logging
 import os
 from datetime import timedelta
+from decimal import Decimal
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -11,9 +13,11 @@ from pretix.base.models import (
     OrderPosition,
 )
 from pretix.base.services.tasks import ProfiledTask
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
+
+logger = logging.getLogger(__name__)
 
 
 @app.task(base=ProfiledTask)
@@ -97,7 +101,8 @@ def preview(event: int, provider: str):
                 return prov.generate(p)
 
 
-def get_cachedticket_for_position(pos, identifier):
+def get_cachedticket_for_position(pos, identifier, generate_async=True):
+    apply_method = 'apply_async' if generate_async else 'apply'
     try:
         ct = CachedTicket.objects.filter(
             order_position=pos, provider=identifier
@@ -109,15 +114,20 @@ def get_cachedticket_for_position(pos, identifier):
         ct = CachedTicket.objects.create(
             order_position=pos, provider=identifier,
             extension='', type='', file=None)
-        generate.apply_async(args=(pos.id, identifier))
+        getattr(generate, apply_method)(args=(pos.id, identifier))
+        if not generate_async:
+            ct.refresh_from_db()
 
     if not ct.file:
         if now() - ct.created > timedelta(minutes=5):
-            generate.apply_async(args=(pos.id, identifier))
+            getattr(generate, apply_method)(args=(pos.id, identifier))
+            if not generate_async:
+                ct.refresh_from_db()
     return ct
 
 
-def get_cachedticket_for_order(order, identifier):
+def get_cachedticket_for_order(order, identifier, generate_async=True):
+    apply_method = 'apply_async' if generate_async else 'apply'
     try:
         ct = CachedCombinedTicket.objects.filter(
             order=order, provider=identifier
@@ -129,9 +139,67 @@ def get_cachedticket_for_order(order, identifier):
         ct = CachedCombinedTicket.objects.create(
             order=order, provider=identifier,
             extension='', type='', file=None)
-        generate_order.apply_async(args=(order.id, identifier))
+        getattr(generate_order, apply_method)(args=(order.id, identifier))
+        if not generate_async:
+            ct.refresh_from_db()
 
     if not ct.file:
         if now() - ct.created > timedelta(minutes=5):
-            generate_order.apply_async(args=(order.id, identifier))
+            getattr(generate_order, apply_method)(args=(order.id, identifier))
+            if not generate_async:
+                ct.refresh_from_db()
     return ct
+
+
+def get_tickets_for_order(order):
+    can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
+    if not can_download:
+        return []
+    if order.status != Order.STATUS_PAID and order.total != Decimal("0.00"):
+        return []
+    if (not order.event.settings.ticket_download
+            or (order.event.settings.ticket_download_date is not None
+                and now() < order.ticket_download_date)):
+        return []
+
+    providers = [
+        response(order.event)
+        for receiver, response
+        in register_ticket_outputs.send(order.event)
+    ]
+
+    tickets = []
+
+    for p in providers:
+        if not p.is_enabled:
+            continue
+
+        if p.multi_download_enabled:
+            try:
+                ct = get_cachedticket_for_order(order, p.identifier, generate_async=False)
+                tickets.append((
+                    "{}-{}-{}{}".format(
+                        order.event.slug.upper(), order.code, ct.provider, ct.extension,
+                    ),
+                    ct
+                ))
+            except:
+                logger.exception('Failed to generate ticket.')
+        else:
+            for pos in order.positions.all():
+                if pos.addon_to and not order.event.settings.ticket_download_addons:
+                    continue
+                if not pos.item.admission and not order.event.settings.ticket_download_nonadm:
+                    continue
+                try:
+                    ct = get_cachedticket_for_position(pos, p.identifier, generate_async=False)
+                    tickets.append((
+                        "{}-{}-{}-{}{}".format(
+                            order.event.slug.upper(), order.code, pos.positionid, ct.provider, ct.extension,
+                        ),
+                        ct
+                    ))
+                except:
+                    logger.exception('Failed to generate ticket.')
+
+    return tickets
