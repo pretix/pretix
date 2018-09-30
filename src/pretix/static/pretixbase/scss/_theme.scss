@@ -148,3 +148,8 @@
   box-shadow: none;
   -webkit-box-shadow: none;
 }
+
+@include table-row-variant('success', lighten($brand-success, 40%));
+@include table-row-variant('info', lighten($brand-info, 30%));
+@include table-row-variant('warning', lighten($brand-warning, 40%));
+@include table-row-variant('danger', lighten($brand-danger, 30%));
