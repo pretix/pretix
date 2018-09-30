@@ -142,21 +142,22 @@ def invite(request, token):
 
     if request.method == 'POST':
         form = RegistrationForm(data=request.POST)
-        if form.is_valid():
-            user = User.objects.create_user(
-                form.cleaned_data['email'], form.cleaned_data['password'],
-                locale=request.LANGUAGE_CODE,
-                timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
-            )
-            user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
-            user.log_action('pretix.control.auth.user.created', user=user)
-            auth_login(request, user)
-            request.session['pretix_auth_login_time'] = int(time.time())
-            request.session['pretix_auth_long_session'] = (
-                settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
-            )
+        with transaction.atomic():
+            valid = form.is_valid()
+            if valid:
+                user = User.objects.create_user(
+                    form.cleaned_data['email'], form.cleaned_data['password'],
+                    locale=request.LANGUAGE_CODE,
+                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
+                )
+                user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
+                user.log_action('pretix.control.auth.user.created', user=user)
+                auth_login(request, user)
+                request.session['pretix_auth_login_time'] = int(time.time())
+                request.session['pretix_auth_long_session'] = (
+                    settings.PRETIX_LONG_SESSIONS and form.cleaned_data.get('keep_logged_in', False)
+                )
 
-            with transaction.atomic():
                 inv.team.members.add(request.user)
                 inv.team.log_action(
                     'pretix.team.member.joined', data={
