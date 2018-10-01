@@ -1,8 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import redirect, reverse
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, reverse
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import FormView, TemplateView
 
+from pretix.base.models import LogEntry
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
@@ -62,3 +65,9 @@ class UpdateCheckView(StaffMemberRequiredMixin, FormView):
 
 class MessageView(TemplateView):
     template_name = 'pretixcontrol/global_message.html'
+
+
+class LogDetailView(AdministratorPermissionRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        le = get_object_or_404(LogEntry, pk=request.GET.get('pk'))
+        return JsonResponse({'data': le.parsed_data})

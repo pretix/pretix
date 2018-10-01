@@ -551,6 +551,22 @@ $(function () {
         }
     });
 
+    $("a[data-expandlogs]").click(function (e) {
+        e.preventDefault();
+        var $a = $(this);
+        var id = $(this).attr("data-id");
+        $a.find(".fa").removeClass("fa-eye").addClass("fa-cog fa-spin");
+        $.getJSON('/control/logdetail/?pk=' + id, function (data) {
+            if ($a.parent().tagName === "p") {
+                $("<pre>").html(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
+            } else {
+                $("<pre>").html(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
+            }
+            $a.remove();
+        });
+        return false;
+    });
+
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));
 });

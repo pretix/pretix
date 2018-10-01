@@ -30,13 +30,18 @@
                     <span class="fa fa-eraser fa-danger fa-fw"
                           data-toggle="tooltip"
                           title="{% trans "Personal data was cleared from this log entry." %}">
-
                     </span>
                 {% endif %}
             </p>
 
             <p>
                 {{ log.display }}
+                {% if staff_session %}
+                    <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                        <span class="fa-eye fa fa-fw"></span>
+                        {% trans "Inspect" %}
+                    </a>
+                {% endif %}
             </p>
         </li>
     {% endfor %}

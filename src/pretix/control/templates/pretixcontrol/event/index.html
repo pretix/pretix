@@ -182,6 +182,12 @@
                         </div>
                         <div class="col-lg-6 col-sm-12 col-xs-12">
                             {{ log.display }}
+                            {% if staff_session %}
+                                <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                                    <span class="fa-eye fa fa-fw"></span>
+                                    {% trans "Inspect" %}
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </li>

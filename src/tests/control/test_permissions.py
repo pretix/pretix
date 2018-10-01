@@ -26,6 +26,7 @@ def env():
 
 superuser_urls = [
     "global/settings/",
+    "logdetail/",
     "users/select2",
     "users/",
     "users/add",

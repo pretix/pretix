@@ -31,7 +31,8 @@
             <li class="list-group-item logentry">
                 <div class="row">
                     <div class="col-lg-2 col-sm-6 col-xs-12">
-                        <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                        <span class="fa fa-clock-o"></span>
+                        {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
                         {% if log.shredded %}
                             <span class="fa fa-eraser fa-danger fa-fw"
                                   data-toggle="tooltip"
@@ -69,6 +70,12 @@
                     </div>
                     <div class="col-lg-6 col-sm-12 col-xs-12">
                         {{ log.display }}
+                        {% if staff_session %}
+                            <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                                <span class="fa-eye fa fa-fw"></span>
+                                {% trans "Inspect" %}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </li>

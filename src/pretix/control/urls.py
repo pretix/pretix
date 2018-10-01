@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     url(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
+    url(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     url(r'^reauth/$', user.ReauthView.as_view(), name='user.reauth'),
     url(r'^sudo/$', user.StartStaffSession.as_view(), name='user.sudo'),
     url(r'^sudo/stop/$', user.StopStaffSession.as_view(), name='user.sudo.stop'),
