@@ -99,6 +99,7 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
             except WaitingListEntry.DoesNotExist:
                 messages.error(request, _('Waiting list entry not found.'))
                 return self._redirect_back()
+        return self._redirect_back()
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
