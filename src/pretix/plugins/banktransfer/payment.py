@@ -96,15 +96,11 @@ class BankTransfer(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    def order_control_render(self, request, order) -> str:
-        if order.payment_info:
-            payment_info = json.loads(order.payment_info)
-        else:
-            payment_info = None
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
-               'code': self._code(order),
-               'payment_info': payment_info, 'order': order}
+               'code': self._code(payment.order),
+               'payment_info': payment.info, 'order': payment.order}
         return template.render(ctx)
 
     def _code(self, order):
