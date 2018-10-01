@@ -100,7 +100,7 @@ class BankTransfer(BasePaymentProvider):
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
                'code': self._code(payment.order),
-               'payment_info': payment.info, 'order': payment.order}
+               'payment_info': payment.info_data, 'order': payment.order}
         return template.render(ctx)
 
     def _code(self, order):
