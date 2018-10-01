@@ -1,10 +1,12 @@
 {% load i18n %}
 
 {% if payment_info %}
-    {% if "source" in payment_info %}
-        <dl class="dl-horizontal">
+    <dl class="dl-horizontal">
+        {% if "id" in payment_info %}
             <dt>{% trans "Charge ID" %}</dt>
             <dd>{{ payment_info.id }}</dd>
+        {% endif %}
+        {% if "source" in payment_info %}
             {% if payment_info.source.card %}
                 <dt>{% trans "Card type" %}</dt>
                 <dd>{{ payment_info.source.card.brand }}</dd>
@@ -33,18 +35,22 @@
                 <dt>{% trans "Payer name" %}</dt>
                 <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
             {% endif %}
+        {% endif %}
+        {% if "amount" in payment_info %}
             <dt>{% trans "Total value" %}</dt>
             <dd>{{ payment_info.amount|floatformat:2 }}</dd>
+        {% endif %}
+        {% if "currency" in payment_info %}
             <dt>{% trans "Currency" %}</dt>
             <dd>{{ payment_info.currency|upper }}</dd>
+        {% endif %}
+        {% if "status" in payment_info %}
             <dt>{% trans "Status" %}</dt>
             <dd>{{ payment_info.status }}</dd>
-        </dl>
-    {% endif %}
-    {% if "message" in payment_info %}
-        <dl class="dl-horizontal">
+        {% endif %}
+        {% if "message" in payment_info %}
             <dt>{% trans "Error message" %}</dt>
             <dd>{{ payment_info.message }}</dd>
-        </dl>
-    {% endif %}
+        {% endif %}
+    </dl>
 {% endif %}
