@@ -270,6 +270,11 @@ def charge_webhook(event, event_json, charge_id, rso):
             payment.info = str(charge)
             payment.state = OrderPayment.PAYMENT_STATE_FAILED
             payment.save()
+            payment.order.log_action('pretix.event.order.payment.failed', {
+                'local_id': payment.local_id,
+                'provider': payment.provider,
+                'info': str(charge)
+            })
 
     return HttpResponse(status=200)
 
@@ -335,6 +340,11 @@ def source_webhook(event, event_json, source_id, rso):
         elif src.status == 'failed':
             payment.info = str(src)
             payment.state = OrderPayment.PAYMENT_STATE_FAILED
+            payment.order.log_action('pretix.event.order.payment.failed', {
+                'local_id': payment.local_id,
+                'provider': payment.provider,
+                'info': str(src)
+            })
             payment.save()
 
     return HttpResponse(status=200)
@@ -423,6 +433,11 @@ class ReturnView(StripeOrderView, View):
                 self.payment.state = OrderPayment.PAYMENT_STATE_FAILED
                 self.payment.info = str(src)
                 self.payment.save()
+                self.payment.order.log_action('pretix.event.order.payment.failed', {
+                    'local_id': self.payment.local_id,
+                    'provider': self.payment.provider,
+                    'info': str(src)
+                })
                 messages.error(self.request, _('We had trouble authorizing your card payment. Please try again and '
                                                'get in touch with us if this problem persists.'))
         return self._redirect_to_order()

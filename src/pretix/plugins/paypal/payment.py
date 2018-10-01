@@ -245,6 +245,10 @@ class Paypal(BasePaymentProvider):
         if payment.state != 'approved':
             payment_obj.state = OrderPayment.PAYMENT_STATE_FAILED
             payment_obj.save()
+            payment.order.log_action('pretix.event.order.payment.failed', {
+                'local_id': payment.local_id,
+                'provider': payment.provider,
+            })
             logger.error('Invalid state: %s' % str(payment))
             raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                      'proceed.'))
