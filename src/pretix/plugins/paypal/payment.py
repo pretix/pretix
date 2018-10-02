@@ -245,7 +245,7 @@ class Paypal(BasePaymentProvider):
         if payment.state != 'approved':
             payment_obj.state = OrderPayment.PAYMENT_STATE_FAILED
             payment_obj.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
+            payment_obj.order.log_action('pretix.event.order.payment.failed', {
                 'local_id': payment.local_id,
                 'provider': payment.provider,
             })
