@@ -919,6 +919,9 @@ class DisplaySettingsForm(SettingsForm):
             ('name_descending', _('Name (descending)')),
         ],  # When adding a new ordering, remember to also define it in the event model
     )
+    meta_noindex = forms.BooleanField(
+        label=_('Ask search engines not to index the ticket shop')
+    )
 
     def __init__(self, *args, **kwargs):
         event = kwargs['obj']
