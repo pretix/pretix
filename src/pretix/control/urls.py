@@ -179,6 +179,7 @@ urlpatterns = [
         url(r'^vouchers/add$', vouchers.VoucherCreate.as_view(), name='event.vouchers.add'),
         url(r'^vouchers/go$', vouchers.VoucherGo.as_view(), name='event.vouchers.go'),
         url(r'^vouchers/bulk_add$', vouchers.VoucherBulkCreate.as_view(), name='event.vouchers.bulk'),
+        url(r'^vouchers/bulk_action$', vouchers.VoucherBulkAction.as_view(), name='event.vouchers.bulkaction'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/transition$', orders.OrderTransition.as_view(),
             name='event.order.transition'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/resend$', orders.OrderResendLink.as_view(),

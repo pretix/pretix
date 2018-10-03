@@ -83,56 +83,73 @@
                     class="btn btn-default"><i class="fa fa-download"></i>
                 {% trans "Download list" %}</a>
         </p>
-        <div class="table-responsive">
-            <table class="table table-hover table-quotas">
-                <thead>
-                <tr>
-                    <th>{% trans "Voucher code" %}</th>
-                    <th>{% trans "Redemptions" %}</th>
-                    <th>{% trans "Expiry" %}</th>
-                    <th>{% trans "Tag" %}</th>
-                    <th>{% trans "Product" %}</th>
-                    {% if request.event.has_subevents %}
-                        <th>{% trans "Date" context "subevent" %}</th>
-                    {% endif %}
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for v in vouchers %}
+        <form action="{% url "control:event.vouchers.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-hover table-quotas">
+                    <thead>
                     <tr>
-                        <td>
-                            <strong><a href="
-                        {% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
-                        </td>
-                        <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
-                        <td>{{ v.valid_until|date }}</td>
-                        <td>
-                            {{ v.tag }}
-                        </td>
-                        <td>
-                            {% if v.item %}
-                                {{ v.item }}
-                                {% if v.variation %}
-                                    – {{ v.variation }}
-                                {% endif %}
-                            {% else %}
-                                {% blocktrans trimmed with quota=v.quota.name %}
-                                    Any product in quota "{{ quota }}"
-                                {% endblocktrans %}
+                        <th>
+                            {% if "can_change_vouchers" in request.eventpermset %}
+                                <input type="checkbox" data-toggle-table />
                             {% endif %}
-                        </td>
+                        </th>
+                        <th>{% trans "Voucher code" %}</th>
+                        <th>{% trans "Redemptions" %}</th>
+                        <th>{% trans "Expiry" %}</th>
+                        <th>{% trans "Tag" %}</th>
+                        <th>{% trans "Product" %}</th>
                         {% if request.event.has_subevents %}
-                            <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                            <th>{% trans "Date" context "subevent" %}</th>
                         {% endif %}
-                        <td class="text-right">
-                            <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <th></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                    {% for v in vouchers %}
+                        <tr>
+                            <td>
+                                {% if "can_change_vouchers" in request.eventpermset %}
+                                    <input type="checkbox" name="voucher" class="" value="{{ v.pk }}"/>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong><a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
+                            </td>
+                            <td>{{ v.redeemed }} / {{ v.max_usages }}</td>
+                            <td>{{ v.valid_until|date }}</td>
+                            <td>
+                                {{ v.tag }}
+                            </td>
+                            <td>
+                                {% if v.item %}
+                                    {{ v.item }}
+                                    {% if v.variation %}
+                                        – {{ v.variation }}
+                                    {% endif %}
+                                {% else %}
+                                    {% blocktrans trimmed with quota=v.quota.name %}
+                                        Any product in quota "{{ quota }}"
+                                    {% endblocktrans %}
+                                {% endif %}
+                            </td>
+                            {% if request.event.has_subevents %}
+                                <td>{{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}</td>
+                            {% endif %}
+                            <td class="text-right">
+                                <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if "can_change_vouchers" in request.eventpermset %}
+                <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
+                    {% trans "Delete selected" %}
+                </button>
+            {% endif %}
+        </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}

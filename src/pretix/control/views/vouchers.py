@@ -9,7 +9,7 @@ from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
 )
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -316,6 +316,44 @@ class VoucherRNG(EventPermissionRequiredMixin, View):
         return JsonResponse({
             'codes': list(codes)
         })
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.vouchers', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
+class VoucherBulkAction(EventPermissionRequiredMixin, View):
+    permission = 'can_change_vouchers'
+
+    @cached_property
+    def objects(self):
+        return self.request.event.vouchers.filter(
+            id__in=self.request.POST.getlist('voucher')
+        )
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('action') == 'delete':
+            return render(request, 'pretixcontrol/vouchers/delete_bulk.html', {
+                'allowed': self.objects.filter(redeemed=0),
+                'forbidden': self.objects.exclude(redeemed=0),
+            })
+        elif request.POST.get('action') == 'delete_confirm':
+            for obj in self.objects:
+                if obj.allow_delete():
+                    obj.log_action('pretix.voucher.deleted', user=self.request.user)
+                    obj.delete()
+                else:
+                    obj.log_action('pretix.voucher.changed', user=self.request.user, data={
+                        'max_usages': min(obj.redeemed, obj.max_usages),
+                        'bulk': True
+                    })
+                    obj.max_usages = min(obj.redeemed, obj.max_usages)
+                    obj.save(update_fields=['max_usages'])
+            messages.success(request, _('The selected vouchers have been deleted or disabled.'))
+        return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.vouchers', kwargs={

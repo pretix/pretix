@@ -1,0 +1,40 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete vouchers" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Delete vouchers" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if allowed %}
+            <p>{% blocktrans %}Are you sure you want to delete the following vouchers?{% endblocktrans %}</p>
+            <ul>
+                {% for s in allowed %}
+                    <li>
+                        {{ s }}
+                        <input type="hidden" name="voucher" value="{{ s.pk }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if forbidden %}
+            <p>{% blocktrans trimmed %}The following vouchers can't be deleted as they already have been redeemed, but they will be set to fully redeemed instead.{% endblocktrans %}</p>
+            <ul>
+                {% for s in forbidden %}
+                    <li>
+                        {{ s }}
+                        <input type="hidden" name="voucher" value="{{ s.pk }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save" value="delete_confirm" name="action">
+                {% trans "Delete" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
