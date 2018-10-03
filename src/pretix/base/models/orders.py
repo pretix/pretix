@@ -496,7 +496,7 @@ class Order(LoggedModel):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None):
+                  auth=None, attach_tickets=False):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -512,6 +512,7 @@ class Order(LoggedModel):
         :param user: Administrative user who triggered this mail to be sent
         :param headers: Dictionary with additional mail headers
         :param sender: Custom email sender.
+        :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
@@ -525,7 +526,7 @@ class Order(LoggedModel):
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers, sender,
-                    invoices=invoices
+                    invoices=invoices, attach_tickets=attach_tickets
                 )
             except SendMailException:
                 raise
@@ -991,7 +992,8 @@ class OrderPayment(models.Model):
                     self.order.send_mail(
                         email_subject, email_template, email_context,
                         'pretix.event.order.email.order_paid', user,
-                        invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else []
+                        invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
+                        attach_tickets=True
                     )
                 except SendMailException:
                     logger.exception('Order paid email could not be sent')

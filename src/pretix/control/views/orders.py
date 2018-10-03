@@ -866,7 +866,8 @@ class OrderResendLink(OrderView):
                 email_subject = _('Your order: %(code)s') % {'code': self.order.code}
                 self.order.send_mail(
                     email_subject, email_template, email_context,
-                    'pretix.event.order.email.resend', user=self.request.user
+                    'pretix.event.order.email.resend', user=self.request.user,
+                    attach_tickets=True
                 )
             except SendMailException:
                 messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
