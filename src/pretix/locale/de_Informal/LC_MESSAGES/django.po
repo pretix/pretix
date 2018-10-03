@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:24+0000\n"
-"PO-Revision-Date: 2018-09-11 14:58+0000\n"
+"PO-Revision-Date: 2018-10-03 10:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -931,16 +931,12 @@ msgstr "Auf Veranstaltungen einschränken"
 
 #: pretix/base/models/devices.py:50
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:49
-#, fuzzy
-#| msgid "Start date"
 msgid "Setup date"
-msgstr "Beginn"
+msgstr "Installationsdatum"
 
 #: pretix/base/models/devices.py:53
-#, fuzzy
-#| msgid "Confirmation date"
 msgid "Initialization date"
-msgstr "Bestätigungsdatum"
+msgstr "Installationsdatum"
 
 #: pretix/base/models/event.py:36
 msgid "The end of the presale period has to be later than its start."
@@ -2708,10 +2704,8 @@ msgstr ""
 "\"{docs_url}\" target=\"_blank\">Weitere Informationen</a>."
 
 #: pretix/base/payment.py:257
-#, fuzzy
-#| msgid "Restrictions"
 msgid "Restrict to countries"
-msgstr "Beschränkungen"
+msgstr "Auf Länder einschränken"
 
 #: pretix/base/payment.py:259
 msgid ""
@@ -2719,6 +2713,9 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed."
 msgstr ""
+"Biete diese Zahlungsmethode nur Leuten an, deren Rechnungsadresse in einem "
+"der angegebenen Länder liegt. Wenn keine Länder ausgewählt sind, wird die "
+"Zahlungsmethode allen angeboten."
 
 #: pretix/base/payment.py:285
 msgctxt "invoice"
@@ -5287,7 +5284,7 @@ msgstr "Name (absteigend)"
 
 #: pretix/control/forms/event.py:923
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "Der Ticket-Shop soll von Suchmaschinen nicht indiziert werden"
 
 #: pretix/control/forms/event.py:938
 msgid "Use feature"
@@ -5323,10 +5320,8 @@ msgid "Generate tickets for non-admission products"
 msgstr "Tickets für Produkte generieren, die keinen Zutritt enthalten"
 
 #: pretix/control/forms/event.py:958
-#, fuzzy
-#| msgid "Offer to download tickets separately for add-on products"
 msgid "Offer to download tickets even before an order is paid"
-msgstr "Biete Ticket-Download für Zusatz-Produkte an"
+msgstr "Biete Ticket-Download bereits vor Bezahlung einer Bestellung an"
 
 #: pretix/control/forms/event.py:999
 msgid "Any country"
@@ -6589,10 +6584,9 @@ msgid "Payment {local_id} has been started."
 msgstr "Die Zahlung {local_id} wurde gestartet."
 
 #: pretix/control/logdisplay.py:201
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has been canceled."
+#, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr "Die Zahlung {local_id} wurde abgebrochen."
+msgstr "Die Zahlung {local_id} ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:202
 #, python-brace-format
@@ -6903,38 +6897,30 @@ msgid "A quota has been removed from the event date."
 msgstr "Ein Kontingent wurde vom Termin entfernt."
 
 #: pretix/control/logdisplay.py:278
-#, fuzzy
-#| msgid "The event has been created."
 msgid "The device has been created."
-msgstr "Die Veranstaltung wurde erstellt."
+msgstr "Das Gerät wurde erstellt."
 
 #: pretix/control/logdisplay.py:279
-#, fuzzy
-#| msgid "The voucher has been changed."
 msgid "The device has been changed."
-msgstr "Der Gutschein wurde verändert."
+msgstr "Das Gerät wurde verändert."
 
 #: pretix/control/logdisplay.py:280
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "Access of the device has been revoked."
-msgstr "Das Gerät wurde entfernt."
+msgstr "Dem Gerät wurde der Zugriff entzogen."
 
 #: pretix/control/logdisplay.py:281
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "The device has been initialized."
-msgstr "Das Gerät wurde entfernt."
+msgstr "Das Gerät wurde installiert."
 
 #: pretix/control/logdisplay.py:282
-#, fuzzy
-#| msgid "The invoice has been regenerated."
 msgid "The access token of the device has been regenerated."
-msgstr "Die Rechnung wurde neu generiert."
+msgstr "Der Zugriffstoken des Geräts wurde neu generiert."
 
 #: pretix/control/logdisplay.py:283
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"Dieses Gerät hat den Server über ein Hardware- oder Softwareupdate "
+"informiert."
 
 #: pretix/control/logdisplay.py:307
 msgid "The settings of a payment provider have been changed."
@@ -7946,7 +7932,7 @@ msgstr "Diese Änderung wurde von einem Administrator durchgeführt."
 #: pretix/control/templates/pretixcontrol/event/logs.html:76
 #: pretix/control/templates/pretixcontrol/includes/logs.html:42
 msgid "Inspect"
-msgstr ""
+msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:198
 msgid "Show more logs"
@@ -10190,42 +10176,40 @@ msgid "Organizer: %(name)s"
 msgstr "Veranstalter: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/base.html:39
-#, fuzzy
-#| msgid "Device name"
 msgid "Devices"
-msgstr "Gerätename"
+msgstr "Geräte"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect to device:"
-msgstr "2. Gerät verbinden"
+msgstr "Gerät verbinden:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:10
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"Öffne die App, die du verbinden möchtest und setze sie ggf. auf den "
+"Werkszustand zurück."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Scanne den folgenden Konfigurations-Code:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:13
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Wenn die App oder das Gerät das Scannen von QR-Codes nicht unterstützt, "
+"kannst du auch die folgenden Daten manuell eingeben:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:15
 msgid "System URL:"
-msgstr ""
+msgstr "System-Adresse:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:16
-#, fuzzy
-#| msgid "Token"
 msgid "Token:"
-msgstr "Token"
+msgstr "Token:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:14
@@ -10235,6 +10219,11 @@ msgid ""
 "not supported by this feature. Future versions of pretixdroid and pretixdesk "
 "will be supported through this menu."
 msgstr ""
+"Bitte beachte, dass dies eine neue Funktion ist, die aktuell nur für "
+"Software im Teststadium, wie z.B. pretixPOS, funktioniert. pretixdroid 1.x "
+"und pretixdesk 0.x werden von dieser Funktion nicht unterstützt. Zukünftige "
+"Versionen von pretixdroid und pretixdesk werden in diesem Menü unterstützt "
+"werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:29
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:21
@@ -10242,106 +10231,85 @@ msgid ""
 "To set up pretixdroid or pretixdesk, please go to the <strong>Check-in "
 "devices</strong> section of an event."
 msgstr ""
+"Um pretixdroid oder pretixdesk einzurichten, gehe bitte zum Abschnitt <strong"
+">Check-in-Geräte</strong> innerhalb einer Veranstaltung."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:35
-#, fuzzy
-#| msgid "Event overview"
 msgid "Device overview"
-msgstr "Überblick"
+msgstr "Geräte-Übersicht"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
-#, fuzzy
-#| msgid "Device name"
 msgid "Device:"
-msgstr "Gerätename"
+msgstr "Gerät:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect a new device"
-msgstr "2. Gerät verbinden"
+msgstr "Neues Gerät verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:32
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date history"
 msgid "Device history"
-msgstr "Termin-Verlauf"
+msgstr "Geräte-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
-#, fuzzy
-#| msgid "Revoke access"
 msgid "Revoke device access:"
-msgstr "Zugriff entfernen"
+msgstr "Gerätezugriff entziehen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the team?"
 msgid "Are you sure you want remove access for this device?"
-msgstr "Möchtest du das Team wirklich löschen?"
+msgstr "Möchtest du diesem Gerät wirklich den Zugriff auf das System entziehen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"Alle Daten über dieses Gerät bleiben erhalten, aber du kannst das Gerät "
+"nicht mehr benutzen."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connected devices"
-msgstr "2. Gerät verbinden"
+msgstr "Verbundene Geräte"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:9
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"Dieses Menü erlaubt dir, Hardware wie z.B. Kassen- oder Scan-Terminals mit "
+"diesem Account zu verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:28
-#, fuzzy
-#| msgid "You haven't created any categories yet."
 msgid "You haven't connected any hardware devices yet."
-msgstr "Du hast bisher keine Kategorien angelegt."
+msgstr "Du hast bisher keine Geräte verbunden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:34
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:39
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect a device"
-msgstr "2. Gerät verbinden"
+msgstr "Neues Gerät verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:45
-#, fuzzy
-#| msgid "Device name"
 msgid "Device ID"
-msgstr "Gerätename"
+msgstr "Geräte-ID"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:47
 msgid "Hardware model"
-msgstr ""
+msgstr "Hardware-Modell"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:48
-#, fuzzy
-#| msgid "Scan software"
 msgid "Software"
-msgstr "Scan-Software"
+msgstr "Software"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:75
-#, fuzzy
-#| msgid "Not yet on sale"
 msgid "Not yet initialized"
-msgstr "Noch nicht im Verkauf"
+msgstr "Noch nicht installiert"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:78
-#, fuzzy
-#| msgid "Revoke"
 msgid "Revoked"
 msgstr "Widerrufen"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:100
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:8
 msgid "Organizer page"
@@ -11471,28 +11439,21 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete voucher"
 msgid "Delete vouchers"
-msgstr "Gutschein löschen"
+msgstr "Gutscheine löschen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr "Möchtest du die folgenden Termine wirklich löschen?"
+msgstr "Möchtest du die folgenden Gutscheine wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
-#, fuzzy
-#| msgid ""
-#| "The following dates can't be deleted as they already have orders, but "
-#| "will be disabled instead."
 msgid ""
 "The following vouchers can't be deleted as they already have been redeemed, "
 "but they will be set to fully redeemed instead."
 msgstr ""
-"Die folgenden Termine können nicht gelöscht werden, da bereits Bestellungen "
-"vorliegen, aber werden stattdessen deaktiviert."
+"Die folgenden Gutscheine können nicht gelöscht werden, da sie bereits "
+"eingelöst wurden. Die Gutscheine werden stattdessen als vollständig "
+"eingelöst gekennzeichnet."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:10
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -12587,22 +12548,16 @@ msgstr ""
 "nicht erneut abrufen können."
 
 #: pretix/control/views/organizer.py:676
-#, fuzzy
-#| msgid "The selected data was deleted successfully."
 msgid "This device has been set up successfully."
-msgstr "Der ausgewählten Daten wurden gelöscht."
+msgstr "Das Gerät wurde erfolgreich installiert."
 
 #: pretix/control/views/organizer.py:704
-#, fuzzy
-#| msgid "You currently do not have access to any events."
 msgid "This device currently does not have access."
-msgstr "Du hast zur Zeit auf keine Veranstaltungen Zugriff."
+msgstr "Dieses Gerät hat derzeit keinen Zugriff."
 
 #: pretix/control/views/organizer.py:715
-#, fuzzy
-#| msgid "Access for the selected application has been revoked."
 msgid "Access for this device has been revoked."
-msgstr "Der Zugriff für die ausgewählte App zu deinem Konto wurde entfernt."
+msgstr "Der Zugriff für dieses Gerät wurde entfernt."
 
 #: pretix/control/views/pdf.py:47
 msgid "The uploaded PDF file is to large."
@@ -12789,11 +12744,8 @@ msgid "The new vouchers have been created."
 msgstr "Die neuen Gutscheine wurden erstellt."
 
 #: pretix/control/views/vouchers.py:355
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected vouchers have been deleted or disabled."
-msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
+msgstr "Die ausgewählten Gutscheine wurden gelöscht oder deaktiviert."
 
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
@@ -15606,10 +15558,9 @@ msgid "You cannot modify this order"
 msgstr "Du kannst diese Bestellung nicht bearbeiten"
 
 #: pretix/presale/views/order.py:680
-#, fuzzy
-#| msgid "Ticket download is not (yet) enabled."
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "Der Ticket-Download ist (noch) nicht freigeschaltet."
+msgstr ""
+"Der Ticket-Download ist für diese Bestellung (noch) nicht freigeschaltet."
 
 #: pretix/presale/views/order.py:682
 msgid "Ticket download is not enabled for add-on products."
