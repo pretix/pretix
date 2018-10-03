@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-11 14:43+0000\n"
+"POT-Creation-Date: 2018-10-03 10:25+0000\n"
 "PO-Revision-Date: 2018-07-13 06:00+0000\n"
 "Last-Translator: Claude <superoxyde@laposte.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -200,7 +200,7 @@ msgstr "Tous"
 msgid "None"
 msgstr "Aucun"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:531
+#: pretix/static/pretixcontrol/js/ui/main.js:541
 msgid "Use a different name internally"
 msgstr "Utiliser un nom différent en interne"
 
