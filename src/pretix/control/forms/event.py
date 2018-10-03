@@ -920,7 +920,8 @@ class DisplaySettingsForm(SettingsForm):
         ],  # When adding a new ordering, remember to also define it in the event model
     )
     meta_noindex = forms.BooleanField(
-        label=_('Ask search engines not to index the ticket shop')
+        label=_('Ask search engines not to index the ticket shop'),
+        required=False
     )
 
     def __init__(self, *args, **kwargs):
