@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:24+0000\n"
-"PO-Revision-Date: 2018-10-03 10:38+0000\n"
+"PO-Revision-Date: 2018-10-03 10:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6902,7 +6902,7 @@ msgstr "Das Gerät wurde erstellt."
 
 #: pretix/control/logdisplay.py:279
 msgid "The device has been changed."
-msgstr "Der Gerät wurde verändert."
+msgstr "Das Gerät wurde verändert."
 
 #: pretix/control/logdisplay.py:280
 msgid "Access of the device has been revoked."
@@ -10188,7 +10188,7 @@ msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
-"Öffne die App, die du verbinden möchtest und setze Sie ggf. auf den "
+"Öffne die App, die du verbinden möchtest und setze sie ggf. auf den "
 "Werkszustand zurück."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
