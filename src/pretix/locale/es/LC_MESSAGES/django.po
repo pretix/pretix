@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-11 14:42+0000\n"
-"PO-Revision-Date: 2018-09-10 16:00+0000\n"
+"PO-Revision-Date: 2018-09-20 08:08+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3118,6 +3118,11 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Este código de descuento está actualmente bloqueado ya que está contenido en "
+"un carrito de la compra. Esto puede significar que otra persona está "
+"canjeando este vale ahora mismo, o que usted intentó canjearlo antes pero no "
+"completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
+"minutos."
 
 #: pretix/base/services/cart.py:71
 #, python-format
@@ -5419,7 +5424,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1165
 msgid "Payment via Stripe"
-msgstr "Pago a través de Banda"
+msgstr "Pago a través de Stripe"
 
 #: pretix/control/forms/event.py:1166
 msgid ""
@@ -5563,10 +5568,8 @@ msgid "Underpaid"
 msgstr "Pago menor al esperado"
 
 #: pretix/control/forms/filter.py:212
-#, fuzzy
-#| msgid "Pending or paid"
 msgid "Pending (but fully paid)"
-msgstr "Pendiente o pagado"
+msgstr "Pendiente (pero pagado completamente)"
 
 #: pretix/control/forms/filter.py:309 pretix/control/forms/filter.py:314
 #: pretix/control/forms/filter.py:477 pretix/control/forms/filter.py:482
@@ -7220,7 +7223,7 @@ msgstr "Salir"
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr "Tablero de mandos"
+msgstr "Tablero"
 
 #: pretix/control/templates/pretixcontrol/base.html:222
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
@@ -7355,10 +7358,8 @@ msgid "Check-In selected attendees"
 msgstr "Registro de participantes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Revert selected check-ins"
-msgstr "Borrar lista de check-in"
+msgstr "Revertir los check-in seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -7855,10 +7856,8 @@ msgstr ""
 "considerar el reembolso de la cantidad pagada en exceso al usuario."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:54
-#, fuzzy
-#| msgid "Show overpaid orders"
 msgid "Show affected orders"
-msgstr "Mostrar ordenes pagadas de más"
+msgstr "Mostrar ordenes afectadas"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:61
 msgid "Your attention is required to resolve the following issues"
@@ -8838,17 +8837,12 @@ msgid "Product history"
 msgstr "Historia del producto"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:39
-#, fuzzy
-#| msgid ""
-#| "Please note that your product will <strong>not</strong> be available for "
-#| "sale until you have added your item to an existing or newly created quota."
 msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
-"Tenga en cuenta que su producto <strong>no</strong> estará disponible para "
-"la venta hasta que haya añadido su producto a una cuota existente o recién "
-"creada."
+"Tenga en cuenta que su varicación <strong>no</strong> estará disponible para "
+"la venta hasta que lo haya añadido a una cuota existente o recién creada."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:88
 msgid "Add a new variation"
@@ -9439,7 +9433,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 #: pretix/control/templates/pretixcontrol/order/change.html:121
 #, python-format
 msgid "<strong>incl.</strong> %(rate)s%% %(name)s"
-msgstr "<strong>incl.</strong> %(rate)s%% %(name)s"
+msgstr "<strong>incl.</strong> %(name)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:126
 msgid "no taxes apply"
@@ -9691,7 +9685,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:183
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr "incl. %(rate)s%% %(taxname)s"
+msgstr "incl. %(taxname)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:356
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
@@ -10084,7 +10078,7 @@ msgstr "Mal pagado"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:141
 msgid "FULLY PAID"
-msgstr ""
+msgstr "PAGADO COMPLETAMENTE"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 msgid "Sales overview"
@@ -11593,10 +11587,8 @@ msgid "You do not have permission to perform this action."
 msgstr "Usted no tiene permiso para realizar esta acción."
 
 #: pretix/control/views/checkin.py:103
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected check-ins have been reverted."
-msgstr "Se ha borrado la lista seleccionada."
+msgstr "El check-in seleccionado ha sido revertido."
 
 #: pretix/control/views/checkin.py:119
 msgid "The selected tickets have been marked as checked in."
@@ -13710,7 +13702,7 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
 #: pretix/plugins/stripe/payment.py:42
 msgid "Stripe"
-msgstr "Rayas"
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/__init__.py:16
 msgid "This plugin allows you to receive credit card payments via Stripe"
@@ -13739,11 +13731,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:75
 msgid "Connect with Stripe"
-msgstr "Conectar con Banda"
+msgstr "Conectar con Stripe"
 
 #: pretix/plugins/stripe/payment.py:85
 msgid "Disconnect from Stripe"
-msgstr "Desconectar de la Banda"
+msgstr "Desconectar de Stripe"
 
 #: pretix/plugins/stripe/payment.py:89
 msgid ""
@@ -13759,12 +13751,12 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:103
 msgid "Stripe account"
-msgstr "Cuenta a rayas"
+msgstr "Cuenta de Stripe"
 
 #: pretix/plugins/stripe/payment.py:111
 msgctxt "stripe"
 msgid "Live"
-msgstr "en directo"
+msgstr "En Vivo"
 
 #: pretix/plugins/stripe/payment.py:112
 msgctxt "stripe"
@@ -13797,7 +13789,7 @@ msgstr "Simple (diseño pretix)"
 
 #: pretix/plugins/stripe/payment.py:156
 msgid "Stripe Checkout"
-msgstr "Pago con franjas"
+msgstr "Pago con Stripe"
 
 #: pretix/plugins/stripe/payment.py:158
 msgid "Only relevant for credit card payments."
@@ -13815,7 +13807,7 @@ msgstr "giropay"
 #: pretix/plugins/stripe/payment.py:183 pretix/plugins/stripe/payment.py:190
 #: pretix/plugins/stripe/payment.py:198
 msgid "Needs to be enabled in your Stripe account first."
-msgstr "Debe habilitarse primero en su cuenta de Banda."
+msgstr "Debe habilitarse primero en su cuenta de Stripe."
 
 #: pretix/plugins/stripe/payment.py:174 pretix/plugins/stripe/payment.py:714
 msgid "iDEAL"
@@ -13886,7 +13878,7 @@ msgstr "{event}-{code}"
 #: pretix/plugins/stripe/payment.py:329
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "La raya reportó un error con su tarjeta: %s"
+msgstr "Stripe reportó un error con su tarjeta: %s"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:464
 #: pretix/plugins/stripe/payment.py:633
@@ -13908,7 +13900,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:373
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr "La raya reportó un error: %s"
+msgstr "Stripe reportó un error: %s"
 
 #: pretix/plugins/stripe/payment.py:417
 msgid "No payment information found."
@@ -13925,7 +13917,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:437
 msgid "Stripe returned an error"
-msgstr "La banda ha devuelto un error"
+msgstr "Stripe ha devuelto un error"
 
 #: pretix/plugins/stripe/payment.py:535
 msgid "Credit card via Stripe"
@@ -13937,7 +13929,7 @@ msgstr "Tarjeta de crédito"
 
 #: pretix/plugins/stripe/payment.py:566
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr "Es posible que necesite habilitar JavaScript para pagos con banda."
+msgstr "Es posible que necesite habilitar JavaScript para pagos con Stripe."
 
 #: pretix/plugins/stripe/payment.py:644
 msgid "giropay via Stripe"
@@ -13959,15 +13951,15 @@ msgstr "iDEAL a través de Stripe"
 
 #: pretix/plugins/stripe/payment.py:762
 msgid "Alipay via Stripe"
-msgstr "Alipay vía Banda"
+msgstr "Alipay vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:805
 msgid "Bancontact via Stripe"
-msgstr "Bancontact vía Bancontact"
+msgstr "Bancontact vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:874
 msgid "SOFORT via Stripe"
-msgstr "SOFORT vía Banda"
+msgstr "SOFORT vía Stripe"
 
 #: pretix/plugins/stripe/payment.py:891
 msgid "Country of your bank"
@@ -14043,23 +14035,23 @@ msgstr "Stripe reportó un evento: {}"
 
 #: pretix/plugins/stripe/signals.py:84
 msgid "Stripe Connect: Client ID"
-msgstr "Conexiones a rayas: ID de cliente"
+msgstr "Conexiones a Stripe: ID de cliente"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Stripe Connect: Secret key"
-msgstr "Conexiones a rayas: Clave secreta"
+msgstr "Conexiones a Stripe: Clave secreta"
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Stripe Connect: Publishable key"
-msgstr "Conexiones a rayas: Clave publicable"
+msgstr "Conexiones a Stripe: Clave publicable"
 
 #: pretix/plugins/stripe/signals.py:105
 msgid "Stripe Connect: Secret key (test)"
-msgstr "Conexiones a rayas: Clave secreta (test)"
+msgstr "Conexiones a Stripe: Clave secreta (test)"
 
 #: pretix/plugins/stripe/signals.py:112
 msgid "Stripe Connect: Publishable key (test)"
-msgstr "Conexiones a rayas: Clave publicable (test)"
+msgstr "Conexiones a Stripe: Clave publicable (test)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -14218,7 +14210,7 @@ msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Su cuenta de Banda está ahora conectada a pretix. A continuación, puede "
+"Su cuenta de Stripe está ahora conectada a pretix. A continuación, puede "
 "modificar los ajustes de forma detallada."
 
 #: pretix/plugins/stripe/views.py:353
@@ -14481,7 +14473,7 @@ msgstr "{name} (+ {price} más {taxes}% {taxname})"
 #: pretix/presale/forms/checkout.py:161
 #, python-brace-format
 msgid "{name} (+ {price} incl. {taxes}% {taxname})"
-msgstr "{name} (+ {price} incl. {taxes}% {taxname})"
+msgstr "{name} (+ {price} incl. {taxname} {taxes}%)"
 
 #: pretix/presale/forms/checkout.py:167
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:5
