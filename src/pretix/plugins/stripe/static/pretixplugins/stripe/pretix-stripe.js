@@ -33,7 +33,7 @@ var pretixstripe = {
       if (pretixstripe.stripe !== null) {
           return;
       }
-      $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
+      $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", true);
         $.ajax(
             {
                 url: 'https://js.stripe.com/v3/',
@@ -120,7 +120,7 @@ var pretixstripe = {
                         }
                       });
                     }
-                    $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
+                    $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
                 }
             }
         );
@@ -129,7 +129,7 @@ var pretixstripe = {
       if (pretixstripe.checkout_handler !== null) {
         return;
       }
-      $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", true);
+      $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", true);
         $.ajax(
             {
                 url: 'https://checkout.stripe.com/checkout.js',
@@ -151,7 +151,7 @@ var pretixstripe = {
                         allowRememberMe: false,
                         billingAddress: false
                     });
-                    $('.stripe-container').closest("form").find(".btn-primary").prop("disabled", false);
+                    $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
                 }
             }
         );
