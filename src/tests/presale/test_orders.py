@@ -306,6 +306,36 @@ class OrdersTest(TestCase):
         assert 'alert-success' in response.rendered_content
         assert self.order.invoices.exists()
 
+    def test_orders_download_pending(self):
+        self.event.settings.set('ticket_download', True)
+        del self.event.settings['ticket_download_date']
+
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        self.event.settings.set('ticket_download_pending', True)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
+        )
+        assert response.status_code == 200
+
+    def test_orders_download_pending_only_approved(self):
+        self.event.settings.set('ticket_download', True)
+        del self.event.settings['ticket_download_date']
+
+        self.order.status = Order.STATUS_PENDING
+        self.order.require_approval = True
+        self.order.save()
+        self.event.settings.set('ticket_download_pending', True)
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret, self.ticket_pos.pk),
+        )
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)
         del self.event.settings['ticket_download_date']

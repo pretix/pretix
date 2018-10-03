@@ -1,7 +1,6 @@
 import logging
 import os
 from datetime import timedelta
-from decimal import Decimal
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -155,11 +154,7 @@ def get_tickets_for_order(order):
     can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
     if not can_download:
         return []
-    if order.status != Order.STATUS_PAID and order.total != Decimal("0.00"):
-        return []
-    if (not order.event.settings.ticket_download
-            or (order.event.settings.ticket_download_date is not None
-                and now() < order.ticket_download_date)):
+    if not order.ticket_download_available:
         return []
 
     providers = [

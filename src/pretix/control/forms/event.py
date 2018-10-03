@@ -949,12 +949,14 @@ class TicketSettingsForm(SettingsForm):
     ticket_download_addons = forms.BooleanField(
         label=_("Offer to download tickets separately for add-on products"),
         required=False,
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
     )
     ticket_download_nonadm = forms.BooleanField(
         label=_("Generate tickets for non-admission products"),
         required=False,
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_ticket_download'}),
+    )
+    ticket_download_pending = forms.BooleanField(
+        label=_("Offer to download tickets even before an order is paid"),
+        required=False,
     )
 
     def prepare_fields(self):

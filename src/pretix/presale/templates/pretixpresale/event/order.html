@@ -84,28 +84,28 @@
             </div>
         </div>
     {% endif %}
-    {% if order.status == 'p' and event.settings.ticket_download %}
-        {% if can_download and download_buttons %}
-            <div class="alert alert-info">
-                {% blocktrans trimmed %}
-                    You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
-                {% endblocktrans %}
-            </div>
-            {% if cart.positions|length > 1 and can_download_multi %}
-                <p>
-                    {% trans "Download all tickets at once:" %}
-                    {% for b in download_buttons %}
-                        {% if b.multi %}
-                            <a href="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                    data-asyncdownload>
-                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                </p>
-            {% endif %}
-        {% elif not download_buttons and ticket_download_date %}
+    {% if can_download and download_buttons %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
+            {% endblocktrans %}
+        </div>
+        {% if cart.positions|length > 1 and can_download_multi %}
+            <p>
+                {% trans "Download all tickets at once:" %}
+                {% for b in download_buttons %}
+                    {% if b.multi %}
+                        <a href="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
+                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
+                                data-asyncdownload>
+                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% elif not download_buttons and ticket_download_date %}
+        {% if order.status == 'p' %}
             <div class="alert alert-info">
                 {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}
                     You will be able to download your tickets here starting on {{ date }}.

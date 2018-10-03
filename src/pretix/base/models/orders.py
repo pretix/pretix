@@ -421,6 +421,20 @@ class Order(LoggedModel):
         return dl_date
 
     @property
+    def ticket_download_available(self):
+        return self.event.settings.ticket_download and (
+            self.event.settings.ticket_download_date is None
+            or now() > self.ticket_download_date
+        ) and (
+            self.status == Order.STATUS_PAID
+            or (
+                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                self.status == Order.STATUS_PENDING and
+                not self.require_approval
+            )
+        )
+
+    @property
     def payment_term_last(self):
         tz = pytz.timezone(self.event.settings.timezone)
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)

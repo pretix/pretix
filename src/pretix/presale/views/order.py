@@ -95,13 +95,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
-        ctx['can_download'] = (
-            can_download and self.request.event.settings.ticket_download
-            and (
-                self.request.event.settings.ticket_download_date is None
-                or now() > self.order.ticket_download_date
-            ) and self.order.status == Order.STATUS_PAID
-        )
+        ctx['can_download'] = can_download and self.order.ticket_download_available
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
@@ -682,12 +676,8 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
             return self.error(_('You requested an invalid ticket output type.'))
         if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status != Order.STATUS_PAID:
-            return self.error(_('Order is not paid.'))
-        if (not self.request.event.settings.ticket_download
-            or (self.request.event.settings.ticket_download_date is not None
-                and now() < self.order.ticket_download_date)):
-            return self.error(_('Ticket download is not (yet) enabled.'))
+        if not self.order.ticket_download_available:
+            return self.error(_('Ticket download is not (yet) enabled for this order.'))
         if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
             return self.error(_('Ticket download is not enabled for add-on products.'))
         if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):

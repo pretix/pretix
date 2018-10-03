@@ -634,7 +634,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                 email_subject, email_template, email_context,
                 log_entry,
                 invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
-                attach_tickets=(payment_provider == 'free')
+                attach_tickets=True
             )
         except SendMailException:
             logger.exception('Order received email could not be sent')

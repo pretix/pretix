@@ -283,6 +283,19 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     assert len(resp.data['downloads']) == 1
     assert len(resp.data['positions'][0]['downloads']) == 1
 
+    order.status = 'n'
+    order.save()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
+                                                                                order.code))
+    assert len(resp.data['downloads']) == 0
+    assert len(resp.data['positions'][0]['downloads']) == 0
+
+    event.settings.ticket_download_pending = True
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
+                                                                                order.code))
+    assert len(resp.data['downloads']) == 1
+    assert len(resp.data['positions'][0]['downloads']) == 1
+
 
 @pytest.mark.django_db
 def test_payment_list(token_client, organizer, event, order):
