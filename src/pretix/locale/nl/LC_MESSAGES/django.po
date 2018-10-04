@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:24+0000\n"
-"PO-Revision-Date: 2018-09-24 20:07+0000\n"
+"PO-Revision-Date: 2018-10-05 08:11+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -721,12 +721,10 @@ msgid "Cancellation"
 msgstr "Annulering"
 
 #: pretix/base/invoice.py:382
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Your reference: {reference}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Uw referentie: {reference}"
+msgstr "Klantkenmerk: {reference}"
 
 #: pretix/base/invoice.py:403 pretix/base/invoice.py:411
 msgctxt "invoice"
@@ -929,16 +927,12 @@ msgstr "Beperk tot evenementen"
 
 #: pretix/base/models/devices.py:50
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:49
-#, fuzzy
-#| msgid "Start date"
 msgid "Setup date"
-msgstr "Begindatum"
+msgstr "Installatiedatum"
 
 #: pretix/base/models/devices.py:53
-#, fuzzy
-#| msgid "Confirmation date"
 msgid "Initialization date"
-msgstr "Bevestigingsdatum"
+msgstr "Initialisatiedatum"
 
 #: pretix/base/models/event.py:36
 msgid "The end of the presale period has to be later than its start."
@@ -2698,7 +2692,7 @@ msgstr ""
 
 #: pretix/base/payment.py:257
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Beperk tot landen"
 
 #: pretix/base/payment.py:259
 msgid ""
@@ -2706,6 +2700,8 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed."
 msgstr ""
+"Sta alleen toe om deze betalingsprovider te kiezen voor factuuradressen in "
+"de gekozen landen. Alle landen zijn toegestaan als u geen landen selecteert."
 
 #: pretix/base/payment.py:285
 msgctxt "invoice"
@@ -5266,7 +5262,7 @@ msgstr "Naam (aflopend)"
 
 #: pretix/control/forms/event.py:923
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "Vraag zoekmachines om deze ticketwinkel niet te indexeren"
 
 #: pretix/control/forms/event.py:938
 msgid "Use feature"
@@ -5302,10 +5298,8 @@ msgid "Generate tickets for non-admission products"
 msgstr "Genereer tickets voor producten die geen toegangsbewijs zijn"
 
 #: pretix/control/forms/event.py:958
-#, fuzzy
-#| msgid "Offer to download tickets separately for add-on products"
 msgid "Offer to download tickets even before an order is paid"
-msgstr "Bied aan om tickets apart te downloaden voor add-onproducten"
+msgstr "Bied voor een bestelling is betaald al aan om tickets te downloaden"
 
 #: pretix/control/forms/event.py:999
 msgid "Any country"
@@ -6571,10 +6565,9 @@ msgid "Payment {local_id} has been started."
 msgstr "Betaling {local_id} is gestart."
 
 #: pretix/control/logdisplay.py:201
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has been canceled."
+#, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr "Betaling {local_id} is geannuleerd."
+msgstr "Betaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:202
 #, python-brace-format
@@ -6888,38 +6881,30 @@ msgid "A quota has been removed from the event date."
 msgstr "Een quotum is verwijderd van de evenementsdatum."
 
 #: pretix/control/logdisplay.py:278
-#, fuzzy
-#| msgid "The event has been created."
 msgid "The device has been created."
-msgstr "Het evenement is aangemaakt."
+msgstr "Het apparaat is aangemaakt."
 
 #: pretix/control/logdisplay.py:279
-#, fuzzy
-#| msgid "The voucher has been changed."
 msgid "The device has been changed."
-msgstr "De voucher is aangepast."
+msgstr "Het apparaat is gewijzigd."
 
 #: pretix/control/logdisplay.py:280
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "Access of the device has been revoked."
-msgstr "Het apparaat is verwijderd."
+msgstr "De toegang van het apparaat is ingetrokken."
 
 #: pretix/control/logdisplay.py:281
-#, fuzzy
-#| msgid "The device has been removed."
 msgid "The device has been initialized."
-msgstr "Het apparaat is verwijderd."
+msgstr "Het apparaat is geïnitialiseerd."
 
 #: pretix/control/logdisplay.py:282
-#, fuzzy
-#| msgid "The invoice has been regenerated."
 msgid "The access token of the device has been regenerated."
-msgstr "De factuur is opnieuw gegenereerd."
+msgstr "Het toegangstoken van het apparaat is opnieuw gegenereerd."
 
 #: pretix/control/logdisplay.py:283
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"Het apparaat heeft de server op de hoogte gesteld van een hardware- of "
+"software-update."
 
 #: pretix/control/logdisplay.py:307
 msgid "The settings of a payment provider have been changed."
@@ -7923,7 +7908,7 @@ msgstr "Deze verandering is uitgevoerd door een pretix-beheerder."
 #: pretix/control/templates/pretixcontrol/event/logs.html:76
 #: pretix/control/templates/pretixcontrol/includes/logs.html:42
 msgid "Inspect"
-msgstr ""
+msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:198
 msgid "Show more logs"
@@ -10161,42 +10146,40 @@ msgid "Organizer: %(name)s"
 msgstr "Organisator: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/base.html:39
-#, fuzzy
-#| msgid "Device name"
 msgid "Devices"
-msgstr "Naam van het apparaat"
+msgstr "Apparaten"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect to device:"
-msgstr "2. Verbind apparaat"
+msgstr "Apparaat verbinden:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:10
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"Open de app die u wilt verbinden, en herstel indien gewenst de app terug in "
+"de originele staat."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Scan de volgende configuratiecode:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:13
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Als uw apparaat geen ondersteuning biedt voor het scannen van een QR-code "
+"kunt u ook de volgende code invoeren:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:15
 msgid "System URL:"
-msgstr ""
+msgstr "Systeem-URL:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:16
-#, fuzzy
-#| msgid "Token"
 msgid "Token:"
-msgstr "Token"
+msgstr "Token:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:14
