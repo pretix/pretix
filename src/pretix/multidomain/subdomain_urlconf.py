@@ -30,7 +30,7 @@ for app in apps.get_app_configs():
             elif hasattr(urlmod, 'organizer_patterns'):
                 patterns = urlmod.organizer_patterns
                 raw_plugin_patterns.append(
-                    url(include((patterns, app.label)))
+                    url(r'', include((patterns, app.label)))
                 )
 
         elif importlib.util.find_spec(app.name + '.subdomain_urls'):  # noqa
