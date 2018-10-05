@@ -15,6 +15,10 @@ event_patterns = [
     ])),
 ]
 
+organizer_patterns = [
+    url(r'^.well-known/apple-developer-merchantid-domain-association$', applepay_association, name='applepay.association'),
+]
+
 urlpatterns = [
     url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/stripe/disconnect/',
         oauth_disconnect, name='oauth.disconnect'),
