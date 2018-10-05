@@ -206,11 +206,14 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
             else:
                 if attach_tickets:
                     for name, ct in get_tickets_for_order(order):
-                        email.attach(
-                            name,
-                            ct.file.read(),
-                            ct.type
-                        )
+                        try:
+                            email.attach(
+                                name,
+                                ct.file.read(),
+                                ct.type
+                            )
+                        except:
+                            pass
 
         email = email_filter.send_chained(event, 'message', message=email, order=order)
 
