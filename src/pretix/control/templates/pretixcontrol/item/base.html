@@ -22,6 +22,11 @@
                     {% trans "Add-Ons" %}
                 </a>
             </li>
+            <li {% if "event.item.bundles" == url_name %}class="active"{% endif %}>
+                <a href="{% url 'control:event.item.bundles' organizer=request.event.organizer.slug event=request.event.slug item=object.id %}">
+                    {% trans "Bundled products" %}
+                </a>
+            </li>
         </ul>
     {% else %}
         <h1>{% trans "Create product" %}</h1>

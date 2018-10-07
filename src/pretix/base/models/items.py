@@ -672,6 +672,72 @@ class ItemAddOn(models.Model):
             raise ValidationError(_('The maximum count needs to be greater than the minimum count.'))
 
 
+class ItemBundle(models.Model):
+    """
+    An instance of this model indicates that buying a ticket of the time ``base_item``
+    automatically also buys ``count`` items of type ``bundled_item``.
+
+    :param base_item: The base item the bundle is attached to
+    :type base_item: Item
+    :param bundled_item: The bundled item
+    :type bundled_item: Item
+    :param bundled_variation: The variation, if the bundled item has variations
+    :type bundled_variation: ItemVariation
+    :param count: The number of items to bundle
+    :type count: int
+    :param designated_price: The designated part price (optional)
+    :type designated_price: bool
+    """
+    base_item = models.ForeignKey(
+        Item,
+        related_name='bundles',
+        on_delete=models.CASCADE
+    )
+    bundled_item = models.ForeignKey(
+        Item,
+        related_name='bundled_with',
+        verbose_name=_('Bundled item'),
+        on_delete=models.CASCADE
+    )
+    bundled_variation = models.ForeignKey(
+        ItemVariation,
+        related_name='bundled_with',
+        verbose_name=_('Bundled variation'),
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
+    count = models.PositiveIntegerField(
+        default=1,
+        verbose_name=_('Number')
+    )
+    designated_price = models.DecimalField(
+        null=True, blank=True,
+        decimal_places=2, max_digits=10,
+        verbose_name=_('Designated price part'),
+        help_text=_('If set, it will be shown that this bundled item is responsible for the given value of the total '
+                    'price. This might be important in cases of mixed taxation, but can be kept blank otherwise.')
+    )
+
+    def clean(self):
+        self.clean_count(self.count)
+
+    @staticmethod
+    def clean_itemvar(event, base_item, bundle, bundled_item, bundled_variation):
+        if event != bundled_item.event:
+            raise ValidationError(_('The bundled item\'s category must belong to the same event as the item.'))
+        if event != base_item.event:
+            raise ValidationError(_('The base item\'s category must belong to the same event as the item.'))
+        if bundled_item.has_variations and not bundled_variation:
+            raise ValidationError(_('A variation needs to be set for this item.'))
+        if bundled_item.has_variations and bundled_variation.item != bundled_item:
+            raise ValidationError(_('The chosen variation does not belong to this item.'))
+
+    @staticmethod
+    def clean_count(count):
+        if count < 0:
+            raise ValidationError(_('The count needs to be equal to or greater than zero.'))
+
+
 class Question(LoggedModel):
     """
     A question is an input field that can be used to extend a ticket by custom information,

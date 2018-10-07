@@ -22,11 +22,11 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn
+from pretix.base.models.items import ItemAddOn, ItemBundle
 from pretix.control.forms.item import (
-    CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemCreateForm,
-    ItemUpdateForm, ItemVariationForm, ItemVariationsFormSet, QuestionForm,
-    QuestionOptionForm, QuotaForm,
+    CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
+    ItemBundleFormSet, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -1032,6 +1032,92 @@ class ItemAddOns(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
 
     def get_success_url(self) -> str:
         return reverse('control:event.item.addons', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.get_object().id,
+        })
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        context['formset'] = self.formset
+        return context
+
+
+class ItemBundles(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/item/bundles.html'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.item = None
+
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Item, ItemBundle,
+            form=ItemBundleForm, formset=ItemBundleFormSet,
+            fk_name='base_item',
+            can_order=False, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            queryset=ItemBundle.objects.filter(base_item=self.get_object()),
+                            event=self.request.event)
+
+    def post(self, request, *args, **kwargs):
+        with transaction.atomic():
+            if self.formset.is_valid():
+                for form in self.formset.deleted_forms:
+                    if not form.instance.pk:
+                        continue
+                    self.get_object().log_action(
+                        'pretix.event.item.bundles.removed', user=self.request.user, data={
+                            'bundled_item': form.instance.bundled_item.pk,
+                            'bundled_variation': (form.instance.bundled_variation.pk if form.instance.bundled_variation else None),
+                            'count': form.instance.count,
+                            'designated_price': str(form.instance.designated_price),
+                        }
+                    )
+                    form.instance.delete()
+                    form.instance.pk = None
+
+                forms = [
+                    ef for ef in self.formset.forms
+                    if ef not in self.formset.deleted_forms
+                ]
+                for i, form in enumerate(forms):
+                    form.instance.base_item = self.get_object()
+                    created = not form.instance.pk
+                    form.save()
+                    if form.has_changed():
+                        change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                        change_data['id'] = form.instance.pk
+                        self.get_object().log_action(
+                            'pretix.event.item.bundles.changed' if not created else
+                            'pretix.event.item.bundles.added',
+                            user=self.request.user, data=change_data
+                        )
+
+                messages.success(self.request, _('Your changes have been saved.'))
+                return redirect(self.get_success_url())
+        return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().category and self.get_object().category.is_addon:
+            messages.error(self.request, _('You cannot add bundles to a product that is only available as an add-on '
+                                           'itself.'))
+            return redirect(self.get_previous_url())
+
+        return super().get(request, *args, **kwargs)
+
+    def get_previous_url(self) -> str:
+        return reverse('control:event.item', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+            'item': self.get_object().id,
+        })
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.item.bundles', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
             'item': self.get_object().id,
