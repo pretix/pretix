@@ -26,6 +26,7 @@ from pretix.base.models import (
     OrderPosition, Quota, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.items import ItemBundle
 from pretix.base.models.orders import (
     CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee, OrderRefund,
     generate_position_secret, generate_secret,
@@ -450,8 +451,22 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # Other checks are not necessary
             continue
 
-        price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
-                          addon_to=cp.addon_to, invoice_address=address)
+        if cp.is_bundled:
+            try:
+                bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
+                price = bundle.designated_price or 0
+            except ItemBundle.DoesNotExist:
+                price = cp.price
+            price = get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent, custom_price_is_net=False,
+                              addon_to=cp.addon_to, invoice_address=address, force_custom_price=True)
+        else:
+            price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
+                              addon_to=cp.addon_to, invoice_address=address)
+
+        if not cp.addon_to_id:
+            for bundledp in cp.addons.all():
+                if bundledp.is_bundled:
+                    price = price - TaxedPrice(net=bundledp.price, gross=bundledp.price, rate=0, tax=0, name='')
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
@@ -599,7 +614,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
     with event.lock() as now_dt:
         positions = list(CartPosition.objects.filter(
-            id__in=position_ids).select_related('item', 'variation', 'subevent'))
+            id__in=position_ids).select_related('item', 'variation', 'subevent', 'addon_to').prefetch_related('addons'))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):

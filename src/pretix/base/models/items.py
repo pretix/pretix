@@ -386,12 +386,12 @@ class Item(LoggedModel):
         if self.event:
             self.event.cache.clear()
 
-    def tax(self, price=None, base_price_is='auto'):
+    def tax(self, price=None, base_price_is='auto', currency=None):
         price = price if price is not None else self.default_price
         if not self.tax_rule:
             return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
                               rate=Decimal('0.00'), name='')
-        return self.tax_rule.tax(price, base_price_is=base_price_is)
+        return self.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
 
     def is_available_by_time(self, now_dt: datetime=None) -> bool:
         now_dt = now_dt or now()
@@ -411,7 +411,8 @@ class Item(LoggedModel):
             return False
         return True
 
-    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None):
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
+                     include_bundled=False, trust_parameters=False):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -420,6 +421,9 @@ class Item(LoggedModel):
                                quotas will be ignored in the calculation. If this leads
                                to no quotas being checked at all, this method will return
                                unlimited availability.
+        :param include_bundled: Also take availability of bundled items into consideration.
+        :param trust_parameters: Disable checking of the subevent parameter and disable checking if
+                                 any variations exist (performance optimization).
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
 
         :raises ValueError: if you call this on an item which has variations associated with it.
@@ -430,17 +434,32 @@ class Item(LoggedModel):
             self.quotas.select_related('subevent').filter(subevent=subevent)
             if subevent else self.quotas.all()
         ))
-        if not subevent and self.event.has_subevents:
+        if not trust_parameters and not subevent and self.event.has_subevents:
             raise TypeError('You need to supply a subevent.')
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
+
         if not check_quotas:
-            return Quota.AVAILABILITY_OK, sys.maxsize
-        if self.has_variations:  # NOQA
+            res = (Quota.AVAILABILITY_OK, sys.maxsize)
+        elif not trust_parameters and self.has_variations:  # NOQA
             raise ValueError('Do not call this directly on items which have variations '
                              'but call this on their ItemVariation objects')
-        return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
-                   key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
+        else:
+            res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
+                      key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
+
+        if (res[1] is None or res[1] > 1) and include_bundled:
+            for b in self.bundles.all():
+                bcq = (b.bundled_variation or b.bundled_item).check_quotas(
+                    count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
+                )
+                bcqa = bcq[1] // b.count
+                if bcqa <= 0:
+                    res = Quota.AVAILABILITY_RESERVED, 0
+                else:
+                    res = Quota.AVAILABILITY_OK, (min(bcqa, res[1]) if res[1] is not None else bcqa)
+
+        return res
 
     def allow_delete(self):
         from pretix.base.models.orders import OrderPosition
@@ -531,11 +550,11 @@ class ItemVariation(models.Model):
     def price(self):
         return self.default_price if self.default_price is not None else self.item.default_price
 
-    def tax(self, price=None):
+    def tax(self, price=None, currency=None):
         price = price if price is not None else self.price
         if not self.item.tax_rule:
             return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
-        return self.item.tax_rule.tax(price)
+        return self.item.tax_rule.tax(price, currency=None)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -547,7 +566,8 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.cache.clear()
 
-    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None) -> Tuple[int, int]:
+    def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
+                     include_bundled=False, trust_parameters=False) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -566,12 +586,26 @@ class ItemVariation(models.Model):
         ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
-        if not subevent and self.item.event.has_subevents:  # NOQA
+        if not trust_parameters and not subevent and self.item.event.has_subevents:  # NOQA
             raise TypeError('You need to supply a subevent.')
         if not check_quotas:
-            return Quota.AVAILABILITY_OK, sys.maxsize
-        return min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
-                   key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
+            res = Quota.AVAILABILITY_OK, sys.maxsize
+        else:
+            res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
+                      key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
+
+        if (res[1] is None or res[1] > 1) and include_bundled:
+            for b in self.item.bundles.all():
+                bcq = (b.bundled_variation or b.bundled_item).check_quotas(
+                    count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
+                )
+                bcqa = bcq[1] // b.count
+                if bcqa <= 0:
+                    res = Quota.AVAILABILITY_RESERVED, 0
+                else:
+                    res = Quota.AVAILABILITY_OK, (min(bcqa, res[1]) if res[1] is not None else bcqa)
+
+        return res
 
     def __lt__(self, other):
         if self.position == other.position:
@@ -715,11 +749,24 @@ class ItemBundle(models.Model):
         decimal_places=2, max_digits=10,
         verbose_name=_('Designated price part'),
         help_text=_('If set, it will be shown that this bundled item is responsible for the given value of the total '
-                    'price. This might be important in cases of mixed taxation, but can be kept blank otherwise.')
+                    'price. This might be important in cases of mixed taxation, but can be kept blank otherwise. This '
+                    'value will NOT be added to the base item\'s price.')
     )
 
     def clean(self):
         self.clean_count(self.count)
+
+    def describe(self):
+        if self.count == 1:
+            if self.bundled_variation_id:
+                return "{} – {}".format(self.bundled_item.name, self.bundled_variation.value)
+            else:
+                return self.bundled_item.name
+        else:
+            if self.bundled_variation_id:
+                return "{}× {} – {}".format(self.count, self.bundled_item.name, self.bundled_variation.value)
+            else:
+                return "{}x {}".format(self.count, self.bundled_item.name)
 
     @staticmethod
     def clean_itemvar(event, base_item, bundle, bundled_item, bundled_variation):

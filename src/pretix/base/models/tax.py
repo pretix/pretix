@@ -33,6 +33,19 @@ class TaxedPrice:
             money_filter(self.gross, currency)
         )
 
+    def __sub__(self, other):
+        newgross = self.gross - other.gross
+        newnet = round_decimal(newgross - (newgross * (1 - 100 / (100 + self.rate)))).quantize(
+            Decimal('10') ** self.gross.as_tuple().exponent
+        )
+        return TaxedPrice(
+            gross=newgross,
+            net=newnet,
+            tax=newgross - newnet,
+            rate=self.rate,
+            name=self.name,
+        )
+
 
 TAXED_ZERO = TaxedPrice(
     gross=Decimal('0.00'),
@@ -129,7 +142,8 @@ class TaxRule(LoggedModel):
     def has_custom_rules(self):
         return self.custom_rules and self.custom_rules != '[]'
 
-    def tax(self, base_price, base_price_is='auto'):
+    def tax(self, base_price, base_price_is='auto', currency=None):
+        currency = currency or (self.event.currency if self.event else None)
         if self.rate == Decimal('0.00'):
             return TaxedPrice(
                 net=base_price, gross=base_price, tax=Decimal('0.00'),
@@ -145,11 +159,11 @@ class TaxRule(LoggedModel):
         if base_price_is == 'gross':
             gross = base_price
             net = round_decimal(gross - (base_price * (1 - 100 / (100 + self.rate))),
-                                self.event.currency if self.event else None)
+                                currency)
         elif base_price_is == 'net':
             net = base_price
             gross = round_decimal((net * (1 + self.rate / 100)),
-                                  self.event.currency if self.event else None)
+                                  currency)
         else:
             raise ValueError('Unknown base price type: {}'.format(base_price_is))
 

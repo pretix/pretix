@@ -1789,6 +1789,7 @@ class CartPosition(AbstractPosition):
     includes_tax = models.BooleanField(
         default=True
     )
+    is_bundled = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("Cart position")

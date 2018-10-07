@@ -300,6 +300,12 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('copy_from'):
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
+            for a in self.cleaned_data['copy_from'].addons.all():
+                instance.addons.create(addon_category=a.addon_category, min_count=a.min_count, max_count=a.max_count,
+                                       price_included=a.price_included, position=a.position)
+            for b in self.cleaned_data['copy_from'].bundles.all():
+                instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
+                                        count=b.count, designated_price=b.designated_price)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 

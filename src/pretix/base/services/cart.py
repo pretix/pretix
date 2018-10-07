@@ -13,7 +13,8 @@ from django.utils.translation import pgettext_lazy, ugettext as _
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemVariation, Voucher,
+    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation,
+    Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
@@ -92,7 +93,7 @@ error_messages = {
 
 class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
-                                               'addon_to', 'subevent', 'includes_tax'))
+                                               'addon_to', 'subevent', 'includes_tax', 'bundled'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
                                                      'quotas', 'subevent'))
@@ -162,7 +163,7 @@ class CartManager:
         self._items_cache.update({
             i.pk: i
             for i in self.event.items.select_related('category').prefetch_related(
-                'addons', 'addons__addon_category', 'quotas'
+                'addons', 'bundles', 'addons__addon_category', 'quotas'
             ).filter(
                 id__in=[i for i in item_ids if i and i not in self._items_cache]
             )
@@ -246,12 +247,12 @@ class CartManager:
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
-                   subevent: Optional[SubEvent], cp_is_net: bool=None):
+                   subevent: Optional[SubEvent], cp_is_net: bool=None, force_custom_price=False):
         try:
             return get_price(
                 item, variation, voucher, custom_price, subevent,
                 custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
-                invoice_address=self.invoice_address
+                invoice_address=self.invoice_address, force_custom_price=force_custom_price
             )
         except ValueError as e:
             if str(e) == 'price_too_high':
@@ -261,11 +262,28 @@ class CartManager:
 
     def extend_expired_positions(self):
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
-            'item', 'variation', 'voucher'
-        ).prefetch_related('item__quotas', 'variation__quotas')
+            'item', 'variation', 'voucher', 'addon_to', 'addon_to__item'
+        ).prefetch_related(
+            'item__quotas',
+            'variation__quotas',
+            'addons'
+        ).order_by('-is_bundled')
         err = None
         for cp in expired:
-            if not cp.includes_tax:
+            if cp.is_bundled:
+                try:
+                    bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
+                    price = bundle.designated_price or 0
+                except ItemBundle.DoesNotExist:
+                    price = cp.price
+                if not cp.includes_tax:
+                    price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
+                                            force_custom_price=True, cp_is_net=True)
+                    price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
+                else:
+                    price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
+                                            force_custom_price=True)
+            elif not cp.includes_tax:
                 price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
                                         cp_is_net=True)
                 price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
@@ -283,6 +301,11 @@ class CartManager:
                     self._quota_diff[quota] += 1
             else:
                 quotas = []
+
+            if not cp.addon_to_id:
+                for bundledp in cp.addons.all():
+                    if bundledp.is_bundled:
+                        price = price - TaxedPrice(net=bundledp.price, gross=bundledp.price, rate=0, tax=0, name='')
 
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
@@ -342,9 +365,44 @@ class CartManager:
                 quotas = []
 
             price = self._get_price(item, variation, voucher, i.get('price'), subevent)
+
+            # Fetch bundled items
+            bundled = []
+            db_bundles = list(item.bundles.all())
+            self._update_items_cache([b.bundled_item_id for b in db_bundles], [b.bundled_variation_id for b in db_bundles])
+            for bundle in db_bundles:
+                if bundle.bundled_item_id not in self._items_cache or (
+                        bundle.bundled_variation_id and bundle.bundled_variation_id not in self._variations_cache
+                ):
+                    raise CartError(error_messages['not_for_sale'])
+                bitem = self._items_cache[bundle.bundled_item_id]
+                bvar = self._variations_cache[bundle.bundled_variation_id] if bundle.bundled_variation_id else None
+                bundle_quotas = list(bitem.quotas.filter(subevent=subevent)
+                                     if bvar is None else bvar.quotas.filter(subevent=subevent))
+                if not bundle_quotas:
+                    raise CartError(error_messages['unavailable'])
+                if not voucher or not voucher.allow_ignore_quota:
+                    for quota in bundle_quotas:
+                        quota_diff[quota] += bundle.count * i['count']
+                else:
+                    bundle_quotas = []
+
+                if bundle.designated_price:
+                    bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True)
+                    price = price - bprice
+                else:
+                    bprice = TAXED_ZERO
+                bop = self.AddOperation(
+                    count=bundle.count, item=bitem, variation=bvar, price=bprice,
+                    voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
+                    includes_tax=bool(price.rate), bundled=[]
+                )
+                self._check_item_constraints(bop)
+                bundled.append(bop)
+
             op = self.AddOperation(
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
-                addon_to=False, subevent=subevent, includes_tax=bool(price.rate)
+                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled
             )
             self._check_item_constraints(op)
             operations.append(op)
@@ -403,6 +461,7 @@ class CartManager:
             current_addons[cp] = {
                 (a.item_id, a.variation_id): a
                 for a in cp.addons.all()
+                if not a.is_bundled
             }
 
         # Create operations, perform various checks
@@ -449,7 +508,7 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate)
+                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[]
                 )
                 self._check_item_constraints(op)
                 operations.append(op)
@@ -609,10 +668,28 @@ class CartManager:
 
                 available_count = min(quota_available_count, voucher_available_count)
 
+                if isinstance(op, self.AddOperation):
+                    for b in op.bundled:
+                        b_quota_available_count = min(available_count * b.count, min(quotas_ok[q] for q in b.quotas))
+                        if b_quota_available_count < b.count:
+                            err = err or error_messages['unavailable']
+                            available_count = 0
+                        elif b_quota_available_count < available_count * b.count:
+                            err = err or error_messages['in_part']
+                            available_count = b_quota_available_count // b.count
+                        for q in b.quotas:
+                            quotas_ok[q] -= available_count * b.count
+                            # TODO: is this correct?
+
                 for q in op.quotas:
                     quotas_ok[q] -= available_count
                 if op.voucher:
                     vouchers_ok[op.voucher] -= available_count
+
+                if any(qa < 0 for qa in quotas_ok.values()):
+                    # Safeguard, shouldn't happen
+                    err = err or error_messages['unavailable']
+                    available_count = 0
 
                 if isinstance(op, self.AddOperation):
                     for k in range(available_count):
@@ -646,6 +723,17 @@ class CartManager:
                                 except ValidationError:
                                     pass
 
+                        if op.bundled:
+                            cp.save()  # Needs to be in the database already so we have a PK that we can reference
+                            for b in op.bundled:
+                                for j in range(b.count):
+                                    new_cart_positions.append(CartPosition(
+                                        event=self.event, item=b.item, variation=b.variation,
+                                        price=b.price.gross, expires=self._expiry, cart_id=self.cart_id,
+                                        voucher=op.voucher, addon_to=cp,
+                                        subevent=b.subevent, includes_tax=b.includes_tax, is_bundled=True
+                                    ))
+
                         new_cart_positions.append(cp)
                 elif isinstance(op, self.ExtendOperation):
                     if available_count == 1:
@@ -660,9 +748,10 @@ class CartManager:
 
         for p in new_cart_positions:
             if p._answers:
-                p.save()
+                if not p.pk:  # We stored some to the database already before
+                    p.save()
                 _save_answers(p, {}, p._answers)
-        CartPosition.objects.bulk_create([p for p in new_cart_positions if not p._answers])
+        CartPosition.objects.bulk_create([p for p in new_cart_positions if not p._answers and not p.pk])
         return err
 
     def commit(self):

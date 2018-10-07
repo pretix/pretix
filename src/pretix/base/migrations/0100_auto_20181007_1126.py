@@ -34,4 +34,9 @@ class Migration(migrations.Migration):
             name='bundled_variation',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bundled_with', to='pretixbase.ItemVariation', null=True, blank=True, verbose_name='Bundled variation'),
         ),
+        migrations.AddField(
+            model_name='cartposition',
+            name='is_bundled',
+            field=models.BooleanField(default=False),
+        ),
     ]
