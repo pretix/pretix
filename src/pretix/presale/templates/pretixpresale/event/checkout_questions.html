@@ -80,6 +80,18 @@
                                     </div>
                                 </div>
                             {% endif %}
+                            {% if pos.subevent %}
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        {% trans "Date" context "subevent" %}
+                                    </label>
+                                    <div class="col-md-9 form-control-text">
+                                        <ul class="addon-list">
+                                           {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
