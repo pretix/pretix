@@ -20,6 +20,12 @@
                     </summary>
                     <div id="cp{{ form.cartpos.pk }}">
                         <div class="panel-body">
+                            {% if form.cartpos.subevent %}
+                                <p>
+                                    <span class="fa fa-calendar"></span>
+                                    {{ form.cartpos.subevent.name }} &middot; {{ form.cartpos.subevent.get_date_range_display }}
+                                </p>
+                            {% endif %}
                             {% for c in form.categories %}
                                 <fieldset>
                                     <legend>{{ c.category.name }}</legend>
