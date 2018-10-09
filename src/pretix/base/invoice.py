@@ -192,7 +192,14 @@ class ThumbnailingImageReader(ImageReader):
             size=(int(width * dpi / 72), int(height * dpi / 72)),
             resample=BICUBIC
         )
+        self._data = None
         return width, height
+
+    def _jpeg_fh(self):
+        # Bypass a reportlab-internal optimization that falls back to the original
+        # file handle if the file is a JPEG, and therefore does not respect the
+        # (smaller) size of the modified image.
+        return None
 
 
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
