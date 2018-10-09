@@ -153,6 +153,12 @@ class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaData
             'event': self.object.slug,
         })
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            kwargs['change_slug'] = True
+        return kwargs
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid() and self.sform.is_valid() and all([f.is_valid() for f in self.meta_forms]):

@@ -35,6 +35,7 @@ class OrganizerUpdateForm(OrganizerForm):
 
     def __init__(self, *args, **kwargs):
         self.domain = kwargs.pop('domain', False)
+        self.change_slug = kwargs.pop('change_slug', False)
         kwargs.setdefault('initial', {})
         self.instance = kwargs['instance']
         if self.domain and self.instance:
@@ -43,7 +44,8 @@ class OrganizerUpdateForm(OrganizerForm):
                 kwargs['initial'].setdefault('domain', initial_domain.domainname)
 
         super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+        if not self.change_slug:
+            self.fields['slug'].widget.attrs['readonly'] = 'readonly'
         if self.domain:
             self.fields['domain'] = forms.CharField(
                 max_length=255,
@@ -53,6 +55,8 @@ class OrganizerUpdateForm(OrganizerForm):
             )
 
     def clean_slug(self):
+        if self.change_slug:
+            return self.cleaned_data['slug']
         return self.instance.slug
 
     def save(self, commit=True):

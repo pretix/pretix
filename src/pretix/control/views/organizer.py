@@ -225,6 +225,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             kwargs['domain'] = True
+            kwargs['change_slug'] = True
         return kwargs
 
     def get_success_url(self) -> str:

@@ -202,16 +202,21 @@ class EventMetaValueForm(forms.ModelForm):
 
 
 class EventUpdateForm(I18nModelForm):
-    def clean_slug(self):
-        return self.instance.slug
 
     def __init__(self, *args, **kwargs):
+        self.change_slug = kwargs.pop('change_slug', False)
         super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+        if not self.change_slug:
+            self.fields['slug'].widget.attrs['readonly'] = 'readonly'
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
         )
+
+    def clean_slug(self):
+        if self.change_slug:
+            return self.cleaned_data['slug']
+        return self.instance.slug
 
     class Meta:
         model = Event
