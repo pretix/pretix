@@ -87,8 +87,10 @@
                         </div>
                         <div class="panel-body">
                             <dl class="dl-horizontal">
-                                <dt>{% trans "Company" %}</dt>
-                                <dd>{{ addr.company }}</dd>
+                                {% if addr.company %}
+                                    <dt>{% trans "Company" %}</dt>
+                                    <dd>{{ addr.company }}</dd>
+                                {% endif %}
                                 <dt>{% trans "Name" %}</dt>
                                 <dd>{{ addr.name }}</dd>
                                 <dt>{% trans "Address" %}</dt>
