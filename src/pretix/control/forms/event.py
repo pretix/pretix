@@ -322,7 +322,8 @@ class EventSettingsForm(SettingsForm):
         label=_("Automatic waiting list assignments"),
         help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
                     "on the waiting list for that product. If this is not active, mails will not be send automatically "
-                    "but you can send them manually via the control panel."),
+                    "but you can send them manually via the control panel. If you disable the waiting list but keep "
+                    "this option enabled, tickets will still be sent out."),
         required=False,
         widget=forms.CheckboxInput(),
     )

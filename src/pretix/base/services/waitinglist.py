@@ -74,5 +74,5 @@ def process_waitinglist(sender, **kwargs):
         live=True
     ).prefetch_related('_settings_objects', 'organizer___settings_objects').select_related('organizer')
     for e in qs:
-        if e.settings.waiting_list_enabled and e.settings.waiting_list_auto and e.presale_is_running:
+        if e.settings.waiting_list_auto and e.presale_is_running:
             assign_automatically.apply_async(args=(e.pk,))
