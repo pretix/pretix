@@ -15,26 +15,32 @@ services:
     networks:
       - internal
 
+  postfix:
+    build: ./postfix
+    container_name: postfix
+    networks:
+      - internal
+
   pretix:
     build: .
     volumes:
-      - ./data:/data
-      - ./static:/pretix/src/pretix/static.dist
+      - pretix-data:/data
+      - static-data:/pretix/src/pretix/static.dist
     depends_on:
       - db
       - redis
+      - postfix
     command: ./pretix-entrypoint.sh
     user: www-data
     networks:
       - internal
       - external
-    ports:
-      - "0.0.0.0:8000:8000"
 
   task:
     build: .
     volumes:
-      - ./data:/data
+      - pretix-data:/data
+      - static-data:/static
     depends_on:
       - pretix
     command: ./task-entrypoint.sh
@@ -44,7 +50,9 @@ services:
 
 
 volumes:
+  pretix-data:
   db-data:
+  static-data:
 
 networks:
   internal:

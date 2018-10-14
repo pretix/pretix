@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  pretix:
-    volumes:
-      - pretix-data:/data
-      - static-data:/pretix/src/pretix/static.dist
-
-  task:
-    volumes:
-      - pretix-data:/data
-      - static-data:/static
-
   nginx:
     image: nginx:latest
     ports:
