@@ -216,6 +216,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
+        if not data.get('is_business'):
+            data['company'] = ''
         if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
