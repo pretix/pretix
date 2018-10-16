@@ -565,7 +565,7 @@
                                             {{ order.invoice_address.vat_id }}
                                             {% if order.invoice_address.vat_id_validated %}
                                                 <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed %}Valid EU VAT ID{% endblocktrans %}"></span>
-                                            {% else %}
+                                            {% elif order.invoice_address.vat_id %}
                                                 <form class="form-inline helper-display-inline" method="post"
                                                         action="{% url "control:event.order.checkvatid" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                                     {% csrf_token %}
