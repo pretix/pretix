@@ -26,10 +26,12 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import CountryField
 from i18nfield.strings import LazyI18nString
+from jsonfallback.fields import FallbackJSONField
 
 from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
@@ -699,8 +701,10 @@ class AbstractPosition(models.Model):
     :type expires: datetime
     :param price: The price of this item
     :type price: decimal.Decimal
-    :param attendee_name: The attendee's name, if entered.
-    :type attendee_name: str
+    :param attendee_name_parts: The parts of the attendee's name, if entered.
+    :type attendee_name_parts: str
+    :param attendee_name_cached: The concatenated version of the attendee's name, if entered.
+    :type attendee_name_cached: str
     :param attendee_email: The attendee's email, if entered.
     :type attendee_email: str
     :param voucher: A voucher that has been applied to this sale
@@ -729,11 +733,14 @@ class AbstractPosition(models.Model):
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
     )
-    attendee_name = models.CharField(
+    attendee_name_cached = models.CharField(
         max_length=255,
         verbose_name=_("Attendee name"),
         blank=True, null=True,
         help_text=_("Empty, if this product is not an admission ticket")
+    )
+    attendee_name_parts = FallbackJSONField(
+        blank=True, null=True,
     )
     attendee_email = models.EmailField(
         verbose_name=_("Attendee email"),
@@ -796,6 +803,15 @@ class AbstractPosition(models.Model):
         return (self.item.quotas.filter(subevent=self.subevent)
                 if self.variation is None
                 else self.variation.quotas.filter(subevent=self.subevent))
+
+    def save(self, *args, **kwargs):
+        self.attendee_name_cached = self.attendee_name
+        super().save(*args, **kwargs)
+
+    @property
+    def attendee_name(self):
+        scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        return scheme['concatenation'].format_map(self.attendee_name_parts)
 
 
 class OrderPayment(models.Model):
@@ -1481,6 +1497,10 @@ class OrderPosition(AbstractPosition):
             if not OrderPosition.objects.filter(pseudonymization_id=code).exists():
                 self.pseudonymization_id = code
                 return
+
+    @property
+    def event(self):
+        return self.order.event
 
 
 class CartPosition(AbstractPosition):

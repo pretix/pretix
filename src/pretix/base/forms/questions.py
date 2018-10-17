@@ -1,3 +1,4 @@
+import copy
 import logging
 from decimal import Decimal
 
@@ -8,6 +9,7 @@ import vat_moss.id
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms.widgets import (
@@ -16,11 +18,95 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import InvoiceAddress, Question
 from pretix.base.models.tax import EU_COUNTRIES
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.forms import SplitDateTimeField
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
 
 logger = logging.getLogger(__name__)
+
+
+class NamePartsWidget(forms.MultiWidget):
+    widget = forms.TextInput
+
+    def __init__(self, scheme: dict, field: forms.Field, attrs=None):
+        widgets = []
+        self.scheme = scheme
+        self.field = field
+        for fname, label, size in self.scheme['fields']:
+            a = copy.copy(attrs) or {}
+            a['data-fname'] = fname
+            widgets.append(self.widget(attrs=a))
+        super().__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value is None:
+            return None
+        data = []
+        for i, field in enumerate(self.scheme['fields']):
+            fname, label, size = field
+            data.append(value.get(fname, ""))
+        return data
+
+    def render(self, name: str, value, attrs=None, renderer=None) -> str:
+        if not isinstance(value, list):
+            value = self.decompress(value)
+        output = []
+        final_attrs = self.build_attrs(attrs or dict())
+        id_ = final_attrs.get('id', None)
+        for i, widget in enumerate(self.widgets):
+            try:
+                widget_value = value[i]
+            except (IndexError, TypeError):
+                widget_value = None
+            if id_:
+                final_attrs = dict(
+                    final_attrs,
+                    id='%s_%s' % (id_, i),
+                    title=self.scheme['fields'][i][1],
+                    placeholder=self.scheme['fields'][i][1],
+                )
+                final_attrs['data-size'] = self.scheme['fields'][i][2]
+            output.append(widget.render(name + '_%s' % i, widget_value, final_attrs, renderer=renderer))
+        return mark_safe(self.format_output(output))
+
+    def format_output(self, rendered_widgets) -> str:
+        return '<div class="nameparts-form-group">%s</div>' % ''.join(rendered_widgets)
+
+
+class NamePartsFormField(forms.MultiValueField):
+    widget = NamePartsWidget
+
+    def compress(self, data_list) -> dict:
+        data = {}
+        for i, value in enumerate(data_list):
+            if value:
+                data[self.scheme['fields'][i][0]] = value
+        return data
+
+    def __init__(self, *args, **kwargs):
+        fields = []
+        defaults = {
+            'widget': self.widget,
+            'max_length': kwargs.pop('max_length', None),
+        }
+        self.scheme = kwargs.pop('scheme')
+        self.one_required = kwargs.get('required', True)
+        require_all_fields = kwargs.pop('require_all_fields', False)
+        kwargs['required'] = False
+        kwargs['widget'] = (kwargs.get('widget') or self.widget)(
+            scheme=self.scheme, field=self, **kwargs.pop('widget_kwargs', {})
+        )
+        defaults.update(**kwargs)
+        for fname, label, size in self.scheme['fields']:
+            defaults['label'] = label
+            field = forms.CharField(**defaults)
+            field.part_name = fname
+            fields.append(field)
+        super().__init__(
+            fields=fields, require_all_fields=False, *args, **kwargs
+        )
+        self.require_all_fields = require_all_fields
 
 
 class BaseQuestionsForm(forms.Form):
@@ -47,10 +133,12 @@ class BaseQuestionsForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if item.admission and event.settings.attendee_names_asked:
-            self.fields['attendee_name'] = forms.CharField(
-                max_length=255, required=event.settings.attendee_names_required,
+            self.fields['attendee_name_parts'] = NamePartsFormField(
+                max_length=255,
+                required=event.settings.attendee_names_required,
+                scheme=PERSON_NAME_SCHEMES.get(event.settings.name_scheme),
                 label=_('Attendee name'),
-                initial=(cartpos.attendee_name if cartpos else orderpos.attendee_name),
+                initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
             )
         if item.admission and event.settings.attendee_emails_asked:
             self.fields['attendee_email'] = forms.EmailField(

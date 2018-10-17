@@ -1,11 +1,12 @@
 import json
+from collections import OrderedDict
 from datetime import datetime
 from typing import Any
 
 from django.conf import settings
 from django.core.files import File
 from django.db.models import Model
-from django.utils.translation import ugettext_noop
+from django.utils.translation import ugettext_noop, ugettext_lazy as _, pgettext_lazy
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
 
@@ -556,7 +557,87 @@ Your {event} team"""))
         'default': 'date_ascending',
         'type': str
     },
+    'name_scheme': {
+        'default': 'full',
+        'type': str
+    }
 }
+PERSON_NAME_SCHEMES = OrderedDict([
+    ('given_family', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': '{given_name} {family_name}'
+    }),
+    ('title_given_family', {
+        'fields': (
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': '{title} {given_name} {family_name}'
+    }),
+    ('first_middle_family', {
+        'fields': (
+            ('first_name', _('First name'), 2),
+            ('middle_name', _('Middle name'), 1),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': '{first_name} {middle_name} {family_name}'
+    }),
+    ('title_first_middle_family', {
+        'fields': (
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('first_name', _('First name'), 2),
+            ('middle_name', _('Middle name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': '{title} {first_name} {middle_name} {family_name}'
+    }),
+    ('family_given', {
+        'fields': (
+            ('family_name', _('Family name'), 1),
+            ('given_name', _('Given name'), 1),
+        ),
+        'concatenation': '{family_name} {given_name}'
+    }),
+    ('family_nospace_given', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': '{family_name}{given_name}'
+    }),
+    ('family_comma_given', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': '{family_name}, {given_name}'
+    }),
+    ('full', {
+        'fields': (
+            ('full_name', _('Name'), 1),
+        ),
+        'concatenation': '{full_name}'
+    }),
+    ('calling_full', {
+        'fields': (
+            ('calling_name', _('Calling name'), 1),
+            ('full_name', _('Full name'), 2),
+        ),
+        'concatenation': '{full_name}'
+    }),
+    ('full_transcription', {
+        'fields': (
+            ('full_name', _('Full name'), 1),
+            ('latin_transcription', _('Latin transcription'), 2),
+        ),
+        'concatenation': '{full_name}'
+    }),
+])
+
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 

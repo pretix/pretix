@@ -34,6 +34,8 @@ babel
 django-i18nfield>=1.4.0
 django-hijack>=2.1.10,<2.2.0
 django-oauth-toolkit==1.2.*
+django-jsonfallback
+psycopg2-binary
 # Stripe
 stripe==2.0.*
 # PayPal
