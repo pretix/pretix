@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:25+0000\n"
-"PO-Revision-Date: 2018-10-20 21:25+0000\n"
+"PO-Revision-Date: 2018-10-22 04:23+0000\n"
 "Last-Translator: Samir C. Costa <samirfor@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
@@ -314,7 +314,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr "Retormar checkout"
+msgstr "Retomar checkout"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
