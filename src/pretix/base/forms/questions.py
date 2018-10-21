@@ -55,6 +55,7 @@ class NamePartsWidget(forms.MultiWidget):
             value = self.decompress(value)
         output = []
         final_attrs = self.build_attrs(attrs or dict())
+        del final_attrs['required']
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):
             try:
@@ -108,6 +109,7 @@ class NamePartsFormField(forms.MultiValueField):
             fields=fields, require_all_fields=False, *args, **kwargs
         )
         self.require_all_fields = require_all_fields
+        self.required = self.one_required
 
     def clean(self, value) -> dict:
         value = super().clean(value)
