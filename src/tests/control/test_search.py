@@ -39,7 +39,7 @@ class OrderSearchTest(SoupTest):
             item=ticket1,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Peter",
+            attendee_name_parts={'full_name': "Peter"},
             attendee_email="att@att.com"
         )
 
@@ -57,7 +57,7 @@ class OrderSearchTest(SoupTest):
             item=ticket2,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Mark"
+            attendee_name_parts={'full_name': "Mark"}
         )
 
         self.team = Team.objects.create(organizer=self.orga1, can_view_orders=True)

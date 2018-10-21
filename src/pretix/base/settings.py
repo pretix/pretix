@@ -578,18 +578,18 @@ PERSON_NAME_SCHEMES = OrderedDict([
         ),
         'concatenation': '{title} {given_name} {family_name}'
     }),
-    ('first_middle_family', {
+    ('given_middle_family', {
         'fields': (
-            ('first_name', _('First name'), 2),
+            ('given_name', _('First name'), 2),
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 2),
         ),
         'concatenation': '{first_name} {middle_name} {family_name}'
     }),
-    ('title_first_middle_family', {
+    ('title_given_middle_family', {
         'fields': (
             ('title', pgettext_lazy('person_name', 'Title'), 1),
-            ('first_name', _('First name'), 2),
+            ('given_name', _('First name'), 2),
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 1),
         ),

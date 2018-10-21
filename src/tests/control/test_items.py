@@ -187,13 +187,13 @@ class QuestionsTest(ItemFormTest):
                                  expires=now() + datetime.timedelta(days=10),
                                  total=14, locale='en')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Peter")
+                                          attendee_name_parts={'full_name': "Peter"})
         op.answers.create(question=c, answer='42')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Michael")
+                                          attendee_name_parts={'full_name': "Michael"})
         op.answers.create(question=c, answer='42')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Petra")
+                                          attendee_name_parts={'full_name': "Petra"})
         op.answers.create(question=c, answer='39')
 
         doc = self.get_doc('/control/event/%s/%s/questions/%s/' % (self.orga1.slug, self.event1.slug, c.id))
@@ -414,7 +414,7 @@ class ItemsTest(ItemFormTest):
             item=self.item1,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Peter"
+            attendee_name_parts={'full_name': "Peter"}
         )
         self.client.post('/control/event/%s/%s/items/%d/delete' % (self.orga1.slug, self.event1.slug, self.item1.id),
                          {})

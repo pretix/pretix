@@ -36,11 +36,11 @@ def env():
     )
     op1 = OrderPosition.objects.create(
         order=o1, item=shirt, variation=shirt_red,
-        price=12, attendee_name=None, secret='1234'
+        price=12, attendee_name_parts={}, secret='1234'
     )
     op2 = OrderPosition.objects.create(
         order=o1, item=ticket,
-        price=23, attendee_name="Peter", secret='5678910'
+        price=23, attendee_name_parts={"full_name": "Peter"}, secret='5678910'
     )
     cl1 = event.checkin_lists.create(name="Foo", all_products=True)
     cl2 = event.checkin_lists.create(name="Bar", all_products=True)

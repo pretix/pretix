@@ -45,7 +45,7 @@ def dashboard_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="Peter"
+        attendee_name_parts={"full_name": "Peter"}
     )
     OrderPosition.objects.create(
         order=order_paid,
@@ -77,7 +77,7 @@ def test_dashboard_pending_not_count(dashboard_env):
         item=dashboard_env[4],
         variation=None,
         price=Decimal("23"),
-        attendee_name="NotPaid"
+        attendee_name_parts={'full_name': "NotPaid"}
     )
     assert '0/2' in c[0]['content']
 
@@ -149,14 +149,14 @@ def checkin_list_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="Pending"
+        attendee_name_parts={'full_name': "Pending"}
     )
     op_a1_ticket = OrderPosition.objects.create(
         order=order_a1,
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="A1"
+        attendee_name_parts={'full_name': "A1"}
     )
     op_a1_mascot = OrderPosition.objects.create(
         order=order_a1,
@@ -169,14 +169,14 @@ def checkin_list_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="A2"
+        attendee_name_parts={'full_name': "A2"}
     )
     op_a3_ticket = OrderPosition.objects.create(
         order=order_a3,
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="a4",  # a3 attendee is a4
+        attendee_name_parts={'full_name': "a4"},  # a3 attendee is a4
         attendee_email="a3company@dummy.test"
     )
 
@@ -339,14 +339,14 @@ def checkin_list_with_addon_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="Pending"
+        attendee_name_parts={'full_name': "Pending"}
     )
     op_a1_ticket = OrderPosition.objects.create(
         order=order_a1,
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="A1"
+        attendee_name_parts={'full_name': "A1"}
     )
     op_a1_workshop = OrderPosition.objects.create(
         order=order_a1,
@@ -360,7 +360,7 @@ def checkin_list_with_addon_env():
         item=item_ticket,
         variation=None,
         price=Decimal("23"),
-        attendee_name="A2"
+        attendee_name_parts={'full_name': "A2"}
     )
 
     # checkin

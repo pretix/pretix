@@ -51,7 +51,7 @@ def env():
         item=ticket,
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter"}
     )
     return event, user, o, ticket
 
@@ -528,7 +528,7 @@ def test_order_extend_expired_quota_partial(client, env):
         item=env[3],
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter"}
     )
     o.expires = now() - timedelta(days=5)
     o.status = Order.STATUS_EXPIRED
@@ -745,11 +745,11 @@ class OrderChangeTests(SoupTest):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}
         )
         self.quota = self.event.quotas.create(name="All", size=100)
         self.quota.items.add(self.ticket)

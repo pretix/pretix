@@ -108,7 +108,7 @@ class BadgeExporter(BaseExporter):
             qs = qs.filter(order__status__in=[Order.STATUS_PAID])
 
         if form_data.get('order_by') == 'name':
-            qs = qs.order_by('attendee_name', 'order__code')
+            qs = qs.order_by('attendee_name_cached', 'order__code')
         elif form_data.get('order_by') == 'last_name':
             qs = qs.order_by('order__code')
             qs = sorted(qs, key=lambda op: op.attendee_name.split()[-1] if op.attendee_name else '')

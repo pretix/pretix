@@ -25,6 +25,7 @@ item                                  integer                    ID of the item
 variation                             integer                    ID of the variation (or ``null``)
 price                                 money (string)             Price of this position
 attendee_name                         string                     Specified attendee name for this position (or ``null``)
+attendee_name_parts                   object of strings          Composition of attendee name (i.e. first name, last name, …)
 attendee_email                        string                     Specified attendee email address for this position (or ``null``)
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
@@ -78,6 +79,7 @@ Cart position endpoints
             "variation": null,
             "price": "23.00",
             "attendee_name": null,
+            "attendee_name_parts": {},
             "attendee_email": null,
             "voucher": null,
             "addon_to": null,
@@ -122,6 +124,7 @@ Cart position endpoints
         "variation": null,
         "price": "23.00",
         "attendee_name": null,
+        "attendee_name_parts": {},
         "attendee_email": null,
         "voucher": null,
         "addon_to": null,
@@ -175,7 +178,7 @@ Cart position endpoints
    * ``item``
    * ``variation`` (optional)
    * ``price``
-   * ``attendee_name`` (optional)
+   * ``attendee_name`` **or** ``attendee_name_parts`` (optional)
    * ``attendee_email`` (optional)
    * ``subevent`` (optional)
    * ``expires`` (optional)
@@ -199,7 +202,10 @@ Cart position endpoints
         "item": 1,
         "variation": null,
         "price": "23.00",
-        "attendee_name": "Peter",
+        "attendee_name_parts": {
+          "given_name": "Peter",
+          "family_name": "Miller"
+        },
         "attendee_email": null,
         "answers": [
           {

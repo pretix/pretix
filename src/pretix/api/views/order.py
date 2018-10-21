@@ -3,8 +3,8 @@ import datetime
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Prefetch, Q
-from django.db.models.functions import Concat
+from django.db.models import Prefetch, Q, F
+from django.db.models.functions import Concat, Coalesce
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
@@ -373,8 +373,8 @@ class OrderPositionFilter(FilterSet):
     def search_qs(self, queryset, name, value):
         return queryset.filter(
             Q(secret__istartswith=value)
-            | Q(attendee_name__icontains=value)
-            | Q(addon_to__attendee_name__icontains=value)
+            | Q(attendee_name_cached__icontains=value)
+            | Q(addon_to__attendee_name_cached__icontains=value)
             | Q(order__code__istartswith=value)
             | Q(order__invoice_address__name__icontains=value)
         )
@@ -383,7 +383,7 @@ class OrderPositionFilter(FilterSet):
         return queryset.filter(checkins__isnull=not value)
 
     def attendee_name_qs(self, queryset, name, value):
-        return queryset.filter(Q(attendee_name__iexact=value) | Q(addon_to__attendee_name__iexact=value))
+        return queryset.filter(Q(attendee_name_cached__iexact=value) | Q(addon_to__attendee_name_cached__iexact=value))
 
     class Meta:
         model = OrderPosition
@@ -409,6 +409,16 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
     filterset_class = OrderPositionFilter
     permission = 'can_view_orders'
     write_permission = 'can_change_orders'
+    ordering_custom = {
+        'attendee_name': {
+            '_order': F('display_name').asc(nulls_first=True),
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
+        },
+        '-attendee_name': {
+            '_order': F('display_name').asc(nulls_last=True),
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
+        },
+    }
 
     def get_queryset(self):
         return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(

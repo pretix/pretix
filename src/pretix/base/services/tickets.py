@@ -87,11 +87,11 @@ def preview(event: int, provider: str):
                                     locale=event.settings.locale,
                                     expires=now(), code="PREVIEW1234", total=119)
 
-        p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
-        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
-        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+        p = order.positions.create(item=item, attendee_name_parts={'full_name': _("John Doe")}, price=item.default_price)
+        order.positions.create(item=item2, attendee_name_parts={'full_name': _("John Doe")}, price=item.default_price, addon_to=p)
+        order.positions.create(item=item2, attendee_name_parts={'full_name': _("John Doe")}, price=item.default_price, addon_to=p)
 
-        InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
+        InvoiceAddress.objects.create(order=order, name_parts={'full_name': _("John Doe")}, company=_("Sample company"))
 
         responses = register_ticket_outputs.send(event)
         for receiver, response in responses:

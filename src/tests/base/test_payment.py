@@ -154,11 +154,11 @@ def test_availability_date_order_relative_subevents(event):
     )
     OrderPosition.objects.create(
         order=order, item=ticket, variation=None, subevent=se1,
-        price=Decimal("23.00"), attendee_name="Peter", positionid=1
+        price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
     )
     OrderPosition.objects.create(
         order=order, item=ticket, variation=None, subevent=se2,
-        price=Decimal("23.00"), attendee_name="Dieter", positionid=2
+        price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
     )
 
     prov = DummyPaymentProvider(event)

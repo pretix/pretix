@@ -46,6 +46,8 @@ class NamePartsWidget(forms.MultiWidget):
         for i, field in enumerate(self.scheme['fields']):
             fname, label, size = field
             data.append(value.get(fname, ""))
+        if '_legacy' in value and not data[-1]:
+            data[-1] = value.get('_legacy', '')
         return data
 
     def render(self, name: str, value, attrs=None, renderer=None) -> str:
@@ -80,8 +82,7 @@ class NamePartsFormField(forms.MultiValueField):
     def compress(self, data_list) -> dict:
         data = {}
         for i, value in enumerate(data_list):
-            if value:
-                data[self.scheme['fields'][i][0]] = value
+            data[self.scheme['fields'][i][0]] = value or ''
         return data
 
     def __init__(self, *args, **kwargs):
@@ -107,6 +108,14 @@ class NamePartsFormField(forms.MultiValueField):
             fields=fields, require_all_fields=False, *args, **kwargs
         )
         self.require_all_fields = require_all_fields
+
+    def clean(self, value) -> dict:
+        value = super().clean(value)
+        if self.one_required and (not value or not any(v for v in value)):
+            raise forms.ValidationError(self.error_messages['required'], code='required')
+        if self.require_all_fields and not all(v for v in value):
+            raise forms.ValidationError(self.error_messages['incomplete'], code='required')
+        return value
 
 
 class BaseQuestionsForm(forms.Form):

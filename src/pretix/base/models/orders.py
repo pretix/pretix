@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 import copy
 import json
 import logging
@@ -810,8 +812,12 @@ class AbstractPosition(models.Model):
 
     @property
     def attendee_name(self):
+        if not self.attendee_name_parts:
+            return None
+        if '_legacy' in self.attendee_name_parts:
+            return self.attendee_name_parts['_legacy']
         scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'].format_map(self.attendee_name_parts)
+        return scheme['concatenation'].format_map(defaultdict(str, self.attendee_name_parts)).strip()
 
 
 class OrderPayment(models.Model):

@@ -129,7 +129,7 @@ class OrderFilterForm(FilterForm):
 
             matching_positions = OrderPosition.objects.filter(
                 Q(order=OuterRef('pk')) & Q(
-                    Q(attendee_name__icontains=u) | Q(attendee_email__icontains=u)
+                    Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
                     | Q(secret__istartswith=u)
                 )
             ).values('id')
@@ -568,9 +568,9 @@ class CheckInFilterForm(FilterForm):
         'item': ('item__name', 'variation__value', 'order__code'),
         '-item': ('-item__name', '-variation__value', '-order__code'),
         'name': {'_order': F('display_name').asc(nulls_first=True),
-                 'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
+                 'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')},
         '-name': {'_order': F('display_name').desc(nulls_last=True),
-                  'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')},
+                  'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')},
     }
 
     user = forms.CharField(
@@ -615,7 +615,7 @@ class CheckInFilterForm(FilterForm):
                 Q(order__code__istartswith=u)
                 | Q(secret__istartswith=u)
                 | Q(order__email__icontains=u)
-                | Q(attendee_name__icontains=u)
+                | Q(attendee_name_cached__icontains=u)
                 | Q(attendee_email__icontains=u)
                 | Q(voucher__code__istartswith=u)
                 | Q(order__invoice_address__name__icontains=u)

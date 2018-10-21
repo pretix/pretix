@@ -158,9 +158,9 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = OrderPosition
-        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
-                  'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
+        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -305,10 +305,11 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
+    attendee_name = serializers.CharField(required=False)
 
     class Meta:
         model = OrderPosition
-        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
+        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'secret', 'addon_to', 'subevent', 'answers')
 
     def validate_secret(self, secret):
@@ -359,6 +360,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 raise ValidationError(
                     {'variation': ['You cannot specify a variation for this item.']}
                 )
+        if data.get('attendee_name') and data.get('attendee_name_parts'):
+            raise ValidationError(
+                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
+            )
         return data
 
 
@@ -555,6 +560,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             for pos_data in positions_data:
                 answers_data = pos_data.pop('answers', [])
                 addon_to = pos_data.pop('addon_to', None)
+                attendee_name = pos_data.pop('attendee_name', '')
+                if attendee_name and not pos_data.get('attendee_name_parts'):
+                    pos_data['attendee_name_parts'] = {
+                        '_legacy': attendee_name
+                    }
                 pos = OrderPosition(**pos_data)
                 pos.order = order
                 pos._calculate_tax()

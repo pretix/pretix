@@ -30,7 +30,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             item=self.ticket,
             variation=None,
             price=Decimal("23"),
-            attendee_name="Peter"
+            attendee_name_parts={'full_name': "Peter"}
         )
 
     def test_iframe_entry_view_wrapper(self):

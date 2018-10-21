@@ -539,11 +539,11 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.id: '',
+            '%s-attendee_name_parts_0' % cr1.id: '',
             'email': 'admin@localhost'
         }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
@@ -551,7 +551,7 @@ class CheckoutTestCase(TestCase):
 
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.id: 'Peter',
+            '%s-attendee_name_parts_0' % cr1.id: 'Peter',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
@@ -569,11 +569,11 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            '%s-attendee_name' % cr1.id: '',
+            '%s-attendee_name_parts_0' % cr1.id: '',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
@@ -828,7 +828,7 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1.attendee_name = 'Peter'
+        cr1.attendee_name_parts = {"full_name": 'Peter'}
         cr1.save()
         q1 = Question.objects.create(
             event=self.event, question='Age', type=Question.TYPE_NUMBER,

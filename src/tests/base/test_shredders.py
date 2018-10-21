@@ -54,7 +54,7 @@ def order(event, item):
         item=item,
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter",
+        attendee_name_parts={'full_name': "Peter"},
         attendee_email="foo@example.org"
     )
     return o
@@ -155,7 +155,7 @@ def test_attendee_name_shredder(event, order):
     }
     s.shred_data()
     order.refresh_from_db()
-    assert order.positions.first().attendee_name is None
+    assert not order.positions.first().attendee_name
     l1.refresh_from_db()
     assert 'Hans' not in l1.data
     assert 'Foo' in l1.data

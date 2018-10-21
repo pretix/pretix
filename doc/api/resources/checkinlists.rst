@@ -371,6 +371,9 @@ Order position endpoints
             "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter",
+            },
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
@@ -466,6 +469,9 @@ Order position endpoints
         "variation": null,
         "price": "23.00",
         "attendee_name": "Peter",
+        "attendee_name_parts": {
+          "full_name": "Peter",
+        },
         "attendee_email": null,
         "voucher": null,
         "tax_rate": "0.00",
