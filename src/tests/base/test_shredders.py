@@ -186,6 +186,7 @@ def test_invoice_address_shredder(event, order):
             'is_business': False,
             'last_modified': ia.last_modified.isoformat().replace('+00:00', 'Z'),
             'name': '',
+            'name_parts': {},
             'street': '221B Baker Street',
             'vat_id': '',
             'vat_id_validated': False,

@@ -196,7 +196,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
             qs = qs.filter(subevent=cl.subevent)
 
         if form_data['sort'] == 'name':
-            qs = qs.order_by(Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached', 'order__invoice_address__name'),
+            qs = qs.order_by(Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached', 'order__invoice_address__name_cached'),
                              'order__code')
         elif form_data['sort'] == 'code':
             qs = qs.order_by('order__code')

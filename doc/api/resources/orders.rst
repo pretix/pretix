@@ -46,6 +46,7 @@ invoice_address                       object                     Invoice address
                                                                  for orders created before pretix 1.7, do not rely on
                                                                  it).
 ├ name                                string                     Customer name
+├ name_parts                          object of strings          Customer name decomposition
 ├ street                              string                     Customer street
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
@@ -279,6 +280,7 @@ List of all orders
                 "is_business": True,
                 "company": "Sample company",
                 "name": "John Doe",
+                "name_parts": {"full_name": "John Doe"},
                 "street": "Test street 12",
                 "zipcode": "12345",
                 "city": "Testington",
@@ -414,6 +416,7 @@ Fetching individual orders
             "company": "Sample company",
             "is_business": True,
             "name": "John Doe",
+            "name_parts": {"full_name": "John Doe"},
             "street": "Test street 12",
             "zipcode": "12345",
             "city": "Testington",
@@ -608,7 +611,7 @@ Creating orders
 
       * ``company``
       * ``is_business``
-      * ``name``
+      * ``name`` **or** ``name_parts``
       * ``street``
       * ``zipcode``
       * ``city``
@@ -671,7 +674,7 @@ Creating orders
         "invoice_address": {
           "is_business": False,
           "company": "Sample company",
-          "name": "John Doe",
+          "name_parts": {"full_name": "John Doe"},
           "street": "Sesam Street 12",
           "zipcode": "12345",
           "city": "Sample City",

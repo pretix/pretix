@@ -36,7 +36,8 @@ class OrderSearch(PaginationMixin, ListView):
             qs = self.filter_form.filter_qs(qs)
 
         return qs.only(
-            'id', 'invoice_address__name', 'code', 'event', 'email', 'datetime', 'total', 'status'
+            'id', 'invoice_address__name_cached', 'invoice_address__name_parts', 'code', 'event', 'email',
+            'datetime', 'total', 'status'
         ).prefetch_related(
             'event', 'event__organizer'
         )

@@ -137,7 +137,7 @@ class OrderFilterForm(FilterForm):
             qs = qs.annotate(has_pos=Exists(matching_positions)).filter(
                 code
                 | Q(email__icontains=u)
-                | Q(invoice_address__name__icontains=u)
+                | Q(invoice_address__name_cached__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
                 | Q(comment__icontains=u)
@@ -618,7 +618,7 @@ class CheckInFilterForm(FilterForm):
                 | Q(attendee_name_cached__icontains=u)
                 | Q(attendee_email__icontains=u)
                 | Q(voucher__code__istartswith=u)
-                | Q(order__invoice_address__name__icontains=u)
+                | Q(order__invoice_address__name_cached__icontains=u)
                 | Q(order__invoice_address__company__icontains=u)
             )
 

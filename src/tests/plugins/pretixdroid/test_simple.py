@@ -273,7 +273,7 @@ def test_search_restricted(client, env):
 @pytest.mark.django_db
 def test_search_invoice_name(client, env):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
-    InvoiceAddress.objects.create(order=env[2], name="John")
+    InvoiceAddress.objects.create(order=env[2], name_parts={"full_name": "John"})
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', 'John'))
     jdata = json.loads(resp.content.decode("utf-8"))

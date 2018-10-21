@@ -13,6 +13,10 @@ def set_attendee_name_parts(apps, schema_editor):
     for op in CartPosition.objects.exclude(attendee_name_cached=None).exclude(
             attendee_name_cached__isnull=True).iterator():
         op.attendee_name_parts = {'_legacy': op.attendee_name_cached}
+    InvoiceAddress = apps.get_model('pretixbase', 'InvoiceAddress')  # noqa
+    for ia in InvoiceAddress.objects.exclude(name_cached=None).exclude(
+            name_cached__isnull=True).iterator():
+        op.name_parts = {'_legacy': ia.name_cached}
 
 
 class Migration(migrations.Migration):
@@ -31,6 +35,11 @@ class Migration(migrations.Migration):
             old_name='attendee_name',
             new_name='attendee_name_cached',
         ),
+        migrations.RenameField(
+            model_name='invoiceaddress',
+            old_name='name',
+            new_name='name_cached',
+        ),
         migrations.AddField(
             model_name='cartposition',
             name='attendee_name_parts',
@@ -41,6 +50,12 @@ class Migration(migrations.Migration):
             model_name='orderposition',
             name='attendee_name_parts',
             field=jsonfallback.fields.FallbackJSONField(null=True, default={'migrated': True}),
+            preserve_default=False,
+        ),
+        migrations.AddField(
+            model_name='invoiceaddress',
+            name='name_parts',
+            field=jsonfallback.fields.FallbackJSONField(default={}),
             preserve_default=False,
         ),
         migrations.RunPython(set_attendee_name_parts, migrations.RunPython.noop)

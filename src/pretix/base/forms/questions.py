@@ -55,7 +55,8 @@ class NamePartsWidget(forms.MultiWidget):
             value = self.decompress(value)
         output = []
         final_attrs = self.build_attrs(attrs or dict())
-        del final_attrs['required']
+        if 'required' in final_attrs:
+            del final_attrs['required']
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):
             try:
@@ -269,13 +270,12 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
     class Meta:
         model = InvoiceAddress
-        fields = ('is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
+        fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'vat_id',
                   'internal_reference')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
             'company': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
-            'name': forms.TextInput(attrs={}),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
         }
@@ -290,15 +290,13 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
+
         if not event.settings.invoice_address_required:
             for k, f in self.fields.items():
                 f.required = False
                 f.widget.is_required = False
                 if 'required' in f.widget.attrs:
                     del f.widget.attrs['required']
-
-            if event.settings.invoice_name_required:
-                self.fields['name'].required = True
         elif event.settings.invoice_address_company_required:
             self.initial['is_business'] = True
 
@@ -311,17 +309,27 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 del self.fields['vat_id'].widget.attrs['data-display-dependency']
         else:
             self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
-            self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'
+            #self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'
+
+        self.fields['name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=(event.settings.invoice_name_required or event.settings.invoice_address_required),
+            scheme=PERSON_NAME_SCHEMES.get(event.settings.name_scheme),
+            label=_('Name'),
+            initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
+        )
 
     def clean(self):
         data = self.cleaned_data
         if not data.get('is_business'):
             data['company'] = ''
-        if not data.get('name') and not data.get('company') and self.event.settings.invoice_address_required:
+        if not data.get('name_parts') and not data.get('company') and self.event.settings.invoice_address_required:
             raise ValidationError(_('You need to provide either a company name or your name.'))
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False
+
+        self.instance.set_name(data.get('name_parts'), self.event)
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass

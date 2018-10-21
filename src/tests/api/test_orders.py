@@ -196,6 +196,7 @@ TEST_ORDER_RES = {
         "is_business": False,
         "company": "Sample company",
         "name": "",
+        "name_parts": {},
         "street": "",
         "zipcode": "",
         "city": "",
@@ -1250,7 +1251,7 @@ ORDER_CREATE_PAYLOAD = {
     "invoice_address": {
         "is_business": False,
         "company": "Sample company",
-        "name": "Fo",
+        "name_parts": {"full_name": "Fo"},
         "street": "Bar",
         "zipcode": "",
         "city": "Sample City",
@@ -1307,6 +1308,8 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert fee.value == Decimal('0.25')
     ia = o.invoice_address
     assert ia.company == "Sample company"
+    assert ia.name_parts == {"full_name": "Fo"}
+    assert ia.name_cached == "Fo"
     assert o.positions.count() == 1
     pos = o.positions.first()
     assert pos.item == item
@@ -1353,6 +1356,28 @@ def test_order_create_legacy_attendee_name(token_client, organizer, event, item,
     assert resp.status_code == 201
     o = Order.objects.get(code=resp.data['code'])
     assert o.positions.first().attendee_name_parts == {"_legacy": "Peter"}
+
+
+@pytest.mark.django_db
+def test_order_create_legacy_invoice_name(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['invoice_address']['name'] = 'Peter'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    del res['invoice_address']['name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.invoice_address.name_parts == {"_legacy": "Peter"}
 
 
 @pytest.mark.django_db

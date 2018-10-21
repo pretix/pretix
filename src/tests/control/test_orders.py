@@ -333,7 +333,7 @@ def test_order_invoice_create_ok(client, env):
 def test_order_invoice_regenerate(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo'}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -362,7 +362,7 @@ def test_order_invoice_regenerate_unknown(client, env):
 def test_order_invoice_reissue(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo'}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content

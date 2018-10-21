@@ -35,11 +35,12 @@ class CompatibleCountryField(serializers.Field):
 
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
+    name = serializers.CharField(required=False)
 
     class Meta:
         model = InvoiceAddress
-        fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
-                  'vat_id_validated', 'internal_reference')
+        fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
+                  'vat_id', 'vat_id_validated', 'internal_reference')
         read_only_fields = ('last_modified', 'vat_id_validated')
 
     def __init__(self, *args, **kwargs):
@@ -47,6 +48,13 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         for v in self.fields.values():
             v.required = False
             v.allow_blank = True
+
+    def validate(self, data):
+        if data.get('name') and data.get('name_parts'):
+            raise ValidationError(
+                {'name': ['Do not specify name if you specified name_parts.']}
+            )
+        return data
 
 
 class AnswerQuestionIdentifierField(serializers.Field):
@@ -469,7 +477,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_info = validated_data.pop('payment_info', '{}')
 
         if 'invoice_address' in validated_data:
-            ia = InvoiceAddress(**validated_data.pop('invoice_address'))
+            iadata = validated_data.pop('invoice_address')
+            name = iadata.pop('name', '')
+            if name and not iadata.get('name_parts'):
+                iadata['name_parts'] = {
+                    '_legacy': name
+                }
+            ia = InvoiceAddress(**iadata)
+            ia.set_name(iadata['name_parts'], self.context['event'])
         else:
             ia = None
 

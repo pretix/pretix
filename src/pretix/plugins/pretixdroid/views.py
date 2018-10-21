@@ -305,7 +305,7 @@ class ApiSearchView(ApiView):
                     | Q(attendee_name_cached__icontains=query)
                     | Q(addon_to__attendee_name_cached__icontains=query)
                     | Q(order__code__istartswith=query)
-                    | Q(order__invoice_address__name__icontains=query)
+                    | Q(order__invoice_address__name_cached__icontains=query)
                 )[:25]
 
             response['results'] = [serialize_op(op, bool(op.last_checked_in), self.config.list) for op in ops]

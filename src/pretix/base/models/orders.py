@@ -741,7 +741,7 @@ class AbstractPosition(models.Model):
         help_text=_("Empty, if this product is not an admission ticket")
     )
     attendee_name_parts = FallbackJSONField(
-        blank=True, null=True,
+        blank=True, null=True, default=dict
     )
     attendee_email = models.EmailField(
         verbose_name=_("Attendee email"),
@@ -1572,7 +1572,8 @@ class InvoiceAddress(models.Model):
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
-    name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
+    name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
+    name_parts = FallbackJSONField(default=dict)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
@@ -1590,7 +1591,26 @@ class InvoiceAddress(models.Model):
     def save(self, **kwargs):
         if self.order:
             self.order.touch()
+        if self.name_parts and not self.name_cached:
+            if self.order:
+                self.set_name(self.name_parts, self.order.event)
+            else:
+                raise RuntimeError('Invalid state: Name was not set via set_name()!')
         super().save(**kwargs)
+
+    def set_name(self, name_parts, event):
+        self.name_parts = name_parts
+        if not self.name_parts:
+            self.name_cached = ""
+        elif '_legacy' in self.name_parts:
+            self.name_cached = self.name_parts['_legacy']
+        else:
+            scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+            self.name_cached = scheme['concatenation'].format_map(defaultdict(str, self.name_parts)).strip()
+
+    @property
+    def name(self):
+        return self.name_cached
 
 
 def cachedticket_name(instance, filename: str) -> str:

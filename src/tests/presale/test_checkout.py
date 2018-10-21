@@ -609,7 +609,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'is_business': 'business',
             'company': 'Foo',
-            'name': 'Bar',
+            'name_parts_0': 'Bar',
             'street': 'Baz',
             'zipcode': '12345',
             'city': 'Here',
@@ -653,7 +653,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=name]')), 1)
+        self.assertEqual(len(doc.select('input[name=name_parts_0]')), 1)
         self.assertEqual(len(doc.select('input[name=street]')), 0)
 
         # Not all required fields filled out, expect failure
@@ -665,7 +665,7 @@ class CheckoutTestCase(TestCase):
 
         # Corrected request
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-            'name': 'Raphael',
+            'name_parts_0': 'Raphael',
             'email': 'admin@localhost'
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
