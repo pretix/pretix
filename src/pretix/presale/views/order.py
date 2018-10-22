@@ -415,54 +415,46 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 old_fee = fee.value
 
                 new_fee = p['provider'].calculate_fee(self.order.pending_sum - old_fee)
-                if new_fee:
-                    fee.value = new_fee
-                    fee.internal_type = p['provider'].identifier
-                    fee._calculate_tax()
-                    fee.save()
-                else:
-                    if fee.pk:
-                        fee.delete()
-                    fee = None
+                with transaction.atomic():
+                    if new_fee:
+                        fee.value = new_fee
+                        fee.internal_type = p['provider'].identifier
+                        fee._calculate_tax()
+                        fee.save()
+                    else:
+                        if fee.pk:
+                            fee.delete()
+                        fee = None
 
-                if self.open_payment and self.open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
-                                                                     OrderPayment.PAYMENT_STATE_CREATED):
-                    self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                    self.open_payment.save(update_fields=['state'])
+                    if self.open_payment and self.open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
+                                                                         OrderPayment.PAYMENT_STATE_CREATED):
+                        self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                        self.open_payment.save(update_fields=['state'])
 
-                self.order.total = self._position_sum + (self.order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
-                newpayment = self.order.payments.create(
-                    state=OrderPayment.PAYMENT_STATE_CREATED,
-                    provider=p['provider'].identifier,
-                    amount=self.order.pending_sum,
-                    fee=fee
-                )
+                    self.order.total = self._position_sum + (self.order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
+                    self.order.save(update_fields=['total'])
+                    newpayment = self.order.payments.create(
+                        state=OrderPayment.PAYMENT_STATE_CREATED,
+                        provider=p['provider'].identifier,
+                        amount=self.order.pending_sum,
+                        fee=fee
+                    )
+                    self.order.log_action(
+                        'pretix.event.order.payment.changed' if self.open_payment else 'pretix.event.order.payment.started',
+                        {
+                            'fee': new_fee,
+                            'old_fee': old_fee,
+                            'provider': newpayment.provider,
+                            'payment': newpayment.pk,
+                            'local_id': newpayment.local_id,
+                        }
+                    )
+                    i = self.order.invoices.filter(is_cancellation=False).last()
+                    if i and self.order.total != oldtotal:
+                        generate_cancellation(i)
+                        generate_invoice(self.order)
 
                 resp = p['provider'].payment_prepare(request, newpayment)
-                if resp:
-                    with transaction.atomic():
-                        if self.open_payment and self.open_payment.provider != p['provider'].identifier:
-                            self.order.log_action('pretix.event.order.payment.changed', {
-                                'old_fee': old_fee,
-                                'new_fee': new_fee,
-                                'old_provider': self.open_payment.provider,
-                                'new_provider': p['provider'].identifier,
-                                'payment': newpayment.pk,
-                                'local_id': newpayment.local_id,
-                            })
-                        else:
-                            self.order.log_action('pretix.event.order.payment.started', {
-                                'fee': new_fee,
-                                'provider': p['provider'].identifier,
-                                'payment': newpayment.pk,
-                                'local_id': newpayment.local_id,
-                            })
-                        self.order.save()
-
-                        i = self.order.invoices.filter(is_cancellation=False).last()
-                        if i and self.order.total != oldtotal:
-                            generate_cancellation(i)
-                            generate_invoice(self.order)
                 if isinstance(resp, str):
                     return redirect(resp)
                 elif resp is True:
