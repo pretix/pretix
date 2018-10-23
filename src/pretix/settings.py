@@ -65,6 +65,7 @@ if DATABASE_IS_GALERA and 'mysql' in db_backend:
     }
 else:
     db_options = {}
+JSON_FIELD_AVAILABLE = db_backend in ('mysql', 'postgresql')
 
 DATABASES = {
     'default': {
