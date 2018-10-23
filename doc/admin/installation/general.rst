@@ -21,6 +21,9 @@ To use pretix, you will need the following things:
 
   .. warning:: Do not ever use SQLite in production. It will break.
 
+  .. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
+               **MariaDB 10.2.7 or newer**.
+
 * A **reverse proxy**. pretix needs to deliver some static content to your users (e.g. CSS, images, ...). While pretix
   is capable of doing this, having this handled by a proper web server like **nginx** or **Apache** will be much
   faster. Also, you need a proxying web server in front to provide SSL encryption.

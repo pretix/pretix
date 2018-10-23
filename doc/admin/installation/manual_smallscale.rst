@@ -33,6 +33,9 @@ Linux and firewalls, we recommend that you start with `ufw`_.
           SSL certificates can be obtained for free these days. We also *do not* provide support for HTTP-only
           installations except for evaluation purposes.
 
+.. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
+             **MariaDB 10.2.7 or newer**.
+
 Unix user
 ---------
 
