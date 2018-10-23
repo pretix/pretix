@@ -32,6 +32,7 @@ matrix:
       env: JOB=translation-spelling
 addons:
   postgresql: "9.4"
+  mariadb: '10.3'
   apt:
       packages:
           - enchant

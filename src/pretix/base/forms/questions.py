@@ -307,24 +307,28 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             del self.fields['company'].widget.attrs['data-display-dependency']
             if 'vat_id' in self.fields:
                 del self.fields['vat_id'].widget.attrs['data-display-dependency']
-        else:
-            self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
-            #self.fields['name'].widget.attrs['data-required-if'] = '#id_is_business_0'
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
-            required=(event.settings.invoice_name_required or event.settings.invoice_address_required),
+            required=event.settings.invoice_name_required,
             scheme=PERSON_NAME_SCHEMES.get(event.settings.name_scheme),
             label=_('Name'),
             initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
         )
+        if event.settings.invoice_address_required and not event.settings.invoice_address_company_required:
+            self.fields['name_parts'].widget.attrs['data-required-if'] = '#id_is_business_0'
+            self.fields['name_parts'].widget.attrs['data-no-required-attr'] = '1'
+            self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
 
     def clean(self):
         data = self.cleaned_data
         if not data.get('is_business'):
             data['company'] = ''
-        if not data.get('name_parts') and not data.get('company') and self.event.settings.invoice_address_required:
-            raise ValidationError(_('You need to provide either a company name or your name.'))
+        if self.event.settings.invoice_address_required:
+            if data.get('is_business') and not data.get('company'):
+                raise ValidationError(_('You need to provide a company name.'))
+            if not data.get('is_business') and not data.get('name_parts'):
+                raise ValidationError(_('You need to provide your name.'))
 
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False

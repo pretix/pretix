@@ -741,7 +741,7 @@ class AbstractPosition(models.Model):
         help_text=_("Empty, if this product is not an admission ticket")
     )
     attendee_name_parts = FallbackJSONField(
-        blank=True, null=True, default=dict
+        blank=True, default=dict
     )
     attendee_email = models.EmailField(
         verbose_name=_("Attendee email"),

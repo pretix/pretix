@@ -43,19 +43,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='cartposition',
             name='attendee_name_parts',
-            field=jsonfallback.fields.FallbackJSONField(null=True, default={'migrated': True}),
+            field=jsonfallback.fields.FallbackJSONField(null=False, default=dict),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='orderposition',
             name='attendee_name_parts',
-            field=jsonfallback.fields.FallbackJSONField(null=True, default={'migrated': True}),
+            field=jsonfallback.fields.FallbackJSONField(null=False, default=dict),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='invoiceaddress',
             name='name_parts',
-            field=jsonfallback.fields.FallbackJSONField(default={}),
+            field=jsonfallback.fields.FallbackJSONField(default=dict),
             preserve_default=False,
         ),
         migrations.RunPython(set_attendee_name_parts, migrations.RunPython.noop)
