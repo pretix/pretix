@@ -40,6 +40,12 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
     with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
+        invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
+        invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
+        invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
+        invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
+        invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
 
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
@@ -66,8 +72,16 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 country=ia.country.name if ia.country else ia.country_old
             ).strip()
             invoice.internal_reference = ia.internal_reference
+            invoice.invoice_to_company = ia.company
+            invoice.invoice_to_name = ia.name
+            invoice.invoice_to_street = ia.street
+            invoice.invoice_to_zipcode = ia.zipcode
+            invoice.invoice_to_city = ia.city
+            invoice.invoice_to_country = ia.country
+
             if ia.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
+                invoice.invoice_to_vat_id = ia.vat_id
 
             cc = str(ia.country)
 
@@ -267,6 +281,12 @@ def build_preview_invoice_pdf(event):
             date=timezone.now().date(), locale=locale, organizer=event.organizer
         )
         invoice.invoice_from = event.settings.get('invoice_address_from')
+        invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
+        invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
+        invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
+        invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
+        invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
 
         introductory = event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = event.settings.get('invoice_additional_text', as_type=LazyI18nString)

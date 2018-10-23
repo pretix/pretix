@@ -5,6 +5,8 @@ from django.db import DatabaseError, models, transaction
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.translation import pgettext
+from django_countries.fields import CountryField
 
 
 def invoice_filename(instance, filename: str) -> str:
@@ -73,7 +75,20 @@ class Invoice(models.Model):
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True, on_delete=models.CASCADE)
     invoice_from = models.TextField()
+    invoice_from_name = models.CharField(max_length=190, null=True)
+    invoice_from_zipcode = models.CharField(max_length=190, null=True)
+    invoice_from_city = models.CharField(max_length=190, null=True)
+    invoice_from_country = CountryField(null=True)
+    invoice_from_tax_id = models.CharField(max_length=190, null=True)
+    invoice_from_vat_id = models.CharField(max_length=190, null=True)
     invoice_to = models.TextField()
+    invoice_to_company = models.TextField(null=True)
+    invoice_to_name = models.TextField(null=True)
+    invoice_to_street = models.TextField(null=True)
+    invoice_to_zipcode = models.CharField(max_length=190, null=True)
+    invoice_to_city = models.TextField(null=True)
+    invoice_to_country = CountryField(null=True)
+    invoice_to_vat_id = models.TextField(null=True)
     date = models.DateField(default=today)
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
@@ -91,6 +106,18 @@ class Invoice(models.Model):
     @staticmethod
     def _to_numeric_invoice_number(number):
         return '{:05d}'.format(int(number))
+
+    @property
+    def full_invoice_from(self):
+        parts = [
+            self.invoice_from_name,
+            self.invoice_from,
+            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            str(self.invoice_from_country),
+            pgettext("invoice", "VAT-ID: %s" % self.invoice_from_vat_id) if self.invoice_from_vat_id else "",
+            pgettext("invoice", "Tax ID: %s" % self.invoice_from_tax_id) if self.invoice_from_tax_id else "",
+        ]
+        return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
     def _get_numeric_invoice_number(self):
         numeric_invoices = Invoice.objects.filter(

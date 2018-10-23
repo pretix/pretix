@@ -9,7 +9,7 @@ from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import (
     pgettext, pgettext_lazy, ugettext_lazy as _,
 )
-from django_countries import Countries
+from django_countries import Countries, countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -522,6 +522,9 @@ class ProviderForm(SettingsForm):
 
 
 class InvoiceSettingsForm(SettingsForm):
+    allcountries = list(countries)
+    allcountries.insert(0, ('', _('Select country')))
+
     invoice_address_asked = forms.BooleanField(
         label=_("Ask for invoice address"),
         required=False
@@ -572,9 +575,10 @@ class InvoiceSettingsForm(SettingsForm):
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
         required=False,
+        widget=forms.RadioSelect,
         choices=(
-            ('False', _('No')),
-            ('admin', _('Manually in admin panel')),
+            ('False', _('Do not generate invoices')),
+            ('admin', _('Only manually in admin panel')),
             ('user', _('Automatically on user request')),
             ('True', _('Automatically for all created orders')),
             ('paid', _('Automatically on payment')),
@@ -598,19 +602,46 @@ class InvoiceSettingsForm(SettingsForm):
         required=True,
         choices=[]
     )
+    invoice_address_from_name = forms.CharField(
+        label=_("Company name"),
+        required=False,
+    )
     invoice_address_from = forms.CharField(
+        label=_("Address line"),
         widget=forms.Textarea(attrs={
-            'rows': 5,
+            'rows': 2,
             'placeholder': _(
-                'Sample Event Company\n'
-                'Albert Einstein Road 52\n'
-                '12345 Samplecity'
+                'Albert Einstein Road 52'
             )
         }),
         required=False,
-        label=_("Your address"),
-        help_text=_("Will be printed as the sender on invoices. Be sure to include relevant details required in "
-                    "your jurisdiction.")
+    )
+    invoice_address_from_zipcode = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': '12345'
+        }),
+        required=False,
+        label=_("ZIP code"),
+    )
+    invoice_address_from_city = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Random City')
+        }),
+        required=False,
+        label=_("City"),
+    )
+    invoice_address_from_country = forms.ChoiceField(
+        choices=allcountries,
+        required=False,
+        label=_("Country"),
+    )
+    invoice_address_from_tax_id = forms.CharField(
+        required=False,
+        label=_("Domestic tax ID"),
+    )
+    invoice_address_from_vat_id = forms.CharField(
+        required=False,
+        label=_("EU VAT ID"),
     )
     invoice_introductory_text = I18nFormField(
         widget=I18nTextarea,
