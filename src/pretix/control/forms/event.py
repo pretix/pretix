@@ -426,9 +426,10 @@ class EventSettingsForm(SettingsForm):
             'and agree with them.'
         )
         self.fields['name_scheme'].choices = (
-            (k, _('Ask for {fields}, display as "{display}"').format(
+            (k, _('Ask for {fields}, display as "{display}". Example: {example}').format(
                 fields=' + '.join(str(vv[1]) for vv in v['fields']),
-                display=v['concatenation']
+                display=v['concatenation'],
+                example=v['concatenation'].format_map(v['sample'])
             ))
             for k, v in PERSON_NAME_SCHEMES.items()
         )

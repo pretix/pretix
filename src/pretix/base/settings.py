@@ -6,7 +6,9 @@ from typing import Any
 from django.conf import settings
 from django.core.files import File
 from django.db.models import Model
-from django.utils.translation import ugettext_noop, ugettext_lazy as _, pgettext_lazy
+from django.utils.translation import (
+    pgettext_lazy, ugettext_lazy as _, ugettext_noop,
+)
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
 
@@ -568,7 +570,11 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{given_name} {family_name}'
+        'concatenation': '{given_name} {family_name}',
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('title_given_family', {
         'fields': (
@@ -576,7 +582,12 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 2),
             ('family_name', _('Family name'), 2),
         ),
-        'concatenation': '{title} {given_name} {family_name}'
+        'concatenation': '{title} {given_name} {family_name}',
+        'sample': {
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('given_middle_family', {
         'fields': (
@@ -584,7 +595,12 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 2),
         ),
-        'concatenation': '{first_name} {middle_name} {family_name}'
+        'concatenation': '{given_name} {middle_name} {family_name}',
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'middle_name': 'M',
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('title_given_middle_family', {
         'fields': (
@@ -593,48 +609,77 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{title} {first_name} {middle_name} {family_name}'
+        'concatenation': '{title} {given_name} {middle_name} {family_name}',
+        'sample': {
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'middle_name': 'M',
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('family_given', {
         'fields': (
             ('family_name', _('Family name'), 1),
             ('given_name', _('Given name'), 1),
         ),
-        'concatenation': '{family_name} {given_name}'
+        'concatenation': '{family_name} {given_name}',
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('family_nospace_given', {
         'fields': (
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{family_name}{given_name}'
+        'concatenation': '{family_name}{given_name}',
+        'sample': {
+            'given_name': '泽东',
+            'family_name': '毛',
+        },
     }),
     ('family_comma_given', {
         'fields': (
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{family_name}, {given_name}'
+        'concatenation': '{family_name}, {given_name}',
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+        },
     }),
     ('full', {
         'fields': (
             ('full_name', _('Name'), 1),
         ),
-        'concatenation': '{full_name}'
+        'concatenation': '{full_name}',
+        'sample': {
+            'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
+        },
     }),
     ('calling_full', {
         'fields': (
             ('calling_name', _('Calling name'), 1),
             ('full_name', _('Full name'), 2),
         ),
-        'concatenation': '{full_name}'
+        'concatenation': '{full_name}',
+        'sample': {
+            'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
+            'calling_name': pgettext_lazy('person_name_sample', 'John'),
+        },
     }),
     ('full_transcription', {
         'fields': (
             ('full_name', _('Full name'), 1),
             ('latin_transcription', _('Latin transcription'), 2),
         ),
-        'concatenation': '{full_name}'
+        'concatenation': '{full_name}',
+        'sample': {
+            'full_name': '庄司',
+            'latin_transcription': 'Shōji'
+        },
     }),
 ])
 

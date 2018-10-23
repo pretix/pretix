@@ -188,14 +188,17 @@ def get_variables(event):
     for key, label, weight in scheme['fields']:
         v['attendee_name_%s' % key] = {
             'label': _("Attendee name: {part}").format(part=label),
-            'editor_sample': '<%s>' % label,
+            'editor_sample': scheme['sample'][key],
             'evaluate': lambda op, order, ev: op.attendee_name_parts.get(key, '')
         }
+
+    v['invoice_name']['editor_sample'] = scheme['concatenation'].format_map(scheme['sample'])
+    v['attendee_name']['editor_sample'] = scheme['concatenation'].format_map(scheme['sample'])
 
     for key, label, weight in scheme['fields']:
         v['invoice_name_%s' % key] = {
             'label': _("Invoice address name: {part}").format(part=label),
-            'editor_sample': '<%s>' % label,
+            'editor_sample': scheme['sample'][key],
             "evaluate": lambda op, order, ev: order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
         }
 
