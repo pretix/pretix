@@ -16,6 +16,7 @@ from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import Checkin, Order, OrderPosition, Question
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.widgets import Select2
 from pretix.plugins.reports.exporters import ReportlabExportMixin
@@ -307,8 +308,16 @@ class CSVCheckinList(BaseCheckinList):
         elif form_data['sort'] == 'code':
             qs = qs.order_by('order__code')
 
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         headers = [
-            _('Order code'), _('Attendee name'), _('Product'), _('Price'), _('Checked in')
+            _('Order code'),
+            _('Attendee name'),
+        ]
+        if len(name_scheme['fields']) > 1:
+            for k, label, w in name_scheme['fields']:
+                headers.append(_('Attendee name: {part}').format(part=label))
+        headers += [
+            _('Product'), _('Price'), _('Checked in')
         ]
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -340,6 +349,13 @@ class CSVCheckinList(BaseCheckinList):
             row = [
                 op.order.code,
                 op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
+            ]
+            if len(name_scheme['fields']) > 1:
+                for k, label, w in name_scheme['fields']:
+                    row.append(
+                        (op.attendee_name_parts or (op.addon_to.attendee_name_parts if op.addon_to else {})).get(k, '')
+                    )
+            row += [
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
