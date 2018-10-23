@@ -7,7 +7,15 @@
 {% endblocktrans %}</p>
 
 <address>
-    {{ details|linebreaksbr }}<br />
-    {% trans "Amount:" %} {{ order.total|money:event.currency }}<br />
+    {% if settings.bank_details_type == "sepa" %}
+        <strong>{% trans "Account holder" %}:</strong> {{ settings.bank_details_sepa_name }}<br>
+        <strong>{% trans "IBAN" %}:</strong> {{ settings.bank_details_sepa_iban }}<br>
+        <strong>{% trans "BIC" %}:</strong> {{ settings.bank_details_sepa_bic }}<br>
+        <strong>{% trans "Bank" %}:</strong> {{ settings.bank_details_sepa_bank }}<br>
+    {% endif %}
+    {% if details %}
+        {{ details|linebreaksbr }}<br>
+    {% endif %}
+    <strong>{% trans "Amount:" %}</strong> {{ order.total|money:event.currency }}<br />
     <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
 </address>

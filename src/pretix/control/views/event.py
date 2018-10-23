@@ -270,7 +270,8 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
         form = ProviderForm(
             obj=self.request.event,
             settingspref=self.provider.settings.get_prefix(),
-            data=(self.request.POST if self.request.method == 'POST' else None)
+            data=(self.request.POST if self.request.method == 'POST' else None),
+            provider=self.provider
         )
         form.fields = OrderedDict(
             [
@@ -1193,6 +1194,7 @@ class QuickSetupView(FormView):
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
 
     @transaction.atomic
@@ -1224,8 +1226,12 @@ class QuickSetupView(FormView):
                                               data={'plugin': 'pretix.plugins.banktransfer'})
                 plugins_active.append('pretix.plugins.banktransfer')
             self.request.event.settings.payment_banktransfer__enabled = True
-            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data[
-                'payment_banktransfer_bank_details']
+            for f in ('bank_details', 'bank_details_type', 'bank_details_sepa_name', 'bank_details_sepa_iban',
+                      'bank_details_sepa_bic', 'bank_details_sepa_bank'):
+                self.request.event.settings.set(
+                    'payment_banktransfer_%s' % f,
+                    form.cleaned_data['payment_banktransfer_%s' % f]
+                )
 
         if form.cleaned_data.get('payment_stripe__enabled', None):
             if 'pretix.plugins.stripe' not in plugins_active:

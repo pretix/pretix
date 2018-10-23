@@ -4,25 +4,27 @@
 {% load formset_tags %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <div class="quick-setup-step">
-        <div class="quick-icon">
-            <span class="fa fa-fw fa-check-circle text-success"></span>
-        </div>
-        <div class="quick-content">
+    {% if request.method == "GET" %}
+        <div class="quick-setup-step">
+            <div class="quick-icon">
+                <span class="fa fa-fw fa-check-circle text-success"></span>
+            </div>
+            <div class="quick-content">
 
-            <h2>{% trans "Congratulations!" %}</h2>
-            <p>
-                <strong>{% trans "You just created an event!" %}</strong>
-            </p>
-            <p>
-                {% blocktrans trimmed %}
-                    You can scroll down and create your first ticket products quickly, or you can use the navigation
-                    on the left to modify the settings of your event in much more detail.
-                {% endblocktrans %}
-            </p>
-            <div class="clearfix"></div>
+                <h2>{% trans "Congratulations!" %}</h2>
+                <p>
+                    <strong>{% trans "You just created an event!" %}</strong>
+                </p>
+                <p>
+                    {% blocktrans trimmed %}
+                        You can scroll down and create your first ticket products quickly, or you can use the navigation
+                        on the left to modify the settings of your event in much more detail.
+                    {% endblocktrans %}
+                </p>
+                <div class="clearfix"></div>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
@@ -157,6 +159,11 @@
                 </p>
                 {% bootstrap_field form.payment_banktransfer__enabled layout="control" label_class="sr-only" field_class="col-md-12" %}
                 <div data-display-dependency="#id_payment_banktransfer__enabled">
+                    {% bootstrap_field form.payment_banktransfer_bank_details_type layout="control" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_name layout="control" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_iban layout="control" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bic layout="control" %}
+                    {% bootstrap_field form.payment_banktransfer_bank_details_sepa_bank layout="control" %}
                     {% bootstrap_field form.payment_banktransfer_bank_details layout="control" %}
                 </div>
                 {% if form.payment_stripe__enabled %}

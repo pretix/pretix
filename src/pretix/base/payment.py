@@ -267,6 +267,15 @@ class BasePaymentProvider:
         d['_restricted_countries']._as_type = list
         return d
 
+    def settings_form_clean(self, cleaned_data):
+        """
+        Overriding this method allows you to inject custom validation into the settings form.
+
+        :param cleaned_data: Form data as per previous validations.
+        :return: Please return the modified cleaned_data
+        """
+        return cleaned_data
+
     def settings_content_render(self, request: HttpRequest) -> str:
         """
         When the event's administrator visits the event configuration

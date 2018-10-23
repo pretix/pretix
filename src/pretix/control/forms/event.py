@@ -489,6 +489,7 @@ class ProviderForm(SettingsForm):
 
     def __init__(self, *args, **kwargs):
         self.settingspref = kwargs.pop('settingspref')
+        self.provider = kwargs.pop('provider', None)
         super().__init__(*args, **kwargs)
 
     def prepare_fields(self):
@@ -515,6 +516,9 @@ class ProviderForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and not val:
                 self.add_error(k, _('This field is required.'))
+        if self.provider:
+            cleaned_data = self.provider.settings_form_clean(cleaned_data)
+        return cleaned_data
 
 
 class InvoiceSettingsForm(SettingsForm):
@@ -1189,7 +1193,13 @@ class QuickSetupForm(I18nForm):
                     "bank statements to process the payments within pretix, or mark them as paid manually."),
         required=False
     )
-    payment_banktransfer_bank_details = BankTransfer.form_field(required=False)
+    btf = BankTransfer.form_fields()
+    payment_banktransfer_bank_details_type = btf['bank_details_type']
+    payment_banktransfer_bank_details_sepa_name = btf['bank_details_sepa_name']
+    payment_banktransfer_bank_details_sepa_iban = btf['bank_details_sepa_iban']
+    payment_banktransfer_bank_details_sepa_bic = btf['bank_details_sepa_bic']
+    payment_banktransfer_bank_details_sepa_bank = btf['bank_details_sepa_bank']
+    payment_banktransfer_bank_details = btf['bank_details']
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('event', None)
@@ -1199,6 +1209,16 @@ class QuickSetupForm(I18nForm):
         if not self.obj.settings.payment_stripe_connect_client_id:
             del self.fields['payment_stripe__enabled']
         self.fields['payment_banktransfer_bank_details'].required = False
+        for f in self.fields.values():
+            if 'data-required-if' in f.widget.attrs:
+                del f.widget.attrs['data-required-if']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('payment_banktransfer__enabled'):
+            provider = BankTransfer(self.obj)
+            cleaned_data = provider.settings_form_clean(cleaned_data)
+        return cleaned_data
 
 
 class QuickSetupProductForm(I18nForm):

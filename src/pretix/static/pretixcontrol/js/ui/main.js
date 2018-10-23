@@ -212,7 +212,7 @@ var form_handlers = function (el) {
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
                 var $toggling = dependent;
-                if (dependent.tagName === "input") {
+                if (dependent.get(0).tagName.toLowerCase() === "input") {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
@@ -235,7 +235,9 @@ var form_handlers = function (el) {
             dependency = $($(this).attr("data-required-if")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
+                    'opacity': enabled ? 0 : 1
+                }, ev ? 500 : 1);
             };
         update();
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);

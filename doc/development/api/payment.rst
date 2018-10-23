@@ -64,6 +64,8 @@ The provider class
 
    .. autoattribute:: settings_form_fields
 
+   .. automethod:: settings_form_clean
+
    .. automethod:: settings_content_render
 
    .. automethod:: is_allowed
