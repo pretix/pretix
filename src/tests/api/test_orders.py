@@ -1340,6 +1340,8 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
 def test_order_create_legacy_attendee_name(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['attendee_name'] = 'Peter'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -1362,6 +1364,8 @@ def test_order_create_legacy_attendee_name(token_client, organizer, event, item,
 def test_order_create_legacy_invoice_name(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['invoice_address']['name'] = 'Peter'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(

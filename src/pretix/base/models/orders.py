@@ -807,6 +807,8 @@ class AbstractPosition(models.Model):
 
     def save(self, *args, **kwargs):
         self.attendee_name_cached = self.attendee_name
+        if self.attendee_name_parts is None:
+            self.attendee_name_parts = {}
         super().save(*args, **kwargs)
 
     @property
