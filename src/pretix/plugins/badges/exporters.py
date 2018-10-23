@@ -4,11 +4,14 @@ from io import BytesIO
 from typing import Tuple
 
 from django import forms
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models.functions import Coalesce
 from django.utils.translation import ugettext as _
+from jsonfallback.functions import JSONExtract
 from PyPDF2 import PdfFileMerger
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
@@ -17,6 +20,7 @@ from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
 
 
@@ -67,6 +71,7 @@ class BadgeExporter(BaseExporter):
 
     @property
     def export_form_fields(self):
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         d = OrderedDict(
             [
                 ('items',
@@ -86,10 +91,13 @@ class BadgeExporter(BaseExporter):
                 ('order_by',
                  forms.ChoiceField(
                      label=_('Sort by'),
-                     choices=(
+                     choices=[
                          ('name', _('Attendee name')),
-                         ('last_name', _('Last part of attendee name')),
-                     )
+                         ('code', _('Order code')),
+                     ] + ([
+                         ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
+                         for k, label, w in name_scheme['fields']
+                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
                  )),
             ]
         )
@@ -109,9 +117,17 @@ class BadgeExporter(BaseExporter):
 
         if form_data.get('order_by') == 'name':
             qs = qs.order_by('attendee_name_cached', 'order__code')
-        elif form_data.get('order_by') == 'last_name':
+        elif form_data.get('order_by') == 'code':
             qs = qs.order_by('order__code')
-            qs = sorted(qs, key=lambda op: op.attendee_name.split()[-1] if op.attendee_name else '')
+        elif form_data.get('order_by', '').startswith('name:'):
+            part = form_data['order_by'][5:]
+            qs = qs.annotate(
+                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
+            ).annotate(
+                resolved_name_part=JSONExtract('resolved_name', part)
+            ).order_by(
+                'resolved_name_part'
+            )
 
         outbuffer = render_pdf(self.event, qs)
         return 'badges.pdf', 'application/pdf', outbuffer.read()

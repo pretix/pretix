@@ -4,6 +4,7 @@ from collections import OrderedDict
 import dateutil.parser
 from defusedcsv import csv
 from django import forms
+from django.conf import settings
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -21,7 +22,6 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.widgets import Select2
 from pretix.plugins.reports.exporters import ReportlabExportMixin
-from pretix.settings import JSON_FIELD_AVAILABLE
 
 
 class BaseCheckinList(BaseExporter):
@@ -54,7 +54,7 @@ class BaseCheckinList(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
                      widget=forms.RadioSelect,
                      required=False
                  )),
