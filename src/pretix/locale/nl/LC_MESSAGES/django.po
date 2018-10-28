@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:24+0000\n"
-"PO-Revision-Date: 2018-10-05 08:11+0000\n"
+"PO-Revision-Date: 2018-10-28 19:47+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -10189,6 +10189,10 @@ msgid ""
 "not supported by this feature. Future versions of pretixdroid and pretixdesk "
 "will be supported through this menu."
 msgstr ""
+"Merk op dat dit een nieuwe functie is die momenteel alleen werkt met "
+"software van bèta-kwaliteit, zoals pretixPOS. pretixdroid 1.x en pretixdroid "
+"0.x worden door deze functie niet ondersteund. Toekomstige versies van "
+"pretixdroid en pretixdesk zullen wel via dit menu ondersteund worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:29
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:21
@@ -10196,106 +10200,85 @@ msgid ""
 "To set up pretixdroid or pretixdesk, please go to the <strong>Check-in "
 "devices</strong> section of an event."
 msgstr ""
+"Ga naar het menu <strong>Incheckapparaten</strong> van een evenement om "
+"pretixdroid of pretixdesk in te stellen."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:35
-#, fuzzy
-#| msgid "Event overview"
 msgid "Device overview"
-msgstr "Evenementenoverzicht"
+msgstr "Apparatenoverzicht"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
-#, fuzzy
-#| msgid "Device name"
 msgid "Device:"
-msgstr "Naam van het apparaat"
+msgstr "Apparaat:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect a new device"
-msgstr "2. Verbind apparaat"
+msgstr "Verbind een nieuw apparaat"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:32
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date history"
 msgid "Device history"
-msgstr "Datumgeschiedenis"
+msgstr "Apparaatgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
-#, fuzzy
-#| msgid "Revoke access"
 msgid "Revoke device access:"
-msgstr "Toegang intrekken"
+msgstr "Apparaattoegang intrekken:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the team?"
 msgid "Are you sure you want remove access for this device?"
-msgstr "Weet u zeker dat u het team wilt verwijderen?"
+msgstr "Weet u zeker dat u de toegang van dit apparaat wilt intrekken?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"Alle gegevens van dit apparaat zullen beschikbaar blijven, maar u zult het "
+"apparaat niet meer kunnen gebruiken."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connected devices"
-msgstr "2. Verbind apparaat"
+msgstr "Verbonden apparaten"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:9
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"Dit menu staat u toe om hardware-apparaten (zoals kassa- of scanterminals) "
+"met uw account te verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:28
-#, fuzzy
-#| msgid "You haven't created any categories yet."
 msgid "You haven't connected any hardware devices yet."
-msgstr "U heeft nog geen categorieën aangemaakt."
+msgstr "U heeft nog geen apparaten verbonden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:34
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:39
-#, fuzzy
-#| msgid "2. Connect device"
 msgid "Connect a device"
-msgstr "2. Verbind apparaat"
+msgstr "Verbind een apparaat"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:45
-#, fuzzy
-#| msgid "Device name"
 msgid "Device ID"
-msgstr "Naam van het apparaat"
+msgstr "Apparaat-ID"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:47
 msgid "Hardware model"
-msgstr ""
+msgstr "Hardwaremodel"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:48
-#, fuzzy
-#| msgid "Scan software"
 msgid "Software"
-msgstr "Scansoftware"
+msgstr "Software"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:75
-#, fuzzy
-#| msgid "Not yet on sale"
 msgid "Not yet initialized"
-msgstr "Nog niet in de verkoop"
+msgstr "Nog niet geïnstalleerd"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:78
-#, fuzzy
-#| msgid "Revoke"
 msgid "Revoked"
-msgstr "Intrekken"
+msgstr "ingetrokken"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:100
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:8
 msgid "Organizer page"
@@ -11422,28 +11405,21 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete voucher"
 msgid "Delete vouchers"
-msgstr "Verwijder voucher"
+msgstr "Verwijder vouchers"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr "Weet u zeker dat u de volgende datums wilt verwijderen?"
+msgstr "Weet u zeker dat u de volgende vouchers wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
-#, fuzzy
-#| msgid ""
-#| "The following dates can't be deleted as they already have orders, but "
-#| "will be disabled instead."
 msgid ""
 "The following vouchers can't be deleted as they already have been redeemed, "
 "but they will be set to fully redeemed instead."
 msgstr ""
-"De volgende datums kunnen niet worden verwijderd omdat er al bestellingen "
-"aan zijn verbonden. In plaats hiervan zullen de datums worden uitgeschakeld."
+"De volgende vouchers kunnen niet worden verwijderd, omdat ze al zijn "
+"verzilverd. In plaats hiervan zullen de vouchers op volledig verzilverd "
+"worden ingesteld."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:10
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -12535,22 +12511,16 @@ msgstr ""
 "kunnen zien."
 
 #: pretix/control/views/organizer.py:676
-#, fuzzy
-#| msgid "The selected data was deleted successfully."
 msgid "This device has been set up successfully."
-msgstr "De gekozen gegevens zijn verwijderd."
+msgstr "Het apparaat is succesvol geïnstalleerd."
 
 #: pretix/control/views/organizer.py:704
-#, fuzzy
-#| msgid "You currently do not have access to any events."
 msgid "This device currently does not have access."
-msgstr "U heeft momenteel geen toegang tot evenementen."
+msgstr "Dit apparaat heeft momenteel geen toegang."
 
 #: pretix/control/views/organizer.py:715
-#, fuzzy
-#| msgid "Access for the selected application has been revoked."
 msgid "Access for this device has been revoked."
-msgstr "De toegang voor de gekozen applicatie is ingetrokken."
+msgstr "De toegang voor dit apparaat is ingetrokken."
 
 #: pretix/control/views/pdf.py:47
 msgid "The uploaded PDF file is to large."
@@ -12734,11 +12704,8 @@ msgid "The new vouchers have been created."
 msgstr "De nieuwe vouchers zijn aangemaakt."
 
 #: pretix/control/views/vouchers.py:355
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected vouchers have been deleted or disabled."
-msgstr "De geselecteerde datums zijn verwijderd of uitgeschakeld."
+msgstr "De gekozen vouchers zijn verwijderd of uitgeschakeld."
 
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
@@ -15536,10 +15503,8 @@ msgid "You cannot modify this order"
 msgstr "U kunt deze bestelling niet aanpassen"
 
 #: pretix/presale/views/order.py:680
-#, fuzzy
-#| msgid "Ticket download is not (yet) enabled."
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "Tickets downloaden is (nog) niet ingeschakeld."
+msgstr "Tickets downloaden is (nog) niet ingeschakeld voor deze bestelling."
 
 #: pretix/presale/views/order.py:682
 msgid "Ticket download is not enabled for add-on products."
