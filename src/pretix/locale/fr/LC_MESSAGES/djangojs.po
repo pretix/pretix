@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:25+0000\n"
-"PO-Revision-Date: 2018-07-13 06:00+0000\n"
-"Last-Translator: Claude <superoxyde@laposte.net>\n"
+"PO-Revision-Date: 2018-10-28 10:23+0000\n"
+"Last-Translator: Arnaud Vergnet <keplyx@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -48,7 +48,7 @@ msgstr "Contacter Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
@@ -156,7 +156,7 @@ msgstr "Zone de code-barres"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Généré par pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
@@ -305,25 +305,18 @@ msgid "Waiting list"
 msgstr "Liste d'attente"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
-#, fuzzy
-#| msgctxt "widget"
-#| msgid ""
-#| "You currently have an active cart for this event. If you select more "
-#| "products, they will be added to your existing cart. Click on this message "
-#| "to continue checkout with your cart."
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
 "Vous avez actuellement un panier actif pour cet événement. Si vous "
-"sélectionnez d'autres produits, ils seront ajoutés à votre panier. Cliquez "
-"sur ce message pour continuer votre commande avec votre panier."
+"sélectionnez d'autres produits, ils seront ajoutés à votre panier."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Reprendre le paiement"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
