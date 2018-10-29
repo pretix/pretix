@@ -67,11 +67,12 @@ class CartMixin:
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             data = cp.meta_info_data
             for r, response in sorted(responses, key=lambda r: str(r[0])):
-                for key, value in response.items():
-                    pos_additional_fields[cp.pk].append({
-                        'answer': data.get('question_form_data', {}).get(key),
-                        'question': value.label
-                    })
+                if response:
+                    for key, value in response.items():
+                        pos_additional_fields[cp.pk].append({
+                            'answer': data.get('question_form_data', {}).get(key),
+                            'question': value.label
+                        })
 
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
