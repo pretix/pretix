@@ -1,7 +1,7 @@
 language: python
 sudo: false
 install:
-  - pip install -U pip wheel setuptools==28.6.1
+  - pip install -U pip wheel setuptools
 script:
   - bash .travis.sh $JOB
 cache:
