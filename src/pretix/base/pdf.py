@@ -216,6 +216,8 @@ class Renderer:
 
     def _draw_poweredby(self, canvas: Canvas, op: OrderPosition, o: dict):
         content = o.get('content', 'dark')
+        if content not in ('dark', 'white'):
+            content = 'dark'
         img = finders.find('pretixpresale/pdf/powered_by_pretix_{}.png'.format(content))
 
         ir = ThumbnailingImageReader(img)
