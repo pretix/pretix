@@ -235,7 +235,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     country_code, normalized_id, company_name = result
                     self.instance.vat_id_validated = True
                     self.instance.vat_id = normalized_id
-            except vat_moss.errors.InvalidError:
+            except (vat_moss.errors.InvalidError, ValueError):
                 raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
             except vat_moss.errors.WebServiceUnavailableError:
                 logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
