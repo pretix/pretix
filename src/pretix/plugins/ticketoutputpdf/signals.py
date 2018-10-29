@@ -97,7 +97,9 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
         for o in layout:
             if o['type'] == 'textarea':
                 if o['content'].startswith('question_'):
-                    o['content'] = 'question_{}'.format(question_map.get(int(o['content'][9:]), 0).pk)
+                    newq = question_map.get(int(o['content'][9:]))
+                    if newq:
+                        o['content'] = 'question_{}'.format(newq.pk)
         bl.layout = json.dumps(layout)
 
         bl.save()

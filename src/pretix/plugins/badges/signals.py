@@ -1,4 +1,5 @@
 import copy
+import json
 
 from django.dispatch import receiver
 from django.template.loader import get_template
@@ -62,13 +63,21 @@ def copy_item(sender, source, target, **kwargs):
 
 
 @receiver(signal=event_copy_data, dispatch_uid="badges_copy_data")
-def event_copy_data_receiver(sender, other, item_map, **kwargs):
+def event_copy_data_receiver(sender, other, question_map, item_map, **kwargs):
     layout_map = {}
     for bl in other.badge_layouts.all():
         oldid = bl.pk
         bl = copy.copy(bl)
         bl.pk = None
         bl.event = sender
+
+        layout = json.loads(bl.layout)
+        for o in layout:
+            if o['type'] == 'textarea':
+                if o['content'].startswith('question_'):
+                    newq = question_map.get(int(o['content'][9:]))
+                    if newq:
+                        o['content'] = 'question_{}'.format(newq.pk)
         bl.save()
 
         if bl.background and bl.background.name:
