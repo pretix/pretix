@@ -91,6 +91,19 @@ var form_handlers = function (el) {
         };
         $(this).datetimepicker(opts);
 	});
+
+    el.find("script[data-replace-with-qr]").each(function () {
+        var $div = $("<div>");
+        $div.insertBefore($(this));
+        $div.qrcode(
+            {
+                text: $(this).html(),
+                correctLevel: 0,  // M
+                width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+                height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+            }
+        );
+    });
 }
 
 

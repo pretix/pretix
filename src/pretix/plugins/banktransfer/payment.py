@@ -175,6 +175,7 @@ class BankTransfer(BasePaymentProvider):
             'event': self.event,
             'code': self._code(payment.order),
             'order': payment.order,
+            'amount': payment.amount,
             'settings': self.settings,
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }

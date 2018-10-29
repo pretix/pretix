@@ -374,7 +374,10 @@ var form_handlers = function (el) {
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html()
+                text: $(this).html(),
+                correctLevel: 0,  // M
+                width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+                height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
             }
         );
     });
