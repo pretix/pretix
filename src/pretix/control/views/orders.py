@@ -218,7 +218,7 @@ class OrderComment(OrderView):
                 self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
                     'new_value': form.cleaned_data.get('checkin_attention')
                 })
-            self.order.save()
+            self.order.save(update_fields=['checkin_attention', 'comment'])
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))
@@ -345,7 +345,7 @@ class OrderRefundProcess(OrderView):
                     self.order.event.subevents.filter(
                         id__in=self.order.positions.values_list('subevent_id', flat=True))
                 )
-                self.order.save()
+                self.order.save(update_fields=['status', 'expires'])
 
             messages.success(self.request, _('The refund has been processed.'))
         else:
@@ -507,7 +507,7 @@ class OrderRefundView(OrderView):
                 manual_value = formats.sanitize_separators(manual_value)
                 try:
                     manual_value = Decimal(manual_value)
-                except (DecimalException, TypeError) as e:
+                except (DecimalException, TypeError):
                     messages.error(self.request, _('You entered an invalid number.'))
                     is_valid = False
                 else:
@@ -530,7 +530,7 @@ class OrderRefundView(OrderView):
                 offsetting_value = formats.sanitize_separators(offsetting_value)
                 try:
                     offsetting_value = Decimal(offsetting_value)
-                except (DecimalException, TypeError) as e:
+                except (DecimalException, TypeError):
                     messages.error(self.request, _('You entered an invalid number.'))
                     is_valid = False
                 else:
@@ -561,7 +561,7 @@ class OrderRefundView(OrderView):
                     value = formats.sanitize_separators(value)
                     try:
                         value = Decimal(value)
-                    except (DecimalException, TypeError) as e:
+                    except (DecimalException, TypeError):
                         messages.error(self.request, _('You entered an invalid number.'))
                         is_valid = False
                     else:
@@ -630,7 +630,7 @@ class OrderRefundView(OrderView):
                                 self.order.event.subevents.filter(
                                     id__in=self.order.positions.values_list('subevent_id', flat=True))
                             )
-                            self.order.save()
+                            self.order.save(update_fields=['status', 'expires'])
 
                     return redirect(self.get_order_url())
                 else:

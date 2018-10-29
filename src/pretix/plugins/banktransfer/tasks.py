@@ -142,12 +142,12 @@ def process_banktransfers(self, job: int, data: list) -> None:
 
             code_len = settings.ENTROPY['order_code']
             if job.event:
-                pattern = re.compile(job.event.slug.upper() + "[ \-_]*([A-Z0-9]{%s})" % code_len)
+                pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
             else:
                 if not prefixes:
-                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"\-")
+                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
                                 for e in job.organizer.events.all()]
-                pattern = re.compile("(%s)[ \-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
+                pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
             for trans in transactions:
                 match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())

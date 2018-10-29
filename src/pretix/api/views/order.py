@@ -251,7 +251,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             )
 
         order.status = Order.STATUS_PENDING
-        order.save()
+        order.save(update_fields=['status'])
         order.log_action(
             'pretix.event.order.unpaid',
             user=request.user if request.user.is_authenticated else None,
@@ -556,7 +556,7 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
                         payment.order.event.subevents.filter(
                             id__in=payment.order.positions.values_list('subevent_id', flat=True))
                     )
-                    payment.order.save()
+                    payment.order.save(update_fields=['status', 'expires'])
             return Response(OrderRefundSerializer(r).data, status=status.HTTP_200_OK)
 
     @detail_route(methods=['POST'])
@@ -622,7 +622,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 refund.order.event.subevents.filter(
                     id__in=refund.order.positions.values_list('subevent_id', flat=True))
             )
-            refund.order.save()
+            refund.order.save(update_fields=['status', 'expires'])
         return self.retrieve(request, [], **kwargs)
 
     @detail_route(methods=['POST'])

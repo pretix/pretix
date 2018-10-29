@@ -31,7 +31,7 @@ from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
 
-from .base import LoggedModel
+from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -47,7 +47,7 @@ def generate_position_secret():
     return get_random_string(length=settings.ENTROPY['ticket_secret'], allowed_chars='abcdefghjkmnpqrstuvwxyz23456789')
 
 
-class Order(LoggedModel):
+class Order(LockModel, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
@@ -903,7 +903,7 @@ class OrderPayment(models.Model):
         if not force and can_be_paid is not True:
             raise Quota.QuotaExceededException(can_be_paid)
         self.order.status = Order.STATUS_PAID
-        self.order.save()
+        self.order.save(update_fields=['status'])
 
         self.order.log_action('pretix.event.order.paid', {
             'provider': self.provider,

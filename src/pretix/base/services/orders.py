@@ -93,7 +93,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
         raise OrderError(_('The new expiry date needs to be in the future.'))
     if order.status == Order.STATUS_PENDING:
         order.expires = new_date
-        order.save()
+        order.save(update_fields=['expires'])
         order.log_action(
             'pretix.event.order.expirychanged',
             user=user,
@@ -109,7 +109,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
             if is_available is True or force is True:
                 order.expires = new_date
                 order.status = Order.STATUS_PENDING
-                order.save()
+                order.save(update_fields=['expires', 'status'])
                 order.log_action(
                     'pretix.event.order.expirychanged',
                     user=user,
@@ -136,7 +136,7 @@ def mark_order_refunded(order, user=None, auth=None, api_token=None):
         user = User.objects.get(pk=user)
     with order.event.lock():
         order.status = Order.STATUS_REFUNDED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.refunded', user=user, auth=auth or api_token)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -159,7 +159,7 @@ def mark_order_expired(order, user=None, auth=None):
         user = User.objects.get(pk=user)
     with order.event.lock():
         order.status = Order.STATUS_EXPIRED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.expired', user=user, auth=auth)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -181,7 +181,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None):
 
     order.require_approval = False
     order.set_expires(now(), order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
-    order.save()
+    order.save(update_fields=['require_approval', 'expires'])
 
     order.log_action('pretix.event.order.approved', user=user, auth=auth)
     if order.total == Decimal('0.00'):
@@ -258,7 +258,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
     with order.event.lock():
         order.status = Order.STATUS_CANCELED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.denied', user=user, auth=auth, data={
         'comment': comment
@@ -327,7 +327,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -661,47 +661,52 @@ def send_expiry_warnings(sender, **kwargs):
     eventcache = {}
     today = now().replace(hour=0, minute=0, second=0)
 
-    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
-        eventsettings = eventcache.get(o.event.pk, None)
-        if eventsettings is None:
-            eventsettings = o.event.settings
-            eventcache[o.event.pk] = eventsettings
+    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).only('pk'):
+        with transaction.atomic():
+            o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+            if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
+                # Race condition
+                continue
+            eventsettings = eventcache.get(o.event.pk, None)
+            if eventsettings is None:
+                eventsettings = o.event.settings
+                eventcache[o.event.pk] = eventsettings
 
-        days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
-        tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
-        if days and (o.expires - today).days <= days:
-            with language(o.locale):
-                o.expiry_reminder_sent = True
-                o.save()
-                try:
-                    invoice_name = o.invoice_address.name
-                    invoice_company = o.invoice_address.company
-                except InvoiceAddress.DoesNotExist:
-                    invoice_name = ""
-                    invoice_company = ""
-                email_template = eventsettings.mail_text_order_expire_warning
-                email_context = {
-                    'event': o.event.name,
-                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                        'order': o.code,
-                        'secret': o.secret
-                    }),
-                    'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                }
-                if eventsettings.payment_term_expire_automatically:
-                    email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
-                else:
-                    email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+            days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
+            tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
+            if days and (o.expires - today).days <= days:
+                with language(o.locale):
+                    o.expiry_reminder_sent = True
+                    o.save(update_fields=['expiry_reminder_sent'])
+                    try:
+                        invoice_name = o.invoice_address.name
+                        invoice_company = o.invoice_address.company
+                    except InvoiceAddress.DoesNotExist:
+                        invoice_name = ""
+                        invoice_company = ""
+                    email_template = eventsettings.mail_text_order_expire_warning
+                    email_context = {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                        'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
+                    }
+                    if eventsettings.payment_term_expire_automatically:
+                        email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+                    else:
+                        email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
 
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.expire_warning_sent'
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                    try:
+                        o.send_mail(
+                            email_subject, email_template, email_context,
+                            'pretix.event.order.email.expire_warning_sent'
+                        )
+                    except SendMailException:
+                        logger.exception('Reminder email could not be sent')
 
 
 @receiver(signal=periodic_task)
@@ -709,6 +714,7 @@ def send_download_reminders(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     for e in Event.objects.filter(date_from__gte=today):
+
         days = e.settings.get('mail_days_download_reminder', as_type=int)
         if days is None:
             continue
@@ -717,30 +723,35 @@ def send_download_reminders(sender, **kwargs):
 
         if now() < reminder_date:
             continue
-        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False):
-            if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
-                continue
+        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False).only('pk'):
+            with transaction.atomic():
+                o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+                if o.download_reminder_sent:
+                    # Race condition
+                    continue
+                if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
+                    continue
 
-            with language(o.locale):
-                o.download_reminder_sent = True
-                o.save()
-                email_template = e.settings.mail_text_download_reminder
-                email_context = {
-                    'event': o.event.name,
-                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                        'order': o.code,
-                        'secret': o.secret
-                    }),
-                }
-                email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.download_reminder_sent',
-                        attach_tickets=True
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                with language(o.locale):
+                    o.download_reminder_sent = True
+                    o.save(update_fields=['download_reminder_sent'])
+                    email_template = e.settings.mail_text_download_reminder
+                    email_context = {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                    }
+                    email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
+                    try:
+                        o.send_mail(
+                            email_subject, email_template, email_context,
+                            'pretix.event.order.email.download_reminder_sent',
+                            attach_tickets=True
+                        )
+                    except SendMailException:
+                        logger.exception('Reminder email could not be sent')
 
 
 class OrderChangeManager:
@@ -767,6 +778,7 @@ class OrderChangeManager:
 
     def __init__(self, order: Order, user=None, auth=None, notify=True):
         self.order = order
+        self.order.refresh_for_update()
         self.user = user
         self.auth = auth
         self.split_order = None
@@ -1170,7 +1182,7 @@ class OrderChangeManager:
                 fee.save()
                 if not self.open_payment.fee:
                     self.open_payment.fee = fee
-                    self.open_payment.save()
+                    self.open_payment.save(update_fields=['fee'])
             elif fee:
                 fee.delete()
 

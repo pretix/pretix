@@ -19,7 +19,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, deny_order,
-    expire_orders, send_download_reminders,
+    expire_orders, send_download_reminders, send_expiry_warnings,
 )
 
 
@@ -287,6 +287,54 @@ def test_deny(event):
     assert o1.invoices.count() == 2
     assert len(djmail.outbox) == 1
     assert 'denied' in djmail.outbox[0].subject
+
+
+class PaymentReminderTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now() + timedelta(days=2),
+            plugins='pretix.plugins.banktransfer'
+        )
+        self.order = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, locale='en',
+            datetime=now(),
+            expires=now() + timedelta(days=10),
+            total=Decimal('46.00'),
+        )
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                          default_price=Decimal('23.00'), admission=True)
+        self.op1 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+        )
+        djmail.outbox = []
+
+    def test_disabled(self):
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_sent_once(self):
+        self.event.settings.mail_days_order_expire_warning = 12
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
+
+    def test_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_sent_days(self):
+        self.event.settings.mail_days_order_expire_warning = 9
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+        self.event.settings.mail_days_order_expire_warning = 10
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
 
 
 class DownloadReminderTests(TestCase):
