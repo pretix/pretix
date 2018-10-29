@@ -570,6 +570,7 @@ class CartManager:
                 if op.position.expires > self.now_dt:
                     for q in op.position.quotas:
                         quotas_ok[q] += 1
+                op.position.addons.all().delete()
                 op.position.delete()
 
             elif isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
