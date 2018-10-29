@@ -194,7 +194,7 @@ class Renderer:
         self.background_file = background_file
         self.variables = get_variables(event)
         if self.background_file:
-            self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()))
+            self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()), strict=False)
         else:
             self.bg_pdf = None
 
