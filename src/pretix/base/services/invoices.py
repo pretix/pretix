@@ -14,6 +14,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
+from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
@@ -152,6 +153,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
                 "rests with the service recipient."
             )
+            invoice.reverse_charge = True
             invoice.save()
 
         offset = len(positions)
@@ -297,7 +299,15 @@ def build_preview_invoice_pdf(event):
         invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
         invoice.payment_provider_text = str(payment).replace('\n', '<br />')
-        invoice.invoice_to = _("John Doe\n214th Example Street\n012345 Somecity")
+        invoice.invoice_to_name = _("John Doe")
+        invoice.invoice_to_street = _("214th Example Street")
+        invoice.invoice_to_zipcode = _("012345")
+        invoice.invoice_to_city = _('Sample city')
+        invoice.invoice_to_country = Country('DE')
+        invoice.invoice_to = '{}\n{}\n{} {}'.format(
+            invoice.invoice_to_name, invoice.invoice_to_street,
+            invoice.invoice_to_zipcode, invoice.invoice_to_city
+        )
         invoice.file = None
         invoice.save()
         invoice.lines.all().delete()

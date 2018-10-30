@@ -93,6 +93,7 @@ class Invoice(models.Model):
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
     additional_text = models.TextField(blank=True)
+    reverse_charge = models.BooleanField(default=False)
     payment_provider_text = models.TextField(blank=True)
     footer_text = models.TextField(blank=True)
     foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
