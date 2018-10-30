@@ -173,11 +173,12 @@ class OrderDetail(OrderView):
             p.additional_fields = []
             data = p.meta_info_data
             for r, response in sorted(responses, key=lambda r: str(r[0])):
-                for key, value in response.items():
-                    p.additional_fields.append({
-                        'answer': data.get('question_form_data', {}).get(key),
-                        'question': value.label
-                    })
+                if response:
+                    for key, value in response.items():
+                        p.additional_fields.append({
+                            'answer': data.get('question_form_data', {}).get(key),
+                            'question': value.label
+                        })
 
             p.has_questions = (
                 p.additional_fields or
