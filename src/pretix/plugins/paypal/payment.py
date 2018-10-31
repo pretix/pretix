@@ -177,7 +177,7 @@ class Paypal(BasePaymentProvider):
                 logger.error('Error on creating payment: ' + str(payment.error))
         except Exception as e:
             messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.error('Error on creating payment: ' + str(e))
+            logger.exception('Error on creating payment: ' + str(e))
 
     def checkout_confirm_render(self, request) -> str:
         """
@@ -231,7 +231,11 @@ class Paypal(BasePaymentProvider):
                     )
                 }
             ])
-            payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
+            try:
+                payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
+            except Exception as e:
+                messages.error(request, _('We had trouble communicating with PayPal'))
+                logger.exception('Error on creating payment: ' + str(e))
 
         payment_obj.refresh_from_db()
         if payment.state == 'pending':
