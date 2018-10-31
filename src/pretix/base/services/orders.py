@@ -778,7 +778,6 @@ class OrderChangeManager:
 
     def __init__(self, order: Order, user=None, auth=None, notify=True):
         self.order = order
-        self.order.refresh_for_update()
         self.user = user
         self.auth = auth
         self.split_order = None
