@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-31 14:21+0000\n"
-"PO-Revision-Date: 2018-08-11 08:17+0000\n"
+"PO-Revision-Date: 2018-10-31 14:26+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -49,7 +49,7 @@ msgstr "Kontaktiere Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr ""
+msgstr "Gesamt"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
