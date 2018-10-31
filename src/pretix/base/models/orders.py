@@ -456,7 +456,7 @@ class Order(LockModel, LoggedModel):
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
-            'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
+            'late': _("The payment can not be accepted as the order is expired and you configured that no late "
                       "payments should be accepted in the payment settings."),
             'require_approval': _('This order is not yet approved by the event organizer.')
         }
