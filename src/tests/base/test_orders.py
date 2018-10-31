@@ -777,6 +777,27 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.pending_sum == Decimal('2.00')
         assert self.order.status == Order.STATUS_PENDING
 
+    def test_change_paid_stays_paid_when_overpaid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=Decimal('2.00'),
+        )
+        assert self.order.pending_sum == Decimal('-2.00')
+        self.ocm.change_price(self.op1, Decimal('25.00'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('48.00')
+        assert self.order.pending_sum == Decimal('0.00')
+        assert self.order.status == Order.STATUS_PAID
+
     def test_add_item_quota_required(self):
         self.quota.delete()
         with self.assertRaises(OrderError):

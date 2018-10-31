@@ -922,12 +922,13 @@ class OrderChangeManager:
 
     def _check_paid_price_change(self):
         if self.order.status == Order.STATUS_PAID and self._totaldiff > 0:
-            self.order.status = Order.STATUS_PENDING
-            self.order.set_expires(
-                now(),
-                self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
-            )
-            self.order.save()
+            if self.order.pending_sum > Decimal('0.00'):
+                self.order.status = Order.STATUS_PENDING
+                self.order.set_expires(
+                    now(),
+                    self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
+                )
+                self.order.save()
         elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff < 0:
             if self.order.pending_sum <= Decimal('0.00'):
                 self.order.status = Order.STATUS_PAID
