@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:25+0000\n"
-"PO-Revision-Date: 2018-06-04 19:48+0000\n"
-"Last-Translator: wallber azevedo pinheiro <wallpinheiro@gmail.com>\n"
+"PO-Revision-Date: 2018-10-22 04:23+0000\n"
+"Last-Translator: Samir C. Costa <samirfor@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.19.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -49,7 +49,7 @@ msgstr "Contatando Stripe…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
 #: pretix/static/pretixbase/js/asynctask.js:42
@@ -131,11 +131,11 @@ msgstr "Pressione Ctrl+C para copiar!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "Ler QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr ""
+msgstr "QR Check-in"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
@@ -155,7 +155,7 @@ msgstr "Área de código de barras"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Distribuído por pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
@@ -199,7 +199,7 @@ msgstr "Nenhum"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:541
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Use um nome diferente internamente"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
@@ -303,25 +303,18 @@ msgid "Waiting list"
 msgstr "Lista de espera"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
-#, fuzzy
-#| msgctxt "widget"
-#| msgid ""
-#| "You currently have an active cart for this event. If you select more "
-#| "products, they will be added to your existing cart. Click on this message "
-#| "to continue checkout with your cart."
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
 "Você atualmente possui um carrinho ativo para este evento. Se você "
-"selecionar mais produtos, eles serão adicionados ao seu carrinho existente. "
-"Clique nesta mensagem para finalizar a compra do seu carrinho."
+"selecionar mais produtos, eles serão adicionados ao seu carrinho existente."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Retomar checkout"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"

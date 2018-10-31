@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-03 10:24+0000\n"
-"PO-Revision-Date: 2018-10-03 10:43+0000\n"
+"PO-Revision-Date: 2018-10-04 09:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -8160,7 +8160,7 @@ msgstr "Installierte Erweiterungen"
 #: pretix/plugins/badges/views.py:88
 #: pretix/plugins/ticketoutputpdf/views.py:130
 msgid "Your changes have been saved."
-msgstr "Die Änderungen wurden gespeichert."
+msgstr "Deine Änderungen wurden gespeichert."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
