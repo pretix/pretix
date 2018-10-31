@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-03 10:25+0000\n"
+"POT-Creation-Date: 2018-10-31 14:21+0000\n"
 "PO-Revision-Date: 2018-10-29 10:51+0000\n"
 "Last-Translator: Mattias de Hollander <m.dehollander@nioo.knaw.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -186,15 +186,15 @@ msgstr "Bezig met het genereren van berichten …"
 msgid "Unknown error."
 msgstr "Onbekende fout."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:250
+#: pretix/static/pretixcontrol/js/ui/main.js:252
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:251
+#: pretix/static/pretixcontrol/js/ui/main.js:253
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:541
+#: pretix/static/pretixcontrol/js/ui/main.js:546
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 

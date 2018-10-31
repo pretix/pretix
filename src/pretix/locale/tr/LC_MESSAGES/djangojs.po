@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-03 10:25+0000\n"
+"POT-Creation-Date: 2018-10-31 14:21+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -189,15 +189,15 @@ msgstr "Mesaj oluşturuluyor…"
 msgid "Unknown error."
 msgstr "Bilinmeyen hata."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:250
+#: pretix/static/pretixcontrol/js/ui/main.js:252
 msgid "All"
 msgstr "Herşey"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:251
+#: pretix/static/pretixcontrol/js/ui/main.js:253
 msgid "None"
 msgstr "Hiçbiri"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:541
+#: pretix/static/pretixcontrol/js/ui/main.js:546
 msgid "Use a different name internally"
 msgstr "Dahili olarak farklı bir ad kullan"
 

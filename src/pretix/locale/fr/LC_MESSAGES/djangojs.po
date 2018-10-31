@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-03 10:25+0000\n"
+"POT-Creation-Date: 2018-10-31 14:21+0000\n"
 "PO-Revision-Date: 2018-10-28 10:23+0000\n"
 "Last-Translator: Arnaud Vergnet <keplyx@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -192,15 +192,15 @@ msgstr "Création de messages …"
 msgid "Unknown error."
 msgstr "Erreur inconnue."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:250
+#: pretix/static/pretixcontrol/js/ui/main.js:252
 msgid "All"
 msgstr "Tous"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:251
+#: pretix/static/pretixcontrol/js/ui/main.js:253
 msgid "None"
 msgstr "Aucun"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:541
+#: pretix/static/pretixcontrol/js/ui/main.js:546
 msgid "Use a different name internally"
 msgstr "Utiliser un nom différent en interne"
 
