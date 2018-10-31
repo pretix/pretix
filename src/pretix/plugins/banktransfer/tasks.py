@@ -73,12 +73,18 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
         }
         try:
             p.confirm()
-        except Quota.QuotaExceededException as e:
-            trans.state = BankTransaction.STATE_ERROR
-            trans.message = str(e)
+        except Quota.QuotaExceededException:
+            trans.state = BankTransaction.STATE_VALID
+            trans.order.payments.filter(
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
         except SendMailException:
-            trans.state = BankTransaction.STATE_ERROR
-            trans.message = ugettext_noop('Problem sending email.')
+            trans.state = BankTransaction.STATE_VALID
+            trans.order.payments.filter(
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+            ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
         else:
             trans.state = BankTransaction.STATE_VALID
             trans.order.payments.filter(
