@@ -689,8 +689,22 @@ class OrderTransition(OrderView):
                 p.confirm(user=self.request.user, count_waitinglist=False,
                           force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
+                p.state = OrderPayment.PAYMENT_STATE_FAILED
+                p.save()
+                self.order.log_action('pretix.event.order.payment.failed', {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'message': str(e)
+                })
                 messages.error(self.request, str(e))
             except PaymentException as e:
+                p.state = OrderPayment.PAYMENT_STATE_FAILED
+                p.save()
+                self.order.log_action('pretix.event.order.payment.failed', {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'message': str(e)
+                })
                 messages.error(self.request, str(e))
             except SendMailException:
                 messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
