@@ -359,8 +359,10 @@ ALL_LANGUAGES = [
     ('de-informal', _('German (informal)')),
     ('nl', _('Dutch')),
     ('da', _('Danish')),
-    ('tr', _('Turkish')),
+    ('fr', _('French')),
     ('pt-br', _('Portuguese (Brazil)')),
+    ('es', _('Spanish')),
+    ('tr', _('Turkish')),
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
