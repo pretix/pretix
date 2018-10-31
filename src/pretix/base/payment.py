@@ -257,11 +257,13 @@ class BasePaymentProvider:
                  label=_('Restrict to countries'),
                  choices=Countries(),
                  help_text=_('Only allow choosing this payment provider for invoice addresses in the selected '
-                             'countries. If you don\'t select any country, all countries are allowed.'),
+                             'countries. If you don\'t select any country, all countries are allowed. This is only '
+                             'enabled if the invoice address is required.'),
                  widget=forms.CheckboxSelectMultiple(
                      attrs={'class': 'scrolling-multiple-choice'}
                  ),
-                 required=False
+                 required=False,
+                 disabled=not self.event.settings.invoice_address_required
              )),
         ])
         d['_restricted_countries']._as_type = list
@@ -409,11 +411,12 @@ class BasePaymentProvider:
                         request._checkout_flow_invoice_address = InvoiceAddress()
             return request._checkout_flow_invoice_address
 
-        restricted_countries = self.settings.get('_restricted_countries', as_type=list)
-        if restricted_countries:
-            ia = get_invoice_address()
-            if str(ia.country) not in restricted_countries:
-                return False
+        if self.event.settings.invoice_address_required:
+            restricted_countries = self.settings.get('_restricted_countries', as_type=list)
+            if restricted_countries:
+                ia = get_invoice_address()
+                if str(ia.country) not in restricted_countries:
+                    return False
 
         return timing and pricing
 
