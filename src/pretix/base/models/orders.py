@@ -901,6 +901,9 @@ class OrderPayment(models.Model):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
         if not force and can_be_paid is not True:
+            self.order.log_action('pretix.event.order.quotaexceeded', {
+                'message': can_be_paid
+            }, user=user, auth=auth)
             raise Quota.QuotaExceededException(can_be_paid)
         self.order.status = Order.STATUS_PAID
         self.order.save(update_fields=['status'])
