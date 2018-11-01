@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-31 14:21+0000\n"
-"PO-Revision-Date: 2018-11-01 13:48+0000\n"
+"PO-Revision-Date: 2018-11-05 09:19+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -13261,7 +13261,7 @@ msgstr "Open bankieren-app"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:55
 msgid "Requires that the app supports BezahlCode"
-msgstr "Verplicht dat de app BezahlCode ondersteunt"
+msgstr "Vereist dat de app BezahlCode ondersteunt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
