@@ -192,8 +192,8 @@ def get_variables(event):
             'evaluate': lambda op, order, ev: op.attendee_name_parts.get(key, '')
         }
 
-    v['invoice_name']['editor_sample'] = scheme['concatenation'].format_map(scheme['sample'])
-    v['attendee_name']['editor_sample'] = scheme['concatenation'].format_map(scheme['sample'])
+    v['invoice_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
+    v['attendee_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
 
     for key, label, weight in scheme['fields']:
         v['invoice_name_%s' % key] = {

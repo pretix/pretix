@@ -560,6 +560,41 @@ class CheckoutTestCase(TestCase):
         cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.attendee_name, 'Peter')
 
+    def test_attendee_name_scheme(self):
+        self.event.settings.set('attendee_names_asked', True)
+        self.event.settings.set('attendee_names_required', True)
+        self.event.settings.set('name_scheme', 'title_given_middle_family')
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_1]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_2]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_3]' % cr1.id)), 1)
+
+        # Not all required fields filled out, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-attendee_name_parts_0' % cr1.id: 'Mr',
+            '%s-attendee_name_parts_1' % cr1.id: 'John',
+            '%s-attendee_name_parts_2' % cr1.id: 'F',
+            '%s-attendee_name_parts_3' % cr1.id: 'Kennedy',
+            'email': 'admin@localhost'
+        })
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.attendee_name, 'Mr John F Kennedy')
+        self.assertEqual(cr1.attendee_name_parts, {
+            'given_name': 'John',
+            'title': 'Mr',
+            'middle_name': 'F',
+            'family_name': 'Kennedy'
+        })
+
     def test_attendee_name_optional(self):
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', False)
@@ -585,6 +620,7 @@ class CheckoutTestCase(TestCase):
     def test_invoice_address_required(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True
+        self.event.settings.set('name_scheme', 'title_given_middle_family')
 
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -609,7 +645,10 @@ class CheckoutTestCase(TestCase):
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'is_business': 'business',
             'company': 'Foo',
-            'name_parts_0': 'Bar',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
             'street': 'Baz',
             'zipcode': '12345',
             'city': 'Here',
@@ -619,6 +658,14 @@ class CheckoutTestCase(TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+        ia = InvoiceAddress.objects.last()
+        assert ia.name_parts == {
+            'title': 'Mr',
+            'given_name': 'John',
+            'middle_name': '',
+            'family_name': 'Kennedy'
+        }
+        assert ia.name_cached == 'Mr John Kennedy'
 
     def test_invoice_address_optional(self):
         self.event.settings.invoice_address_asked = True

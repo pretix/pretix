@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import string
-from collections import defaultdict
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Union
@@ -818,7 +817,7 @@ class AbstractPosition(models.Model):
         if '_legacy' in self.attendee_name_parts:
             return self.attendee_name_parts['_legacy']
         scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'].format_map(defaultdict(str, self.attendee_name_parts)).strip()
+        return scheme['concatenation'](self.attendee_name_parts).strip()
 
 
 class OrderPayment(models.Model):
@@ -1608,7 +1607,7 @@ class InvoiceAddress(models.Model):
             self.name_cached = self.name_parts['_legacy']
         else:
             scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
-            self.name_cached = scheme['concatenation'].format_map(defaultdict(str, self.name_parts)).strip()
+            self.name_cached = scheme['concatenation'](self.name_parts).strip()
 
     @property
     def name(self):

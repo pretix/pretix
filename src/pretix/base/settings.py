@@ -570,7 +570,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{given_name} {family_name}',
+        'concatenation': lambda d: ' '.join(str(p) for p in [d.get('given_name', ''), d.get('family_name', '')] if p),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
@@ -582,7 +582,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 2),
             ('family_name', _('Family name'), 2),
         ),
-        'concatenation': '{title} {given_name} {family_name}',
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('title', ''), d.get('given_name', ''), d.get('family_name', '')] if p
+        ),
         'sample': {
             'title': pgettext_lazy('person_name_sample', 'Dr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -595,7 +597,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 2),
         ),
-        'concatenation': '{given_name} {middle_name} {family_name}',
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('given_name', ''), d.get('middle_name', ''), d.get('family_name', '')] if p
+        ),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'middle_name': 'M',
@@ -609,7 +613,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('middle_name', _('Middle name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{title} {given_name} {middle_name} {family_name}',
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('title', ''), d.get('given_name'), d.get('middle_name'), d.get('family_name')] if p
+        ),
         'sample': {
             'title': pgettext_lazy('person_name_sample', 'Dr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -622,7 +628,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('family_name', _('Family name'), 1),
             ('given_name', _('Given name'), 1),
         ),
-        'concatenation': '{family_name} {given_name}',
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
+        ),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
@@ -633,7 +641,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{family_name}{given_name}',
+        'concatenation': lambda d: ''.join(
+            str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
+        ),
         'sample': {
             'given_name': '泽东',
             'family_name': '毛',
@@ -644,7 +654,11 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('given_name', _('Given name'), 1),
             ('family_name', _('Family name'), 1),
         ),
-        'concatenation': '{family_name}, {given_name}',
+        'concatenation': lambda d: (
+            str(d.get('family_name', '')) +
+            str((', ' if d.get('family_name') and d.get('given_name') else '')) +
+            str(d.get('given_name', ''))
+        ),
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
@@ -654,7 +668,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'fields': (
             ('full_name', _('Name'), 1),
         ),
-        'concatenation': '{full_name}',
+        'concatenation': lambda d: str(d.get('full_name', '')),
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
         },
@@ -664,7 +678,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('calling_name', _('Calling name'), 1),
             ('full_name', _('Full name'), 2),
         ),
-        'concatenation': '{full_name}',
+        'concatenation': lambda d: str(d.get('full_name', '')),
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
             'calling_name': pgettext_lazy('person_name_sample', 'John'),
@@ -675,7 +689,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('full_name', _('Full name'), 1),
             ('latin_transcription', _('Latin transcription'), 2),
         ),
-        'concatenation': '{full_name}',
+        'concatenation': lambda d: str(d.get('full_name', '')),
         'sample': {
             'full_name': '庄司',
             'latin_transcription': 'Shōji'
