@@ -21,7 +21,7 @@ def set_attendee_name_parts(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0099_auto_20180912_1035'),
+        ('pretixbase', '0101_auto_20181025_2255'),
     ]
 
     operations = [
