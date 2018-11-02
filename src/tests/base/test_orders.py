@@ -309,7 +309,7 @@ class PaymentReminderTests(TestCase):
                                           default_price=Decimal('23.00'), admission=True)
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
         )
         djmail.outbox = []
 

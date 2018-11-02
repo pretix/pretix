@@ -762,7 +762,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('invoice_address_required', True)
         ia = InvoiceAddress.objects.create(
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
-            country=Country('DE'), name='Foo', street='Foo'
+            country=Country('DE'), name_parts={'full_name': 'Foo'}, name_cached='Foo', street='Foo'
         )
         self._set_session('invoice_address', ia.pk)
         CartPosition.objects.create(
@@ -786,7 +786,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('invoice_address_required', True)
         ia = InvoiceAddress.objects.create(
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
-            country=Country('CH'), name='Foo', street='Foo'
+            country=Country('CH'), name_parts={'full_name': 'Foo'}, name_cached='Foo', street='Foo'
         )
         self._set_session('invoice_address', ia.pk)
         CartPosition.objects.create(
