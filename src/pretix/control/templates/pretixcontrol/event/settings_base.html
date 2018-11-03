@@ -70,11 +70,6 @@
                     {% trans "Invoicing" %}
                 </a>
             </li>
-            <li {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Permissions" %}
-                </a>
-            </li>
             <li {% if "event.settings.widget" == url_name %}class="active"{% endif %}>
                 <a href="{% url 'control:event.settings.widget' organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% trans "Widget" %}
