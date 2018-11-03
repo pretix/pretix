@@ -52,7 +52,6 @@ event_urls = [
     "settings/plugins",
     "settings/payment",
     "settings/tickets",
-    "settings/permissions",
     "settings/email",
     "settings/invoice",
     "settings/invoice/preview",
