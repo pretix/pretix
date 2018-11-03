@@ -108,7 +108,6 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/live/', 200),
     ('/control/event/{orga}/{event}/settings/', 200),
     ('/control/event/{orga}/{event}/settings/plugins', 200),
-    ('/control/event/{orga}/{event}/settings/permissions', 200),
     ('/control/event/{orga}/{event}/settings/payment', 200),
     ('/control/event/{orga}/{event}/settings/tickets', 200),
     ('/control/event/{orga}/{event}/settings/widget', 200),
