@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-31 14:21+0000\n"
-"PO-Revision-Date: 2018-09-20 08:08+0000\n"
+"PO-Revision-Date: 2018-11-05 09:19+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -752,12 +752,10 @@ msgid "Cancellation"
 msgstr "Cancelación"
 
 #: pretix/base/invoice.py:389
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Your reference: {reference}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Tu referencia: {reference}"
+msgstr "Referencia del cliente: {reference}"
 
 #: pretix/base/invoice.py:410 pretix/base/invoice.py:418
 msgctxt "invoice"
@@ -961,16 +959,12 @@ msgstr "Limitar a eventos"
 
 #: pretix/base/models/devices.py:50
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:49
-#, fuzzy
-#| msgid "Start date"
 msgid "Setup date"
-msgstr "Fecha de inicio"
+msgstr "Fecha de instalación"
 
 #: pretix/base/models/devices.py:53
-#, fuzzy
-#| msgid "Confirmation date"
 msgid "Initialization date"
-msgstr "Fecha de confirmación"
+msgstr "Fecha de inicialización"
 
 #: pretix/base/models/event.py:36
 msgid "The end of the presale period has to be later than its start."
@@ -1191,9 +1185,7 @@ msgid "VAT-ID: %s"
 msgstr "IVA-ID: %s"
 
 #: pretix/base/models/invoices.py:119
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "VAT-ID: %s"
+#, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
 msgstr "IVA-ID: %s"
@@ -1891,11 +1883,6 @@ msgstr ""
 "la configuración de pago ha finalizado."
 
 #: pretix/base/models/orders.py:459
-#, fuzzy
-#| msgid ""
-#| "The payment can not be accepted as it the order is expired and you "
-#| "configured that no late payments should be accepted in the payment "
-#| "settings."
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
@@ -2076,11 +2063,11 @@ msgstr "Posiciones de la orden"
 
 #: pretix/base/models/orders.py:1507
 msgid "Cart ID (e.g. session key)"
-msgstr "ID de carro (p. ej. clave de sesión)"
+msgstr "ID de carrito (p. ej. clave de sesión)"
 
 #: pretix/base/models/orders.py:1522
 msgid "Cart position"
-msgstr "Posición del carro"
+msgstr "Posición del carrito"
 
 #: pretix/base/models/orders.py:1523
 msgid "Cart positions"
@@ -2746,7 +2733,7 @@ msgstr ""
 
 #: pretix/base/payment.py:257
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Restringir a países"
 
 #: pretix/base/payment.py:259
 msgid ""
@@ -2754,6 +2741,10 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Sólo se permite elegir este proveedor de pago para las direcciones de "
+"facturación de los países seleccionados. Si no selecciona ningún país, se "
+"permiten todos los países. Esto sólo está habilitado si se requiere la "
+"dirección de facturación."
 
 #: pretix/base/payment.py:296
 msgctxt "invoice"
@@ -3072,7 +3063,7 @@ msgstr "Usted no seleccionó ningún producto."
 
 #: pretix/base/services/cart.py:46
 msgid "Unknown cart position."
-msgstr "Posición del carro desconocida."
+msgstr "Posición del carrito desconocida."
 
 #: pretix/base/services/cart.py:47
 msgctxt "subevent"
@@ -3138,7 +3129,7 @@ msgid ""
 "positions have been removed from your cart."
 msgstr ""
 "El período de preventa de este evento aún no ha comenzado. Las posiciones "
-"afectadas han sido eliminadas de su carro."
+"afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/cart.py:62 pretix/base/services/orders.py:75
 msgid ""
@@ -3146,7 +3137,7 @@ msgid ""
 "affected positions have been removed from your cart."
 msgstr ""
 "El período de preventa de uno de los eventos de su carrito ha finalizado. "
-"Las posiciones afectadas han sido eliminadas de su carro."
+"Las posiciones afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/cart.py:64
 msgid "The entered price is to high."
@@ -3309,26 +3300,16 @@ msgid "A payment provider specific text might appear here."
 msgstr "Un texto específico del proveedor de pago podría aparecer aquí."
 
 #: pretix/base/services/invoices.py:303
-#, fuzzy
-#| msgid ""
-#| "John Doe\n"
-#| "214th Example Street\n"
-#| "012345 Somecity"
 msgid "214th Example Street"
-msgstr ""
-"Juan Perez\n"
-"Calle Ejemplo 214 \n"
-"012345 Alguna Ciudad"
+msgstr "Calle Ejemplo 214"
 
 #: pretix/base/services/invoices.py:304
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:305
-#, fuzzy
-#| msgid "Sample company"
 msgid "Sample city"
-msgstr "Compañía de ejemplo"
+msgstr "Ciudad de ejemplo"
 
 #: pretix/base/services/invoices.py:319
 msgid "Sample product {}"
@@ -3447,7 +3428,7 @@ msgid ""
 "The affected positions have been removed from your cart."
 msgstr ""
 "El período de preventa de uno de los eventos de su carrito aún no ha "
-"comenzado. Las posiciones afectadas han sido eliminadas de su carro."
+"comenzado. Las posiciones afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/orders.py:93 pretix/control/forms/orders.py:48
 msgid "The new expiry date needs to be in the future."
@@ -4574,12 +4555,6 @@ msgid "Automatic waiting list assignments"
 msgstr "Asignaciones automáticas a listas de espera"
 
 #: pretix/control/forms/event.py:323
-#, fuzzy
-#| msgid ""
-#| "If ticket capacity becomes free, automatically create a voucher and send "
-#| "it to the first person on the waiting list for that product. If this is "
-#| "not active, mails will not be send automatically but you can send them "
-#| "manually via the control panel."
 msgid ""
 "If ticket capacity becomes free, automatically create a voucher and send it "
 "to the first person on the waiting list for that product. If this is not "
@@ -4590,7 +4565,9 @@ msgstr ""
 "Si se libera la capacidad de entradas, cree automáticamente un vale y "
 "envíelo a la primera persona en la lista de espera para ese producto. Si "
 "esto no está activo, los correos no se enviarán automáticamente, pero puede "
-"enviarlos manualmente a través del panel de control."
+"enviarlos manualmente a través del panel de control. Si deshabilitas la "
+"lista de espera pero mantienes esta opción activa, los tickets se enviarán "
+"automáticamente."
 
 #: pretix/control/forms/event.py:331
 msgid "Ask for attendee names"
@@ -4923,16 +4900,12 @@ msgid "Generate invoices"
 msgstr "Generar facturas"
 
 #: pretix/control/forms/event.py:580
-#, fuzzy
-#| msgid "Generate invoices"
 msgid "Do not generate invoices"
-msgstr "Generar facturas"
+msgstr "No generar facturas"
 
 #: pretix/control/forms/event.py:581
-#, fuzzy
-#| msgid "Manually in admin panel"
 msgid "Only manually in admin panel"
-msgstr "Manualmente en el panel de administración"
+msgstr "Solo manualmente en el panel de administración"
 
 #: pretix/control/forms/event.py:582
 msgid "Automatically on user request"
@@ -4977,22 +4950,18 @@ msgid "Invoice style"
 msgstr "Estilo de factura"
 
 #: pretix/control/forms/event.py:610
-#, fuzzy
-#| msgid "Address"
 msgid "Address line"
-msgstr "Dirección"
+msgstr "Línea de dirección"
 
 #: pretix/control/forms/event.py:614
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "Calle Albert Einstein 52"
 
 #: pretix/control/forms/event.py:640
 msgid "Domestic tax ID"
 msgstr ""
 
 #: pretix/control/forms/event.py:644
-#, fuzzy
-#| msgid "VAT ID"
 msgid "EU VAT ID"
 msgstr "Identificador IVA"
 
@@ -5356,7 +5325,7 @@ msgstr "Nombre (descendente)"
 
 #: pretix/control/forms/event.py:964
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "Preguntarle a los motores de búsqueda no indexar la tienda de tickets"
 
 #: pretix/control/forms/event.py:980
 msgid "Use feature"
@@ -5393,11 +5362,8 @@ msgid "Generate tickets for non-admission products"
 msgstr "Generar tickets para productos no admitidos"
 
 #: pretix/control/forms/event.py:1000
-#, fuzzy
-#| msgid "Offer to download tickets separately for add-on products"
 msgid "Offer to download tickets even before an order is paid"
-msgstr ""
-"Ofrecer la descarga de tickets por separado para los productos adicionales"
+msgstr "Ofrecer la descarga de tickets antes de que la orden esté pagada"
 
 #: pretix/control/forms/event.py:1041
 msgid "Any country"
@@ -6658,10 +6624,9 @@ msgid "Payment {local_id} has been started."
 msgstr "Se ha iniciado el pago {local_id}."
 
 #: pretix/control/logdisplay.py:201
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has been canceled."
+#, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr "El pago {local_id} ha sido cancelado."
+msgstr "El pago {local_id} ha fallado."
 
 #: pretix/control/logdisplay.py:202
 #, fuzzy, python-brace-format
@@ -7013,6 +6978,8 @@ msgstr "Se ha regenerado la factura."
 #: pretix/control/logdisplay.py:284
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"El dispositivo ha notificado al servidor de una actualización de hardware o "
+"software."
 
 #: pretix/control/logdisplay.py:308
 msgid "The settings of a payment provider have been changed."
@@ -8027,7 +7994,7 @@ msgstr "Este cambio fue realizado por un administrador de pretix."
 #: pretix/control/templates/pretixcontrol/event/logs.html:76
 #: pretix/control/templates/pretixcontrol/includes/logs.html:42
 msgid "Inspect"
-msgstr ""
+msgstr "Inspeccionar"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:198
 msgid "Show more logs"
@@ -10309,20 +10276,24 @@ msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"Abra la aplicación que quiere conectar y opcionalmente resetee al estado "
+"original."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Escanee el siguiente código de configuración:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:13
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Si su aplicación/dispositivo no admite el escaneo de un código QR, también "
+"puede introducir la siguiente información:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:15
 msgid "System URL:"
-msgstr ""
+msgstr "URL del sistema:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:16
 #, fuzzy
@@ -10338,6 +10309,10 @@ msgid ""
 "not supported by this feature. Future versions of pretixdroid and pretixdesk "
 "will be supported through this menu."
 msgstr ""
+"Tenga en cuenta que se trata de una nueva función que actualmente sólo "
+"funciona para software en fase beta, como pretixPOS. pretixdroid 1.x y "
+"pretixdesk 0.x no son compatibles con esta función. Las versiones futuras de "
+"pretixdroid y pretixdesk serán soportadas a través de este menú."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:29
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:21
@@ -10345,6 +10320,8 @@ msgid ""
 "To set up pretixdroid or pretixdesk, please go to the <strong>Check-in "
 "devices</strong> section of an event."
 msgstr ""
+"Para configurar pretixdroid o pretixdesk, vaya a la sección <strong>"
+"Dispositivos de registro</strong> de un evento."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:35
 #, fuzzy
@@ -10388,6 +10365,8 @@ msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"Toda la información de este dispositivo estará todavía disponible, pero no "
+"podrás seguir usando el dispositivo."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
 #, fuzzy
@@ -10400,6 +10379,8 @@ msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"Este menú le permite conectar dispositivos de hardware como terminales de "
+"taquilla o terminales de escaneo a su cuenta."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:28
 #, fuzzy
@@ -10422,7 +10403,7 @@ msgstr "Nombre del dispositivo"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:47
 msgid "Hardware model"
-msgstr ""
+msgstr "Modelo del Hardware"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:48
 #, fuzzy
@@ -10444,7 +10425,7 @@ msgstr "Revocar"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:100
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:8
 msgid "Organizer page"
@@ -13117,7 +13098,7 @@ msgstr "Datos de la cuenta bancaria"
 
 #: pretix/plugins/banktransfer/payment.py:30
 msgid "SEPA bank account"
-msgstr ""
+msgstr "Cuenta de banco SEPA"
 
 #: pretix/plugins/banktransfer/payment.py:31
 #, fuzzy
@@ -13136,14 +13117,14 @@ msgstr "Titular de la cuenta"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:56
 #: pretix/plugins/banktransfer/payment.py:158
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:12
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:16
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:66
 #, fuzzy
@@ -13179,6 +13160,9 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"Para cuentas SEPA, puedes dejar esta opción vacía. En caso contrario, por "
+"favor agregar todo lo que los clientes necesitan para transferir el dinero, "
+"p. e. números de cuenta, número de ruteo, direcciones, etc."
 
 #: pretix/plugins/banktransfer/payment.py:99
 msgid "Do not include a hypen in the payment reference."
@@ -13435,11 +13419,11 @@ msgstr "Código de referencia (importante):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:53
 msgid "Open banking app"
-msgstr ""
+msgstr "Abrir aplicación bancaria"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:55
 msgid "Requires that the app supports BezahlCode"
-msgstr ""
+msgstr "Se requiere que la aplicación soporte BezahlCode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
@@ -15339,7 +15323,7 @@ msgstr "Importe de %(item)s a pedir"
 #: pretix/presale/templates/pretixpresale/event/index.html:448
 #: pretix/presale/templates/pretixpresale/event/voucher.html:230
 msgid "Add to cart"
-msgstr "Añadir al carro"
+msgstr "Añadir al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:460
 msgid "Redeem a voucher"
