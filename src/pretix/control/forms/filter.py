@@ -739,7 +739,6 @@ class VoucherFilterForm(FilterForm):
         label=_('Search voucher'),
         widget=forms.TextInput(attrs={
             'placeholder': _('Search voucher'),
-            'autofocus': 'autofocus'
         }),
         required=False
     )
