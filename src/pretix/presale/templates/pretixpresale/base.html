@@ -4,7 +4,7 @@
 {% load safelink %}
 {% load statici18n %}
 <!DOCTYPE html>
-<html>
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
     {% compress css %}

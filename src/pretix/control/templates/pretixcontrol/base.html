@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load eventurl %}
 <!DOCTYPE html>
-<html>
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 	<head>
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>

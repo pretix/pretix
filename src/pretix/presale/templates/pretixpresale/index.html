@@ -2,7 +2,7 @@
 {% load compress %}
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 <head>
     <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
     {% compress css %}
