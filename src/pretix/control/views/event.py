@@ -644,7 +644,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                                                     expires=now(), code="PREVIEW", total=119)
                 item = request.event.items.create(name=ugettext("Sample product"), default_price=42.23,
                                                   description=ugettext("Sample product description"))
-                order.positions.create(item=item, attendee_name=ugettext("John Doe"), price=item.default_price)
+                order.positions.create(item=item, attendee_name_parts={'full_name': ugettext("John Doe")}, price=item.default_price)
                 v = renderers[request.GET.get('renderer')].render(
                     v,
                     str(request.event.settings.mail_text_signature),

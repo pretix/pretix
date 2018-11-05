@@ -34,7 +34,8 @@
     {% endcompress %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
     <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">

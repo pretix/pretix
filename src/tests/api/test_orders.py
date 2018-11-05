@@ -100,7 +100,7 @@ def order(event, item, taxrule, question):
             item=item,
             variation=None,
             price=Decimal("23"),
-            attendee_name="Peter",
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
@@ -115,6 +115,7 @@ TEST_ORDERPOSITION_RES = {
     "item": 1,
     "variation": None,
     "price": "23.00",
+    "attendee_name_parts": {"full_name": "Peter", "_scheme": "full"},
     "attendee_name": "Peter",
     "attendee_email": None,
     "voucher": None,
@@ -195,6 +196,7 @@ TEST_ORDER_RES = {
         "is_business": False,
         "company": "Sample company",
         "name": "",
+        "name_parts": {},
         "street": "",
         "zipcode": "",
         "city": "",
@@ -703,7 +705,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
         item=item,
         variation=None,
         price=Decimal("23"),
-        attendee_name="Peter",
+        attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
         secret="foobar",
         pseudonymization_id="BAZ",
     )
@@ -1249,7 +1251,7 @@ ORDER_CREATE_PAYLOAD = {
     "invoice_address": {
         "is_business": False,
         "company": "Sample company",
-        "name": "Fo",
+        "name_parts": {"full_name": "Fo"},
         "street": "Bar",
         "zipcode": "",
         "city": "Sample City",
@@ -1263,7 +1265,7 @@ ORDER_CREATE_PAYLOAD = {
             "item": 1,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
             "answers": [
@@ -1306,10 +1308,13 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert fee.value == Decimal('0.25')
     ia = o.invoice_address
     assert ia.company == "Sample company"
+    assert ia.name_parts == {"full_name": "Fo", "_scheme": "full"}
+    assert ia.name_cached == "Fo"
     assert o.positions.count() == 1
     pos = o.positions.first()
     assert pos.item == item
     assert pos.price == Decimal("23.00")
+    assert pos.attendee_name_parts == {"full_name": "Peter", "_scheme": "full"}
     answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "S"
@@ -1330,6 +1335,54 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
     o = Order.objects.get(code=resp.data['code'])
     with pytest.raises(InvoiceAddress.DoesNotExist):
         o.invoice_address
+
+
+@pytest.mark.django_db
+def test_order_create_legacy_attendee_name(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['attendee_name'] = 'Peter'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    del res['positions'][0]['attendee_name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.positions.first().attendee_name_parts == {"_legacy": "Peter"}
+
+
+@pytest.mark.django_db
+def test_order_create_legacy_invoice_name(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['invoice_address']['name'] = 'Peter'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    del res['invoice_address']['name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.invoice_address.name_parts == {"_legacy": "Peter"}
 
 
 @pytest.mark.django_db
@@ -1646,7 +1699,7 @@ def test_order_create_positionids_addons(token_client, organizer, event, item, q
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
             "answers": [],
@@ -1657,7 +1710,7 @@ def test_order_create_positionids_addons(token_client, organizer, event, item, q
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": 1,
             "answers": [],
@@ -1685,7 +1738,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
             "answers": [],
@@ -1696,7 +1749,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": 2,
             "answers": [],
@@ -1727,7 +1780,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
             "answers": [],
@@ -1737,7 +1790,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": 2,
             "answers": [],
@@ -1761,7 +1814,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "answers": [],
             "subevent": None
@@ -1770,7 +1823,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "answers": [],
             "subevent": None
@@ -1797,7 +1850,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "answers": [],
             "subevent": None
@@ -1807,7 +1860,7 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "answers": [],
             "subevent": None
@@ -2066,7 +2119,7 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": None,
             "answers": [],
@@ -2077,7 +2130,7 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
             "item": item.pk,
             "variation": None,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
             "addon_to": 1,
             "answers": [],

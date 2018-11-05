@@ -102,7 +102,7 @@
 
     {% if frontpage_text and not cart_namespace %}
         <div>
-            {{ frontpage_text|rich_text }}
+            {{ frontpage_text|rich_text|linebreaksbr }}
         </div>
     {% endif %}
 

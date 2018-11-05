@@ -184,6 +184,8 @@ def get_cart(request):
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
                 'item__tax_rule'
             )
+            for cp in request._cart_cache:
+                cp.event = request.event  # Populate field with known value to save queries
     return request._cart_cache
 
 

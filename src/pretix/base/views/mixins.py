@@ -80,8 +80,8 @@ class BaseQuestionsViewMixin:
                 # This form was correctly filled, so we store the data as
                 # answers to the questions / in the CartPosition object
                 for k, v in form.cleaned_data.items():
-                    if k == 'attendee_name':
-                        form.pos.attendee_name = v if v != '' else None
+                    if k == 'attendee_name_parts':
+                        form.pos.attendee_name_parts = v if v else None
                         form.pos.save()
                     elif k == 'attendee_email':
                         form.pos.attendee_email = v if v != '' else None

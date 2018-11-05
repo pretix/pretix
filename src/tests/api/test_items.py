@@ -61,7 +61,7 @@ def order_position(item, order, taxrule, variations):
         tax_rate=taxrule.rate,
         tax_value=Decimal("3"),
         price=Decimal("23"),
-        attendee_name="Peter",
+        attendee_name_parts={'full_name': "Peter"},
         secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
     )
     return op

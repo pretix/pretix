@@ -50,7 +50,7 @@ def order(event, item, other_item, taxrule):
             item=item,
             variation=None,
             price=Decimal("23"),
-            attendee_name="Peter",
+            attendee_name_parts={'full_name': "Peter"},
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
@@ -60,7 +60,7 @@ def order(event, item, other_item, taxrule):
             item=other_item,
             variation=None,
             price=Decimal("23"),
-            attendee_name="Michael",
+            attendee_name_parts={'full_name': "Michael"},
             secret="sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
             pseudonymization_id="BACDEFGHKL",
         )
@@ -75,6 +75,7 @@ TEST_ORDERPOSITION1_RES = {
     "variation": None,
     "price": "23.00",
     "attendee_name": "Peter",
+    "attendee_name_parts": {'full_name': "Peter"},
     "attendee_email": None,
     "voucher": None,
     "tax_rate": "0.00",
@@ -97,6 +98,7 @@ TEST_ORDERPOSITION2_RES = {
     "variation": None,
     "price": "23.00",
     "attendee_name": "Michael",
+    "attendee_name_parts": {'full_name': "Michael"},
     "attendee_email": None,
     "voucher": None,
     "tax_rate": "0.00",

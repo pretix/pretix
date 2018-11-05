@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
+from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ..exporter import BaseExporter
 from ..signals import register_data_exporters
@@ -74,7 +75,14 @@ class OrderListExporter(BaseExporter):
 
         headers = [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Order date'),
-            _('Company'), _('Name'), _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
+            _('Company'), _('Name'),
+        ]
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        if len(name_scheme['fields']) > 1:
+            for k, label, w in name_scheme['fields']:
+                headers.append(label)
+        headers += [
+            _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
             _('Date of last payment'), _('Fees'), _('Order locale')
         ]
 
@@ -118,6 +126,13 @@ class OrderListExporter(BaseExporter):
                 row += [
                     order.invoice_address.company,
                     order.invoice_address.name,
+                ]
+                if len(name_scheme['fields']) > 1:
+                    for k, label, w in name_scheme['fields']:
+                        row.append(
+                            order.invoice_address.name_parts.get(k, '')
+                        )
+                row += [
                     order.invoice_address.street,
                     order.invoice_address.zipcode,
                     order.invoice_address.city,
@@ -126,7 +141,7 @@ class OrderListExporter(BaseExporter):
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:
-                row += ['', '', '', '', '', '', '']
+                row += [''] * 7 + (len(name_scheme['fields']) if len(name_scheme['fields']) > 1 else 0)
 
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',

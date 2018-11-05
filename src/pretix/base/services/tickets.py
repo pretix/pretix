@@ -12,6 +12,7 @@ from pretix.base.models import (
     OrderPosition,
 )
 from pretix.base.services.tasks import ProfiledTask
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
@@ -87,11 +88,13 @@ def preview(event: int, provider: str):
                                     locale=event.settings.locale,
                                     expires=now(), code="PREVIEW1234", total=119)
 
-        p = order.positions.create(item=item, attendee_name=_("John Doe"), price=item.default_price)
-        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
-        order.positions.create(item=item2, attendee_name=_("John Doe"), price=item.default_price, addon_to=p)
+        scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+        sample = {k: str(v) for k, v in scheme['sample'].items()}
+        p = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
+        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
+        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p)
 
-        InvoiceAddress.objects.create(order=order, name=_("John Doe"), company=_("Sample company"))
+        InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
 
         responses = register_ticket_outputs.send(event)
         for receiver, response in responses:

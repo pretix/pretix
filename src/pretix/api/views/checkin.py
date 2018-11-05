@@ -154,7 +154,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.objects.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
-    ordering = ('attendee_name', 'positionid')
+    ordering = ('attendee_name_cached', 'positionid')
     ordering_fields = (
         'order__code', 'order__datetime', 'positionid', 'attendee_name',
         'last_checked_in', 'order__email',
@@ -162,11 +162,11 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_custom = {
         'attendee_name': {
             '_order': F('display_name').asc(nulls_first=True),
-            'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
         },
         '-attendee_name': {
             '_order': F('display_name').desc(nulls_last=True),
-            'display_name': Coalesce('attendee_name', 'addon_to__attendee_name')
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
         },
         'last_checked_in': {
             '_order': FixedOrderBy(F('last_checked_in'), nulls_first=True),
