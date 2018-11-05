@@ -109,8 +109,11 @@
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
-                            <span class="event-name">{{ request.event }}</span>
+                        <a href="#" class="dropdown-toggle event-dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
+                            <div class="event-indicator">
+                                <span class="event-name">{{ request.event }}</span>
+                                <span class="event-daterange">{{ request.event.get_date_range_display }}</span>
+                            </div>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
                             data-source="{% url "control:events.typeahead" %}">
