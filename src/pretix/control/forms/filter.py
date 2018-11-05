@@ -796,7 +796,10 @@ class VoucherFilterForm(FilterForm):
 
         if fdata.get('tag'):
             s = fdata.get('tag').strip()
-            qs = qs.filter(tag__icontains=s)
+            if s == '<>':
+                qs = qs.filter(Q(tag__isnull=True) | Q(tag=''))
+            else:
+                qs = qs.filter(tag__icontains=s)
 
         if fdata.get('qm'):
             s = fdata.get('qm')
