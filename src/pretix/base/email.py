@@ -1,5 +1,5 @@
 import logging
-from smtplib import SMTPRecipientsRefused, SMTPSenderRefused
+from smtplib import SMTPResponseException
 
 import bleach
 import markdown
@@ -23,16 +23,14 @@ class CustomSMTPBackend(EmailBackend):
         try:
             self.open()
             self.connection.ehlo_or_helo_if_needed()
-            self.connection.rcpt("test@example.org")
             (code, resp) = self.connection.mail(from_addr, [])
             if code != 250:
                 logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
-                raise SMTPSenderRefused(code, resp, from_addr)
-            senderrs = {}
+                raise SMTPResponseException(code, resp)
             (code, resp) = self.connection.rcpt('test@example.com')
             if (code != 250) and (code != 251):
                 logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
-                raise SMTPRecipientsRefused(senderrs)
+                raise SMTPResponseException(code, resp)
         finally:
             self.close()
 
@@ -97,7 +95,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
     @property
     def template_name(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order: Order) -> str:
         body_md = bleach.linkify(markdown_compile(plain_body))
