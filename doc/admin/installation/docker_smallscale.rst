@@ -26,7 +26,7 @@ installation guides):
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `MySQL`_ or `PostgreSQL`_ database server
+* A `PostgreSQL`_, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
@@ -61,7 +61,7 @@ Next, we need a database and a database user. We can create these with any kind 
 our database's shell, e.g. for MySQL::
 
     $ mysql -u root -p
-    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
     mysql> GRANT ALL PRIVILEGES ON pretix.* TO pretix@'localhost' IDENTIFIED BY '*********';
     mysql> FLUSH PRIVILEGES;
 

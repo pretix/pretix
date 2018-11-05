@@ -75,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     REQUIRED_FIELDS = []
 
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
-                              verbose_name=_('E-mail'))
+                              verbose_name=_('E-mail'), max_length=190)
     fullname = models.CharField(max_length=255, blank=True, null=True,
                                 verbose_name=_('Full name'))
     is_active = models.BooleanField(default=True,
