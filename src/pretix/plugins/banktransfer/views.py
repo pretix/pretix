@@ -172,7 +172,7 @@ class ActionView(View):
             | Q(email__icontains=u)
             | Q(positions__attendee_name_cached__icontains=u)
             | Q(positions__attendee_email__icontains=u)
-            | Q(invoice_address__name__icontains=u)
+            | Q(invoice_address__name_cached__icontains=u)
             | Q(invoice_address__company__icontains=u)
             | Q(invoices__invoice_no=u)
             | Q(invoices__invoice_no=u.zfill(5))
