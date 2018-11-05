@@ -574,6 +574,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'given_family',
         },
     }),
     ('title_given_family', {
@@ -589,6 +590,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             'title': pgettext_lazy('person_name_sample', 'Dr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_given_family',
         },
     }),
     ('given_middle_family', {
@@ -604,6 +606,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'middle_name': 'M',
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'given_middle_family',
         },
     }),
     ('title_given_middle_family', {
@@ -621,6 +624,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'middle_name': 'M',
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_given_middle_family',
         },
     }),
     ('family_given', {
@@ -634,6 +638,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'family_given',
         },
     }),
     ('family_nospace_given', {
@@ -647,6 +652,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'sample': {
             'given_name': '泽东',
             'family_name': '毛',
+            '_scheme': 'family_nospace_given',
         },
     }),
     ('family_comma_given', {
@@ -662,6 +668,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'sample': {
             'given_name': pgettext_lazy('person_name_sample', 'John'),
             'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'family_comma_given',
         },
     }),
     ('full', {
@@ -671,6 +678,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: str(d.get('full_name', '')),
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
+            '_scheme': 'full',
         },
     }),
     ('calling_full', {
@@ -682,6 +690,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
             'calling_name': pgettext_lazy('person_name_sample', 'John'),
+            '_scheme': 'calling_full',
         },
     }),
     ('full_transcription', {
@@ -692,7 +701,8 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: str(d.get('full_name', '')),
         'sample': {
             'full_name': '庄司',
-            'latin_transcription': 'Shōji'
+            'latin_transcription': 'Shōji',
+            '_scheme': 'full_transcription',
         },
     }),
 ])
