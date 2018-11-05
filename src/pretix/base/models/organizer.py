@@ -82,6 +82,20 @@ class Organizer(LoggedModel):
 
         return ObjectRelatedCache(self)
 
+    def allow_delete(self):
+        from . import Order, Invoice
+        return (
+            not Order.objects.filter(event__organizer=self).exists() and
+            not Invoice.objects.filter(event__organizer=self).exists() and
+            not self.devices.exists()
+        )
+
+    def delete_sub_objects(self):
+        for e in self.events.all():
+            e.delete_sub_objects()
+            e.delete()
+        self.teams.all().delete()
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)

@@ -1,0 +1,45 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+    <h1>{% trans "Delete organizer" %}</h1>
+    {% if request.organizer.allow_delete %}
+        {% bootstrap_form_errors form layout="inline" %}
+        <p>
+            {% blocktrans trimmed %}
+                This operation will destroy this organizer including all events, configuration, products, quotas,
+                questions, vouchers, lists, etc.
+            {% endblocktrans %}
+        </p>
+        <p><strong>
+            {% blocktrans trimmed %}
+                This operation is irreversible and there is no way to bring your data back.
+            {% endblocktrans %}
+        </strong></p>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>
+                {% blocktrans trimmed with slug=request.organizer.slug %}
+                    To confirm you really want this, please type out the organizer's short name ("{{ slug }}") here:
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.slug layout="inline" %}
+
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% trans "Delete" %}
+                </button>
+            </div>
+        </form>
+    {% else %}
+        <p>
+            {% trans "This organizer account can not be deleted as it already contains orders, invoices, or devices." %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                pretix does not allow deleting orders once they have been placed in order to be audit-proof and
+                trustable by financial authorities.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+{% endblock %}

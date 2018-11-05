@@ -12,6 +12,12 @@
                 {% trans "Edit" %}
             </a>
         {% endif %}
+        {% if request.user.is_staff and staff_session %}
+            <a href="{% url "control:organizer.delete" organizer=organizer.slug %}"
+                    class="btn btn-danger hidden-print">
+                <span class="fa fa-trash"></span>
+            </a>
+        {% endif %}
     </h1>
     <ul class="nav nav-pills hidden-print">
         <li {% if "organizer" == url_name %}class="active"{% endif %}>

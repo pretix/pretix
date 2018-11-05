@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, ProtectedError
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -23,10 +23,13 @@ from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
-    DeviceForm, EventMetaPropertyForm, OrganizerDisplaySettingsForm,
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
+    DeviceForm, EventMetaPropertyForm, OrganizerDeleteForm,
+    OrganizerDisplaySettingsForm, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, TeamForm,
 )
-from pretix.control.permissions import OrganizerPermissionRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+)
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.helpers.urls import build_absolute_uri
@@ -166,6 +169,47 @@ class OrganizerDisplaySettings(OrganizerSettingsFormView):
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class OrganizerDelete(AdministratorPermissionRequiredMixin, FormView):
+    model = Organizer
+    template_name = 'pretixcontrol/organizers/delete.html'
+    context_object_name = 'organizer'
+    form_class = OrganizerDeleteForm
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.organizer.allow_delete():
+            messages.error(self.request, _('This organizer can not be deleted.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                self.request.user.log_action(
+                    'pretix.organizer.deleted', user=self.request.user,
+                    data={
+                        'organizer_id': self.request.organizer.pk,
+                        'name': str(self.request.organizer.name),
+                        'logentries': list(self.request.organizer.all_logentries().values_list('pk', flat=True))
+                    }
+                )
+                self.request.organizer.delete_sub_objects()
+                self.request.organizer.delete()
+            messages.success(self.request, _('The organizer has been deleted.'))
+            return redirect(self.get_success_url())
+        except ProtectedError:
+            messages.error(self.request, _('The organizer could not be deleted as some constraints (e.g. data created by '
+                                           'plug-ins) do not allow it.'))
+            return self.get(self.request, *self.args, **self.kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:index')
 
 
 class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
