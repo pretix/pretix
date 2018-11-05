@@ -592,7 +592,8 @@ class CheckoutTestCase(TestCase):
             'given_name': 'John',
             'title': 'Mr',
             'middle_name': 'F',
-            'family_name': 'Kennedy'
+            'family_name': 'Kennedy',
+            "_scheme": "title_given_middle_family"
         })
 
     def test_attendee_name_optional(self):
@@ -615,7 +616,7 @@ class CheckoutTestCase(TestCase):
                              target_status_code=200)
 
         cr1 = CartPosition.objects.get(id=cr1.id)
-        self.assertIsNone(cr1.attendee_name)
+        assert not cr1.attendee_name
 
     def test_invoice_address_required(self):
         self.event.settings.invoice_address_asked = True
@@ -663,7 +664,8 @@ class CheckoutTestCase(TestCase):
             'title': 'Mr',
             'given_name': 'John',
             'middle_name': '',
-            'family_name': 'Kennedy'
+            'family_name': 'Kennedy',
+            "_scheme": "title_given_middle_family"
         }
         assert ia.name_cached == 'Mr John Kennedy'
 
@@ -809,7 +811,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('invoice_address_required', True)
         ia = InvoiceAddress.objects.create(
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
-            country=Country('DE'), name_parts={'full_name': 'Foo'}, name_cached='Foo', street='Foo'
+            country=Country('DE'), name_parts={'full_name': 'Foo', "_scheme": "full"}, name_cached='Foo', street='Foo'
         )
         self._set_session('invoice_address', ia.pk)
         CartPosition.objects.create(
@@ -833,7 +835,7 @@ class CheckoutTestCase(TestCase):
         self.event.settings.set('invoice_address_required', True)
         ia = InvoiceAddress.objects.create(
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,
-            country=Country('CH'), name_parts={'full_name': 'Foo'}, name_cached='Foo', street='Foo'
+            country=Country('CH'), name_parts={'full_name': 'Foo', "_scheme": "full"}, name_cached='Foo', street='Foo'
         )
         self._set_session('invoice_address', ia.pk)
         CartPosition.objects.create(
@@ -875,7 +877,7 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        cr1.attendee_name_parts = {"full_name": 'Peter'}
+        cr1.attendee_name_parts = {"full_name": 'Peter', "_scheme": "full"}
         cr1.save()
         q1 = Question.objects.create(
             event=self.event, question='Age', type=Question.TYPE_NUMBER,

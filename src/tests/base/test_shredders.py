@@ -54,7 +54,7 @@ def order(event, item):
         item=item,
         variation=None,
         price=Decimal("14"),
-        attendee_name_parts={'full_name': "Peter"},
+        attendee_name_parts={'full_name': "Peter", "_scheme": "full"},
         attendee_email="foo@example.org"
     )
     return o

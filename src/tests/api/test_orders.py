@@ -100,7 +100,7 @@ def order(event, item, taxrule, question):
             item=item,
             variation=None,
             price=Decimal("23"),
-            attendee_name_parts={"full_name": "Peter"},
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
@@ -115,7 +115,7 @@ TEST_ORDERPOSITION_RES = {
     "item": 1,
     "variation": None,
     "price": "23.00",
-    "attendee_name_parts": {"full_name": "Peter"},
+    "attendee_name_parts": {"full_name": "Peter", "_scheme": "full"},
     "attendee_name": "Peter",
     "attendee_email": None,
     "voucher": None,
@@ -705,7 +705,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
         item=item,
         variation=None,
         price=Decimal("23"),
-        attendee_name_parts={"full_name": "Peter"},
+        attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
         secret="foobar",
         pseudonymization_id="BAZ",
     )
@@ -1308,12 +1308,13 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert fee.value == Decimal('0.25')
     ia = o.invoice_address
     assert ia.company == "Sample company"
-    assert ia.name_parts == {"full_name": "Fo"}
+    assert ia.name_parts == {"full_name": "Fo", "_scheme": "full"}
     assert ia.name_cached == "Fo"
     assert o.positions.count() == 1
     pos = o.positions.first()
     assert pos.item == item
     assert pos.price == Decimal("23.00")
+    assert pos.attendee_name_parts == {"full_name": "Peter", "_scheme": "full"}
     answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "S"

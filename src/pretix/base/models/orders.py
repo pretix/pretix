@@ -1605,7 +1605,7 @@ class InvoiceAddress(models.Model):
     @property
     def name(self):
         if not self.name_parts:
-            return None
+            return ""
         if '_legacy' in self.name_parts:
             return self.name_parts['_legacy']
         if '_scheme' in self.name_parts:
