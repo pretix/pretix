@@ -215,11 +215,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.user.settings.notifications.enabled': _('Notifications have been enabled.'),
         'pretix.user.settings.notifications.disabled': _('Notifications have been disabled.'),
         'pretix.user.settings.notifications.changed': _('Your notification settings have been changed.'),
-        'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
+        'pretix.user.anonymized': _('This user has been anonymized.'),
         'pretix.user.oauth.authorized': _('The application "{application_name}" has been authorized to access your '
                                           'account.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
+        'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
         'pretix.voucher.added': _('The voucher has been created.'),
         'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
         'pretix.voucher.changed': _('The voucher has been changed.'),

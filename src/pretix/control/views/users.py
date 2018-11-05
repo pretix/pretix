@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,7 +8,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from hijack.helpers import login_user, release_hijack
 
 from pretix.base.models import User
@@ -97,6 +99,36 @@ class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRe
 
     def get_success_url(self):
         return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class UserAnonymizeView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, TemplateView):
+    template_name = "pretixcontrol/users/anonymize.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['user'] = get_object_or_404(User, pk=self.kwargs.get("id"))
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        self.object.log_action('pretix.user.anonymized',
+                               user=request.user)
+        self.object.email = "{}@disabled.pretix.eu".format(self.object.pk)
+        self.object.fullname = ""
+        self.object.is_active = False
+        self.object.notifications_send = False
+        self.object.save()
+        for le in self.object.all_logentries.filter(action_type="pretix.user.settings.changed"):
+            d = le.parsed_data
+            if 'email' in d:
+                d['email'] = '█'
+            if 'fullname' in d:
+                d['fullname'] = '█'
+            le.data = json.dumps(d)
+            le.shredded = True
+            le.save(update_fields=['data', 'shredded'])
+
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
 
 
 class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
