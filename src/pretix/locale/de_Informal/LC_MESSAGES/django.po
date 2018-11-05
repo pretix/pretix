@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-05 15:36+0000\n"
-"PO-Revision-Date: 2018-10-31 14:33+0000\n"
+"PO-Revision-Date: 2018-11-05 15:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -551,16 +551,12 @@ msgid "Street and Number"
 msgstr "Straße und Hausnummer"
 
 #: pretix/base/forms/questions.py:331
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide a company name."
-msgstr "Du musst entweder einen Firmennamen oder deinen Namen eingeben."
+msgstr "Du musst einen Firmennamen eingeben."
 
 #: pretix/base/forms/questions.py:333
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide your name."
-msgstr "Du musst entweder einen Firmennamen oder deinen Namen eingeben."
+msgstr "Du musst deinen Namen eingeben."
 
 #: pretix/base/forms/questions.py:344 pretix/control/views/orders.py:781
 msgid "Your VAT ID does not match the selected country."
@@ -2994,14 +2990,10 @@ msgid "Random City"
 msgstr "Musterstadt"
 
 #: pretix/base/pdf.py:151
-#, fuzzy
-#| msgid "Invoice address: name"
 msgid "Invoice address name"
 msgstr "Rechnungsadresse: Name"
 
 #: pretix/base/pdf.py:156
-#, fuzzy
-#| msgid "Invoice address: company"
 msgid "Invoice address company"
 msgstr "Rechnungsadresse: Firma"
 
@@ -3044,16 +3036,14 @@ msgstr "Information zum Veranstalter"
 #: pretix/plugins/checkinlists/exporters.py:55
 #: pretix/plugins/checkinlists/exporters.py:314
 #: pretix/plugins/ticketoutputpdf/exporters.py:42
-#, fuzzy, python-brace-format
-#| msgid "Attendee name"
+#, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Name des Teilnehmers"
+msgstr "Teilnehmername: {part}"
 
 #: pretix/base/pdf.py:200
-#, fuzzy, python-brace-format
-#| msgid "Invoice address: name"
+#, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr "Rechnungsadresse: Name"
+msgstr "Rechnungsadresse: Name: {part}"
 
 #: pretix/base/pdf.py:334 pretix/plugins/ticketoutputpdf/ticketoutput.py:107
 msgid "Ticket"
@@ -4071,62 +4061,47 @@ msgstr "Nachname"
 #: pretix/base/settings.py:604 pretix/base/settings.py:621
 #: pretix/base/settings.py:635 pretix/base/settings.py:663
 #: pretix/base/settings.py:684
-#, fuzzy
-#| msgid "John Doe"
 msgctxt "person_name_sample"
 msgid "John"
-msgstr "Max Mustermann"
+msgstr "Max"
 
 #: pretix/base/settings.py:576 pretix/base/settings.py:591
 #: pretix/base/settings.py:606 pretix/base/settings.py:623
 #: pretix/base/settings.py:636 pretix/base/settings.py:664
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "Mustermann"
 
 #: pretix/base/settings.py:581 pretix/base/settings.py:611
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: pretix/base/settings.py:589 pretix/base/settings.py:620
-#, fuzzy
-#| msgid "Dark"
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr "Dunkel"
+msgstr "Dr."
 
 #: pretix/base/settings.py:596 pretix/base/settings.py:612
-#, fuzzy
-#| msgid "Ticket name"
 msgid "First name"
-msgstr "Ticket-Bezeichnung"
-
-#: pretix/base/settings.py:597 pretix/base/settings.py:613
-#, fuzzy
-#| msgid "Given name"
-msgid "Middle name"
 msgstr "Vorname"
 
+#: pretix/base/settings.py:597 pretix/base/settings.py:613
+msgid "Middle name"
+msgstr "Mittlerer Name"
+
 #: pretix/base/settings.py:673 pretix/base/settings.py:683
-#, fuzzy
-#| msgid "John Doe"
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "Max Mustermann"
 
 #: pretix/base/settings.py:678
-#, fuzzy
-#| msgid "Full name"
 msgid "Calling name"
-msgstr "Voller Name"
+msgstr "Rufname"
 
 #: pretix/base/settings.py:690
-#, fuzzy
-#| msgctxt "refund_state"
-#| msgid "in transit"
 msgid "Latin transcription"
-msgstr "auf dem Weg"
+msgstr "Transkription"
 
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
 msgid "Your event needs to be over for at least 60 days to use this feature."
@@ -4701,10 +4676,8 @@ msgid "Require customers to fill in the names of all attendees."
 msgstr "Erfordere die Eingabe aller Teilnehmer-Namen."
 
 #: pretix/control/forms/event.py:343
-#, fuzzy
-#| msgid "Payment information"
 msgid "Name format"
-msgstr "Zahlungsinformationen"
+msgstr "Namensformat"
 
 #: pretix/control/forms/event.py:344
 msgid ""
@@ -4712,6 +4685,9 @@ msgid ""
 "already received orders might lead to unexpected behaviour when sorting or "
 "changing names."
 msgstr ""
+"Dies legt fest, wie pretix Menschen nach ihren Namen fragt. Eine Änderung "
+"dieser Option, wenn bereits Bestellungen existieren, kann beim Sortieren "
+"nach Namen oder Ändern von Namen zu unerwartetem Verhalten führen."
 
 #: pretix/control/forms/event.py:349
 msgid "Ask for email addresses per ticket"
@@ -4854,7 +4830,7 @@ msgstr ""
 #: pretix/control/forms/event.py:430
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "Frage nach {fields}, Anzeige wie {example}"
 
 #: pretix/control/forms/event.py:440
 msgid "Payment term in days"
@@ -6808,10 +6784,8 @@ msgid "Your notification settings have been changed."
 msgstr "Die Benachrichtigungs-Einstellungen wurden geändert."
 
 #: pretix/control/logdisplay.py:218
-#, fuzzy
-#| msgid "The user has been created."
 msgid "This user has been anonymized."
-msgstr "Der Benutzer wurde erstellt."
+msgstr "Dieser Nutzer wurde anonymisiert."
 
 #: pretix/control/logdisplay.py:221
 msgid "Password reset mail sent."
@@ -6822,10 +6796,9 @@ msgid "The password has been reset."
 msgstr "Das Passwort wurde zurückgesetzt."
 
 #: pretix/control/logdisplay.py:223
-#, fuzzy, python-brace-format
-#| msgid "The variation \"{value}\" has been deleted."
+#, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr "Die Variante \"{value}\" wurde gelöscht."
+msgstr "Der Veranstalter \"{name}\" wurde gelöscht."
 
 #: pretix/control/logdisplay.py:224
 msgid "The voucher has been created."
@@ -10352,44 +10325,33 @@ msgid "Devices"
 msgstr "Geräte"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
-#, fuzzy
-#| msgid "All organizers"
 msgid "Delete organizer"
-msgstr "Alle Veranstalter"
+msgstr "Veranstalter löschen"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:9
-#, fuzzy
-#| msgid ""
-#| "This operation will destroy your event including all configuration, "
-#| "products, quotas, questions, vouchers, lists, etc."
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
 msgstr ""
-"Dies wird deine Veranstaltung inklusive aller Konfiguration, Produkte, "
-"Kontingente, Fragen, Gutscheine, Listen, etc. entfernen."
+"Dies wird diesen Veranstalter inklusive aller Veranstaltung, Konfiguration, "
+"Produkte, Kontingente, Fragen, Gutscheine, Listen, etc. entfernen."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
-#, fuzzy, python-format
-#| msgid ""
-#| "To confirm you really want this, please type out the event's short name "
-#| "(\"%(slug)s\") here:"
+#, python-format
 msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
 "Um zu bestätigen, dass du das wirklich möchtest, tippe bitte den Kurznamen "
-"der Veranstaltung (\"%(slug)s\") hier ein:"
+"des Veranstalters (\"%(slug)s\") hier ein:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
-#, fuzzy
-#| msgid "Your event can not be deleted as it already contains orders."
 msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
 msgstr ""
-"Diese Veranstaltung kann nicht gelöscht werden, da sie bereits Bestellungen "
-"enthält."
+"Dieser Veranstalter kann nicht gelöscht werden, da er bereits Bestellungen, "
+"Rechnungen oder Geräte erstellt hat."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
@@ -11546,11 +11508,11 @@ msgstr "Sitzung starten"
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:4
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:6
 msgid "Anonymize user"
-msgstr ""
+msgstr "Nutzer anonymisieren"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:11
 msgid "Disable and anonymize user"
-msgstr ""
+msgstr "Anonymisieren und deaktivieren"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
@@ -11577,7 +11539,7 @@ msgstr "In Benutzer schlüpfen"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonymisieren"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:39
 msgid "Team memberships"
@@ -11757,10 +11719,8 @@ msgid "Redeemed vouchers"
 msgstr "Eingelöste Gutscheine"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:37
-#, fuzzy
-#| msgid "Empty cart"
 msgid "Empty tag"
-msgstr "Warenkorb leeren"
+msgstr "Leerer Tag"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
@@ -12695,28 +12655,20 @@ msgid "Token name"
 msgstr "Token-Name"
 
 #: pretix/control/views/organizer.py:182
-#, fuzzy
-#| msgid "This event can not be deleted."
 msgid "This organizer can not be deleted."
-msgstr "Diese Veranstaltung kann nicht gelöscht werden."
+msgstr "Dieser Veranstalter kann nicht gelöscht werden."
 
 #: pretix/control/views/organizer.py:204
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "The organizer has been deleted."
-msgstr "Ein neuer Veranstalter wurde erstellt."
+msgstr "Der Veranstalter wurde gelöscht."
 
 #: pretix/control/views/organizer.py:207
-#, fuzzy
-#| msgid ""
-#| "The event could not be deleted as some constraints (e.g. data created by "
-#| "plug-ins) do not allow it."
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen (z."
-"B. von Plugins erstellte Daten) es nicht erlauben."
+"Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen ("
+"z.B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py:329
 msgid "The new organizer has been created."
@@ -14765,10 +14717,8 @@ msgid "This plugin allows you to print out tickets as PDF files"
 msgstr "Dieses Plugin erlaubt, Tickets als PDF-Dateien herunterzuladen"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:22
-#, fuzzy
-#| msgid "All paid PDF tickets in one file"
 msgid "All PDF tickets in one file"
-msgstr "Alle bezahlten Tickets als eine PDF-Datei"
+msgstr "Alle PDF-Tickets in einer Datei"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:23
 msgid "PDF ticket layout"
@@ -15952,17 +15902,15 @@ msgstr "Dänisch"
 
 #: pretix/settings.py:372
 msgid "French"
-msgstr ""
+msgstr "Französisch"
 
 #: pretix/settings.py:373
 msgid "Portuguese (Brazil)"
 msgstr "Portugiesisch (Brasilien)"
 
 #: pretix/settings.py:374
-#, fuzzy
-#| msgid "Danish"
 msgid "Spanish"
-msgstr "Dänisch"
+msgstr "Spanisch"
 
 #: pretix/settings.py:375
 msgid "Turkish"
