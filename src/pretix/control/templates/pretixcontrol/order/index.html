@@ -157,7 +157,8 @@
                                         <form class="form-inline helper-display-inline" method="post"
                                                 action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                             {% csrf_token %}
-                                            <button class="btn btn-default btn-xs">
+                                            <button class="btn btn-default btn-xs" data-toggle="tooltip"
+                                                title="{% trans 'Rebuild the invoice with updated data but the same invoice number.' %}">
                                                 {% trans "Regenerate" %}
                                             </button>
                                         </form>
@@ -165,7 +166,11 @@
                                             <form class="form-inline helper-display-inline" method="post"
                                                     action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}
-                                                <button class="btn btn-default btn-xs">
+                                                <button class="btn btn-default btn-xs"
+                                                        {% if order.status != "r" and order.status != "c" %}
+                                                            data-toggle="tooltip"
+                                                            title="{% trans 'Generate a cancellation document for this invoice and create a new invoice with a new invoice number.' %}"
+                                                        {% endif %}>
                                                     {% if order.status == "r" or order.status == "c" %}
                                                         {% trans "Generate cancellation" %}
                                                     {% else %}
