@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-05 15:36+0000\n"
-"PO-Revision-Date: 2018-11-05 15:46+0000\n"
+"PO-Revision-Date: 2018-11-05 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -538,13 +538,13 @@ msgstr "Passwort wiederholen"
 #: pretix/plugins/ticketoutputpdf/exporters.py:39
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:27
 msgid "Attendee name"
-msgstr "Name des Teilnehmers"
+msgstr "Name des/der Teilnehmer*in"
 
 #: pretix/base/forms/questions.py:160 pretix/base/models/orders.py:746
 #: pretix/control/templates/pretixcontrol/order/index.html:252
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:31
 msgid "Attendee email"
-msgstr "Teilnehmer-E-Mail"
+msgstr "Teilnehmer*innen-E-Mail"
 
 #: pretix/base/forms/questions.py:279
 msgid "Street and Number"
@@ -3038,7 +3038,7 @@ msgstr "Information zum Veranstalter"
 #: pretix/plugins/ticketoutputpdf/exporters.py:42
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Teilnehmername: {part}"
+msgstr "Teilnehmer*innenname: {part}"
 
 #: pretix/base/pdf.py:200
 #, python-brace-format
@@ -3312,7 +3312,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr "Teilnehmer: {name}"
+msgstr "Teilnehmer*in: {name}"
 
 #: pretix/base/services/invoices.py:138 pretix/plugins/reports/exporters.py:187
 msgctxt "subevent"
@@ -4124,7 +4124,7 @@ msgid ""
 "logged email contents."
 msgstr ""
 "Dies entfernt alle E-Mail-Adressen und gespeicherte E-Mail-Inhalte von "
-"Bestellungen und Teilnehmern."
+"Bestellungen und Teilnehmer*innen."
 
 #: pretix/base/shredder.py:172
 msgid "This will remove all email addresses from the waiting list."
@@ -4132,15 +4132,15 @@ msgstr "Dies entfernt alle E-Mail-Adressen von der Warteliste."
 
 #: pretix/base/shredder.py:198
 msgid "Attendee names"
-msgstr "Teilnehmernamen"
+msgstr "Teilnehmer*innennamen"
 
 #: pretix/base/shredder.py:200
 msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
-"Dies entfernt alle Teilnehmernamen von Bestellungen, sowie Änderungen an "
-"diesen."
+"Dies entfernt alle Teilnehmer*innennamen von Bestellungen, sowie Änderungen "
+"an diesen."
 
 #: pretix/base/shredder.py:236
 msgid "Invoice addresses"
@@ -4661,19 +4661,19 @@ msgstr ""
 
 #: pretix/control/forms/event.py:332
 msgid "Ask for attendee names"
-msgstr "Namen der Teilnehmer erfragen"
+msgstr "Namen der Teilnehmer*innen erfragen"
 
 #: pretix/control/forms/event.py:333
 msgid "Ask for a name for all tickets which include admission to the event."
-msgstr "Frage für alle Eintritts-Tickets nach dem Namen des Teilnehmers."
+msgstr "Frage für alle Eintritts-Tickets nach dem Namen des/der Teilnehmer*in."
 
 #: pretix/control/forms/event.py:337
 msgid "Require attendee names"
-msgstr "Namen des Teilnehmer erfordern"
+msgstr "Namen der Teilnehmer*innen erfordern"
 
 #: pretix/control/forms/event.py:338
 msgid "Require customers to fill in the names of all attendees."
-msgstr "Erfordere die Eingabe aller Teilnehmer-Namen."
+msgstr "Erfordere die Eingabe aller Teilnehmer*innen-Namen."
 
 #: pretix/control/forms/event.py:343
 msgid "Name format"
@@ -4708,7 +4708,7 @@ msgstr ""
 "aktivierst, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
 "jedes Zutritts-Ticket in der Bestellung. Dies könnte z.B. nützlich sein, "
 "wenn du auch im Falle von Gruppenbestellungen individuelle Adressen von "
-"jedem Teilnehmer benötigen. pretix sendet die Bestellbestätigung trotzdem "
+"jeder Teilnehmer*in benötigst. pretix sendet die Bestellbestätigung trotzdem "
 "nach wie vor nur an die primäre Adresse."
 
 #: pretix/control/forms/event.py:359
@@ -4791,8 +4791,8 @@ msgstr "Kontakt-E-Mail"
 #: pretix/control/forms/event.py:398 pretix/control/forms/event.py:1216
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
-"Wir werden diese Adresse veröffentlichen um Teilnehmern zu ermöglichen, dich "
-"zu kontaktieren."
+"Wir werden diese Adresse veröffentlichen um Teilnehmer*innen zu ermöglichen, "
+"dich zu kontaktieren."
 
 #: pretix/control/forms/event.py:401
 msgid "Allow users to cancel unpaid orders"
@@ -4803,15 +4803,15 @@ msgid ""
 "If checked, users can cancel orders by themselves as long as they are not "
 "yet paid."
 msgstr ""
-"Wenn diese Option aktiviert ist, können Teilnehmer selbstständig "
+"Wenn diese Option aktiviert ist, können Teilnehmer*innen selbstständig "
 "Bestellungen stornieren solange sie nicht bezahlt wurden."
 
 #: pretix/control/forms/event.py:414
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
-"Du kannst die Angabe von Teilnehmernamen nur erfordern, wenn auch nach Namen "
-"gefragt wird."
+"Du kannst die Angabe von Teilnehmer*innennamen nur erfordern, wenn auch nach "
+"Namen gefragt wird."
 
 #: pretix/control/forms/event.py:418
 msgid "You have to ask for attendee emails if you want to make them required."
@@ -5550,11 +5550,12 @@ msgstr "Ticket-Downloads"
 
 #: pretix/control/forms/event.py:1198
 msgid "Your customers will be able to download their tickets in PDF format."
-msgstr "Die Teilnehmer werden ihre Tickets im PDF-Format herunterladen können."
+msgstr ""
+"Die Teilnehmer*innen werden ihre Tickets im PDF-Format herunterladen können."
 
 #: pretix/control/forms/event.py:1202
 msgid "Require all attendees to fill in their names"
-msgstr "Erfordere, dass alle Teilnehmer ihre Namen ausfüllen"
+msgstr "Erfordere, dass alle Teilnehmer*innen ihre Namen ausfüllen"
 
 #: pretix/control/forms/event.py:1203
 msgid ""
@@ -5590,8 +5591,8 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
-"Deine Teilnehmer werden angewiesen, das Geld direkt auf dein Bankkonto zu "
-"überweisen. Du kannst dann deinen Kontoauszug in pretix importieren, um "
+"Deine Teilnehmer*innen werden angewiesen, das Geld direkt auf dein Bankkonto "
+"zu überweisen. Du kannst dann deinen Kontoauszug in pretix importieren, um "
 "Zahlungen zuzuweisen, oder die Bestellungen manuell als bezahlt markieren."
 
 #: pretix/control/forms/event.py:1276
@@ -5810,7 +5811,7 @@ msgstr "Check-in-Status"
 
 #: pretix/control/forms/filter.py:587
 msgid "All attendees"
-msgstr "Alle Teilnehmer"
+msgstr "Alle Teilnehmer*innen"
 
 #: pretix/control/forms/filter.py:588
 #: pretix/control/templates/pretixcontrol/checkin/index.html:106
@@ -7514,7 +7515,7 @@ msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
 msgid "No attendee record was found."
-msgstr "Keine passenden Teilnehmer gefunden."
+msgstr "Keine passenden Teilnehmer*innen gefunden."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:75
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
@@ -7527,7 +7528,7 @@ msgstr "unbezahlt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 msgid "Check-In selected attendees"
-msgstr "Ausgewählte Teilnehmer einchecken"
+msgstr "Ausgewählte Personen einchecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
 msgid "Revert selected check-ins"
@@ -8477,7 +8478,7 @@ msgid ""
 "provide ways for your attendees to contact you:"
 msgstr ""
 "Wenn irgendetwas schiefgeht oder unklar ist, empfehlen wir, dass du deinen "
-"Teilnehmern die Möglichkeit gibst, dich zu benachrichtigen:"
+"Teilnehmer*innen die Möglichkeit gibst, dich zu benachrichtigen:"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:21
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
@@ -9220,9 +9221,9 @@ msgid ""
 "ticket. If you provide food, one example might be to ask your users about "
 "dietary requirements."
 msgstr ""
-"Fragen erlauben deinen Besuchern, zusätzliche Informationen zu ihrem Ticket "
-"auszufüllen. Wenn deine Veranstaltung Verpflegung beinhaltet, könntest du z."
-"B. nach Allergien deiner Teilnehmer fragen."
+"Fragen erlauben deinen Besucher*innen, zusätzliche Informationen zu ihrem "
+"Ticket auszufüllen. Wenn deine Veranstaltung Verpflegung beinhaltet, "
+"könntest du z.B. nach Allergien deiner Teilnehmer*innen fragen."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:15
 msgid "You haven't created any questions yet."
@@ -9319,8 +9320,8 @@ msgstr ""
 "Um deine Produkte verfügbar zu machen, musst du Kontingente anlegen. "
 "Kontingente definieren, wie oft ein Produkt verkauft werden darf. Auf diese "
 "Art kannst du konfigurieren, ob deine Veranstaltung unbegrenzt viele "
-"Teilnehmer aufnehmen kann oder ob die Anzahl begrenzt ist. Du kannst ein "
-"Produkt zu mehreren Kontingenten hinzufügen, um komplexere Anforderungen "
+"Teilnehmer*innen aufnehmen kann oder ob die Anzahl begrenzt ist. Du kannst "
+"ein Produkt zu mehreren Kontingenten hinzufügen, um komplexere Anforderungen "
 "abzubilden, z.B. wenn du die Gesamtzahl der Tickets begrenzen willst, aber "
 "einen speziellen Ticket-Typ noch stärker begrenzen willst."
 
@@ -13039,8 +13040,8 @@ msgstr "Das pretix-Team"
 msgid ""
 "This plugin allows you to generate badges or name tags for your attendees."
 msgstr ""
-"Diese Erweiterung erlaubt, Namensschilder oder Badges für die Teilnehmer zu "
-"erstellen."
+"Diese Erweiterung erlaubt, Namensschilder oder Badges für die Teilnehmer*"
+"innen zu erstellen."
 
 #: pretix/plugins/badges/exporters.py:70
 msgid "Attendee badges"
