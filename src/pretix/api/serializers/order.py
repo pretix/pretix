@@ -484,7 +484,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     '_legacy': name
                 }
             ia = InvoiceAddress(**iadata)
-            ia.set_name(iadata['name_parts'], self.context['event'])
         else:
             ia = None
 

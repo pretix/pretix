@@ -816,7 +816,10 @@ class AbstractPosition(models.Model):
             return None
         if '_legacy' in self.attendee_name_parts:
             return self.attendee_name_parts['_legacy']
-        scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        if '_scheme' in self.attendee_name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         return scheme['concatenation'](self.attendee_name_parts).strip()
 
 
@@ -1592,26 +1595,24 @@ class InvoiceAddress(models.Model):
     def save(self, **kwargs):
         if self.order:
             self.order.touch()
-        if self.name_parts and not self.name_cached:
-            if self.order:
-                self.set_name(self.name_parts, self.order.event)
-            else:
-                raise RuntimeError('Invalid state: Name was not set via set_name()!')
-        super().save(**kwargs)
 
-    def set_name(self, name_parts, event):
-        self.name_parts = name_parts
-        if not self.name_parts:
-            self.name_cached = ""
-        elif '_legacy' in self.name_parts:
-            self.name_cached = self.name_parts['_legacy']
+        if self.name_parts:
+            self.name_cached = self.name
         else:
-            scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
-            self.name_cached = scheme['concatenation'](self.name_parts).strip()
+            self.name_cached = None
+        super().save(**kwargs)
 
     @property
     def name(self):
-        return self.name_cached
+        if not self.name_parts:
+            return None
+        if '_legacy' in self.name_parts:
+            return self.name_parts['_legacy']
+        if '_scheme' in self.name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+        else:
+            raise TypeError("Invalid name given.")
+        return scheme['concatenation'](self.name_parts).strip()
 
 
 def cachedticket_name(instance, filename: str) -> str:

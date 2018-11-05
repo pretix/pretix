@@ -83,6 +83,7 @@ class NamePartsFormField(forms.MultiValueField):
 
     def compress(self, data_list) -> dict:
         data = {}
+        data['_scheme'] = self.scheme_name
         for i, value in enumerate(data_list):
             data[self.scheme['fields'][i][0]] = value or ''
         return data
@@ -93,7 +94,8 @@ class NamePartsFormField(forms.MultiValueField):
             'widget': self.widget,
             'max_length': kwargs.pop('max_length', None),
         }
-        self.scheme = kwargs.pop('scheme')
+        self.scheme_name = kwargs.pop('scheme')
+        self.scheme = PERSON_NAME_SCHEMES.get(self.scheme_name)
         self.one_required = kwargs.get('required', True)
         require_all_fields = kwargs.pop('require_all_fields', False)
         kwargs['required'] = False
@@ -148,7 +150,7 @@ class BaseQuestionsForm(forms.Form):
             self.fields['attendee_name_parts'] = NamePartsFormField(
                 max_length=255,
                 required=event.settings.attendee_names_required,
-                scheme=PERSON_NAME_SCHEMES.get(event.settings.name_scheme),
+                scheme=event.settings.name_scheme,
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
             )
@@ -311,7 +313,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
             required=event.settings.invoice_name_required,
-            scheme=PERSON_NAME_SCHEMES.get(event.settings.name_scheme),
+            scheme=event.settings.name_scheme,
             label=_('Name'),
             initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
         )
@@ -333,7 +335,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False
 
-        self.instance.set_name(data.get('name_parts'), self.event)
+        self.instance.name_parts = data.get('name_parts')
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass

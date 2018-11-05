@@ -341,7 +341,8 @@ class EventSettingsForm(SettingsForm):
     )
     name_scheme = forms.ChoiceField(
         label=_("Name format"),
-        help_text=_("This defines how pretix will ask for human ames."),
+        help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
+                    "orders might lead to unexpected behaviour when sorting or changing names."),
         required=True,
     )
     attendee_emails_asked = forms.BooleanField(
