@@ -1599,7 +1599,7 @@ class InvoiceAddress(models.Model):
         if self.name_parts:
             self.name_cached = self.name
         else:
-            self.name_cached = None
+            self.name_cached = ""
         super().save(**kwargs)
 
     @property
