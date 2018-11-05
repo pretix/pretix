@@ -58,6 +58,8 @@ debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
 db_backend = config.get('database', 'backend', fallback='sqlite3')
+if db_backend == 'postgresql_psycopg2':
+    db_backend = 'postgresql'
 DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
 if DATABASE_IS_GALERA and 'mysql' in db_backend:
     db_options = {
