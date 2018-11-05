@@ -19,6 +19,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import InvoiceAddress, Question
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import SplitDateTimeField
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
@@ -169,6 +170,7 @@ class BaseQuestionsForm(forms.Form):
             else:
                 initial = None
             tz = pytz.timezone(event.settings.timezone)
+            help_text = rich_text(q.help_text)
             if q.type == Question.TYPE_BOOLEAN:
                 if q.required:
                     # For some reason, django-bootstrap3 does not set the required attribute
@@ -184,7 +186,7 @@ class BaseQuestionsForm(forms.Form):
 
                 field = forms.BooleanField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=initialbool, widget=widget,
                 )
             elif q.type == Question.TYPE_NUMBER:
@@ -197,13 +199,13 @@ class BaseQuestionsForm(forms.Form):
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_TEXT:
                 field = forms.CharField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     widget=forms.Textarea,
                     initial=initial.answer if initial else None,
                 )
@@ -211,7 +213,7 @@ class BaseQuestionsForm(forms.Form):
                 field = forms.ModelChoiceField(
                     queryset=q.options,
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     widget=forms.Select,
                     empty_label='',
                     initial=initial.options.first() if initial else None,
@@ -220,35 +222,35 @@ class BaseQuestionsForm(forms.Form):
                 field = forms.ModelMultipleChoiceField(
                     queryset=q.options,
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
                 field = forms.FileField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=initial.file if initial else None,
                     widget=UploadedFileWidget(position=pos, event=event, answer=initial),
                 )
             elif q.type == Question.TYPE_DATE:
                 field = forms.DateField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
                     widget=DatePickerWidget(),
                 )
             elif q.type == Question.TYPE_TIME:
                 field = forms.TimeField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).time() if initial and initial.answer else None,
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 field = SplitDateTimeField(
                     label=q.question, required=q.required,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
                     widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
