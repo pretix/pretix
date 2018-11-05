@@ -9,14 +9,17 @@ def set_attendee_name_parts(apps, schema_editor):
     for op in OrderPosition.objects.exclude(attendee_name_cached=None).exclude(
             attendee_name_cached__isnull=True).iterator():
         op.attendee_name_parts = {'_legacy': op.attendee_name_cached}
+        op.save(update_fields=['attendee_name_parts'])
     CartPosition = apps.get_model('pretixbase', 'CartPosition')  # noqa
     for op in CartPosition.objects.exclude(attendee_name_cached=None).exclude(
             attendee_name_cached__isnull=True).iterator():
         op.attendee_name_parts = {'_legacy': op.attendee_name_cached}
+        op.save(update_fields=['attendee_name_parts'])
     InvoiceAddress = apps.get_model('pretixbase', 'InvoiceAddress')  # noqa
     for ia in InvoiceAddress.objects.exclude(name_cached=None).exclude(
             name_cached__isnull=True).iterator():
-        op.name_parts = {'_legacy': ia.name_cached}
+        ia.name_parts = {'_legacy': ia.name_cached}
+        ia.save(update_fields=['name_parts'])
 
 
 class Migration(migrations.Migration):
