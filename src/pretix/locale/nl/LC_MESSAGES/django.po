@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-31 14:21+0000\n"
-"PO-Revision-Date: 2018-10-28 19:47+0000\n"
+"PO-Revision-Date: 2018-11-05 09:19+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1186,12 +1186,10 @@ msgid "VAT-ID: %s"
 msgstr "Btw-nummer: %s"
 
 #: pretix/base/models/invoices.py:119
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "VAT-ID: %s"
+#, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "Btw-nummer: %s"
+msgstr "Belastingnummer: %s"
 
 #: pretix/base/models/items.py:44
 msgid "Category name"
@@ -1879,17 +1877,12 @@ msgstr ""
 "van betalingen verstreken is."
 
 #: pretix/base/models/orders.py:459
-#, fuzzy
-#| msgid ""
-#| "The payment can not be accepted as it the order is expired and you "
-#| "configured that no late payments should be accepted in the payment "
-#| "settings."
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
-"De betaling kan niet worden geaccepteerd omdat de bestelling is verlopen en "
-"daarnaast staat ingesteld dat late betalingen niet worden geaccepteerd."
+"De betaling kan niet worden geaccepteerd, omdat de bestelling is verlopen en "
+"u heeft ingesteld dat late betalingen niet worden geaccepteerd."
 
 #: pretix/base/models/orders.py:461
 msgid "This order is not yet approved by the event organizer."
@@ -2744,18 +2737,14 @@ msgid "Restrict to countries"
 msgstr "Beperk tot landen"
 
 #: pretix/base/payment.py:259
-#, fuzzy
-#| msgid ""
-#| "Only allow choosing this payment provider for invoice addresses in the "
-#| "selected countries. If you don't select any country, all countries are "
-#| "allowed."
 msgid ""
 "Only allow choosing this payment provider for invoice addresses in the "
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
 "Sta alleen toe om deze betalingsprovider te kiezen voor factuuradressen in "
-"de gekozen landen. Alle landen zijn toegestaan als u geen landen selecteert."
+"de gekozen landen. Alle landen zijn toegestaan als u geen landen selecteert. "
+"Dit is alleen mogelijk als het factuuradres verplicht is."
 
 #: pretix/base/payment.py:296
 msgctxt "invoice"
@@ -3308,26 +3297,16 @@ msgstr ""
 "Hier kan een tekst verschijnen die specifiek is aan de betalingsprovider."
 
 #: pretix/base/services/invoices.py:303
-#, fuzzy
-#| msgid ""
-#| "John Doe\n"
-#| "214th Example Street\n"
-#| "012345 Somecity"
 msgid "214th Example Street"
-msgstr ""
-"John Doe\n"
-"Voorbeeldstraat 214\n"
-"1234 AB Voorbeeldstad"
+msgstr "Voorbeeldstraat 214"
 
 #: pretix/base/services/invoices.py:304
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:305
-#, fuzzy
-#| msgid "Sample company"
 msgid "Sample city"
-msgstr "Voorbeeldbedrijf"
+msgstr "Voorbeeldstad"
 
 #: pretix/base/services/invoices.py:319
 msgid "Sample product {}"
@@ -4563,12 +4542,6 @@ msgid "Automatic waiting list assignments"
 msgstr "Automatische toewijzingen van wachtlijst"
 
 #: pretix/control/forms/event.py:323
-#, fuzzy
-#| msgid ""
-#| "If ticket capacity becomes free, automatically create a voucher and send "
-#| "it to the first person on the waiting list for that product. If this is "
-#| "not active, mails will not be send automatically but you can send them "
-#| "manually via the control panel."
 msgid ""
 "If ticket capacity becomes free, automatically create a voucher and send it "
 "to the first person on the waiting list for that product. If this is not "
@@ -4578,7 +4551,9 @@ msgid ""
 msgstr ""
 "Maak automatisch vouchers aan en verstuur ze naar mensen op de wachtlijst "
 "als tickets vrijkomen. Als dit niet actief is zullen mails niet automatisch "
-"verstuurd worden, maar kunt u ze wel handmatig versturen via de instellingen."
+"verstuurd worden, maar kunt u ze wel handmatig versturen via de "
+"instellingen. Als u de wachtlijst uitschakelt, maar deze optie ingeschakeld "
+"houdt, zullen tickets alsnog worden verstuurd."
 
 #: pretix/control/forms/event.py:331
 msgid "Ask for attendee names"
@@ -4908,16 +4883,12 @@ msgid "Generate invoices"
 msgstr "Genereer facturen"
 
 #: pretix/control/forms/event.py:580
-#, fuzzy
-#| msgid "Generate invoices"
 msgid "Do not generate invoices"
-msgstr "Genereer facturen"
+msgstr "Genereer geen facturen"
 
 #: pretix/control/forms/event.py:581
-#, fuzzy
-#| msgid "Manually in admin panel"
 msgid "Only manually in admin panel"
-msgstr "Handmatig in het administratiepaneel"
+msgstr "Alleen handmatig in het administratiepaneel"
 
 #: pretix/control/forms/event.py:582
 msgid "Automatically on user request"
@@ -4961,24 +4932,20 @@ msgid "Invoice style"
 msgstr "Factuurstijl"
 
 #: pretix/control/forms/event.py:610
-#, fuzzy
-#| msgid "Address"
 msgid "Address line"
-msgstr "Adres"
+msgstr "Adresregel"
 
 #: pretix/control/forms/event.py:614
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "Albert Einstein-straat 52"
 
 #: pretix/control/forms/event.py:640
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "Binnenlands belastingnummer"
 
 #: pretix/control/forms/event.py:644
-#, fuzzy
-#| msgid "VAT ID"
 msgid "EU VAT ID"
-msgstr "BTW-nummer"
+msgstr "EU-BTW-nummer"
 
 #: pretix/control/forms/event.py:651
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -6631,10 +6598,9 @@ msgid "Payment {local_id} has failed."
 msgstr "Betaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:202
-#, fuzzy, python-brace-format
-#| msgid "This order is not marked as paid."
+#, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "Deze bestelling is niet gemarkeerd als betaald."
+msgstr "De bestelling kon niet worden gemarkeer als betaald: {message}"
 
 #: pretix/control/logdisplay.py:203
 #, python-brace-format
@@ -7982,28 +7948,20 @@ msgid "Show more logs"
 msgstr "Toon meer logs"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:9
-#, fuzzy
-#| msgid "Price settings"
 msgid "Invoice settings"
-msgstr "Prijsinstellingen"
+msgstr "Factuurinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:19
-#, fuzzy
-#| msgid "Invoice address: name"
 msgid "Invoice address form"
-msgstr "Factuuradres: naam"
+msgstr "Factuuradresformulier"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:27
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Your invoice details"
-msgstr "Vouchergegevens"
+msgstr "Uw factuurdetails"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:37
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Invoice customization"
-msgstr "Factuurgegevens"
+msgstr "Factuuraanpassingen"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:46
 msgid "Save and show preview"
@@ -12994,67 +12952,52 @@ msgstr ""
 "Installeer het python-package 'chardet' voor betere CSV-importmogelijkheden."
 
 #: pretix/plugins/banktransfer/payment.py:27
-#, fuzzy
-#| msgid "Bank account details"
 msgid "Bank account type"
-msgstr "Bankrekeninginformatie"
+msgstr "Bankrekeningtype"
 
 #: pretix/plugins/banktransfer/payment.py:30
 msgid "SEPA bank account"
-msgstr ""
+msgstr "SEPA-bankrekening"
 
 #: pretix/plugins/banktransfer/payment.py:31
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Other bank account"
-msgstr "Maak een nieuw account"
+msgstr "Andere bankrekening"
 
 #: pretix/plugins/banktransfer/payment.py:36
-#, fuzzy
-#| msgid "Account holder"
 msgid "Name of account holder"
-msgstr "Rekeninghouder"
+msgstr "Naam van rekeninghouder"
 
 #: pretix/plugins/banktransfer/payment.py:46
 #: pretix/plugins/banktransfer/payment.py:157
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:56
 #: pretix/plugins/banktransfer/payment.py:158
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:12
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:16
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:66
-#, fuzzy
-#| msgid "Number of days"
 msgid "Name of bank"
-msgstr "Aantal dagen"
+msgstr "Naam van de bank"
 
 #: pretix/plugins/banktransfer/payment.py:76
 msgid "Bank account details"
 msgstr "Bankrekeninginformatie"
 
 #: pretix/plugins/banktransfer/payment.py:79
-#, fuzzy
-#| msgid ""
-#| "Include everything that your customers need to send you a bank transfer "
-#| "payment. Within SEPA countries, IBAN, BIC and account owner should "
-#| "suffice. If you have lots of international customers, they might also "
-#| "need your full address and your bank's full address."
 msgid ""
 "Include everything else that your customers might need to send you a bank "
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
-"Voeg alles in dat uw klanten nodig hebben om je een bankoverschrijving te "
-"sturen. Binnen SEPA-landen zouden IBAN, BIC en naam rekeninghouder voldoende "
-"moeten zijn. Als u veel internationale klanten hebt moet u misschien ook uw "
-"volledige adres en het volledige adres van uw bank opgeven."
+"Voeg alle informatie in die uw klanten nodig zouden kunnen hebben om u een "
+"bankoverschrijving te sturen. Als u veel internationale klanten heeft hebben "
+"ze misschien uw volledige adres en het volledige adres van uw bank nodig."
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid ""
@@ -13062,6 +13005,9 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"Voor SEPA-rekeningen kunt u dit leeg laten. Voeg anders alles toe dat uw "
+"klanten nodig zouden kunnen hebben om het geld over te maken, bijv. "
+"rekeningnummers, bankkenmerken, adressen, etc."
 
 #: pretix/plugins/banktransfer/payment.py:99
 msgid "Do not include a hypen in the payment reference."
@@ -13072,16 +13018,12 @@ msgid "This is required in some countries."
 msgstr "Dit is in sommige landen verplicht."
 
 #: pretix/plugins/banktransfer/payment.py:122
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "Please fill out your bank account details."
-msgstr "Bevestig de volgende betalingsdetails."
+msgstr "Vul de volgende bankrekeningdetails in."
 
 #: pretix/plugins/banktransfer/payment.py:126
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please enter your bank account details."
-msgstr "Vul alstublieft uw naam in."
+msgstr "Vul uw bankrekeninggegevens in."
 
 #: pretix/plugins/banktransfer/payment.py:156
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:10
@@ -13315,11 +13257,11 @@ msgstr "Betalingskenmerk (belangrijk):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:53
 msgid "Open banking app"
-msgstr ""
+msgstr "Open bankieren-app"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:55
 msgid "Requires that the app supports BezahlCode"
-msgstr ""
+msgstr "Vereist dat de app BezahlCode ondersteunt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
