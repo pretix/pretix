@@ -327,8 +327,8 @@ body.loading #wrapper {
     padding: 3px 10px;
 }
 .navbar-nav > li > a.event-dropdown-toggle {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 11px;
+    padding-bottom: 9px;
     vertical-align: middle;
     min-height: 0;
     line-height: 0;
@@ -338,11 +338,12 @@ body.loading #wrapper {
         position: relative;
         line-height: 30px;
         vertical-align: top;
+        top: -1px;
     }
     .caret {
         position: relative;
         vertical-align: top;
-        top: 13px;
+        top: 12px;
     }
     .event-indicator {
         display: inline-block;
