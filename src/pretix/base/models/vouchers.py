@@ -240,6 +240,8 @@ class Voucher(LoggedModel):
     def clean_quota_needs_checking(data, old_instance, item_changed, creating):
         # We only need to check for quota on vouchers that are now blocking quota and haven't
         # before (or have blocked a different quota before)
+        if data.get('allow_ignore_quota', False):
+            return False
         if data.get('block_quota', False):
             is_valid = data.get('valid_until') is None or data.get('valid_until') >= now()
             if not is_valid:
