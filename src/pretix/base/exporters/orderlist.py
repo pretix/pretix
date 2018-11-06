@@ -141,7 +141,7 @@ class OrderListExporter(BaseExporter):
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:
-                row += [''] * 7 + (len(name_scheme['fields']) if len(name_scheme['fields']) > 1 else 0)
+                row += [''] * (7 + (len(name_scheme['fields']) if len(name_scheme['fields']) > 1 else 0))
 
             row += [
                 order.payment_date.astimezone(tz).strftime('%Y-%m-%d') if order.payment_date else '',
