@@ -182,6 +182,24 @@ def test_cartpos_create(token_client, organizer, event, item, quota, question):
 
 
 @pytest.mark.django_db
+def test_cartpos_create_name_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['attendee_name'] = None
+    del res['attendee_name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    cp = CartPosition.objects.get(pk=resp.data['id'])
+    assert cp.price == Decimal('23.00')
+    assert cp.item == item
+    assert cp.attendee_name_parts == {}
+
+
+@pytest.mark.django_db
 def test_cartpos_create_legacy_name(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
     res['item'] = item.pk

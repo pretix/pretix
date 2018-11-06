@@ -27,7 +27,7 @@ class CartPositionSerializer(I18nAwareModelSerializer):
 class CartPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     expires = serializers.DateTimeField(required=False)
-    attendee_name = serializers.CharField(required=False)
+    attendee_name = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
