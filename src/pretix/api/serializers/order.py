@@ -315,7 +315,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
-    attendee_name = serializers.CharField(required=False)
+    attendee_name = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
