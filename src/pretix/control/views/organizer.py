@@ -847,3 +847,25 @@ class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     def form_invalid(self, form):
         messages.error(self.request, _('Your changes could not be saved.'))
         return super().form_invalid(form)
+
+
+class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = WebHook
+    template_name = 'pretixcontrol/organizers/webhook_logs.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'calls'
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['webhook'] = self.webhook
+        return ctx
+
+    @cached_property
+    def webhook(self):
+        return get_object_or_404(
+            WebHook, organizer=self.request.organizer, pk=self.kwargs.get('webhook')
+        )
+
+    def get_queryset(self):
+        return self.webhook.calls.order_by('-datetime')

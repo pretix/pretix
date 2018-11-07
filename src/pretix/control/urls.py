@@ -76,6 +76,8 @@ urlpatterns = [
         name='organizer.webhook.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/webhook/(?P<webhook>[^/]+)/edit$', organizer.WebHookUpdateView.as_view(),
         name='organizer.webhook.edit'),
+    url(r'^organizer/(?P<organizer>[^/]+)/webhook/(?P<webhook>[^/]+)/logs$', organizer.WebHookLogsView.as_view(),
+        name='organizer.webhook.logs'),
     url(r'^organizer/(?P<organizer>[^/]+)/devices$', organizer.DeviceListView.as_view(), name='organizer.devices'),
     url(r'^organizer/(?P<organizer>[^/]+)/device/add$', organizer.DeviceCreateView.as_view(),
         name='organizer.device.add'),

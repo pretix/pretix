@@ -87,6 +87,7 @@ class WebHookCall(models.Model):
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='calls')
     datetime = models.DateTimeField(auto_now_add=True)
     target_url = models.URLField()
+    action_type = models.CharField(max_length=255)
     is_retry = models.BooleanField(default=False)
     execution_time = models.FloatField(null=True)
     return_code = models.PositiveIntegerField(default=0)

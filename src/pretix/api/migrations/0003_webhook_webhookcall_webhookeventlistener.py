@@ -70,4 +70,10 @@ class Migration(migrations.Migration):
             name='webhook',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='listeners', to='pretixapi.WebHook'),
         ),
+        migrations.AddField(
+            model_name='webhookcall',
+            name='action_type',
+            field=models.CharField(default='', max_length=255),
+            preserve_default=False,
+        ),
     ]

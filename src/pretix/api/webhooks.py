@@ -89,7 +89,7 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
             'organizer': order.event.organizer.slug,
             'event': order.event.slug,
             'code': order.code,
-            'action': self._action_type,
+            'action': logentry.action_type,
         }
 
 
@@ -194,6 +194,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
             )
             WebHookCall.objects.create(
                 webhook=webhook,
+                action_type=logentry.action_type,
                 target_url=webhook.target_url,
                 is_retry=self.request.retries > 0,
                 execution_time=time.time() - t,
@@ -210,6 +211,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
         except RequestException as e:
             WebHookCall.objects.create(
                 webhook=webhook,
+                action_type=logentry.action_type,
                 target_url=webhook.target_url,
                 is_retry=self.request.retries > 0,
                 execution_time=time.time() - t,
