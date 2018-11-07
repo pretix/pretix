@@ -77,6 +77,12 @@ class WebHook(models.Model):
     all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
 
+    @property
+    def action_types(self):
+        return [
+            l.action_type for l in self.listeners.all()
+        ]
+
 
 class WebHookEventListener(models.Model):
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='listeners')

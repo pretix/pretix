@@ -76,16 +76,16 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         return p
 
     def generate(self, p: OrderPosition, override_layout=None, override_background=None):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def get_layout_settings_key(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def get_background_settings_key(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def get_default_background(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def get_current_background(self):
         return (

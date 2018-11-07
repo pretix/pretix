@@ -21,3 +21,4 @@ Resources and endpoints
    checkinlists
    waitinglist
    carts
+   webhooks

@@ -86,6 +86,7 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
         order = logentry.content_object
 
         return {
+            'notification_id': logentry.pk,
             'organizer': order.event.organizer.slug,
             'event': order.event.slug,
             'code': order.code,
@@ -190,7 +191,8 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
         try:
             resp = requests.post(
                 webhook.target_url,
-                json=payload
+                json=payload,
+                allow_redirects=False
             )
             WebHookCall.objects.create(
                 webhook=webhook,
@@ -217,7 +219,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
                 execution_time=time.time() - t,
                 return_code=0,
                 payload=json.dumps(payload),
-                response_body=str(e)
+                response_body=str(e)[:1024 * 1024]
             )
             raise self.retry(countdown=2 ** (self.request.retries * 2))
     except MaxRetriesExceededError:
