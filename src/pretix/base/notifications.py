@@ -225,7 +225,7 @@ def register_default_notification_types(sender, **kwargs):
         ),
         ParametrizedOrderNotificationType(
             sender,
-            'pretix.event.order.changed',
+            'pretix.event.order.changed.*',
             _('Order changed'),
             _('Order {order.code} has been changed.')
         ),

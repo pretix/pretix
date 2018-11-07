@@ -60,7 +60,13 @@
                         </td>
                         <td class="text-right">
                             <a href="{% url "control:organizer.webhook.edit" organizer=request.organizer.slug webhook=w.id %}"
-                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Edit" %}">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url "control:organizer.webhook.edit" organizer=request.organizer.slug webhook=w.id %}"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Logs" %}">
+                                <i class="fa fa-list"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

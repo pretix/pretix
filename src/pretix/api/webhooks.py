@@ -1,20 +1,19 @@
+import json
+import logging
 import time
 from collections import OrderedDict
 
-import json
-import logging
 import requests
 from celery.exceptions import MaxRetriesExceededError
-from django.db.models import OuterRef, Q, Exists
+from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from requests import RequestException
 
-from pretix.api.models import WebHookEventListener, WebHook, WebHookCall
+from pretix.api.models import WebHook, WebHookCall, WebHookEventListener
 from pretix.api.signals import register_webhook_events
 from pretix.base.models import LogEntry
-from pretix.base.services.tasks import TransactionAwareTask, ProfiledTask
-from pretix.base.signals import register_notification_types
+from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.celery_app import app
 
 logger = logging.getLogger(__name__)
@@ -122,7 +121,7 @@ def register_default_webhook_events(sender, **kwargs):
             _('Order contact address changed'),
         ),
         ParametrizedOrderWebhookEvent(
-            'pretix.event.order.changed',
+            'pretix.event.order.changed.*',
             _('Order changed'),
         ),
         ParametrizedOrderWebhookEvent(
@@ -144,15 +143,21 @@ def notify_webhooks(logentry_id: int):
         return  # We need to know the organizer
 
     types = get_all_webhook_events()
-    notification_type = types.get(logentry.action_type)
+    notification_type = None
+    typepath = logentry.action_type
+    while not notification_type and '.' in typepath:
+        notification_type = types.get(typepath + ('.*' if typepath != logentry.action_type else ''))
+        typepath = typepath.rsplit('.', 1)[0]
+
     if not notification_type:
         return  # Ignore, no webhooks for this event type
 
     # All webhooks that registered for this notification
     event_listener = WebHookEventListener.objects.filter(
         webhook=OuterRef('pk'),
-        action_type=logentry.action_type
+        action_type=notification_type.action_type
     )
+
     webhooks = WebHook.objects.annotate(has_el=Exists(event_listener)).filter(
         organizer=logentry.organizer,
         has_el=True,
@@ -164,17 +169,17 @@ def notify_webhooks(logentry_id: int):
         )
 
     for wh in webhooks:
-        send_webhook.apply_async(args=(logentry_id, wh.pk))
+        send_webhook.apply_async(args=(logentry_id, notification_type.action_type, wh.pk))
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=9)
-def send_webhook(self, logentry_id: int, webhook_id: int):
+def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
     # 9 retries with 2**(2*x) timing is roughly 72 hours
     logentry = LogEntry.all.get(id=logentry_id)
     webhook = WebHook.objects.get(id=webhook_id)
 
     types = get_all_webhook_events()
-    event_type = types.get(logentry.action_type)
+    event_type = types.get(action_type)
     if not event_type or not webhook.enabled:
         return  # Ignore, e.g. plugin not installed
 

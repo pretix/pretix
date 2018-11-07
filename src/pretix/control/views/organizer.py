@@ -26,8 +26,8 @@ from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
     DeviceForm, EventMetaPropertyForm, OrganizerDeleteForm,
     OrganizerDisplaySettingsForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm,
-    WebHookForm)
+    OrganizerUpdateForm, TeamForm, WebHookForm,
+)
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
