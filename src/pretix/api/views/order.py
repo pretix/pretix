@@ -60,7 +60,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering = ('datetime',)
-    ordering_fields = ('datetime', 'code', 'status')
+    ordering_fields = ('datetime', 'code', 'status', 'last_modified')
     filterset_class = OrderFilter
     lookup_field = 'code'
     permission = 'can_view_orders'
