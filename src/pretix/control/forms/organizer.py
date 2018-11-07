@@ -5,6 +5,7 @@ from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
+from pretix.api.models import WebHook
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Device, Organizer, Team
 from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
@@ -222,3 +223,20 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         self.fields['primary_font'].choices += [
             (a, a) for a in get_fonts()
         ]
+
+
+class WebHookForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+        self.fields['limit_events'].queryset = organizer.events.all()
+
+    class Meta:
+        model = WebHook
+        fields = ['target_url', 'enabled', 'all_events', 'limit_events']
+        widgets = {
+            'limit_events': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_events'
+            }),
+        }

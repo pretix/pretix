@@ -1,0 +1,23 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    {% if webhook %}
+        <legend>{% trans "Modify webhook" %}</legend>
+    {% else %}
+        <legend>{% trans "Create a new webhook" %}</legend>
+    {% endif %}
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.target_url layout="control" %}
+        {% bootstrap_field form.enabled layout="control" %}
+        {% bootstrap_field form.all_events layout="control" %}
+        {% bootstrap_field form.limit_events layout="control" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

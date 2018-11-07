@@ -71,7 +71,7 @@ class OAuthRefreshToken(AbstractRefreshToken):
 
 
 class WebHook(models.Model):
-    organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE)
+    organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE, related_name='webhooks')
     enabled = models.BooleanField(default=True, verbose_name=_("Enable webhook"))
     target_url = models.URLField(verbose_name=_("Target URL"))
     all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
@@ -79,12 +79,12 @@ class WebHook(models.Model):
 
 
 class WebHookEventListener(models.Model):
-    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE)
+    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='listeners')
     action_type = models.CharField(max_length=255)
 
 
 class WebHookCall(models.Model):
-    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE)
+    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='calls')
     datetime = models.DateTimeField(auto_now_add=True)
     target_url = models.URLField()
     is_retry = models.BooleanField(default=False)
