@@ -45,4 +45,29 @@ class Migration(migrations.Migration):
                 ('webhook', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='pretixapi.WebHook')),
             ],
         ),
+        migrations.AddField(
+            model_name='webhookcall',
+            name='success',
+            field=models.BooleanField(default=False),
+        ),
+        migrations.AlterField(
+            model_name='webhook',
+            name='all_events',
+            field=models.BooleanField(default=True, verbose_name='All events (including newly created ones)'),
+        ),
+        migrations.AlterField(
+            model_name='webhook',
+            name='organizer',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='webhooks', to='pretixbase.Organizer'),
+        ),
+        migrations.AlterField(
+            model_name='webhookcall',
+            name='webhook',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='calls', to='pretixapi.WebHook'),
+        ),
+        migrations.AlterField(
+            model_name='webhookeventlistener',
+            name='webhook',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='listeners', to='pretixapi.WebHook'),
+        ),
     ]

@@ -59,7 +59,7 @@ def get_all_webhook_events():
         return _ALL_EVENTS
 
     types = OrderedDict()
-    for recv, ret in register_notification_types.send(None):
+    for recv, ret in register_webhook_events.send(None):
         if isinstance(ret, (list, tuple)):
             for r in ret:
                 types[r.action_type] = r
@@ -158,9 +158,9 @@ def notify_webhooks(logentry_id: int):
         has_el=True,
         enabled=True
     )
-    if logentry.event:
+    if logentry.event_id:
         webhooks = webhooks.filter(
-            Q(all_events=True) | Q(limit_events__pk=self.pk)
+            Q(all_events=True) | Q(limit_events__pk=logentry.event_id)
         )
 
     for wh in webhooks:

@@ -74,7 +74,7 @@ class WebHook(models.Model):
     organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE, related_name='webhooks')
     enabled = models.BooleanField(default=True, verbose_name=_("Enable webhook"))
     target_url = models.URLField(verbose_name=_("Target URL"))
-    all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
+    all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
 
 
@@ -90,6 +90,6 @@ class WebHookCall(models.Model):
     is_retry = models.BooleanField(default=False)
     execution_time = models.FloatField(null=True)
     return_code = models.PositiveIntegerField(default=0)
-    success = True
+    success = models.BooleanField(default=False)
     payload = models.TextField()
     response_body = models.TextField()

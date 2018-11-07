@@ -794,9 +794,12 @@ class WebHookCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
         self.request.organizer.log_action('pretix.webhook.created', user=self.request.user, data={
-            k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+            k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
             for k in form.changed_data
         })
+        new_listeners = set(form.cleaned_data['events'])
+        for l in new_listeners:
+            self.object.listeners.create(action_type=l)
         return ret
 
     def form_invalid(self, form):
@@ -827,9 +830,17 @@ class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     def form_valid(self, form):
         if form.has_changed():
             self.request.organizer.log_action('pretix.webhook.changed', user=self.request.user, data={
-                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
                 for k in form.changed_data
             })
+
+        current_listeners = set(self.object.listeners.values_list('action_type', flat=True))
+        new_listeners = set(form.cleaned_data['events'])
+        for l in current_listeners - new_listeners:
+            self.object.listeners.filter(action_type=l).delete()
+        for l in new_listeners - current_listeners:
+            self.object.listeners.create(action_type=l)
+
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
