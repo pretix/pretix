@@ -53,6 +53,7 @@ class LoggingMixin:
         from .organizer import TeamAPIToken
         from ..notifications import get_all_notification_types
         from ..services.notifications import notify
+        from pretix.api.webhooks import get_all_webhook_events, notify_webhooks
 
         event = None
         if isinstance(self, Event):
@@ -82,6 +83,8 @@ class LoggingMixin:
 
             if action in get_all_notification_types():
                 notify.apply_async(args=(logentry.pk,))
+            if action in get_all_webhook_events():
+                notify_webhooks.apply_async(args=(logentry.pk,))
         return logentry
 
 
