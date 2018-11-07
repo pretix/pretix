@@ -736,10 +736,10 @@ def test_items_with_order_position_not_delete(token_client, organizer, event, it
 
 
 @pytest.mark.django_db
-def test_items_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
+def test_items_with_cart_position_delete(token_client, organizer, event, item, cart_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
-    assert resp.status_code == 403
-    assert event.items.filter(pk=item.id).exists()
+    assert resp.status_code == 204
+    assert not event.items.filter(pk=item.id).exists()
 
 
 @pytest.fixture
