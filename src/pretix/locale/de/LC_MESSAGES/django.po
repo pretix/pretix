@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-08 15:40+0000\n"
-"PO-Revision-Date: 2018-11-05 15:50+0000\n"
+"PO-Revision-Date: 2018-11-08 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -65,17 +65,13 @@ msgid "Client secret"
 msgstr "Geheimer Schlüssel"
 
 #: pretix/api/models.py:75
-#, fuzzy
-#| msgid "Enable"
 msgid "Enable webhook"
-msgstr "Aktivieren"
+msgstr "Webhook aktivieren"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:33
-#, fuzzy
-#| msgid "Server URL"
 msgid "Target URL"
-msgstr "Server-URL"
+msgstr "Ziel-URL"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
@@ -195,28 +191,20 @@ msgid "Order refunded"
 msgstr "Bestellung zurückerstattet"
 
 #: pretix/api/webhooks.py:148
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order approved"
-msgstr "Bestellung abgelaufen"
+msgstr "Bestellung freigegeben"
 
 #: pretix/api/webhooks.py:152
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order denied"
-msgstr "Bestellung abgelaufen"
+msgstr "Bestellung abgelehnt"
 
 #: pretix/api/webhooks.py:156
-#, fuzzy
-#| msgid "Not checked in"
 msgid "Ticket checked in"
-msgstr "Nicht eingecheckt"
+msgstr "Ticket eingecheckt"
 
 #: pretix/api/webhooks.py:160
-#, fuzzy
-#| msgid "The selected check-ins have been reverted."
 msgid "Ticket check-in reverted"
-msgstr "Der ausgewählte Check-In wurde gelöscht."
+msgstr "Check-in rückgängig gemacht"
 
 #: pretix/base/email.py:127
 msgid "pretix default"
@@ -6334,11 +6322,9 @@ msgstr ""
 "soll."
 
 #: pretix/control/forms/organizer.py:233
-#, fuzzy
-#| msgid "Event date"
 msgctxt "webhooks"
 msgid "Event types"
-msgstr "Veranstaltungsdatum"
+msgstr "Benachrichtigungsarten"
 
 #: pretix/control/forms/renderers.py:27
 msgctxt "form"
@@ -6556,19 +6542,14 @@ msgid "(unknown)"
 msgstr "(unbekannt)"
 
 #: pretix/control/logdisplay.py:126
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been checked in again at {datetime} on list "
-#| "\"{list}\"."
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
-"Ticket #{posid} wurde am {datetime} erneut manuell auf der Liste \"{list}\" "
-"eingecheckt."
+"Position #{posid} wurde am {datetime} auf der Liste \"{list}\" eingecheckt."
 
 #: pretix/control/logdisplay.py:132
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} has been scanned for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
 msgstr "Ticket #{posid} wurde für die Liste \"{list}\" gescannt."
 
@@ -9873,6 +9854,8 @@ msgstr "Rechnung"
 #: pretix/control/templates/pretixcontrol/order/index.html:161
 msgid "Rebuild the invoice with updated data but the same invoice number."
 msgstr ""
+"Stellt die Rechnung mit aktualisierten Daten aber der gleichen "
+"Rechnungsnummer neu aus."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:162
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:20
@@ -9884,6 +9867,8 @@ msgid ""
 "Generate a cancellation document for this invoice and create a new invoice "
 "with a new invoice number."
 msgstr ""
+"Legt einen Stornobeleg für diese Rechnung und eine neue Rechnung mit neuer "
+"Rechnungsnummer an."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:175
 msgid "Generate cancellation"
@@ -10415,7 +10400,7 @@ msgstr "Geräte"
 #: pretix/control/templates/pretixcontrol/organizers/base.html:52
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
 msgid "Webhooks"
-msgstr ""
+msgstr "Webhooks"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -10724,73 +10709,62 @@ msgid "+ %(count)s invited"
 msgstr "+ %(count)s eingeladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
-#, fuzzy
-#| msgid "Modify order"
 msgid "Modify webhook"
-msgstr "Bestellung bearbeiten"
+msgstr "Webhook bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:8
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create a new webhook"
-msgstr "Neues Team erstellen"
+msgstr "Neuen Webhook erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:5
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr ""
+msgstr "Protokolle für Webhook %(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
-msgstr ""
+msgstr "Diese Seite zeigt alle Aufrufe des Webhooks in den letzten 30 Tagen an."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:15
 msgid "This webhook was retried since it previously failed."
-msgstr ""
+msgstr "Dieser Webhook wurde erneut gesendet, da er vorher fehlgeschlagen ist."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "failed"
 msgid "Failed"
-msgstr "fehlgeschlagen"
+msgstr "Fehlgeschlagen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:54
-#, fuzzy
-#| msgid "Bad Request"
 msgid "Request URL"
-msgstr "Bad Request"
+msgstr "Request-URL"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:56
 msgid "Request POST body"
-msgstr ""
+msgstr "POST-Inhalt des Requests"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:58
 msgid "Response body"
-msgstr ""
+msgstr "Antwortinhalt"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:64
 msgid "This webhook did not receive any events in the last 30 days."
-msgstr ""
+msgstr "Dieser Webhook wurde in den letzten 30 Tagen nicht aufgerufen."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:9
 msgid ""
 "This menu allows you to create webhooks to connect pretix to other online "
 "services."
 msgstr ""
+"Dieses Menü erlaubt es Ihnen, mit Webhooks pretix mit anderen Onlinediensten "
+"zu verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:16
-#, fuzzy
-#| msgid "You haven't created any quotas yet."
 msgid "You haven't created any webhooks yet."
-msgstr "Sie haben noch keine Kontingente erstellt."
+msgstr "Sie haben noch keine Webhooks erstellt."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:22
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:27
-#, fuzzy
-#| msgid "Create user"
 msgid "Create webhook"
-msgstr "Benutzer erstellen"
+msgstr "Webhook erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:67
 msgid "Logs"
