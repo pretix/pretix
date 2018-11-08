@@ -17,7 +17,9 @@ from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.exporter import BaseExporter
-from pretix.base.models import Checkin, Order, OrderPosition, Question
+from pretix.base.models import (
+    Checkin, InvoiceAddress, Order, OrderPosition, Question,
+)
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.widgets import Select2
@@ -332,9 +334,15 @@ class CSVCheckinList(BaseCheckinList):
         for q in questions:
             headers.append(str(q.question))
 
+        headers.append(_('Company'))
         writer.writerow(headers)
 
         for op in qs:
+            try:
+                ia = op.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = InvoiceAddress()
+
             last_checked_in = None
             if isinstance(op.last_checked_in, str):  # SQLite
                 last_checked_in = dateutil.parser.parse(op.last_checked_in)
@@ -344,12 +352,16 @@ class CSVCheckinList(BaseCheckinList):
                 last_checked_in = make_aware(last_checked_in, UTC)
             row = [
                 op.order.code,
-                op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
+                op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '') or ia.name,
             ]
             if len(name_scheme['fields']) > 1:
                 for k, label, w in name_scheme['fields']:
                     row.append(
-                        (op.attendee_name_parts or (op.addon_to.attendee_name_parts if op.addon_to else {})).get(k, '')
+                        (
+                            op.attendee_name_parts or
+                            (op.addon_to.attendee_name_parts if op.addon_to else {}) or
+                            ia.name_parts
+                        ).get(k, '')
                     )
             row += [
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
@@ -373,6 +385,7 @@ class CSVCheckinList(BaseCheckinList):
             for q in questions:
                 row.append(acache.get(q.pk, ''))
 
+            row.append(ia.company)
             writer.writerow(row)
 
         return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
