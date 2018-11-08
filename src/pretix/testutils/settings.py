@@ -29,6 +29,9 @@ PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 # Disable celery
 CELERY_ALWAYS_EAGER = True
 HAS_CELERY = False
+CELERY_BROKER_URL = None
+CELERY_RESULT_BACKEND = None
+CELERY_TASK_ALWAYS_EAGER = True
 
 # Don't use redis
 SESSION_ENGINE = "django.contrib.sessions.backends.db"

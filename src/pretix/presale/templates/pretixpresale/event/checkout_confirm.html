@@ -8,7 +8,8 @@
     <h2>{% trans "Review order" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     <p>{% trans "Please review the details below and confirm your order." %}</p>
-    <form method="post" data-asynctask>
+    <form method="post" data-asynctask
+            data-asynctask-headline="{% trans "Please hang tight, we're finalizing your order!" %}">
         {% csrf_token %}
         <div class="panel panel-primary cart">
             <div class="panel-heading">
