@@ -18,8 +18,6 @@ matrix:
       env: JOB=tests-cov PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.6
       env: JOB=style
-    - python: 3.5
-      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg
     - python: 3.6
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_mysql.cfg
     - python: 3.6
