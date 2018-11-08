@@ -156,7 +156,7 @@ def register_default_webhook_events(sender, **kwargs):
             _('Ticket checked in'),
         ),
         ParametrizedOrderPositionWebhookEvent(
-            'pretix.event.checkin',
+            'pretix.event.checkin.reverted',
             _('Ticket check-in reverted'),
         ),
     )
