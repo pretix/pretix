@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-08 15:40+0000\n"
-"PO-Revision-Date: 2018-10-31 14:34+0000\n"
+"PO-Revision-Date: 2018-11-08 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -95,19 +95,14 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:101
-#, fuzzy
-#| msgid ""
-#| "Your request has been queued on the server and will now be processed. If "
-#| "this takes longer than two minutes, please contact us or go back in your "
-#| "browser and try again."
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"Deine Anfrage ist auf dem Server angekommen und wird nun verarbeitet. Wenn "
-"dies länger als zwei Minuten dauert, kontaktiere uns bitte oder gehe in "
-"deinem Browser einen Schritt zurück und versuche es erneut."
+"Deine Anfrage ist auf dem Server angekommen, aber wurde dort noch nicht "
+"verarbeitet. Wenn dies länger als zwei Minuten dauert, kontaktiere uns bitte "
+"oder gehe in deinem Browser einen Schritt zurück und versuche es erneut."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
