@@ -42,7 +42,7 @@ if [ "$1" == "tests" ]; then
 	cd src
 	python manage.py check
 	make all compress
-	py.test --reruns 5 -n 2 tests
+	py.test --reruns 5 -n 3 tests
 fi
 if [ "$1" == "tests-cov" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
