@@ -1,0 +1,78 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <legend>
+        {% trans "Webhooks" %}
+    </legend>
+    <p>
+        {% blocktrans trimmed %}
+            This menu allows you to create webhooks to connect pretix to other online services.
+        {% endblocktrans %}
+    </p>
+    {% if webhooks|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any webhooks yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:organizer.webhook.add" organizer=request.organizer.slug %}"
+                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create webhook" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:organizer.webhook.add" organizer=request.organizer.slug %}"
+                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create webhook" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Target URL" %}</th>
+                    <th>{% trans "Events" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for w in webhooks %}
+                    <tr>
+                        <td>
+                            {% if not w.enabled %}<del>{% endif %}
+                            {{ w.target_url }}
+                            {% if not w.enabled %}</del>{% endif %}
+                        </td>
+                        <td>
+                            {% if w.all_events %}
+                                {% trans "All" %}
+                            {% else %}
+                                <ul>
+                                    {% for e in w.limit_events.all %}
+                                        <li>
+                                            <a href="{% url "control:event.index" organizer=request.organizer.slug event=e.slug %}">
+                                                {{ e }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:organizer.webhook.edit" organizer=request.organizer.slug webhook=w.id %}"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Edit" %}">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url "control:organizer.webhook.logs" organizer=request.organizer.slug webhook=w.id %}"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Logs" %}">
+                                <i class="fa fa-list"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

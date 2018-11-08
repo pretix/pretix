@@ -137,6 +137,10 @@ organizer_urls = [
     'organizer/abc/device/1/edit',
     'organizer/abc/device/1/connect',
     'organizer/abc/device/1/revoke',
+    'organizer/abc/webhooks',
+    'organizer/abc/webhook/add',
+    'organizer/abc/webhook/1/edit',
+    'organizer/abc/webhook/1/logs',
 ]
 
 
@@ -378,6 +382,15 @@ organizer_permission_urls = [
     ("can_change_teams", "organizer/dummy/team/1/delete", 200),
     ("can_change_organizer_settings", "organizer/dummy/edit", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/display", 200),
+    ("can_change_organizer_settings", "organizer/dummy/devices", 200),
+    ("can_change_organizer_settings", "organizer/dummy/device/add", 200),
+    ("can_change_organizer_settings", "organizer/dummy/device/1/edit", 404),
+    ("can_change_organizer_settings", "organizer/dummy/device/1/connect", 404),
+    ("can_change_organizer_settings", "organizer/dummy/device/1/revoke", 404),
+    ("can_change_organizer_settings", "organizer/dummy/webhooks", 200),
+    ("can_change_organizer_settings", "organizer/dummy/webhook/add", 200),
+    ("can_change_organizer_settings", "organizer/dummy/webhook/1/edit", 404),
+    ("can_change_organizer_settings", "organizer/dummy/webhook/1/logs", 404),
 ]
 
 

@@ -1,0 +1,67 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <legend>{% blocktrans with url=webhook.target_url %}Logs for webhook {{ url }}{% endblocktrans %}</legend>
+    <p>
+        {% trans "This page shows all calls to your webhook in the past 30 days." %}
+    </p>
+    {% for c in calls %}
+        <details class="panel panel-default">
+            <summary class="panel-heading">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        {% if c.is_retry %}
+                            <span class="fa fa-repeat fa-fw" data-toggle="tooltip" title="{% trans "This webhook was retried since it previously failed." %}"></span>
+                        {% else %}
+                            <span class="fa fa-clock-o fa-fw"></span>
+                        {% endif %}
+                        {{ c.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <span class="fa fa-tag fa-fw"></span>
+                        {{ c.action_type }}
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-4">
+                        <span class="fa fa-hourglass fa-fw"></span>
+                        {{ c.execution_time|floatformat:2 }}s
+                    </div>
+                    <div class="col-md-2 col-xs-8 text-right">
+                        {% if c.success %}
+                            <span class="label label-success">
+                                <span class="fa fa-check-circle fa-fw"></span>
+                                {{ c.return_code }}
+                            </span>
+                        {% else %}
+                            {% if c.return_code %}
+                                <span class="label label-danger">
+                                    <span class="fa fa-warning fa-fw"></span>
+                                    {{ c.return_code }}
+                                </span>
+                            {% else %}
+                                <span class="label label-danger">
+                                    <span class="fa fa-warning fa-fw"></span>
+                                    {% trans "Failed" %}
+                                </span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </summary>
+            <div id="{{ c.pk }}">
+
+                <div class="panel-body">
+                    <strong>{% trans "Request URL" %}</strong>
+                    <pre><code>POST {{ c.target_url }}</code></pre>
+                    <strong>{% trans "Request POST body" %}</strong>
+                    <pre><code>{{ c.payload }}</code></pre>
+                    <strong>{% trans "Response body" %}</strong>
+                    <pre><code>{{ c.response_body }}</code></pre>
+                </div>
+            </div>
+        </details>
+    {% empty %}
+        <div class="alert-info">{% trans "This webhook did not receive any events in the last 30 days." %}</div>
+    {% endfor %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

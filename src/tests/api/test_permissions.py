@@ -124,6 +124,15 @@ event_permission_sub_urls = [
     ('delete', 'can_change_orders', 'cartpositions/1/', 404),
 ]
 
+org_permission_sub_urls = [
+    ('get', 'can_change_organizer_settings', 'webhooks/', 200),
+    ('post', 'can_change_organizer_settings', 'webhooks/', 400),
+    ('get', 'can_change_organizer_settings', 'webhooks/1/', 404),
+    ('put', 'can_change_organizer_settings', 'webhooks/1/', 404),
+    ('patch', 'can_change_organizer_settings', 'webhooks/1/', 404),
+    ('delete', 'can_change_organizer_settings', 'webhooks/1/', 404),
+]
+
 
 event_permission_root_urls = [
     ('post', 'can_create_events', 400),
@@ -400,3 +409,32 @@ def test_device_subresource_permission_check(device_client, device, organizer, e
             assert resp.status_code == 403
         else:
             assert resp.status_code in (404, 403)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("urlset", org_permission_sub_urls)
+def test_token_org_subresources_permission_allowed(token_client, team, organizer, event, urlset):
+    team.all_events = True
+    if urlset[1]:
+        setattr(team, urlset[1], True)
+    team.save()
+    resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
+        organizer.slug, urlset[2]))
+    assert resp.status_code == urlset[3]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("urlset", org_permission_sub_urls)
+def test_token_org_subresources_permission_not_allowed(token_client, team, organizer, event, urlset):
+    if urlset[1] is None:
+        team.all_events = False
+    else:
+        team.all_events = True
+        setattr(team, urlset[1], False)
+    team.save()
+    resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
+        organizer.slug, urlset[2]))
+    if urlset[3] == 404:
+        assert resp.status_code == 403
+    else:
+        assert resp.status_code in (404, 403)

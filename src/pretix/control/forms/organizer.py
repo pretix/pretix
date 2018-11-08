@@ -2,9 +2,12 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
+from pretix.api.models import WebHook
+from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Device, Organizer, Team
 from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
@@ -222,3 +225,32 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         self.fields['primary_font'].choices += [
             (a, a) for a in get_fonts()
         ]
+
+
+class WebHookForm(forms.ModelForm):
+    events = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        label=pgettext_lazy('webhooks', 'Event types')
+    )
+
+    def __init__(self, *args, **kwargs):
+        organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+        self.fields['limit_events'].queryset = organizer.events.all()
+        self.fields['events'].choices = [
+            (
+                a.action_type,
+                mark_safe('{} – <code>{}</code>'.format(a.verbose_name, a.action_type))
+            ) for a in get_all_webhook_events().values()
+        ]
+        if self.instance:
+            self.fields['events'].initial = list(self.instance.listeners.values_list('action_type', flat=True))
+
+    class Meta:
+        model = WebHook
+        fields = ['target_url', 'enabled', 'all_events', 'limit_events']
+        widgets = {
+            'limit_events': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_events'
+            }),
+        }

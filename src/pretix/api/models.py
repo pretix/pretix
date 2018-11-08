@@ -68,3 +68,41 @@ class OAuthRefreshToken(AbstractRefreshToken):
         OAuthAccessToken, on_delete=models.SET_NULL, blank=True, null=True,
         related_name="refresh_token"
     )
+
+
+class WebHook(models.Model):
+    organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE, related_name='webhooks')
+    enabled = models.BooleanField(default=True, verbose_name=_("Enable webhook"))
+    target_url = models.URLField(verbose_name=_("Target URL"))
+    all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
+    limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
+
+    @property
+    def action_types(self):
+        return [
+            l.action_type for l in self.listeners.all()
+        ]
+
+
+class WebHookEventListener(models.Model):
+    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='listeners')
+    action_type = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ("action_type",)
+
+
+class WebHookCall(models.Model):
+    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='calls')
+    datetime = models.DateTimeField(auto_now_add=True)
+    target_url = models.URLField()
+    action_type = models.CharField(max_length=255)
+    is_retry = models.BooleanField(default=False)
+    execution_time = models.FloatField(null=True)
+    return_code = models.PositiveIntegerField(default=0)
+    success = models.BooleanField(default=False)
+    payload = models.TextField()
+    response_body = models.TextField()
+
+    class Meta:
+        ordering = ("-datetime",)

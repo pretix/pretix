@@ -46,6 +46,13 @@
                 </a>
             </li>
         {% endif %}
+        {% if 'can_change_organizer_settings' in request.orgapermset %}
+            <li {% if "organizer.webhook" in url_name %}class="active"{% endif %}>
+                <a href="{% url "control:organizer.webhooks" organizer=organizer.slug %}">
+                    {% trans "Webhooks" %}
+                </a>
+            </li>
+        {% endif %}
         {% for nav in nav_organizer %}
             <li {% if nav.active %}class="active"{% endif %}>
                 <a href="{{ nav.url }}">

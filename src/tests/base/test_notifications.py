@@ -79,6 +79,17 @@ def test_notification_trigger_global(event, order, user, monkeypatch_on_commit):
 
 
 @pytest.mark.django_db
+def test_notification_trigger_global_wildcard(event, order, user, monkeypatch_on_commit):
+    djmail.outbox = []
+    user.notification_settings.create(
+        method='mail', event=None, action_type='pretix.event.order.changed.*', enabled=True
+    )
+    with transaction.atomic():
+        order.log_action('pretix.event.order.changed.item', {})
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 def test_notification_enabled_global_ignored_specific(event, order, user, monkeypatch_on_commit):
     djmail.outbox = []
     user.notification_settings.create(

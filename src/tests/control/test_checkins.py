@@ -262,7 +262,7 @@ def test_manual_checkins(client, checkin_list_env):
     })
     assert checkin_list_env[5][3].checkins.exists()
     assert LogEntry.objects.filter(
-        action_type='pretix.control.views.checkin', object_id=checkin_list_env[5][3].order.pk
+        action_type='pretix.event.checkin', object_id=checkin_list_env[5][3].order.pk
     ).exists()
 
 
@@ -279,10 +279,10 @@ def test_manual_checkins_revert(client, checkin_list_env):
     })
     assert not checkin_list_env[5][3].checkins.exists()
     assert LogEntry.objects.filter(
-        action_type='pretix.control.views.checkin', object_id=checkin_list_env[5][3].order.pk
+        action_type='pretix.event.checkin', object_id=checkin_list_env[5][3].order.pk
     ).exists()
     assert LogEntry.objects.filter(
-        action_type='pretix.control.views.checkin.reverted', object_id=checkin_list_env[5][3].order.pk
+        action_type='pretix.event.checkin.reverted', object_id=checkin_list_env[5][3].order.pk
     ).exists()
 
 

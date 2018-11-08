@@ -8,7 +8,7 @@ from pretix.api.views import cart
 
 from .views import (
     checkin, device, event, item, oauth, order, organizer, voucher,
-    waitinglist,
+    waitinglist, webhooks,
 )
 
 router = routers.DefaultRouter()
@@ -17,6 +17,7 @@ router.register(r'organizers', organizer.OrganizerViewSet)
 orga_router = routers.DefaultRouter()
 orga_router.register(r'events', event.EventViewSet)
 orga_router.register(r'subevents', event.SubEventViewSet)
+orga_router.register(r'webhooks', webhooks.WebHookViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)

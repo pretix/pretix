@@ -17,6 +17,7 @@ from django.views.generic import (
     CreateView, DeleteView, DetailView, FormView, ListView, UpdateView,
 )
 
+from pretix.api.models import WebHook
 from pretix.base.models import Device, Organizer, Team, TeamInvite, User
 from pretix.base.models.event import EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
@@ -25,13 +26,14 @@ from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.organizer import (
     DeviceForm, EventMetaPropertyForm, OrganizerDeleteForm,
     OrganizerDisplaySettingsForm, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, TeamForm,
+    OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
 )
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
+from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.urls import build_absolute_uri
 from pretix.presale.style import regenerate_organizer_css
 
@@ -761,3 +763,110 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         return redirect(reverse('control:organizer.devices', kwargs={
             'organizer': self.request.organizer.slug,
         }))
+
+
+class WebHookListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = WebHook
+    template_name = 'pretixcontrol/organizers/webhooks.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'webhooks'
+
+    def get_queryset(self):
+        return self.request.organizer.webhooks.prefetch_related('limit_events')
+
+
+class WebHookCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = WebHook
+    template_name = 'pretixcontrol/organizers/webhook_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = WebHookForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('control:organizer.webhooks', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        self.request.organizer.log_action('pretix.webhook.created', user=self.request.user, data=merge_dicts({
+            k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+            for k in form.changed_data
+        }, {'id': form.instance.pk}))
+        new_listeners = set(form.cleaned_data['events'])
+        for l in new_listeners:
+            self.object.listeners.create(action_type=l)
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = WebHook
+    template_name = 'pretixcontrol/organizers/webhook_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'webhook'
+    form_class = WebHookForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(WebHook, organizer=self.request.organizer, pk=self.kwargs.get('webhook'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.webhooks', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.request.organizer.log_action('pretix.webhook.changed', user=self.request.user, data=merge_dicts({
+                k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                for k in form.changed_data
+            }, {'id': form.instance.pk}))
+
+        current_listeners = set(self.object.listeners.values_list('action_type', flat=True))
+        new_listeners = set(form.cleaned_data['events'])
+        for l in current_listeners - new_listeners:
+            self.object.listeners.filter(action_type=l).delete()
+        for l in new_listeners - current_listeners:
+            self.object.listeners.create(action_type=l)
+
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = WebHook
+    template_name = 'pretixcontrol/organizers/webhook_logs.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'calls'
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['webhook'] = self.webhook
+        return ctx
+
+    @cached_property
+    def webhook(self):
+        return get_object_or_404(
+            WebHook, organizer=self.request.organizer, pk=self.kwargs.get('webhook')
+        )
+
+    def get_queryset(self):
+        return self.webhook.calls.order_by('-datetime')
