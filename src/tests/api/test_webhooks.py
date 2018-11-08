@@ -24,7 +24,7 @@ TEST_WEBHOOK_RES = {
     "target_url": "https://google.com",
     "all_events": False,
     "limit_events": ['dummy'],
-    "action_types": ['pretix.event.order.placed', 'pretix.event.order.paid'],
+    "action_types": ['pretix.event.order.paid', 'pretix.event.order.placed'],
 }
 
 

@@ -133,6 +133,15 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.event.order.refunded',
             _('Order refunded'),
         ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.approved',
+            _('Order approved'),
+        ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.denied',
+            _('Order denied'),
+        ),
+        # TODO: checkin
     )
 
 
@@ -202,7 +211,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
                 execution_time=time.time() - t,
                 return_code=resp.status_code,
                 payload=json.dumps(payload),
-                response_body=resp.text,
+                response_body=resp.text[:1024 * 1024],
                 success=200 <= resp.status_code <= 299
             )
             if resp.status_code == 410:

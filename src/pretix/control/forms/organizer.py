@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea
 
@@ -237,7 +238,10 @@ class WebHookForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['limit_events'].queryset = organizer.events.all()
         self.fields['events'].choices = [
-            (a.action_type, a.verbose_name) for a in get_all_webhook_events().values()
+            (
+                a.action_type,
+                mark_safe('{} – <code>{}</code>'.format(a.verbose_name, a.action_type))
+            ) for a in get_all_webhook_events().values()
         ]
         if self.instance:
             self.fields['events'].initial = list(self.instance.listeners.values_list('action_type', flat=True))

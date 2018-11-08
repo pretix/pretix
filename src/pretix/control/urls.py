@@ -71,7 +71,7 @@ urlpatterns = [
     url(r'^organizer/(?P<organizer>[^/]+)/delete$', organizer.OrganizerDelete.as_view(), name='organizer.delete'),
     url(r'^organizer/(?P<organizer>[^/]+)/settings/display$', organizer.OrganizerDisplaySettings.as_view(),
         name='organizer.display'),
-    url(r'^organizer/(?P<organizer>[^/]+)/webhooks', organizer.WebHookListView.as_view(), name='organizer.webhooks'),
+    url(r'^organizer/(?P<organizer>[^/]+)/webhooks$', organizer.WebHookListView.as_view(), name='organizer.webhooks'),
     url(r'^organizer/(?P<organizer>[^/]+)/webhook/add$', organizer.WebHookCreateView.as_view(),
         name='organizer.webhook.add'),
     url(r'^organizer/(?P<organizer>[^/]+)/webhook/(?P<webhook>[^/]+)/edit$', organizer.WebHookUpdateView.as_view(),

@@ -88,6 +88,9 @@ class WebHookEventListener(models.Model):
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='listeners')
     action_type = models.CharField(max_length=255)
 
+    class Meta:
+        ordering = ("action_type",)
+
 
 class WebHookCall(models.Model):
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='calls')
@@ -100,3 +103,6 @@ class WebHookCall(models.Model):
     success = models.BooleanField(default=False)
     payload = models.TextField()
     response_body = models.TextField()
+
+    class Meta:
+        ordering = ("-datetime",)
