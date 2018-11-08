@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-05 15:36+0000\n"
+"POT-Creation-Date: 2018-11-08 15:40+0000\n"
 "PO-Revision-Date: 2018-10-29 10:51+0000\n"
 "Last-Translator: Mattias de Hollander <m.dehollander@nioo.knaw.nl>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -51,8 +51,6 @@ msgid "Total"
 msgstr "Totaal"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
-#: pretix/static/pretixbase/js/asynctask.js:42
-#: pretix/static/pretixbase/js/asynctask.js:94
 msgid ""
 "Your request has been queued on the server and will now be processed. If "
 "this takes longer than two minutes, please contact us or go back in your "
@@ -62,19 +60,19 @@ msgstr ""
 "twee minuten duurt, neem contact met ons op of probeer opnieuw."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:41
-#: pretix/static/pretixbase/js/asynctask.js:62
-#: pretix/static/pretixbase/js/asynctask.js:116
+#: pretix/static/pretixbase/js/asynctask.js:66
+#: pretix/static/pretixbase/js/asynctask.js:124
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
 msgstr "Er is een fout opgetreden met code {code}."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
-#: pretix/static/pretixbase/js/asynctask.js:137
+#: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
 msgstr "Uw aanvraag is in behandeling …"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
-#: pretix/static/pretixbase/js/asynctask.js:138
+#: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -83,8 +81,8 @@ msgstr ""
 "Uw aanvraag wordt naar de server verstuurd. Als dit langer dan een minuut "
 "duurt, controleer uw internetverbinding en probeer opnieuw."
 
-#: pretix/static/pretixbase/js/asynctask.js:38
-#: pretix/static/pretixbase/js/asynctask.js:90
+#: pretix/static/pretixbase/js/asynctask.js:39
+#: pretix/static/pretixbase/js/asynctask.js:95
 msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
@@ -92,7 +90,22 @@ msgstr ""
 "Uw aanvraag is in behandeling op de server. Afhankelijk van de grootte van "
 "het evenement kan dit enkele minuten duren."
 
-#: pretix/static/pretixbase/js/asynctask.js:65
+#: pretix/static/pretixbase/js/asynctask.js:45
+#: pretix/static/pretixbase/js/asynctask.js:101
+#, fuzzy
+#| msgid ""
+#| "Your request has been queued on the server and will now be processed. If "
+#| "this takes longer than two minutes, please contact us or go back in your "
+#| "browser and try again."
+msgid ""
+"Your request arrived on the server but we still wait for it to be processed. "
+"If this takes longer than two minutes, please contact us or go back in your "
+"browser and try again."
+msgstr ""
+"Uw aanvraag wordt in behandeling genomen op de server. Als dit langer dan "
+"twee minuten duurt, neem contact met ons op of probeer opnieuw."
+
+#: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -100,12 +113,12 @@ msgstr ""
 "De server is op dit moment niet bereikbaar, we proberen opnieuw. Laatste "
 "foutcode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:107
+#: pretix/static/pretixbase/js/asynctask.js:115
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
 msgstr "De aanvraag duurde te lang, probeer alstublieft opnieuw."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixbase/js/asynctask.js:127
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -113,7 +126,7 @@ msgstr ""
 "De server is op dit moment niet bereikbaar, probeer alstublieft opnieuw. "
 "Foutcode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:174
+#: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:28
 msgid "Close message"
 msgstr "Sluit bericht"
