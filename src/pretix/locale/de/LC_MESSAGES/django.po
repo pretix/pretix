@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-08 15:40+0000\n"
-"PO-Revision-Date: 2018-11-08 15:55+0000\n"
+"PO-Revision-Date: 2018-11-08 15:56+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -10768,7 +10768,7 @@ msgstr "Webhook erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:67
 msgid "Logs"
-msgstr ""
+msgstr "Protokolle"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
@@ -15169,7 +15169,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:9
 msgid "We're now trying to book these add-ons for you!"
-msgstr ""
+msgstr "Wir versuchen nun, diese Zusatzprodukte für Sie zu buchen!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:35
 #, python-format
@@ -15252,7 +15252,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Einen Moment, Ihre Bestellung ist fast fertig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:19
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
@@ -15383,7 +15383,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:84
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "Alles klar, wir nehmen das raus…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:88
 msgid "Remove one"
@@ -15391,7 +15391,7 @@ msgstr "Eins entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:96
 msgid "We're trying to reserve another one for you!"
-msgstr ""
+msgstr "Okay, wir versuchen mehr für Sie zu reservieren!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:97
 #: pretix/presale/templates/pretixpresale/event/index.html:184
@@ -15401,6 +15401,8 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
+"Sobald die Produkte in Ihrem Warenkorb sind, haben Sie %(time)s Minuten um "
+"Ihre Bestellung abzuschließen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:112
 msgid "Add one more"
@@ -15500,7 +15502,7 @@ msgstr "Zum Kalender hinzufügen"
 #: pretix/presale/templates/pretixpresale/event/index.html:183
 #: pretix/presale/templates/pretixpresale/event/voucher.html:26
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "Wir versuchen nun, die ausgewählten Produkte für Sie zu reservieren!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:224
 #: pretix/presale/templates/pretixpresale/event/index.html:368
