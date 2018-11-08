@@ -94,6 +94,16 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
         }
 
 
+class ParametrizedOrderPositionWebhookEvent(ParametrizedOrderWebhookEvent):
+
+    def build_payload(self, logentry: LogEntry):
+        d = super().build_payload(logentry)
+        d['orderposition_id'] = logentry.parsed_data.get('position')
+        d['orderposition_positionid'] = logentry.parsed_data.get('positionid')
+        d['checkin_list'] = logentry.parsed_data.get('list')
+        d['first_checkin'] = logentry.parsed_data.get('first_checkin')
+
+
 @receiver(register_webhook_events, dispatch_uid="base_register_default_webhook_events")
 def register_default_webhook_events(sender, **kwargs):
     return (
@@ -141,7 +151,14 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.event.order.denied',
             _('Order denied'),
         ),
-        # TODO: checkin
+        ParametrizedOrderPositionWebhookEvent(
+            'pretix.event.checkin',
+            _('Ticket checked in'),
+        ),
+        ParametrizedOrderPositionWebhookEvent(
+            'pretix.event.checkin',
+            _('Ticket check-in reverted'),
+        ),
     )
 
 

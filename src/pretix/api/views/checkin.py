@@ -244,7 +244,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 ignore_unpaid=ignore_unpaid,
                 nonce=nonce,
                 datetime=dt,
-                questions_supported=self.request.data.get('questions_supported', True)
+                questions_supported=self.request.data.get('questions_supported', True),
+                user=self.request.user,
+                auth=self.request.auth,
             )
         except RequiredQuestionsError as e:
             return Response({

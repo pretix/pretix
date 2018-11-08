@@ -59,7 +59,8 @@ def _save_answers(op, answers, given_answers):
 
 @transaction.atomic
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
-                    ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True):
+                    ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
+                    user=None, auth=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -133,7 +134,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'forced': op.order.status != Order.STATUS_PAID,
                 'datetime': dt,
                 'list': clist.pk
-            })
+            }, user=user, auth=auth)
     else:
         if not force:
             raise CheckInError(
@@ -147,4 +148,4 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'forced': force,
             'datetime': dt,
             'list': clist.pk
-        })
+        }, user=user, auth=auth)

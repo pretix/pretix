@@ -123,13 +123,13 @@ def _display_checkin(event, logentry):
 
     if data.get('first'):
         if show_dt:
-            return _('Position #{posid} has been scanned at {datetime} for list "{list}".').format(
+            return _('Position #{posid} has been checked in at {datetime} for list "{list}".').format(
                 posid=data.get('positionid'),
                 datetime=dt_formatted,
                 list=checkin_list
             )
         else:
-            return _('Position #{posid} has been scanned for list "{list}".').format(
+            return _('Position #{posid} has been checked in for list "{list}".').format(
                 posid=data.get('positionid'),
                 list=checkin_list
             )
@@ -321,6 +321,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         return _display_checkin(sender, logentry)
 
     if logentry.action_type == 'pretix.control.views.checkin':
+        # deprecated
         dt = dateutil.parser.parse(data.get('datetime'))
         tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
@@ -344,7 +345,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             list=checkin_list
         )
 
-    if logentry.action_type == 'pretix.control.views.checkin.reverted':
+    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
         if 'list' in data:
             try:
                 checkin_list = sender.checkin_lists.get(pk=data.get('list')).name

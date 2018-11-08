@@ -55,6 +55,10 @@ def order(event):
     return o
 
 
+def force_str(v):
+    return v.decode() if isinstance(v, bytes) else str(v)
+
+
 @pytest.fixture
 def monkeypatch_on_commit(monkeypatch):
     monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
@@ -72,7 +76,7 @@ def test_webhook_trigger_event_specific(event, order, webhook, monkeypatch_on_co
     with transaction.atomic():
         le = order.log_action('pretix.event.order.paid', {})
     assert len(responses.calls) == 1
-    assert json.loads(responses.calls[0].request.body) == {
+    assert json.loads(force_str(responses.calls[0].request.body)) == {
         "notification_id": le.pk,
         "organizer": "dummy",
         "event": "dummy",
@@ -98,7 +102,7 @@ def test_webhook_trigger_global(event, order, webhook, monkeypatch_on_commit):
     with transaction.atomic():
         le = order.log_action('pretix.event.order.paid', {})
     assert len(responses.calls) == 1
-    assert json.loads(responses.calls[0].request.body) == {
+    assert json.loads(force_str(responses.calls[0].request.body)) == {
         "notification_id": le.pk,
         "organizer": "dummy",
         "event": "dummy",
@@ -118,7 +122,7 @@ def test_webhook_trigger_global_wildcard(event, order, webhook, monkeypatch_on_c
     with transaction.atomic():
         le = order.log_action('pretix.event.order.changed.item', {})
     assert len(responses.calls) == 1
-    assert json.loads(responses.calls[0].request.body) == {
+    assert json.loads(force_str(responses.calls[0].request.body)) == {
         "notification_id": le.pk,
         "organizer": "dummy",
         "event": "dummy",
