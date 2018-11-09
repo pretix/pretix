@@ -1,11 +1,12 @@
 import contextlib
+
 from django.db import transaction
 from django.db.models import F, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import (
     BooleanFilter, DjangoFilterBackend, FilterSet,
 )
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.decorators import list_route
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
@@ -56,7 +57,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
             return False
 
         if 'block_quota' in data and not data.get('block_quota'):
-           return False
+            return False
         if instance and 'block_quota' not in data and not instance.block_quota:
             return False
 
@@ -111,3 +112,24 @@ class VoucherViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+    @list_route(methods=['POST'])
+    def batch_create(self, request, *args, **kwargs):
+        if any(self._predict_quota_check(d, None) for d in request.data):
+            lockfn = request.event.lock
+        else:
+            lockfn = contextlib.suppress  # noop context manager
+        with lockfn():
+            serializer = self.get_serializer(data=request.data, many=True)
+            serializer.is_valid(raise_exception=True)
+            with transaction.atomic():
+                serializer.save(event=self.request.event)
+                for i in serializer.instance:
+                    i.log_action(
+                        'pretix.voucher.added',
+                        user=self.request.user,
+                        auth=self.request.auth,
+                        data=self.request.data
+                    )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

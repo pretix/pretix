@@ -231,6 +231,76 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
    :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/vouchers/batch_create/
+
+   Creates multiple new vouchers atomically.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/vouchers/batch_create/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 408
+
+      [
+        {
+          "code": "43K6LKM37FBVR2YG",
+          "max_usages": 1,
+          "valid_until": null,
+          "block_quota": false,
+          "allow_ignore_quota": false,
+          "price_mode": "set",
+          "value": "12.00",
+          "item": 1,
+          "variation": null,
+          "quota": null,
+          "tag": "testvoucher",
+          "comment": "",
+          "subevent": null
+        },
+        {
+          "code": "ASDKLJCYXCASDASD",
+          "max_usages": 1,
+          "valid_until": null,
+          "block_quota": false,
+          "allow_ignore_quota": false,
+          "price_mode": "set",
+          "value": "12.00",
+          "item": 1,
+          "variation": null,
+          "quota": null,
+          "tag": "testvoucher",
+          "comment": "",
+          "subevent": null
+        },
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      [
+        {
+          "id": 1,
+          "code": "43K6LKM37FBVR2YG",
+          …
+        }, …
+      }
+
+   :param organizer: The ``slug`` field of the organizer to create a vouchers for
+   :param event: The ``slug`` field of the event to create a vouchers for
+   :statuscode 201: no error
+   :statuscode 400: The vouchers could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+   :statuscode 409: The server was unable to acquire a lock and could not process your request. You can try again after a short waiting period.
+
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/vouchers/(id)/
 
    Update a voucher. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
