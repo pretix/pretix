@@ -1,17 +1,20 @@
-version: '3'
+version: '3.4'
 
 services:
   nginx:
-    image: nginx:latest
-    ports:
-      - "0.0.0.0:80:80"
+    build: ./nginx
     volumes:
       - static-data:/static
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - pretix
     networks:
       - external
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 volumes:
   pretix-data:

@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  nginx:
+    networks:
+      external:
+      HAProxy2Pretix:
+          ipv4_address: 10.255.0.2
+networks:
+  internal:
+  external:
+  HAProxy2Pretix:
+    external: yes
