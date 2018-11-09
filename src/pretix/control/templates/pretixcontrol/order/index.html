@@ -536,8 +536,10 @@
                         </div>
                     {% endif %}
                 </div>
+            </div>
+            <div class="row">
                 {% if request.event.settings.invoice_address_asked or order.invoice_address %}
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="pull-right">
@@ -588,25 +590,27 @@
                         </div>
                     </div>
                 {% endif %}
-            </div>
-            <div class="panel panel-default items">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        {% trans "Internal comment" %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <form class="form" method="post"
-                            action="{% url "control:event.order.comment" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                        {% csrf_token %}
-                        <div class="row">
-                            {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-                            {% bootstrap_field comment_form.checkin_attention layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                <div class="{% if request.event.settings.invoice_address_asked or order.invoice_address %}col-md-6{% else %}col-md-12{% endif %}">
+                    <div class="panel panel-default items">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Internal comment" %}
+                            </h3>
                         </div>
-                        <button class="btn btn-default">
-                            {% trans "Update comment" %}
-                        </button>
-                    </form>
+                        <div class="panel-body">
+                            <form class="form" method="post"
+                                    action="{% url "control:event.order.comment" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                                    {% bootstrap_field comment_form.checkin_attention layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+                                </div>
+                                <button class="btn btn-default">
+                                    {% trans "Update comment" %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
