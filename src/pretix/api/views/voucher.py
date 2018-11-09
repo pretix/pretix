@@ -1,11 +1,15 @@
+import contextlib
+from django.db import transaction
 from django.db.models import F, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import (
     BooleanFilter, DjangoFilterBackend, FilterSet,
 )
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import list_route
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
 from pretix.api.serializers.voucher import VoucherSerializer
 from pretix.base.models import Voucher
@@ -41,8 +45,29 @@ class VoucherViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.vouchers.all()
 
+    def _predict_quota_check(self, data, instance):
+        # This method predicts if Voucher.clean_quota_needs_checking
+        # *migh* later require a quota check. It is only approximate
+        # and returns True a little too often. The point is to avoid
+        # locks when we know we won't need them.
+        if 'allow_ignore_quota' in data and data.get('allow_ignore_quota'):
+            return False
+        if instance and 'allow_ignore_quota' not in data and instance.allow_ignore_quota:
+            return False
+
+        if 'block_quota' in data and not data.get('block_quota'):
+           return False
+        if instance and 'block_quota' not in data and not instance.block_quota:
+            return False
+
+        return True
+
     def create(self, request, *args, **kwargs):
-        with request.event.lock():
+        if self._predict_quota_check(request.data, None):
+            lockfn = request.event.lock
+        else:
+            lockfn = contextlib.suppress  # noop context manager
+        with lockfn():
             return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -60,7 +85,11 @@ class VoucherViewSet(viewsets.ModelViewSet):
         return ctx
 
     def update(self, request, *args, **kwargs):
-        with request.event.lock():
+        if self._predict_quota_check(request.data, self.get_object()):
+            lockfn = request.event.lock
+        else:
+            lockfn = contextlib.suppress  # noop context manager
+        with lockfn():
             return super().update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
