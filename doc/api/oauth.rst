@@ -166,6 +166,42 @@ endpoint to revoke it.
 If you want to revoke your client secret, you can generate a new one in the list of your managed applications in the
 pretix user interface.
 
+Fetching the user profile
+-------------------------
+
+If you need the user's meta data, you can fetch it here:
+
+.. http:get:: /api/v1/me
+
+   Returns the profile of the authenticated user
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/me HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Authorization: Bearer i3ytqTSRWsKp16fqjekHXa4tdM4qNC
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        email: "admin@localhost",
+        fullname: "John Doe",
+        locale: "de",
+        timezone: "Europe/Berlin"
+      }
+
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+
 .. _OAuth2: https://en.wikipedia.org/wiki/OAuth
 .. _OAuth2 Simplified: https://aaronparecki.com/oauth-2-simplified/
 .. _HTTP Basic authentication: https://en.wikipedia.org/wiki/Basic_access_authentication
