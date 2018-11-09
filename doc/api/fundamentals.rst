@@ -148,6 +148,7 @@ Field specific input errors include the name of the offending fields as keys in 
 
    {"amount": ["A valid integer is required."], "description": ["This field may not be blank."]}
 
+If you see errors of type ``429 Too Many Requests``, you should read our documentation on :ref:`rest-ratelimit`.
 
 Data types
 ----------
