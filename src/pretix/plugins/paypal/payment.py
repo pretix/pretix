@@ -4,17 +4,22 @@ import urllib.parse
 from collections import OrderedDict
 
 import paypalrestsdk
+from paypalrestsdk.openid_connect import Tokeninfo
 from django import forms
 from django.contrib import messages
 from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.urls import reverse
+from django.utils.crypto import get_random_string
+from django.utils.http import urlquote
 from django.utils.translation import ugettext as __, ugettext_lazy as _
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
+from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.paypal.models import ReferencedPayPalObject
@@ -28,19 +33,26 @@ class Paypal(BasePaymentProvider):
     payment_form_fields = OrderedDict([
     ])
 
+    def __init__(self, event: Event):
+        super().__init__(event)
+        self.settings = SettingsSandbox('payment', 'paypal', event)
+
     @property
     def settings_form_fields(self):
-        d = OrderedDict(
-            [
-                ('endpoint',
-                 forms.ChoiceField(
-                     label=_('Endpoint'),
-                     initial='live',
-                     choices=(
-                         ('live', 'Live'),
-                         ('sandbox', 'Sandbox'),
-                     ),
-                 )),
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            # PayPal connect
+            if self.settings.connect_user_id:
+                fields = [
+                    ('connect_user_id',
+                     forms.CharField(
+                         label=_('PayPal account'),
+                         disabled=True
+                     )),
+                ]
+            else:
+                return {}
+        else:
+            fields = [
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
@@ -56,24 +68,77 @@ class Paypal(BasePaymentProvider):
                      label=_('Secret'),
                      max_length=80,
                      min_length=80,
-                 ))
+                 )),
+            ]
+
+        d = OrderedDict(
+            fields + [
+                ('endpoint',
+                 forms.ChoiceField(
+                     label=_('Endpoint'),
+                     initial='live',
+                     choices=(
+                         ('live', 'Live'),
+                         ('sandbox', 'Sandbox'),
+                     ),
+                 )),
             ] + list(super().settings_form_fields.items())
         )
+
         d.move_to_end('_enabled', False)
         return d
 
+    def get_connect_url(self, request):
+        request.session['payment_paypal_oauth_event'] = request.event.pk
+
+        self.init_api()
+        return Tokeninfo.authorize_url({'scope': 'openid profile email'})
+
     def settings_content_render(self, request):
-        return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
-            _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
-              'when payments are refunded externally.'),
-            build_global_uri('plugins:paypal:webhook')
-        )
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            # Use PayPal connect
+            if not self.settings.connect_user_id:
+                return (
+                    "<p>{}</p>"
+                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
+                ).format(
+                    _('To accept payments via PayPal, you will need an account at PayPal. By clicking on the '
+                      'following button, you can either create a new PayPal account connect pretix to an existing '
+                      'one.'),
+                    self.get_connect_url(request),
+                    _('Connect with <i class="fa fa-paypal"></i> PayPal')
+                )
+            else:
+                return (
+                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
+                ).format(
+                    reverse('plugins:paypal:oauth.disconnect', kwargs={
+                        'organizer': self.event.organizer.slug,
+                        'event': self.event.slug,
+                    }),
+                    _('Disconnect from PayPal')
+                )
+        else:
+            return "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+                _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
+                  'when payments are refunded externally.'),
+                build_global_uri('plugins:paypal:webhook')
+            )
 
     def init_api(self):
-        paypalrestsdk.set_config(
-            mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
-            client_id=self.settings.get('client_id'),
-            client_secret=self.settings.get('secret'))
+        if self.settings.connect_client_id:
+            paypalrestsdk.set_config(
+                mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
+                client_id=self.settings.connect_client_id,
+                client_secret=self.settings.connect_secret_key,
+                openid_client_id=self.settings.connect_client_id,
+                openid_client_secret=self.settings.connect_secret_key,
+                openid_redirect_uri=urlquote(build_global_uri('plugins:paypal:oauth.return')))
+        else:
+            paypalrestsdk.set_config(
+                mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
+                client_id=self.settings.get('client_id'),
+                client_secret=self.settings.get('secret'))
 
     def payment_is_valid_session(self, request):
         return (request.session.get('payment_paypal_id', '') != ''
@@ -89,6 +154,10 @@ class Paypal(BasePaymentProvider):
         kwargs = {}
         if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+
+        if request.event.settings.payment_paypal_connect_user_id:
+            userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
+            request.event.settings.payment_paypal_connect_user_id = userinfo.email
 
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
@@ -115,7 +184,13 @@ class Paypal(BasePaymentProvider):
                         "currency": request.event.currency,
                         "total": self.format_price(cart['total'])
                     },
-                    "description": __('Event tickets for {event}').format(event=request.event.name)
+                    "description": __('Event tickets for {event}').format(event=request.event.name),
+                    "payee": {
+                        "email": "" or request.event.settings.payment_paypal_connect_user_id,
+                        # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                        # we should use it instead of the merchant's eMail-address
+                        #"merchant_id": request.event.settings.payment_paypal_connect_user_id,
+                    }
                 }
             ]
         })
@@ -322,6 +397,11 @@ class Paypal(BasePaymentProvider):
 
     def payment_prepare(self, request, payment_obj):
         self.init_api()
+
+        if request.event.settings.payment_paypal_connect_user_id:
+            userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
+            request.event.settings.payment_paypal_connect_user_id = userinfo.email
+
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
             'payer': {
@@ -351,7 +431,13 @@ class Paypal(BasePaymentProvider):
                     "description": __('Order {order} for {event}').format(
                         event=request.event.name,
                         order=payment_obj.order.code
-                    )
+                    ),
+                    "payee": {
+                        "email": "" or request.event.settings.payment_paypal_connect_user_id,
+                        # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                        # we should use it instead of the merchant's eMail-address
+                        #"merchant_id": request.event.settings.payment_paypal_connect_user_id,
+                    }
                 }
             ]
         })
