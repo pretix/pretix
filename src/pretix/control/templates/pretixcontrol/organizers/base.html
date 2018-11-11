@@ -19,48 +19,6 @@
             </a>
         {% endif %}
     </h1>
-    <ul class="nav nav-pills hidden-print">
-        <li {% if "organizer" == url_name %}class="active"{% endif %}>
-            <a href="{% url "control:organizer" organizer=organizer.slug %}">
-                {% trans "Events" %}
-            </a>
-        </li>
-        {% if 'can_change_teams' in request.orgapermset %}
-            <li {% if "organizer.team" in url_name %}class="active"{% endif %}>
-                <a href="{% url "control:organizer.teams" organizer=organizer.slug %}">
-                    {% trans "Teams" %}
-                </a>
-            </li>
-        {% endif %}
-        {% if 'can_change_organizer_settings' in request.orgapermset %}
-            <li {% if "organizer.display" in url_name %}class="active"{% endif %}>
-                <a href="{% url "control:organizer.display" organizer=organizer.slug %}">
-                    {% trans "Display" %}
-                </a>
-            </li>
-        {% endif %}
-        {% if 'can_change_organizer_settings' in request.orgapermset %}
-            <li {% if "organizer.device" in url_name %}class="active"{% endif %}>
-                <a href="{% url "control:organizer.devices" organizer=organizer.slug %}">
-                    {% trans "Devices" %}
-                </a>
-            </li>
-        {% endif %}
-        {% if 'can_change_organizer_settings' in request.orgapermset %}
-            <li {% if "organizer.webhook" in url_name %}class="active"{% endif %}>
-                <a href="{% url "control:organizer.webhooks" organizer=organizer.slug %}">
-                    {% trans "Webhooks" %}
-                </a>
-            </li>
-        {% endif %}
-        {% for nav in nav_organizer %}
-            <li {% if nav.active %}class="active"{% endif %}>
-                <a href="{{ nav.url }}">
-                    {{ nav.label }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
 
     {% block inner %}
     {% endblock %}
