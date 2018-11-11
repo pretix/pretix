@@ -436,7 +436,7 @@ def get_organizer_navigation(request):
                 'organizer': request.organizer.slug
             }),
             'active': 'organizer.device' in url.url_name,
-            'icon': 'group',
+            'icon': 'tablet',
         })
         nav.append({
             'label': _('Webhooks'),
@@ -444,7 +444,7 @@ def get_organizer_navigation(request):
                 'organizer': request.organizer.slug
             }),
             'active': 'organizer.webhook' in url.url_name,
-            'icon': 'group',
+            'icon': 'bolt',
         })
 
     merge_in(nav, sorted(
