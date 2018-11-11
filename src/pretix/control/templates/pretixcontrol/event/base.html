@@ -8,7 +8,7 @@
         <a href="{% url 'control:event.index' organizer=request.event.organizer.slug event=request.event.slug %}"
                 {% if url_name == "event.index" %}class="active"{% endif %}>
             <i class="fa fa-dashboard fa-fw"></i>
-            {% trans "Event dashboard" %}
+            {% trans "Dashboard" %}
         </a>
     </li>
     {% if 'can_change_event_settings' in request.eventpermset %}

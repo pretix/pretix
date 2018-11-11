@@ -108,24 +108,6 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle event-dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
-                            <div class="event-indicator">
-                                <span class="event-name">{{ request.event }}</span>
-                                <span class="event-daterange">{{ request.event.get_date_range_display }}</span>
-                            </div>
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
-                            data-source="{% url "control:events.typeahead" %}">
-                            <li class="query-holder">
-                                <div class="form-box">
-                                    <input type="text" class="form-control"
-                                            placeholder="{% trans "Search for events" %}"
-                                            data-typeahead-query>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
                     {% if request.event %}
                         <li>
                             {% if has_domain and not request.event.live %}
@@ -221,6 +203,53 @@
                         </ul>
                     </div>
                     <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
+                        <div class="dropdown context-selector">
+                            {% if request.event %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.event }}</span>
+                                        <span class="context-meta">{{ request.event.get_date_range_display }}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% elif request.organizer %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-group fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.organizer }}</span>
+                                        <span class="context-meta">{% trans "Organizer account" %}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% else %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+                                    </span>
+
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.user }}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% endif %}
+                            <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
+                                data-typeahead-field="#event-dropdown-field"
+                                data-source="{% url "control:nav.typeahead" %}">
+                                <li class="query-holder">
+                                    <div class="form-box">
+                                        <input type="text" class="form-control" id="event-dropdown-field"
+                                               placeholder="{% trans "Search for events" %}"
+                                               data-typeahead-query>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <ul class="nav" id="side-menu">
                             {% block nav %}
                                 <li>
@@ -262,7 +291,7 @@
                                         <a href="{% url 'control:users' %}"
                                            {% if "users" in url_name %}class="active"{% endif %}>
                                             <i class="fa fa-user fa-fw"></i>
-                                            {% trans "Users" %}
+
                                         </a>
                                     </li>
                                     <li>
