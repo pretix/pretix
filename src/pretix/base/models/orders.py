@@ -715,7 +715,7 @@ class AbstractPosition(models.Model):
     subevent = models.ForeignKey(
         SubEvent,
         null=True, blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name=pgettext_lazy("subevent", "Date"),
     )
     item = models.ForeignKey(
@@ -748,10 +748,10 @@ class AbstractPosition(models.Model):
         help_text=_("Empty, if this product is not an admission ticket")
     )
     voucher = models.ForeignKey(
-        'Voucher', null=True, blank=True, on_delete=models.CASCADE
+        'Voucher', null=True, blank=True, on_delete=models.PROTECT
     )
     addon_to = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.CASCADE, related_name='addons'
+        'self', null=True, blank=True, on_delete=models.PROTECT, related_name='addons'
     )
     meta_info = models.TextField(
         verbose_name=_("Meta information"),
