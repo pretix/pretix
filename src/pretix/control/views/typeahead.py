@@ -123,7 +123,11 @@ def nav_context_list(request):
     if query:
         qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
-    show_user = not query or query.lower() in request.user.email.lower() or query.lower() in request.user.fullname.lower()
+    show_user = not query or (
+        query and request.user.email and query.lower() in request.user.email.lower()
+    ) or (
+        query and request.user.fullname and query.lower() in request.user.fullname.lower()
+    )
     total = qs_events.count() + qs_orga.count()
     pagesize = 20
     offset = (page - 1) * pagesize
