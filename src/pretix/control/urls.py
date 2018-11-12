@@ -96,6 +96,7 @@ urlpatterns = [
     url(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/delete$', organizer.TeamDeleteView.as_view(),
         name='organizer.team.delete'),
     url(r'^organizer/(?P<organizer>[^/]+)/slugrng', main.SlugRNG.as_view(), name='events.add.slugrng'),
+    url(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),
     url(r'^events/$', main.EventList.as_view(), name='events'),
     url(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
     url(r'^events/typeahead/$', typeahead.event_list, name='events.typeahead'),

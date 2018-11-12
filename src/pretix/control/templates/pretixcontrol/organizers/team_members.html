@@ -2,14 +2,14 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <h2>
+    <h1>
         {% trans "Team:" %} {{ team.name }}
         <a href="{% url "control:organizer.team.edit" organizer=organizer.slug team=team.pk %}"
            class="btn btn-default">
             <span class="fa fa-edit"></span>
             {% trans "Edit" %}
         </a>
-    </h2>
+    </h1>
     <h3>{% trans "Team members" %}</h3>
     <form action="" method="post">
         {% csrf_token %}

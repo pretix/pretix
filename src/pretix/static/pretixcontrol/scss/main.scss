@@ -309,58 +309,17 @@ body.loading #wrapper {
     height: 30px;
 }
 
-.event-name, .event-indicator .event-daterange {
-    display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: bottom;
-}
-@media (max-width: $screen-sm-max) {
-    .event-name, .event-indicator .event-daterange {
-        max-width: 150px;
-    }
-}
 
 .dropdown-menu .form-box {
     padding: 3px 10px;
 }
-.navbar-nav > li > a.event-dropdown-toggle {
-    padding-top: 11px;
-    padding-bottom: 9px;
-    vertical-align: middle;
-    min-height: 0;
-    line-height: 0;
-    height: 50px;
-
-    i.fa {
-        position: relative;
-        line-height: 30px;
-        vertical-align: top;
-        top: -1px;
-    }
-    .caret {
-        position: relative;
-        vertical-align: top;
-        top: 12px;
-    }
-    .event-indicator {
-        display: inline-block;
-        padding-left: 5px;
-        padding-right: 2px;
-        line-height: 15px;
-        span {
-            display: block;
-        }
-        span.event-daterange {
-            opacity: 0.7;
-            font-size: 11px;
-        }
-    }
-}
 .event-dropdown {
-    width: 300px;
+    width: 251px;
+}
+@media (max-width: $screen-xs-max) {
+    .event-dropdown {
+        width: 100%;
+    }
 }
 .event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full, .primary {
@@ -380,6 +339,12 @@ body.loading #wrapper {
     .active {
         background: $brand-primary;
         color: white;
+    }
+    span.event-name-full, span.event-daterange, span.event-organizer, span.secondary {
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 }
 

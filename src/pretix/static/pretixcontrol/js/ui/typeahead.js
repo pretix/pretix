@@ -1,6 +1,6 @@
 /*global $,u2f */
 $(function () {
-    $('ul.navbar-nav .dropdown, .navbar-events-collapse').on('shown.bs.collapse shown.bs.dropdown', function () {
+    $('.sidebar .dropdown, ul.navbar-nav .dropdown, .navbar-events-collapse').on('shown.bs.collapse shown.bs.dropdown', function () {
         $(this).parent().find("input").val("").change().focus();
     });
     $('.dropdown-menu .form-box input').click(function (e) {
@@ -23,30 +23,70 @@ $(function () {
                 function (data) {
                     $container.find("li:not(.query-holder)").remove();
                     $.each(data.results, function (i, res) {
-                        $container.append(
-                            $("<li>").append(
-                                $("<a>").attr("href", res.url).append(
-                                    $("<div>").append(
-                                        $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
-                                    ).append(
-                                        $("<span>").addClass("event-organizer").append(
-                                            $("<span>").addClass("fa fa-users fa-fw")
-                                        ).append(" ").append($("<div>").text(res.organizer).html())
-                                    ).append(
-                                        $("<span>").addClass("event-daterange").append(
-                                            $("<span>").addClass("fa fa-calendar fa-fw")
-                                        ).append(" ").append(res.date_range)
-                                    )
-                                ).on("mousedown", function (event) {
-                                    if ($(this).length) {
-                                        location.href = $(this).attr("href");
-                                    }
-                                    $(this).parent().addClass("active");
-                                    event.preventDefault();
-                                    event.stopPropagation();
-                                })
-                            )
-                        );
+                        if (res.type === "organizer") {
+                            $container.append(
+                                $("<li>").append(
+                                    $("<a>").attr("href", res.url).append(
+                                        $("<div>").append(
+                                            $("<span>").addClass("event-name-full").append(
+                                                $("<span>").addClass("fa fa-users fa-fw")
+                                            ).append(" ").append($("<div>").text(res.name).html())
+                                        )
+                                    ).on("mousedown", function (event) {
+                                        if ($(this).length) {
+                                            location.href = $(this).attr("href");
+                                        }
+                                        $(this).parent().addClass("active");
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    })
+                                )
+                            );
+                        } else if (res.type === "user") {
+                            $container.append(
+                                $("<li>").append(
+                                    $("<a>").attr("href", res.url).append(
+                                        $("<div>").append(
+                                            $("<span>").addClass("event-name-full").append(
+                                                $("<span>").addClass("fa fa-user fa-fw")
+                                            ).append(" ").append($("<div>").text(res.name).html())
+                                        )
+                                    ).on("mousedown", function (event) {
+                                        if ($(this).length) {
+                                            location.href = $(this).attr("href");
+                                        }
+                                        $(this).parent().addClass("active");
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    })
+                                )
+                            );
+                        } else {
+                            $container.append(
+                                $("<li>").append(
+                                    $("<a>").attr("href", res.url).append(
+                                        $("<div>").append(
+                                            $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
+                                        ).append(
+                                            $("<span>").addClass("event-organizer").append(
+                                                $("<span>").addClass("fa fa-users fa-fw")
+                                            ).append(" ").append($("<div>").text(res.organizer).html())
+                                        ).append(
+                                            $("<span>").addClass("event-daterange").append(
+                                                $("<span>").addClass("fa fa-calendar fa-fw")
+                                            ).append(" ").append(res.date_range)
+                                        )
+                                    ).on("mousedown", function (event) {
+                                        if ($(this).length) {
+                                            location.href = $(this).attr("href");
+                                        }
+                                        $(this).parent().addClass("active");
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    })
+                                )
+                            );
+                        }
                     });
                     $container.toggleClass('focused', $query.is(":focus") && $container.children().length > 0);
                 }

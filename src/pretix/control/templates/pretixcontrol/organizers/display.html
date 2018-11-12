@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
+    <h1>{% trans "Display settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>

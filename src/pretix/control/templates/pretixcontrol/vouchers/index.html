@@ -1,9 +1,10 @@
-{% extends "pretixcontrol/vouchers/base.html" %}
+{% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
 {% load urlreplace %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
-{% block inside %}
+{% block content %}
+    <h1>{% trans "Vouchers" %}</h1>
     <p>
         {% blocktrans trimmed %}
             Vouchers allow you to assign tickets to specific persons for a lower price. They also enable you to
