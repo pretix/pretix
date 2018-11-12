@@ -184,6 +184,16 @@
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
+                                {% if can_generate_invoice %}
+                                    <br/>
+                                    <form class="form-inline helper-display-inline" method="post"
+                                            action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default btn-xs">
+                                            {% trans "Generate invoice" %}
+                                        </button>
+                                    </form>
+                                {% endif %}
                             </dd>
                         {% elif can_generate_invoice %}
                             <dt>{% trans "Invoices" %}</dt>
