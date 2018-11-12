@@ -123,12 +123,13 @@ def nav_context_list(request):
     if query:
         qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
+    show_user = not query or query.lower() in request.user.email.lower() or query.lower() in request.user.fullname.lower()
     total = qs_events.count() + qs_orga.count()
     pagesize = 20
     offset = (page - 1) * pagesize
-    results = [
+    results = ([
         serialize_user(request.user)
-    ] + [
+    ] if show_user else []) + [
         serialize_orga(e) for e in qs_orga[offset:offset + (pagesize if query else 5)]
     ] + [
         serialize_event(e) for e in qs_events.select_related('organizer')[offset:offset + (pagesize if query else 5)]
