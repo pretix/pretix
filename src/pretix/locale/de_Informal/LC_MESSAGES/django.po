@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-11-08 15:51+0000\n"
+"PO-Revision-Date: 2018-11-12 10:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -7285,11 +7285,9 @@ msgid "Tags"
 msgstr "Tags"
 
 #: pretix/control/navigation.py:255
-#, fuzzy
-#| msgid "Check-in"
 msgctxt "navigation"
 msgid "Check-in"
-msgstr "Check-ins"
+msgstr "Check-in"
 
 #: pretix/control/navigation.py:264
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
@@ -7308,10 +7306,8 @@ msgid "Order search"
 msgstr "Bestellungen durchsuchen"
 
 #: pretix/control/navigation.py:313
-#, fuzzy
-#| msgid "Base settings"
 msgid "User settings"
-msgstr "Grundeinstellungen"
+msgstr "Benutzereinstellungen"
 
 #: pretix/control/navigation.py:324
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
@@ -7320,11 +7316,9 @@ msgstr "Benachrichtigungen"
 
 #: pretix/control/navigation.py:329
 msgid "2FA"
-msgstr ""
+msgstr "2FA"
 
 #: pretix/control/navigation.py:334
-#, fuzzy
-#| msgid "Authorized applications"
 msgid "Authorized apps"
 msgstr "Autorisierte Apps"
 
@@ -7337,10 +7331,8 @@ msgid "Account history"
 msgstr "Konto-Änderungen"
 
 #: pretix/control/navigation.py:354
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All users"
-msgstr "Alle Gutscheine"
+msgstr "Alle Benutzer"
 
 #: pretix/control/navigation.py:359
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
@@ -7582,10 +7574,8 @@ msgid "Log out"
 msgstr "Abmelden"
 
 #: pretix/control/templates/pretixcontrol/base.html:211
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer account"
-msgstr "Veranstaltername"
+msgstr "Veranstalterkonto"
 
 #: pretix/control/templates/pretixcontrol/base.html:231
 msgid "Search for events"
@@ -10608,10 +10598,8 @@ msgstr ""
 "die keine eigenen Design-Einstellungen gesetzt sind."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:8
-#, fuzzy
-#| msgid "Organizer-level settings"
 msgid "Organizer settings"
-msgstr "Einstellungen auf Veranstalter-Ebene"
+msgstr "Veranstalter-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:29
 msgid "Other"
@@ -10794,10 +10782,8 @@ msgstr ""
 "zu verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:13
-#, fuzzy
-#| msgid "Paper orientation"
 msgid "Read documentation"
-msgstr "Orientierung"
+msgstr "Dokumentation lesen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:19
 msgid "You haven't created any webhooks yet."
@@ -11730,8 +11716,6 @@ msgid "Create a new user"
 msgstr "Neuen Benutzer erstellen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
-#, fuzzy
-#| msgid "Create multiple voucher"
 msgid "Create multiple vouchers"
 msgstr "Mehrere Gutscheine erstellen"
 
@@ -11865,10 +11849,8 @@ msgstr "Beliebiges Produkt des Kontingents \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:3
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Voucher tags"
-msgstr "Gutscheindetails"
+msgstr "Gutschein-Tags"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:7
 msgid ""
