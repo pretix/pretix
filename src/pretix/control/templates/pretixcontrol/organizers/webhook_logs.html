@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <legend>{% blocktrans with url=webhook.target_url %}Logs for webhook {{ url }}{% endblocktrans %}</legend>
+    <h1>{% blocktrans with url=webhook.target_url %}Logs for webhook {{ url }}{% endblocktrans %}</h1>
     <p>
         {% trans "This page shows all calls to your webhook in the past 30 days." %}
     </p>

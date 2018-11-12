@@ -2,3 +2,8 @@
 {% load i18n %}
 {% load static %}
 {% block title %}{% trans "Import bank data" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Import bank data" %}</h1>
+    {% block inner %}
+    {% endblock %}
+{% endblock %}

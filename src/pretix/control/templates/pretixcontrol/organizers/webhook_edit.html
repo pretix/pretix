@@ -3,9 +3,9 @@
 {% load bootstrap3 %}
 {% block inner %}
     {% if webhook %}
-        <legend>{% trans "Modify webhook" %}</legend>
+        <h1>{% trans "Modify webhook" %}</h1>
     {% else %}
-        <legend>{% trans "Create a new webhook" %}</legend>
+        <h1>{% trans "Create a new webhook" %}</h1>
     {% endif %}
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}

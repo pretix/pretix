@@ -1,6 +1,8 @@
-{% extends "pretixcontrol/vouchers/base.html" %}
+{% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
-{% block inside %}
+{% block title %}{% trans "Voucher tags" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Voucher tags" %}</h1>
     <p>
         {% blocktrans trimmed %}
             If you add a "tag" to a voucher, you can here see statistics on their usage.

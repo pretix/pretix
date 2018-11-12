@@ -2,6 +2,9 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
+    <h1>
+        {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
+    </h1>
     {% if events|length == 0 %}
         <p>
             <em>{% trans "You currently do not have access to any events." %}</em>

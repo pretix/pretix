@@ -3,23 +3,6 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
-    <h1>
-        {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
-        {% if 'can_change_organizer_settings' in request.orgapermset %}
-            <a href="{% url "control:organizer.edit" organizer=organizer.slug %}"
-                    class="btn btn-default hidden-print">
-                <span class="fa fa-edit"></span>
-                {% trans "Edit" %}
-            </a>
-        {% endif %}
-        {% if request.user.is_staff and staff_session %}
-            <a href="{% url "control:organizer.delete" organizer=organizer.slug %}"
-                    class="btn btn-danger hidden-print">
-                <span class="fa fa-trash"></span>
-            </a>
-        {% endif %}
-    </h1>
-
     {% block inner %}
     {% endblock %}
 
