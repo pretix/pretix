@@ -82,10 +82,6 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <button type="button" class="navbar-toggle navbar-events"
-                            data-toggle="collapse" data-target=".navbar-events-collapse">
-                        <i class="fa fa-calendar"></i><span class="caret"></span>
-                    </button>
                     {% if request.event %}
                         {% if has_domain and not request.event.live %}
                             <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
@@ -191,17 +187,6 @@
                     </li>
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg mobile-event-dropdown">
-                        <ul class="nav" data-event-typeahead data-source="{% url "control:events.typeahead" %}">
-                            <li class="query-holder">
-                                <div class="form-box">
-                                    <input type="text" class="form-control"
-                                            placeholder="{% trans "Search for events" %}"
-                                            data-typeahead-query>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
                         <div class="dropdown context-selector">
                             {% if request.event %}
@@ -239,7 +224,6 @@
                                     <span class="caret"></span></a>
                             {% endif %}
                             <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
-                                data-typeahead-field="#event-dropdown-field"
                                 data-source="{% url "control:nav.typeahead" %}">
                                 <li class="query-holder">
                                     <div class="form-box">

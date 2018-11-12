@@ -316,6 +316,11 @@ body.loading #wrapper {
 .event-dropdown {
     width: 251px;
 }
+@media (max-width: $screen-xs-max) {
+    .event-dropdown {
+        width: 100%;
+    }
+}
 .event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full, .primary {
         display: block;

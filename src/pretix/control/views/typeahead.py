@@ -104,6 +104,7 @@ def nav_context_list(request):
         page = int(request.GET.get('page', '1'))
     except ValueError:
         page = 1
+
     qs_events = request.user.get_events_with_any_permission(request).filter(
         Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
     ).annotate(
@@ -119,7 +120,8 @@ def nav_context_list(request):
         qs_orga = Organizer.objects.all()
     else:
         qs_orga = Organizer.objects.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
-    qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
+    if query:
+        qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
     total = qs_events.count() + qs_orga.count()
     pagesize = 20
@@ -127,9 +129,9 @@ def nav_context_list(request):
     results = [
         serialize_user(request.user)
     ] + [
-        serialize_orga(e) for e in qs_orga[offset:offset + pagesize]
+        serialize_orga(e) for e in qs_orga[offset:offset + (pagesize if query else 5)]
     ] + [
-        serialize_event(e) for e in qs_events.select_related('organizer')[offset:offset + pagesize]
+        serialize_event(e) for e in qs_events.select_related('organizer')[offset:offset + (pagesize if query else 5)]
     ]
     doc = {
         'results': results,
