@@ -1024,6 +1024,7 @@ class OrderChangeManager:
                         'addon_to': opa.addon_to_id,
                         'old_price': opa.price,
                     })
+                    opa.delete()
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
