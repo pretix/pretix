@@ -68,10 +68,6 @@ class Paypal(BasePaymentProvider):
                      max_length=80,
                      min_length=80,
                  )),
-            ]
-
-        d = OrderedDict(
-            fields + [
                 ('endpoint',
                  forms.ChoiceField(
                      label=_('Endpoint'),
@@ -81,7 +77,10 @@ class Paypal(BasePaymentProvider):
                          ('sandbox', 'Sandbox'),
                      ),
                  )),
-            ] + list(super().settings_form_fields.items())
+            ]
+
+        d = OrderedDict(
+            fields + list(super().settings_form_fields.items())
         )
 
         d.move_to_end('_enabled', False)
@@ -127,7 +126,7 @@ class Paypal(BasePaymentProvider):
     def init_api(self):
         if self.settings.connect_client_id:
             paypalrestsdk.set_config(
-                mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
+                mode="sandbox" if "sandbox" in self.settings.connect_endpoint else 'live',
                 client_id=self.settings.connect_client_id,
                 client_secret=self.settings.connect_secret_key,
                 openid_client_id=self.settings.connect_client_id,
@@ -157,6 +156,14 @@ class Paypal(BasePaymentProvider):
         if request.event.settings.payment_paypal_connect_user_id:
             userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
             request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            payee = {
+                "email": request.event.settings.payment_paypal_connect_user_id,
+                # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                # we should use it instead of the merchant's eMail-address
+                # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
+            }
+        else:
+            payee = {}
 
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
@@ -184,12 +191,7 @@ class Paypal(BasePaymentProvider):
                         "total": self.format_price(cart['total'])
                     },
                     "description": __('Event tickets for {event}').format(event=request.event.name),
-                    "payee": {
-                        "email": request.event.settings.payment_paypal_connect_user_id or "",
-                        # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                        # we should use it instead of the merchant's eMail-address
-                        # "merchant_id": request.event.settings.payment_paypal_connect_user_id or "",
-                    }
+                    "payee": payee
                 }
             ]
         })
@@ -400,6 +402,14 @@ class Paypal(BasePaymentProvider):
         if request.event.settings.payment_paypal_connect_user_id:
             userinfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token).userinfo()
             request.event.settings.payment_paypal_connect_user_id = userinfo.email
+            payee = {
+                "email": request.event.settings.payment_paypal_connect_user_id,
+                # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
+                # we should use it instead of the merchant's eMail-address
+                # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
+            }
+        else:
+            payee = {}
 
         payment = paypalrestsdk.Payment({
             'intent': 'sale',
@@ -431,12 +441,7 @@ class Paypal(BasePaymentProvider):
                         event=request.event.name,
                         order=payment_obj.order.code
                     ),
-                    "payee": {
-                        "email": request.event.settings.payment_paypal_connect_user_id or "",
-                        # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                        # we should use it instead of the merchant's eMail-address
-                        # "merchant_id": request.event.settings.payment_paypal_connect_user_id or "",
-                    }
+                    "payee": payee
                 }
             ]
         })

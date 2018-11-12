@@ -69,4 +69,12 @@ def register_global_settings(sender, **kwargs):
             label=_('PayPal Connect: Secret key'),
             required=False,
         )),
+        ('payment_paypal_connect_endpoint', forms.ChoiceField(
+            label=_('Endpoint'),
+            initial='live',
+            choices=(
+                ('live', 'Live'),
+                ('sandbox', 'Sandbox'),
+            ),
+        )),
     ])
