@@ -309,21 +309,17 @@ body.loading #wrapper {
     height: 30px;
 }
 
-.event-name {
-    display: inline-block;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: bottom;
-}
 
 .dropdown-menu .form-box {
     padding: 3px 10px;
 }
-
 .event-dropdown {
-    width: 300px;
+    width: 251px;
+}
+@media (max-width: $screen-xs-max) {
+    .event-dropdown {
+        width: 100%;
+    }
 }
 .event-dropdown, .mobile-event-dropdown, .select2-results {
     .event-name-full, .primary {
@@ -343,6 +339,12 @@ body.loading #wrapper {
     .active {
         background: $brand-primary;
         color: white;
+    }
+    span.event-name-full, span.event-daterange, span.event-organizer, span.secondary {
+        width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 }
 

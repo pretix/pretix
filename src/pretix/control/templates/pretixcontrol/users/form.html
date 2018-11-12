@@ -13,6 +13,7 @@
             {% csrf_token %}
             <button class="btn btn-default">{% trans "Impersonate user" %}</button>
         </form>
+        <a href="{% url "control:users.anonymize" id=user.pk %}" class="btn btn-default">{% trans "Anonymize" %}</a>
     </p>
     <div class="row">
         <div class="col-md-10 col-xs-12">

@@ -34,7 +34,8 @@
     {% endcompress %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
     <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
@@ -71,11 +72,16 @@
 <div id="ajaxerr">
 </div>
 <div id="loadingmodal">
-    <i class="fa fa-cog big-rotating-icon"></i>
-    <h1>{% trans "We are processing your request …" %}</h1>
-    <p>
-        {% trans "If this takes longer than a few minutes, please contact us." %}
-    </p>
+    <div class="modal-card">
+        <div class="modal-card-icon">
+            <i class="fa fa-cog big-rotating-icon"></i>
+        </div>
+        <div class="modal-card-content">
+            <h3></h3>
+            <p class="text"></p>
+            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+        </div>
+    </div>
 </div>
 {% if DEBUG %}
     <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>

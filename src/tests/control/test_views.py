@@ -100,6 +100,7 @@ def logged_in_client(client, event):
     ('/control/organizer/{orga}/edit', 200),
     ('/control/organizer/{orga}/teams', 200),
     ('/control/organizer/{orga}/devices', 200),
+    ('/control/organizer/{orga}/webhooks', 200),
 
     ('/control/events/', 200),
     ('/control/events/add', 200),

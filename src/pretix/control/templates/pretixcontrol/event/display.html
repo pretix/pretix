@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load hierarkey_form %}
 {% block inside %}
+    <h1>{% trans "Display settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}

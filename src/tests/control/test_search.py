@@ -30,7 +30,7 @@ class OrderSearchTest(SoupTest):
             datetime=now(), expires=now() + datetime.timedelta(days=10),
             total=14, locale='en'
         )
-        InvoiceAddress.objects.create(order=o1, company="Test Ltd.", name="Peter Miller")
+        InvoiceAddress.objects.create(order=o1, company="Test Ltd.", name_parts={'full_name': "Peter Miller", "_scheme": "full"})
         ticket1 = Item.objects.create(event=self.event1, name='Early-bird ticket',
                                       category=None, default_price=23,
                                       admission=True)
@@ -39,7 +39,7 @@ class OrderSearchTest(SoupTest):
             item=ticket1,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Peter",
+            attendee_name_parts={'full_name': "Peter", "_scheme": "full"},
             attendee_email="att@att.com"
         )
 
@@ -57,7 +57,7 @@ class OrderSearchTest(SoupTest):
             item=ticket2,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Mark"
+            attendee_name_parts={'full_name': "Mark", "_scheme": "full"}
         )
 
         self.team = Team.objects.create(organizer=self.orga1, can_view_orders=True)

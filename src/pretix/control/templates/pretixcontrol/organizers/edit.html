@@ -4,7 +4,16 @@
 {% load formset_tags %}
 {% block title %}{% trans "Organizer" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Organizer" %}</h1>
+    <h1>
+        {% blocktrans with name=organizer.name %}Organizer settings{% endblocktrans %}
+        {% if request.user.is_staff and staff_session %}
+            <a href="{% url "control:organizer.delete" organizer=organizer.slug %}"
+                    class="btn btn-danger hidden-print">
+                <span class="fa fa-trash"></span>
+            </a>
+        {% endif %}
+    </h1>
+
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>

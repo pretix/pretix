@@ -46,6 +46,7 @@ invoice_address                       object                     Invoice address
                                                                  for orders created before pretix 1.7, do not rely on
                                                                  it).
 ├ name                                string                     Customer name
+├ name_parts                          object of strings          Customer name decomposition
 ├ street                              string                     Customer street
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
@@ -137,6 +138,7 @@ item                                  integer                    ID of the purch
 variation                             integer                    ID of the purchased variation (or ``null``)
 price                                 money (string)             Price of this position
 attendee_name                         string                     Specified attendee name for this position (or ``null``)
+attendee_name_parts                   object of strings          Decomposition of attendee name (i.e. given name, family name)
 attendee_email                        string                     Specified attendee email address for this position (or ``null``)
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 tax_rate                              decimal (string)           VAT rate applied for this position
@@ -278,6 +280,7 @@ List of all orders
                 "is_business": True,
                 "company": "Sample company",
                 "name": "John Doe",
+                "name_parts": {"full_name": "John Doe"},
                 "street": "Test street 12",
                 "zipcode": "12345",
                 "city": "Testington",
@@ -295,6 +298,9 @@ List of all orders
                 "variation": null,
                 "price": "23.00",
                 "attendee_name": "Peter",
+                "attendee_name_parts": {
+                  "full_name": "Peter",
+                },
                 "attendee_email": null,
                 "voucher": null,
                 "tax_rate": "0.00",
@@ -410,6 +416,7 @@ Fetching individual orders
             "company": "Sample company",
             "is_business": True,
             "name": "John Doe",
+            "name_parts": {"full_name": "John Doe"},
             "street": "Test street 12",
             "zipcode": "12345",
             "city": "Testington",
@@ -427,6 +434,9 @@ Fetching individual orders
             "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter",
+            },
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
@@ -601,7 +611,7 @@ Creating orders
 
       * ``company``
       * ``is_business``
-      * ``name``
+      * ``name`` **or** ``name_parts``
       * ``street``
       * ``zipcode``
       * ``city``
@@ -615,7 +625,7 @@ Creating orders
       * ``item``
       * ``variation``
       * ``price``
-      * ``attendee_name``
+      * ``attendee_name`` **or** ``attendee_name_parts``
       * ``attendee_email``
       * ``secret`` (optional)
       * ``addon_to`` (optional, see below)
@@ -664,7 +674,7 @@ Creating orders
         "invoice_address": {
           "is_business": False,
           "company": "Sample company",
-          "name": "John Doe",
+          "name_parts": {"full_name": "John Doe"},
           "street": "Sesam Street 12",
           "zipcode": "12345",
           "city": "Sample City",
@@ -678,7 +688,9 @@ Creating orders
             "item": 1,
             "variation": null,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter"
+            },
             "attendee_email": null,
             "addon_to": null,
             "answers": [
@@ -1075,6 +1087,9 @@ List of all order positions
             "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter"
+            },
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
@@ -1172,6 +1187,9 @@ Fetching individual positions
         "variation": null,
         "price": "23.00",
         "attendee_name": "Peter",
+        "attendee_name_parts": {
+          "full_name": "Peter",
+        },
         "attendee_email": null,
         "voucher": null,
         "tax_rate": "0.00",

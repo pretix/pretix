@@ -4,18 +4,23 @@ from collections import OrderedDict
 import dateutil.parser
 from defusedcsv import csv
 from django import forms
+from django.conf import settings
 from django.db.models import Max, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
+from jsonfallback.functions import JSONExtract
 from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.exporter import BaseExporter
-from pretix.base.models import Checkin, Order, OrderPosition, Question
+from pretix.base.models import (
+    Checkin, InvoiceAddress, Order, OrderPosition, Question,
+)
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.widgets import Select2
 from pretix.plugins.reports.exporters import ReportlabExportMixin
@@ -24,6 +29,7 @@ from pretix.plugins.reports.exporters import ReportlabExportMixin
 class BaseCheckinList(BaseExporter):
     @property
     def export_form_fields(self):
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         d = OrderedDict(
             [
                 ('list',
@@ -44,10 +50,13 @@ class BaseCheckinList(BaseExporter):
                  forms.ChoiceField(
                      label=_('Sort by'),
                      initial='name',
-                     choices=(
+                     choices=[
                          ('name', _('Attendee name')),
                          ('code', _('Order code')),
-                     ),
+                     ] + ([
+                         ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
+                         for k, label, w in name_scheme['fields']
+                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
                      widget=forms.RadioSelect,
                      required=False
                  )),
@@ -78,6 +87,49 @@ class BaseCheckinList(BaseExporter):
         d['list'].required = True
 
         return d
+
+    def _get_queryset(self, cl, form_data):
+        cqs = Checkin.objects.filter(
+            position_id=OuterRef('pk'),
+            list_id=cl.pk
+        ).order_by().values('position_id').annotate(
+            m=Max('datetime')
+        ).values('m')
+        qs = OrderPosition.objects.filter(
+            order__event=self.event,
+        ).annotate(
+            last_checked_in=Subquery(cqs)
+        ).prefetch_related(
+            'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
+        ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address')
+
+        if not cl.all_products:
+            qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
+
+        if cl.subevent:
+            qs = qs.filter(subevent=cl.subevent)
+
+        if form_data['sort'] == 'name':
+            qs = qs.order_by(Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached', 'order__invoice_address__name_cached'),
+                             'order__code')
+        elif form_data['sort'] == 'code':
+            qs = qs.order_by('order__code')
+        elif form_data['sort'].startswith('name:'):
+            part = form_data['sort'][5:]
+            qs = qs.annotate(
+                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
+            ).annotate(
+                resolved_name_part=JSONExtract('resolved_name', part)
+            ).order_by(
+                'resolved_name_part'
+            )
+
+        if not cl.include_pending:
+            qs = qs.filter(order__status=Order.STATUS_PAID)
+        else:
+            qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
+
+        return qs
 
 
 class CBFlowable(Flowable):
@@ -174,37 +226,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
                 p = Paragraph(txt, headrowstyle)
             tdata[0].append(p)
 
-        cqs = Checkin.objects.filter(
-            position_id=OuterRef('pk'),
-            list_id=cl.pk
-        ).order_by().values('position_id').annotate(
-            m=Max('datetime')
-        ).values('m')
-
-        qs = OrderPosition.objects.filter(
-            order__event=self.event,
-        ).annotate(
-            last_checked_in=Subquery(cqs)
-        ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address').prefetch_related(
-            'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
-        )
-
-        if not cl.all_products:
-            qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
-
-        if cl.subevent:
-            qs = qs.filter(subevent=cl.subevent)
-
-        if form_data['sort'] == 'name':
-            qs = qs.order_by(Coalesce('attendee_name', 'addon_to__attendee_name', 'order__invoice_address__name'),
-                             'order__code')
-        elif form_data['sort'] == 'code':
-            qs = qs.order_by('order__code')
-
-        if not cl.include_pending:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
-        else:
-            qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
+        qs = self._get_queryset(cl, form_data)
 
         for op in qs:
             try:
@@ -216,7 +238,7 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
 
             name = op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '') or ian
             if iac:
-                name += "\n" + iac
+                name += "<br/>" + iac
 
             row = [
                 '!!' if op.item.checkin_attention else '',
@@ -282,33 +304,18 @@ class CSVCheckinList(BaseCheckinList):
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
 
-        cqs = Checkin.objects.filter(
-            position_id=OuterRef('pk'),
-            list_id=cl.pk
-        ).order_by().values('position_id').annotate(
-            m=Max('datetime')
-        ).values('m')
-        qs = OrderPosition.objects.filter(
-            order__event=self.event,
-        ).annotate(
-            last_checked_in=Subquery(cqs)
-        ).prefetch_related(
-            'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
-        ).select_related('order', 'item', 'variation', 'addon_to')
+        qs = self._get_queryset(cl, form_data)
 
-        if not cl.all_products:
-            qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
-
-        if cl.subevent:
-            qs = qs.filter(subevent=cl.subevent)
-
-        if form_data['sort'] == 'name':
-            qs = qs.order_by(Coalesce('attendee_name', 'addon_to__attendee_name'))
-        elif form_data['sort'] == 'code':
-            qs = qs.order_by('order__code')
-
+        name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         headers = [
-            _('Order code'), _('Attendee name'), _('Product'), _('Price'), _('Checked in')
+            _('Order code'),
+            _('Attendee name'),
+        ]
+        if len(name_scheme['fields']) > 1:
+            for k, label, w in name_scheme['fields']:
+                headers.append(_('Attendee name: {part}').format(part=label))
+        headers += [
+            _('Product'), _('Price'), _('Checked in')
         ]
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -327,9 +334,15 @@ class CSVCheckinList(BaseCheckinList):
         for q in questions:
             headers.append(str(q.question))
 
+        headers.append(_('Company'))
         writer.writerow(headers)
 
         for op in qs:
+            try:
+                ia = op.order.invoice_address
+            except InvoiceAddress.DoesNotExist:
+                ia = InvoiceAddress()
+
             last_checked_in = None
             if isinstance(op.last_checked_in, str):  # SQLite
                 last_checked_in = dateutil.parser.parse(op.last_checked_in)
@@ -339,7 +352,18 @@ class CSVCheckinList(BaseCheckinList):
                 last_checked_in = make_aware(last_checked_in, UTC)
             row = [
                 op.order.code,
-                op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''),
+                op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '') or ia.name,
+            ]
+            if len(name_scheme['fields']) > 1:
+                for k, label, w in name_scheme['fields']:
+                    row.append(
+                        (
+                            op.attendee_name_parts or
+                            (op.addon_to.attendee_name_parts if op.addon_to else {}) or
+                            ia.name_parts
+                        ).get(k, '')
+                    )
+            row += [
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
                 date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
@@ -361,6 +385,7 @@ class CSVCheckinList(BaseCheckinList):
             for q in questions:
                 row.append(acache.get(q.pk, ''))
 
+            row.append(ia.company)
             writer.writerow(row)
 
         return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")

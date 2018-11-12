@@ -30,7 +30,7 @@ RUN chmod +x /usr/local/bin/pretix && \
     pip3 install -U pip wheel setuptools && \
     cd /pretix/src && \
     rm -f pretix.cfg && \
-    pip3 install -r requirements.txt -r requirements/mysql.txt -r requirements/postgres.txt \
+    pip3 install -r requirements.txt -r requirements/mysql.txt \
     	-r requirements/memcached.txt -r requirements/redis.txt gunicorn && \
 	mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data && \

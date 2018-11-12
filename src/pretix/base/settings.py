@@ -1,11 +1,14 @@
 import json
+from collections import OrderedDict
 from datetime import datetime
 from typing import Any
 
 from django.conf import settings
 from django.core.files import File
 from django.db.models import Model
-from django.utils.translation import ugettext_noop
+from django.utils.translation import (
+    pgettext_lazy, ugettext_lazy as _, ugettext_noop,
+)
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.strings import LazyI18nString
 
@@ -556,7 +559,154 @@ Your {event} team"""))
         'default': 'date_ascending',
         'type': str
     },
+    'name_scheme': {
+        'default': 'full',
+        'type': str
+    }
 }
+PERSON_NAME_SCHEMES = OrderedDict([
+    ('given_family', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': lambda d: ' '.join(str(p) for p in [d.get('given_name', ''), d.get('family_name', '')] if p),
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'given_family',
+        },
+    }),
+    ('title_given_family', {
+        'fields': (
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('Given name'), 2),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('title', ''), d.get('given_name', ''), d.get('family_name', '')] if p
+        ),
+        'sample': {
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_given_family',
+        },
+    }),
+    ('given_middle_family', {
+        'fields': (
+            ('given_name', _('First name'), 2),
+            ('middle_name', _('Middle name'), 1),
+            ('family_name', _('Family name'), 2),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('given_name', ''), d.get('middle_name', ''), d.get('family_name', '')] if p
+        ),
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'middle_name': 'M',
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'given_middle_family',
+        },
+    }),
+    ('title_given_middle_family', {
+        'fields': (
+            ('title', pgettext_lazy('person_name', 'Title'), 1),
+            ('given_name', _('First name'), 2),
+            ('middle_name', _('Middle name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('title', ''), d.get('given_name'), d.get('middle_name'), d.get('family_name')] if p
+        ),
+        'sample': {
+            'title': pgettext_lazy('person_name_sample', 'Dr'),
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'middle_name': 'M',
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'title_given_middle_family',
+        },
+    }),
+    ('family_given', {
+        'fields': (
+            ('family_name', _('Family name'), 1),
+            ('given_name', _('Given name'), 1),
+        ),
+        'concatenation': lambda d: ' '.join(
+            str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
+        ),
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'family_given',
+        },
+    }),
+    ('family_nospace_given', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': lambda d: ''.join(
+            str(p) for p in [d.get('family_name', ''), d.get('given_name', '')] if p
+        ),
+        'sample': {
+            'given_name': '泽东',
+            'family_name': '毛',
+            '_scheme': 'family_nospace_given',
+        },
+    }),
+    ('family_comma_given', {
+        'fields': (
+            ('given_name', _('Given name'), 1),
+            ('family_name', _('Family name'), 1),
+        ),
+        'concatenation': lambda d: (
+            str(d.get('family_name', '')) +
+            str((', ' if d.get('family_name') and d.get('given_name') else '')) +
+            str(d.get('given_name', ''))
+        ),
+        'sample': {
+            'given_name': pgettext_lazy('person_name_sample', 'John'),
+            'family_name': pgettext_lazy('person_name_sample', 'Doe'),
+            '_scheme': 'family_comma_given',
+        },
+    }),
+    ('full', {
+        'fields': (
+            ('full_name', _('Name'), 1),
+        ),
+        'concatenation': lambda d: str(d.get('full_name', '')),
+        'sample': {
+            'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
+            '_scheme': 'full',
+        },
+    }),
+    ('calling_full', {
+        'fields': (
+            ('calling_name', _('Calling name'), 1),
+            ('full_name', _('Full name'), 2),
+        ),
+        'concatenation': lambda d: str(d.get('full_name', '')),
+        'sample': {
+            'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
+            'calling_name': pgettext_lazy('person_name_sample', 'John'),
+            '_scheme': 'calling_full',
+        },
+    }),
+    ('full_transcription', {
+        'fields': (
+            ('full_name', _('Full name'), 1),
+            ('latin_transcription', _('Latin transcription'), 2),
+        ),
+        'concatenation': lambda d: str(d.get('full_name', '')),
+        'sample': {
+            'full_name': '庄司',
+            'latin_transcription': 'Shōji',
+            '_scheme': 'full_transcription',
+        },
+    }),
+])
+
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 

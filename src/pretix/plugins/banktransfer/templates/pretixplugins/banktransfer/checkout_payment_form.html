@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load ibanformat %}
 
 <p>{% blocktrans trimmed %}
     After completing your purchase, we will ask you to transfer the money to the following
@@ -8,7 +9,7 @@
 <address>
     {% if settings.bank_details_type == "sepa" %}
         {% trans "Account holder" %}: {{ settings.bank_details_sepa_name }}<br>
-        {% trans "IBAN" %}: {{ settings.bank_details_sepa_iban }}<br>
+        {% trans "IBAN" %}: {{ settings.bank_details_sepa_iban|ibanformat }}<br>
         {% trans "BIC" %}: {{ settings.bank_details_sepa_bic }}<br>
         {% trans "Bank" %}: {{ settings.bank_details_sepa_bank }}<br>
     {% endif %}

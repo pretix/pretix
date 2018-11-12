@@ -403,12 +403,9 @@ class Item(LoggedModel):
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def allow_delete(self):
-        from pretix.base.models.orders import CartPosition, OrderPosition
+        from pretix.base.models.orders import OrderPosition
 
-        return (
-            not OrderPosition.objects.filter(item=self).exists()
-            and not CartPosition.objects.filter(item=self).exists()
-        )
+        return not OrderPosition.objects.filter(item=self).exists()
 
     @cached_property
     def has_variations(self):

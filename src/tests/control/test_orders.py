@@ -51,7 +51,7 @@ def env():
         item=ticket,
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
     )
     return event, user, o, ticket
 
@@ -333,7 +333,7 @@ def test_order_invoice_create_ok(client, env):
 def test_order_invoice_regenerate(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -362,7 +362,7 @@ def test_order_invoice_regenerate_unknown(client, env):
 def test_order_invoice_reissue(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -528,7 +528,7 @@ def test_order_extend_expired_quota_partial(client, env):
         item=env[3],
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
     )
     o.expires = now() - timedelta(days=5)
     o.status = Order.STATUS_EXPIRED
@@ -745,11 +745,11 @@ class OrderChangeTests(SoupTest):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter", "_scheme": "full"}
         )
         self.quota = self.event.quotas.create(name="All", size=100)
         self.quota.items.add(self.ticket)

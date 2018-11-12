@@ -170,9 +170,9 @@ class ActionView(View):
         qs = self.order_qs().order_by('pk').annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no')).filter(
             code
             | Q(email__icontains=u)
-            | Q(positions__attendee_name__icontains=u)
+            | Q(positions__attendee_name_cached__icontains=u)
             | Q(positions__attendee_email__icontains=u)
-            | Q(invoice_address__name__icontains=u)
+            | Q(invoice_address__name_cached__icontains=u)
             | Q(invoice_address__company__icontains=u)
             | Q(invoices__invoice_no=u)
             | Q(invoices__invoice_no=u.zfill(5))

@@ -34,7 +34,7 @@ def order(event):
                                  default_price=Decimal('23.00'), admission=True)
     OrderPosition.objects.create(
         order=o, item=ticket, variation=None,
-        price=Decimal("23.00"), attendee_name="Peter", positionid=1
+        price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
     )
     return o
 
@@ -75,6 +75,17 @@ def test_notification_trigger_global(event, order, user, monkeypatch_on_commit):
     )
     with transaction.atomic():
         order.log_action('pretix.event.order.paid', {})
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+def test_notification_trigger_global_wildcard(event, order, user, monkeypatch_on_commit):
+    djmail.outbox = []
+    user.notification_settings.create(
+        method='mail', event=None, action_type='pretix.event.order.changed.*', enabled=True
+    )
+    with transaction.atomic():
+        order.log_action('pretix.event.order.changed.item', {})
     assert len(djmail.outbox) == 1
 
 

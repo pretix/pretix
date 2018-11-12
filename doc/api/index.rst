@@ -16,3 +16,5 @@ in functionality over time.
    fundamentals
    auth
    resources/index
+   ratelimit
+   webhooks

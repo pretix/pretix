@@ -82,10 +82,6 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <button type="button" class="navbar-toggle navbar-events"
-                            data-toggle="collapse" data-target=".navbar-events-collapse">
-                        <i class="fa fa-calendar"></i><span class="caret"></span>
-                    </button>
                     {% if request.event %}
                         {% if has_domain and not request.event.live %}
                             <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
@@ -108,21 +104,6 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left hidden-xs">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i>
-                            <span class="event-name">{{ request.event }}</span>
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
-                            data-source="{% url "control:events.typeahead" %}">
-                            <li class="query-holder">
-                                <div class="form-box">
-                                    <input type="text" class="form-control"
-                                            placeholder="{% trans "Search for events" %}"
-                                            data-typeahead-query>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
                     {% if request.event %}
                         <li>
                             {% if has_domain and not request.event.live %}
@@ -206,71 +187,56 @@
                     </li>
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-events-collapse navbar-collapse hidden-sm hidden-md hidden-lg mobile-event-dropdown">
-                        <ul class="nav" data-event-typeahead data-source="{% url "control:events.typeahead" %}">
-                            <li>
-                                <div class="form-box">
-                                    <input type="text" class="form-control"
-                                            placeholder="{% trans "Search for events" %}"
-                                            data-typeahead-query>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
+                        <div class="dropdown context-selector">
+                            {% if request.event %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.event }}</span>
+                                        <span class="context-meta">{{ request.event.get_date_range_display }}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% elif request.organizer %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-group fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.organizer }}</span>
+                                        <span class="context-meta">{% trans "Organizer account" %}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% else %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <span class="fa-stack fa-lg">
+                                      <i class="fa fa-circle fa-stack-2x"></i>
+                                      <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+                                    </span>
+
+                                    <div class="context-indicator">
+                                        <span class="context-name">{{ request.user }}</span>
+                                    </div>
+                                    <span class="caret"></span></a>
+                            {% endif %}
+                            <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
+                                data-source="{% url "control:nav.typeahead" %}">
+                                <li class="query-holder">
+                                    <div class="form-box">
+                                        <input type="text" class="form-control" id="event-dropdown-field"
+                                               placeholder="{% trans "Search for events" %}"
+                                               data-typeahead-query>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <ul class="nav" id="side-menu">
                             {% block nav %}
-                                <li>
-                                    <a href="{% url 'control:index' %}" {% if url_name == "index" %}class="active"{% endif %}>
-                                        <i class="fa fa-dashboard fa-fw"></i>
-                                        {% trans "Dashboard" %}
-                                    </a>
-                                </li>
-                                {% if staff_session %}
-                                    <li>
-                                        <a href="{% url 'control:global.settings' %}"
-                                                {% if "global.settings" in url_name %}class="active"{% endif %}>
-                                            <i class="fa fa-wrench fa-fw"></i>
-                                            {% trans "Global settings" %}
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{% url 'control:events' %}" {% if "events" in url_name %}class="active"{% endif %}>
-                                        <i class="fa fa-calendar fa-fw"></i>
-                                        {% trans "Events" %}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'control:organizers' %}" {% if "organizer" in url_name %}class="active"{% endif %}>
-                                        <i class="fa fa-users fa-fw"></i>
-                                        {% trans "Organizers" %}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'control:search.orders' %}"
-                                            {% if url_name == "search.orders" %}class="active"{% endif %}>
-                                        <i class="fa fa-search fa-fw"></i>
-                                        {% trans "Order search" %}
-                                    </a>
-                                </li>
-                                {% if staff_session %}
-                                    <li>
-                                        <a href="{% url 'control:users' %}"
-                                           {% if "users" in url_name %}class="active"{% endif %}>
-                                            <i class="fa fa-user fa-fw"></i>
-                                            {% trans "Users" %}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{% url 'control:user.sudo.list' %}"
-                                                {% if "sudo" in url_name %}class="active"{% endif %}>
-                                            <i class="fa fa-id-card fa-fw"></i>
-                                            {% trans "Admin sessions" %}
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                {% for nav in nav_global %}
+                                {% for nav in nav_items %}
                                     <li>
                                         <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
                                                 {% if nav.children %}class="has-children"{% endif %}>

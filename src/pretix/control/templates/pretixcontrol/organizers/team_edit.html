@@ -3,9 +3,9 @@
 {% load bootstrap3 %}
 {% block inner %}
     {% if team %}
-        <h2>{% trans "Team:" %} {{ team.name }}</h2>
+        <h1>{% trans "Team:" %} {{ team.name }}</h1>
     {% else %}
-        <h2>{% trans "Create a new team" %}</h2>
+        <h1>{% trans "Create a new team" %}</h1>
         <p>
             {% blocktrans trimmed %}
                 You will be able to add team members in the next step.

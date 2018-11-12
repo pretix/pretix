@@ -61,7 +61,7 @@ class OrdersTest(TestCase):
             item=self.ticket,
             variation=None,
             price=Decimal("23"),
-            attendee_name="Peter"
+            attendee_name_parts={'full_name': "Peter"}
         )
         self.not_my_order = Order.objects.create(
             status=Order.STATUS_PENDING,
@@ -147,12 +147,12 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % self.ticket_pos.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.id: '',
+                '%s-attendee_name_parts_0' % self.ticket_pos.id: '',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -168,19 +168,19 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name]' % self.ticket_pos.id)), 1)
+        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % self.ticket_pos.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.id: '',
+                '%s-attendee_name_parts_0' % self.ticket_pos.id: '',
             }, follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select('.has-error')), 1)
 
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-attendee_name' % self.ticket_pos.id: 'Peter',
+                '%s-attendee_name_parts_0' % self.ticket_pos.id: 'Peter',
             }, follow=True)
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),

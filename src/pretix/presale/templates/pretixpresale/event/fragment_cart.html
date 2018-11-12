@@ -81,6 +81,7 @@
             <div class="count">
                 {% if editable %}
                 <form action="{% eventurl event "presale:event.cart.remove" cart_namespace=cart_namespace|default_if_none:"" %}"
+                        data-asynctask-headline="{% trans "Okay, we're removing that…" %}"
                         method="post" data-asynctask>
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ line.id }}" />
@@ -92,6 +93,8 @@
                 {{ line.count }}
                 {% if editable %}
                 <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
+                        data-asynctask-headline="{% trans "We're trying to reserve another one for you!" %}"
+                        data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
                     method="post" data-asynctask>
                     <input type="hidden" name="subevent" value="{{ line.subevent_id|default_if_none:"" }}" />
                     {% csrf_token %}

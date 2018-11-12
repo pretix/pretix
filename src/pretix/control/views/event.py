@@ -46,7 +46,6 @@ from pretix.control.forms.event import (
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.signals import nav_event_settings
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
@@ -60,12 +59,7 @@ from ..logdisplay import OVERVIEW_BLACKLIST
 class EventSettingsViewMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['nav_event_settings'] = []
         ctx['is_event_settings'] = True
-
-        for recv, retv in nav_event_settings.send(sender=self.request.event, request=self.request):
-            ctx['nav_event_settings'] += retv
-        ctx['nav_event_settings'].sort(key=lambda n: n['label'])
         return ctx
 
 
@@ -644,7 +638,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                                                     expires=now(), code="PREVIEW", total=119)
                 item = request.event.items.create(name=ugettext("Sample product"), default_price=42.23,
                                                   description=ugettext("Sample product description"))
-                order.positions.create(item=item, attendee_name=ugettext("John Doe"), price=item.default_price)
+                order.positions.create(item=item, attendee_name_parts={'full_name': ugettext("John Doe")}, price=item.default_price)
                 v = renderers[request.GET.get('renderer')].render(
                     v,
                     str(request.event.settings.mail_text_signature),

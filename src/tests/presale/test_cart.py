@@ -1679,6 +1679,20 @@ class CartAddonTest(CartTestMixin, TestCase):
             }
         ])
 
+    def test_remove_with_addons(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        cp2 = CartPosition.objects.create(
+            expires=now() + timedelta(minutes=10), item=self.workshop1, price=Decimal('12.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.remove_item(cp1.pk)
+        self.cm.commit()
+        assert not CartPosition.objects.filter(pk=cp1.pk).exists()
+        assert not CartPosition.objects.filter(pk=cp2.pk).exists()
+
     def test_remove_addons(self):
         cp1 = CartPosition.objects.create(
             expires=now() + timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),

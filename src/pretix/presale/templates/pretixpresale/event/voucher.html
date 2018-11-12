@@ -21,7 +21,11 @@
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post"
                 action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={% eventurl request.event "presale:event.index" cart_namespace=cart_namespace %}{% if "iframe" in request.GET and not new_tab %}&iframe={{ request.GET.iframe }}{% endif %}{% if "take_cart_id" in request.GET and new_tab %}&take_cart_id={{ request.GET.take_cart_id }}{% endif %}"
-            {% if new_tab %}target="_blank"{% else %}data-asynctask{% endif %}>
+            {% if new_tab %}target="_blank"{% else %}
+                data-asynctask
+                data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
+                data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
+            {% endif %}>
             {% csrf_token %}
             <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
             <input type="hidden" name="_voucher_code" value="{{ voucher.code }}">

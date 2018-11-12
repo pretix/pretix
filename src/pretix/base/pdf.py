@@ -26,6 +26,7 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.invoice import ThumbnailingImageReader
 from pretix.base.models import Order, OrderPosition
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.presale.style import get_fonts
@@ -147,12 +148,12 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: str(ev.location).replace("\n", "<br/>\n")
     }),
     ("invoice_name", {
-        "label": _("Invoice address: name"),
+        "label": _("Invoice address name"),
         "editor_sample": _("John Doe"),
         "evaluate": lambda op, order, ev: order.invoice_address.name if getattr(order, 'invoice_address', None) else ''
     }),
     ("invoice_company", {
-        "label": _("Invoice address: company"),
+        "label": _("Invoice address company"),
         "editor_sample": _("Sample company"),
         "evaluate": lambda op, order, ev: order.invoice_address.company if getattr(order, 'invoice_address', None) else ''
     }),
@@ -182,8 +183,28 @@ DEFAULT_VARIABLES = OrderedDict((
 
 def get_variables(event):
     v = copy.copy(DEFAULT_VARIABLES)
+
+    scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+    for key, label, weight in scheme['fields']:
+        v['attendee_name_%s' % key] = {
+            'label': _("Attendee name: {part}").format(part=label),
+            'editor_sample': scheme['sample'][key],
+            'evaluate': lambda op, order, ev: op.attendee_name_parts.get(key, '')
+        }
+
+    v['invoice_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
+    v['attendee_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
+
+    for key, label, weight in scheme['fields']:
+        v['invoice_name_%s' % key] = {
+            'label': _("Invoice address name: {part}").format(part=label),
+            'editor_sample': scheme['sample'][key],
+            "evaluate": lambda op, order, ev: order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+        }
+
     for recv, res in layout_text_variables.send(sender=event):
         v.update(res)
+
     return v
 
 

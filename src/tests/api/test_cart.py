@@ -54,7 +54,8 @@ TEST_CARTPOSITION_RES = {
     'item': 1,
     'variation': None,
     'price': '23.00',
-    'attendee_name': None,
+    'attendee_name_parts': {'full_name': 'Peter'},
+    'attendee_name': 'Peter',
     'attendee_email': None,
     'voucher': None,
     'addon_to': None,
@@ -74,7 +75,7 @@ def test_cp_list(token_client, organizer, event, item, taxrule, question):
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa", item=item,
-            price=23,
+            price=23, attendee_name_parts={'full_name': 'Peter'},
             datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
             expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
         )
@@ -95,7 +96,7 @@ def test_cp_list_api(token_client, organizer, event, item, taxrule, question):
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
-            price=23,
+            price=23, attendee_name_parts={'full_name': 'Peter'},
             datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
             expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
         )
@@ -116,7 +117,7 @@ def test_cp_detail(token_client, organizer, event, item, taxrule, question):
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
-            price=23,
+            price=23, attendee_name_parts={'full_name': 'Peter'},
             datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
             expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
         )
@@ -137,7 +138,7 @@ def test_cp_delete(token_client, organizer, event, item, taxrule, question):
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
-            price=23,
+            price=23, attendee_name_parts={'full_name': 'Peter'},
             datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
             expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
         )
@@ -154,7 +155,7 @@ CARTPOS_CREATE_PAYLOAD = {
     'item': 1,
     'variation': None,
     'price': '23.00',
-    'attendee_name': None,
+    'attendee_name_parts': {'full_name': 'Peter'},
     'attendee_email': None,
     'addon_to': None,
     'subevent': None,
@@ -177,6 +178,49 @@ def test_cartpos_create(token_client, organizer, event, item, quota, question):
     cp = CartPosition.objects.get(pk=resp.data['id'])
     assert cp.price == Decimal('23.00')
     assert cp.item == item
+    assert cp.attendee_name_parts == {'full_name': 'Peter'}
+
+
+@pytest.mark.django_db
+def test_cartpos_create_name_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['attendee_name'] = None
+    del res['attendee_name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    cp = CartPosition.objects.get(pk=resp.data['id'])
+    assert cp.price == Decimal('23.00')
+    assert cp.item == item
+    assert cp.attendee_name_parts == {}
+
+
+@pytest.mark.django_db
+def test_cartpos_create_legacy_name(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['attendee_name'] = 'Peter'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    del res['attendee_name_parts']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    cp = CartPosition.objects.get(pk=resp.data['id'])
+    assert cp.price == Decimal('23.00')
+    assert cp.item == item
+    assert cp.attendee_name_parts == {'_legacy': 'Peter'}
 
 
 @pytest.mark.django_db

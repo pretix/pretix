@@ -121,7 +121,10 @@ def test_address_vat_id(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  name='Sherlock Holmes', zipcode='12345', city='London', country_old='UK',
+                                  name_parts={'full_name': 'Sherlock Holmes', '_scheme': 'full'},
+                                  zipcode='12345',
+                                  city='London',
+                                  country_old='UK',
                                   country='', vat_id='UK1234567', order=order)
     inv = generate_invoice(order)
     assert inv.invoice_to == "Acme Company\nSherlock Holmes\n221B Baker Street\n12345 London\nUK\nVAT-ID: UK1234567"

@@ -20,6 +20,7 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.forms import (
     ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
     SplitDateTimeField, SplitDateTimePickerWidget,
@@ -338,6 +339,12 @@ class EventSettingsForm(SettingsForm):
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_names_asked'}),
     )
+    name_scheme = forms.ChoiceField(
+        label=_("Name format"),
+        help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
+                    "orders might lead to unexpected behaviour when sorting or changing names."),
+        required=True,
+    )
     attendee_emails_asked = forms.BooleanField(
         label=_("Ask for email addresses per ticket"),
         help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be sent "
@@ -418,6 +425,13 @@ class EventSettingsForm(SettingsForm):
         self.fields['confirm_text'].widget.attrs['placeholder'] = _(
             'e.g. I hereby confirm that I have read and agree with the event organizer\'s terms of service '
             'and agree with them.'
+        )
+        self.fields['name_scheme'].choices = (
+            (k, _('Ask for {fields}, display like {example}').format(
+                fields=' + '.join(str(vv[1]) for vv in v['fields']),
+                example=v['concatenation'](v['sample'])
+            ))
+            for k, v in PERSON_NAME_SCHEMES.items()
         )
 
 

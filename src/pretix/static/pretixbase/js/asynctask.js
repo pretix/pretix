@@ -35,13 +35,17 @@ function async_task_check_callback(data, jqXHR, status) {
     async_task_timeout = window.setTimeout(async_task_check, 250);
 
     if (async_task_is_long) {
-        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                          'processed. Depending on the size of your event, this might take up to a ' +
-                                          'few minutes.'));
+        $("#loadingmodal p.status").text(gettext(
+            'Your request has been queued on the server and will now be ' +
+            'processed. Depending on the size of your event, this might take up to a ' +
+            'few minutes.'
+        ));
     } else {
-        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                          'processed. If this takes longer than two minutes, please contact us or go ' +
-                                          'back in your browser and try again.'));
+        $("#loadingmodal p.status").text(gettext(
+            'Your request arrived on the server but we still wait for it to be ' +
+            'processed. If this takes longer than two minutes, please contact us or go ' +
+            'back in your browser and try again.'
+        ));
     }
 }
 
@@ -62,7 +66,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             alert(gettext('An error of type {code} occurred.').replace(/\{code\}/, jqXHR.status));
         } else {
             // 500 can be an application error or overload in some cases :(
-            $("#loadingmodal p").text(gettext('We currently cannot reach the server, but we keep trying.' +
+            $("#loadingmodal p.status").text(gettext('We currently cannot reach the server, but we keep trying.' +
                                               ' Last error code: {code}').replace(/\{code\}/, jqXHR.status));
             async_task_timeout = window.setTimeout(async_task_check, 5000);
         }
@@ -87,13 +91,17 @@ function async_task_callback(data, jqXHR, status) {
     async_task_timeout = window.setTimeout(async_task_check, 100);
 
     if (async_task_is_long) {
-        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                          'processed. Depending on the size of your event, this might take up to a ' +
-                                          'few minutes.'));
+        $("#loadingmodal p.status").text(gettext(
+            'Your request has been queued on the server and will now be ' +
+            'processed. Depending on the size of your event, this might take up to a ' +
+            'few minutes.'
+        ));
     } else {
-        $("#loadingmodal p").text(gettext('Your request has been queued on the server and will now be ' +
-                                          'processed. If this takes longer than two minutes, please contact us or go ' +
-                                          'back in your browser and try again.'));
+        $("#loadingmodal p.status").text(gettext(
+            'Your request arrived on the server but we still wait for it to be ' +
+            'processed. If this takes longer than two minutes, please contact us or go ' +
+            'back in your browser and try again.'
+        ));
     }
     if (location.href.indexOf("async_id") === -1) {
         history.pushState({}, "Waiting", async_task_check_url.replace(/ajax=1/, ''));
@@ -134,10 +142,21 @@ $(function () {
         async_task_is_long = $(this).is("[data-asynctask-long]");
         async_task_old_url = location.href;
         $("body").data('ajaxing', true);
-        waitingDialog.show(gettext('We are processing your request …'));
-        $("#loadingmodal p").text(gettext('We are currently sending your request to the server. If this takes longer ' +
-                                          'than one minute, please check your internet connection and then reload ' +
-                                          'this page and try again.'));
+        if ($(this).is("[data-asynctask-headline]")) {
+            waitingDialog.show($(this).attr("data-asynctask-headline"));
+        } else {
+            waitingDialog.show(gettext('We are processing your request …'));
+        }
+        if ($(this).is("[data-asynctask-text]")) {
+            $("#loadingmodal p.text").text($(this).attr("data-asynctask-text")).show();
+        } else {
+            $("#loadingmodal p.text").hide();
+        }
+        $("#loadingmodal p.status").text(gettext(
+            'We are currently sending your request to the server. If this takes longer ' +
+            'than one minute, please check your internet connection and then reload ' +
+            'this page and try again.'
+        ));
 
         $.ajax(
             {
@@ -157,7 +176,7 @@ $(function () {
 var waitingDialog = {
     show: function (message) {
         "use strict";
-        $("#loadingmodal").find("h1").html(message);
+        $("#loadingmodal").find("h3").html(message);
         $("body").addClass("loading");
     },
     hide: function () {

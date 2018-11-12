@@ -4,8 +4,8 @@
 {% block inside %}
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
+        <h1>{% trans "Ticket download" %}</h1>
         <fieldset>
-            <legend>{% trans "Ticket download" %}</legend>
             {% if request.event.settings.ticket_download and not any_enabled %}
                 <div class="alert alert-warning">
                     {% blocktrans trimmed %}

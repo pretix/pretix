@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block title %}{% trans "Tax rules" %}{% endblock %}
 {% block inside %}
-    <legend>{% trans "Tax rules" %}</legend>
+    <h1>{% trans "Tax rules" %}</h1>
     {% if taxrules|length == 0 %}
         <div class="empty-collection">
             <p>

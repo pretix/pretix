@@ -309,7 +309,7 @@ class PaymentReminderTests(TestCase):
                                           default_price=Decimal('23.00'), admission=True)
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
         )
         djmail.outbox = []
 
@@ -357,7 +357,7 @@ class DownloadReminderTests(TestCase):
                                           default_price=Decimal('23.00'), admission=True)
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={"full_name": "Peter"}, positionid=1
         )
         djmail.outbox = []
 
@@ -411,11 +411,11 @@ class OrderChangeManagerTests(TestCase):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter", positionid=2
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
         )
         self.ocm = OrderChangeManager(self.order, None)
         self.quota = self.event.quotas.create(name='Test', size=None)

@@ -78,6 +78,9 @@
       text-decoration: none;
     }
   }
+  a {
+    outline: none;
+  }
 }
 @media(max-width: $screen-sm-max) {
   .checkout-step-label {

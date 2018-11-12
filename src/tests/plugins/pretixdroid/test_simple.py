@@ -36,11 +36,11 @@ def env():
     )
     op1 = OrderPosition.objects.create(
         order=o1, item=shirt, variation=shirt_red,
-        price=12, attendee_name=None, secret='1234'
+        price=12, attendee_name_parts={}, secret='1234'
     )
     op2 = OrderPosition.objects.create(
         order=o1, item=ticket,
-        price=23, attendee_name="Peter", secret='5678910'
+        price=23, attendee_name_parts={"full_name": "Peter", "_scheme": "full"}, secret='5678910'
     )
     cl1 = event.checkin_lists.create(name="Foo", all_products=True)
     cl2 = event.checkin_lists.create(name="Bar", all_products=True)
@@ -273,7 +273,7 @@ def test_search_restricted(client, env):
 @pytest.mark.django_db
 def test_search_invoice_name(client, env):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
-    InvoiceAddress.objects.create(order=env[2], name="John")
+    InvoiceAddress.objects.create(order=env[2], name_parts={"full_name": "John", "_scheme": "full"})
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', 'John'))
     jdata = json.loads(resp.content.decode("utf-8"))

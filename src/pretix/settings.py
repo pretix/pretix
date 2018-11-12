@@ -58,6 +58,8 @@ debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
 db_backend = config.get('database', 'backend', fallback='sqlite3')
+if db_backend == 'postgresql_psycopg2':
+    db_backend = 'postgresql'
 DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
 if DATABASE_IS_GALERA and 'mysql' in db_backend:
     db_options = {
@@ -65,6 +67,10 @@ if DATABASE_IS_GALERA and 'mysql' in db_backend:
     }
 else:
     db_options = {}
+
+if 'mysql' in db_backend:
+    db_options['charset'] = 'utf8mb4'
+JSON_FIELD_AVAILABLE = db_backend in ('mysql', 'postgresql')
 
 DATABASES = {
     'default': {
@@ -75,7 +81,11 @@ DATABASES = {
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
-        'OPTIONS': db_options
+        'OPTIONS': db_options,
+        'TEST': {
+            'CHARSET': 'utf8mb4',
+            'COLLATION': 'utf8mb4_unicode_ci',
+        } if 'mysql' in db_backend else {}
     }
 }
 
