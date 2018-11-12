@@ -4,16 +4,15 @@ import urllib.parse
 from collections import OrderedDict
 
 import paypalrestsdk
-from paypalrestsdk.openid_connect import Tokeninfo
 from django import forms
 from django.contrib import messages
 from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as __, ugettext_lazy as _
+from paypalrestsdk.openid_connect import Tokeninfo
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
@@ -106,7 +105,7 @@ class Paypal(BasePaymentProvider):
                       'following button, you can either create a new PayPal account connect pretix to an existing '
                       'one.'),
                     self.get_connect_url(request),
-                    _('Connect with <i class="fa fa-paypal"></i> PayPal')
+                    _('Connect with {icon} PayPal').format(icon='<i class="fa fa-paypal"></i>')
                 )
             else:
                 return (
@@ -186,10 +185,10 @@ class Paypal(BasePaymentProvider):
                     },
                     "description": __('Event tickets for {event}').format(event=request.event.name),
                     "payee": {
-                        "email": "" or request.event.settings.payment_paypal_connect_user_id,
+                        "email": request.event.settings.payment_paypal_connect_user_id or "",
                         # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
                         # we should use it instead of the merchant's eMail-address
-                        #"merchant_id": request.event.settings.payment_paypal_connect_user_id,
+                        # "merchant_id": request.event.settings.payment_paypal_connect_user_id or "",
                     }
                 }
             ]
@@ -433,10 +432,10 @@ class Paypal(BasePaymentProvider):
                         order=payment_obj.order.code
                     ),
                     "payee": {
-                        "email": "" or request.event.settings.payment_paypal_connect_user_id,
+                        "email": request.event.settings.payment_paypal_connect_user_id or "",
                         # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
                         # we should use it instead of the merchant's eMail-address
-                        #"merchant_id": request.event.settings.payment_paypal_connect_user_id,
+                        # "merchant_id": request.event.settings.payment_paypal_connect_user_id or "",
                     }
                 }
             ]

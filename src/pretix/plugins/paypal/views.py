@@ -3,7 +3,6 @@ import logging
 from decimal import Decimal
 
 import paypalrestsdk
-from paypalrestsdk.openid_connect import Tokeninfo
 from django.contrib import messages
 from django.core import signing
 from django.db.models import Sum
@@ -14,10 +13,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from paypalrestsdk.openid_connect import Tokeninfo
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
-from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.models import ReferencedPayPalObject
@@ -40,6 +39,7 @@ def redirect_view(request, *args, **kwargs):
     r._csp_ignore = True
     return r
 
+
 def oauth_return(request, *args, **kwargs):
     if 'payment_paypal_oauth_event' not in request.session:
         messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
@@ -47,10 +47,8 @@ def oauth_return(request, *args, **kwargs):
 
     event = get_object_or_404(Event, pk=request.session['payment_paypal_oauth_event'])
 
-    gs = GlobalSettingsObject()
     prov = Paypal(event)
     prov.init_api()
-    testdata = {}
 
     try:
         tokeninfo = Tokeninfo.create(request.GET.get('code'))
@@ -71,6 +69,7 @@ def oauth_return(request, *args, **kwargs):
         'event': event.slug,
         'provider': 'paypal'
     }))
+
 
 def success(request, *args, **kwargs):
     pid = request.GET.get('paymentId')
@@ -236,6 +235,7 @@ def webhook(request, *args, **kwargs):
             pass
 
     return HttpResponse(status=200)
+
 
 @event_permission_required('can_change_event_settings')
 @require_POST

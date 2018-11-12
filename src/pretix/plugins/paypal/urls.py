@@ -3,8 +3,7 @@ from django.conf.urls import include, url
 from pretix.multidomain import event_url
 
 from .views import (
-    abort, redirect_view, success, oauth_disconnect, oauth_return,
-    webhook
+    abort, oauth_disconnect, oauth_return, redirect_view, success, webhook,
 )
 
 event_patterns = [

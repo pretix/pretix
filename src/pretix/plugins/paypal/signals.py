@@ -57,6 +57,7 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)
 
+
 @receiver(register_global_settings, dispatch_uid='paypal_global_settings')
 def register_global_settings(sender, **kwargs):
     return OrderedDict([
