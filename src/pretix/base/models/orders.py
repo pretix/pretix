@@ -1449,6 +1449,7 @@ class OrderPosition(AbstractPosition):
         # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
         # due to the deletion cascade.
         for cartpos in cp:
+            cartpos.addons.all().delete()
             cartpos.delete()
         return ops
 
