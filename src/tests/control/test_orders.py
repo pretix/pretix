@@ -468,10 +468,12 @@ def test_order_extend_expired_quota_left(client, env):
     o.expires = now() - timedelta(days=5)
     o.status = Order.STATUS_EXPIRED
     o.save()
+    generate_cancellation(generate_invoice(o))
     q = Quota.objects.create(event=env[0], size=3)
     q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
     client.login(email='dummy@dummy.dummy', password='dummy')
+    assert o.invoices.count() == 2
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
     }, follow=True)
@@ -479,6 +481,7 @@ def test_order_extend_expired_quota_left(client, env):
     o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
     assert o.status == Order.STATUS_PENDING
+    assert o.invoices.count() == 3
 
 
 @pytest.mark.django_db

@@ -91,34 +91,32 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
     """
     if new_date < now():
         raise OrderError(_('The new expiry date needs to be in the future.'))
-    if order.status == Order.STATUS_PENDING:
+
+    def change(was_expired=True):
         order.expires = new_date
-        order.save(update_fields=['expires'])
+        if was_expired:
+            order.status = Order.STATUS_PENDING
+        order.save(update_fields=['expires'] + (['status'] if was_expired else []))
         order.log_action(
             'pretix.event.order.expirychanged',
             user=user,
             auth=auth,
             data={
                 'expires': order.expires,
-                'state_change': False
+                'state_change': was_expired
             }
         )
+        if was_expired:
+            if order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count():
+                generate_invoice(order)
+
+    if order.status == Order.STATUS_PENDING:
+        change(was_expired=False)
     else:
         with order.event.lock() as now_dt:
             is_available = order._is_still_available(now_dt, count_waitinglist=False)
             if is_available is True or force is True:
-                order.expires = new_date
-                order.status = Order.STATUS_PENDING
-                order.save(update_fields=['expires', 'status'])
-                order.log_action(
-                    'pretix.event.order.expirychanged',
-                    user=user,
-                    auth=auth,
-                    data={
-                        'expires': order.expires,
-                        'state_change': True
-                    }
-                )
+                change(was_expired=True)
             else:
                 raise OrderError(is_available)
 
