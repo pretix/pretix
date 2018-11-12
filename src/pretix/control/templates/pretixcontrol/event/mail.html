@@ -3,12 +3,13 @@
 {% load bootstrap3 %}
 {% load static %}
 {% block inside %}
+    <h1>{% trans "E-mail settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
           mail-preview-url="{% url "control:event.settings.mail.preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <fieldset>
-            <legend>{% trans "E-mail settings" %}</legend>
+            <legend>{% trans "General settings" %}</legend>
             {% bootstrap_field form.mail_prefix layout="control" %}
             {% bootstrap_field form.mail_from layout="control" %}
             {% bootstrap_field form.mail_text_signature layout="control" %}

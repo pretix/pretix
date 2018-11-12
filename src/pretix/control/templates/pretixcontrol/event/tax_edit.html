@@ -11,9 +11,9 @@
 {% endblock %}
 {% block inside %}
     {% if rule %}
-        <legend>{% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}</legend>
+        <h1>{% blocktrans with name=rule.name %}Tax rule: {{ name }}{% endblocktrans %}</h1>
     {% else %}
-        <legend>{% trans "Tax rule" %}</legend>
+        <h1>{% trans "Tax rule" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}

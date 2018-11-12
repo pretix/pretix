@@ -9,6 +9,8 @@ from pretix.control.signals import (
 
 def get_event_navigation(request: HttpRequest):
     url = request.resolver_match
+    if not url:
+        return []
     nav = [
         {
             'label': _('Dashboard'),
@@ -279,6 +281,8 @@ def get_event_navigation(request: HttpRequest):
 
 def get_global_navigation(request):
     url = request.resolver_match
+    if not url:
+        return []
     has_staff_session = request.user.has_active_staff_session(request.session.session_key)
     nav = [
         {
@@ -386,6 +390,8 @@ def get_global_navigation(request):
 
 def get_organizer_navigation(request):
     url = request.resolver_match
+    if not url:
+        return []
     nav = [
         {
             'label': _('Events'),

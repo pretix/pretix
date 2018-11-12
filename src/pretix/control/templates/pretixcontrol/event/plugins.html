@@ -2,10 +2,10 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inside %}
+    <h1>{% trans "Installed plugins" %}</h1>
 	<form action="" method="post" class="form-horizontal form-plugins">
 		{% csrf_token %}
 		<fieldset>
-			<legend>{% trans "Installed plugins" %}</legend>
 			{% if "success" in request.GET %}
 				<div class="alert alert-success">
 					{% trans "Your changes have been saved." %}
