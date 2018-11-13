@@ -1502,12 +1502,26 @@ class CheckoutTestCase(TestCase):
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
 
+    def test_confirm_no_longer_available(self):
+        self.ticket.available_until = now() - timedelta(days=1)
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+
     def test_confirm_inactive(self):
         self.ticket.active = False
         self.ticket.save()
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=23, expires=now() - timedelta(minutes=10)
+            price=23, expires=now() + timedelta(minutes=10)
         )
         self._set_session('payment', 'banktransfer')
 

@@ -377,7 +377,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     products_seen = Counter()
     for i, cp in enumerate(positions):
-        if not cp.item.active or (cp.variation and not cp.variation.active):
+        if not cp.item.is_available() or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
             cp.delete()
             continue
