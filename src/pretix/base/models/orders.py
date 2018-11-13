@@ -1601,6 +1601,7 @@ class InvoiceAddress(models.Model):
             self.name_cached = self.name
         else:
             self.name_cached = ""
+            self.name_parts = {}
         super().save(**kwargs)
 
     @property
