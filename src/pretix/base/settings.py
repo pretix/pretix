@@ -483,6 +483,14 @@ Your {event} team"""))
         'default': '#8E44B3',
         'type': str
     },
+    'theme_color_success': {
+        'default': '#50A167',
+        'type': str
+    },
+    'theme_color_danger': {
+        'default': '#D36060',
+        'type': str
+    },
     'primary_font': {
         'default': 'Open Sans',
         'type': str

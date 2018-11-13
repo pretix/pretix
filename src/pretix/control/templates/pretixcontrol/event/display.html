@@ -20,8 +20,10 @@
         <fieldset>
             <legend>{% trans "Shop design" %}</legend>
             {% url "control:organizer.display" organizer=request.organizer.slug as org_url %}
-            {% propagated request.event org_url "primary_color" "primary_font" %}
+            {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" %}
                 {% bootstrap_field form.primary_color layout="control" %}
+                {% bootstrap_field form.theme_color_success layout="control" %}
+                {% bootstrap_field form.theme_color_danger layout="control" %}
                 {% bootstrap_field form.primary_font layout="control" %}
             {% endpropagated %}
         </fieldset>
