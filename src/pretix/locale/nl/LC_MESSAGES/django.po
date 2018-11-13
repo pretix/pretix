@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-11-13 13:16+0000\n"
+"PO-Revision-Date: 2018-11-13 13:18+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -7241,10 +7241,8 @@ msgid "Order search"
 msgstr "Bestelling zoeken"
 
 #: pretix/control/navigation.py:313
-#, fuzzy
-#| msgid "Base settings"
 msgid "User settings"
-msgstr "Basisinstellingen"
+msgstr "Gebruikersinstellingen"
 
 #: pretix/control/navigation.py:324
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
@@ -7253,13 +7251,11 @@ msgstr "Meldingen"
 
 #: pretix/control/navigation.py:329
 msgid "2FA"
-msgstr ""
+msgstr "2FA"
 
 #: pretix/control/navigation.py:334
-#, fuzzy
-#| msgid "Authorized applications"
 msgid "Authorized apps"
-msgstr "Geautoriseerde applicaties"
+msgstr "Geautoriseerde apps"
 
 #: pretix/control/navigation.py:339
 #: pretix/control/templates/pretixcontrol/user/history.html:4
@@ -7270,10 +7266,8 @@ msgid "Account history"
 msgstr "Accountgeschiedenis"
 
 #: pretix/control/navigation.py:354
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All users"
-msgstr "Alle vouchers"
+msgstr "Alle gebruikers"
 
 #: pretix/control/navigation.py:359
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
@@ -7511,10 +7505,8 @@ msgid "Log out"
 msgstr "Log uit"
 
 #: pretix/control/templates/pretixcontrol/base.html:211
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer account"
-msgstr "Naam van de organisator"
+msgstr "Organisatoraccount"
 
 #: pretix/control/templates/pretixcontrol/base.html:231
 msgid "Search for events"
@@ -8286,10 +8278,8 @@ msgid "Edit"
 msgstr "Bewerken"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:5
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Payment settings"
-msgstr "Betaling in afwachting"
+msgstr "Betalingsinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:9
 msgid "Payment providers"
@@ -10526,10 +10516,8 @@ msgstr ""
 "eigen ontwerpinstellingen hebben."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:8
-#, fuzzy
-#| msgid "Organizer-level settings"
 msgid "Organizer settings"
-msgstr "Instellingen op organisator-niveau"
+msgstr "Organisatorinstellingen"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:29
 msgid "Other"
@@ -10711,7 +10699,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:13
 msgid "Read documentation"
-msgstr ""
+msgstr "Lees documentatie"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:19
 msgid "You haven't created any webhooks yet."
@@ -11643,8 +11631,6 @@ msgid "Create a new user"
 msgstr "Maak een nieuwe gebruiker aan"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
-#, fuzzy
-#| msgid "Create multiple voucher"
 msgid "Create multiple vouchers"
 msgstr "Maak meerdere vouchers aan"
 
@@ -11779,10 +11765,8 @@ msgstr "Elk product in quotum \"%(quota)s\""
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:3
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Voucher tags"
-msgstr "Vouchergegevens"
+msgstr "Vouchertags"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:7
 msgid ""
