@@ -70,7 +70,7 @@ def register_global_settings(sender, **kwargs):
             required=False,
         )),
         ('payment_paypal_connect_endpoint', forms.ChoiceField(
-            label=_('Endpoint'),
+            label=_('PayPal Connect Endpoint'),
             initial='live',
             choices=(
                 ('live', 'Live'),
