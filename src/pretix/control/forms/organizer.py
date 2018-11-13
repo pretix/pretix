@@ -10,9 +10,7 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Device, Organizer, Team
-from pretix.control.forms import (
-    ColorContrastValidator, ExtFileField, MultipleLanguagesWidget,
-)
+from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
 
@@ -181,32 +179,27 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
     theme_color_success = forms.CharField(
         label=_("Accent color for success"),
-        help_text=_("We strongly suggest to use a dark shade of green that has a good contrast for text on white "
-                    "ground."),
+        help_text=_("We strongly suggest to use a shade of green."),
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
     theme_color_danger = forms.CharField(
         label=_("Accent color for errors"),
-        help_text=_("We strongly suggest to use a dark shade of red that has a good contrast for text on white "
-                    "ground."),
+        help_text=_("We strongly suggest to use a shade of red."),
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
 
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )

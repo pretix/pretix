@@ -5,7 +5,6 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms.utils import from_current_timezone
-from django.utils.deconstruct import deconstructible
 from django.utils.html import conditional_escape
 from django.utils.translation import ugettext_lazy as _
 
@@ -186,44 +185,3 @@ class SplitDateTimeField(forms.SplitDateTimeField):
             result = datetime.datetime.combine(*data_list)
             return from_current_timezone(result)
         return None
-
-
-@deconstructible
-class ColorContrastValidator:
-    message = _('This color is too bright to allow for proper contrast when used for text on white ground.')
-    code = 'contrast'
-
-    def __init__(self, message=None, code=None):
-        if message is not None:
-            self.message = message
-        if code is not None:
-            self.code = code
-
-    def __call__(self, value):
-        # See https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-        fg_color = [int(str(value)[1:3], 16), int(str(value)[1:3], 16), int(str(value)[1:3], 16)]
-        bg_color = [255, 255, 255]
-        fg_lum = [
-            (float(cc) / 255) / 12.92
-            if (float(cc) / 255) < 0.03928
-            else (((float(cc) / 255) + 0.055) / 1.055) ** 2.4
-            for cc in fg_color
-        ]
-        bg_lum = [
-            (float(cc) / 255) / 12.92
-            if (float(cc) / 255) < 0.03928
-            else (((float(cc) / 255) + 0.055) / 1.055) ** 2.4
-            for cc in bg_color
-        ]
-        fg_rel_lum = 0.2126 * fg_lum[0] + 0.7152 * fg_lum[1] + 0.0722 * fg_lum[2]
-        bg_rel_lum = 0.2126 * bg_lum[0] + 0.7152 * bg_lum[1] + 0.0722 * bg_lum[2]
-        contrast_ratio = (bg_rel_lum + 0.05) / (fg_rel_lum + 0.05)
-        if contrast_ratio < 1.4:
-            raise ValidationError(self.message, code=self.code)
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, ColorContrastValidator) and
-            (self.message == other.message) and
-            (self.code == other.code)
-        )

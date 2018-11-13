@@ -22,9 +22,8 @@ from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.forms import (
-    ColorContrastValidator, ExtFileField, MultipleLanguagesWidget,
-    SingleLanguageWidget, SlugWidget, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
@@ -936,37 +935,30 @@ class MailSettingsForm(SettingsForm):
 class DisplaySettingsForm(SettingsForm):
     primary_color = forms.CharField(
         label=_("Primary color"),
-        help_text=_("We strongly suggest to use a dark shade that has a good contrast for text on white ground."),
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
     theme_color_success = forms.CharField(
         label=_("Accent color for success"),
-        help_text=_("We strongly suggest to use a dark shade of green that has a good contrast for text on white "
-                    "ground."),
+        help_text=_("We strongly suggest to use a shade of green."),
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
     theme_color_danger = forms.CharField(
         label=_("Accent color for errors"),
-        help_text=_("We strongly suggest to use a dark shade of red that has a good contrast for text on white "
-                    "ground."),
+        help_text=_("We strongly suggest to use a dark shade of red."),
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                            message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
-
-            ColorContrastValidator()
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
