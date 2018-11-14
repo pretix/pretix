@@ -231,9 +231,7 @@
                                         </div>
                                         <div class="col-md-2 col-xs-6 price">
                                             {% if item.min_price != item.max_price or item.free_price %}
-                                                {% blocktrans trimmed with minprice=item.min_price|money:event.currency %}
-                                                    from {{ minprice }}
-                                                {% endblocktrans %}
+                                                {{ item.min_price|money:event.currency  }} – {{ item.max_price|money:event.currency  }}
                                             {% elif not item.min_price and not item.max_price %}
                                                 {% trans "FREE" context "price" %}
                                             {% else %}
