@@ -355,7 +355,8 @@ class Event(EventMixin, LoggedModel):
         if not really:
             raise TypeError("Pass really=True as a parameter.")
 
-        OrderPosition.objects.filter(order__event=self).delete()
+        OrderPosition.all.filter(order__event=self, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order__event=self).delete()
         OrderFee.objects.filter(order__event=self).delete()
         OrderPayment.objects.filter(order__event=self).delete()
         OrderRefund.objects.filter(order__event=self).delete()

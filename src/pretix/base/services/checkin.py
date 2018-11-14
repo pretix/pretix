@@ -78,7 +78,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     dt = datetime or now()
 
     # Fetch order position with related objects
-    op = OrderPosition.objects.select_related(
+    op = OrderPosition.all.select_related(
         'item', 'variation', 'order', 'addon_to'
     ).prefetch_related(
         'item__questions',
@@ -89,6 +89,12 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         ),
         'answers'
     ).get(pk=op.pk)
+
+    if op.canceled:
+        raise CheckInError(
+            _('This order position has been canceled.'),
+            'unpaid'
+        )
 
     answers = {a.question: a for a in op.answers.all()}
     require_answers = []

@@ -29,4 +29,10 @@ class Migration(migrations.Migration):
             name='fee_type',
             field=models.CharField(choices=[('payment', 'Payment fee'), ('shipping', 'Shipping fee'), ('service', 'Service fee'), ('cancellation', 'Cancellation fee'), ('other', 'Other fees'), ('giftcard', 'Gift card')], max_length=100),
         ),
+        migrations.AlterField(
+            model_name='orderposition',
+            name='order',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='all_positions',
+                                    to='pretixbase.Order', verbose_name='Order'),
+        ),
     ]

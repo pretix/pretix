@@ -186,6 +186,10 @@ class Order(LockModel, LoggedModel):
     def __str__(self):
         return self.full_code
 
+    @property
+    def positions(self):
+        return self.all_positions(manager='objects')
+
     @cached_property
     def meta_info_data(self):
         try:
@@ -1399,7 +1403,7 @@ class OrderPosition(AbstractPosition):
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
-        related_name='positions',
+        related_name='all_positions',
         on_delete=models.PROTECT
     )
     tax_rate = models.DecimalField(
@@ -1505,7 +1509,7 @@ class OrderPosition(AbstractPosition):
             self._calculate_tax()
         self.order.touch()
         if self.pk is None:
-            while OrderPosition.objects.filter(secret=self.secret).exists():
+            while OrderPosition.all.filter(secret=self.secret).exists():
                 self.secret = generate_position_secret()
 
         if not self.pseudonymization_id:
@@ -1521,7 +1525,7 @@ class OrderPosition(AbstractPosition):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=10, allowed_chars=charset)
-            if not OrderPosition.objects.filter(pseudonymization_id=code).exists():
+            if not OrderPosition.all.filter(pseudonymization_id=code).exists():
                 self.pseudonymization_id = code
                 return
 

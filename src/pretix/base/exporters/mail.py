@@ -18,7 +18,7 @@ class MailExporter(BaseExporter):
     def render(self, form_data: dict):
         qs = self.event.orders.filter(status__in=form_data['status'])
         addrs = qs.values('email')
-        pos = OrderPosition.all.filter(
+        pos = OrderPosition.objects.filter(
             order__event=self.event, order__status__in=form_data['status']
         ).values('attendee_email')
         data = "\r\n".join(set(a['email'] for a in addrs if a['email'])
