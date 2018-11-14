@@ -101,7 +101,7 @@ class BaseCheckinList(BaseExporter):
             last_checked_in=Subquery(cqs)
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
-        ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address')
+        ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher')
 
         if not cl.all_products:
             qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
@@ -288,7 +288,8 @@ class CSVCheckinList(BaseCheckinList):
             label=_('CSV dialect'),
             choices=(
                 ('default', 'Default'),
-                ('excel', 'Excel')
+                ('excel', 'Excel'),
+                ('semicolon', 'Semicolon'),
             )
         )
         return d
@@ -297,6 +298,8 @@ class CSVCheckinList(BaseCheckinList):
         output = io.StringIO()
         if form_data.get('dialect', '-') in csv.list_dialects():
             writer = csv.writer(output, dialect=form_data.get('dialect'))
+        elif form_data.get('dialect', '-') == "semicolon":
+            writer = csv.writer(output, dialect='excel', delimiter=';')
         else:
             writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
@@ -335,6 +338,7 @@ class CSVCheckinList(BaseCheckinList):
             headers.append(str(q.question))
 
         headers.append(_('Company'))
+        headers.append(_('Voucher code'))
         writer.writerow(headers)
 
         for op in qs:
@@ -386,6 +390,7 @@ class CSVCheckinList(BaseCheckinList):
                 row.append(acache.get(q.pk, ''))
 
             row.append(ia.company)
+            row.append(op.voucher.code if op.voucher else "")
             writer.writerow(row)
 
         return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")

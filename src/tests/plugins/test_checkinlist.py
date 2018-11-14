@@ -63,11 +63,11 @@ def test_csv_simple(event):
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title","Attendee name:
  First name","Attendee name: Middle name","Attendee name: Family name","Product","Price","Checked in","Secret",
-"E-mail","Company"
+"E-mail","Company","Voucher code"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 """)
 
 
@@ -85,11 +85,11 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Secret","E-mail","Company"
+"Checked in","Secret","E-mail","Company","Voucher code"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 """)
     c = CSVCheckinList(event)
     _, _, content = c.render({
@@ -100,9 +100,9 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Secret","E-mail","Company"
+"Checked in","Secret","E-mail","Company","Voucher code"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test",""
+"dummy@dummy.test","",""
 """)
