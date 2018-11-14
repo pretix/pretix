@@ -118,6 +118,14 @@ DEFAULT_VARIABLES = OrderedDict((
             "SHORT_DATETIME_FORMAT"
         ) if ev.date_to else ""
     }),
+    ("event_end_date", {
+        "label": _("Event end date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: date_format(
+            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATE_FORMAT"
+        ) if ev.date_to else ""
+    }),
     ("event_end_time", {
         "label": _("Event end time"),
         "editor_sample": _("22:00"),
