@@ -234,7 +234,7 @@
                 </div>
                 <div class="panel-body">
                     {% for line in items.positions %}
-                        <div class="row-fluid product-row">
+                        <div class="row-fluid product-row {% if line.canceled %}pos-canceled{% endif %}">
                             <div class="col-md-9 col-xs-6">
                                 {% if line.addon_to %}
                                     <span class="addon-signifier">+</span>

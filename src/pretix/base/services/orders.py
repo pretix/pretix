@@ -1043,7 +1043,8 @@ class OrderChangeManager:
                         'addon_to': opa.addon_to_id,
                         'old_price': opa.price,
                     })
-                    opa.delete()
+                    opa.canceled = True
+                    opa.save(update_fields=['canceled'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
@@ -1052,7 +1053,8 @@ class OrderChangeManager:
                     'old_price': op.position.price,
                     'addon_to': None,
                 })
-                op.position.delete()
+                op.position.canceled = True
+                op.position.save(update_fields=['canceled'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
@@ -1117,7 +1119,7 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             pass
 
-        split_order.total = sum([p.price for p in split_positions])
+        split_order.total = sum([p.price for p in split_positions if not p.canceled])
         if split_order.total != Decimal('0.00') and self.order.status != Order.STATUS_PAID:
             pp = self._get_payment_provider()
             if pp:
@@ -1180,7 +1182,7 @@ class OrderChangeManager:
         return payment_sum - refund_sum
 
     def _recalculate_total_and_payment_fee(self):
-        total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
+        total = sum([p.price for p in self.order.positions.all() if not p.canceled]) + sum([f.value for f in self.order.fees.all()])
         payment_fee = Decimal('0.00')
         if self.open_payment:
             current_fee = Decimal('0.00')

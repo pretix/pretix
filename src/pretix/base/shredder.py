@@ -133,12 +133,12 @@ class EmailAddressShredder(BaseDataShredder):
         }, indent=4)
         yield 'emails-by-attendee.json', 'application/json', json.dumps({
             '{}-{}'.format(op.order.code, op.positionid): op.attendee_email
-            for op in OrderPosition.objects.filter(order__event=self.event, attendee_email__isnull=False)
+            for op in OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False)
         }, indent=4)
 
     @transaction.atomic
     def shred_data(self):
-        OrderPosition.objects.filter(order__event=self.event, attendee_email__isnull=False).update(attendee_email=None)
+        OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False).update(attendee_email=None)
 
         for o in self.event.orders.all():
             o.email = None
@@ -202,7 +202,7 @@ class AttendeeNameShredder(BaseDataShredder):
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'attendee-names.json', 'application/json', json.dumps({
             '{}-{}'.format(op.order.code, op.positionid): op.attendee_name
-            for op in OrderPosition.objects.filter(
+            for op in OrderPosition.all.filter(
                 order__event=self.event
             ).filter(
                 Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
@@ -211,7 +211,7 @@ class AttendeeNameShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        OrderPosition.objects.filter(
+        OrderPosition.all.filter(
             order__event=self.event
         ).filter(
             Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
@@ -267,7 +267,7 @@ class QuestionAnswerShredder(BaseDataShredder):
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'question-answers.json', 'application/json', json.dumps({
             '{}-{}'.format(op.order.code, op.positionid): AnswerSerializer(op.answers.all(), many=True).data
-            for op in OrderPosition.objects.filter(order__event=self.event).prefetch_related('answers')
+            for op in OrderPosition.all.filter(order__event=self.event).prefetch_related('answers')
         }, indent=4)
 
     @transaction.atomic

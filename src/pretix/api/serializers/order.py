@@ -324,7 +324,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                   'secret', 'addon_to', 'subevent', 'answers')
 
     def validate_secret(self, secret):
-        if secret and OrderPosition.objects.filter(order__event=self.context['event'], secret=secret).exists():
+        if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
             raise ValidationError(
                 'You cannot assign a position secret that already exists.'
             )

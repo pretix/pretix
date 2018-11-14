@@ -98,7 +98,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
-            queryset=self.order.positions.select_related('tax_rule'),
+            queryset=self.order.positions.filter(canceled=False).select_related('tax_rule'),
             order=self.order
         )
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (

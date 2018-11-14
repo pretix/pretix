@@ -145,7 +145,7 @@
                             <label>
                                 <input name="{{ position.form.prefix }}-operation" type="radio" value="cancel"
                                         {% if position.form.operation.value == "cancel" %}checked="checked"{% endif %}>
-                                {% trans "Remove from order" %}
+                                {% trans "Cancel position" %}
                                 {% if position.addons.exists %}
                                     <em class="text-danger">
                                         {% trans "Removing this position will also remove all add-ons to this position." %}
