@@ -246,10 +246,10 @@ class EventOrderFilterForm(OrderFilterForm):
         qs = super().filter_qs(qs)
 
         if fdata.get('item'):
-            qs = qs.filter(positions__item=fdata.get('item'))
+            qs = qs.filter(all_positions__item=fdata.get('item'), all_positions__canceled=False)
 
         if fdata.get('subevent'):
-            qs = qs.filter(positions__subevent=fdata.get('subevent'))
+            qs = qs.filter(all_positions__subevent=fdata.get('subevent'), all_positions__canceled=False)
 
         if fdata.get('question') and fdata.get('answer') is not None:
             q = fdata.get('question')

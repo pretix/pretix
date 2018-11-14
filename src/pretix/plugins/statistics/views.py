@@ -61,7 +61,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         if not ctx['obd_data']:
             oqs = Order.objects.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
             if subevent:
-                oqs = oqs.filter(positions__subevent_id=subevent).distinct()
+                oqs = oqs.filter(positions__subevent_id=subevent, positions__canceled=False).distinct()
 
             ordered_by_day = {}
             for o in oqs.filter(event=self.request.event).values('datetime'):
