@@ -50,7 +50,7 @@ class CartMixin:
                 prefetch.append('answers')
 
             cartpos = queryset.order_by(
-                'item', 'variation'
+                'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
             ).select_related(
                 'item', 'variation', 'addon_to', 'subevent', 'subevent__event', 'subevent__event__organizer'
             ).prefetch_related(
