@@ -6342,54 +6342,6 @@ msgstr "Dag"
 msgid "Weekend day"
 msgstr "Weekenddag"
 
-#: pretix/control/forms/subevents.py:294
-msgid "January"
-msgstr "Januari"
-
-#: pretix/control/forms/subevents.py:295
-msgid "February"
-msgstr "Februari"
-
-#: pretix/control/forms/subevents.py:296
-msgid "March"
-msgstr "Maart"
-
-#: pretix/control/forms/subevents.py:297
-msgid "April"
-msgstr "April"
-
-#: pretix/control/forms/subevents.py:298
-msgid "May"
-msgstr "Mei"
-
-#: pretix/control/forms/subevents.py:299
-msgid "June"
-msgstr "Juni"
-
-#: pretix/control/forms/subevents.py:300
-msgid "July"
-msgstr "Juli"
-
-#: pretix/control/forms/subevents.py:301
-msgid "August"
-msgstr "Augustus"
-
-#: pretix/control/forms/subevents.py:302
-msgid "September"
-msgstr "September"
-
-#: pretix/control/forms/subevents.py:303
-msgid "October"
-msgstr "Oktober"
-
-#: pretix/control/forms/subevents.py:304
-msgid "November"
-msgstr "November"
-
-#: pretix/control/forms/subevents.py:305
-msgid "December"
-msgstr "December"
-
 #: pretix/control/forms/users.py:94 pretix/control/views/user.py:115
 msgid "Your changes could not be saved. See below for details."
 msgstr "Uw wijzigingen konden niet worden opgeslagen. Zie onder voor details."

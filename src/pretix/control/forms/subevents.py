@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django import forms
 from django.forms import formset_factory
+from django.utils.dates import MONTHS, WEEKDAYS
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
@@ -276,13 +277,13 @@ class RRuleForm(forms.Form):
     )
     yearly_byweekday = forms.ChoiceField(
         choices=[
-            ('MO', _('Monday')),
-            ('TU', _('Tuesday')),
-            ('WE', _('Wednesday')),
-            ('TH', _('Thursday')),
-            ('FR', _('Friday')),
-            ('SA', _('Saturday')),
-            ('SU', _('Sunday')),
+            ('MO', WEEKDAYS[0]),
+            ('TU', WEEKDAYS[1]),
+            ('WE', WEEKDAYS[2]),
+            ('TH', WEEKDAYS[3]),
+            ('FR', WEEKDAYS[4]),
+            ('SA', WEEKDAYS[5]),
+            ('SU', WEEKDAYS[6]),
             ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
             ('MO,TU,WE,TH,FR', _('Weekday')),
             ('SA,SU', _('Weekend day')),
@@ -291,18 +292,7 @@ class RRuleForm(forms.Form):
     )
     yearly_bymonth = forms.ChoiceField(
         choices=[
-            ('1', _('January')),
-            ('2', _('February')),
-            ('3', _('March')),
-            ('4', _('April')),
-            ('5', _('May')),
-            ('6', _('June')),
-            ('7', _('July')),
-            ('8', _('August')),
-            ('9', _('September')),
-            ('10', _('October')),
-            ('11', _('November')),
-            ('12', _('December')),
+            (str(i), MONTHS[i]) for i in range(1, 13)
         ],
         required=False
     )
@@ -326,13 +316,13 @@ class RRuleForm(forms.Form):
     )
     monthly_byweekday = forms.ChoiceField(
         choices=[
-            ('MO', _('Monday')),
-            ('TU', _('Tuesday')),
-            ('WE', _('Wednesday')),
-            ('TH', _('Thursday')),
-            ('FR', _('Friday')),
-            ('SA', _('Saturday')),
-            ('SU', _('Sunday')),
+            ('MO', WEEKDAYS[0]),
+            ('TU', WEEKDAYS[1]),
+            ('WE', WEEKDAYS[2]),
+            ('TH', WEEKDAYS[3]),
+            ('FR', WEEKDAYS[4]),
+            ('SA', WEEKDAYS[5]),
+            ('SU', WEEKDAYS[6]),
             ('MO,TU,WE,TH,FR,SA,SU', _('Day')),
             ('MO,TU,WE,TH,FR', _('Weekday')),
             ('SA,SU', _('Weekend day')),
@@ -342,13 +332,13 @@ class RRuleForm(forms.Form):
 
     weekly_byweekday = forms.MultipleChoiceField(
         choices=[
-            ('MO', _('Monday')),
-            ('TU', _('Tuesday')),
-            ('WE', _('Wednesday')),
-            ('TH', _('Thursday')),
-            ('FR', _('Friday')),
-            ('SA', _('Saturday')),
-            ('SU', _('Sunday')),
+            ('MO', WEEKDAYS[0]),
+            ('TU', WEEKDAYS[1]),
+            ('WE', WEEKDAYS[2]),
+            ('TH', WEEKDAYS[3]),
+            ('FR', WEEKDAYS[4]),
+            ('SA', WEEKDAYS[5]),
+            ('SU', WEEKDAYS[6]),
         ],
         required=False,
         widget=forms.CheckboxSelectMultiple
