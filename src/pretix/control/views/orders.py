@@ -62,9 +62,10 @@ from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import EventOrderFilterForm, RefundFilterForm
 from pretix.control.forms.orders import (
-    CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm, MarkPaidForm,
-    OrderContactForm, OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
-    OrderPositionChangeForm, OrderRefundForm, OtherOperationsForm,
+    CancelForm, CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm,
+    MarkPaidForm, OrderContactForm, OrderLocaleForm, OrderMailForm,
+    OrderPositionAddForm, OrderPositionChangeForm, OrderRefundForm,
+    OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -772,7 +773,10 @@ class OrderRefundView(OrderView):
             'payments': payments,
             'remainder': to_refund,
             'order': self.order,
-            'partial_amount': self.request.POST.get('start-partial_amount'),
+            'partial_amount': (
+                self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
+                else self.request.GET.get('start-partial_amount')
+            ),
             'start_form': self.start_form
         })
 
@@ -796,6 +800,13 @@ class OrderTransition(OrderView):
     @cached_property
     def mark_paid_form(self):
         return MarkPaidForm(
+            instance=self.order,
+            data=self.request.POST if self.request.method == "POST" else None,
+        )
+
+    @cached_property
+    def mark_canceled_form(self):
+        return CancelForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
         )
@@ -847,8 +858,10 @@ class OrderTransition(OrderView):
                                                  'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been created successfully.'))
-        elif self.order.cancel_allowed() and to == 'c':
-            cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
+        elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
+            cancel_order(self.order, user=self.request.user,
+                         send_mail=self.mark_canceled_form.cleaned_data['send_email'],
+                         cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
             self.order.refresh_from_db()
 
             if self.order.pending_sum < 0:
@@ -877,6 +890,7 @@ class OrderTransition(OrderView):
             })
         elif self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
+                'form': self.mark_canceled_form,
                 'order': self.order,
             })
         else:
