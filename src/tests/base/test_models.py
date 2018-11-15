@@ -1023,6 +1023,14 @@ class OrderTestCase(BaseQuotaTestCase):
         assert not o.has_pending_refund
         assert not o.has_external_refund
 
+    def test_canceled_positions(self):
+        self.op1.canceled = True
+        self.op1.save()
+        assert OrderPosition.objects.count() == 1
+        assert OrderPosition.all.count() == 2
+        assert self.order.positions.count() == 1
+        assert self.order.all_positions.count() == 2
+
 
 class ItemCategoryTest(TestCase):
     """

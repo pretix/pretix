@@ -442,7 +442,7 @@ class Item(LoggedModel):
     def allow_delete(self):
         from pretix.base.models.orders import OrderPosition
 
-        return not OrderPosition.objects.filter(item=self).exists()
+        return not OrderPosition.all.filter(item=self).exists()
 
     @cached_property
     def has_variations(self):

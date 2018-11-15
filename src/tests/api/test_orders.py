@@ -720,6 +720,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
     ))
     assert resp.status_code == 204
     assert order.positions.count() == 1
+    assert order.all_positions.count() == 2
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
 
