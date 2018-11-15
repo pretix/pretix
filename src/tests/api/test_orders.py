@@ -509,7 +509,7 @@ def test_refund_process_mark_refunded(token_client, organizer, event, order):
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
     order.refresh_from_db()
-    assert order.status == Order.STATUS_REFUNDED
+    assert order.status == Order.STATUS_CANCELED
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
@@ -953,8 +953,8 @@ def test_order_mark_canceled_pending_no_email(token_client, organizer, event, or
 
 
 @pytest.mark.django_db
-def test_order_mark_canceled_paid(token_client, organizer, event, order):
-    order.status = Order.STATUS_PAID
+def test_order_mark_canceled_expired(token_client, organizer, event, order):
+    order.status = Order.STATUS_EXPIRED
     order.save()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
@@ -963,7 +963,7 @@ def test_order_mark_canceled_paid(token_client, organizer, event, order):
     )
     assert resp.status_code == 400
     order.refresh_from_db()
-    assert order.status == Order.STATUS_PAID
+    assert order.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db
@@ -976,7 +976,7 @@ def test_order_mark_paid_refunded(token_client, organizer, event, order):
         )
     )
     assert resp.status_code == 200
-    assert resp.data['status'] == Order.STATUS_REFUNDED
+    assert resp.data['status'] == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db
@@ -2412,7 +2412,7 @@ def test_refund_create_mark_refunded(token_client, organizer, event, order):
     assert r.info_data == {"foo": "bar"}
     assert r.payment.local_id == 2
     order.refresh_from_db()
-    assert order.status == Order.STATUS_REFUNDED
+    assert order.status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db

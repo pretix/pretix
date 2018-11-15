@@ -90,7 +90,6 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
 
     states = {
         'canceled': Order.STATUS_CANCELED,
-        'refunded': Order.STATUS_REFUNDED,
         'paid': Order.STATUS_PAID,
         'pending': Order.STATUS_PENDING,
         'expired': Order.STATUS_EXPIRED,

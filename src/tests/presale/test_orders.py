@@ -132,13 +132,13 @@ class OrdersTest(TestCase):
         assert "pending" in doc.select(".label-warning")[0].text.lower()
 
     def test_orders_modify_invalid(self):
-        self.order.status = Order.STATUS_REFUNDED
+        self.order.status = Order.STATUS_CANCELED
         self.order.save()
         self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         self.order = Order.objects.get(id=self.order.id)
-        assert self.order.status == Order.STATUS_REFUNDED
+        assert self.order.status == Order.STATUS_CANCELED
 
     def test_orders_modify_attendee_optional(self):
         self.event.settings.set('attendee_names_asked', True)

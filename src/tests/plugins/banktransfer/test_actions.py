@@ -162,7 +162,7 @@ def test_retry_refunded(env, client):
                                            state=BankTransaction.STATE_ERROR,
                                            amount=23, date='unknown', order=env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    env[3].status = Order.STATUS_REFUNDED
+    env[3].status = Order.STATUS_CANCELED
     env[3].save()
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
         'action_{}'.format(trans.pk): 'retry',
@@ -171,7 +171,7 @@ def test_retry_refunded(env, client):
     trans.refresh_from_db()
     assert trans.state == BankTransaction.STATE_ERROR
     env[3].refresh_from_db()
-    assert env[3].status == Order.STATUS_REFUNDED
+    assert env[3].status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db

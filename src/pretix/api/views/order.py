@@ -770,7 +770,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
             c = generate_cancellation(inv)
-            if inv.order.status not in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
+            if inv.order.status != Order.STATUS_CANCELED:
                 inv = generate_invoice(inv.order)
             else:
                 inv = c

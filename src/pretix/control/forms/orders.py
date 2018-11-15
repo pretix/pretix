@@ -391,7 +391,7 @@ class OrderRefundForm(forms.Form):
         self.order = kwargs.pop('order')
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['partial_amount'], self.order.event.currency)
-        if self.order.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
+        if self.order.status == Order.STATUS_CANCELED:
             del self.fields['action']
 
     def clean_partial_amount(self):

@@ -70,7 +70,6 @@ class Order(LockModel, LoggedModel):
         * ``STATUS_PAID``
         * ``STATUS_EXPIRED``
         * ``STATUS_CANCELED``
-        * ``STATUS_REFUNDED``
 
     :param event: The event this order belongs to
     :type event: Event
@@ -102,13 +101,12 @@ class Order(LockModel, LoggedModel):
     STATUS_PAID = "p"
     STATUS_EXPIRED = "e"
     STATUS_CANCELED = "c"
-    STATUS_REFUNDED = "r"
+    STATUS_REFUNDED = "c"  # deprecated
     STATUS_CHOICE = (
         (STATUS_PENDING, _("pending")),
         (STATUS_PAID, _("paid")),
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELED, _("canceled")),
-        (STATUS_REFUNDED, _("refunded"))
     )
 
     code = models.CharField(
@@ -187,6 +185,10 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     @property
+    def fees(self):
+        return self.all_fees(manager='objects')
+
+    @property
     def positions(self):
         return self.all_positions(manager='objects')
 
@@ -211,7 +213,7 @@ class Order(LockModel, LoggedModel):
     @property
     def pending_sum(self):
         total = self.total
-        if self.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
+        if self.status == Order.STATUS_CANCELED:
             total = Decimal('0.00')
         payment_sum = self.payments.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
@@ -252,9 +254,9 @@ class Order(LockModel, LoggedModel):
             pending_sum_rc=-1 * Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
         ).annotate(
             is_overpaid=Case(
-                When(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0),
+                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0),
                      then=Value('1')),
-                When(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0),
+                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
@@ -340,8 +342,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status == Order.STATUS_PENDING
-            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID)
         )
 
     @staticmethod
@@ -403,7 +404,10 @@ class Order(LockModel, LoggedModel):
         """
         positions = self.positions.all().select_related('item')
         cancelable = all([op.item.allow_cancel for op in positions])
-        return self.cancel_allowed() and self.event.settings.cancel_allow_user and cancelable
+        return (
+            self.status == Order.STATUS_PENDING
+            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+        ) and self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
@@ -1258,6 +1262,11 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
+class ActivePositionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(canceled=False)
+
+
 class OrderFee(models.Model):
     """
     An OrderFee object represents a fee that is added to the order total independently of
@@ -1279,6 +1288,8 @@ class OrderFee(models.Model):
     :type tax_rule: TaxRule
     :param tax_value: The tax amount included in the price
     :type tax_value: Decimal
+    :param canceled: True, if this position is canceled and should no longer be regarded
+    :type canceled: bool
     """
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
@@ -1302,7 +1313,7 @@ class OrderFee(models.Model):
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
-        related_name='fees',
+        related_name='all_fees',
         on_delete=models.PROTECT
     )
     fee_type = models.CharField(
@@ -1323,6 +1334,10 @@ class OrderFee(models.Model):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
+    canceled = models.BooleanField(default=False)
+
+    all = models.Manager()
+    objects = ActivePositionManager()
 
     @property
     def net_value(self):
@@ -1369,11 +1384,6 @@ class OrderFee(models.Model):
     def delete(self, **kwargs):
         self.order.touch()
         super().delete(**kwargs)
-
-
-class ActivePositionManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(canceled=False)
 
 
 class OrderPosition(AbstractPosition):

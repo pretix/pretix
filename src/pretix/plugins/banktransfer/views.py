@@ -54,11 +54,6 @@ class ActionView(View):
                 'status': 'error',
                 'message': _('The order is already marked as paid.')
             })
-        elif trans.order.status == Order.STATUS_REFUNDED:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('The order has already been refunded.')
-            })
         elif trans.order.status == Order.STATUS_CANCELED:
             return JsonResponse({
                 'status': 'error',

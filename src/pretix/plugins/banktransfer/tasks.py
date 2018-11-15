@@ -50,9 +50,6 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
 
     if trans.order.status == Order.STATUS_PAID and trans.order.pending_sum <= Decimal('0.00'):
         trans.state = BankTransaction.STATE_DUPLICATE
-    elif trans.order.status == Order.STATUS_REFUNDED:
-        trans.state = BankTransaction.STATE_ERROR
-        trans.message = ugettext_noop('The order has already been refunded.')
     elif trans.order.status == Order.STATUS_CANCELED:
         trans.state = BankTransaction.STATE_ERROR
         trans.message = ugettext_noop('The order has already been canceled.')

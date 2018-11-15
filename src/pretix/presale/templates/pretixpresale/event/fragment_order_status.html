@@ -12,6 +12,4 @@
     <span class="label label-danger {{ class }}">{% trans "Expired" %}</span>
 {% elif order.status == "c" %}
     <span class="label label-danger {{ class }}">{% trans "Canceled" %}</span>
-{% elif order.status == "r" %}
-    <span class="label label-danger {{ class }}">{% trans "Refunded" %}</span>
 {% endif %}

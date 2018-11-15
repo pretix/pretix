@@ -24,7 +24,6 @@
                 <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
                 <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
                 <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
-                <option value="r" {% if request.GET.status == "r" %}selected="selected"{% endif %}>{% trans "Refunded" %}</option>
             </select>
             <select name="item" class="form-control">
                 <option value="">{% trans "All products" %}</option>

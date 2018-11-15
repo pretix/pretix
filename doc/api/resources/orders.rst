@@ -26,7 +26,6 @@ status                                string                     Order status, o
                                                                  * ``p`` – paid
                                                                  * ``e`` – expired
                                                                  * ``c`` – canceled
-                                                                 * ``r`` – refunded
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 locale                                string                     The locale used for communication with this customer
@@ -874,7 +873,7 @@ Order state operations
 
       {
         "code": "ABC12",
-        "status": "r",
+        "status": "c",
         ...
       }
 

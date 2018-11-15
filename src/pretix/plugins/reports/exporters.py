@@ -157,7 +157,7 @@ class OverviewReport(Report):
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
         colwidths = [
-            a * doc.width for a in (.25, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075)
+            a * doc.width for a in (.33, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075, 0.05, .075)
         ]
         tstyledata = [
             ('SPAN', (1, 0), (2, 0)),
@@ -188,7 +188,7 @@ class OverviewReport(Report):
             story.append(Spacer(1, 5 * mm))
         tdata = [
             [
-                _('Product'), _('Canceled'), '', _('Refunded'), '', _('Expired'), '', _('Purchased'),
+                _('Product'), _('Canceled'), '', _('Expired'), '', _('Purchased'),
                 '', '', '', '', ''
             ],
             [
@@ -209,7 +209,6 @@ class OverviewReport(Report):
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         states = (
             ('canceled', Order.STATUS_CANCELED),
-            ('refunded', Order.STATUS_REFUNDED),
             ('expired', Order.STATUS_EXPIRED),
             ('pending', Order.STATUS_PENDING),
             ('paid', Order.STATUS_PAID),
