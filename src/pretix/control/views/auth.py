@@ -167,8 +167,8 @@ def invite(request, token):
                     }
                 )
                 inv.delete()
-            messages.success(request, _('Welcome to pretix! You are now part of the team "{}".').format(inv.team.name))
-            return redirect('control:index')
+                messages.success(request, _('Welcome to pretix! You are now part of the team "{}".').format(inv.team.name))
+                return redirect('control:index')
     else:
         form = RegistrationForm(initial={'email': inv.email})
     ctx['form'] = form
