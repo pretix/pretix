@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-06-12 13:50+0000\n"
-"Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
+"PO-Revision-Date: 2018-11-16 13:13+0000\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -822,7 +822,7 @@ msgstr "Oprindelig faktureringsdato"
 #: pretix/base/invoice.py:299
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr "Fakturadatao"
+msgstr "Fakturadato"
 
 #: pretix/base/invoice.py:335
 #, python-brace-format
@@ -2740,7 +2740,7 @@ msgstr ""
 #: pretix/base/payment.py:296
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Betalingen for denne faktura er allerede modtaget."
 
 #: pretix/base/payment.py:633
 msgid "Automatic refunds are not supported by this payment provider."
