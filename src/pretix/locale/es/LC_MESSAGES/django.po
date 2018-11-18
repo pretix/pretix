@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -3794,8 +3794,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:547 pretix/base/models/organizer.py:85
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
-"La URL semántica solo puede contener letras, números, puntos y guiones."
+msgstr "La URL semántica solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:564 pretix/base/models/event.py:1389
 msgid "Show in lists"
@@ -15449,8 +15448,7 @@ msgstr "Se ha creado la orden."
 
 #: pretix/control/logdisplay.py:386
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
-"La orden requiere aprobación antes que pueda continuar a ser procesada."
+msgstr "La orden requiere aprobación antes que pueda continuar a ser procesada."
 
 #: pretix/control/logdisplay.py:387 pretix/control/views/orders.py:568
 msgid "The order has been approved."
