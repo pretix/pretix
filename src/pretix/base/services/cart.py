@@ -633,7 +633,6 @@ class CartManager:
                             if not k.startswith('question-'):
                                 continue
                             q = cp.item.questions.filter(ask_during_checkin=False, identifier__iexact=k[9:]).first()
-                            print(k, k[9:], v, q)
                             if q:
                                 try:
                                     cp._answers[q] = q.clean_answer(v)

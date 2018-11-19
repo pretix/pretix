@@ -273,19 +273,19 @@ def get_or_create_cart_id(request, create=True):
         cart_data = {}
         if prefix and 'take_cart_id' in request.GET and current_id:
             new_id = current_id
-            if 'widget_data' in request.GET:
-                try:
-                    cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
-                except ValueError:
-                    pass
-            else:
-                cached_widget_data = widget_data_cache.get('widget_data_{}'.format(current_id))
-                if cached_widget_data:
-                    cart_data['widget_data'] = cached_widget_data
+            cached_widget_data = widget_data_cache.get('widget_data_{}'.format(current_id))
+            if cached_widget_data:
+                cart_data['widget_data'] = cached_widget_data
         else:
             if not create:
                 return None
             new_id = generate_cart_id(request, prefix=prefix)
+
+        if 'widget_data' not in cart_data and 'widget_data' in request.GET:
+            try:
+                cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
+            except ValueError:
+                pass
 
         if 'carts' not in request.session:
             request.session['carts'] = {}
@@ -479,6 +479,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if 'iframe' in request.GET and 'require_cookie' not in request.GET:
             return redirect(request.get_full_path() + '&require_cookie=1')
+
+        if len(self.request.GET.get('widget_data', '{}')) > 3:
+            # We've been passed data from a widget, we need to create a cart session to store it.
+            get_or_create_cart_id(request)
         return super().get(request, *args, **kwargs)
 
 

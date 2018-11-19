@@ -237,6 +237,9 @@
                     <div class="clearfix"></div>
                 </div>
             {% endif %}
+            {% if "widget_data" in request.GET %}
+                <input type="hidden" value="{{ request.GET.widget_data }}" name="widget_data">
+            {% endif %}
         </form>
     {% endif %}
 {% endblock %}

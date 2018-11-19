@@ -182,12 +182,6 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 * If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
   made through this widget will be counted towards this campaign.
 
-
-.. note::
-
-   This data will only be used if an item is added to the cart directly through the widget. It will currently not be
-   used if a voucher is entered inside the widget or if a pre-existing checkout session is being resumed.
-
 .. versionchanged:: 2.3
 
    Data passing options have been added in pretix 2.3. If you use a self-hosted version of pretix, they only work
