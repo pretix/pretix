@@ -38,6 +38,9 @@ addons:
           - enchant
           - myspell-de-de
           - aspell-en
+          - sqlite3
+  sources:
+    - travis-ci/sqlite3
 branches:
   except:
   - /^weblate-.*/
