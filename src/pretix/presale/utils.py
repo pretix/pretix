@@ -97,33 +97,39 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     return response
 
     except Event.DoesNotExist:
-        if hasattr(request, 'organizer_domain'):
-            event = request.organizer.events.get(
-                slug__iexact=url.kwargs['event'],
-                organizer=request.organizer,
-            )
-            pathparts = request.get_full_path().split('/')
-            pathparts[1] = event.slug
-            return redirect('/'.join(pathparts))
-        else:
-            if 'event' in url.kwargs and 'organizer' in url.kwargs:
-                event = Event.objects.select_related('organizer').get(
+        try:
+            if hasattr(request, 'organizer_domain'):
+                event = request.organizer.events.get(
                     slug__iexact=url.kwargs['event'],
-                    organizer__slug__iexact=url.kwargs['organizer']
+                    organizer=request.organizer,
                 )
                 pathparts = request.get_full_path().split('/')
-                pathparts[1] = event.organizer.slug
-                pathparts[2] = event.slug
+                pathparts[1] = event.slug
                 return redirect('/'.join(pathparts))
-            elif 'organizer' in url.kwargs:
+            else:
+                if 'event' in url.kwargs and 'organizer' in url.kwargs:
+                    event = Event.objects.select_related('organizer').get(
+                        slug__iexact=url.kwargs['event'],
+                        organizer__slug__iexact=url.kwargs['organizer']
+                    )
+                    pathparts = request.get_full_path().split('/')
+                    pathparts[1] = event.organizer.slug
+                    pathparts[2] = event.slug
+                    return redirect('/'.join(pathparts))
+        except Event.DoesNotExist:
+            raise Http404(_('The selected event was not found.'))
+        raise Http404(_('The selected event was not found.'))
+    except Organizer.DoesNotExist:
+        if 'organizer' in url.kwargs:
+            try:
                 organizer = Organizer.objects.get(
                     slug__iexact=url.kwargs['organizer']
                 )
-                pathparts = request.get_full_path().split('/')
-                pathparts[1] = organizer.slug
-                return redirect('/'.join(pathparts))
-        raise Http404(_('The selected event was not found.'))
-    except Organizer.DoesNotExist:
+            except Organizer.DoesNotExist:
+                raise Http404(_('The selected organizer was not found.'))
+            pathparts = request.get_full_path().split('/')
+            pathparts[1] = organizer.slug
+            return redirect('/'.join(pathparts))
         raise Http404(_('The selected organizer was not found.'))
 
     request._event_detected = True
