@@ -102,6 +102,7 @@ class ParametrizedOrderPositionWebhookEvent(ParametrizedOrderWebhookEvent):
         d['orderposition_positionid'] = logentry.parsed_data.get('positionid')
         d['checkin_list'] = logentry.parsed_data.get('list')
         d['first_checkin'] = logentry.parsed_data.get('first_checkin')
+        return d
 
 
 @receiver(register_webhook_events, dispatch_uid="base_register_default_webhook_events")
