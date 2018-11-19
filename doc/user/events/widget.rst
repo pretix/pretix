@@ -149,8 +149,48 @@ Just as the widget, the button supports the optional attributes ``voucher`` and 
 
 You can style the button using the ``pretix-button`` CSS class.
 
-.. versionchanged:: 1.13
+Passing user data to the widget
+-------------------------------
 
-   The pretix Button has been added in version 1.13.
+If you display the widget in a restricted area of your website and you want to pre-fill fields in the checkout process
+with known user data to save your users some typing and increase conversions, you can pass additional data attributes
+with that information::
+
+    <pretix-widget event="https://pretix.eu/demo/democon/"
+        data-attendee-name-given-name="John"
+        data-attendee-name-family-name="Doe"
+        data-email="test@example.org"
+        data-question-L9G8NG9M="Foobar">
+    </pretix-widget>
+
+This works for the pretix Button as well. Currently, the following attributes are understood by pretix itself:
+
+* ``data-email`` will prefill the order email field as well as the attendee email field (if enabled).
+
+* ``data-question-IDENTIFIER`` will prefill the answer for the question with the given identifier. You can view and set
+  identifiers in the *Questions* section of the backend.
+
+* Depending on the person name scheme configured in your event settings, you can pass one or more of
+  ``data-attendee-name-full-name``, ``data-attendee-name-given-name``, ``data-attendee-name-family-name``,
+  ``data-attendee-name-middle-name``, ``data-attendee-name-title``, ``data-attendee-name-calling-name``,
+  ``data-attendee-name-latin-transcription``. If you don't know or don't care, you can also just pass a string as
+  ``data-attendee-name``, which will prefill the last part of the name, whatever that is.
+
+Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
+Hosted or pretix Enterprise are active, you can pass the following fields:
+
+* If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
+  made through this widget will be counted towards this campaign.
+
+
+.. note::
+
+   This data will only be used if an item is added to the cart directly through the widget. It will currently not be
+   used if a voucher is entered inside the widget or if a pre-existing checkout session is being resumed.
+
+.. versionchanged:: 2.3
+
+   Data passing options have been added in pretix 2.3. If you use a self-hosted version of pretix, they only work
+   fully if you configured a redis server.
 
 .. _Let's Encrypt: https://letsencrypt.org/

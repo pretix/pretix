@@ -4,6 +4,7 @@ from decimal import Decimal
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.dispatch import receiver
@@ -17,9 +18,11 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
+from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledTask
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.celery_app import app
 from pretix.presale.signals import (
@@ -99,7 +102,7 @@ class CartManager:
         AddOperation: 30
     }
 
-    def __init__(self, event: Event, cart_id: str, invoice_address: InvoiceAddress=None):
+    def __init__(self, event: Event, cart_id: str, invoice_address: InvoiceAddress=None, widget_data=None):
         self.event = event
         self.cart_id = cart_id
         self.now_dt = now()
@@ -111,6 +114,7 @@ class CartManager:
         self._variations_cache = {}
         self._expiry = None
         self.invoice_address = invoice_address
+        self._widget_data = widget_data or {}
 
     @property
     def positions(self):
@@ -605,12 +609,38 @@ class CartManager:
 
                 if isinstance(op, self.AddOperation):
                     for k in range(available_count):
-                        new_cart_positions.append(CartPosition(
+                        cp = CartPosition(
                             event=self.event, item=op.item, variation=op.variation,
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
                             subevent=op.subevent, includes_tax=op.includes_tax
-                        ))
+                        )
+                        if self.event.settings.attendee_names_asked:
+                            scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
+                            if 'attendee-name' in self._widget_data:
+                                cp.attendee_name_parts = {'_legacy': self._widget_data['attendee-name']}
+                            if any('attendee-name-{}'.format(k.replace('_', '-')) in self._widget_data for k, l, w
+                                   in scheme['fields']):
+                                cp.attendee_name_parts = {
+                                    k: self._widget_data.get('attendee-name-{}'.format(k.replace('_', '-')), '')
+                                    for k, l, w in scheme['fields']
+                                }
+                        if self.event.settings.attendee_emails_asked and 'email' in self._widget_data:
+                            cp.attendee_email = self._widget_data.get('email')
+
+                        cp._answers = {}
+                        for k, v in self._widget_data.items():
+                            if not k.startswith('question-'):
+                                continue
+                            q = cp.item.questions.filter(ask_during_checkin=False, identifier__iexact=k[9:]).first()
+                            print(k, k[9:], v, q)
+                            if q:
+                                try:
+                                    cp._answers[q] = q.clean_answer(v)
+                                except ValidationError:
+                                    pass
+
+                        new_cart_positions.append(cp)
                 elif isinstance(op, self.ExtendOperation):
                     if available_count == 1:
                         op.position.expires = self._expiry
@@ -621,7 +651,11 @@ class CartManager:
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
 
-        CartPosition.objects.bulk_create(new_cart_positions)
+        for p in new_cart_positions:
+            if p._answers:
+                p.save()
+                _save_answers(p, {}, p._answers)
+        CartPosition.objects.bulk_create([p for p in new_cart_positions if not p._answers])
         return err
 
     def commit(self):
@@ -702,7 +736,7 @@ def get_fees(event, request, total, invoice_address, provider):
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en',
-                      invoice_address: int=None) -> None:
+                      invoice_address: int=None, widget_data=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -722,7 +756,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, widget_data=widget_data)
                 cm.add_new_items(items)
                 cm.commit()
             except LockTimeoutException:

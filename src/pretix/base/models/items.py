@@ -750,7 +750,7 @@ class Question(LoggedModel):
 
     @staticmethod
     def _clean_identifier(event, code, instance=None):
-        qs = Question.objects.filter(event=event, identifier=code)
+        qs = Question.objects.filter(event=event, identifier__iexact=code)
         if instance:
             qs = qs.exclude(pk=instance.pk)
         if qs.exists():

@@ -309,7 +309,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def contact_form(self):
         initial = {
-            'email': self.cart_session.get('email', '')
+            'email': (
+                self.cart_session.get('email', '') or
+                self.cart_session.get('widget_data', {}).get('email', '')
+            )
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
