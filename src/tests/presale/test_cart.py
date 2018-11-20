@@ -1,4 +1,5 @@
 import datetime
+import json
 from datetime import timedelta
 from decimal import Decimal
 
@@ -106,6 +107,91 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
+
+    def test_widget_data_post(self):
+        self.event.settings.attendee_names_asked = True
+        self.event.settings.attendee_emails_asked = True
+        q = self.event.questions.create(
+            event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        q.items.add(self.ticket)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'widget_data': json.dumps({
+                'attendee-name-full-name': 'John Doe',
+                'email': 'foo@example.com',
+                'question-' + q.identifier: '43'
+            })
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertEqual(objs[0].attendee_email, "foo@example.com")
+        self.assertEqual(objs[0].attendee_name, "John Doe")
+        a = objs[0].answers.first()
+        self.assertEqual(a.answer, "43")
+        self.assertEqual(a.question, q)
+
+    def test_widget_data_ignored_unknown_or_unasked(self):
+        self.event.settings.attendee_names_asked = False
+        self.event.settings.attendee_emails_asked = False
+        q = self.event.questions.create(
+            event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        q.items.add(self.ticket)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'widget_data': json.dumps({
+                'attendee-name-full-name': 'John Doe',
+                'email': 'foo@example.com',
+                'question-' + q.identifier: 'bla'
+            })
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        assert not objs[0].attendee_email
+        assert not objs[0].attendee_name
+        assert not objs[0].answers.exists()
+
+    def test_widget_data_session(self):
+        self.event.settings.attendee_names_asked = True
+        self.event.settings.attendee_emails_asked = True
+        q = self.event.questions.create(
+            event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
+            required=True
+        )
+        q.items.add(self.ticket)
+        self._set_session('widget_data', {
+            'attendee-name': 'John Doe',
+            'email': 'foo@example.com',
+            'question-' + q.identifier: '43'
+        })
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertEqual(objs[0].attendee_email, "foo@example.com")
+        self.assertEqual(objs[0].attendee_name, "John Doe")
+        a = objs[0].answers.first()
+        self.assertEqual(a.answer, "43")
+        self.assertEqual(a.question, q)
 
     def _set_session(self, key, value):
         session = self.client.session
