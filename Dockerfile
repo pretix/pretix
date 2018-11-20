@@ -1,10 +1,26 @@
 FROM python:3.6
 
 RUN apt-get update && \
-    apt-get install -y git libxml2-dev libxslt1-dev python-dev python-virtualenv locales \
-      libffi-dev build-essential python3-dev zlib1g-dev libssl-dev gettext libpq-dev \
-      default-libmysqlclient-dev libmemcached-dev libjpeg-dev supervisor nginx sudo \
-	  --no-install-recommends && \
+    apt-get install -y --no-install-recommends \
+            build-essential \
+            default-libmysqlclient-dev \
+            gettext \
+            git \
+            libffi-dev \
+            libjpeg-dev \
+            libmemcached-dev \
+            libpq-dev \
+            libssl-dev \
+            libxml2-dev \
+            libxslt1-dev \
+            locales \
+            nginx \
+            python-dev \
+            python-virtualenv \
+            python3-dev \
+            sudo \
+            supervisor \
+            zlib1g-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     dpkg-reconfigure locales && \
@@ -27,11 +43,18 @@ COPY src /pretix/src
 
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
-    pip3 install -U pip wheel setuptools && \
+    pip3 install -U \
+        pip \
+        setuptools \
+        wheel && \
     cd /pretix/src && \
     rm -f pretix.cfg && \
-    pip3 install -r requirements.txt -r requirements/mysql.txt \
-    	-r requirements/memcached.txt -r requirements/redis.txt gunicorn && \
+    pip3 install \
+        -r requirements.txt \
+        -r requirements/memcached.txt \
+        -r requirements/mysql.txt \
+        -r requirements/redis.txt \
+        gunicorn && \
 	mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data && \
 	sudo -u pretixuser make production
