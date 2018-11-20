@@ -149,8 +149,94 @@ Just as the widget, the button supports the optional attributes ``voucher`` and 
 
 You can style the button using the ``pretix-button`` CSS class.
 
-.. versionchanged:: 1.13
+Dynamically loading the widget
+------------------------------
 
-   The pretix Button has been added in version 1.13.
+If you need to control the way or timing the widget loads, for example because you want to modify user data (see
+below) dynamically via JavaScript, you can register a listener that we will call before creating the widget::
+
+    <script type="text/javascript">
+    window.pretixWidgetCallback = function () {
+        // Will be run before we create the widget.
+    }
+    </script>
+
+If you want, you can suppress us loading the widget and/or modify the user data passed to the widget::
+
+    <script type="text/javascript">
+    window.pretixWidgetCallback = function () {
+        window.PretixWidget.build_widgets = false;
+        window.PretixWidget.widget_data["email"] = "test@example.org";
+    }
+    </script>
+
+If you then later want to trigger loading the widgets, just call ``window.PretixWidget.buildWidgets()``.
+
+
+Passing user data to the widget
+-------------------------------
+
+If you display the widget in a restricted area of your website and you want to pre-fill fields in the checkout process
+with known user data to save your users some typing and increase conversions, you can pass additional data attributes
+with that information::
+
+    <pretix-widget event="https://pretix.eu/demo/democon/"
+        data-attendee-name-given-name="John"
+        data-attendee-name-family-name="Doe"
+        data-email="test@example.org"
+        data-question-L9G8NG9M="Foobar">
+    </pretix-widget>
+
+This works for the pretix Button as well. Currently, the following attributes are understood by pretix itself:
+
+* ``data-email`` will pre-fill the order email field as well as the attendee email field (if enabled).
+
+* ``data-question-IDENTIFIER`` will pre-fill the answer for the question with the given identifier. You can view and set
+  identifiers in the *Questions* section of the backend.
+
+* Depending on the person name scheme configured in your event settings, you can pass one or more of
+  ``data-attendee-name-full-name``, ``data-attendee-name-given-name``, ``data-attendee-name-family-name``,
+  ``data-attendee-name-middle-name``, ``data-attendee-name-title``, ``data-attendee-name-calling-name``,
+  ``data-attendee-name-latin-transcription``. If you don't know or don't care, you can also just pass a string as
+  ``data-attendee-name``, which will pre-fill the last part of the name, whatever that is.
+
+Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
+Hosted or pretix Enterprise are active, you can pass the following fields:
+
+* If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
+  made through this widget will be counted towards this campaign.
+
+* If you use the tracking plugin, you can pass a Google Analytics User ID to enable cross-domain tracking. This will
+  require you to dynamically load the widget, like this::
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-XXXXXX-1', 'auto');
+        ga('send', 'pageview');
+
+        window.pretixWidgetCallback = function () {
+            window.PretixWidget.build_widgets = false;
+            window.addEventListener('load', function() { // Wait for GA to be loaded
+                if(window.ga && ga.create) {
+                    ga(function(tracker) {
+                        window.PretixWidget.widget_data["tracking-ga-id"] = tracker.get('clientId');
+                        window.PretixWidget.buildWidgets()
+                    });
+                } else { // Tracking is probably blocked
+                       window.PretixWidget.buildWidgets()
+                }
+            });
+        };
+    </script>
+
+
+.. versionchanged:: 2.3
+
+   Data passing options have been added in pretix 2.3. If you use a self-hosted version of pretix, they only work
+   fully if you configured a redis server.
 
 .. _Let's Encrypt: https://letsencrypt.org/

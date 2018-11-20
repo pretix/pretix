@@ -3,6 +3,11 @@
 /* This is embedded in an isolation wrapper that exposes siteglobals as the global
    scope. */
 
+window.PretixWidget = {
+    'build_widgets': true,
+    'widget_data': {}
+};
+
 var Vue = module.exports;
 
 var strings = {
@@ -457,6 +462,9 @@ var shared_methods = {
             return;
         }
         var redirect_url = this.$root.voucherFormTarget + '&voucher=' + this.voucher + '&subevent=' + this.$root.subevent;
+        if (this.$root.widget_data) {
+            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+        }
         var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
         this.$root.overlay.frame_loading = true;
         iframe.src = redirect_url;
@@ -465,6 +473,9 @@ var shared_methods = {
         var redirect_url = this.$root.event_url + 'w/' + widget_id + '/?iframe=1&locale=' + lang;
         if (this.$root.cart_id) {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
+        }
+        if (this.$root.widget_data) {
+            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -572,6 +583,7 @@ Vue.component('pretix-widget', {
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
         + '<div class="pretix-widget-info-message pretix-widget-clickable"'
         + '     v-if="$root.cart_exists">'
@@ -618,6 +630,7 @@ Vue.component('pretix-button', {
         + '<form method="post" :action="$root.formTarget" ref="form" target="_blank">'
         + '<input type="hidden" name="_voucher_code" :value="$root.voucher_code" v-if="$root.voucher_code">'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
+        + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
         + '<input type="hidden" v-for="item in $root.items" :name="item.item" :value="item.count" />'
         + '<button class="pretix-button" @click="buy">{{ $root.button_text }}</button>'
         + '</form>'
@@ -733,6 +746,9 @@ var shared_root_computed = {
             }
         }
         return has_priced || cnt_items > 1;
+    },
+    widget_data_json: function () {
+        return JSON.stringify(this.widget_data);
     }
 };
 
@@ -757,6 +773,23 @@ var create_overlay = function (app) {
     app.$root.overlay = framechild;
 };
 
+function get_ga_client_id(tracking_id) {
+    if (typeof ga === "undefined") {
+        return null;
+    }
+    try {
+        var trackers = ga.getAll();
+        var i, len;
+        for (i = 0, len = trackers.length; i < len; i += 1) {
+            if (trackers[i].get('trackingId') === tracking_id) {
+                return trackers[i].get('clientId');
+            }
+        }
+    } catch (e) {
+    }
+    return null;
+}
+
 var create_widget = function (element) {
     var event_url = element.attributes.event.value;
     if (!event_url.match(/\/$/)) {
@@ -766,6 +799,13 @@ var create_widget = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
+    var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
+    for (var i = 0; i < element.attributes.length; i++) {
+        var attrib = element.attributes[i];
+        if (attrib.name.match(/^data-.*$/)) {
+            widget_data[attrib.name.replace(/^data-/, '')] = attrib.value;
+        }
+    }
 
     if (element.tagName !== "pretix-widget") {
         element.innerHTML = "<pretix-widget></pretix-widget>";
@@ -786,6 +826,7 @@ var create_widget = function (element) {
                 skip_ssl: skip_ssl,
                 error: null,
                 display_add_to_cart: false,
+                widget_data: widget_data,
                 loading: 1,
                 widget_id: 'pretix-widget-' + widget_id,
                 vouchers_exist: false,
@@ -815,6 +856,13 @@ var create_button = function (element) {
     var raw_items = element.attributes.items ? element.attributes.items.value : "";
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var button_text = element.innerHTML;
+    var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
+    for (var i = 0; i < element.attributes.length; i++) {
+        var attrib = element.attributes[i];
+        if (attrib.name.match(/^data-.*$/)) {
+            widget_data[attrib.name.replace(/^data-/, '')] = attrib.value;
+        }
+    }
 
     if (element.tagName !== "pretix-button") {
         element.innerHTML = "<pretix-button>" + element.innerHTML + "</pretix-button>";
@@ -840,6 +888,7 @@ var create_button = function (element) {
                 voucher_code: voucher,
                 items: items,
                 error: null,
+                widget_data: widget_data,
                 widget_id: 'pretix-widget-' + widget_id,
                 button_text: button_text
             }
@@ -856,27 +905,35 @@ var create_button = function (element) {
 /* Find all widgets on the page and render them */
 widgetlist = [];
 buttonlist = [];
-document.createElement("pretix-widget");
-document.createElement("pretix-button");
-docReady(function () {
-    var widgets = document.querySelectorAll("pretix-widget, div.pretix-widget-compat");
-    var wlength = widgets.length;
-    for (var i = 0; i < wlength; i++) {
-        var widget = widgets[i];
-        widgetlist.push(create_widget(widget));
-    }
+window.PretixWidget.buildWidgets = function () {
+    document.createElement("pretix-widget");
+    document.createElement("pretix-button");
+    docReady(function () {
+        var widgets = document.querySelectorAll("pretix-widget, div.pretix-widget-compat");
+        var wlength = widgets.length;
+        for (var i = 0; i < wlength; i++) {
+            var widget = widgets[i];
+            widgetlist.push(create_widget(widget));
+        }
 
-    var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
-    var blength = buttons.length;
-    for (var i = 0; i < blength; i++) {
-        var button = buttons[i];
-        buttonlist.push(create_button(button));
-    }
-});
+        var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
+        var blength = buttons.length;
+        for (var i = 0; i < blength; i++) {
+            var button = buttons[i];
+            buttonlist.push(create_button(button));
+        }
+    });
+};
+if (typeof window.pretixWidgetCallback !== "undefined") {
+    window.pretixWidgetCallback();
+}
+if (window.PretixWidget.build_widgets) {
+    window.PretixWidget.buildWidgets();
+}
 
 /* Set a global variable for debugging. In DEBUG mode, siteglobals will be window, otherwise it will be something
    unnamed. */
-siteglobals.pretixwidget = {
+siteglobals.pretixwidget_debug = {
     'Vue': Vue,
     'widgets': widgetlist,
     'buttons': buttonlist

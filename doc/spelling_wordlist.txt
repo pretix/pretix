@@ -1,5 +1,6 @@
 addon
 addons
+Analytics
 anonymize
 api
 auditability
