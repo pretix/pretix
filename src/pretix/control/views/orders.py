@@ -673,7 +673,7 @@ class OrderTransition(OrderView):
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
-            ps = self.order.pending_sum
+            ps = max(0, self.order.pending_sum)
             try:
                 p = self.order.payments.get(
                     state__in=(OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
