@@ -2,6 +2,8 @@ import string
 from decimal import Decimal
 
 from django.db import DatabaseError, models, transaction
+from django.db.models import Max
+from django.db.models.functions import Cast
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -124,8 +126,12 @@ class Invoice(models.Model):
         numeric_invoices = Invoice.objects.filter(
             event__organizer=self.event.organizer,
             prefix=self.prefix,
-        ).exclude(invoice_no__contains='-')
-        return self._to_numeric_invoice_number(numeric_invoices.count() + 1)
+        ).exclude(invoice_no__contains='-').annotate(
+            numeric_number=Cast('invoice_no', models.IntegerField())
+        ).aggregate(
+            max=Max('numeric_number')
+        )['max'] or 0
+        return self._to_numeric_invoice_number(numeric_invoices + 1)
 
     def _get_invoice_number_from_order(self):
         return '{order}-{count}'.format(
@@ -183,7 +189,7 @@ class Invoice(models.Model):
 
     class Meta:
         unique_together = ('organizer', 'prefix', 'invoice_no')
-        ordering = ('invoice_no',)
+        ordering = ('date', 'invoice_no',)
 
 
 class InvoiceLine(models.Model):
