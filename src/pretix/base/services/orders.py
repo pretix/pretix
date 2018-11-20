@@ -931,6 +931,21 @@ class OrderChangeManager:
             if self.order.pending_sum <= Decimal('0.00'):
                 self.order.status = Order.STATUS_PAID
                 self.order.save()
+            elif self.open_payment:
+                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                self.open_payment.save()
+                self.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': self.open_payment.local_id,
+                    'provider': self.open_payment.provider,
+                }, user=self.user, auth=self.auth)
+        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff > 0:
+            if self.open_payment:
+                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                self.open_payment.save()
+                self.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': self.open_payment.local_id,
+                    'provider': self.open_payment.provider,
+                }, user=self.user, auth=self.auth)
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):

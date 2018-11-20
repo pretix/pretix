@@ -1103,6 +1103,18 @@ class OrderChangeManagerTests(TestCase):
         assert o2.invoice_address != ia
         assert o2.invoice_address.company == 'Sample'
 
+    def test_change_price_of_pending_order_with_payment(self):
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        assert self.order.payments.last().state == OrderPayment.PAYMENT_STATE_CREATED
+        assert self.order.payments.last().amount == Decimal('46.00')
+
+        self.ocm.change_price(self.op1, Decimal('27.00'))
+        self.ocm.commit()
+
+        assert self.order.payments.last().state == OrderPayment.PAYMENT_STATE_CANCELED
+        assert self.order.payments.last().amount == Decimal('46.00')
+
     def test_split_reverse_charge(self):
         ia = self._enable_reverse_charge()
 
