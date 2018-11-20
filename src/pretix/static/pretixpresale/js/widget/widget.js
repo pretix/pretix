@@ -3,6 +3,11 @@
 /* This is embedded in an isolation wrapper that exposes siteglobals as the global
    scope. */
 
+window.PretixWidget = {
+    'build_widgets': true,
+    'widget_data': {}
+};
+
 var Vue = module.exports;
 
 var strings = {
@@ -794,7 +799,7 @@ var create_widget = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
-    var widget_data = {};
+    var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -851,7 +856,7 @@ var create_button = function (element) {
     var raw_items = element.attributes.items ? element.attributes.items.value : "";
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var button_text = element.innerHTML;
-    var widget_data = {};
+    var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -900,27 +905,35 @@ var create_button = function (element) {
 /* Find all widgets on the page and render them */
 widgetlist = [];
 buttonlist = [];
-document.createElement("pretix-widget");
-document.createElement("pretix-button");
-docReady(function () {
-    var widgets = document.querySelectorAll("pretix-widget, div.pretix-widget-compat");
-    var wlength = widgets.length;
-    for (var i = 0; i < wlength; i++) {
-        var widget = widgets[i];
-        widgetlist.push(create_widget(widget));
-    }
+window.PretixWidget.buildWidgets = function () {
+    document.createElement("pretix-widget");
+    document.createElement("pretix-button");
+    docReady(function () {
+        var widgets = document.querySelectorAll("pretix-widget, div.pretix-widget-compat");
+        var wlength = widgets.length;
+        for (var i = 0; i < wlength; i++) {
+            var widget = widgets[i];
+            widgetlist.push(create_widget(widget));
+        }
 
-    var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
-    var blength = buttons.length;
-    for (var i = 0; i < blength; i++) {
-        var button = buttons[i];
-        buttonlist.push(create_button(button));
-    }
-});
+        var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");
+        var blength = buttons.length;
+        for (var i = 0; i < blength; i++) {
+            var button = buttons[i];
+            buttonlist.push(create_button(button));
+        }
+    });
+};
+if (typeof window.pretixWidgetCallback !== "undefined") {
+    window.pretixWidgetCallback();
+}
+if (window.PretixWidget.build_widgets) {
+    window.PretixWidget.buildWidgets();
+}
 
 /* Set a global variable for debugging. In DEBUG mode, siteglobals will be window, otherwise it will be something
    unnamed. */
-siteglobals.pretixwidget = {
+siteglobals.pretixwidget_debug = {
     'Vue': Vue,
     'widgets': widgetlist,
     'buttons': buttonlist
