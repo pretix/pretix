@@ -116,8 +116,8 @@ class OrderFilterForm(FilterForm):
             u = fdata.get('query')
 
             if "-" in u:
-                code = (Q(event__slug__icontains=u.split("-")[0])
-                        & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
+                code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
+                        & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
