@@ -237,6 +237,17 @@ class Paypal(BasePaymentProvider):
                 messages.error(request, _('We had trouble communicating with PayPal'))
                 logger.exception('Error on creating payment: ' + str(e))
 
+        for trans in payment.transactions:
+            for rr in trans.related_resources:
+                if hasattr(rr, 'sale') and rr.sale:
+                    if rr.sale.state == 'pending':
+                        messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
+                                                    'soon as the payment completed.'))
+                        payment_obj.info = json.dumps(payment.to_dict())
+                        payment_obj.state = OrderPayment.PAYMENT_STATE_PENDING
+                        payment_obj.save()
+                        return
+
         payment_obj.refresh_from_db()
         if payment.state == 'pending':
             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
