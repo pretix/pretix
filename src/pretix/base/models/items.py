@@ -334,6 +334,7 @@ class Item(LoggedModel):
     )
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),
+        default=['web']
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.

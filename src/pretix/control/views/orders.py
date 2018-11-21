@@ -26,6 +26,7 @@ from django.views.generic import (
 )
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
@@ -160,6 +161,7 @@ class OrderDetail(OrderView):
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
         ctx['overpaid'] = self.order.pending_sum * -1
+        ctx['sales_channel'] = get_all_sales_channels().get(self.order.sales_channel)
         return ctx
 
     def get_items(self):

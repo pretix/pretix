@@ -102,7 +102,8 @@ class CartManager:
         AddOperation: 30
     }
 
-    def __init__(self, event: Event, cart_id: str, invoice_address: InvoiceAddress=None, widget_data=None):
+    def __init__(self, event: Event, cart_id: str, invoice_address: InvoiceAddress=None, widget_data=None,
+                 sales_channel='web'):
         self.event = event
         self.cart_id = cart_id
         self.now_dt = now()
@@ -115,6 +116,7 @@ class CartManager:
         self._expiry = None
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
+        self._sales_channel = sales_channel
 
     @property
     def positions(self):
@@ -190,6 +192,9 @@ class CartManager:
                 raise CartError(error_messages['voucher_required'])
 
             if not op.item.is_available() or (op.variation and not op.variation.active):
+                raise CartError(error_messages['unavailable'])
+
+            if self._sales_channel not in op.item.sales_channels:
                 raise CartError(error_messages['unavailable'])
 
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
@@ -735,7 +740,7 @@ def get_fees(event, request, total, invoice_address, provider):
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en',
-                      invoice_address: int=None, widget_data=None) -> None:
+                      invoice_address: int=None, widget_data=None, sales_channel='web') -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -755,7 +760,8 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, widget_data=widget_data)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, widget_data=widget_data,
+                                 sales_channel=sales_channel)
                 cm.add_new_items(items)
                 cm.commit()
             except LockTimeoutException:
@@ -807,7 +813,7 @@ def clear_cart(self, event: int, cart_id: str=None, locale='en') -> None:
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, locale='en',
-                    invoice_address: int=None) -> None:
+                    invoice_address: int=None, sales_channel='web') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -825,7 +831,7 @@ def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, loc
                 pass
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel)
                 cm.set_addons(addons)
                 cm.commit()
             except LockTimeoutException:

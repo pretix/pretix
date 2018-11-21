@@ -92,6 +92,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if require_plugin not in request.event.get_plugins() and not is_core:
                     raise Http404(_('This feature is not enabled.'))
 
+            request.sales_channel = 'web'
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response

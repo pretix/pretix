@@ -64,7 +64,6 @@ class MultiStringContains(builtin_lookups.Contains):
     def process_rhs(self, qn, connection):
         sql, params = super().process_rhs(qn, connection)
         params[0] = "%" + DELIMITER + params[0][1:-1] + DELIMITER + "%"
-        print(sql, params)
         return sql, params
 
 

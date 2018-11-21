@@ -228,6 +228,9 @@ class ItemCreateForm(I18nModelForm):
             self.instance.free_price = self.cleaned_data['copy_from'].free_price
             self.instance.original_price = self.cleaned_data['copy_from'].original_price
             self.instance.sales_channels = self.cleaned_data['copy_from'].sales_channels
+        else:
+            # Add to all sales channels by default
+            self.instance.sales_channels = [k for k in get_all_sales_channels().keys()]
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)

@@ -47,12 +47,13 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None):
+def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
     items = event.items.all().filter(
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
         & Q(Q(category__isnull=True) | Q(category__is_addon=False))
+        & Q(sales_channels__contains=channel)
     )
 
     vouchq = Q(hide_without_voucher=False)
@@ -249,7 +250,8 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
-            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
+            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
+                                                           channel=self.request.sales_channel)
             context['itemnum'] = len(items)
 
             # Regroup those by category
