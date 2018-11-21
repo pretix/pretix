@@ -38,7 +38,7 @@ class Paypal(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        if self.settings.connect_client_id and not self.settings.secret_key:
+        if self.settings.connect_client_id and not self.settings.secret:
             # PayPal connect
             if self.settings.connect_user_id:
                 fields = [
@@ -93,7 +93,7 @@ class Paypal(BasePaymentProvider):
         return Tokeninfo.authorize_url({'scope': 'openid profile email'})
 
     def settings_content_render(self, request):
-        if self.settings.connect_client_id and not self.settings.secret_key:
+        if self.settings.connect_client_id and not self.settings.secret:
             # Use PayPal connect
             if not self.settings.connect_user_id:
                 return (
