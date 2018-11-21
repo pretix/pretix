@@ -35,6 +35,22 @@ RUN apt-get update && \
 ENV LC_ALL=C.UTF-8 \
     DJANGO_SETTINGS_MODULE=production_settings
 
+# To copy only the requirements files needed to install from PIP
+COPY src/requirements /pretix/src/requirements
+COPY src/requirements.txt /pretix/src
+RUN pip3 install -U \
+        pip \
+        setuptools \
+        wheel && \
+    cd /pretix/src && \
+    pip3 install \
+        -r requirements.txt \
+        -r requirements/memcached.txt \
+        -r requirements/mysql.txt \
+        -r requirements/redis.txt \
+        gunicorn && \
+    rm -rf ~/.cache/pip
+
 COPY deployment/docker/pretix.bash /usr/local/bin/pretix
 COPY deployment/docker/supervisord.conf /etc/supervisord.conf
 COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
@@ -43,18 +59,8 @@ COPY src /pretix/src
 
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
-    pip3 install -U \
-        pip \
-        setuptools \
-        wheel && \
     cd /pretix/src && \
     rm -f pretix.cfg && \
-    pip3 install \
-        -r requirements.txt \
-        -r requirements/memcached.txt \
-        -r requirements/mysql.txt \
-        -r requirements/redis.txt \
-        gunicorn && \
 	mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data && \
 	sudo -u pretixuser make production
