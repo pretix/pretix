@@ -107,7 +107,8 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
             }
         )
         if was_expired:
-            if order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count():
+            num_invoices = order.invoices.filter(is_cancellation=False).count()
+            if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices:
                 generate_invoice(order)
 
     if order.status == Order.STATUS_PENDING:
