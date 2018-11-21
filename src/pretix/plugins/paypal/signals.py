@@ -1,11 +1,14 @@
 import json
+from collections import OrderedDict
 
+from django import forms
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.signals import (
-    logentry_display, register_payment_providers, requiredaction_display,
+    logentry_display, register_global_settings, register_payment_providers,
+    requiredaction_display,
 )
 
 
@@ -53,3 +56,25 @@ def pretixcontrol_action_display(sender, action, request, **kwargs):
 
     ctx = {'data': data, 'event': sender, 'action': action}
     return template.render(ctx, request)
+
+
+@receiver(register_global_settings, dispatch_uid='paypal_global_settings')
+def register_global_settings(sender, **kwargs):
+    return OrderedDict([
+        ('payment_paypal_connect_client_id', forms.CharField(
+            label=_('PayPal Connect: Client ID'),
+            required=False,
+        )),
+        ('payment_paypal_connect_secret_key', forms.CharField(
+            label=_('PayPal Connect: Secret key'),
+            required=False,
+        )),
+        ('payment_paypal_connect_endpoint', forms.ChoiceField(
+            label=_('PayPal Connect Endpoint'),
+            initial='live',
+            choices=(
+                ('live', 'Live'),
+                ('sandbox', 'Sandbox'),
+            ),
+        )),
+    ])
