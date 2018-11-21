@@ -31,10 +31,13 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'PAYMENT.SALE.DENIED': _('Payment denied.'),
         'PAYMENT.SALE.REFUNDED': _('Payment refunded.'),
         'PAYMENT.SALE.REVERSED': _('Payment reversed.'),
+        'PAYMENT.SALE.PENDING': _('Payment pending.'),
     }
 
     if event_type in plains:
         text = plains[event_type]
+    else:
+        text = event_type
 
     if text:
         return _('PayPal reported an event: {}').format(text)
