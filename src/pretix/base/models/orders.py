@@ -94,6 +94,8 @@ class Order(LockModel, LoggedModel):
     :type require_approval: bool
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
+    :param sales_channel: Identifier of the sales channel this order was created through.
+    :type sales_channel: str
     """
 
     STATUS_PENDING = "n"
@@ -174,6 +176,7 @@ class Order(LockModel, LoggedModel):
     require_approval = models.BooleanField(
         default=False
     )
+    sales_channel = models.CharField(max_length=190)
 
     class Meta:
         verbose_name = _("Order")
