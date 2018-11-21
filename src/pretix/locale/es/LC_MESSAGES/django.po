@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-23 14:36+0000\n"
-"PO-Revision-Date: 2018-11-19 09:23+0000\n"
+"POT-Creation-Date: 2018-11-12 10:31+0000\n"
+"PO-Revision-Date: 2018-11-21 10:14+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -207,7 +207,7 @@ msgstr "Ticket checkeado"
 
 #: pretix/api/webhooks.py:161
 msgid "Ticket check-in reverted"
-msgstr "El check-in ha sido revertido"
+msgstr "El registro ha sido revertido"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
@@ -1522,11 +1522,11 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
-"Si lo ajusta, la aplicación de facturación mostrará una advertencia visible "
-"de que este ticket requiere una atención especial. Puede utilizar esta "
-"opción, por ejemplo, para los tickets de estudiante, con el fin de indicar a "
-"la persona en el momento de la facturación que todavía es necesario "
-"comprobar el carné de estudiante."
+"Si lo ajusta, la aplicación de registro mostrará una advertencia visible de "
+"que este ticket requiere una atención especial. Puede utilizar esta opción, "
+"por ejemplo, para los tickets de estudiante, con el fin de indicar a la "
+"persona en el momento de la facturación que todavía es necesario comprobar "
+"el carné de estudiante."
 
 #: pretix/base/models/items.py:329
 msgid "Original price"
@@ -1749,7 +1749,7 @@ msgstr "Esta pregunta se hará a los compradores de los productos seleccionados"
 #: pretix/base/models/items.py:736
 msgid "Ask during check-in instead of in the ticket buying process"
 msgstr ""
-"Pregunte durante el check-in en lugar de durante el proceso de compra de "
+"Pregunte durante el registro en lugar de durante el proceso de compra de "
 "entradas"
 
 #: pretix/base/models/items.py:737
@@ -1757,7 +1757,7 @@ msgid ""
 "This will only work if you handle your check-in with pretixdroid 1.8 or "
 "newer or pretixdesk 0.2 or newer."
 msgstr ""
-"Esto sólo funcionará si realiza el check-in con pretixdroid 1.8 o posterior "
+"Esto sólo funcionará si realiza el registro con pretixdroid 1.8 o posterior "
 "o con pretixdesk 0.2 o posterior."
 
 #: pretix/base/models/items.py:764
@@ -1945,10 +1945,10 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
-"Si lo ajusta, la aplicación de facturación mostrará una advertencia visible "
-"de que las entradas de este pedido requieren una atención especial. Esto no "
+"Si lo ajusta, la aplicación de registro mostrará una advertencia visible de "
+"que las entradas de este pedido requieren una atención especial. Esto no "
 "mostrará ningún detalle ni mensaje personalizado, por lo que deberá informar "
-"a su personal de facturación sobre cómo manejar estos casos."
+"a su personal de registro sobre cómo manejar estos casos."
 
 #: pretix/base/models/orders.py:170 pretix/base/models/orders.py:760
 msgid "Meta information"
@@ -2829,16 +2829,15 @@ msgstr "Nombre del método de pago"
 
 #: pretix/base/payment.py:739
 msgid "Payment process description during checkout"
-msgstr "Descripción del proceso de pago durante el proceso de pago"
+msgstr "Descripción del proceso de pago durante la compra"
 
 #: pretix/base/payment.py:740
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
-"Este texto se mostrará durante el proceso de pago cuando el usuario "
-"seleccione este método de pago. Debe dar una breve explicación sobre este "
-"método de pago."
+"Este texto se mostrará durante la compra cuando el usuario seleccione este "
+"método de pago. Debe dar una breve explicación sobre este método de pago."
 
 #: pretix/base/payment.py:745
 msgid "Payment process description in order confirmation emails"
@@ -3314,8 +3313,8 @@ msgstr ""
 #: pretix/base/services/checkin.py:103
 msgid "This order position has an invalid product for this check-in list."
 msgstr ""
-"Esta posición de pedido tiene un producto no válido para esta lista de check-"
-"in."
+"Esta posición de pedido tiene un producto no válido para esta lista de "
+"registro."
 
 #: pretix/base/services/checkin.py:110
 msgid "This order is not marked as paid."
@@ -3323,7 +3322,7 @@ msgstr "La orden no está marcada como pagada."
 
 #: pretix/base/services/checkin.py:115
 msgid "You need to answer questions to complete this check-in."
-msgstr "Necesitas reponder preguntas para terminar el chequeo."
+msgstr "Necesitas responder preguntas para terminar el registro."
 
 #: pretix/base/services/checkin.py:141
 msgid "This ticket has already been redeemed."
@@ -6649,7 +6648,7 @@ msgstr "El comentario interno de la orden ha sido actualizado."
 #: pretix/control/logdisplay.py:177
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr ""
-"La bandera de la orden que requiere atención en el check-in ha sido cambiada."
+"La bandera de la orden que requiere atención en el registro ha sido cambiada."
 
 #: pretix/control/logdisplay.py:179
 #, python-brace-format
@@ -6969,7 +6968,7 @@ msgstr "Se ha modificado la normativa fiscal."
 
 #: pretix/control/logdisplay.py:250
 msgid "The check-in list has been added."
-msgstr "Se ha añadido la lista de check-in."
+msgstr "Se ha añadido la lista de registro."
 
 #: pretix/control/logdisplay.py:251
 msgid "The check-in list has been deleted."
@@ -7159,10 +7158,9 @@ msgstr ""
 "\"{list}\"."
 
 #: pretix/control/logdisplay.py:357
-#, fuzzy, python-brace-format
-#| msgid "The check-in list has been deleted."
+#, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "Se ha borrado la lista de registro."
+msgstr "El registro #{posid} en la lista \"{list}\" ha sido revertido."
 
 #: pretix/control/logdisplay.py:363
 #, python-brace-format
@@ -7331,11 +7329,9 @@ msgid "Tags"
 msgstr "Etiquetas"
 
 #: pretix/control/navigation.py:255
-#, fuzzy
-#| msgid "Check-in"
 msgctxt "navigation"
 msgid "Check-in"
-msgstr "Facturación"
+msgstr "Registro"
 
 #: pretix/control/navigation.py:264
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
@@ -7745,16 +7741,16 @@ msgstr "no pagada"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 msgid "Check-In selected attendees"
-msgstr "Registro de participantes seleccionados"
+msgstr "Registrar participantes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:124
 msgid "Revert selected check-ins"
-msgstr "Revertir los check-in seleccionados"
+msgstr "Revertir los registros seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr "Borrar lista de check-in"
+msgstr "Borrar lista de registro"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
@@ -7770,7 +7766,7 @@ msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
 msgstr ""
-"Esto también eliminará la información de <strong>%(num)s</strong> check-ins."
+"Esto también eliminará la información de <strong>%(num)s</strong> registros."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -7845,7 +7841,7 @@ msgstr "Eliminar"
 #: pretix/plugins/pretixdroid/models.py:24
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:51
 msgid "Check-in list"
-msgstr "Lista de check-in"
+msgstr "Lista de registro"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:21
 #: pretix/control/templates/pretixcontrol/event/settings.html:10
@@ -7868,7 +7864,7 @@ msgstr "Información general"
 msgid "Please select the products that should be part of this check-in list."
 msgstr ""
 "Por favor, seleccione los productos que deben formar parte de esta lista de "
-"check-in."
+"registro."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -7902,16 +7898,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:33
 msgid "Your search did not match any check-in lists."
-msgstr "Su búsqueda no coincidió con ninguna lista de check-in."
+msgstr "Su búsqueda no coincidió con ninguna lista de registro."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:35
 msgid "You haven't created any check-in lists yet."
-msgstr "Aún no ha creado ninguna lista de check-in."
+msgstr "Aún no ha creado ninguna lista de registro."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:44
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:50
 msgid "Create a new check-in list"
-msgstr "Crear una nueva lista de check-in"
+msgstr "Crear una nueva lista de registro"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -9159,7 +9155,7 @@ msgstr "Disponibilidad"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:39
 msgid "Check-in"
-msgstr "Facturación"
+msgstr "Registro"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:43
 msgid "Additional settings"
@@ -10015,7 +10011,7 @@ msgstr "sin respuesta"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:281
 msgid "This question will be asked during check-in."
-msgstr "Esta pregunta se hará durante el check-in."
+msgstr "Esta pregunta se hará durante el registro."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:293
 msgid ""
@@ -11114,7 +11110,7 @@ msgstr "Añadir un nuevo objeto"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:331
 msgid "QR code for Check-In"
-msgstr "Código QR para Check-In"
+msgstr "Código QR para registro"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:337
 msgid "QR code for Lead Scanning"
@@ -11318,7 +11314,7 @@ msgstr "Precios de artículo"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:432
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:190
 msgid "Add a new check-in list"
-msgstr "Añadir una nueva lista de check-in"
+msgstr "Añadir una nueva lista de registro"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
@@ -12259,7 +12255,7 @@ msgstr "Usted no tiene permiso para realizar esta acción."
 
 #: pretix/control/views/checkin.py:104
 msgid "The selected check-ins have been reverted."
-msgstr "El check-in seleccionado ha sido revertido."
+msgstr "El registro seleccionado ha sido revertido."
 
 #: pretix/control/views/checkin.py:122
 msgid "The selected tickets have been marked as checked in."
@@ -12267,7 +12263,7 @@ msgstr "Las solicitudes seleccionadas se han marcado como recibidas."
 
 #: pretix/control/views/checkin.py:163
 msgid "The new check-in list has been created."
-msgstr "Se ha creado la nueva lista de check-in."
+msgstr "Se ha creado la nueva lista de registro."
 
 #: pretix/control/views/checkin.py:170 pretix/control/views/checkin.py:208
 #: pretix/control/views/event.py:168 pretix/control/views/event.py:310
@@ -13920,7 +13916,7 @@ msgstr "Exportador de la lista de registro"
 
 #: pretix/plugins/checkinlists/__init__.py:17
 msgid "This plugin allows you to generate check-in lists for your conference."
-msgstr "Este plugin le permite generar listas de check-in para su conferencia."
+msgstr "Este plugin le permite generar listas de registro para su conferencia."
 
 #: pretix/plugins/checkinlists/exporters.py:46
 msgid "Include QR-code secret"
@@ -13932,7 +13928,7 @@ msgstr "Incluir preguntas"
 
 #: pretix/plugins/checkinlists/exporters.py:161
 msgid "Check-in list (PDF)"
-msgstr "Lista de check-in (PDF)"
+msgstr "Lista de registro (PDF)"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:212
@@ -14282,12 +14278,12 @@ msgstr "pretixdesk - para ordenadores de sobremesa"
 
 #: pretix/plugins/pretixdroid/signals.py:18
 msgid "Check-in devices"
-msgstr "Dispositivos de facturación"
+msgstr "Dispositivos de registro"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:5
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:7
 msgid "Check-in device configuration"
-msgstr "Configuración del dispositivo de facturación"
+msgstr "Configuración del dispositivo de registro"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:8
 msgid ""
@@ -15467,7 +15463,7 @@ msgstr "Regresar"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
 msgid "Checkout"
-msgstr "Realizar Pedido"
+msgstr "Compra"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
@@ -15701,7 +15697,7 @@ msgstr "Carrito vacío"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Proceed with checkout"
-msgstr "Continuar con el proceso de compra"
+msgstr "Proceder con la compra"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
