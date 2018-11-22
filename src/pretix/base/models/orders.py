@@ -176,7 +176,7 @@ class Order(LockModel, LoggedModel):
     require_approval = models.BooleanField(
         default=False
     )
-    sales_channel = models.CharField(max_length=190)
+    sales_channel = models.CharField(max_length=190, default="web")
 
     class Meta:
         verbose_name = _("Order")

@@ -1,6 +1,8 @@
 from django.core import exceptions
 from django.db.models import TextField, lookups as builtin_lookups
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 DELIMITER = "\x1F"
 
@@ -21,7 +23,7 @@ class MultiStringField(TextField):
         if isinstance(value, (list, tuple)):
             return value
         elif value:
-            return value.split(DELIMITER)
+            return [v for v in value.split(DELIMITER) if v]
         else:
             return []
 
@@ -37,7 +39,7 @@ class MultiStringField(TextField):
 
     def from_db_value(self, value, expression, connection, context):
         if value:
-            return value.split(DELIMITER)
+            return [v for v in value.split(DELIMITER) if v]
         else:
             return []
 
@@ -72,3 +74,21 @@ class MultiStringIContains(builtin_lookups.IContains):
         sql, params = super().process_rhs(qn, connection)
         params[0] = "%" + DELIMITER + params[0][1:-1] + DELIMITER + "%"
         return sql, params
+
+
+class MultiStringSerializer(serializers.Field):
+    def __init__(self, **kwargs):
+        self.allow_blank = kwargs.pop('allow_blank', False)
+        super().__init__(**kwargs)
+
+    def to_representation(self, value):
+        return value
+
+    def to_internal_value(self, data):
+        if isinstance(data, list):
+            return data
+        else:
+            raise ValidationError('Invalid data type.')
+
+
+serializers.ModelSerializer.serializer_field_mapping[MultiStringField] = MultiStringSerializer

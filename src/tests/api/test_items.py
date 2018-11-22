@@ -212,6 +212,7 @@ TEST_ITEM_RES = {
     "name": {"en": "Budget Ticket"},
     "internal_name": None,
     "default_price": "23.00",
+    "sales_channels": ["web"],
     "category": None,
     "active": True,
     "description": None,
@@ -352,6 +353,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
                 "en": "Ticket"
             },
             "active": True,
+            "sales_channels": ["web", "pretixpos"],
             "description": None,
             "default_price": "23.00",
             "free_price": False,
@@ -373,6 +375,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
         format='json'
     )
     assert resp.status_code == 201
+    assert Item.objects.last().sales_channels == ["web", "pretixpos"]
 
 
 @pytest.mark.django_db
