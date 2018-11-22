@@ -375,7 +375,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
         format='json'
     )
     assert resp.status_code == 201
-    assert Item.objects.last().sales_channels == ["web", "pretixpos"]
+    assert Item.objects.get(pk=resp.data['id']).sales_channels == ["web", "pretixpos"]
 
 
 @pytest.mark.django_db
