@@ -569,6 +569,8 @@ Creating orders
 
        * does not validate if products are only to be sold in a specific time frame
 
+       * does not validate if products are only to be sold on other sales channels
+
        * does not validate if the event's ticket sales are already over or haven't started
 
        * does not validate the number of items per order or the number of times an item can be included in an order
