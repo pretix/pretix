@@ -66,7 +66,7 @@ class TicketLayoutFormTest(SoupTest):
             'tax_rate': '19.00',
             'active': 'yes',
             'allow_cancel': 'yes',
-            'ticketlayoutitem-layout': bl2.pk,
+            'ticketlayoutitem_web-layout': bl2.pk,
             'sales_channels': 'web',
         })
         assert TicketLayoutItem.objects.get(item=self.item1, layout=bl2)

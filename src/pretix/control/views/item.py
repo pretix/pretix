@@ -834,7 +834,10 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     def plugin_forms(self):
         forms = []
         for rec, resp in item_forms.send(sender=self.request.event, item=self.item, request=self.request):
-            forms.append(resp)
+            if isinstance(resp, (list, tuple)):
+                forms.extend(resp)
+            else:
+                forms.append(resp)
         return forms
 
     def get_success_url(self) -> str:

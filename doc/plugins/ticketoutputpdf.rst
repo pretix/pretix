@@ -20,12 +20,17 @@ default                               boolean                    ``true`` if thi
 layout                                object                     Layout specification for libpretixprint
 background                            URL                        Background PDF file
 item_assignments                      list of objects            Products this layout is assigned to
+├ sales_channel                       string                     Sales channel (defaults to ``web``).
 └ item                                integer                    Item ID
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.16
 
    This resource has been added.
+
+.. versionchanged:: 2.3
+
+   The ``item_assignments.sales_channel`` field has been added.
 
 
 Endpoints
