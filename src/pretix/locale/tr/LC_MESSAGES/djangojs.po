@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 10:31+0000\n"
+"POT-Creation-Date: 2018-11-23 14:37+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -203,15 +203,29 @@ msgstr "Mesaj oluşturuluyor…"
 msgid "Unknown error."
 msgstr "Bilinmeyen hata."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:252
+#: pretix/static/pretixcontrol/js/ui/main.js:205
+msgid "Your color has great contrast and is very easy to read!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:209
+msgid "Your color has decent contrast and is probably good-enough to read!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:213
+msgid ""
+"Your color has bad contrast for text on white background, please choose a "
+"darker shade."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:294
 msgid "All"
 msgstr "Herşey"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:253
+#: pretix/static/pretixcontrol/js/ui/main.js:295
 msgid "None"
 msgstr "Hiçbiri"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:546
+#: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
 msgstr "Dahili olarak farklı bir ad kullan"
 
@@ -251,79 +265,79 @@ msgstr[1] ""
 "Diğer\n"
 "Sepetinizdeki ürünler {num} dakikalığına ayrılmıştır."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:9
+#: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Satıldı"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:10
+#: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Buy"
 msgstr "Satın al"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:11
+#: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Ayrılmış"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:12
+#: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "FREE"
 msgstr "Ücretsiz"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:13
+#: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "% (para birimi) s% (fiyat) s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:14
+#: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "dahil %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:15
+#: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "artı %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "şu anda mevcut: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Sadece bir kupon ile kullanılabilir"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "sipariş için minimum miktar: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Bilet dükkanını kapat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Bilet mağazası yüklenemedi."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Sepet oluşturulamadı. Lütfen daha sonra tekrar deneyiniz"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Bekleme listesi"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -332,12 +346,12 @@ msgstr ""
 "Şu anda bu etkinlik için aktif bir sepetiniz var. Daha fazla ürün "
 "seçerseniz, mevcut sepetinize eklenir."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Ödeme işlemine devam et"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
@@ -346,32 +360,32 @@ msgstr ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\"> etkinlik "
 "biletleme pretix tarafından desteklenmektedir </a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Bir kupon kullan"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Ödemek"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Kupon kodu"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Close"
 msgstr "Kapalı"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Continue"
 msgstr "Devam et"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "See variations"
 msgstr "Varyasyonları gör"
