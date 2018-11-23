@@ -236,7 +236,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         data=(self.request.POST if self.request.method == 'POST' else None),
                         quota_cache=quota_cache,
                         item_cache=item_cache,
-                        subevent=cartpos.subevent
+                        subevent=cartpos.subevent,
+                        sales_channel=self.request.sales_channel
                     )
                 }
 
@@ -294,7 +295,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             return self.get(request, *args, **kwargs)
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
-                       invoice_address=self.invoice_address.pk, locale=get_language())
+                       invoice_address=self.invoice_address.pk, locale=get_language(),
+                       sales_channel=request.sales_channel)
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -613,7 +615,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return self.do(self.request.event.id, self.payment_provider.identifier if self.payment_provider else None,
                        [p.id for p in self.positions], self.cart_session.get('email'),
-                       translation.get_language(), self.invoice_address.pk, meta_info)
+                       translation.get_language(), self.invoice_address.pk, meta_info,
+                       request.sales_channel)
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)

@@ -658,6 +658,22 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
+    def test_wrong_sales_channel(self):
+        self.ticket.sales_channels = ['bar']
+        self.ticket.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
+    def test_other_sales_channel(self):
+        self.ticket.sales_channels = ['bar']
+        self.ticket.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True, PRETIX_SALES_CHANNEL='bar')
+        self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
     def test_in_time_available(self):
         self.ticket.available_until = now() + timedelta(days=2)
         self.ticket.available_from = now() - timedelta(days=2)

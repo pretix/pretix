@@ -30,6 +30,8 @@ status                                string                     Order status, o
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 locale                                string                     The locale used for communication with this customer
+sales_channel                         string                     Channel this sale was created through, such as
+                                                                 ``"web"``.
 datetime                              datetime                   Time of order creation
 expires                               datetime                   The order will expire, if it is still pending by this time
 payment_date                          date                       **DEPRECATED AND INACCURATE** Date of payment receipt
@@ -120,6 +122,10 @@ last_modified                         datetime                   Last modificati
    The ``order.payment_date`` and ``order.payment_provider`` attributes have been deprecated in favor of the new
    nested ``payments`` and ``refunds`` resources, but will still be served and removed in 2.2. The ``require_approval``
    attribute has been added, as have been the ``…/approve/`` and ``…/deny/`` endpoints.
+
+.. versionchanged:: 2.3
+
+   The ``sales_channel`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -265,6 +271,7 @@ List of all orders
             "secret": "k24fiuwvu8kxz3y1",
             "email": "tester@example.org",
             "locale": "en",
+            "sales_channel": "web",
             "datetime": "2017-12-01T10:00:00Z",
             "expires": "2017-12-10T10:00:00Z",
             "last_modified": "2017-12-01T10:00:00Z",
@@ -401,6 +408,7 @@ Fetching individual orders
         "secret": "k24fiuwvu8kxz3y1",
         "email": "tester@example.org",
         "locale": "en",
+        "sales_channel": "web",
         "datetime": "2017-12-01T10:00:00Z",
         "expires": "2017-12-10T10:00:00Z",
         "last_modified": "2017-12-01T10:00:00Z",
@@ -561,6 +569,8 @@ Creating orders
 
        * does not validate if products are only to be sold in a specific time frame
 
+       * does not validate if products are only to be sold on other sales channels
+
        * does not validate if the event's ticket sales are already over or haven't started
 
        * does not validate the number of items per order or the number of times an item can be included in an order
@@ -597,6 +607,7 @@ Creating orders
      creation.
    * ``email``
    * ``locale``
+   * ``sales_channel``
    * ``payment_provider`` – The identifier of the payment provider set for this order. This needs to be an existing
      payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"`` for all
      orders you create as paid.
@@ -661,6 +672,7 @@ Creating orders
       {
         "email": "dummy@example.org",
         "locale": "en",
+        "sales_channel": "web",
         "fees": [
           {
             "fee_type": "payment",

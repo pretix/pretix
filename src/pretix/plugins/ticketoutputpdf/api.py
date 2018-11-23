@@ -10,7 +10,7 @@ class ItemAssignmentSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = TicketLayoutItem
-        fields = ('item',)
+        fields = ('item', 'sales_channel')
 
 
 class TicketLayoutSerializer(I18nAwareModelSerializer):

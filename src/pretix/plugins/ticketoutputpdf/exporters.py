@@ -85,7 +85,13 @@ class AllTicketsPDF(BaseExporter):
             with language(op.order.locale):
                 buffer = BytesIO()
                 p = o._create_canvas(buffer)
-                layout = o.layout_map.get(op.item_id, o.default_layout)
+                layout = o.layout_map.get(
+                    (op.item_id, op.order.sales_channel),
+                    o.layout_map.get(
+                        (op.item_id, 'web'),
+                        o.default_layout
+                    )
+                )
                 o._draw_page(layout, p, op, op.order)
                 p.save()
                 outbuffer = o._render_with_background(layout, buffer)

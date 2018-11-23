@@ -155,7 +155,7 @@ class WidgetAPIProductList(View):
 
     def _get_items(self):
         items, display_add_to_cart = get_grouped_items(
-            self.request.event, subevent=self.subevent, voucher=self.voucher
+            self.request.event, subevent=self.subevent, voucher=self.voucher, channel='web'
         )
         grps = []
         for cat, g in item_group_by_category(items):

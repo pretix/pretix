@@ -26,6 +26,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Availability" %}</legend>
+                    {% bootstrap_field form.sales_channels layout="control" %}
                     {% bootstrap_field form.available_from layout="control" %}
                     {% bootstrap_field form.available_until layout="control" %}
                     {% bootstrap_field form.max_per_order layout="control" %}

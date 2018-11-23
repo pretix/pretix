@@ -304,7 +304,8 @@ class ItemsTest(ItemFormTest):
             'default_price': '23.00',
             'tax_rate': '19.00',
             'active': 'yes',
-            'allow_cancel': 'yes'
+            'allow_cancel': 'yes',
+            'sales_channels': 'web'
         })
         self.item1.refresh_from_db()
         assert self.item1.default_price == Decimal('23.00')
@@ -425,6 +426,7 @@ class ItemsTest(ItemFormTest):
     def test_create_copy(self):
         q = Question.objects.create(event=self.event1, question="Size", type="N")
         q.items.add(self.item2)
+        self.item2.sales_channels = ["web", "bar"]
 
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'Intermediate',
@@ -443,6 +445,7 @@ class ItemsTest(ItemFormTest):
         assert i_new.require_voucher == i_old.require_voucher
         assert i_new.hide_without_voucher == i_old.hide_without_voucher
         assert i_new.allow_cancel == i_old.allow_cancel
+        assert i_new.sales_channels == i_old.sales_channels
         assert set(i_new.questions.all()) == set(i_old.questions.all())
         assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
 

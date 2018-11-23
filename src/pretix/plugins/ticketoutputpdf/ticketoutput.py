@@ -37,7 +37,7 @@ class PdfTicketOutput(BaseTicketOutput):
     @cached_property
     def layout_map(self):
         return {
-            bi.item_id: bi.layout
+            (bi.item_id, bi.sales_channel): bi.layout
             for bi in TicketLayoutItem.objects.select_related('layout').filter(item__event=self.event)
         }
 
@@ -68,7 +68,13 @@ class PdfTicketOutput(BaseTicketOutput):
 
                 buffer = BytesIO()
                 p = self._create_canvas(buffer)
-                layout = self.layout_map.get(op.item_id, self.default_layout)
+                layout = self.layout_map.get(
+                    (op.item_id, order.sales_channel),
+                    self.layout_map.get(
+                        (op.item_id, 'web'),
+                        self.default_layout
+                    )
+                )
                 self._draw_page(layout, p, op, order)
                 p.save()
                 outbuffer = self._render_with_background(layout, buffer)
@@ -84,7 +90,13 @@ class PdfTicketOutput(BaseTicketOutput):
         buffer = BytesIO()
         p = self._create_canvas(buffer)
         order = op.order
-        layout = self.layout_map.get(op.item_id, self.default_layout)
+        layout = self.layout_map.get(
+            (op.item_id, order.sales_channel),
+            self.layout_map.get(
+                (op.item_id, 'web'),
+                self.default_layout
+            )
+        )
         with language(order.locale):
             self._draw_page(layout, p, op, order)
         p.save()

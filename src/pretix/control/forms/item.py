@@ -8,6 +8,7 @@ from django.utils.translation import (
 )
 from i18nfield.forms import I18nFormField, I18nTextarea
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nFormSet, I18nModelForm
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
@@ -226,6 +227,10 @@ class ItemCreateForm(I18nModelForm):
             self.instance.checkin_attention = self.cleaned_data['copy_from'].checkin_attention
             self.instance.free_price = self.cleaned_data['copy_from'].free_price
             self.instance.original_price = self.cleaned_data['copy_from'].original_price
+            self.instance.sales_channels = self.cleaned_data['copy_from'].sales_channels
+        else:
+            # Add to all sales channels by default
+            self.instance.sales_channels = [k for k in get_all_sales_channels().keys()]
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         instance = super().save(*args, **kwargs)
@@ -302,6 +307,13 @@ class ItemUpdateForm(I18nModelForm):
             'over 65. This ticket includes access to all parts of the event, except the VIP '
             'area.'
         )
+        self.fields['sales_channels'] = forms.MultipleChoiceField(
+            label=_('Sales channels'),
+            choices=(
+                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+            ),
+            widget=forms.CheckboxSelectMultiple
+        )
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
     class Meta:
@@ -312,6 +324,7 @@ class ItemUpdateForm(I18nModelForm):
             'name',
             'internal_name',
             'active',
+            'sales_channels',
             'admission',
             'description',
             'picture',

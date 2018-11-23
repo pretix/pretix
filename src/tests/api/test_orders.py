@@ -177,6 +177,7 @@ TEST_ORDER_RES = {
     "datetime": "2017-12-01T10:00:00Z",
     "expires": "2017-12-10T10:00:00Z",
     "payment_date": "2017-12-01",
+    "sales_channel": "web",
     "fees": [
         {
             "fee_type": "payment",
@@ -1238,6 +1239,7 @@ def test_order_invalid_state_deny(token_client, organizer, event, order):
 ORDER_CREATE_PAYLOAD = {
     "email": "dummy@dummy.test",
     "locale": "en",
+    "sales_channel": "web",
     "fees": [
         {
             "fee_type": "payment",
@@ -1297,6 +1299,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
+    assert o.sales_channel == "web"
 
     p = o.payments.first()
     assert p.provider == "banktransfer"
@@ -1335,6 +1338,37 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
     o = Order.objects.get(code=resp.data['code'])
     with pytest.raises(InvoiceAddress.DoesNotExist):
         o.invoice_address
+
+
+@pytest.mark.django_db
+def test_order_create_sales_channel_optional(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['sales_channel']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.sales_channel == "web"
+
+
+@pytest.mark.django_db
+def test_order_create_sales_channel_invalid(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['sales_channel'] = 'foo'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'sales_channel': ['Unknown sales channel.']}
 
 
 @pytest.mark.django_db

@@ -17,6 +17,7 @@ from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
+from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.tax import TaxedPrice
 
@@ -195,6 +196,8 @@ class Item(LoggedModel):
     :type original_price: decimal.Decimal
     :param require_approval: If set to ``True``, orders containing this product can only be processed and paid after approved by an administrator
     :type require_approval: bool
+    :param sales_channels: Sales channels this item is available on.
+    :type sales_channels: bool
     """
 
     event = models.ForeignKey(
@@ -328,6 +331,10 @@ class Item(LoggedModel):
         max_digits=7, decimal_places=2,
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
+    )
+    sales_channels = fields.MultiStringField(
+        verbose_name=_('Sales channels'),
+        default=['web']
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.

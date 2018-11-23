@@ -114,6 +114,10 @@
                         <dd>{{ order.code }}</dd>
                         <dt>{% trans "Order date" %}</dt>
                         <dd>{{ order.datetime }}</dd>
+                        {% if sales_channel %}
+                            <dt>{% trans "Sales channel" %}</dt>
+                            <dd>{{ sales_channel.verbose_name }}</dd>
+                        {% endif %}
                         <dt>{% trans "Order locale" %}</dt>
                         <dd>
                             {{ display_locale }}

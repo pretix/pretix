@@ -92,6 +92,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if require_plugin not in request.event.get_plugins() and not is_core:
                     raise Http404(_('This feature is not enabled.'))
 
+            if not hasattr(request, 'sales_channel'):
+                # The environ lookup is only relevant during unit testing
+                request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', 'web')
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response

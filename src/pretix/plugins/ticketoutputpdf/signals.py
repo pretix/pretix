@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import QuestionAnswer
 from pretix.base.signals import (  # NOQA: legacy import
     event_copy_data, item_copy_data, layout_text_variables, logentry_display,
@@ -61,25 +62,26 @@ def variables_from_questions(sender, *args, **kwargs):
 
 @receiver(item_forms, dispatch_uid="pretix_ticketoutputpdf_item_forms")
 def control_item_forms(sender, request, item, **kwargs):
-    try:
-        inst = TicketLayoutItem.objects.get(item=item)
-    except TicketLayoutItem.DoesNotExist:
-        inst = TicketLayoutItem(item=item)
-    return TicketLayoutItemForm(
-        instance=inst,
-        event=sender,
-        data=(request.POST if request.method == "POST" else None),
-        prefix="ticketlayoutitem"
-    )
+    forms = []
+    for k, v in sorted(list(get_all_sales_channels().items()), key=lambda a: (int(a[0] != 'web'), a[0])):
+        try:
+            inst = TicketLayoutItem.objects.get(item=item, sales_channel=k)
+        except TicketLayoutItem.DoesNotExist:
+            inst = TicketLayoutItem(item=item)
+        forms.append(TicketLayoutItemForm(
+            instance=inst,
+            event=sender,
+            sales_channel=v,
+            data=(request.POST if request.method == "POST" else None),
+            prefix="ticketlayoutitem_{}".format(k)
+        ))
+    return forms
 
 
 @receiver(item_copy_data, dispatch_uid="pretix_ticketoutputpdf_item_copy")
 def copy_item(sender, source, target, **kwargs):
-    try:
-        inst = TicketLayoutItem.objects.get(item=source)
-        TicketLayoutItem.objects.create(item=target, layout=inst.layout)
-    except TicketLayoutItem.DoesNotExist:
-        pass
+    for tli in TicketLayoutItem.objects.filter(item=source):
+        TicketLayoutItem.objects.create(item=target, layout=tli.layout, sales_channel=tli.sales_channel)
 
 
 @receiver(signal=event_copy_data, dispatch_uid="pretix_ticketoutputpdf_copy_data")
@@ -110,7 +112,8 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
         layout_map[oldid] = bl
 
     for bi in TicketLayoutItem.objects.filter(item__event=other):
-        TicketLayoutItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id))
+        TicketLayoutItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id),
+                                        sales_channel=bi.sales_channel)
     return layout_map
 
 

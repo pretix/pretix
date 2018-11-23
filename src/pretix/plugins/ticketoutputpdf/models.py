@@ -66,6 +66,10 @@ class TicketLayout(LoggedModel):
 
 
 class TicketLayoutItem(models.Model):
-    item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='ticketlayout_assignment',
-                                on_delete=models.CASCADE)
+    item = models.ForeignKey('pretixbase.Item', null=True, blank=True, related_name='ticketlayout_assignments',
+                             on_delete=models.CASCADE)
     layout = models.ForeignKey('TicketLayout', on_delete=models.CASCADE, related_name='item_assignments')
+    sales_channel = models.CharField(max_length=190, default='web')
+
+    class Meta:
+        unique_together = (('item', 'layout', 'sales_channel'),)

@@ -11,6 +11,7 @@ from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     Question, QuestionAnswer,
@@ -232,7 +233,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval')
+                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -412,13 +413,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
+        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts')
 
     def validate_payment_provider(self, pp):
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
         return pp
+
+    def validate_sales_channel(self, channel):
+        if channel not in get_all_sales_channels():
+            raise ValidationError('Unknown sales channel.')
+        return channel
 
     def validate_code(self, code):
         if code and Order.objects.filter(event__organizer=self.context['event'].organizer, code=code).exists():
