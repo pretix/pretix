@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-23 14:36+0000\n"
-"PO-Revision-Date: 2018-11-12 10:34+0000\n"
+"PO-Revision-Date: 2018-11-23 15:16+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -208,7 +208,7 @@ msgstr "Check-in rückgängig gemacht"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Online-Shop"
 
 #: pretix/base/email.py:127
 msgid "pretix default"
@@ -1089,7 +1089,7 @@ msgstr "Shop ist live"
 
 #: pretix/base/models/event.py:222
 msgid "Event currency"
-msgstr "Währung"
+msgstr "Veranstaltungswährung"
 
 #: pretix/base/models/event.py:225 pretix/base/models/event.py:772
 #: pretix/control/forms/event.py:991 pretix/control/forms/subevents.py:58
@@ -1257,7 +1257,7 @@ msgstr ""
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Kein Wert darf den Trennwert enthalten."
 
 #: pretix/base/models/invoices.py:120 pretix/base/services/invoices.py:86
 #, python-format
@@ -1538,10 +1538,8 @@ msgstr ""
 "tatsächlichen Preisberechnung."
 
 #: pretix/base/models/items.py:336 pretix/control/forms/item.py:311
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channels"
-msgstr "Änderungen speichern"
+msgstr "Verkaufskanäle"
 
 #: pretix/base/models/items.py:343 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:51 pretix/control/forms/filter.py:753
@@ -2997,16 +2995,12 @@ msgid "2017-05-31 22:00"
 msgstr "31.05.2016 22:00"
 
 #: pretix/base/pdf.py:122
-#, fuzzy
-#| msgid "Event end time"
 msgid "Event end date"
-msgstr "Veranstaltungsende"
+msgstr "Veranstaltungsenddatum"
 
 #: pretix/base/pdf.py:123
-#, fuzzy
-#| msgid "2017-05-31 20:00"
 msgid "2017-05-31"
-msgstr "31.05.2016 20:00"
+msgstr "31.05.2016"
 
 #: pretix/base/pdf.py:131
 msgid "22:00"
@@ -5439,19 +5433,19 @@ msgstr "Bitte geben Sie einen hexadezimalen Farbwert ein, z.B. #990000."
 
 #: pretix/control/forms/event.py:946 pretix/control/forms/organizer.py:186
 msgid "Accent color for success"
-msgstr ""
+msgstr "Akzentfarbe für Erfolg"
 
 #: pretix/control/forms/event.py:947 pretix/control/forms/organizer.py:187
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Wir empfehlen dringend, einen Grünton zu verwenden."
 
 #: pretix/control/forms/event.py:956 pretix/control/forms/organizer.py:196
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Akzentfarbe für Fehler"
 
 #: pretix/control/forms/event.py:957
 msgid "We strongly suggest to use a dark shade of red."
-msgstr ""
+msgstr "Wir empfehlen dringend, einen dunklen Rotton zu verwenden."
 
 #: pretix/control/forms/event.py:969
 msgid ""
@@ -6303,7 +6297,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:197
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "Wir empfehlen dringend, einen Rotton zu verwenden."
 
 #: pretix/control/forms/organizer.py:207
 msgid "Homepage text"
@@ -9868,10 +9862,8 @@ msgid "Order details"
 msgstr "Bestellung"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:118
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channel"
-msgstr "Änderungen speichern"
+msgstr "Verkaufskanal"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:129
 msgid "Expiry date"
@@ -13813,10 +13805,8 @@ msgid "This plugin allows you to receive payments via PayPal"
 msgstr "Dieses Plugin erlaubt, Zahlungen über PayPal anzunehmen"
 
 #: pretix/plugins/paypal/payment.py:47
-#, fuzzy
-#| msgid "SEPA bank account"
 msgid "PayPal account"
-msgstr "SEPA-Bankkonto"
+msgstr "PayPal-Konto"
 
 #: pretix/plugins/paypal/payment.py:60 pretix/plugins/stripe/payment.py:126
 #, python-brace-format
@@ -13832,31 +13822,23 @@ msgid "Endpoint"
 msgstr "API-Endpunkt"
 
 #: pretix/plugins/paypal/payment.py:103
-#, fuzzy
-#| msgid ""
-#| "To accept payments via Stripe, you will need an account at Stripe. By "
-#| "clicking on the following button, you can either create a new Stripe "
-#| "account connect pretix to an existing one."
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
 "connect pretix to an existing one."
 msgstr ""
-"Um Zahlungen mit Stripe zu akzeptieren, benötigen Sie ein Konto bei Stripe. "
-"Mit einem Klick auf diesen Button können Sie entweder ein neues Stripe-Konto "
-"erstellen, oder pretix mit einem bestehenden Stripe-Konto verknüpfen."
+"Um Zahlungen mit PayPal zu akzeptieren, benötigen Sie ein Konto bei PayPal. "
+"Mit einem Klick auf diesen Button können Sie entweder ein neues PayPal-Konto "
+"erstellen, oder pretix mit einem bestehenden PayPal-Konto verknüpfen."
 
 #: pretix/plugins/paypal/payment.py:107
-#, fuzzy, python-brace-format
-#| msgid "Connect with Stripe"
+#, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr "Mit Stripe verbinden"
+msgstr "Mit {icon} PayPal verbinden"
 
 #: pretix/plugins/paypal/payment.py:117
-#, fuzzy
-#| msgid "Disconnect from Stripe"
 msgid "Disconnect from PayPal"
-msgstr "Verbindung mit Stripe trennen"
+msgstr "Verbindung mit PayPal trennen"
 
 #: pretix/plugins/paypal/payment.py:121
 msgid ""
@@ -13914,30 +13896,24 @@ msgid "Payment reversed."
 msgstr "Zahlung storniert."
 
 #: pretix/plugins/paypal/signals.py:34
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Payment pending."
-msgstr "Zahlung ausstehend"
+msgstr "Zahlung ausstehend."
 
 #: pretix/plugins/paypal/signals.py:43
 msgid "PayPal reported an event: {}"
 msgstr "PayPal meldete ein Ereignis: {}"
 
 #: pretix/plugins/paypal/signals.py:68
-#, fuzzy
-#| msgid "Stripe Connect: Client ID"
 msgid "PayPal Connect: Client ID"
-msgstr "Stripe Connect: Client-ID"
+msgstr "PayPal Connect: Client-ID"
 
 #: pretix/plugins/paypal/signals.py:72
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "PayPal Connect: Secret key"
-msgstr "Stripe Connect: Geheimer Schlüssel"
+msgstr "PayPal Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/paypal/signals.py:76
 msgid "PayPal Connect Endpoint"
-msgstr ""
+msgstr "PayPal Connect: Endpunkt"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -14041,23 +14017,17 @@ msgid "Click here in order to open the window."
 msgstr "Hier klicken um das Fenster zu öffnen."
 
 #: pretix/plugins/paypal/views.py:45 pretix/plugins/paypal/views.py:58
-#, fuzzy
-#| msgid "An error occurred during connecting with Stripe, please try again."
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
-"Während der Verbindung mit Stripe ist ein Fehler aufgetreten, bitte "
+"Während der Verbindung mit PayPal ist ein Fehler aufgetreten, bitte "
 "versuchen Sie es erneut."
 
 #: pretix/plugins/paypal/views.py:61
-#, fuzzy
-#| msgid ""
-#| "Your Stripe account is now connected to pretix. You can change the "
-#| "settings in detail below."
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Ihr Stripe-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
+"Ihr PayPal-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
 "die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/paypal/views.py:102
@@ -14069,10 +14039,8 @@ msgid "It looks like you canceled the PayPal payment"
 msgstr "Die PayPal-Zahlung wurde abgebrochen"
 
 #: pretix/plugins/paypal/views.py:246
-#, fuzzy
-#| msgid "Your Stripe account has been disconnected."
 msgid "Your PayPal account has been disconnected."
-msgstr "Das Stripe-Konto wurde getrennt."
+msgstr "Das PayPal-Konto wurde getrennt."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
@@ -14977,14 +14945,13 @@ msgid "All PDF tickets in one file"
 msgstr "Alle PDF-Tickets in einer Datei"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
-#, fuzzy, python-brace-format
-#| msgid "PDF ticket layout"
+#, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr "PDF-Ticketlayout"
+msgstr "PDF-Ticketlayout für {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
-msgstr ""
+msgstr "(wie oben)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
