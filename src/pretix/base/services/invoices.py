@@ -13,7 +13,7 @@ from django.db.models import Count
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.timezone import now
-from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
+from django.utils.translation import pgettext, ugettext as _
 from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
 
@@ -54,7 +54,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         if open_payment and open_payment.payment_provider:
             payment = open_payment.payment_provider.render_invoice_text(invoice.order)
         elif invoice.order.status == Order.STATUS_PAID:
-            return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
+            payment = pgettext('invoice', 'The payment for this invoice has already been received.')
         else:
             payment = ""
 
