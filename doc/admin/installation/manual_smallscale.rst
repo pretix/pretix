@@ -50,21 +50,27 @@ Database
 --------
 
 Having the database server installed, we still need a database and a database user. We can create these with any kind
-of database managing tool or directly on our database's shell, e.g. for MySQL::
+of database managing tool or directly on our database's shell. For PostgreSQL, we would do::
 
-    $ mysql -u root -p
-    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-    mysql> GRANT ALL PRIVILEGES ON pretix.* TO pretix@'localhost' IDENTIFIED BY '*********';
-    mysql> FLUSH PRIVILEGES;
+    # sudo -u postgres createuser pretix
+    # sudo -u postgres createdb -O pretix pretix
+
+When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
+
+    mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 Package dependencies
 --------------------
 
 To build and run pretix, you will need the following debian packages::
 
-    # apt-get install git build-essential python-dev python-virtualenv python3 python3-pip \
+    # apt-get install git build-essential python-dev python3-venv python3 python3-pip \
                       python3-dev libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
-                      gettext libpq-dev libmysqlclient-dev libjpeg-dev libopenjp2-7-dev
+                      gettext libpq-dev libmariadbclient-dev libjpeg-dev libopenjp2-7-dev
+
+.. note:: Python 3.7 is not yet supported, so if you run a very recent OS, make sure to get
+          Python 3.6 from somewhere. You can check the current state of things in our
+          `Python 3.7 issue`_.
 
 Config file
 -----------
@@ -85,13 +91,18 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/var/pretix/data
 
     [database]
-    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
-    backend=mysql
+    ; For MySQL, replace with "mysql"
+    backend=postgresql
     name=pretix
     user=pretix
-    password=*********
-    ; Replace with host IP address for PostgreSQL
-    host=/var/run/mysqld/mysqld.sock
+    ; For MySQL, enter the user password. For PostgreSQL on the same host,
+    ; we don't need one because we can use peer authentification if our
+    ; PostgreSQL user matches our unix user.
+    password=
+    ; For MySQL, use local socket, e.g. /var/run/mysqld/mysqld.sock
+    ; For a remote host, supply an IP address
+    ; For local postgres authentication, you can leave it empty
+    host=
 
     [mail]
     ; See config file documentation for more options
@@ -115,14 +126,14 @@ Now we will install pretix itself. The following steps are to be executed as the
 actually install pretix, we will create a virtual environment to isolate the python packages from your global
 python installation::
 
-    $ virtualenv -p python3 /var/pretix/venv
+    $ python3 -m venv /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
 
-We now install pretix, its direct dependencies and gunicorn. Replace ``mysql`` with ``postgres`` in the following
-command if you're running PostgreSQL::
+We now install pretix, its direct dependencies and gunicorn. Replace ``postgres`` with ``mysql`` in the following
+command if you're running MySQL::
 
-    (venv)$ pip3 install "pretix[mysql]" gunicorn
+    (venv)$ pip3 install "pretix[postgres]" gunicorn
 
 Note that you need Python 3.5 or newer. You can find out your Python version using ``python -V``.
 
@@ -268,10 +279,10 @@ Updates
 .. warning:: While we try hard not to break things, **please perform a backup before every upgrade**.
 
 To upgrade to a new pretix release, pull the latest code changes and run the following commands (again, replace
-``mysql`` with ``postgres`` if necessary)::
+``postgres`` with ``mysql`` if necessary)::
 
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip3 install -U pretix[mysql] gunicorn
+    (venv)$ pip3 install -U pretix[postgres] gunicorn
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
     (venv)$ python -m pretix updatestyles
@@ -303,3 +314,4 @@ example::
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall
 .. _strong encryption settings: https://mozilla.github.io/server-side-tls/ssl-config-generator/
+.. _Python 3.7 issue: https://github.com/pretix/pretix/issues/1025

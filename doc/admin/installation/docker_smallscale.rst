@@ -58,16 +58,29 @@ Database
 --------
 
 Next, we need a database and a database user. We can create these with any kind of database managing tool or directly on
-our database's shell, e.g. for MySQL::
+our database's shell. For PostgreSQL, we would do::
 
-    $ mysql -u root -p
-    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-    mysql> GRANT ALL PRIVILEGES ON pretix.* TO pretix@'localhost' IDENTIFIED BY '*********';
-    mysql> FLUSH PRIVILEGES;
+    # sudo -u postgres createuser -P pretix
+    # sudo -u postgres createdb -O pretix pretix
 
-Replace the asterisks with a password of your own. For MySQL, we will use a unix domain socket to connect to the
-database. For PostgreSQL, be sure to configure the interface binding and your firewall so that the docker container
-can reach PostgreSQL.
+Make sure that your database listens on the network. If PostgreSQL on the same same host as docker, but not inside a docker container, we recommend that you just listen on the Docker interface by changing the following line in ``/etc/postgresql/<version>/main/postgresql.conf``::
+
+    listen_addresses = 'localhost,172.17.0.1'
+
+You also need to add a new line to ``/etc/postgresql/<version>/main/pg_hba.conf`` to allow network connections to this user and database::
+
+    host    pretix          pretix          172.17.0.1/16           md5
+
+Restart PostgreSQL after you changed these files::
+
+    # systemctl restart postgresql
+
+If you have a firewall running, you should also make sure that port 5432 is reachable from the ``172.17.0.1/16`` subnet.
+
+For MySQL, you can either also use network-based connections or mount the ``/var/run/mysqld/mysqld.sock`` socket into the docker container.
+When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
+
+    mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 Redis
 -----
@@ -114,13 +127,16 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/data
 
     [database]
-    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
-    backend=mysql
+    ; Replace postgresql with mysql for MySQL
+    backend=postgresql
     name=pretix
     user=pretix
+    ; Replace with the password you chose above
     password=*********
-    ; Replace with host IP address for PostgreSQL
-    host=/var/run/mysqld/mysqld.sock
+    ; In most docker setups, 172.17.0.1 is the address of the docker host. Adjuts
+    ; this to wherever your database is running, e.g. the name of a linked container
+    ; or of a mounted MySQL socket.
+    host=172.17.0.1
 
     [mail]
     ; See config file documentation for more options
@@ -164,14 +180,15 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
         -v /var/pretix-data:/data \
         -v /etc/pretix:/etc/pretix \
         -v /var/run/redis:/var/run/redis \
-        -v /var/run/mysqld:/var/run/mysqld \
         pretix/standalone:stable all
     ExecStop=/usr/bin/docker stop %n
 
     [Install]
     WantedBy=multi-user.target
 
-You can leave the MySQL socket volume out if you're using PostgreSQL. You can now run the following commands
+When using MySQL and socket mounting, you'll need the additional flag ``-v /var/run/mysqld:/var/run/mysqld`` in the command.
+
+You can now run the following commands
 to enable and start the service::
 
     # systemctl daemon-reload
