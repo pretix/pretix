@@ -50,12 +50,17 @@ Database
 --------
 
 Having the database server installed, we still need a database and a database user. We can create these with any kind
-of database managing tool or directly on our database's shell, e.g. for MySQL::
+of database managing tool or directly on our database's shell, e.g. for POSTGRESQL:
 
-    $ mysql -u root -p
-    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-    mysql> GRANT ALL PRIVILEGES ON pretix.* TO pretix@'localhost' IDENTIFIED BY '*********';
-    mysql> FLUSH PRIVILEGES;
+    $ psql postgres -U root
+    postgres=# CREATE ROLE pretixuser WITH LOGIN PASSWORD '*********'; 
+    postgres=# \du
+    postgres=# ALTER ROLE patrick CREATEDB; 
+    postgres=# \du 
+    postgres=# \q
+    $ psql postgres -U pretixuser
+    postgres=# CREATE DATABASE pretix;
+    postgres=# GRANT ALL PRIVILEGES ON DATABASE pretix TO pretixuser;
 
 Package dependencies
 --------------------
@@ -85,13 +90,14 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     datadir=/var/pretix/data
 
     [database]
-    ; Replace mysql with postgresql_psycopg2 for PostgreSQL
-    backend=mysql
+    ; Replace postgresql_psycopg2 with mysql for MySQL
+    backend=postgresql_psycopg2
     name=pretix
-    user=pretix
+    user=pretixuser
     password=*********
-    ; Replace with host IP address for PostgreSQL
-    host=/var/run/mysqld/mysqld.sock
+    ; Replace with address to mysql.sock ej. /var/run/mysqld/mysqld.sock for MySQL
+    ; Use IP Address with PostgreSQL
+    host=${POSTGRESQL_HOST_IP}
 
     [mail]
     ; See config file documentation for more options
