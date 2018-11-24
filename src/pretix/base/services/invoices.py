@@ -14,6 +14,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
+from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
@@ -40,12 +41,20 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
     with language(invoice.locale):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
+        invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
+        invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
+        invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
+        invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
+        invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
 
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
         if open_payment and open_payment.payment_provider:
             payment = open_payment.payment_provider.render_invoice_text(invoice.order)
+        elif invoice.order.status == Order.STATUS_PAID:
+            payment = pgettext('invoice', 'The payment for this invoice has already been received.')
         else:
             payment = ""
 
@@ -66,8 +75,16 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 country=ia.country.name if ia.country else ia.country_old
             ).strip()
             invoice.internal_reference = ia.internal_reference
+            invoice.invoice_to_company = ia.company
+            invoice.invoice_to_name = ia.name
+            invoice.invoice_to_street = ia.street
+            invoice.invoice_to_zipcode = ia.zipcode
+            invoice.invoice_to_city = ia.city
+            invoice.invoice_to_country = ia.country
+
             if ia.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
+                invoice.invoice_to_vat_id = ia.vat_id
 
             cc = str(ia.country)
 
@@ -138,6 +155,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability "
                 "rests with the service recipient."
             )
+            invoice.reverse_charge = True
             invoice.save()
 
         offset = len(positions)
@@ -267,6 +285,12 @@ def build_preview_invoice_pdf(event):
             date=timezone.now().date(), locale=locale, organizer=event.organizer
         )
         invoice.invoice_from = event.settings.get('invoice_address_from')
+        invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
+        invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
+        invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
+        invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
+        invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
 
         introductory = event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = event.settings.get('invoice_additional_text', as_type=LazyI18nString)
@@ -277,7 +301,15 @@ def build_preview_invoice_pdf(event):
         invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
         invoice.payment_provider_text = str(payment).replace('\n', '<br />')
-        invoice.invoice_to = _("John Doe\n214th Example Street\n012345 Somecity")
+        invoice.invoice_to_name = _("John Doe")
+        invoice.invoice_to_street = _("214th Example Street")
+        invoice.invoice_to_zipcode = _("012345")
+        invoice.invoice_to_city = _('Sample city')
+        invoice.invoice_to_country = Country('DE')
+        invoice.invoice_to = '{}\n{}\n{} {}'.format(
+            invoice.invoice_to_name, invoice.invoice_to_street,
+            invoice.invoice_to_zipcode, invoice.invoice_to_city
+        )
         invoice.file = None
         invoice.save()
         invoice.lines.all().delete()

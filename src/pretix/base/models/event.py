@@ -282,10 +282,10 @@ class Event(EventMixin, LoggedModel):
         if not really:
             raise TypeError("Pass really=True as a parameter.")
 
-        OrderPosition.objects.all().delete(order__event=self)
-        OrderFee.objects.all().delete(order__event=self)
-        OrderPayment.objects.all().delete(order__event=self)
-        OrderRefund.objects.all().delete(order__event=self)
+        OrderPosition.objects.filter(order__event=self).delete()
+        OrderFee.objects.filter(order__event=self).delete()
+        OrderPayment.objects.filter(order__event=self).delete()
+        OrderRefund.objects.filter(order__event=self).delete()
         self.orders.all().delete()
 
     def save(self, *args, **kwargs):
@@ -301,7 +301,7 @@ class Event(EventMixin, LoggedModel):
             return []
         return self.plugins.split(",")
 
-    def get_cache(self) -> "pretix.base.cache.ObjectRelatedCache":
+    def get_cache(self):
         """
         Returns an :py:class:`ObjectRelatedCache` object. This behaves equivalent to
         Django's built-in cache backends, but puts you into an isolated environment for

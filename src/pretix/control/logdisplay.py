@@ -123,13 +123,13 @@ def _display_checkin(event, logentry):
 
     if data.get('first'):
         if show_dt:
-            return _('Position #{posid} has been scanned at {datetime} for list "{list}".').format(
+            return _('Position #{posid} has been checked in at {datetime} for list "{list}".').format(
                 posid=data.get('positionid'),
                 datetime=dt_formatted,
                 list=checkin_list
             )
         else:
-            return _('Position #{posid} has been scanned for list "{list}".').format(
+            return _('Position #{posid} has been checked in for list "{list}".').format(
                 posid=data.get('positionid'),
                 list=checkin_list
             )
@@ -199,6 +199,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),
         'pretix.event.order.payment.started': _('Payment {local_id} has been started.'),
         'pretix.event.order.payment.failed': _('Payment {local_id} has failed.'),
+        'pretix.event.order.quotaexceeded': _('The order could not be marked as paid: {message}'),
         'pretix.event.order.refund.created': _('Refund {local_id} has been created.'),
         'pretix.event.order.refund.created.externally': _('Refund {local_id} has been created by an external entity.'),
         'pretix.event.order.refund.done': _('Refund {local_id} has been completed.'),
@@ -214,10 +215,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.user.settings.notifications.enabled': _('Notifications have been enabled.'),
         'pretix.user.settings.notifications.disabled': _('Notifications have been disabled.'),
         'pretix.user.settings.notifications.changed': _('Your notification settings have been changed.'),
+        'pretix.user.anonymized': _('This user has been anonymized.'),
         'pretix.user.oauth.authorized': _('The application "{application_name}" has been authorized to access your '
                                           'account.'),
         'pretix.control.auth.user.forgot_password.mail_sent': _('Password reset mail sent.'),
         'pretix.control.auth.user.forgot_password.recovered': _('The password has been reset.'),
+        'pretix.organizer.deleted': _('The organizer "{name}" has been deleted.'),
         'pretix.voucher.added': _('The voucher has been created.'),
         'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
         'pretix.voucher.changed': _('The voucher has been changed.'),
@@ -318,6 +321,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         return _display_checkin(sender, logentry)
 
     if logentry.action_type == 'pretix.control.views.checkin':
+        # deprecated
         dt = dateutil.parser.parse(data.get('datetime'))
         tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
@@ -341,7 +345,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             list=checkin_list
         )
 
-    if logentry.action_type == 'pretix.control.views.checkin.reverted':
+    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
         if 'list' in data:
             try:
                 checkin_list = sender.checkin_lists.get(pk=data.get('list')).name

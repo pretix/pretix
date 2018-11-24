@@ -15,13 +15,20 @@ class I18nField(Field):
         super().__init__(**kwargs)
 
     def to_representation(self, value):
-        if value is None or value.data is None:
+        if hasattr(value, 'data'):
+            if isinstance(value.data, dict):
+                return value.data
+            elif value.data is None:
+                return None
+            else:
+                return {
+                    settings.LANGUAGE_CODE: str(value.data)
+                }
+        elif value is None:
             return None
-        if isinstance(value.data, dict):
-            return value.data
         else:
             return {
-                settings.LANGUAGE_CODE: str(value.data)
+                settings.LANGUAGE_CODE: str(value)
             }
 
     def to_internal_value(self, data):

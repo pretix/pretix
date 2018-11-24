@@ -66,7 +66,7 @@ class InvoiceNameForm(InvoiceAddressForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for f in list(self.fields.keys()):
-            if f != 'name':
+            if f != 'name_parts':
                 del self.fields[f]
 
 
@@ -138,7 +138,6 @@ class AddOnsForm(forms.Form):
         if override_price:
             price = override_price
 
-        print(price, repr(price), type(price), repr(item.default_price))
         if self.price_included:
             price = TAXED_ZERO
         else:
@@ -191,6 +190,7 @@ class AddOnsForm(forms.Form):
         quota_cache = kwargs.pop('quota_cache')
         item_cache = kwargs.pop('item_cache')
         self.price_included = kwargs.pop('price_included')
+        self.sales_channel = kwargs.pop('sales_channel')
 
         super().__init__(*args, **kwargs)
 
@@ -209,6 +209,7 @@ class AddOnsForm(forms.Form):
                 & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
                 & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
                 & Q(hide_without_voucher=False)
+                & Q(sales_channels__contains=self.sales_channel)
             ).select_related('tax_rule').prefetch_related(
                 Prefetch('quotas',
                          to_attr='_subevent_quotas',

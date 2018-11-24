@@ -94,10 +94,11 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
                     Checkin.objects.filter(position=op, list=self.list).delete()
-                    op.order.log_action('pretix.control.views.checkin.reverted', data={
+                    op.order.log_action('pretix.event.checkin.reverted', data={
                         'position': op.id,
                         'positionid': op.positionid,
-                        'list': self.list.pk
+                        'list': self.list.pk,
+                        'web': True
                     }, user=request.user)
 
             messages.success(request, _('The selected check-ins have been reverted.'))
@@ -108,12 +109,14 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                     ci, created = Checkin.objects.get_or_create(position=op, list=self.list, defaults={
                         'datetime': now(),
                     })
-                    op.order.log_action('pretix.control.views.checkin', data={
+                    op.order.log_action('pretix.event.checkin', data={
                         'position': op.id,
                         'positionid': op.positionid,
                         'first': created,
+                        'forced': False,
                         'datetime': now(),
-                        'list': self.list.pk
+                        'list': self.list.pk,
+                        'web': True
                     }, user=request.user)
 
             messages.success(request, _('The selected tickets have been marked as checked in.'))

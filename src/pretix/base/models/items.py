@@ -17,6 +17,7 @@ from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.fields import I18nCharField, I18nTextField
 
+from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.tax import TaxedPrice
 
@@ -195,6 +196,8 @@ class Item(LoggedModel):
     :type original_price: decimal.Decimal
     :param require_approval: If set to ``True``, orders containing this product can only be processed and paid after approved by an administrator
     :type require_approval: bool
+    :param sales_channels: Sales channels this item is available on.
+    :type sales_channels: bool
     """
 
     event = models.ForeignKey(
@@ -329,6 +332,10 @@ class Item(LoggedModel):
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
+    sales_channels = fields.MultiStringField(
+        verbose_name=_('Sales channels'),
+        default=['web']
+    )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
 
@@ -403,12 +410,9 @@ class Item(LoggedModel):
                    key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
     def allow_delete(self):
-        from pretix.base.models.orders import CartPosition, OrderPosition
+        from pretix.base.models.orders import OrderPosition
 
-        return (
-            not OrderPosition.objects.filter(item=self).exists()
-            and not CartPosition.objects.filter(item=self).exists()
-        )
+        return not OrderPosition.objects.filter(item=self).exists()
 
     @cached_property
     def has_variations(self):
@@ -753,7 +757,7 @@ class Question(LoggedModel):
 
     @staticmethod
     def _clean_identifier(event, code, instance=None):
-        qs = Question.objects.filter(event=event, identifier=code)
+        qs = Question.objects.filter(event=event, identifier__iexact=code)
         if instance:
             qs = qs.exclude(pk=instance.pk)
         if qs.exists():

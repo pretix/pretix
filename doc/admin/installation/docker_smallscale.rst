@@ -26,7 +26,7 @@ installation guides):
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `MySQL`_ or `PostgreSQL`_ database server
+* A `PostgreSQL`_, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
@@ -35,6 +35,9 @@ Linux and firewalls, we recommend that you start with `ufw`_.
 .. note:: Please, do not run pretix without HTTPS encryption. You'll handle user data and thanks to `Let's Encrypt`_
           SSL certificates can be obtained for free these days. We also *do not* provide support for HTTP-only
           installations except for evaluation purposes.
+
+.. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
+             **MariaDB 10.2.7 or newer**.
 
 On this guide
 -------------
@@ -58,7 +61,7 @@ Next, we need a database and a database user. We can create these with any kind 
 our database's shell, e.g. for MySQL::
 
     $ mysql -u root -p
-    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+    mysql> CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
     mysql> GRANT ALL PRIVILEGES ON pretix.* TO pretix@'localhost' IDENTIFIED BY '*********';
     mysql> FLUSH PRIVILEGES;
 

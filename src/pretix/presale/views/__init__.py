@@ -50,7 +50,7 @@ class CartMixin:
                 prefetch.append('answers')
 
             cartpos = queryset.order_by(
-                'item', 'variation'
+                'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
             ).select_related(
                 'item', 'variation', 'addon_to', 'subevent', 'subevent__event', 'subevent__event__organizer'
             ).prefetch_related(
@@ -67,11 +67,12 @@ class CartMixin:
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             data = cp.meta_info_data
             for r, response in sorted(responses, key=lambda r: str(r[0])):
-                for key, value in response.items():
-                    pos_additional_fields[cp.pk].append({
-                        'answer': data.get('question_form_data', {}).get(key),
-                        'question': value.label
-                    })
+                if response:
+                    for key, value in response.items():
+                        pos_additional_fields[cp.pk].append({
+                            'answer': data.get('question_form_data', {}).get(key),
+                            'question': value.label
+                        })
 
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
@@ -183,6 +184,8 @@ def get_cart(request):
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
                 'item__tax_rule'
             )
+            for cp in request._cart_cache:
+                cp.event = request.event  # Populate field with known value to save queries
     return request._cart_cache
 
 

@@ -46,7 +46,6 @@ from pretix.control.forms.event import (
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.signals import nav_event_settings
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import get_domain
@@ -60,12 +59,7 @@ from ..logdisplay import OVERVIEW_BLACKLIST
 class EventSettingsViewMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['nav_event_settings'] = []
         ctx['is_event_settings'] = True
-
-        for recv, retv in nav_event_settings.send(sender=self.request.event, request=self.request):
-            ctx['nav_event_settings'] += retv
-        ctx['nav_event_settings'].sort(key=lambda n: n['label'])
         return ctx
 
 
@@ -152,6 +146,12 @@ class EventUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, MetaData
             'organizer': self.object.organizer.slug,
             'event': self.object.slug,
         })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            kwargs['change_slug'] = True
+        return kwargs
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -264,7 +264,8 @@ class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMix
         form = ProviderForm(
             obj=self.request.event,
             settingspref=self.provider.settings.get_prefix(),
-            data=(self.request.POST if self.request.method == 'POST' else None)
+            data=(self.request.POST if self.request.method == 'POST' else None),
+            provider=self.provider
         )
         form.fields = OrderedDict(
             [
@@ -637,7 +638,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                                                     expires=now(), code="PREVIEW", total=119)
                 item = request.event.items.create(name=ugettext("Sample product"), default_price=42.23,
                                                   description=ugettext("Sample product description"))
-                order.positions.create(item=item, attendee_name=ugettext("John Doe"), price=item.default_price)
+                order.positions.create(item=item, attendee_name_parts={'full_name': ugettext("John Doe")}, price=item.default_price)
                 v = renderers[request.GET.get('renderer')].render(
                     v,
                     str(request.event.settings.mail_text_signature),
@@ -1187,6 +1188,7 @@ class QuickSetupView(FormView):
         if form.is_valid() and self.formset.is_valid():
             return self.form_valid(form)
         else:
+            messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.form_invalid(form)
 
     @transaction.atomic
@@ -1218,8 +1220,12 @@ class QuickSetupView(FormView):
                                               data={'plugin': 'pretix.plugins.banktransfer'})
                 plugins_active.append('pretix.plugins.banktransfer')
             self.request.event.settings.payment_banktransfer__enabled = True
-            self.request.event.settings.payment_banktransfer_bank_details = form.cleaned_data[
-                'payment_banktransfer_bank_details']
+            for f in ('bank_details', 'bank_details_type', 'bank_details_sepa_name', 'bank_details_sepa_iban',
+                      'bank_details_sepa_bic', 'bank_details_sepa_bank'):
+                self.request.event.settings.set(
+                    'payment_banktransfer_%s' % f,
+                    form.cleaned_data['payment_banktransfer_%s' % f]
+                )
 
         if form.cleaned_data.get('payment_stripe__enabled', None):
             if 'pretix.plugins.stripe' not in plugins_active:

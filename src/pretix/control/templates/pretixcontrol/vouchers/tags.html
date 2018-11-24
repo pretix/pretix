@@ -1,6 +1,8 @@
-{% extends "pretixcontrol/vouchers/base.html" %}
+{% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
-{% block inside %}
+{% block title %}{% trans "Voucher tags" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Voucher tags" %}</h1>
     <p>
         {% blocktrans trimmed %}
             If you add a "tag" to a voucher, you can here see statistics on their usage.
@@ -27,10 +29,17 @@
                 {% for t in tags %}
                     <tr>
                         <td>
-                            <strong><a
-                                    href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ t.tag|urlencode }}">
-                                {{ t.tag }}
-                            </a></strong> <small>({{ t.redeemed }} / {{ t.total }})</small>
+                            <strong>
+                            {% if t.tag %}
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ t.tag|urlencode }}">
+                                    {{ t.tag }}
+                                </a>
+                            {% else %}
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ '<>'|urlencode }}">
+                                    {% trans "Empty tag" %}
+                                </a>
+                            {% endif %}
+                            </strong> <small>({{ t.redeemed }} / {{ t.total }})</small>
                         </td>
                         <td>
                             <div class="progress">

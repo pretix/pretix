@@ -3,6 +3,7 @@ import uuid
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.constants import LOOKUP_SEP
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
@@ -52,6 +53,7 @@ class LoggingMixin:
         from .organizer import TeamAPIToken
         from ..notifications import get_all_notification_types
         from ..services.notifications import notify
+        from pretix.api.webhooks import get_all_webhook_events, notify_webhooks
 
         event = None
         if isinstance(self, Event):
@@ -79,8 +81,21 @@ class LoggingMixin:
         if save:
             logentry.save()
 
-            if action in get_all_notification_types():
+            no_types = get_all_notification_types()
+            wh_types = get_all_webhook_events()
+
+            no_type = None
+            wh_type = None
+            typepath = logentry.action_type
+            while (not no_type or not wh_types) and '.' in typepath:
+                wh_type = wh_type or wh_types.get(typepath + ('.*' if typepath != logentry.action_type else ''))
+                no_type = no_type or no_types.get(typepath + ('.*' if typepath != logentry.action_type else ''))
+                typepath = typepath.rsplit('.', 1)[0]
+
+            if no_type:
                 notify.apply_async(args=(logentry.pk,))
+            if wh_type:
+                notify_webhooks.apply_async(args=(logentry.pk,))
         return logentry
 
 
@@ -100,3 +115,49 @@ class LoggedModel(models.Model, LoggingMixin):
         return LogEntry.objects.filter(
             content_type=ContentType.objects.get_for_model(type(self)), object_id=self.pk
         ).select_related('user', 'event', 'oauth_application', 'api_token', 'device')
+
+
+class LockModel:
+    def refresh_for_update(self, fields=None, using=None, **kwargs):
+        """
+        Like refresh_from_db(), but with select_for_update().
+        See also https://code.djangoproject.com/ticket/28344
+        """
+        if fields is not None:
+            if not fields:
+                return
+            if any(LOOKUP_SEP in f for f in fields):
+                raise ValueError(
+                    'Found "%s" in fields argument. Relations and transforms '
+                    'are not allowed in fields.' % LOOKUP_SEP)
+
+        hints = {'instance': self}
+        db_instance_qs = self.__class__._base_manager.db_manager(using, hints=hints).filter(pk=self.pk).select_for_update(**kwargs)
+
+        # Use provided fields, if not set then reload all non-deferred fields.
+        deferred_fields = self.get_deferred_fields()
+        if fields is not None:
+            fields = list(fields)
+            db_instance_qs = db_instance_qs.only(*fields)
+        elif deferred_fields:
+            fields = [f.attname for f in self._meta.concrete_fields
+                      if f.attname not in deferred_fields]
+            db_instance_qs = db_instance_qs.only(*fields)
+
+        db_instance = db_instance_qs.get()
+        non_loaded_fields = db_instance.get_deferred_fields()
+        for field in self._meta.concrete_fields:
+            if field.attname in non_loaded_fields:
+                # This field wasn't refreshed - skip ahead.
+                continue
+            setattr(self, field.attname, getattr(db_instance, field.attname))
+            # Clear cached foreign keys.
+            if field.is_relation and field.is_cached(self):
+                field.delete_cached_value(self)
+
+        # Clear cached relations.
+        for field in self._meta.related_objects:
+            if field.is_cached(self):
+                field.delete_cached_value(self)
+
+        self._state.db = db_instance._state.db

@@ -54,7 +54,7 @@ def send_mails(event: int, user: int, subject: dict, message: dict, orders: list
                     'pretix.plugins.sendmail.order.email.sent',
                     user=user,
                     data={
-                        'subject': subject.localize(o.locale),
+                        'subject': subject.localize(o.locale).format_map(email_context),
                         'message': message.localize(o.locale).format_map(email_context),
                         'recipient': o.email
                     }

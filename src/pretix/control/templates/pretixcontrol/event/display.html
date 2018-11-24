@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load hierarkey_form %}
 {% block inside %}
+    <h1>{% trans "Display settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
@@ -19,8 +20,10 @@
         <fieldset>
             <legend>{% trans "Shop design" %}</legend>
             {% url "control:organizer.display" organizer=request.organizer.slug as org_url %}
-            {% propagated request.event org_url "primary_color" "primary_font" %}
+            {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" %}
                 {% bootstrap_field form.primary_color layout="control" %}
+                {% bootstrap_field form.theme_color_success layout="control" %}
+                {% bootstrap_field form.theme_color_danger layout="control" %}
                 {% bootstrap_field form.primary_font layout="control" %}
             {% endpropagated %}
         </fieldset>

@@ -9,7 +9,9 @@ from ..signals import periodic_task
 
 @receiver(signal=periodic_task)
 def clean_cart_positions(sender, **kwargs):
-    for cp in CartPosition.objects.filter(expires__lt=now() - timedelta(days=14)):
+    for cp in CartPosition.objects.filter(expires__lt=now() - timedelta(days=14), addon_to__isnull=False):
+        cp.delete()
+    for cp in CartPosition.objects.filter(expires__lt=now() - timedelta(days=14), addon_to__isnull=True):
         cp.delete()
     for ia in InvoiceAddress.objects.filter(order__isnull=True, last_modified__lt=now() - timedelta(days=14)):
         ia.delete()

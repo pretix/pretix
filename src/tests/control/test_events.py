@@ -59,7 +59,9 @@ class EventsTest(SoupTest):
         doc.select("[name=ticket_download]")[0]['checked'] = "checked"
         doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
         doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
-        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=payment_banktransfer_bank_details_type]")[1]['checked'] = 'checked'
+        del doc.select("[name=payment_banktransfer_bank_details_type]")[0]['checked']
+        doc.select("[name*=payment_banktransfer_bank_details_0]")[0].contents[0].replace_with("Foo")
         doc.select("[name=total_quota]")[0]['value'] = "300"
         doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
         doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
@@ -103,7 +105,9 @@ class EventsTest(SoupTest):
         doc.select("[name=ticket_download]")[0]['checked'] = "checked"
         doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
         doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
-        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=payment_banktransfer_bank_details_type]")[1]['checked'] = 'checked'
+        del doc.select("[name=payment_banktransfer_bank_details_type]")[0]['checked']
+        doc.select("[name*=payment_banktransfer_bank_details_0]")[0].contents[0].replace_with("Foo")
         doc.select("[name=total_quota]")[0]['value'] = ""
         doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
         doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
@@ -151,7 +155,9 @@ class EventsTest(SoupTest):
         doc.select("[name=ticket_download]")[0]['checked'] = "checked"
         doc.select("[name=contact_mail]")[0]['value'] = "test@example.org"
         doc.select("[name=payment_banktransfer__enabled]")[0]['checked'] = "checked"
-        doc.select("[name*=payment_banktransfer_bank_details]")[0].contents[0].replace_with("Foo")
+        doc.select("[name=payment_banktransfer_bank_details_type]")[1]['checked'] = 'checked'
+        del doc.select("[name=payment_banktransfer_bank_details_type]")[0]['checked']
+        doc.select("[name*=payment_banktransfer_bank_details_0]")[0].contents[0].replace_with("Foo")
         doc.select("[name=total_quota]")[0]['value'] = "120"
         doc.select("[name=form-TOTAL_FORMS]")[0]['value'] = "2"
         doc.select("[name=form-INITIAL_FORMS]")[0]['value'] = "2"
@@ -285,6 +291,7 @@ class EventsTest(SoupTest):
         self.post_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug), {
             'payment_banktransfer__enabled': 'true',
             'payment_banktransfer__fee_abs': '12.23',
+            'payment_banktransfer_bank_details_type': 'other',
             'payment_banktransfer_bank_details_0': 'Test',
         })
         self.event1.settings.flush()
@@ -349,16 +356,16 @@ class EventsTest(SoupTest):
 
             doc = self.get_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug))
             data = extract_form_fields(doc.select("form")[0])
-            data['primary_color'] = '#FF0000'
+            data['primary_color'] = '#000000'
             doc = self.post_doc('/control/event/%s/%s/settings/display' % (self.orga1.slug, self.event1.slug),
                                 data, follow=True)
             assert doc.select('.alert-success')
             self.event1.settings.flush()
-            assert self.event1.settings.get('primary_color') == '#FF0000'
+            assert self.event1.settings.get('primary_color') == '#000000'
             mocked.assert_any_call(args=(self.event1.pk,))
 
     def test_display_settings_do_not_override_parent(self):
-        self.orga1.settings.primary_color = '#ff00ff'
+        self.orga1.settings.primary_color = '#000000'
         with mocker_context() as mocker:
             mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
 
@@ -373,7 +380,7 @@ class EventsTest(SoupTest):
             mocked.assert_any_call(args=(self.event1.pk,))
 
     def test_display_settings_explicitly_override_parent(self):
-        self.orga1.settings.primary_color = '#ff00ff'
+        self.orga1.settings.primary_color = '#000000'
         with mocker_context() as mocker:
             mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
 

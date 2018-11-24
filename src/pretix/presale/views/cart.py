@@ -1,8 +1,10 @@
+import json
 import mimetypes
 import os
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import caches
 from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -32,6 +34,11 @@ from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
 )
 from pretix.presale.views.robots import NoSearchIndexViewMixin
+
+try:
+    widget_data_cache = caches['redis']
+except:
+    widget_data_cache = caches['default']
 
 
 class CartActionMixin:
@@ -266,10 +273,19 @@ def get_or_create_cart_id(request, create=True):
         cart_data = {}
         if prefix and 'take_cart_id' in request.GET and current_id:
             new_id = current_id
+            cached_widget_data = widget_data_cache.get('widget_data_{}'.format(current_id))
+            if cached_widget_data:
+                cart_data['widget_data'] = cached_widget_data
         else:
             if not create:
                 return None
             new_id = generate_cart_id(request, prefix=prefix)
+
+        if 'widget_data' not in cart_data and 'widget_data' in request.GET:
+            try:
+                cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
+            except ValueError:
+                pass
 
         if 'carts' not in request.session:
             request.session['carts'] = {}
@@ -349,10 +365,24 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         }
 
     def post(self, request, *args, **kwargs):
+        cart_id = get_or_create_cart_id(self.request)
+        if "widget_data" in request.POST:
+            try:
+                widget_data = json.loads(request.POST.get("widget_data", "{}"))
+            except ValueError:
+                widget_data = {}
+            else:
+                widget_data_cache.set('widget_data_{}'.format(cart_id), widget_data, 600)
+                cs = cart_session(request)
+                cs['widget_data'] = widget_data
+        else:
+            cs = cart_session(request)
+            widget_data = cs.get('widget_data', {})
+
         items = self._items_from_post_data()
         if items:
-            return self.do(self.request.event.id, items, get_or_create_cart_id(self.request), translation.get_language(),
-                           self.invoice_address.pk)
+            return self.do(self.request.event.id, items, cart_id, translation.get_language(),
+                           self.invoice_address.pk, widget_data, self.request.sales_channel)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -375,7 +405,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
 
         # Fetch all items
         items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
-                                                       voucher=self.voucher)
+                                                       voucher=self.voucher, channel=self.request.sales_channel)
 
         # Calculate how many options the user still has. If there is only one option, we can
         # check the box right away ;)
@@ -449,6 +479,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if 'iframe' in request.GET and 'require_cookie' not in request.GET:
             return redirect(request.get_full_path() + '&require_cookie=1')
+
+        if len(self.request.GET.get('widget_data', '{}')) > 3:
+            # We've been passed data from a widget, we need to create a cart session to store it.
+            get_or_create_cart_id(request)
         return super().get(request, *args, **kwargs)
 
 

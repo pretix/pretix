@@ -61,7 +61,7 @@ def order_position(item, order, taxrule, variations):
         tax_rate=taxrule.rate,
         tax_value=Decimal("3"),
         price=Decimal("23"),
-        attendee_name="Peter",
+        attendee_name_parts={'full_name': "Peter"},
         secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
     )
     return op
@@ -212,6 +212,7 @@ TEST_ITEM_RES = {
     "name": {"en": "Budget Ticket"},
     "internal_name": None,
     "default_price": "23.00",
+    "sales_channels": ["web"],
     "category": None,
     "active": True,
     "description": None,
@@ -352,6 +353,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
                 "en": "Ticket"
             },
             "active": True,
+            "sales_channels": ["web", "pretixpos"],
             "description": None,
             "default_price": "23.00",
             "free_price": False,
@@ -373,6 +375,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
         format='json'
     )
     assert resp.status_code == 201
+    assert Item.objects.get(pk=resp.data['id']).sales_channels == ["web", "pretixpos"]
 
 
 @pytest.mark.django_db
@@ -736,10 +739,10 @@ def test_items_with_order_position_not_delete(token_client, organizer, event, it
 
 
 @pytest.mark.django_db
-def test_items_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
+def test_items_with_cart_position_delete(token_client, organizer, event, item, cart_position):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk))
-    assert resp.status_code == 403
-    assert event.items.filter(pk=item.id).exists()
+    assert resp.status_code == 204
+    assert not event.items.filter(pk=item.id).exists()
 
 
 @pytest.fixture

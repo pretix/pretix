@@ -157,6 +157,22 @@ var form_handlers = function (el) {
         fill_field.on("dp.show", show);
     });
 
+    function luminanace(r, g, b) {
+        var a = [r, g, b].map(function (v) {
+            v /= 255;
+            return v <= 0.03928
+                ? v / 12.92
+                : Math.pow( (v + 0.055) / 1.055, 2.4 );
+        });
+        return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+    function contrast(rgb1, rgb2) {
+        var l1 = luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
+             l2 = luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
+             ratio = l1/l2
+        if (l2 > l1) {ratio = 1/ratio}
+        return ratio.toFixed(1)
+    }
     el.find(".colorpickerfield").colorpicker({
         format: 'hex',
         align: 'left',
@@ -173,6 +189,32 @@ var form_handlers = function (el) {
                 maxTop: 200
             }
         }
+    }).on('changeColor create', function (e) {
+        var rgb = $(this).colorpicker('color').toRGB();
+        var c = contrast([255,255,255], [rgb.r, rgb.g, rgb.b]);
+        var mark = 'times';
+        if ($(this).parent().find(".contrast-state").length === 0) {
+            $(this).parent().append("<div class='help-block contrast-state'></div>");
+        }
+        var $note = $(this).parent().find(".contrast-state");
+        if ($(this).val() === "") {
+            $note.remove();
+        }
+        if (c > 7) {
+            $note.html("<span class='fa fa-fw fa-check-circle'></span>")
+                .append(gettext('Your color has great contrast and is very easy to read!'));
+            $note.addClass("text-success").removeClass("text-warning").removeClass("text-danger");
+        } else if (c > 2.5) {
+            $note.html("<span class='fa fa-fw fa-info-circle'></span>")
+                .append(gettext('Your color has decent contrast and is probably good-enough to read!'));
+            $note.removeClass("text-success").removeClass("text-warning").removeClass("text-danger");
+        } else {
+            $note.html("<span class='fa fa-fw fa-warning'></span>")
+                .append(gettext('Your color has bad contrast for text on white background, please choose a darker ' +
+                    'shade.'));
+            $note.addClass("text-danger").removeClass("text-success").removeClass("text-warning");
+        }
+        console.log(c);
     });
 
     el.find("input[data-checkbox-dependency]").each(function () {
@@ -212,7 +254,7 @@ var form_handlers = function (el) {
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
                 var $toggling = dependent;
-                if (dependent.tagName === "input") {
+                if (dependent.get(0).tagName.toLowerCase() === "input") {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
@@ -235,7 +277,9 @@ var form_handlers = function (el) {
             dependency = $($(this).attr("data-required-if")),
             update = function (ev) {
                 var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
+                    'opacity': enabled ? 0 : 1
+                }, ev ? 500 : 1);
             };
         update();
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
@@ -372,7 +416,10 @@ var form_handlers = function (el) {
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html()
+                text: $(this).html(),
+                correctLevel: 0,  // M
+                width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+                height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
             }
         );
     });

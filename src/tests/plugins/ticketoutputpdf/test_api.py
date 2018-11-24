@@ -29,7 +29,7 @@ RES_LAYOUT = {
     'id': 1,
     'name': 'Foo',
     'default': True,
-    'item_assignments': [{'item': 1}],
+    'item_assignments': [{'item': 1, 'sales_channel': 'web'}],
     'layout': [{'a': 2}],
     'background': None
 }

@@ -182,5 +182,4 @@ class WaitingListTestCase(TestCase):
                 event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
             )
         process_waitinglist(None)
-        assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 5
-        assert Voucher.objects.count() == 0
+        assert Voucher.objects.count() == 5

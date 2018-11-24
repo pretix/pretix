@@ -27,7 +27,7 @@ class InvoiceExporter(BaseExporter):
             qs = qs.annotate(
                 has_payment_with_provider=Exists(
                     OrderPayment.objects.filter(
-                        Q(order=OuterRef('pk')) & Q(provider=form_data.get('payment_provider'))
+                        Q(order=OuterRef('order_id')) & Q(provider=form_data.get('payment_provider'))
                     )
                 )
             )

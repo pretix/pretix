@@ -51,7 +51,7 @@ def env():
         item=ticket,
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
     )
     return event, user, o, ticket
 
@@ -333,7 +333,7 @@ def test_order_invoice_create_ok(client, env):
 def test_order_invoice_regenerate(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -362,7 +362,7 @@ def test_order_invoice_regenerate_unknown(client, env):
 def test_order_invoice_reissue(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     i = generate_invoice(env[2])
-    InvoiceAddress.objects.create(name='Foo', order=env[2])
+    InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
     env[0].settings.set('invoice_generate', 'admin')
     response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % i.pk, {}, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -468,10 +468,12 @@ def test_order_extend_expired_quota_left(client, env):
     o.expires = now() - timedelta(days=5)
     o.status = Order.STATUS_EXPIRED
     o.save()
+    generate_cancellation(generate_invoice(o))
     q = Quota.objects.create(event=env[0], size=3)
     q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
     client.login(email='dummy@dummy.dummy', password='dummy')
+    assert o.invoices.count() == 2
     response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
         'expires': newdate
     }, follow=True)
@@ -479,6 +481,7 @@ def test_order_extend_expired_quota_left(client, env):
     o = Order.objects.get(id=env[2].id)
     assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
     assert o.status == Order.STATUS_PENDING
+    assert o.invoices.count() == 3
 
 
 @pytest.mark.django_db
@@ -528,7 +531,7 @@ def test_order_extend_expired_quota_partial(client, env):
         item=env[3],
         variation=None,
         price=Decimal("14"),
-        attendee_name="Peter"
+        attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
     )
     o.expires = now() - timedelta(days=5)
     o.status = Order.STATUS_EXPIRED
@@ -582,6 +585,29 @@ def test_order_mark_paid_blocked(client, env):
     assert 'alert-danger' in response.rendered_content
     o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_order_mark_paid_overpaid_exired(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.status = Order.STATUS_EXPIRED
+    o.expires = now() - timedelta(days=5)
+    o.save()
+    o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=o.total * 2)
+    assert o.pending_sum == -1 * o.total
+    q = Quota.objects.create(event=env[0], size=0)
+    q.items.add(env[3])
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p',
+        'force': 'on'
+    }, follow=True)
+    assert 'alert-success' in response.rendered_content
+    o = Order.objects.get(id=env[2].id)
+    assert o.status == Order.STATUS_PAID
+    assert o.payments.last().amount == 0
+    assert o.pending_sum == -1 * o.total
 
 
 @pytest.mark.django_db
@@ -745,11 +771,11 @@ class OrderChangeTests(SoupTest):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter"
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter", "_scheme": "full"}
         )
         self.quota = self.event.quotas.create(name="All", size=100)
         self.quota.items.add(self.ticket)

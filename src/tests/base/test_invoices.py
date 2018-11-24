@@ -121,7 +121,10 @@ def test_address_vat_id(env):
     event, order = env
     event.settings.set('invoice_language', 'en')
     InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                  name='Sherlock Holmes', zipcode='12345', city='London', country_old='UK',
+                                  name_parts={'full_name': 'Sherlock Holmes', '_scheme': 'full'},
+                                  zipcode='12345',
+                                  city='London',
+                                  country_old='UK',
                                   country='', vat_id='UK1234567', order=order)
     inv = generate_invoice(order)
     assert inv.invoice_to == "Acme Company\nSherlock Holmes\n221B Baker Street\n12345 London\nUK\nVAT-ID: UK1234567"
@@ -291,20 +294,27 @@ def test_invoice_numbers(env):
 
     event.settings.set('invoice_numbers_consecutive', True)
     inv5 = generate_invoice(order)
+    inv6 = generate_invoice(order)
+    inv7 = generate_invoice(order)
+    Invoice.objects.filter(pk=inv6.pk).delete()  # This should never ever happen, but what if it happens anyway?
+    inv8 = generate_invoice(order)
     inv23 = generate_invoice(order2)
 
-    # expected behaviour for switching between numbering formats
+    # expected behaviour for switching between numbering formats or dealing with gaps
     assert inv1.invoice_no == '00001'
     assert inv2.invoice_no == '00002'
     assert inv3.invoice_no == '{}-3'.format(order.code)
     assert inv4.invoice_no == '{}-4'.format(order.code)
     assert inv5.invoice_no == '00003'
+    assert inv6.invoice_no == '00004'
+    assert inv7.invoice_no == '00005'
+    assert inv8.invoice_no == '00006'
 
     # test that separate orders are counted separately in this mode
     assert inv21.invoice_no == '{}-1'.format(order2.code)
     assert inv22.invoice_no == '{}-2'.format(order2.code)
     # but consecutively in this mode
-    assert inv23.invoice_no == '00004'
+    assert inv23.invoice_no == '00007'
 
     # test Invoice.number, too
     assert inv1.number == '{}-00001'.format(event.slug.upper())

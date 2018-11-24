@@ -187,13 +187,13 @@ class QuestionsTest(ItemFormTest):
                                  expires=now() + datetime.timedelta(days=10),
                                  total=14, locale='en')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Peter")
+                                          attendee_name_parts={'full_name': "Peter"})
         op.answers.create(question=c, answer='42')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Michael")
+                                          attendee_name_parts={'full_name': "Michael"})
         op.answers.create(question=c, answer='42')
         op = OrderPosition.objects.create(order=o, item=item1, variation=None, price=Decimal("14"),
-                                          attendee_name="Petra")
+                                          attendee_name_parts={'full_name': "Petra"})
         op.answers.create(question=c, answer='39')
 
         doc = self.get_doc('/control/event/%s/%s/questions/%s/' % (self.orga1.slug, self.event1.slug, c.id))
@@ -304,7 +304,8 @@ class ItemsTest(ItemFormTest):
             'default_price': '23.00',
             'tax_rate': '19.00',
             'active': 'yes',
-            'allow_cancel': 'yes'
+            'allow_cancel': 'yes',
+            'sales_channels': 'web'
         })
         self.item1.refresh_from_db()
         assert self.item1.default_price == Decimal('23.00')
@@ -414,7 +415,7 @@ class ItemsTest(ItemFormTest):
             item=self.item1,
             variation=None,
             price=Decimal("14"),
-            attendee_name="Peter"
+            attendee_name_parts={'full_name': "Peter"}
         )
         self.client.post('/control/event/%s/%s/items/%d/delete' % (self.orga1.slug, self.event1.slug, self.item1.id),
                          {})
@@ -425,6 +426,7 @@ class ItemsTest(ItemFormTest):
     def test_create_copy(self):
         q = Question.objects.create(event=self.event1, question="Size", type="N")
         q.items.add(self.item2)
+        self.item2.sales_channels = ["web", "bar"]
 
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'Intermediate',
@@ -443,6 +445,7 @@ class ItemsTest(ItemFormTest):
         assert i_new.require_voucher == i_old.require_voucher
         assert i_new.hide_without_voucher == i_old.hide_without_voucher
         assert i_new.allow_cancel == i_old.allow_cancel
+        assert i_new.sales_channels == i_old.sales_channels
         assert set(i_new.questions.all()) == set(i_old.questions.all())
         assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
 

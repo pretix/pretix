@@ -9,7 +9,7 @@ from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import (
     pgettext, pgettext_lazy, ugettext_lazy as _,
 )
-from django_countries import Countries
+from django_countries import Countries, countries
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -20,6 +20,7 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.forms import (
     ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
     SplitDateTimeField, SplitDateTimePickerWidget,
@@ -202,16 +203,21 @@ class EventMetaValueForm(forms.ModelForm):
 
 
 class EventUpdateForm(I18nModelForm):
-    def clean_slug(self):
-        return self.instance.slug
 
     def __init__(self, *args, **kwargs):
+        self.change_slug = kwargs.pop('change_slug', False)
         super().__init__(*args, **kwargs)
-        self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+        if not self.change_slug:
+            self.fields['slug'].widget.attrs['readonly'] = 'readonly'
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
         )
+
+    def clean_slug(self):
+        if self.change_slug:
+            return self.cleaned_data['slug']
+        return self.instance.slug
 
     class Meta:
         model = Event
@@ -317,7 +323,8 @@ class EventSettingsForm(SettingsForm):
         label=_("Automatic waiting list assignments"),
         help_text=_("If ticket capacity becomes free, automatically create a voucher and send it to the first person "
                     "on the waiting list for that product. If this is not active, mails will not be send automatically "
-                    "but you can send them manually via the control panel."),
+                    "but you can send them manually via the control panel. If you disable the waiting list but keep "
+                    "this option enabled, tickets will still be sent out."),
         required=False,
         widget=forms.CheckboxInput(),
     )
@@ -331,6 +338,12 @@ class EventSettingsForm(SettingsForm):
         help_text=_("Require customers to fill in the names of all attendees."),
         required=False,
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_names_asked'}),
+    )
+    name_scheme = forms.ChoiceField(
+        label=_("Name format"),
+        help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
+                    "orders might lead to unexpected behaviour when sorting or changing names."),
+        required=True,
     )
     attendee_emails_asked = forms.BooleanField(
         label=_("Ask for email addresses per ticket"),
@@ -413,6 +426,13 @@ class EventSettingsForm(SettingsForm):
             'e.g. I hereby confirm that I have read and agree with the event organizer\'s terms of service '
             'and agree with them.'
         )
+        self.fields['name_scheme'].choices = (
+            (k, _('Ask for {fields}, display like {example}').format(
+                fields=' + '.join(str(vv[1]) for vv in v['fields']),
+                example=v['concatenation'](v['sample'])
+            ))
+            for k, v in PERSON_NAME_SCHEMES.items()
+        )
 
 
 class PaymentSettingsForm(SettingsForm):
@@ -483,6 +503,7 @@ class ProviderForm(SettingsForm):
 
     def __init__(self, *args, **kwargs):
         self.settingspref = kwargs.pop('settingspref')
+        self.provider = kwargs.pop('provider', None)
         super().__init__(*args, **kwargs)
 
     def prepare_fields(self):
@@ -509,9 +530,15 @@ class ProviderForm(SettingsForm):
             val = cleaned_data.get(k)
             if v._required and not val:
                 self.add_error(k, _('This field is required.'))
+        if self.provider:
+            cleaned_data = self.provider.settings_form_clean(cleaned_data)
+        return cleaned_data
 
 
 class InvoiceSettingsForm(SettingsForm):
+    allcountries = list(countries)
+    allcountries.insert(0, ('', _('Select country')))
+
     invoice_address_asked = forms.BooleanField(
         label=_("Ask for invoice address"),
         required=False
@@ -562,9 +589,10 @@ class InvoiceSettingsForm(SettingsForm):
     invoice_generate = forms.ChoiceField(
         label=_("Generate invoices"),
         required=False,
+        widget=forms.RadioSelect,
         choices=(
-            ('False', _('No')),
-            ('admin', _('Manually in admin panel')),
+            ('False', _('Do not generate invoices')),
+            ('admin', _('Only manually in admin panel')),
             ('user', _('Automatically on user request')),
             ('True', _('Automatically for all created orders')),
             ('paid', _('Automatically on payment')),
@@ -588,19 +616,46 @@ class InvoiceSettingsForm(SettingsForm):
         required=True,
         choices=[]
     )
+    invoice_address_from_name = forms.CharField(
+        label=_("Company name"),
+        required=False,
+    )
     invoice_address_from = forms.CharField(
+        label=_("Address line"),
         widget=forms.Textarea(attrs={
-            'rows': 5,
+            'rows': 2,
             'placeholder': _(
-                'Sample Event Company\n'
-                'Albert Einstein Road 52\n'
-                '12345 Samplecity'
+                'Albert Einstein Road 52'
             )
         }),
         required=False,
-        label=_("Your address"),
-        help_text=_("Will be printed as the sender on invoices. Be sure to include relevant details required in "
-                    "your jurisdiction.")
+    )
+    invoice_address_from_zipcode = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': '12345'
+        }),
+        required=False,
+        label=_("ZIP code"),
+    )
+    invoice_address_from_city = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Random City')
+        }),
+        required=False,
+        label=_("City"),
+    )
+    invoice_address_from_country = forms.ChoiceField(
+        choices=allcountries,
+        required=False,
+        label=_("Country"),
+    )
+    invoice_address_from_tax_id = forms.CharField(
+        required=False,
+        label=_("Domestic tax ID"),
+    )
+    invoice_address_from_vat_id = forms.CharField(
+        required=False,
+        label=_("EU VAT ID"),
     )
     invoice_introductory_text = I18nFormField(
         widget=I18nTextarea,
@@ -883,7 +938,27 @@ class DisplaySettingsForm(SettingsForm):
         required=False,
         validators=[
             RegexValidator(regex='^#[0-9a-fA-F]{6}$',
-                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.'))
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    theme_color_success = forms.CharField(
+        label=_("Accent color for success"),
+        help_text=_("We strongly suggest to use a shade of green."),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
+        ],
+        widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
+    )
+    theme_color_danger = forms.CharField(
+        label=_("Accent color for errors"),
+        help_text=_("We strongly suggest to use a dark shade of red."),
+        required=False,
+        validators=[
+            RegexValidator(regex='^#[0-9a-fA-F]{6}$',
+                           message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
         ],
         widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
     )
@@ -1183,7 +1258,13 @@ class QuickSetupForm(I18nForm):
                     "bank statements to process the payments within pretix, or mark them as paid manually."),
         required=False
     )
-    payment_banktransfer_bank_details = BankTransfer.form_field(required=False)
+    btf = BankTransfer.form_fields()
+    payment_banktransfer_bank_details_type = btf['bank_details_type']
+    payment_banktransfer_bank_details_sepa_name = btf['bank_details_sepa_name']
+    payment_banktransfer_bank_details_sepa_iban = btf['bank_details_sepa_iban']
+    payment_banktransfer_bank_details_sepa_bic = btf['bank_details_sepa_bic']
+    payment_banktransfer_bank_details_sepa_bank = btf['bank_details_sepa_bank']
+    payment_banktransfer_bank_details = btf['bank_details']
 
     def __init__(self, *args, **kwargs):
         self.obj = kwargs.pop('event', None)
@@ -1193,6 +1274,16 @@ class QuickSetupForm(I18nForm):
         if not self.obj.settings.payment_stripe_connect_client_id:
             del self.fields['payment_stripe__enabled']
         self.fields['payment_banktransfer_bank_details'].required = False
+        for f in self.fields.values():
+            if 'data-required-if' in f.widget.attrs:
+                del f.widget.attrs['data-required-if']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('payment_banktransfer__enabled'):
+            provider = BankTransfer(self.obj)
+            cleaned_data = provider.settings_form_clean(cleaned_data)
+        return cleaned_data
 
 
 class QuickSetupProductForm(I18nForm):

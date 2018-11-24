@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-03 10:25+0000\n"
-"PO-Revision-Date: 2018-08-11 08:20+0000\n"
+"POT-Creation-Date: 2018-11-23 14:37+0000\n"
+"PO-Revision-Date: 2018-11-08 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -49,11 +49,9 @@ msgstr "Kontaktiere Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr ""
+msgstr "Gesamt"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:28
-#: pretix/static/pretixbase/js/asynctask.js:42
-#: pretix/static/pretixbase/js/asynctask.js:94
 msgid ""
 "Your request has been queued on the server and will now be processed. If "
 "this takes longer than two minutes, please contact us or go back in your "
@@ -64,19 +62,19 @@ msgstr ""
 "deinem Browser einen Schritt zurück und versuche es erneut."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:41
-#: pretix/static/pretixbase/js/asynctask.js:62
-#: pretix/static/pretixbase/js/asynctask.js:116
+#: pretix/static/pretixbase/js/asynctask.js:66
+#: pretix/static/pretixbase/js/asynctask.js:124
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
 msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
 
 #: pretix/static/pretixbase/js/asyncdownload.js:54
-#: pretix/static/pretixbase/js/asynctask.js:137
+#: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
 msgstr "Wir verarbeiten deine Anfrage …"
 
 #: pretix/static/pretixbase/js/asyncdownload.js:55
-#: pretix/static/pretixbase/js/asynctask.js:138
+#: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -86,8 +84,8 @@ msgstr ""
 "dauert, prüfe bitte deine Internetverbindung. Danach kannst du diese Seite "
 "neu laden und es erneut versuchen."
 
-#: pretix/static/pretixbase/js/asynctask.js:38
-#: pretix/static/pretixbase/js/asynctask.js:90
+#: pretix/static/pretixbase/js/asynctask.js:39
+#: pretix/static/pretixbase/js/asynctask.js:95
 msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
@@ -95,7 +93,18 @@ msgstr ""
 "Deine Anfrage ist auf dem Server angekommen und wird nun verarbeitet. Je "
 "nach Größe der Veranstaltung kann dies einige Minuten dauern."
 
-#: pretix/static/pretixbase/js/asynctask.js:65
+#: pretix/static/pretixbase/js/asynctask.js:45
+#: pretix/static/pretixbase/js/asynctask.js:101
+msgid ""
+"Your request arrived on the server but we still wait for it to be processed. "
+"If this takes longer than two minutes, please contact us or go back in your "
+"browser and try again."
+msgstr ""
+"Deine Anfrage ist auf dem Server angekommen, aber wurde dort noch nicht "
+"verarbeitet. Wenn dies länger als zwei Minuten dauert, kontaktiere uns bitte "
+"oder gehe in deinem Browser einen Schritt zurück und versuche es erneut."
+
+#: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -103,12 +112,12 @@ msgstr ""
 "Wir können den Server aktuell nicht erreichen, versuchen es aber weiter. "
 "Letzter Fehlercode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:107
+#: pretix/static/pretixbase/js/asynctask.js:115
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
 msgstr "Diese Anfrage hat zu lange gedauert. Bitte erneut versuchen."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixbase/js/asynctask.js:127
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -116,7 +125,7 @@ msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
 "einmal. Fehlercode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:174
+#: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:28
 msgid "Close message"
 msgstr "Schließen"
@@ -191,15 +200,29 @@ msgstr "Generiere Nachrichten…"
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:250
+#: pretix/static/pretixcontrol/js/ui/main.js:205
+msgid "Your color has great contrast and is very easy to read!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:209
+msgid "Your color has decent contrast and is probably good-enough to read!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:213
+msgid ""
+"Your color has bad contrast for text on white background, please choose a "
+"darker shade."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:294
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:251
+#: pretix/static/pretixcontrol/js/ui/main.js:295
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:541
+#: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
@@ -233,79 +256,79 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in deinem Warenkorb sind noch {num} Minuten für dich reserviert."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:9
+#: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Ausverkauft"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:10
+#: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Buy"
 msgstr "In den Warenkorb"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:11
+#: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Reserviert"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:12
+#: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "FREE"
 msgstr "GRATIS"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:13
+#: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "ab %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:14
+#: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "inkl. %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:15
+#: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "zzgl. %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "aktuell verfügbar: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Nur mit Gutschein verfügbar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimale Bestellmenge: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Ticket-Shop schließen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Der Ticket-Shop konnte nicht geladen werden."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Der Warenkorb konnte nicht erstellt werden. Bitte erneut versuchen."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Warteliste"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -314,12 +337,12 @@ msgstr ""
 "Du hast einen aktiven Warenkorb für diese Veranstaltung. Wenn du mehr "
 "Produkte auswählst, werden diese zu deinem Warenkorb hinzugefügt."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Kauf fortsetzen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
@@ -328,32 +351,32 @@ msgstr ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">Event-"
 "Ticketshop von pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Gutschein einlösen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Einlösen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Gutscheincode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Close"
 msgstr "Schließen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "See variations"
 msgstr "Varianten zeigen"

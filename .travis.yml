@@ -1,7 +1,7 @@
 language: python
 sudo: false
 install:
-  - pip install -U pip wheel setuptools==28.6.1
+  - pip install -U pip wheel setuptools
 script:
   - bash .travis.sh $JOB
 cache:
@@ -18,11 +18,11 @@ matrix:
       env: JOB=tests-cov PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.6
       env: JOB=style
-    - python: 3.5
-      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg
     - python: 3.6
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_mysql.cfg
     - python: 3.6
+      env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
+    - python: 3.5
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.6
       env: JOB=plugins
@@ -32,11 +32,15 @@ matrix:
       env: JOB=translation-spelling
 addons:
   postgresql: "9.4"
+  mariadb: '10.3'
   apt:
       packages:
           - enchant
           - myspell-de-de
           - aspell-en
+          - sqlite3
+  sources:
+    - travis-ci/sqlite3
 branches:
   except:
   - /^weblate-.*/

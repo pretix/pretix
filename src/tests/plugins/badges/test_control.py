@@ -66,7 +66,8 @@ class BadgeLayoutFormTest(SoupTest):
             'tax_rate': '19.00',
             'active': 'yes',
             'allow_cancel': 'yes',
-            'badgeitem-layout': bl2.pk
+            'badgeitem-layout': bl2.pk,
+            'sales_channels': 'web',
         })
         assert BadgeItem.objects.get(item=self.item1, layout=bl2)
         self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
@@ -75,6 +76,7 @@ class BadgeLayoutFormTest(SoupTest):
             'tax_rate': '19.00',
             'active': 'yes',
             'allow_cancel': 'yes',
+            'sales_channels': 'web',
         })
         assert not BadgeItem.objects.filter(item=self.item1, layout=bl2).exists()
 

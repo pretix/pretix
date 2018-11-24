@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <h2>{% trans "Delete team:" %} {{ team.name }}</h2>
+    <h1>{% trans "Delete team:" %} {{ team.name }}</h1>
     {% if not possible %}
         <p>{% blocktrans %}You cannot delete the team because there would be no one left who could change team permissions afterwards.{% endblocktrans %}</p>
         <div class="form-group submit-group">

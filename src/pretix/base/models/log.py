@@ -64,6 +64,16 @@ class LogEntry(models.Model):
         return self.action_type
 
     @cached_property
+    def organizer(self):
+        if self.event:
+            return self.event.organizer
+        elif hasattr(self.content_object, 'event'):
+            return self.content_object.event.organizer
+        elif hasattr(self.content_object, 'organizer'):
+            return self.content_object.organizer
+        return None
+
+    @cached_property
     def display_object(self):
         from . import Order, Voucher, Quota, Item, ItemCategory, Question, Event, TaxRule, SubEvent
 

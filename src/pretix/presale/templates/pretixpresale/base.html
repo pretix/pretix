@@ -24,6 +24,7 @@
         <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
         <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
         <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
         <script type="text/javascript" src="{% static "pretixbase/js/asyncdownload.js" %}"></script>
@@ -36,6 +37,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
+    <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% url "presale:site.webmanifest" %}">
+    <link rel="mask-icon" href="{% static "pretixbase/img/icons/safari-pinned-tab.svg" %}" color="{{ settings.primary_color|default:"#3b1c4a" }}">
+    <meta name="msapplication-TileColor" content="{{ settings.primary_color|default:"#3b1c4a" }}">
+    <meta name="msapplication-config" content="{% url "presale:browserconfig.xml" %}">
+    <meta name="theme-color" content="{{ settings.primary_color|default:"#3b1c4a" }}">
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}">
 {% block above %}
@@ -60,11 +72,16 @@
 <div id="ajaxerr">
 </div>
 <div id="loadingmodal">
-    <i class="fa fa-cog big-rotating-icon"></i>
-    <h1>{% trans "We are processing your request …" %}</h1>
-    <p>
-        {% trans "If this takes longer than a few minutes, please contact us." %}
-    </p>
+    <div class="modal-card">
+        <div class="modal-card-icon">
+            <i class="fa fa-cog big-rotating-icon"></i>
+        </div>
+        <div class="modal-card-content">
+            <h3></h3>
+            <p class="text"></p>
+            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+        </div>
+    </div>
 </div>
 {% if DEBUG %}
     <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>

@@ -12,7 +12,7 @@ from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
-from django.utils.http import cookie_date
+from django.utils.http import http_date
 
 from pretix.base.models import Organizer
 from pretix.multidomain.models import KnownDomain
@@ -101,7 +101,7 @@ class SessionMiddleware(BaseSessionMiddleware):
                     else:
                         max_age = request.session.get_expiry_age()
                         expires_time = time.time() + max_age
-                        expires = cookie_date(expires_time)
+                        expires = http_date(expires_time)
                     # Save the session data and refresh the client cookie.
                     # Skip session save for 500 responses, refs #3881.
                     if response.status_code != 500:

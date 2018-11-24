@@ -26,6 +26,7 @@ from django.views.generic import (
 )
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Invoice, InvoiceAddress,
@@ -122,6 +123,12 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
             self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'True')
+        ) and (
+            not self.order.invoices.exists()
+            or (
+                self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+                and self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
+            )
         )
         return ctx
 
@@ -154,6 +161,7 @@ class OrderDetail(OrderView):
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
         ctx['overpaid'] = self.order.pending_sum * -1
+        ctx['sales_channel'] = get_all_sales_channels().get(self.order.sales_channel)
         return ctx
 
     def get_items(self):
@@ -173,11 +181,12 @@ class OrderDetail(OrderView):
             p.additional_fields = []
             data = p.meta_info_data
             for r, response in sorted(responses, key=lambda r: str(r[0])):
-                for key, value in response.items():
-                    p.additional_fields.append({
-                        'answer': data.get('question_form_data', {}).get(key),
-                        'question': value.label
-                    })
+                if response:
+                    for key, value in response.items():
+                        p.additional_fields.append({
+                            'answer': data.get('question_form_data', {}).get(key),
+                            'question': value.label
+                        })
 
             p.has_questions = (
                 p.additional_fields or
@@ -218,7 +227,7 @@ class OrderComment(OrderView):
                 self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
                     'new_value': form.cleaned_data.get('checkin_attention')
                 })
-            self.order.save()
+            self.order.save(update_fields=['checkin_attention', 'comment'])
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))
@@ -345,7 +354,7 @@ class OrderRefundProcess(OrderView):
                     self.order.event.subevents.filter(
                         id__in=self.order.positions.values_list('subevent_id', flat=True))
                 )
-                self.order.save()
+                self.order.save(update_fields=['status', 'expires'])
 
             messages.success(self.request, _('The refund has been processed.'))
         else:
@@ -507,7 +516,7 @@ class OrderRefundView(OrderView):
                 manual_value = formats.sanitize_separators(manual_value)
                 try:
                     manual_value = Decimal(manual_value)
-                except (DecimalException, TypeError) as e:
+                except (DecimalException, TypeError):
                     messages.error(self.request, _('You entered an invalid number.'))
                     is_valid = False
                 else:
@@ -530,7 +539,7 @@ class OrderRefundView(OrderView):
                 offsetting_value = formats.sanitize_separators(offsetting_value)
                 try:
                     offsetting_value = Decimal(offsetting_value)
-                except (DecimalException, TypeError) as e:
+                except (DecimalException, TypeError):
                     messages.error(self.request, _('You entered an invalid number.'))
                     is_valid = False
                 else:
@@ -561,7 +570,7 @@ class OrderRefundView(OrderView):
                     value = formats.sanitize_separators(value)
                     try:
                         value = Decimal(value)
-                    except (DecimalException, TypeError) as e:
+                    except (DecimalException, TypeError):
                         messages.error(self.request, _('You entered an invalid number.'))
                         is_valid = False
                     else:
@@ -630,7 +639,7 @@ class OrderRefundView(OrderView):
                                 self.order.event.subevents.filter(
                                     id__in=self.order.positions.values_list('subevent_id', flat=True))
                             )
-                            self.order.save()
+                            self.order.save(update_fields=['status', 'expires'])
 
                     return redirect(self.get_order_url())
                 else:
@@ -666,7 +675,7 @@ class OrderTransition(OrderView):
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
-            ps = self.order.pending_sum
+            ps = max(0, self.order.pending_sum)
             try:
                 p = self.order.payments.get(
                     state__in=(OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
@@ -688,8 +697,22 @@ class OrderTransition(OrderView):
                 p.confirm(user=self.request.user, count_waitinglist=False,
                           force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
+                p.state = OrderPayment.PAYMENT_STATE_FAILED
+                p.save()
+                self.order.log_action('pretix.event.order.payment.failed', {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'message': str(e)
+                })
                 messages.error(self.request, str(e))
             except PaymentException as e:
+                p.state = OrderPayment.PAYMENT_STATE_FAILED
+                p.save()
+                self.order.log_action('pretix.event.order.payment.failed', {
+                    'local_id': p.local_id,
+                    'provider': p.provider,
+                    'message': str(e)
+                })
                 messages.error(self.request, str(e))
             except SendMailException:
                 messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
@@ -723,9 +746,13 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid') or not invoice_qualified(self.order):
+        has_inv = self.order.invoices.exists() and not (
+            self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+            and self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
+        )
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(self.order):
             messages.error(self.request, _('You cannot generate an invoice for this order.'))
-        elif self.order.invoices.exists():
+        elif has_inv:
             messages.error(self.request, _('An invoice for this order already exists.'))
         else:
             inv = generate_invoice(self.order)

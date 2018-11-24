@@ -2,20 +2,20 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    <h2>{% trans "Revoke device access:" %} {{ device.name }}</h2>
-        <form action="" method="post" class="form-horizontal">
-            {% csrf_token %}
-            <p>
-                <strong>{% blocktrans %}Are you sure you want remove access for this device?{% endblocktrans %}</strong>
-                {% trans "All data of this device will stay available, but you can't use the device any more." %}
-            </p>
-            <div class="form-group submit-group">
-                <a href="{% url "control:organizer.devices" organizer=request.organizer.slug%}" class="btn btn-default btn-cancel">
-                    {% trans "Cancel" %}
-                </a>
-                <button type="submit" class="btn btn-danger btn-save">
-                    {% trans "Revoke" %}
-                </button>
-            </div>
-        </form>
+    <h1>{% trans "Revoke device access:" %} {{ device.name }}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>
+            <strong>{% blocktrans %}Are you sure you want remove access for this device?{% endblocktrans %}</strong>
+            {% trans "All data of this device will stay available, but you can't use the device any more." %}
+        </p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Revoke" %}
+            </button>
+        </div>
+    </form>
 {% endblock %}

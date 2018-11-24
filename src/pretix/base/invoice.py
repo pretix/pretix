@@ -192,7 +192,14 @@ class ThumbnailingImageReader(ImageReader):
             size=(int(width * dpi / 72), int(height * dpi / 72)),
             resample=BICUBIC
         )
+        self._data = None
         return width, height
+
+    def _jpeg_fh(self):
+        # Bypass a reportlab-internal optimization that falls back to the original
+        # file handle if the file is a JPEG, and therefore does not respect the
+        # (smaller) size of the modified image.
+        return None
 
 
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
@@ -216,7 +223,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         p.drawOn(canvas, 25 * mm, (297 - 52) * mm - p_size[1])
 
     def _draw_invoice_from(self, canvas):
-        p = Paragraph(self.invoice.invoice_from.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+        p = Paragraph(self.invoice.full_invoice_from.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
         p.wrapOn(canvas, 70 * mm, 50 * mm)
         p_size = p.wrap(70 * mm, 50 * mm)
         p.drawOn(canvas, 25 * mm, (297 - 17) * mm - p_size[1])
@@ -323,7 +330,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             return txt
 
         if not self.invoice.event.has_subevents:
-            if self.invoice.event.settings.show_date_to:
+            if self.invoice.event.settings.show_date_to and self.invoice.event.date_to:
                 p_str = (
                     shorten(self.invoice.event.name) + '\n' + pgettext('invoice', '{from_date}\nuntil {to_date}').format(
                         from_date=self.invoice.event.get_date_from_display(),

@@ -91,6 +91,19 @@ var form_handlers = function (el) {
         };
         $(this).datetimepicker(opts);
 	});
+
+    el.find("script[data-replace-with-qr]").each(function () {
+        var $div = $("<div>");
+        $div.insertBefore($(this));
+        $div.qrcode(
+            {
+                text: $(this).html(),
+                correctLevel: 0,  // M
+                width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+                height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
+            }
+        );
+    });
 }
 
 
@@ -176,7 +189,10 @@ $(function () {
         dependency = $($(this).attr("data-required-if")),
         update = function (ev) {
           var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-          dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled);
+          if (!dependent.is("[data-no-required-attr]")) {
+              dependent.prop('required', enabled);
+          }
+          dependent.closest('.form-group').toggleClass('required', enabled);
         };
       update();
       dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);

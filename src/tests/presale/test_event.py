@@ -84,7 +84,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
         q.items.add(item)
-        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
         self.assertNotIn("btn-add-to-cart", html)
 
@@ -95,6 +95,16 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section .product-row")[0].text)
         self.assertEqual(len(doc.select("#btn-add-to-cart")), 1)
+
+    def test_sales_channel(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                   sales_channels=['bar'])
+        q.items.add(item)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug), PRETIX_SALES_CHANNEL="bar").rendered_content
+        self.assertIn("Early-bird", html)
 
     def test_timely_available(self):
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -110,7 +120,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    available_until=now() - datetime.timedelta(days=2))
         q.items.add(item)
-        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_not_yet_available(self):
@@ -118,7 +128,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    available_from=now() + datetime.timedelta(days=2))
         q.items.add(item)
-        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_hidden_without_voucher(self):
@@ -126,7 +136,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
                                    hide_without_voucher=True)
         q.items.add(item)
-        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_simple_with_category(self):

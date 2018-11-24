@@ -40,6 +40,10 @@ def compile_scss(object, file="main.scss", fonts=True):
     sassrules = []
     if object.settings.get('primary_color'):
         sassrules.append('$brand-primary: {};'.format(object.settings.get('primary_color')))
+    if object.settings.get('theme_color_success'):
+        sassrules.append('$brand-success: {};'.format(object.settings.get('theme_color_success')))
+    if object.settings.get('theme_color_danger'):
+        sassrules.append('$brand-danger: {};'.format(object.settings.get('theme_color_danger')))
 
     font = object.settings.get('primary_font')
     if font != 'Open Sans' and fonts:

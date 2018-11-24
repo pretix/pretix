@@ -17,9 +17,15 @@ def notify(logentry_id: int):
     if not logentry.event:
         return  # Ignore, we only have event-related notifications right now
     types = get_all_notification_types(logentry.event)
-    notification_type = types.get(logentry.action_type)
+
+    notification_type = None
+    typepath = logentry.action_type
+    while not notification_type and '.' in typepath:
+        notification_type = types.get(typepath + ('.*' if typepath != logentry.action_type else ''))
+        typepath = typepath.rsplit('.', 1)[0]
+
     if not notification_type:
-        return  # Ignore, e.g. plugin not active for this event
+        return  # No suitable plugin
 
     # All users that have the permission to get the notification
     users = logentry.event.get_users_with_permission(
@@ -33,7 +39,7 @@ def notify(logentry_id: int):
         (ns.user, ns.method): ns.enabled
         for ns in NotificationSetting.objects.filter(
             event=logentry.event,
-            action_type=logentry.action_type,
+            action_type=notification_type.action_type,
             user__pk__in=users.values_list('pk', flat=True)
         )
     }
@@ -41,7 +47,7 @@ def notify(logentry_id: int):
         (ns.user, ns.method): ns.enabled
         for ns in NotificationSetting.objects.filter(
             event__isnull=True,
-            action_type=logentry.action_type,
+            action_type=notification_type.action_type,
             user__pk__in=users.values_list('pk', flat=True)
         )
     }
@@ -49,20 +55,20 @@ def notify(logentry_id: int):
     for um, enabled in notify_specific.items():
         user, method = um
         if enabled:
-            send_notification.apply_async(args=(logentry_id, user.pk, method))
+            send_notification.apply_async(args=(logentry_id, notification_type.action_type, user.pk, method))
 
     for um, enabled in notify_global.items():
         user, method = um
         if enabled and um not in notify_specific:
-            send_notification.apply_async(args=(logentry_id, user.pk, method))
+            send_notification.apply_async(args=(logentry_id, notification_type.action_type, user.pk, method))
 
 
 @app.task(base=ProfiledTask)
-def send_notification(logentry_id: int, user_id: int, method: str):
+def send_notification(logentry_id: int, action_type: str, user_id: int, method: str):
     logentry = LogEntry.all.get(id=logentry_id)
     user = User.objects.get(id=user_id)
     types = get_all_notification_types(logentry.event)
-    notification_type = types.get(logentry.action_type)
+    notification_type = types.get(action_type)
     if not notification_type:
         return  # Ignore, e.g. plugin not active for this event
 

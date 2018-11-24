@@ -5,18 +5,6 @@
 {% block title %}{% trans "Global settings" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Global settings" %}</h1>
-    <ul class="nav nav-pills">
-        <li {% if "global.settings" == url_name %}class="active"{% endif %}>
-            <a href="{% url 'control:global.settings' %}">
-                {% trans "General" %}
-            </a>
-        </li>
-        <li {% if "global.update" == url_name %}class="active"{% endif %}>
-            <a href="{% url 'control:global.update' %}">
-                {% trans "Update check" %}
-            </a>
-        </li>
-    </ul>
     {% block inner %}
     {% endblock %}
 {% endblock %}

@@ -8,6 +8,7 @@ import pretix.presale.views.locale
 import pretix.presale.views.order
 import pretix.presale.views.organizer
 import pretix.presale.views.robots
+import pretix.presale.views.theme
 import pretix.presale.views.user
 import pretix.presale.views.waiting
 import pretix.presale.views.widget
@@ -111,5 +112,7 @@ organizer_patterns = [
 locale_patterns = [
     url(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
     url(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
+    url(r'^browserconfig.xml$', pretix.presale.views.theme.browserconfig_xml, name='browserconfig.xml'),
+    url(r'^site.webmanifest$', pretix.presale.views.theme.webmanifest, name='site.webmanifest'),
     url(r'^widget/v1\.(?P<lang>[a-zA-Z0-9_\-]+)\.js$', pretix.presale.views.widget.widget_js, name='widget.js'),
 ]

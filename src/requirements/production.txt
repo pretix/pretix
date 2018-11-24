@@ -34,6 +34,8 @@ babel
 django-i18nfield>=1.4.0
 django-hijack>=2.1.10,<2.2.0
 django-oauth-toolkit==1.2.*
+django-jsonfallback
+psycopg2-binary
 # Stripe
 stripe==2.0.*
 # PayPal
@@ -48,6 +50,7 @@ django-countries
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.0.1
 vat_moss==0.11.0
+django-localflavor
 idna==2.6 # required by current requests
 django-redis==4.8.*
 redis==2.10.5

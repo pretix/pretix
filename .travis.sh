@@ -11,7 +11,6 @@ fi
 
 if [ "$PRETIX_CONFIG_FILE" == "tests/travis_postgres.cfg" ]; then
     psql -c 'create database travis_ci_test;' -U postgres
-    pip3 install -Ur src/requirements/postgres.txt
 fi
 
 if [ "$1" == "style" ]; then
@@ -43,7 +42,7 @@ if [ "$1" == "tests" ]; then
 	cd src
 	python manage.py check
 	make all compress
-	py.test --reruns 5 -n 2 tests
+	py.test --reruns 5 -n 3 tests
 fi
 if [ "$1" == "tests-cov" ]; then
 	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt

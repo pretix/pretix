@@ -96,7 +96,6 @@ body.loading .container {
     height: 100vh;
     background: rgba(255, 255, 255, .7);
     opacity: 0;
-    text-align: center;
     z-index: 900000;
     visibility: hidden;
     padding: 10px;
@@ -107,14 +106,53 @@ body.loading .container {
         color: $brand-primary;
     }
 
-    .big-rotating-icon {
-        -webkit-animation: fa-spin 8s infinite linear;
-        animation: fa-spin 8s infinite linear;
-        margin-top: 50px;
-        font-size: 200px;
-        color: $brand-primary;
+    .modal-card {
+        margin: 50px auto 0;
+        top: 50px;
+        width: 90%;
+        max-width: 600px;
+        background: white;
+        border-radius: $border-radius-large;
+        box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+        padding: 20px;
+        min-height: 160px;
+
+        .modal-card-icon {
+            float: left;
+            width: 150px;
+            text-align: center;
+            .big-rotating-icon {
+                -webkit-animation: fa-spin 8s infinite linear;
+                animation: fa-spin 8s infinite linear;
+                font-size: 120px;
+                color: $brand-primary;
+            }
+        }
+        .modal-card-content {
+            margin-left: 160px;
+            text-align: left;
+            h3 {
+                margin-top: 0;
+            }
+        }
     }
 }
+@media (max-width: 700px) {
+    #loadingmodal, #ajaxerr {
+        .modal-card {
+            .modal-card-icon {
+                float: none;
+                width: 100%;
+            }
+            .modal-card-content {
+                text-align: center;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
 #ajaxerr {
     background: rgba(236, 236, 236, .9);
 }

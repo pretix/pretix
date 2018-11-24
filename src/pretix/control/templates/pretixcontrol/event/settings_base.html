@@ -27,68 +27,6 @@
         </div>
     {% endif %}
 
-    <h1>{% trans "Settings" %}</h1>
-    <ul class="nav nav-pills">
-        {% if 'can_change_event_settings' in request.eventpermset %}
-            <li {% if "event.settings" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "General" %}
-                </a>
-            </li>
-            <li {% if "event.settings.payment" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.payment' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Payment" %}
-                </a>
-            </li>
-            <li {% if "event.settings.plugins" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.plugins' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Plugins" %}
-                </a>
-            </li>
-            <li {% if "event.settings.display" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.display' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Display" %}
-                </a>
-            </li>
-            <li {% if "event.settings.tickets" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.tickets' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Tickets" %}
-                </a>
-            </li>
-            <li {% if "event.settings.mail" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.mail' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "E-mail" %}
-                </a>
-            </li>
-            <li {% if "event.settings.tax" in url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.tax' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Tax rules" %}
-                </a>
-            </li>
-            <li {% if "event.settings.invoice" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.invoice' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Invoicing" %}
-                </a>
-            </li>
-            <li {% if "event.settings.permissions" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.permissions' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Permissions" %}
-                </a>
-            </li>
-            <li {% if "event.settings.widget" == url_name %}class="active"{% endif %}>
-                <a href="{% url 'control:event.settings.widget' organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% trans "Widget" %}
-                </a>
-            </li>
-        {% endif %}
-        {% for nav in nav_event_settings %}
-            <li {% if nav.active %}class="active"{% endif %}>
-                <a href="{{ nav.url }}">
-                    {{ nav.label }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
     {% block inside %}
     {% endblock %}
 {% endblock %}

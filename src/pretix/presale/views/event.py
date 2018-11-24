@@ -47,12 +47,13 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None):
+def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
     items = event.items.all().filter(
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
         & Q(Q(category__isnull=True) | Q(category__is_addon=False))
+        & Q(sales_channels__contains=channel)
     )
 
     vouchq = Q(hide_without_voucher=False)
@@ -189,6 +190,9 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
                 request.GET.get('take_cart_id')
             ))
+        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
+            # We've been passed data from a widget, we need to create a cart session to store it.
+            get_or_create_cart_id(request)
         elif 'require_cookie' in request.GET and settings.SESSION_COOKIE_NAME not in request.COOKIES:
             # Cookies are in fact not supported
             r = render(request, 'pretixpresale/event/cookies.html', {
@@ -246,7 +250,8 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
-            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent)
+            items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
+                                                           channel=self.request.sales_channel)
             context['itemnum'] = len(items)
 
             # Regroup those by category

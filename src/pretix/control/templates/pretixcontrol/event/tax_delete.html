@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Delete tax rule" %}{% endblock %}
 {% block inside %}
-    <legend>{% trans "Delete tax rule" %}</legend>
+    <h1>{% trans "Delete tax rule" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% if possible %}

@@ -8,11 +8,14 @@ from django.utils.translation import get_language
 
 from pretix.base.models.auth import StaffSession
 from pretix.base.settings import GlobalSettingsObject
+from pretix.control.navigation import (
+    get_event_navigation, get_global_navigation, get_organizer_navigation,
+)
 
 from ..helpers.i18n import (
     get_javascript_format, get_javascript_output_format, get_moment_locale,
 )
-from .signals import html_head, nav_event, nav_global, nav_topbar
+from .signals import html_head, nav_topbar
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -40,10 +43,9 @@ def contextprocessor(request):
     ctx['html_head'] = "".join(_html_head)
 
     _js_payment_weekdays_disabled = '[]'
-    _nav_event = []
     if getattr(request, 'event', None) and hasattr(request, 'organizer') and request.user.is_authenticated:
-        for receiver, response in nav_event.send(request.event, request=request):
-            _nav_event += response
+        ctx['nav_items'] = get_event_navigation(request)
+
         if request.event.settings.get('payment_term_weekdays'):
             _js_payment_weekdays_disabled = '[0,6]'
 
@@ -65,16 +67,12 @@ def contextprocessor(request):
         if request.GET.get('subevent', ''):
             # Do not use .get() for lazy evaluation
             ctx['selected_subevents'] = request.event.subevents.filter(pk=request.GET.get('subevent'))
+    elif getattr(request, 'organizer', None) and request.user.is_authenticated:
+        ctx['nav_items'] = get_organizer_navigation(request)
+    elif request.user.is_authenticated:
+        ctx['nav_items'] = get_global_navigation(request)
 
-    ctx['nav_event'] = _nav_event
     ctx['js_payment_weekdays_disabled'] = _js_payment_weekdays_disabled
-
-    _nav_global = []
-    if not hasattr(request, 'event') and request.user.is_authenticated:
-        for receiver, response in nav_global.send(request, request=request):
-            _nav_global += response
-
-    ctx['nav_global'] = sorted(_nav_global, key=lambda n: n['label'])
 
     _nav_topbar = []
     if request.user.is_authenticated:

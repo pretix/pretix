@@ -178,6 +178,15 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
+register_sales_channels = django.dispatch.Signal(
+    providing_args=[]
+)
+"""
+This signal is sent out to get all known sales channels types. Receivers should return an
+instance of a subclass of pretix.base.channels.SalesChannel or a list of such
+instances.
+"""
+
 register_data_exporters = EventPluginSignal(
     providing_args=[]
 )

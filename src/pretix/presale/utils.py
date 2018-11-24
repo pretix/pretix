@@ -92,13 +92,47 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if require_plugin not in request.event.get_plugins() and not is_core:
                     raise Http404(_('This feature is not enabled.'))
 
+            if not hasattr(request, 'sales_channel'):
+                # The environ lookup is only relevant during unit testing
+                request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', 'web')
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response
 
     except Event.DoesNotExist:
+        try:
+            if hasattr(request, 'organizer_domain'):
+                event = request.organizer.events.get(
+                    slug__iexact=url.kwargs['event'],
+                    organizer=request.organizer,
+                )
+                pathparts = request.get_full_path().split('/')
+                pathparts[1] = event.slug
+                return redirect('/'.join(pathparts))
+            else:
+                if 'event' in url.kwargs and 'organizer' in url.kwargs:
+                    event = Event.objects.select_related('organizer').get(
+                        slug__iexact=url.kwargs['event'],
+                        organizer__slug__iexact=url.kwargs['organizer']
+                    )
+                    pathparts = request.get_full_path().split('/')
+                    pathparts[1] = event.organizer.slug
+                    pathparts[2] = event.slug
+                    return redirect('/'.join(pathparts))
+        except Event.DoesNotExist:
+            raise Http404(_('The selected event was not found.'))
         raise Http404(_('The selected event was not found.'))
     except Organizer.DoesNotExist:
+        if 'organizer' in url.kwargs:
+            try:
+                organizer = Organizer.objects.get(
+                    slug__iexact=url.kwargs['organizer']
+                )
+            except Organizer.DoesNotExist:
+                raise Http404(_('The selected organizer was not found.'))
+            pathparts = request.get_full_path().split('/')
+            pathparts[1] = organizer.slug
+            return redirect('/'.join(pathparts))
         raise Http404(_('The selected organizer was not found.'))
 
     request._event_detected = True

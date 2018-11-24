@@ -30,6 +30,8 @@ status                                string                     Order status, o
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 locale                                string                     The locale used for communication with this customer
+sales_channel                         string                     Channel this sale was created through, such as
+                                                                 ``"web"``.
 datetime                              datetime                   Time of order creation
 expires                               datetime                   The order will expire, if it is still pending by this time
 payment_date                          date                       **DEPRECATED AND INACCURATE** Date of payment receipt
@@ -46,6 +48,7 @@ invoice_address                       object                     Invoice address
                                                                  for orders created before pretix 1.7, do not rely on
                                                                  it).
 ├ name                                string                     Customer name
+├ name_parts                          object of strings          Customer name decomposition
 ├ street                              string                     Customer street
 ├ zipcode                             string                     Customer ZIP code
 ├ city                                string                     Customer city
@@ -120,6 +123,10 @@ last_modified                         datetime                   Last modificati
    nested ``payments`` and ``refunds`` resources, but will still be served and removed in 2.2. The ``require_approval``
    attribute has been added, as have been the ``…/approve/`` and ``…/deny/`` endpoints.
 
+.. versionchanged:: 2.3
+
+   The ``sales_channel`` attribute has been added.
+
 .. _order-position-resource:
 
 Order position resource
@@ -137,6 +144,7 @@ item                                  integer                    ID of the purch
 variation                             integer                    ID of the purchased variation (or ``null``)
 price                                 money (string)             Price of this position
 attendee_name                         string                     Specified attendee name for this position (or ``null``)
+attendee_name_parts                   object of strings          Decomposition of attendee name (i.e. given name, family name)
 attendee_email                        string                     Specified attendee email address for this position (or ``null``)
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 tax_rate                              decimal (string)           VAT rate applied for this position
@@ -263,6 +271,7 @@ List of all orders
             "secret": "k24fiuwvu8kxz3y1",
             "email": "tester@example.org",
             "locale": "en",
+            "sales_channel": "web",
             "datetime": "2017-12-01T10:00:00Z",
             "expires": "2017-12-10T10:00:00Z",
             "last_modified": "2017-12-01T10:00:00Z",
@@ -278,6 +287,7 @@ List of all orders
                 "is_business": True,
                 "company": "Sample company",
                 "name": "John Doe",
+                "name_parts": {"full_name": "John Doe"},
                 "street": "Test street 12",
                 "zipcode": "12345",
                 "city": "Testington",
@@ -295,6 +305,9 @@ List of all orders
                 "variation": null,
                 "price": "23.00",
                 "attendee_name": "Peter",
+                "attendee_name_parts": {
+                  "full_name": "Peter",
+                },
                 "attendee_email": null,
                 "voucher": null,
                 "tax_rate": "0.00",
@@ -395,6 +408,7 @@ Fetching individual orders
         "secret": "k24fiuwvu8kxz3y1",
         "email": "tester@example.org",
         "locale": "en",
+        "sales_channel": "web",
         "datetime": "2017-12-01T10:00:00Z",
         "expires": "2017-12-10T10:00:00Z",
         "last_modified": "2017-12-01T10:00:00Z",
@@ -410,6 +424,7 @@ Fetching individual orders
             "company": "Sample company",
             "is_business": True,
             "name": "John Doe",
+            "name_parts": {"full_name": "John Doe"},
             "street": "Test street 12",
             "zipcode": "12345",
             "city": "Testington",
@@ -427,6 +442,9 @@ Fetching individual orders
             "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter",
+            },
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
@@ -551,6 +569,8 @@ Creating orders
 
        * does not validate if products are only to be sold in a specific time frame
 
+       * does not validate if products are only to be sold on other sales channels
+
        * does not validate if the event's ticket sales are already over or haven't started
 
        * does not validate the number of items per order or the number of times an item can be included in an order
@@ -587,6 +607,7 @@ Creating orders
      creation.
    * ``email``
    * ``locale``
+   * ``sales_channel``
    * ``payment_provider`` – The identifier of the payment provider set for this order. This needs to be an existing
      payment provider. You should use ``"free"`` for free orders, and we strongly advise to use ``"manual"`` for all
      orders you create as paid.
@@ -601,7 +622,7 @@ Creating orders
 
       * ``company``
       * ``is_business``
-      * ``name``
+      * ``name`` **or** ``name_parts``
       * ``street``
       * ``zipcode``
       * ``city``
@@ -615,7 +636,7 @@ Creating orders
       * ``item``
       * ``variation``
       * ``price``
-      * ``attendee_name``
+      * ``attendee_name`` **or** ``attendee_name_parts``
       * ``attendee_email``
       * ``secret`` (optional)
       * ``addon_to`` (optional, see below)
@@ -651,6 +672,7 @@ Creating orders
       {
         "email": "dummy@example.org",
         "locale": "en",
+        "sales_channel": "web",
         "fees": [
           {
             "fee_type": "payment",
@@ -664,7 +686,7 @@ Creating orders
         "invoice_address": {
           "is_business": False,
           "company": "Sample company",
-          "name": "John Doe",
+          "name_parts": {"full_name": "John Doe"},
           "street": "Sesam Street 12",
           "zipcode": "12345",
           "city": "Sample City",
@@ -678,7 +700,9 @@ Creating orders
             "item": 1,
             "variation": null,
             "price": "23.00",
-            "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter"
+            },
             "attendee_email": null,
             "addon_to": null,
             "answers": [
@@ -1075,6 +1099,9 @@ List of all order positions
             "variation": null,
             "price": "23.00",
             "attendee_name": "Peter",
+            "attendee_name_parts": {
+              "full_name": "Peter"
+            },
             "attendee_email": null,
             "voucher": null,
             "tax_rate": "0.00",
@@ -1172,6 +1199,9 @@ Fetching individual positions
         "variation": null,
         "price": "23.00",
         "attendee_name": "Peter",
+        "attendee_name_parts": {
+          "full_name": "Peter",
+        },
         "attendee_email": null,
         "voucher": null,
         "tax_rate": "0.00",

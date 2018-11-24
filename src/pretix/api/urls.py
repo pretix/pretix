@@ -7,8 +7,8 @@ from rest_framework import routers
 from pretix.api.views import cart
 
 from .views import (
-    checkin, device, event, item, oauth, order, organizer, voucher,
-    waitinglist,
+    checkin, device, event, item, oauth, order, organizer, user, voucher,
+    waitinglist, webhooks,
 )
 
 router = routers.DefaultRouter()
@@ -17,6 +17,7 @@ router.register(r'organizers', organizer.OrganizerViewSet)
 orga_router = routers.DefaultRouter()
 orga_router.register(r'events', event.EventViewSet)
 orga_router.register(r'subevents', event.SubEventViewSet)
+orga_router.register(r'webhooks', webhooks.WebHookViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)
@@ -71,4 +72,5 @@ urlpatterns = [
     url(r"^device/update$", device.UpdateView.as_view(), name="device.update"),
     url(r"^device/roll$", device.RollKeyView.as_view(), name="device.roll"),
     url(r"^device/revoke$", device.RevokeKeyView.as_view(), name="device.revoke"),
+    url(r"^me$", user.MeView.as_view(), name="user.me"),
 ]

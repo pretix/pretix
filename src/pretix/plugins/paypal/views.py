@@ -7,14 +7,17 @@ from django.contrib import messages
 from django.core import signing
 from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from paypalrestsdk.openid_connect import Tokeninfo
 
-from pretix.base.models import Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
+from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.plugins.paypal.payment import Paypal
@@ -35,6 +38,37 @@ def redirect_view(request, *args, **kwargs):
     })
     r._csp_ignore = True
     return r
+
+
+def oauth_return(request, *args, **kwargs):
+    if 'payment_paypal_oauth_event' not in request.session:
+        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        return redirect(reverse('control:index'))
+
+    event = get_object_or_404(Event, pk=request.session['payment_paypal_oauth_event'])
+
+    prov = Paypal(event)
+    prov.init_api()
+
+    try:
+        tokeninfo = Tokeninfo.create(request.GET.get('code'))
+        userinfo = Tokeninfo.create_with_refresh_token(tokeninfo['refresh_token']).userinfo()
+    except:
+        logger.exception('Failed to obtain OAuth token')
+        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+    else:
+        messages.success(request,
+                         _('Your PayPal account is now connected to pretix. You can change the settings in '
+                           'detail below.'))
+
+        event.settings.payment_paypal_connect_refresh_token = tokeninfo['refresh_token']
+        event.settings.payment_paypal_connect_user_id = userinfo.email
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': event.organizer.slug,
+        'event': event.slug,
+        'provider': 'paypal'
+    }))
 
 
 def success(request, *args, **kwargs):
@@ -201,3 +235,18 @@ def webhook(request, *args, **kwargs):
             pass
 
     return HttpResponse(status=200)
+
+
+@event_permission_required('can_change_event_settings')
+@require_POST
+def oauth_disconnect(request, **kwargs):
+    del request.event.settings.payment_paypal_connect_refresh_token
+    del request.event.settings.payment_paypal_connect_user_id
+    request.event.settings.payment_paypal__enabled = False
+    messages.success(request, _('Your PayPal account has been disconnected.'))
+
+    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        'organizer': request.event.organizer.slug,
+        'event': request.event.slug,
+        'provider': 'paypal'
+    }))

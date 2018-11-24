@@ -1,5 +1,25 @@
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Voucher
+
+
+class VoucherListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        codes = set()
+        errs = []
+        err = False
+        for voucher_data in validated_data:
+            if voucher_data['code'] in codes:
+                err = True
+                errs.append({'code': ['Duplicate voucher code in request.']})
+            else:
+                codes.add(voucher_data['code'])
+                errs.append({})
+        if err:
+            raise ValidationError(errs)
+        return super().create(validated_data)
 
 
 class VoucherSerializer(I18nAwareModelSerializer):
@@ -9,6 +29,7 @@ class VoucherSerializer(I18nAwareModelSerializer):
                   'allow_ignore_quota', 'price_mode', 'value', 'item', 'variation', 'quota',
                   'tag', 'comment', 'subevent')
         read_only_fields = ('id', 'redeemed')
+        list_serializer_class = VoucherListSerializer
 
     def validate(self, data):
         data = super().validate(data)

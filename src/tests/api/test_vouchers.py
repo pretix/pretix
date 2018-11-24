@@ -879,3 +879,134 @@ def test_redeemed_is_not_writable(token_client, organizer, event, item):
         },
     )
     assert v.redeemed == 0
+
+
+@pytest.mark.django_db
+def test_create_multiple_vouchers(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/vouchers/batch_create/'.format(organizer.slug, event.slug),
+        data=[
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': False,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            },
+            {
+                'code': 'JKLMNOPQR',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': True,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            }
+        ], format='json'
+    )
+    assert resp.status_code == 201
+    assert Voucher.objects.count() == 2
+    assert resp.data[0]['code'] == 'ABCDEFGHI'
+    v1 = Voucher.objects.get(code='ABCDEFGHI')
+    assert not v1.block_quota
+    assert resp.data[1]['code'] == 'JKLMNOPQR'
+    v2 = Voucher.objects.get(code='JKLMNOPQR')
+    assert v2.block_quota
+
+
+@pytest.mark.django_db
+def test_create_multiple_vouchers_one_invalid(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/vouchers/batch_create/'.format(organizer.slug, event.slug),
+        data=[
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': False,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            },
+            {
+                'code': 'J',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': True,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            }
+        ], format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == [{}, {'code': ['Ensure this field has at least 5 characters.']}]
+    assert Voucher.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_create_multiple_vouchers_duplicate_code(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/vouchers/batch_create/'.format(organizer.slug, event.slug),
+        data=[
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': False,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            },
+            {
+                'code': 'ABCDEFGHI',
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': True,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            }
+        ], format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == [{}, {'code': ['Duplicate voucher code in request.']}]
+    assert Voucher.objects.count() == 0

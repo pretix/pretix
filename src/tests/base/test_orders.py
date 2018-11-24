@@ -19,7 +19,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, deny_order,
-    expire_orders, send_download_reminders,
+    expire_orders, send_download_reminders, send_expiry_warnings,
 )
 
 
@@ -289,6 +289,54 @@ def test_deny(event):
     assert 'denied' in djmail.outbox[0].subject
 
 
+class PaymentReminderTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now() + timedelta(days=2),
+            plugins='pretix.plugins.banktransfer'
+        )
+        self.order = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, locale='en',
+            datetime=now(),
+            expires=now() + timedelta(days=10),
+            total=Decimal('46.00'),
+        )
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                          default_price=Decimal('23.00'), admission=True)
+        self.op1 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+        )
+        djmail.outbox = []
+
+    def test_disabled(self):
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_sent_once(self):
+        self.event.settings.mail_days_order_expire_warning = 12
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
+
+    def test_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_sent_days(self):
+        self.event.settings.mail_days_order_expire_warning = 9
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+        self.event.settings.mail_days_order_expire_warning = 10
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
+
+
 class DownloadReminderTests(TestCase):
     def setUp(self):
         super().setUp()
@@ -309,7 +357,7 @@ class DownloadReminderTests(TestCase):
                                           default_price=Decimal('23.00'), admission=True)
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={"full_name": "Peter"}, positionid=1
         )
         djmail.outbox = []
 
@@ -363,11 +411,11 @@ class OrderChangeManagerTests(TestCase):
                                          default_price=Decimal('12.00'))
         self.op1 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Peter", positionid=1
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
         )
         self.op2 = OrderPosition.objects.create(
             order=self.order, item=self.ticket, variation=None,
-            price=Decimal("23.00"), attendee_name="Dieter", positionid=2
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
         )
         self.ocm = OrderChangeManager(self.order, None)
         self.quota = self.event.quotas.create(name='Test', size=None)
@@ -729,6 +777,27 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.pending_sum == Decimal('2.00')
         assert self.order.status == Order.STATUS_PENDING
 
+    def test_change_paid_stays_paid_when_overpaid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=Decimal('2.00'),
+        )
+        assert self.order.pending_sum == Decimal('-2.00')
+        self.ocm.change_price(self.op1, Decimal('25.00'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('48.00')
+        assert self.order.pending_sum == Decimal('0.00')
+        assert self.order.status == Order.STATUS_PAID
+
     def test_add_item_quota_required(self):
         self.quota.delete()
         with self.assertRaises(OrderError):
@@ -1033,6 +1102,18 @@ class OrderChangeManagerTests(TestCase):
         assert o2.positions.count() == 1
         assert o2.invoice_address != ia
         assert o2.invoice_address.company == 'Sample'
+
+    def test_change_price_of_pending_order_with_payment(self):
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        assert self.order.payments.last().state == OrderPayment.PAYMENT_STATE_CREATED
+        assert self.order.payments.last().amount == Decimal('46.00')
+
+        self.ocm.change_price(self.op1, Decimal('27.00'))
+        self.ocm.commit()
+
+        assert self.order.payments.last().state == OrderPayment.PAYMENT_STATE_CANCELED
+        assert self.order.payments.last().amount == Decimal('46.00')
 
     def test_split_reverse_charge(self):
         ia = self._enable_reverse_charge()

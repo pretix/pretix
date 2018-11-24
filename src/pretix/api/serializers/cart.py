@@ -19,18 +19,19 @@ class CartPositionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = CartPosition
-        fields = ('id', 'cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'voucher', 'addon_to', 'subevent', 'datetime', 'expires', 'includes_tax',
+        fields = ('id', 'cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'attendee_email', 'voucher', 'addon_to', 'subevent', 'datetime', 'expires', 'includes_tax',
                   'answers',)
 
 
 class CartPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     expires = serializers.DateTimeField(required=False)
+    attendee_name = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
-        fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
+        fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'subevent', 'expires', 'includes_tax', 'answers',)
 
     def create(self, validated_data):
@@ -65,6 +66,11 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                             quota.name
                         )
                     )
+            attendee_name = validated_data.pop('attendee_name', '')
+            if attendee_name and not validated_data.get('attendee_name_parts'):
+                validated_data['attendee_name_parts'] = {
+                    '_legacy': attendee_name
+                }
             cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:
@@ -118,4 +124,8 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 raise ValidationError(
                     'You cannot specify a variation for this item.'
                 )
+        if data.get('attendee_name') and data.get('attendee_name_parts'):
+            raise ValidationError(
+                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
+            )
         return data

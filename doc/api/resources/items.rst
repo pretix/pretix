@@ -37,6 +37,8 @@ admission                             boolean                    ``True`` for it
 position                              integer                    An integer, used for sorting
 picture                               string                     A product picture to be displayed in the shop
                                                                  (read-only).
+sales_channels                        list of strings            Sales channels this product is available on, such as
+                                                                 ``"web"`` or ``"resellers"``. Defaults to ``["web"]``.
 available_from                        datetime                   The first date time at which this item can be bought
                                                                  (or ``null``).
 available_until                       datetime                   The last date time at which this item can be bought
@@ -105,6 +107,10 @@ addons                                list of objects            Definition of a
 
    The field ``require_approval`` has been added.
 
+.. versionchanged:: 2.3
+
+   The ``sales_channels`` attribute has been added.
+
 Notes
 -----
 Please note that an item either always has variations or never has. Once created with variations the item can never
@@ -147,6 +153,7 @@ Endpoints
             "id": 1,
             "name": {"en": "Standard ticket"},
             "internal_name": "",
+            "sales_channels": ["web"],
             "default_price": "23.00",
             "original_price": null,
             "category": null,
@@ -232,6 +239,7 @@ Endpoints
         "id": 1,
         "name": {"en": "Standard ticket"},
         "internal_name": "",
+        "sales_channels": ["web"],
         "default_price": "23.00",
         "original_price": null,
         "category": null,
@@ -298,6 +306,7 @@ Endpoints
         "id": 1,
         "name": {"en": "Standard ticket"},
         "internal_name": "",
+        "sales_channels": ["web"],
         "default_price": "23.00",
         "original_price": null,
         "category": null,
@@ -351,6 +360,7 @@ Endpoints
         "id": 1,
         "name": {"en": "Standard ticket"},
         "internal_name": "",
+        "sales_channels": ["web"],
         "default_price": "23.00",
         "original_price": null,
         "category": null,
@@ -436,6 +446,7 @@ Endpoints
         "id": 1,
         "name": {"en": "Ticket"},
         "internal_name": "",
+        "sales_channels": ["web"],
         "default_price": "25.00",
         "original_price": null,
         "category": null,

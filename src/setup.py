@@ -127,12 +127,15 @@ setup(
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',
         'django-i18nfield>=1.4.0',
+        'django-jsonfallback',
+        'psycopg2-binary',
         'vobject==0.9.*',
         'pycountry',
         'django-countries',
         'pyuca',
         'defusedcsv',
         'vat_moss==0.11.0',
+        'django-localflavor',
         'django-hijack>=2.1.10,<2.2.0',
         'django-oauth-toolkit==1.2.*',
         'idna==2.6',  # required by current requests
@@ -156,7 +159,6 @@ setup(
         ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],
-        'postgres': ['psycopg2-binary'],
     },
 
     packages=find_packages(exclude=['tests', 'tests.*']),

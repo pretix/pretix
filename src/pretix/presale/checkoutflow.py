@@ -236,7 +236,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         data=(self.request.POST if self.request.method == 'POST' else None),
                         quota_cache=quota_cache,
                         item_cache=item_cache,
-                        subevent=cartpos.subevent
+                        subevent=cartpos.subevent,
+                        sales_channel=self.request.sales_channel
                     )
                 }
 
@@ -294,7 +295,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             return self.get(request, *args, **kwargs)
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
-                       invoice_address=self.invoice_address.pk, locale=get_language())
+                       invoice_address=self.invoice_address.pk, locale=get_language(),
+                       sales_channel=request.sales_channel)
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -309,7 +311,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def contact_form(self):
         initial = {
-            'email': self.cart_session.get('email', '')
+            'email': (
+                self.cart_session.get('email', '') or
+                self.cart_session.get('widget_data', {}).get('email', '')
+            )
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
@@ -391,7 +396,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
             if cp.item.admission and self.request.event.settings.get('attendee_names_required', as_type=bool) \
-                    and cp.attendee_name is None:
+                    and not cp.attendee_name_parts:
                 if warn:
                     messages.warning(request, _('Please fill in answers to all required questions.'))
                 return False
@@ -610,7 +615,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return self.do(self.request.event.id, self.payment_provider.identifier if self.payment_provider else None,
                        [p.id for p in self.positions], self.cart_session.get('email'),
-                       translation.get_language(), self.invoice_address.pk, meta_info)
+                       translation.get_language(), self.invoice_address.pk, meta_info,
+                       request.sales_channel)
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)

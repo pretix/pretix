@@ -26,12 +26,14 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import CountryField
 from i18nfield.strings import LazyI18nString
+from jsonfallback.fields import FallbackJSONField
 
 from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.settings import PERSON_NAME_SCHEMES
 
-from .base import LoggedModel
+from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -47,7 +49,7 @@ def generate_position_secret():
     return get_random_string(length=settings.ENTROPY['ticket_secret'], allowed_chars='abcdefghjkmnpqrstuvwxyz23456789')
 
 
-class Order(LoggedModel):
+class Order(LockModel, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
@@ -92,6 +94,8 @@ class Order(LoggedModel):
     :type require_approval: bool
     :param meta_info: Additional meta information on the order, JSON-encoded.
     :type meta_info: str
+    :param sales_channel: Identifier of the sales channel this order was created through.
+    :type sales_channel: str
     """
 
     STATUS_PENDING = "n"
@@ -172,6 +176,7 @@ class Order(LoggedModel):
     require_approval = models.BooleanField(
         default=False
     )
+    sales_channel = models.CharField(max_length=190, default="web")
 
     class Meta:
         verbose_name = _("Order")
@@ -456,7 +461,7 @@ class Order(LoggedModel):
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
-            'late': _("The payment can not be accepted as it the order is expired and you configured that no late "
+            'late': _("The payment can not be accepted as the order is expired and you configured that no late "
                       "payments should be accepted in the payment settings."),
             'require_approval': _('This order is not yet approved by the event organizer.')
         }
@@ -699,8 +704,10 @@ class AbstractPosition(models.Model):
     :type expires: datetime
     :param price: The price of this item
     :type price: decimal.Decimal
-    :param attendee_name: The attendee's name, if entered.
-    :type attendee_name: str
+    :param attendee_name_parts: The parts of the attendee's name, if entered.
+    :type attendee_name_parts: str
+    :param attendee_name_cached: The concatenated version of the attendee's name, if entered.
+    :type attendee_name_cached: str
     :param attendee_email: The attendee's email, if entered.
     :type attendee_email: str
     :param voucher: A voucher that has been applied to this sale
@@ -711,7 +718,7 @@ class AbstractPosition(models.Model):
     subevent = models.ForeignKey(
         SubEvent,
         null=True, blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name=pgettext_lazy("subevent", "Date"),
     )
     item = models.ForeignKey(
@@ -729,11 +736,14 @@ class AbstractPosition(models.Model):
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
     )
-    attendee_name = models.CharField(
+    attendee_name_cached = models.CharField(
         max_length=255,
         verbose_name=_("Attendee name"),
         blank=True, null=True,
         help_text=_("Empty, if this product is not an admission ticket")
+    )
+    attendee_name_parts = FallbackJSONField(
+        blank=True, default=dict
     )
     attendee_email = models.EmailField(
         verbose_name=_("Attendee email"),
@@ -741,10 +751,10 @@ class AbstractPosition(models.Model):
         help_text=_("Empty, if this product is not an admission ticket")
     )
     voucher = models.ForeignKey(
-        'Voucher', null=True, blank=True, on_delete=models.CASCADE
+        'Voucher', null=True, blank=True, on_delete=models.PROTECT
     )
     addon_to = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.CASCADE, related_name='addons'
+        'self', null=True, blank=True, on_delete=models.PROTECT, related_name='addons'
     )
     meta_info = models.TextField(
         verbose_name=_("Meta information"),
@@ -796,6 +806,24 @@ class AbstractPosition(models.Model):
         return (self.item.quotas.filter(subevent=self.subevent)
                 if self.variation is None
                 else self.variation.quotas.filter(subevent=self.subevent))
+
+    def save(self, *args, **kwargs):
+        self.attendee_name_cached = self.attendee_name
+        if self.attendee_name_parts is None:
+            self.attendee_name_parts = {}
+        super().save(*args, **kwargs)
+
+    @property
+    def attendee_name(self):
+        if not self.attendee_name_parts:
+            return None
+        if '_legacy' in self.attendee_name_parts:
+            return self.attendee_name_parts['_legacy']
+        if '_scheme' in self.attendee_name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        return scheme['concatenation'](self.attendee_name_parts).strip()
 
 
 class OrderPayment(models.Model):
@@ -901,9 +929,12 @@ class OrderPayment(models.Model):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
         if not force and can_be_paid is not True:
+            self.order.log_action('pretix.event.order.quotaexceeded', {
+                'message': can_be_paid
+            }, user=user, auth=auth)
             raise Quota.QuotaExceededException(can_be_paid)
         self.order.status = Order.STATUS_PAID
-        self.order.save()
+        self.order.save(update_fields=['status'])
 
         self.order.log_action('pretix.event.order.paid', {
             'provider': self.provider,
@@ -1421,6 +1452,7 @@ class OrderPosition(AbstractPosition):
         # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
         # due to the deletion cascade.
         for cartpos in cp:
+            cartpos.addons.all().delete()
             cartpos.delete()
         return ops
 
@@ -1478,6 +1510,10 @@ class OrderPosition(AbstractPosition):
             if not OrderPosition.objects.filter(pseudonymization_id=code).exists():
                 self.pseudonymization_id = code
                 return
+
+    @property
+    def event(self):
+        return self.order.event
 
 
 class CartPosition(AbstractPosition):
@@ -1544,7 +1580,8 @@ class InvoiceAddress(models.Model):
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
-    name = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
+    name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
+    name_parts = FallbackJSONField(default=dict)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)
@@ -1562,7 +1599,25 @@ class InvoiceAddress(models.Model):
     def save(self, **kwargs):
         if self.order:
             self.order.touch()
+
+        if self.name_parts:
+            self.name_cached = self.name
+        else:
+            self.name_cached = ""
+            self.name_parts = {}
         super().save(**kwargs)
+
+    @property
+    def name(self):
+        if not self.name_parts:
+            return ""
+        if '_legacy' in self.name_parts:
+            return self.name_parts['_legacy']
+        if '_scheme' in self.name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+        else:
+            raise TypeError("Invalid name given.")
+        return scheme['concatenation'](self.name_parts).strip()
 
 
 def cachedticket_name(instance, filename: str) -> str:

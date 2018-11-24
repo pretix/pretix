@@ -11,6 +11,7 @@ from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     Question, QuestionAnswer,
@@ -35,11 +36,12 @@ class CompatibleCountryField(serializers.Field):
 
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
+    name = serializers.CharField(required=False)
 
     class Meta:
         model = InvoiceAddress
-        fields = ('last_modified', 'is_business', 'company', 'name', 'street', 'zipcode', 'city', 'country', 'vat_id',
-                  'vat_id_validated', 'internal_reference')
+        fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
+                  'vat_id', 'vat_id_validated', 'internal_reference')
         read_only_fields = ('last_modified', 'vat_id_validated')
 
     def __init__(self, *args, **kwargs):
@@ -47,6 +49,15 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         for v in self.fields.values():
             v.required = False
             v.allow_blank = True
+
+    def validate(self, data):
+        if data.get('name') and data.get('name_parts'):
+            raise ValidationError(
+                {'name': ['Do not specify name if you specified name_parts.']}
+            )
+        if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
+            data['name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
+        return data
 
 
 class AnswerQuestionIdentifierField(serializers.Field):
@@ -158,9 +169,9 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = OrderPosition
-        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
-                  'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins', 'downloads',
-                  'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
+        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -222,7 +233,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval')
+                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -305,10 +316,11 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
+    attendee_name = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
-        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_email',
+        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'secret', 'addon_to', 'subevent', 'answers')
 
     def validate_secret(self, secret):
@@ -359,6 +371,12 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 raise ValidationError(
                     {'variation': ['You cannot specify a variation for this item.']}
                 )
+        if data.get('attendee_name') and data.get('attendee_name_parts'):
+            raise ValidationError(
+                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
+            )
+        if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
+            data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
         return data
 
 
@@ -395,13 +413,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment',
+        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts')
 
     def validate_payment_provider(self, pp):
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
         return pp
+
+    def validate_sales_channel(self, channel):
+        if channel not in get_all_sales_channels():
+            raise ValidationError('Unknown sales channel.')
+        return channel
 
     def validate_code(self, code):
         if code and Order.objects.filter(event__organizer=self.context['event'].organizer, code=code).exists():
@@ -464,7 +487,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_info = validated_data.pop('payment_info', '{}')
 
         if 'invoice_address' in validated_data:
-            ia = InvoiceAddress(**validated_data.pop('invoice_address'))
+            iadata = validated_data.pop('invoice_address')
+            name = iadata.pop('name', '')
+            if name and not iadata.get('name_parts'):
+                iadata['name_parts'] = {
+                    '_legacy': name
+                }
+            ia = InvoiceAddress(**iadata)
         else:
             ia = None
 
@@ -555,6 +584,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             for pos_data in positions_data:
                 answers_data = pos_data.pop('answers', [])
                 addon_to = pos_data.pop('addon_to', None)
+                attendee_name = pos_data.pop('attendee_name', '')
+                if attendee_name and not pos_data.get('attendee_name_parts'):
+                    pos_data['attendee_name_parts'] = {
+                        '_legacy': attendee_name
+                    }
                 pos = OrderPosition(**pos_data)
                 pos.order = order
                 pos._calculate_tax()

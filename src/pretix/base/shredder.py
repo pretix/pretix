@@ -3,7 +3,7 @@ from datetime import timedelta
 from typing import List, Tuple
 
 from django.db import transaction
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.timezone import now
@@ -202,12 +202,20 @@ class AttendeeNameShredder(BaseDataShredder):
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'attendee-names.json', 'application/json', json.dumps({
             '{}-{}'.format(op.order.code, op.positionid): op.attendee_name
-            for op in OrderPosition.objects.filter(order__event=self.event, attendee_name__isnull=False)
+            for op in OrderPosition.objects.filter(
+                order__event=self.event
+            ).filter(
+                Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
+            )
         }, indent=4)
 
     @transaction.atomic
     def shred_data(self):
-        OrderPosition.objects.filter(order__event=self.event, attendee_name__isnull=False).update(attendee_name=None)
+        OrderPosition.objects.filter(
+            order__event=self.event
+        ).filter(
+            Q(Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False))
+        ).update(attendee_name_cached=None, attendee_name_parts={'_shredded': True})
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data
@@ -215,6 +223,10 @@ class AttendeeNameShredder(BaseDataShredder):
                 for i, row in enumerate(d['data']):
                     if 'attendee_name' in row:
                         d['data'][i]['attendee_name'] = '█'
+                    if 'attendee_name_parts' in row:
+                        d['data'][i]['attendee_name_parts'] = {
+                            '_legacy': '█'
+                        }
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])

@@ -91,34 +91,33 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
     """
     if new_date < now():
         raise OrderError(_('The new expiry date needs to be in the future.'))
-    if order.status == Order.STATUS_PENDING:
+
+    def change(was_expired=True):
         order.expires = new_date
-        order.save()
+        if was_expired:
+            order.status = Order.STATUS_PENDING
+        order.save(update_fields=['expires'] + (['status'] if was_expired else []))
         order.log_action(
             'pretix.event.order.expirychanged',
             user=user,
             auth=auth,
             data={
                 'expires': order.expires,
-                'state_change': False
+                'state_change': was_expired
             }
         )
+        if was_expired:
+            num_invoices = order.invoices.filter(is_cancellation=False).count()
+            if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices:
+                generate_invoice(order)
+
+    if order.status == Order.STATUS_PENDING:
+        change(was_expired=False)
     else:
         with order.event.lock() as now_dt:
             is_available = order._is_still_available(now_dt, count_waitinglist=False)
             if is_available is True or force is True:
-                order.expires = new_date
-                order.status = Order.STATUS_PENDING
-                order.save()
-                order.log_action(
-                    'pretix.event.order.expirychanged',
-                    user=user,
-                    auth=auth,
-                    data={
-                        'expires': order.expires,
-                        'state_change': True
-                    }
-                )
+                change(was_expired=True)
             else:
                 raise OrderError(is_available)
 
@@ -136,7 +135,7 @@ def mark_order_refunded(order, user=None, auth=None, api_token=None):
         user = User.objects.get(pk=user)
     with order.event.lock():
         order.status = Order.STATUS_REFUNDED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.refunded', user=user, auth=auth or api_token)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -159,7 +158,7 @@ def mark_order_expired(order, user=None, auth=None):
         user = User.objects.get(pk=user)
     with order.event.lock():
         order.status = Order.STATUS_EXPIRED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.expired', user=user, auth=auth)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -181,7 +180,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None):
 
     order.require_approval = False
     order.set_expires(now(), order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
-    order.save()
+    order.save(update_fields=['require_approval', 'expires'])
 
     order.log_action('pretix.event.order.approved', user=user, auth=auth)
     if order.total == Decimal('0.00'):
@@ -258,7 +257,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
     with order.event.lock():
         order.status = Order.STATUS_CANCELED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.denied', user=user, auth=auth, data={
         'comment': comment
@@ -327,7 +326,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if not order.cancel_allowed():
             raise OrderError(_('You cannot cancel this order.'))
         order.status = Order.STATUS_CANCELED
-        order.save()
+        order.save(update_fields=['status'])
 
     order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device)
     i = order.invoices.filter(is_cancellation=False).last()
@@ -379,7 +378,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     products_seen = Counter()
     for i, cp in enumerate(positions):
-        if not cp.item.active or (cp.variation and not cp.variation.active):
+        if not cp.item.is_available() or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
             cp.delete()
             continue
@@ -499,7 +498,7 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
-                  meta_info: dict=None):
+                  meta_info: dict=None, sales_channel: str='web'):
     fees, pf = _get_fees(positions, payment_provider, address, meta_info, event)
     total = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
@@ -512,7 +511,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             locale=locale,
             total=total,
             meta_info=json.dumps(meta_info or {}),
-            require_approval=any(p.item.require_approval for p in positions)
+            require_approval=any(p.item.require_approval for p in positions),
+            sales_channel=sales_channel
         )
         order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
         order.save()
@@ -551,7 +551,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
 
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
-                   email: str, locale: str, address: int, meta_info: dict=None):
+                   email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web'):
 
     event = Event.objects.get(id=event)
     if payment_provider:
@@ -580,7 +580,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions, address=addr)
         order = _create_order(event, email, positions, now_dt, pprov,
-                              locale=locale, address=addr, meta_info=meta_info)
+                              locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel)
 
     invoice = order.invoices.last()  # Might be generated by plugin already
     if event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
@@ -661,47 +661,52 @@ def send_expiry_warnings(sender, **kwargs):
     eventcache = {}
     today = now().replace(hour=0, minute=0, second=0)
 
-    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).select_related('event'):
-        eventsettings = eventcache.get(o.event.pk, None)
-        if eventsettings is None:
-            eventsettings = o.event.settings
-            eventcache[o.event.pk] = eventsettings
+    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).only('pk'):
+        with transaction.atomic():
+            o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+            if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
+                # Race condition
+                continue
+            eventsettings = eventcache.get(o.event.pk, None)
+            if eventsettings is None:
+                eventsettings = o.event.settings
+                eventcache[o.event.pk] = eventsettings
 
-        days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
-        tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
-        if days and (o.expires - today).days <= days:
-            with language(o.locale):
-                o.expiry_reminder_sent = True
-                o.save()
-                try:
-                    invoice_name = o.invoice_address.name
-                    invoice_company = o.invoice_address.company
-                except InvoiceAddress.DoesNotExist:
-                    invoice_name = ""
-                    invoice_company = ""
-                email_template = eventsettings.mail_text_order_expire_warning
-                email_context = {
-                    'event': o.event.name,
-                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                        'order': o.code,
-                        'secret': o.secret
-                    }),
-                    'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                }
-                if eventsettings.payment_term_expire_automatically:
-                    email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
-                else:
-                    email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+            days = eventsettings.get('mail_days_order_expire_warning', as_type=int)
+            tz = pytz.timezone(eventsettings.get('timezone', settings.TIME_ZONE))
+            if days and (o.expires - today).days <= days:
+                with language(o.locale):
+                    o.expiry_reminder_sent = True
+                    o.save(update_fields=['expiry_reminder_sent'])
+                    try:
+                        invoice_name = o.invoice_address.name
+                        invoice_company = o.invoice_address.company
+                    except InvoiceAddress.DoesNotExist:
+                        invoice_name = ""
+                        invoice_company = ""
+                    email_template = eventsettings.mail_text_order_expire_warning
+                    email_context = {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                        'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
+                    }
+                    if eventsettings.payment_term_expire_automatically:
+                        email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+                    else:
+                        email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
 
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.expire_warning_sent'
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                    try:
+                        o.send_mail(
+                            email_subject, email_template, email_context,
+                            'pretix.event.order.email.expire_warning_sent'
+                        )
+                    except SendMailException:
+                        logger.exception('Reminder email could not be sent')
 
 
 @receiver(signal=periodic_task)
@@ -709,6 +714,7 @@ def send_download_reminders(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     for e in Event.objects.filter(date_from__gte=today):
+
         days = e.settings.get('mail_days_download_reminder', as_type=int)
         if days is None:
             continue
@@ -717,30 +723,35 @@ def send_download_reminders(sender, **kwargs):
 
         if now() < reminder_date:
             continue
-        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False):
-            if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
-                continue
+        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False).only('pk'):
+            with transaction.atomic():
+                o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+                if o.download_reminder_sent:
+                    # Race condition
+                    continue
+                if not all([r for rr, r in allow_ticket_download.send(e, order=o)]):
+                    continue
 
-            with language(o.locale):
-                o.download_reminder_sent = True
-                o.save()
-                email_template = e.settings.mail_text_download_reminder
-                email_context = {
-                    'event': o.event.name,
-                    'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                        'order': o.code,
-                        'secret': o.secret
-                    }),
-                }
-                email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.download_reminder_sent',
-                        attach_tickets=True
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                with language(o.locale):
+                    o.download_reminder_sent = True
+                    o.save(update_fields=['download_reminder_sent'])
+                    email_template = e.settings.mail_text_download_reminder
+                    email_context = {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                    }
+                    email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
+                    try:
+                        o.send_mail(
+                            email_subject, email_template, email_context,
+                            'pretix.event.order.email.download_reminder_sent',
+                            attach_tickets=True
+                        )
+                    except SendMailException:
+                        logger.exception('Reminder email could not be sent')
 
 
 class OrderChangeManager:
@@ -911,16 +922,32 @@ class OrderChangeManager:
 
     def _check_paid_price_change(self):
         if self.order.status == Order.STATUS_PAID and self._totaldiff > 0:
-            self.order.status = Order.STATUS_PENDING
-            self.order.set_expires(
-                now(),
-                self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
-            )
-            self.order.save()
+            if self.order.pending_sum > Decimal('0.00'):
+                self.order.status = Order.STATUS_PENDING
+                self.order.set_expires(
+                    now(),
+                    self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
+                )
+                self.order.save()
         elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff < 0:
             if self.order.pending_sum <= Decimal('0.00'):
                 self.order.status = Order.STATUS_PAID
                 self.order.save()
+            elif self.open_payment:
+                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                self.open_payment.save()
+                self.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': self.open_payment.local_id,
+                    'provider': self.open_payment.provider,
+                }, user=self.user, auth=self.auth)
+        elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff > 0:
+            if self.open_payment:
+                self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+                self.open_payment.save()
+                self.order.log_action('pretix.event.order.payment.canceled', {
+                    'local_id': self.open_payment.local_id,
+                    'provider': self.open_payment.provider,
+                }, user=self.user, auth=self.auth)
 
     def _check_paid_to_free(self):
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
@@ -1012,6 +1039,7 @@ class OrderChangeManager:
                         'addon_to': opa.addon_to_id,
                         'old_price': opa.price,
                     })
+                    opa.delete()
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
@@ -1170,7 +1198,7 @@ class OrderChangeManager:
                 fee.save()
                 if not self.open_payment.fee:
                     self.open_payment.fee = fee
-                    self.open_payment.save()
+                    self.open_payment.save(update_fields=['fee'])
             elif fee:
                 fee.delete()
 
@@ -1291,11 +1319,13 @@ class OrderChangeManager:
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: str, payment_provider: str, positions: List[str],
-                  email: str=None, locale: str=None, address: int=None, meta_info: dict=None):
+                  email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
+                  sales_channel: str='web'):
     with language(locale):
         try:
             try:
-                return _perform_order(event, payment_provider, positions, email, locale, address, meta_info)
+                return _perform_order(event, payment_provider, positions, email, locale, address, meta_info,
+                                      sales_channel)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

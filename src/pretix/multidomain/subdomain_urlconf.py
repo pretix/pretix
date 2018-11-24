@@ -27,7 +27,7 @@ for app in apps.get_app_configs():
                 raw_plugin_patterns.append(
                     url(r'^(?P<event>[^/]+)/', include((patterns, app.label)))
                 )
-            elif hasattr(urlmod, 'organizer_patterns'):
+            if hasattr(urlmod, 'organizer_patterns'):
                 patterns = urlmod.organizer_patterns
                 raw_plugin_patterns.append(
                     url(r'', include((patterns, app.label)))

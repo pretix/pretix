@@ -17,6 +17,55 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.i18n import i18ncomp
 
 
+def serialize_user(u):
+    return {
+        'id': u.pk,
+        'type': 'user',
+        'name': str(u),
+        'text': str(u),
+        'url': reverse('control:index')
+    }
+
+
+def serialize_orga(o):
+    return {
+        'id': o.pk,
+        'slug': o.slug,
+        'type': 'organizer',
+        'name': str(o.name),
+        'text': str(o.name),
+        'url': reverse('control:organizer', kwargs={
+            'organizer': o.slug
+        })
+    }
+
+
+def serialize_event(e):
+    dr = e.get_date_range_display()
+    if e.has_subevents:
+        if e.min_from is None:
+            dr = pgettext('subevent', 'No dates')
+        else:
+            tz = pytz.timezone(e.settings.timezone)
+            dr = _('Series:') + ' ' + daterange(
+                e.min_from.astimezone(tz),
+                (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
+            )
+    return {
+        'id': e.pk,
+        'slug': e.slug,
+        'type': 'event',
+        'organizer': str(e.organizer.name),
+        'name': str(e.name),
+        'text': str(e.name),
+        'date_range': dr,
+        'url': reverse('control:event.index', kwargs={
+            'event': e.slug,
+            'organizer': e.organizer.slug
+        })
+    }
+
+
 def event_list(request):
     query = request.GET.get('query', '')
     try:
@@ -35,38 +84,62 @@ def event_list(request):
         order_from=Coalesce('min_from', 'date_from'),
     ).order_by('-order_from')
 
-    def serialize(e):
-
-        dr = e.get_date_range_display()
-        if e.has_subevents:
-            if e.min_from is None:
-                dr = pgettext('subevent', 'No dates')
-            else:
-                tz = pytz.timezone(e.settings.timezone)
-                dr = _('Series:') + ' ' + daterange(
-                    e.min_from.astimezone(tz),
-                    (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
-                )
-        return {
-            'id': e.pk,
-            'slug': e.slug,
-            'organizer': str(e.organizer.name),
-            'name': str(e.name),
-            'text': str(e.name),
-            'date_range': dr,
-            'url': reverse('control:event.index', kwargs={
-                'event': e.slug,
-                'organizer': e.organizer.slug
-            })
-        }
-
     total = qs.count()
     pagesize = 20
     offset = (page - 1) * pagesize
     doc = {
         'results': [
-            serialize(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
+            serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
         ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+def nav_context_list(request):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs_events = request.user.get_events_with_any_permission(request).filter(
+        Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
+    ).annotate(
+        min_from=Min('subevents__date_from'),
+        max_from=Max('subevents__date_from'),
+        max_to=Max('subevents__date_to'),
+        max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
+    ).annotate(
+        order_from=Coalesce('min_from', 'date_from'),
+    ).order_by('-order_from')
+
+    if request.user.has_active_staff_session(request.session.session_key):
+        qs_orga = Organizer.objects.all()
+    else:
+        qs_orga = Organizer.objects.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
+    if query:
+        qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
+
+    show_user = not query or (
+        query and request.user.email and query.lower() in request.user.email.lower()
+    ) or (
+        query and request.user.fullname and query.lower() in request.user.fullname.lower()
+    )
+    total = qs_events.count() + qs_orga.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    results = ([
+        serialize_user(request.user)
+    ] if show_user else []) + [
+        serialize_orga(e) for e in qs_orga[offset:offset + (pagesize if query else 5)]
+    ] + [
+        serialize_event(e) for e in qs_events.select_related('organizer')[offset:offset + (pagesize if query else 5)]
+    ]
+    doc = {
+        'results': results,
         'pagination': {
             "more": total >= (offset + pagesize)
         }

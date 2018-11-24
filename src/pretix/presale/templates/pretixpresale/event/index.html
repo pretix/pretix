@@ -102,7 +102,7 @@
 
     {% if frontpage_text and not cart_namespace %}
         <div>
-            {{ frontpage_text|rich_text }}
+            {{ frontpage_text|rich_text|linebreaksbr }}
         </div>
     {% endif %}
 
@@ -180,6 +180,8 @@
 
         {% if ev.presale_is_running or event.settings.show_items_outside_presale_period %}
             <form method="post" data-asynctask
+                    data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
+                    data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
                     action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ request.path|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
@@ -229,9 +231,7 @@
                                         </div>
                                         <div class="col-md-2 col-xs-6 price">
                                             {% if item.min_price != item.max_price or item.free_price %}
-                                                {% blocktrans trimmed with minprice=item.min_price|money:event.currency %}
-                                                    from {{ minprice }}
-                                                {% endblocktrans %}
+                                                {{ item.min_price|money:event.currency  }} – {{ item.max_price|money:event.currency  }}
                                             {% elif not item.min_price and not item.max_price %}
                                                 {% trans "FREE" context "price" %}
                                             {% else %}

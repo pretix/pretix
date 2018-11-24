@@ -74,7 +74,7 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'category', 'name', 'internal_name', 'active', 'description',
+        fields = ('id', 'category', 'name', 'internal_name', 'active', 'sales_channels', 'description',
                   'default_price', 'free_price', 'tax_rate', 'tax_rule', 'admission',
                   'position', 'picture', 'available_from', 'available_until',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel',
