@@ -60,11 +60,14 @@
             <div class="download-desktop">
                 {% if not line.addon_to or event.settings.ticket_download_addons %}
                     {% for b in download_buttons %}
-                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                data-asyncdownload>
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                        </a>
+                        <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                            </button>
+                        </form>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -150,11 +153,14 @@
             <div class="download-mobile">
                 {% if not line.addon_to or event.settings.ticket_download_addons %}
                     {% for b in download_buttons %}
-                        <a href="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                           class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                data-asyncdownload>
-                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                        </a>
+                        <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                            method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                            {% csrf_token %}
+                            <button type="submit"
+                               class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                            </button>
+                        </form>
                     {% endfor %}
                 {% endif %}
             </div>

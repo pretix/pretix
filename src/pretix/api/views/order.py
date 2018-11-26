@@ -25,8 +25,8 @@ from pretix.api.serializers.order import (
     OrderRefundSerializer, OrderSerializer,
 )
 from pretix.base.models import (
-    Device, Invoice, Order, OrderPayment, OrderPosition, OrderRefund, Quota,
-    TeamAPIToken,
+    CachedCombinedTicket, CachedTicket, Device, Invoice, Order, OrderPayment,
+    OrderPosition, OrderRefund, Quota, TeamAPIToken,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -38,9 +38,7 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
 )
-from pretix.base.services.tickets import (
-    get_cachedticket_for_order, get_cachedticket_for_position,
-)
+from pretix.base.services.tickets import generate
 from pretix.base.signals import order_placed, register_ticket_outputs
 
 
@@ -130,9 +128,11 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         if order.status != Order.STATUS_PAID:
             raise PermissionDenied("Downloads are not available for unpaid orders.")
 
-        ct = get_cachedticket_for_order(order, provider.identifier)
-
-        if not ct.file:
+        ct = CachedCombinedTicket.objects.filter(
+            order=order, provider=provider.identifier, file__isnull=False
+        ).last()
+        if not ct or not ct.file:
+            generate.apply_async(args=('order', order.pk, provider.identifier))
             raise RetryException()
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)
@@ -447,9 +447,11 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
         if not pos.item.admission and not request.event.settings.ticket_download_nonadm:
             raise PermissionDenied("Downloads are not enabled for non-admission products.")
 
-        ct = get_cachedticket_for_position(pos, provider.identifier)
-
-        if not ct.file:
+        ct = CachedTicket.objects.filter(
+            order_position=pos, provider=provider.identifier, file__isnull=False
+        ).last()
+        if not ct or not ct.file:
+            generate.apply_async(args=('orderposition', pos.pk, provider.identifier))
             raise RetryException()
         else:
             resp = FileResponse(ct.file.file, content_type=ct.type)

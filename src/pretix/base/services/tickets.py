@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import timedelta
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -20,54 +19,48 @@ from pretix.helpers.database import rolledback_transaction
 logger = logging.getLogger(__name__)
 
 
-@app.task(base=ProfiledTask)
-def generate(order_position: str, provider: str):
+def generate_orderposition(order_position: int, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
-    try:
-        ct = CachedTicket.objects.get(order_position=order_position, provider=provider)
-    except CachedTicket.MultipleObjectsReturned:
-        CachedTicket.objects.filter(order_position=order_position, provider=provider).delete()
-        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
-                                         type='', file=None)
-    except CachedTicket.DoesNotExist:
-        ct = CachedTicket.objects.create(order_position=order_position, provider=provider, extension='',
-                                         type='', file=None)
 
     with language(order_position.order.locale):
         responses = register_ticket_outputs.send(order_position.order.event)
         for receiver, response in responses:
             prov = response(order_position.order.event)
             if prov.identifier == provider:
-                filename, ct.type, data = prov.generate(order_position)
+                filename, ttype, data = prov.generate(order_position)
                 path, ext = os.path.splitext(filename)
-                ct.extension = ext
-                ct.save()
+                for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
+                    ct.delete()
+                ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
+                                                 extension=ext, type=ttype, file=None)
                 ct.file.save(filename, ContentFile(data))
+                return ct.pk
 
 
-@app.task(base=ProfiledTask)
 def generate_order(order: int, provider: str):
     order = Order.objects.select_related('event').get(id=order)
-    try:
-        ct = CachedCombinedTicket.objects.get(order=order, provider=provider)
-    except CachedCombinedTicket.MultipleObjectsReturned:
-        CachedCombinedTicket.objects.filter(order=order, provider=provider).delete()
-        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
-                                                 type='', file=None)
-    except CachedCombinedTicket.DoesNotExist:
-        ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension='',
-                                                 type='', file=None)
 
     with language(order.locale):
         responses = register_ticket_outputs.send(order.event)
         for receiver, response in responses:
             prov = response(order.event)
             if prov.identifier == provider:
-                filename, ct.type, data = prov.generate_order(order)
+                filename, ttype, data = prov.generate_order(order)
                 path, ext = os.path.splitext(filename)
-                ct.extension = ext
-                ct.save()
+                for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
+                    ct.delete()
+                ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
+                                                         type=ttype, file=None)
                 ct.file.save(filename, ContentFile(data))
+                return ct.pk
+
+
+@app.task(base=ProfiledTask)
+def generate(model: str, pk: int, provider: str):
+    if model == 'order':
+        return generate_order(pk, provider)
+    elif model == 'orderposition':
+        return generate_orderposition(pk, provider)
 
 
 class DummyRollbackException(Exception):
@@ -103,56 +96,6 @@ def preview(event: int, provider: str):
                 return prov.generate(p)
 
 
-def get_cachedticket_for_position(pos, identifier, generate_async=True):
-    apply_method = 'apply_async' if generate_async else 'apply'
-    try:
-        ct = CachedTicket.objects.filter(
-            order_position=pos, provider=identifier
-        ).last()
-    except CachedTicket.DoesNotExist:
-        ct = None
-
-    if not ct:
-        ct = CachedTicket.objects.create(
-            order_position=pos, provider=identifier,
-            extension='', type='', file=None)
-        getattr(generate, apply_method)(args=(pos.id, identifier))
-        if not generate_async:
-            ct.refresh_from_db()
-
-    if not ct.file:
-        if now() - ct.created > timedelta(minutes=5):
-            getattr(generate, apply_method)(args=(pos.id, identifier))
-            if not generate_async:
-                ct.refresh_from_db()
-    return ct
-
-
-def get_cachedticket_for_order(order, identifier, generate_async=True):
-    apply_method = 'apply_async' if generate_async else 'apply'
-    try:
-        ct = CachedCombinedTicket.objects.filter(
-            order=order, provider=identifier
-        ).last()
-    except CachedCombinedTicket.DoesNotExist:
-        ct = None
-
-    if not ct:
-        ct = CachedCombinedTicket.objects.create(
-            order=order, provider=identifier,
-            extension='', type='', file=None)
-        getattr(generate_order, apply_method)(args=(order.id, identifier))
-        if not generate_async:
-            ct.refresh_from_db()
-
-    if not ct.file:
-        if now() - ct.created > timedelta(minutes=5):
-            getattr(generate_order, apply_method)(args=(order.id, identifier))
-            if not generate_async:
-                ct.refresh_from_db()
-    return ct
-
-
 def get_tickets_for_order(order):
     can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
     if not can_download:
@@ -174,7 +117,12 @@ def get_tickets_for_order(order):
 
         if p.multi_download_enabled:
             try:
-                ct = get_cachedticket_for_order(order, p.identifier, generate_async=False)
+                ct = CachedCombinedTicket.objects.filter(
+                    order=order, provider=p.identifier, file__isnull=False
+                ).last()
+                if not ct or not ct.file:
+                    retval = generate.apply(args=('order', order.pk, p.identifier))
+                    ct = CachedCombinedTicket.objects.get(pk=retval.value)
                 tickets.append((
                     "{}-{}-{}{}".format(
                         order.event.slug.upper(), order.code, ct.provider, ct.extension,
@@ -190,7 +138,12 @@ def get_tickets_for_order(order):
                 if not pos.item.admission and not order.event.settings.ticket_download_nonadm:
                     continue
                 try:
-                    ct = get_cachedticket_for_position(pos, p.identifier, generate_async=False)
+                    ct = CachedTicket.objects.filter(
+                        order_position=pos, provider=p.identifier, file__isnull=False
+                    ).last()
+                    if not ct or not ct.file:
+                        retval = generate.apply(args=('orderposition', pos.pk, p.identifier))
+                        ct = CachedTicket.objects.get(pk=retval.value)
                     tickets.append((
                         "{}-{}-{}-{}{}".format(
                             order.event.slug.upper(), order.code, pos.positionid, ct.provider, ct.extension,

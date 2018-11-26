@@ -2,12 +2,13 @@ import mimetypes
 import os
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Exists, OuterRef, Q, Sum
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -25,9 +26,7 @@ from pretix.base.services.invoices import (
     invoice_qualified,
 )
 from pretix.base.services.orders import cancel_order
-from pretix.base.services.tickets import (
-    get_cachedticket_for_order, get_cachedticket_for_position,
-)
+from pretix.base.services.tickets import generate
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
@@ -627,7 +626,14 @@ class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class OrderDownload(EventViewMixin, OrderDetailMixin, View):
+class OrderDownload(EventViewMixin, OrderDetailMixin, AsyncAction, View):
+    task = generate
+
+    def get_success_url(self, value):
+        return self.get_self_url()
+
+    def get_error_url(self):
+        return self.get_order_url()
 
     def get_self_url(self):
         return eventreverse(self.request.event,
@@ -652,18 +658,15 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         except OrderPosition.DoesNotExist:
             return None
 
-    def error(self, msg):
-        messages.error(self.request, msg)
-        if "ajax" in self.request.POST or "ajax" in self.request.GET:
-            return JsonResponse({
-                'ready': True,
-                'success': False,
-                'redirect': self.get_order_url(),
-                'message': msg,
-            })
-        return redirect(self.get_order_url())
-
     def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        ct = self.get_last_ct()
+        if ct:
+            return self.success(ct)
+        return self.http_method_not_allowed(request)
+
+    def post(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
             return self.error(_('You requested an invalid ticket output type.'))
         if not self.order or ('position' in kwargs and not self.order_position):
@@ -675,47 +678,52 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, View):
         if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):
             return self.error(_('Ticket download is not enabled for non-admission products.'))
 
-        if 'position' in kwargs:
-            return self._download_position()
-        else:
-            return self._download_order()
+        ct = self.get_last_ct()
+        if ct:
+            return self.success(ct)
+        return self.do('orderposition' if 'position' in kwargs else 'order',
+                       self.order_position.pk if 'position' in kwargs else self.order.pk,
+                       self.output.identifier)
 
-    def _download_order(self):
-        ct = get_cachedticket_for_order(self.order, self.output.identifier)
+    def get_success_message(self, value):
+        return ""
 
-        if 'ajax' in self.request.GET:
+    def success(self, value):
+        if "ajax" in self.request.POST or "ajax" in self.request.GET:
             return JsonResponse({
-                'ready': bool(ct and ct.file),
-                'success': False,
-                'redirect': self.get_self_url()
+                'ready': True,
+                'success': True,
+                'redirect': self.get_success_url(value),
+                'message': str(self.get_success_message(value))
             })
-        elif not ct.file:
-            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
-        else:
-            resp = FileResponse(ct.file.file, content_type=ct.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), self.order.code, self.output.identifier, ct.extension
-            )
-            return resp
-
-    def _download_position(self):
-        ct = get_cachedticket_for_position(self.order_position, self.output.identifier)
-
-        if 'ajax' in self.request.GET:
-            return JsonResponse({
-                'ready': bool(ct and ct.file),
-                'success': False,
-                'redirect': self.get_self_url()
-            })
-        elif not ct.file:
-            return render(self.request, "pretixbase/cachedfiles/pending.html", {})
-        else:
-            resp = FileResponse(ct.file.file, content_type=ct.type)
+        if isinstance(value, CachedTicket):
+            resp = FileResponse(value.file.file, content_type=value.type)
             resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
                 self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                self.output.identifier, ct.extension
+                self.output.identifier, value.extension
             )
             return resp
+        elif isinstance(value, CachedCombinedTicket):
+            resp = FileResponse(value.file.file, content_type=value.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+            )
+            return resp
+        else:
+            return redirect(self.get_self_url())
+
+    def get_last_ct(self):
+        if 'position' in self.kwargs:
+            ct = CachedTicket.objects.filter(
+                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+            ).last()
+        else:
+            ct = CachedCombinedTicket.objects.filter(
+                order=self.order, provider=self.output.identifier, file__isnull=False
+            ).last()
+        if not ct or not ct.file:
+            return None
+        return ct
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

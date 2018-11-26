@@ -313,9 +313,10 @@ class OrdersTest(TestCase):
         self.order.status = Order.STATUS_PENDING
         self.order.save()
         self.event.settings.set('ticket_download_pending', True)
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
+            follow=True
         )
         assert response.status_code == 200
 
@@ -327,7 +328,7 @@ class OrdersTest(TestCase):
         self.order.require_approval = True
         self.order.save()
         self.event.settings.set('ticket_download_pending', True)
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
         )
@@ -339,7 +340,7 @@ class OrdersTest(TestCase):
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)
         del self.event.settings['ticket_download_date']
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/pdf' % (self.orga.slug, self.event.slug, self.order.code,
                                                     self.order.secret, self.ticket_pos.pk),
             follow=True)
@@ -348,13 +349,13 @@ class OrdersTest(TestCase):
                                                       self.order.secret),
                              target_status_code=200)
 
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/ABC/123/download/%d/testdummy' % (self.orga.slug, self.event.slug,
                                                             self.ticket_pos.pk)
         )
         assert response.status_code == 404
 
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
             follow=True
@@ -366,14 +367,15 @@ class OrdersTest(TestCase):
 
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
+            follow=True
         )
         assert response.status_code == 200
 
         self.event.settings.set('ticket_download_date', now() + datetime.timedelta(days=1))
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
             follow=True
@@ -388,7 +390,7 @@ class OrdersTest(TestCase):
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(RelativeDate(
             base_date_name='date_from', days_before=2, time=None
         )))
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
             follow=True
@@ -399,14 +401,15 @@ class OrdersTest(TestCase):
                              target_status_code=200)
 
         del self.event.settings['ticket_download_date']
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
+            follow=True
         )
         assert response.status_code == 200
 
         self.event.settings.set('ticket_download', False)
-        response = self.client.get(
+        response = self.client.post(
             '/%s/%s/order/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                           self.order.secret, self.ticket_pos.pk),
             follow=True

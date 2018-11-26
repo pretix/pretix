@@ -31,3 +31,7 @@ def clean_cached_tickets(sender, **kwargs):
         cf.delete()
     for cf in CachedCombinedTicket.objects.filter(created__lte=now() - timedelta(days=30)):
         cf.delete()
+    for cf in CachedTicket.objects.filter(created__lte=now() - timedelta(minutes=30), file__isnull=True):
+        cf.delete()
+    for cf in CachedCombinedTicket.objects.filter(created__lte=now() - timedelta(minutes=30), file__isnull=True):
+        cf.delete()

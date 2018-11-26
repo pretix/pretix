@@ -278,5 +278,9 @@ details summary {
     transform: rotate(180deg);
 }
 
+form.download-btn-form {
+    display: inline;
+}
+
 @import "_iframe.scss";
 @import "_a11y.scss";
