@@ -212,12 +212,10 @@ class LayoutEditorView(BaseEditorView):
         self.layout.save(update_fields=['layout'])
         self.layout.log_action(action='pretix.plugins.ticketoutputpdf.layout.changed', user=self.request.user,
                                data={'layout': self.request.POST.get("data")})
-        CachedTicket.objects.filter(
-            order_position__order__event=self.request.event, provider='pdf'
-        ).delete()
-        CachedCombinedTicket.objects.filter(
-            order__event=self.request.event, provider='pdf'
-        ).delete()
+        for ct in CachedTicket.objects.filter(order_position__order__event=self.request.event, provider='pdf'):
+            ct.delete()
+        for ct in CachedCombinedTicket.objects.filter(order__event=self.request.event, provider='pdf'):
+            ct.delete()
 
     def get_default_background(self):
         return static('pretixpresale/pdf/ticket_default_a4.pdf')
