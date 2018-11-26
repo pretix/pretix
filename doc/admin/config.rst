@@ -295,5 +295,13 @@ various places like order codes, secrets in the ticket QR codes, etc. Example::
     ; Voucher code needs to be < 255 characters, default is 16
     voucher_code=16
 
+External tools
+--------------
+
+pretix can make use of some external tools if they are installed. Currently, they are all optional. Example::
+
+    [tools]
+    pdftk=/usr/bin/pdftk
+
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
 .. _Celery documentation: http://docs.celeryproject.org/en/latest/userguide/configuration.html

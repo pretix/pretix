@@ -57,6 +57,8 @@ else:
 debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
 
+PDFTK = config.get('tools', 'pdftk', fallback=None)
+
 db_backend = config.get('database', 'backend', fallback='sqlite3')
 if db_backend == 'postgresql_psycopg2':
     db_backend = 'postgresql'

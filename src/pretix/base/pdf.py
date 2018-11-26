@@ -1,11 +1,15 @@
 import copy
 import logging
+import os
 import re
+import subprocess
+import tempfile
 import uuid
 from collections import OrderedDict
 from io import BytesIO
 
 import bleach
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
@@ -222,10 +226,11 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
-        if self.background_file:
-            self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()), strict=False)
-        else:
-            self.bg_pdf = None
+        if not settings.PDFTK:
+            if self.background_file:
+                self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()), strict=False)
+            else:
+                self.bg_pdf = None
 
     @classmethod
     def _register_fonts(cls):
@@ -340,21 +345,40 @@ class Renderer:
         canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
-        from PyPDF2 import PdfFileWriter, PdfFileReader
-        buffer.seek(0)
-        new_pdf = PdfFileReader(buffer)
-        output = PdfFileWriter()
+        if settings.PDFTK:
+            buffer.seek(0)
+            with tempfile.TemporaryDirectory() as d:
+                with open(os.path.join(d, 'back.pdf'), 'wb') as f:
+                    f.write(self.background_file.read())
+                with open(os.path.join(d, 'front.pdf'), 'wb') as f:
+                    f.write(buffer.read())
+                subprocess.run([
+                    settings.PDFTK,
+                    os.path.join(d, 'front.pdf'),
+                    'multistamp',
+                    os.path.join(d, 'back.pdf'),
+                    'output',
+                    os.path.join(d, 'out.pdf'),
+                    'compress'
+                ], check=True)
+                with open(os.path.join(d, 'out.pdf'), 'rb') as f:
+                    return BytesIO(f.read())
+        else:
+            from PyPDF2 import PdfFileWriter, PdfFileReader
+            buffer.seek(0)
+            new_pdf = PdfFileReader(buffer)
+            output = PdfFileWriter()
 
-        for page in new_pdf.pages:
-            bg_page = copy.copy(self.bg_pdf.getPage(0))
-            bg_page.mergePage(page)
-            output.addPage(bg_page)
+            for page in new_pdf.pages:
+                bg_page = copy.copy(self.bg_pdf.getPage(0))
+                bg_page.mergePage(page)
+                output.addPage(bg_page)
 
-        output.addMetadata({
-            '/Title': str(title),
-            '/Creator': 'pretix',
-        })
-        outbuffer = BytesIO()
-        output.write(outbuffer)
-        outbuffer.seek(0)
-        return outbuffer
+            output.addMetadata({
+                '/Title': str(title),
+                '/Creator': 'pretix',
+            })
+            outbuffer = BytesIO()
+            output.write(outbuffer)
+            outbuffer.seek(0)
+            return outbuffer
