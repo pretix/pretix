@@ -6,7 +6,7 @@ import pytz
 from django.conf import settings
 from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.views import View
@@ -292,7 +292,10 @@ class CalendarView(OrganizerViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
 
-        _, ndays = calendar.monthrange(self.year, self.month)
+        try:
+            _, ndays = calendar.monthrange(self.year, self.month)
+        except calendar.IllegalMonthError:
+            raise Http404()
         before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=UTC) - timedelta(days=1)
         after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=UTC) + timedelta(days=1)
 
