@@ -573,6 +573,7 @@ CELERY_TASK_QUEUES = (
     Queue('checkout', routing_key='checkout.#'),
     Queue('mail', routing_key='mail.#'),
     Queue('background', routing_key='background.#'),
+    Queue('notifications', routing_key='notifications.#'),
 )
 CELERY_TASK_ROUTES = ([
     ('pretix.base.services.cart.*', {'queue': 'checkout'}),
@@ -582,6 +583,8 @@ CELERY_TASK_ROUTES = ([
     ('pretix.base.services.update_check.*', {'queue': 'background'}),
     ('pretix.base.services.quotas.*', {'queue': 'background'}),
     ('pretix.base.services.waitinglist.*', {'queue': 'background'}),
+    ('pretix.base.services.notifications.*', {'queue': 'notifications'}),
+    ('pretix.api.webhooks.*', {'queue': 'notifications'}),
     ('pretix.plugins.banktransfer.*', {'queue': 'background'}),
 ],)
 
