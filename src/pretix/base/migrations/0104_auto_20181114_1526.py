@@ -15,7 +15,7 @@ def change_refunded_to_canceled(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0102_auto_20181017_0024'),
+        ('pretixbase', '0103_auto_20181121_1224'),
     ]
 
     operations = [
