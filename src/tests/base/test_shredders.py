@@ -12,7 +12,7 @@ from pretix.base.models import (
     OrderPayment, OrderPosition, Organizer, QuestionAnswer,
 )
 from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
-from pretix.base.services.tickets import generate, generate_order
+from pretix.base.services.tickets import generate
 from pretix.base.shredder import (
     AttendeeNameShredder, CachedTicketShredder, EmailAddressShredder,
     InvoiceAddressShredder, InvoiceShredder, PaymentInfoShredder,
@@ -274,8 +274,8 @@ def test_invoice_shredder(event, order):
 
 @pytest.mark.django_db
 def test_cached_tickets(event, order):
-    generate(order.positions.first().pk, 'pdf')
-    generate_order(order.pk, 'pdf')
+    generate('orderposition', order.positions.first().pk, 'pdf')
+    generate('order', order.pk, 'pdf')
 
     ct = CachedTicket.objects.get(order_position=order.positions.first(), provider='pdf')
     cct = CachedCombinedTicket.objects.get(order=order, provider='pdf')
