@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-11-21 10:14+0000\n"
+"PO-Revision-Date: 2018-11-26 11:05+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -7375,10 +7375,8 @@ msgid "Account history"
 msgstr "Historial de la cuenta"
 
 #: pretix/control/navigation.py:354
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All users"
-msgstr "Todos los vales"
+msgstr "Todos los usuarios"
 
 #: pretix/control/navigation.py:359
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
