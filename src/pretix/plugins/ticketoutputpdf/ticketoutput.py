@@ -11,7 +11,6 @@ from django.template.loader import get_template
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from PyPDF2 import PdfFileMerger
-from reportlab.pdfgen.canvas import Canvas
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
@@ -53,9 +52,23 @@ class PdfTicketOutput(BaseTicketOutput):
     def _register_fonts(self):
         Renderer._register_fonts()
 
-    def _draw_page(self, layout: TicketLayout, canvas: Canvas, op: OrderPosition, order: Order):
+    def _draw_page(self, layout: TicketLayout, op: OrderPosition, order: Order):
+        buffer = BytesIO()
         objs = self.override_layout or json.loads(layout.layout) or self._legacy_layout()
-        Renderer(self.event, objs, None).draw_page(canvas, order, op)
+        bg_file = layout.background
+
+        if self.override_background:
+            bgf = default_storage.open(self.override_background.name, "rb")
+        elif isinstance(bg_file, File) and bg_file.name:
+            bgf = default_storage.open(bg_file.name, "rb")
+        else:
+            bgf = self._get_default_background()
+
+        p = self._create_canvas(buffer)
+        renderer = Renderer(self.event, objs, bgf)
+        renderer.draw_page(p, order, op)
+        p.save()
+        return renderer.render_background(buffer, _('Ticket'))
 
     def generate_order(self, order: Order):
         merger = PdfFileMerger()
@@ -66,8 +79,6 @@ class PdfTicketOutput(BaseTicketOutput):
                 if not op.item.admission and not self.event.settings.ticket_download_nonadm:
                     continue
 
-                buffer = BytesIO()
-                p = self._create_canvas(buffer)
                 layout = self.layout_map.get(
                     (op.item_id, order.sales_channel),
                     self.layout_map.get(
@@ -75,9 +86,7 @@ class PdfTicketOutput(BaseTicketOutput):
                         self.default_layout
                     )
                 )
-                self._draw_page(layout, p, op, order)
-                p.save()
-                outbuffer = self._render_with_background(layout, buffer)
+                outbuffer = self._draw_page(layout, op, order)
                 merger.append(ContentFile(outbuffer.read()))
 
         outbuffer = BytesIO()
@@ -87,8 +96,6 @@ class PdfTicketOutput(BaseTicketOutput):
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     def generate(self, op):
-        buffer = BytesIO()
-        p = self._create_canvas(buffer)
         order = op.order
         layout = self.layout_map.get(
             (op.item_id, order.sales_channel),
@@ -98,9 +105,7 @@ class PdfTicketOutput(BaseTicketOutput):
             )
         )
         with language(order.locale):
-            self._draw_page(layout, p, op, order)
-        p.save()
-        outbuffer = self._render_with_background(layout, buffer)
+            outbuffer = self._draw_page(layout, op, order)
         return 'order%s%s.pdf' % (self.event.slug, order.code), 'application/pdf', outbuffer.read()
 
     def _create_canvas(self, buffer):
@@ -115,16 +120,6 @@ class PdfTicketOutput(BaseTicketOutput):
 
     def _get_default_background(self):
         return open(finders.find('pretixpresale/pdf/ticket_default_a4.pdf'), "rb")
-
-    def _render_with_background(self, layout: TicketLayout, buffer, title=_('Ticket')):
-        bg_file = layout.background
-        if self.override_background:
-            bgf = default_storage.open(self.override_background.name, "rb")
-        elif isinstance(bg_file, File) and bg_file.name:
-            bgf = default_storage.open(bg_file.name, "rb")
-        else:
-            bgf = self._get_default_background()
-        return Renderer(self.event, None, bgf).render_background(buffer, title)
 
     def settings_content_render(self, request: HttpRequest) -> str:
         """

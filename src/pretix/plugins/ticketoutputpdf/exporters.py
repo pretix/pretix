@@ -83,8 +83,6 @@ class AllTicketsPDF(BaseExporter):
                 continue
 
             with language(op.order.locale):
-                buffer = BytesIO()
-                p = o._create_canvas(buffer)
                 layout = o.layout_map.get(
                     (op.item_id, op.order.sales_channel),
                     o.layout_map.get(
@@ -92,9 +90,7 @@ class AllTicketsPDF(BaseExporter):
                         o.default_layout
                     )
                 )
-                o._draw_page(layout, p, op, op.order)
-                p.save()
-                outbuffer = o._render_with_background(layout, buffer)
+                outbuffer = o._draw_page(layout, op, op.order)
                 merger.append(ContentFile(outbuffer.read()))
 
         outbuffer = BytesIO()
