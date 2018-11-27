@@ -226,11 +226,12 @@ class Renderer:
         self.layout = layout
         self.background_file = background_file
         self.variables = get_variables(event)
-        if not settings.PDFTK:
-            if self.background_file:
-                self.bg_pdf = PdfFileReader(BytesIO(self.background_file.read()), strict=False)
-            else:
-                self.bg_pdf = None
+        if self.background_file:
+            self.bg_bytes = self.background_file.read()
+            self.bg_pdf = PdfFileReader(BytesIO(self.bg_bytes), strict=False)
+        else:
+            self.bg_bytes = None
+            self.bg_pdf = None
 
     @classmethod
     def _register_fonts(cls):
@@ -342,6 +343,8 @@ class Renderer:
                 self._draw_textarea(canvas, op, order, o)
             elif o['type'] == "poweredby":
                 self._draw_poweredby(canvas, op, o)
+            if self.bg_pdf:
+                canvas.setPageSize((self.bg_pdf.getPage(0).mediaBox[2], self.bg_pdf.getPage(0).mediaBox[3]))
         canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
@@ -349,13 +352,13 @@ class Renderer:
             buffer.seek(0)
             with tempfile.TemporaryDirectory() as d:
                 with open(os.path.join(d, 'back.pdf'), 'wb') as f:
-                    f.write(self.background_file.read())
+                    f.write(self.bg_bytes)
                 with open(os.path.join(d, 'front.pdf'), 'wb') as f:
                     f.write(buffer.read())
                 subprocess.run([
                     settings.PDFTK,
                     os.path.join(d, 'front.pdf'),
-                    'multistamp',
+                    'background',
                     os.path.join(d, 'back.pdf'),
                     'output',
                     os.path.join(d, 'out.pdf'),
