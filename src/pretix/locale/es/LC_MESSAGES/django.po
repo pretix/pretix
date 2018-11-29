@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-11-26 11:05+0000\n"
-"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"PO-Revision-Date: 2018-11-29 09:01+0000\n"
+"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -211,7 +211,7 @@ msgstr "El registro ha sido revertido"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Tienda en línea"
 
 #: pretix/base/email.py:127
 msgid "pretix default"
@@ -1260,7 +1260,7 @@ msgstr ""
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Ningún valor debe contener el carácter delimitador."
 
 #: pretix/base/models/invoices.py:120 pretix/base/services/invoices.py:86
 #, python-format
@@ -5445,19 +5445,19 @@ msgstr ""
 
 #: pretix/control/forms/event.py:946 pretix/control/forms/organizer.py:186
 msgid "Accent color for success"
-msgstr ""
+msgstr "Acentuar el color para éxito"
 
 #: pretix/control/forms/event.py:947 pretix/control/forms/organizer.py:187
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Sugerimos fuertemente usar un tono de verde."
 
 #: pretix/control/forms/event.py:956 pretix/control/forms/organizer.py:196
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Acentuar los colores para errores"
 
 #: pretix/control/forms/event.py:957
 msgid "We strongly suggest to use a dark shade of red."
-msgstr ""
+msgstr "Sugerimos fuertemente usar un tono oscuro de rojo."
 
 #: pretix/control/forms/event.py:969
 msgid ""
@@ -6309,7 +6309,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:197
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "Sugerimos fuertemente usar un tono de rojo."
 
 #: pretix/control/forms/organizer.py:207
 msgid "Homepage text"
@@ -11108,11 +11108,11 @@ msgstr "Añadir un nuevo objeto"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:331
 msgid "QR code for Check-In"
-msgstr "Código QR para registro"
+msgstr "QR para registro"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:337
 msgid "QR code for Lead Scanning"
-msgstr "Código QR para el escaneo de plomo"
+msgstr "QR escaneo prospecto"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:343
 msgid "pretix Logo"
@@ -13918,7 +13918,7 @@ msgstr "Este plugin le permite generar listas de registro para su conferencia."
 
 #: pretix/plugins/checkinlists/exporters.py:46
 msgid "Include QR-code secret"
-msgstr "Incluir secreto QR-code"
+msgstr "Incluir código QR secreto"
 
 #: pretix/plugins/checkinlists/exporters.py:66
 msgid "Include questions"
@@ -14087,7 +14087,7 @@ msgstr "Conexiones a Stripe: Clave secreta"
 
 #: pretix/plugins/paypal/signals.py:76
 msgid "PayPal Connect Endpoint"
-msgstr ""
+msgstr "Punto final de conexión a PayPal"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -15121,7 +15121,7 @@ msgstr "Diseño de tickets en PDF"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
-msgstr ""
+msgstr "(Lo mismo que arriba)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
