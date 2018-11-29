@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
 "PO-Revision-Date: 2018-11-29 09:01+0000\n"
-"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -627,16 +627,12 @@ msgid "Street and Number"
 msgstr "Calle y número"
 
 #: pretix/base/forms/questions.py:333
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide a company name."
-msgstr "Debe especificar el nombre de la compañía o su propio nombre."
+msgstr "Debe proveer el nombre de una compañía."
 
 #: pretix/base/forms/questions.py:335
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide your name."
-msgstr "Debe especificar el nombre de la compañía o su propio nombre."
+msgstr "Debe especificar su nombre."
 
 #: pretix/base/forms/questions.py:346 pretix/control/views/orders.py:793
 msgid "Your VAT ID does not match the selected country."
@@ -1543,10 +1539,8 @@ msgstr ""
 "afectará realmente a los precios."
 
 #: pretix/base/models/items.py:336 pretix/control/forms/item.py:311
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channels"
-msgstr "Guardar cambios"
+msgstr "Canales de ventas"
 
 #: pretix/base/models/items.py:343 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:51 pretix/control/forms/filter.py:753
@@ -2984,16 +2978,12 @@ msgid "2017-05-31 22:00"
 msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:122
-#, fuzzy
-#| msgid "Event end time"
 msgid "Event end date"
-msgstr "Hora de finalización del evento"
+msgstr "Fecha de finalización del evento"
 
 #: pretix/base/pdf.py:123
-#, fuzzy
-#| msgid "2017-05-31 20:00"
 msgid "2017-05-31"
-msgstr "2017-05-31 20:00"
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:131
 msgid "22:00"
@@ -3024,16 +3014,12 @@ msgid "Random City"
 msgstr "Ciudad Aleatoria"
 
 #: pretix/base/pdf.py:159
-#, fuzzy
-#| msgid "Invoice address: name"
 msgid "Invoice address name"
-msgstr "Dirección de facturación: nombre"
+msgstr "Dirección de facturación"
 
 #: pretix/base/pdf.py:164
-#, fuzzy
-#| msgid "Invoice address: company"
 msgid "Invoice address company"
-msgstr "Dirección de facturación: empresa"
+msgstr "Dirección de facturación empresa"
 
 #: pretix/base/pdf.py:165 pretix/base/services/tickets.py:97
 #: pretix/control/views/pdf.py:75
@@ -7619,10 +7605,8 @@ msgid "Log out"
 msgstr "Salir"
 
 #: pretix/control/templates/pretixcontrol/base.html:211
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer account"
-msgstr "Nombre del organizador"
+msgstr "Cuenta del organizador"
 
 #: pretix/control/templates/pretixcontrol/base.html:231
 msgid "Search for events"
