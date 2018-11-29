@@ -558,7 +558,8 @@ class Order(LockModel, LoggedModel):
                         'subject': subject,
                         'message': email_content,
                         'recipient': recipient,
-                        'invoices': [i.pk for i in invoices] if invoices else []
+                        'invoices': [i.pk for i in invoices] if invoices else [],
+                        'attach_tickets': attach_tickets,
                     }
                 )
 
