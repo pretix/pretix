@@ -54,8 +54,16 @@
                             </td>
                             <td>
                                 {% if i.available_from or i.available_until %}
-                                    <span class="fa fa-clock-o fa-fw text-muted" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}">
-                                    </span>
+                                    {% if not i.is_available_by_time %}
+                                        <span class="label label-danger" data-toggle="tooltip"
+                                                title="{% trans "Currently unavailable since a limited timeframe for this product has been set" %}">
+                                            <span class="fa fa-clock-o fa-fw" data-toggle="tooltip">
+                                            </span>
+                                        </span>
+                                    {% else %}
+                                        <span class="fa fa-clock-o fa-fw text-muted" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}">
+                                        </span>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>
@@ -69,10 +77,15 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if i.hide_without_voucher %}
-                                    <span class="fa fa-ticket fa-fw text-muted" data-toggle="tooltip" title="{% trans "Only visible with a voucher" %}"></span>
+                                {% if i.category.is_addon %}
+                                    <span class="fa fa-puzzle-piece fa-fw text-muted" data-toggle="tooltip"
+                                            title="{% trans "Only available as an add-on product" %}"></span>
+                                {% elif i.hide_without_voucher %}
+                                    <span class="fa fa-tags fa-fw text-muted" data-toggle="tooltip"
+                                            title="{% trans "Only visible with a voucher" %}"></span>
                                 {% elif i.require_voucher %}
-                                    <span class="fa fa-ticket fa-fw text-muted" data-toggle="tooltip" title="{% trans "Can only bought using a voucher" %}"></span>
+                                    <span class="fa fa-tags fa-fw text-muted" data-toggle="tooltip"
+                                            title="{% trans "Can only bought using a voucher" %}"></span>
                                 {% endif %}
                             </td>
                             <td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
