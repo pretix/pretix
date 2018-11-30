@@ -1,8 +1,6 @@
-import io
 from collections import OrderedDict
 
 import dateutil.parser
-from defusedcsv import csv
 from django import forms
 from django.conf import settings
 from django.db.models import Max, OuterRef, Subquery
@@ -16,7 +14,7 @@ from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
-from pretix.base.exporter import BaseExporter
+from pretix.base.exporter import BaseExporter, ListExporter
 from pretix.base.models import (
     Checkin, InvoiceAddress, Order, OrderPosition, Question,
 )
@@ -26,9 +24,9 @@ from pretix.control.forms.widgets import Select2
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
 
-class BaseCheckinList(BaseExporter):
+class CheckInListMixin(BaseExporter):
     @property
-    def export_form_fields(self):
+    def _fields(self):
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         d = OrderedDict(
             [
@@ -155,14 +153,14 @@ class TableTextRotate(Flowable):
         canvas.drawString(0, -1, self.text)
 
 
-class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
+class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
     name = "overview"
     identifier = 'checkinlistpdf'
     verbose_name = ugettext_lazy('Check-in list (PDF)')
 
     @property
     def export_form_fields(self):
-        f = super().export_form_fields
+        f = self._fields
         del f['secrets']
         return f
 
@@ -276,33 +274,16 @@ class PDFCheckinList(ReportlabExportMixin, BaseCheckinList):
         return story
 
 
-class CSVCheckinList(BaseCheckinList):
+class CSVCheckinList(CheckInListMixin, ListExporter):
     name = "overview"
-    identifier = 'checkinlistcsv'
-    verbose_name = ugettext_lazy('Check-in list (CSV)')
+    identifier = 'checkinlist'
+    verbose_name = ugettext_lazy('Check-in list')
 
     @property
-    def export_form_fields(self):
-        d = super().export_form_fields
-        d['dialect'] = forms.ChoiceField(
-            label=_('CSV dialect'),
-            choices=(
-                ('default', 'Default'),
-                ('excel', 'Excel'),
-                ('semicolon', 'Semicolon'),
-            )
-        )
-        return d
+    def additional_form_fields(self):
+        return self._fields
 
-    def render(self, form_data: dict):
-        output = io.StringIO()
-        if form_data.get('dialect', '-') in csv.list_dialects():
-            writer = csv.writer(output, dialect=form_data.get('dialect'))
-        elif form_data.get('dialect', '-') == "semicolon":
-            writer = csv.writer(output, dialect='excel', delimiter=';')
-        else:
-            writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
-
+    def iterate_list(self, form_data):
         cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
@@ -339,7 +320,7 @@ class CSVCheckinList(BaseCheckinList):
 
         headers.append(_('Company'))
         headers.append(_('Voucher code'))
-        writer.writerow(headers)
+        yield headers
 
         for op in qs:
             try:
@@ -391,6 +372,7 @@ class CSVCheckinList(BaseCheckinList):
 
             row.append(ia.company)
             row.append(op.voucher.code if op.voucher else "")
-            writer.writerow(row)
+            yield row
 
-        return '{}_checkin.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
+    def get_filename(self):
+        return '{}_checkin.csv'.format(self.event.slug)

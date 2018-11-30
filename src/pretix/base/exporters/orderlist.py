@@ -1,9 +1,7 @@
-import io
 from collections import OrderedDict
 from decimal import Decimal
 
 import pytz
-from defusedcsv import csv
 from django import forms
 from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
 from django.dispatch import receiver
@@ -14,16 +12,16 @@ from pretix.base.models import InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
-from ..exporter import BaseExporter
+from ..exporter import ListExporter
 from ..signals import register_data_exporters
 
 
-class OrderListExporter(BaseExporter):
-    identifier = 'orderlistcsv'
-    verbose_name = ugettext_lazy('List of orders (CSV)')
+class OrderListExporter(ListExporter):
+    identifier = 'orderlist'
+    verbose_name = ugettext_lazy('List of orders')
 
     @property
-    def export_form_fields(self):
+    def additional_form_fields(self):
         return OrderedDict(
             [
                 ('paid_only',
@@ -51,10 +49,8 @@ class OrderListExporter(BaseExporter):
         tax_rates = sorted(tax_rates)
         return tax_rates
 
-    def render(self, form_data: dict):
-        output = io.StringIO()
+    def iterate_list(self, form_data: dict):
         tz = pytz.timezone(self.event.settings.timezone)
-        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
         p_date = OrderPayment.objects.filter(
             order=OuterRef('pk'),
@@ -95,7 +91,7 @@ class OrderListExporter(BaseExporter):
 
         headers.append(_('Invoice numbers'))
 
-        writer.writerow(headers)
+        yield headers
 
         full_fee_sum_cache = {
             o['order__id']: o['grosssum'] for o in
@@ -162,17 +158,18 @@ class OrderListExporter(BaseExporter):
                 ]
 
             row.append(', '.join([i.number for i in order.invoices.all()]))
-            writer.writerow(row)
+            yield row
 
-        return '{}_orders.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
+    def get_filename(self):
+        return '{}_orders.csv'.format(self.event.slug)
 
 
-class PaymentListExporter(BaseExporter):
-    identifier = 'paymentlistcsv'
-    verbose_name = ugettext_lazy('List of payments and refunds (CSV)')
+class PaymentListExporter(ListExporter):
+    identifier = 'paymentlist'
+    verbose_name = ugettext_lazy('List of payments and refunds')
 
     @property
-    def export_form_fields(self):
+    def additional_form_fields(self):
         return OrderedDict(
             [
                 ('successful_only',
@@ -184,10 +181,8 @@ class PaymentListExporter(BaseExporter):
             ]
         )
 
-    def render(self, form_data: dict):
-        output = io.StringIO()
+    def iterate_list(self, form_data):
         tz = pytz.timezone(self.event.settings.timezone)
-        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
         provider_names = {
             k: v.verbose_name
@@ -215,7 +210,7 @@ class PaymentListExporter(BaseExporter):
             _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
             _('Amount'), _('Payment method')
         ]
-        writer.writerow(headers)
+        yield headers
 
         for obj in objs:
             if isinstance(obj, OrderPayment) and obj.payment_date:
@@ -233,24 +228,22 @@ class PaymentListExporter(BaseExporter):
                 localize(obj.amount * (-1 if isinstance(obj, OrderRefund) else 1)),
                 provider_names.get(obj.provider, obj.provider)
             ]
-            writer.writerow(row)
+            yield row
 
-        return '{}_payments.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
+    def get_filename(self):
+        return '{}_payments.csv'.format(self.event.slug)
 
 
-class QuotaListExporter(BaseExporter):
-    identifier = 'quotalistcsv'
-    verbose_name = ugettext_lazy('Quota availabilities (CSV)')
+class QuotaListExporter(ListExporter):
+    identifier = 'quotalist'
+    verbose_name = ugettext_lazy('Quota availabilities')
 
-    def render(self, form_data: dict):
-        output = io.StringIO()
-        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
-
+    def iterate_list(self, form_data):
         headers = [
             _('Quota name'), _('Total quota'), _('Paid orders'), _('Pending orders'), _('Blocking vouchers'),
             _('Current user\'s carts'), _('Waiting list'), _('Current availability')
         ]
-        writer.writerow(headers)
+        yield headers
 
         for quota in self.event.quotas.all():
             avail = quota.availability()
@@ -264,9 +257,10 @@ class QuotaListExporter(BaseExporter):
                 quota.count_waiting_list_pending(),
                 _('Infinite') if avail[1] is None else avail[1]
             ]
-            writer.writerow(row)
+            yield row
 
-        return '{}_quotas.csv'.format(self.event.slug), 'text/csv', output.getvalue().encode("utf-8")
+    def get_filename(self):
+        return '{}_quotas.csv'.format(self.event.slug)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")

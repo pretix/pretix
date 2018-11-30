@@ -1,4 +1,10 @@
+import io
+from collections import OrderedDict
 from typing import Tuple
+
+from defusedcsv import csv
+from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 
 class BaseExporter:
@@ -69,3 +75,46 @@ class BaseExporter:
         tasks.
         """
         raise NotImplementedError()  # NOQA
+
+
+class ListExporter(BaseExporter):
+
+    @property
+    def export_form_fields(self) -> dict:
+        ff = OrderedDict(
+            [
+                ('_format',
+                 forms.ChoiceField(
+                     label=_('Export format'),
+                     choices=(
+                         ('default', _('CSV (with commas)')),
+                         ('excel', _('CSV (Excel-style)')),
+                         ('semicolon', _('CSV (with semicolons)')),
+                     ),
+                 )),
+            ]
+        )
+        ff.update(self.additional_form_fields)
+        return ff
+
+    @property
+    def additional_form_fields(self) -> dict:
+        return {}
+
+    def iterate_list(self, form_data):
+        raise NotImplementedError()  # noqa
+
+    def get_filename(self):
+        return 'export.csv'
+
+    def render(self, form_data: dict) -> Tuple[str, str, str]:
+        output = io.StringIO()
+        if form_data.get('_format') == 'default':
+            writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+        elif form_data.get('_format') == 'excel':
+            writer = csv.writer(output, dialect='excel')
+        elif form_data.get('_format') == 'semicolon':
+            writer = csv.writer(output, dialect='excel', delimiter=";")
+        for line in self.iterate_list(form_data):
+            writer.writerow(line)
+        return self.get_filename(), 'text/csv', output.getvalue().encode("utf-8")
