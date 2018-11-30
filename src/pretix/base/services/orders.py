@@ -661,7 +661,9 @@ def send_expiry_warnings(sender, **kwargs):
     eventcache = {}
     today = now().replace(hour=0, minute=0, second=0)
 
-    for o in Order.objects.filter(expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING).only('pk'):
+    for o in Order.objects.filter(
+        expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING, datetime__lte=now() - timedelta(hours=2)
+    ).only('pk'):
         with transaction.atomic():
             o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
             if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
@@ -723,7 +725,7 @@ def send_download_reminders(sender, **kwargs):
 
         if now() < reminder_date:
             continue
-        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False).only('pk'):
+        for o in e.orders.filter(status=Order.STATUS_PAID, download_reminder_sent=False, datetime__lte=now() - timedelta(hours=2)).only('pk'):
             with transaction.atomic():
                 o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
                 if o.download_reminder_sent:

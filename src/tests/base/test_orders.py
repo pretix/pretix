@@ -301,8 +301,8 @@ class PaymentReminderTests(TestCase):
         self.order = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, locale='en',
-            datetime=now(),
-            expires=now() + timedelta(days=10),
+            datetime=now() - timedelta(hours=4),
+            expires=now() - timedelta(hours=4) + timedelta(days=10),
             total=Decimal('46.00'),
         )
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
@@ -336,6 +336,14 @@ class PaymentReminderTests(TestCase):
         send_expiry_warnings(sender=self.event)
         assert len(djmail.outbox) == 1
 
+    def test_sent_not_immediately_after_purchase(self):
+        self.order.datetime = now()
+        self.order.expires = now() + timedelta(hours=3)
+        self.order.save()
+        self.event.settings.mail_days_order_expire_warning = 2
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
 
 class DownloadReminderTests(TestCase):
     def setUp(self):
@@ -349,8 +357,8 @@ class DownloadReminderTests(TestCase):
         self.order = Order.objects.create(
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PAID, locale='en',
-            datetime=now(),
-            expires=now() + timedelta(days=10),
+            datetime=now() - timedelta(hours=4),
+            expires=now() - timedelta(hours=4) + timedelta(days=10),
             total=Decimal('46.00'),
         )
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
@@ -382,6 +390,13 @@ class DownloadReminderTests(TestCase):
 
     def test_not_sent_too_early(self):
         self.event.settings.mail_days_download_reminder = 1
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    def test_not_sent_too_soon_after_purchase(self):
+        self.order.datetime = now()
+        self.order.save()
+        self.event.settings.mail_days_download_reminder = 2
         send_download_reminders(sender=self.event)
         assert len(djmail.outbox) == 0
 
