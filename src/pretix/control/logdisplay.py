@@ -165,6 +165,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.refunded': _('The order has been refunded.'),
         'pretix.event.order.canceled': _('The order has been canceled.'),
         'pretix.event.order.placed': _('The order has been created.'),
+        'pretix.event.order.placed.require_approval': _('The order requires approval before it can continue to be processed.'),
         'pretix.event.order.approved': _('The order has been approved.'),
         'pretix.event.order.denied': _('The order has been denied.'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '

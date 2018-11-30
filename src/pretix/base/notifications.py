@@ -195,6 +195,12 @@ def register_default_notification_types(sender, **kwargs):
         ),
         ParametrizedOrderNotificationType(
             sender,
+            'pretix.event.order.placed.require_approval',
+            _('New order requires approval'),
+            _('A new order has been placed that requires approval: {order.code}'),
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
             'pretix.event.order.paid',
             _('Order marked as paid'),
             _('Order {order.code} has been marked as paid.')

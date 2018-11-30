@@ -113,6 +113,10 @@ def register_default_webhook_events(sender, **kwargs):
             _('New order placed'),
         ),
         ParametrizedOrderWebhookEvent(
+            'pretix.event.order.placed.required_approval',
+            _('New order requires approval'),
+        ),
+        ParametrizedOrderWebhookEvent(
             'pretix.event.order.paid',
             _('Order marked as paid'),
         ),
