@@ -137,6 +137,7 @@ setup(
         'vat_moss==0.11.0',
         'django-localflavor',
         'django-hijack>=2.1.10,<2.2.0',
+        'openpyxl',
         'django-oauth-toolkit==1.2.*',
         'idna==2.6',  # required by current requests
     ],

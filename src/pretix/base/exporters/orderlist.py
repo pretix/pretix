@@ -161,7 +161,7 @@ class OrderListExporter(ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_orders.csv'.format(self.event.slug)
+        return '{}_orders'.format(self.event.slug)
 
 
 class PaymentListExporter(ListExporter):
@@ -231,7 +231,7 @@ class PaymentListExporter(ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_payments.csv'.format(self.event.slug)
+        return '{}_payments'.format(self.event.slug)
 
 
 class QuotaListExporter(ListExporter):
@@ -260,7 +260,7 @@ class QuotaListExporter(ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_quotas.csv'.format(self.event.slug)
+        return '{}_quotas'.format(self.event.slug)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")

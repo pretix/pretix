@@ -375,4 +375,4 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_checkin.csv'.format(self.event.slug)
+        return '{}_checkin'.format(self.event.slug)

@@ -1,10 +1,13 @@
 import io
+import tempfile
 from collections import OrderedDict
 from typing import Tuple
 
 from defusedcsv import csv
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from openpyxl import Workbook
+from openpyxl.cell.cell import KNOWN_TYPES
 
 
 class BaseExporter:
@@ -61,7 +64,7 @@ class BaseExporter:
         """
         return {}
 
-    def render(self, form_data: dict) -> Tuple[str, str, str]:
+    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
         """
         Render the exported file and return a tuple consisting of a filename, a file type
         and file content.
@@ -87,6 +90,7 @@ class ListExporter(BaseExporter):
                  forms.ChoiceField(
                      label=_('Export format'),
                      choices=(
+                         ('xlsx', _('Excel (.xlsx)')),
                          ('default', _('CSV (with commas)')),
                          ('excel', _('CSV (Excel-style)')),
                          ('semicolon', _('CSV (with semicolons)')),
@@ -107,14 +111,35 @@ class ListExporter(BaseExporter):
     def get_filename(self):
         return 'export.csv'
 
-    def render(self, form_data: dict) -> Tuple[str, str, str]:
+    def _render_csv(self, form_data, **kwargs):
         output = io.StringIO()
-        if form_data.get('_format') == 'default':
-            writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
-        elif form_data.get('_format') == 'excel':
-            writer = csv.writer(output, dialect='excel')
-        elif form_data.get('_format') == 'semicolon':
-            writer = csv.writer(output, dialect='excel', delimiter=";")
+        writer = csv.writer(output, **kwargs)
         for line in self.iterate_list(form_data):
             writer.writerow(line)
-        return self.get_filename(), 'text/csv', output.getvalue().encode("utf-8")
+        return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
+
+    def _render_xlsx(self, form_data):
+        wb = Workbook()
+        ws = wb.get_active_sheet()
+        try:
+            ws.title = str(self.verbose_name)
+        except:
+            pass
+        for i, line in enumerate(self.iterate_list(form_data)):
+            for j, val in enumerate(line):
+                ws.cell(row=i + 1, column=j + 1).value = str(val) if not isinstance(val, KNOWN_TYPES) else val
+
+        with tempfile.NamedTemporaryFile(suffix='.xlsx') as f:
+            wb.save(f.name)
+            f.seek(0)
+            return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', f.read()
+
+    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
+        if form_data.get('_format') == 'xlsx':
+            return self._render_xlsx(form_data)
+        elif form_data.get('_format') == 'default':
+            return self._render_csv(form_data, quoting=csv.QUOTE_NONNUMERIC, delimiter=',')
+        elif form_data.get('_format') == 'csv-excel':
+            return self._render_csv(form_data, dialect='excel')
+        elif form_data.get('_format') == 'semicolon':
+            return self._render_csv(form_data, dialect='excel', delimiter=';')
