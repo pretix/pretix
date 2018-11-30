@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-12 10:31+0000\n"
-"PO-Revision-Date: 2018-11-29 09:01+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2018-12-02 15:44+0000\n"
+"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -9908,10 +9908,8 @@ msgid "Order details"
 msgstr "Detalles del pedido"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:118
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channel"
-msgstr "Guardar cambios"
+msgstr "Canal de ventas"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:129
 msgid "Expiry date"
