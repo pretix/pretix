@@ -18,17 +18,21 @@
     <form method="post" class="form-horizontal" href="">
         {% csrf_token %}
         <p>{% blocktrans trimmed %}
-            Do you really want to mark this order as paid?
+            Do you really want to create a manual payment for this order?
         {% endblocktrans %}</p>
         <input type="hidden" name="status" value="p" />
-        {% bootstrap_form form layout='horizontal' horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.amount layout='horizontal' %}
+        {% if form.force %}
+            {% bootstrap_field form.force layout='horizontal' horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
+        {% endif %}
         <div class="form-group submit-group">
             <a class="btn btn-default btn-lg"
                     href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                 {% trans "Cancel" %}
             </a>
             <button class="btn btn-primary btn-save btn-lg" type="submit">
-                {% trans "Mark as paid" %}
+                {% trans "Create payment" %}
             </button>
             <div class="clearfix"></div>
         </div>

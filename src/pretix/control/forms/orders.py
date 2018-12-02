@@ -49,7 +49,7 @@ class ExtendForm(I18nModelForm):
         return data
 
 
-class MarkPaidForm(forms.Form):
+class ConfirmPaymentForm(forms.Form):
     force = forms.BooleanField(
         label=_('Overbook quota and ignore late payment'),
         help_text=_('If you check this box, this operation will be performed even if it leads to an overbooked quota '
@@ -73,6 +73,20 @@ class MarkPaidForm(forms.Form):
         )
         if quota_success and term_success:
             del self.fields['force']
+
+
+class MarkPaidForm(ConfirmPaymentForm):
+    amount = forms.DecimalField(
+        required=True,
+        max_digits=10, decimal_places=2,
+        localize=True,
+        label=_('Payment amount'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        change_decimal_field(self.fields['amount'], self.instance.event.currency)
+        self.fields['amount'].initial = max(0, self.instance.pending_sum)
 
 
 class ExporterForm(forms.Form):

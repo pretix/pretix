@@ -55,8 +55,8 @@ from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import EventOrderFilterForm, RefundFilterForm
 from pretix.control.forms.orders import (
-    CommentForm, ExporterForm, ExtendForm, MarkPaidForm, OrderContactForm,
-    OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
+    CommentForm, ConfirmPaymentForm, ExporterForm, ExtendForm, MarkPaidForm,
+    OrderContactForm, OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
     OrderPositionChangeForm, OrderRefundForm, OtherOperationsForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -404,7 +404,7 @@ class OrderPaymentConfirm(OrderView):
 
     @cached_property
     def mark_paid_form(self):
-        return MarkPaidForm(
+        return ConfirmPaymentForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
         )
@@ -675,7 +675,7 @@ class OrderTransition(OrderView):
     def post(self, *args, **kwargs):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
-            ps = max(0, self.order.pending_sum)
+            ps = self.mark_paid_form.cleaned_data['amount']
             try:
                 p = self.order.payments.get(
                     state__in=(OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
@@ -718,7 +718,7 @@ class OrderTransition(OrderView):
                 messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
                                                  'confirmation mail.'))
             else:
-                messages.success(self.request, _('The order has been marked as paid.'))
+                messages.success(self.request, _('The payment has been created successfully.'))
         elif self.order.cancel_allowed() and to == 'c':
             cancel_order(self.order, user=self.request.user, send_mail=self.request.POST.get("send_email") == "on")
             messages.success(self.request, _('The order has been canceled.'))

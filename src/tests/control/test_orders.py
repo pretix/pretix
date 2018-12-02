@@ -193,6 +193,7 @@ def test_order_transition_to_paid_in_time_success(client, env):
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'amount': str(env[2].pending_sum),
         'status': 'p'
     })
     o = Order.objects.get(id=env[2].id)
@@ -208,7 +209,8 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
     res = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
-        'status': 'p'
+        'status': 'p',
+        'amount': str(o.pending_sum),
     })
     o = Order.objects.get(id=env[2].id)
     assert res.status_code < 400
@@ -279,6 +281,7 @@ def test_order_transition(client, env, process):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.get('/control/event/dummy/dummy/orders/FOO/transition?status=' + process[1])
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'amount': str(o.pending_sum),
         'status': process[1]
     })
     o = Order.objects.get(id=env[2].id)
@@ -562,7 +565,8 @@ def test_order_mark_paid_overdue_quota_blocked_by_waiting_list(client, env):
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
-        'status': 'p'
+        'status': 'p',
+        'amount': str(o.pending_sum),
     }, follow=True)
     assert 'alert-success' in response.rendered_content
     o = Order.objects.get(id=env[2].id)
@@ -580,6 +584,7 @@ def test_order_mark_paid_blocked(client, env):
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'amount': str(o.pending_sum),
         'status': 'p'
     }, follow=True)
     assert 'alert-danger' in response.rendered_content
@@ -588,7 +593,7 @@ def test_order_mark_paid_blocked(client, env):
 
 
 @pytest.mark.django_db
-def test_order_mark_paid_overpaid_exired(client, env):
+def test_order_mark_paid_overpaid_epxired(client, env):
     o = Order.objects.get(id=env[2].id)
     o.status = Order.STATUS_EXPIRED
     o.expires = now() - timedelta(days=5)
@@ -601,6 +606,7 @@ def test_order_mark_paid_overpaid_exired(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p',
+        'amount': '0.00',
         'force': 'on'
     }, follow=True)
     assert 'alert-success' in response.rendered_content
@@ -622,6 +628,7 @@ def test_order_mark_paid_forced(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'p',
+        'amount': str(o.pending_sum),
         'force': 'on'
     }, follow=True)
     assert 'alert-success' in response.rendered_content
