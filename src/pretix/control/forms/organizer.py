@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -79,6 +81,19 @@ class OrganizerUpdateForm(OrganizerForm):
                 required=False,
                 help_text=_('You need to configure the custom domain in the webserver beforehand.')
             )
+
+    def clean_domain(self):
+        d = self.cleaned_data['domain']
+        if d:
+            if d == urlparse(settings.SITE_URL).hostname:
+                raise ValidationError(
+                    _('You cannot choose the base domain of this installation.')
+                )
+            if KnownDomain.objects.filter(domainname=d).exclude(organizer=self.instance.pk).exists():
+                raise ValidationError(
+                    _('This domain is already in use for a different organizer.')
+                )
+        return d
 
     def clean_slug(self):
         if self.change_slug:
