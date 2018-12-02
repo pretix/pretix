@@ -6,7 +6,10 @@ import bleach
 import dateutil.parser
 import pytz
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.formats import date_format
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
@@ -91,12 +94,17 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
             old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
-        return text + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
-            old_item=old_item,
+        url = reverse('control:event.order', kwargs={
+            'event': event.slug,
+            'organizer': event.organizer.slug,
+            'code': data['new_order']
+        })
+        return mark_safe(escape(text) + ' ' + _('Position #{posid} ({old_item}, {old_price}) split into new order: {order}').format(
+            old_item=escape(old_item),
             posid=data.get('positionid', '?'),
-            order=data['new_order'],
+            order='<a href="{}">{}</a>'.format(url, data['new_order']),
             old_price=money_filter(Decimal(data['old_price']), event.currency),
-        )
+        ))
     elif logentry.action_type == 'pretix.event.order.changed.split_from':
         return _('This order has been created by splitting the order {order}').format(
             order=data['original_order'],
