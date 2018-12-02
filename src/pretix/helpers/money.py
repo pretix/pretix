@@ -25,6 +25,7 @@ class DecimalTextInput(TextInput):
 def change_decimal_field(field, currency):
     places = settings.CURRENCY_PLACES.get(currency, 2)
     field.decimal_places = places
+    field.localize = True
     if isinstance(field.widget, NumberInput):
         field.widget.attrs['step'] = str(Decimal('1') / 10 ** places).lower()
     elif isinstance(field.widget, TextInput):
