@@ -36,7 +36,7 @@
                                 </div>
                                 <div id="{{ item }}_preview" class="tab-pane mail-preview-group">
                                     {% for l in request.event.settings.locales %}
-                                        <pre lang="{{ l }}" for="{{ item }}" class="mail-preview"></pre>
+                                        <div lang="{{ l }}" for="{{ item }}" class="mail-preview"></div>
                                     {% endfor %}
                                 </div>
                             </div>

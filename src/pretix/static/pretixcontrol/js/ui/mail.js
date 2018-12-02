@@ -3,9 +3,9 @@ function preview_task_callback(data, jqXHR, status) {
     if (data.item) {
         $('#' + data.item + '_panel').data('ajaxing', false);
         for (var m in data.msgs){
-            var target = $('pre[for=' + data.item + '][lang=' + m +']');
+            var target = $('div[for=' + data.item + '][lang=' + m +']');
             if (target.length === 1){
-                target.text(data.msgs[m]);
+                target.html(data.msgs[m]);
             }
         }
     }
@@ -15,7 +15,7 @@ function preview_task_error(item) {
     "use strict";
     return function(jqXHR, textStatus, errorThrown) {
         $('#' + item + '_panel').data('ajaxing', false);
-        $('#' + item + '_preview pre').text(gettext('An error has occurred.'));
+        $('#' + item + '_preview div').text(gettext('An error has occurred.'));
         if (textStatus === "timeout") {
             alert(gettext("The request took to long. Please try again."));
         } else {
@@ -49,7 +49,7 @@ $(function () {
 
         // prepare for ajax
         $('#' + itemName + '_panel').data('ajaxing', true);
-        $('#' + itemName + '_preview pre').text(gettext('Generating messages …'));
+        $('#' + itemName + '_preview div').text(gettext('Generating messages …'));
 
         $.ajax(
             {
