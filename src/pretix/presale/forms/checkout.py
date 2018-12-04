@@ -2,10 +2,9 @@ from itertools import chain
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, Prefetch
 from django.utils.encoding import force_text
 from django.utils.formats import number_format
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms.questions import (
@@ -204,12 +203,9 @@ class AddOnsForm(forms.Form):
         ckey = '{}-{}'.format(subevent.pk if subevent else 0, category.pk)
         if ckey not in item_cache:
             # Get all items to possibly show
-            items = category.items.filter(
-                Q(active=True)
-                & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-                & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-                & Q(hide_without_voucher=False)
-                & Q(sales_channels__contains=self.sales_channel)
+            items = category.items.filter_available(
+                channel=self.sales_channel,
+                allow_addons=True
             ).select_related('tax_rule').prefetch_related(
                 Prefetch('quotas',
                          to_attr='_subevent_quotas',

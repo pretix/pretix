@@ -153,6 +153,30 @@ class SubEventItemVariation(models.Model):
             self.subevent.event.cache.clear()
 
 
+class ItemQuerySet(models.QuerySet):
+    def filter_available(self, channel='web', voucher=None, allow_addons=False):
+        q = (
+            # IMPORTANT: If this is updated, also update the ItemVariation query
+            # in models/event.py: EventMixin.annotated()
+            Q(active=True)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(sales_channels__contains=channel)
+        )
+        if allow_addons:
+            q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
+        qs = self.filter(q)
+
+        vouchq = Q(hide_without_voucher=False)
+        if voucher:
+            if voucher.item_id:
+                vouchq |= Q(pk=voucher.item_id)
+                qs = qs.filter(pk=voucher.item_id)
+            elif voucher.quota_id:
+                qs = qs.filter(quotas__in=[voucher.quota_id])
+        return qs.filter(vouchq)
+
+
 class Item(LoggedModel):
     """
     An item is a thing which can be sold. It belongs to an event and may or may not belong to a category.
@@ -199,6 +223,8 @@ class Item(LoggedModel):
     :param sales_channels: Sales channels this item is available on.
     :type sales_channels: bool
     """
+
+    objects = ItemQuerySet.as_manager()
 
     event = models.ForeignKey(
         Event,

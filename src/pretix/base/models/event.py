@@ -163,14 +163,8 @@ class EventMixin:
     def annotated(cls, qs, channel='web'):
         from pretix.base.models import Item, ItemVariation, Quota
 
-        sq_active_item = Item.objects.filter(
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(Q(category__isnull=True) | Q(category__is_addon=False))
-            & Q(sales_channels__contains=channel)
-            & Q(hide_without_voucher=False)  # TODO: does this make sense?
-            & Q(variations__isnull=True)
+        sq_active_item = Item.objects.filter_available(channel=channel).filter(
+            Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))
         )
         sq_active_variation = ItemVariation.objects.filter(
