@@ -209,6 +209,8 @@ class EventMixin:
                 return res[0]
             elif res[0] > best:
                 best = res[0]
+        if not self.active_quotas:
+            return None
         return best
 
 

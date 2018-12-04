@@ -41,7 +41,7 @@
                                                 {% if event.event.presale_is_running %}
                                                     {% if event.event.best_availability_state == 100 %}
                                                         <span class="fa fa-ticket"></span> {% trans "Tickets on sale" %}
-                                                    {% elif event.event.settings.waiting_list_enabled %}
+                                                    {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
                                                         <span class="fa fa-ticket"></span> {% trans "Waiting list" %}
                                                     {% elif event.event.best_availability_state == 20 %}
                                                         <span class="fa fa-ticket"></span> {% trans "Reserved" %}

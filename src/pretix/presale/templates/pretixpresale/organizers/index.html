@@ -64,7 +64,7 @@
                         {% elif e.presale_is_running %}
                             {% if e.best_availability_state == 100 %}
                                 <span class="label label-success">{% trans "Tickets on sale" %}</span>
-                            {% elif e.settings.waiting_list_enabled %}
+                            {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
                                 <span class="label label-warning">{% trans "Waiting list" %}</span>
                             {% elif e.best_availability_state == 20 %}
                                 <span class="label label-warning">{% trans "Reserved" %}</span>
