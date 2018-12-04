@@ -13,7 +13,7 @@ def env():
     event = Event.objects.create(
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now() + timedelta(days=10),
-        live=True
+        live=True, is_public=False
     )
     return o, event
 
@@ -123,7 +123,7 @@ def test_calendar(env, client):
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
         date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
-        live=True
+        live=True, is_public=False
     )
     r = client.get('/mrmcd/?style=calendar')
     assert 'MRMCD2017' not in r.rendered_content
@@ -159,7 +159,7 @@ def test_ics(env, client):
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
         date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
-        live=True
+        live=True, is_public=False
     )
     r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' not in r.content
