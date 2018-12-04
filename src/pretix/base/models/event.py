@@ -227,10 +227,9 @@ class Event(EventMixin, LoggedModel):
                                    verbose_name=_("Event end time"))
     date_admission = models.DateTimeField(null=True, blank=True,
                                           verbose_name=_("Admission time"))
-    is_public = models.BooleanField(default=False,
-                                    verbose_name=_("Visible in public lists"),
-                                    help_text=_("If selected, this event may show up on the ticket system's start page "
-                                                "or an organization profile."))
+    is_public = models.BooleanField(default=True,
+                                    verbose_name=_("Show in lists"),
+                                    help_text=_("If selected, this event will show up publicly on the list of events for your organizer account."))
     presale_end = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("End of presale"),
