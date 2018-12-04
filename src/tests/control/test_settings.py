@@ -91,7 +91,7 @@ class MailSettingPreviewTest(SoupTest):
         res = json.loads(response.content.decode())
         assert res['item'] == 'mail_text_order_free'
         assert len(res['msgs']) == 1
-        assert res['msgs']['en'] == dummy_text
+        assert dummy_text in res['msgs']['en']
 
     def test_multiple_languages(self):
         dummy_text = 'This is dummy sentence for test'
@@ -105,8 +105,8 @@ class MailSettingPreviewTest(SoupTest):
         res = json.loads(response.content.decode())
         assert res['item'] == 'mail_text_order_free'
         assert len(res['msgs']) == 2
-        assert res['msgs']['en'] == dummy_text
-        assert res['msgs']['de-informal'] == dummy_text
+        assert dummy_text in res['msgs']['en']
+        assert dummy_text in res['msgs']['de-informal']
 
     def test_i18n_placeholders(self):
         dummy_text = '{event}'
@@ -120,8 +120,8 @@ class MailSettingPreviewTest(SoupTest):
         res = json.loads(response.content.decode())
         assert res['item'] == 'mail_text_order_placed'
         assert len(res['msgs']) == 2
-        assert res['msgs']['en'] == self.locale_event.name['en']
-        assert res['msgs']['de-informal'] == self.locale_event.name['de-informal']
+        assert self.locale_event.name['en'] in res['msgs']['en']
+        assert self.locale_event.name['de-informal'] in res['msgs']['de-informal']
 
     def test_i18n_locale_order(self):
         self.locale_event.settings.locales = ['de-informal', 'en']
@@ -137,8 +137,8 @@ class MailSettingPreviewTest(SoupTest):
         res = json.loads(response.content.decode())
         assert res['item'] == 'mail_text_order_placed'
         assert len(res['msgs']) == 2
-        assert res['msgs']['de-informal'] == self.locale_event.name['de-informal']
-        assert res['msgs']['en'] == self.locale_event.name['en']
+        assert self.locale_event.name['de-informal'] in res['msgs']['de-informal']
+        assert self.locale_event.name['en'] in res['msgs']['en']
 
     def test_mail_text_order_placed(self):
         text = '{event}{total}{currency}{date}{payment_info}{url}{invoice_name}{invoice_company}'
@@ -268,7 +268,7 @@ class MailSettingPreviewTest(SoupTest):
         res = json.loads(response.content.decode())
         assert res['item'] == 'mail_text_waiting_list'
         assert len(res['msgs']) == 1
-        assert res['msgs']['en'] == text
+        assert text in res['msgs']['en']
 
     def test_localised_date(self):
         dummy_text = '{date}'

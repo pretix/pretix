@@ -59,6 +59,7 @@ def test_csv_simple(event):
         'list': event.checkin_lists.first().pk,
         'secrets': True,
         'sort': 'name',
+        '_format': 'default',
         'questions': []
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title","Attendee name:
@@ -81,6 +82,7 @@ def test_csv_order_by_name_parts(event):  # noqa
         'list': event.checkin_lists.first().pk,
         'secrets': True,
         'sort': 'name:given_name',
+        '_format': 'default',
         'questions': []
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
@@ -96,6 +98,7 @@ def test_csv_order_by_name_parts(event):  # noqa
         'list': event.checkin_lists.first().pk,
         'secrets': True,
         'sort': 'name:family_name',
+        '_format': 'default',
         'questions': []
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
