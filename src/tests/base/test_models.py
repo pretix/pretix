@@ -1252,6 +1252,100 @@ class EventTest(TestCase):
         assert event.presale_has_ended
         assert not event.presale_is_running
 
+    def test_active_quotas_annotation(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
+        item2 = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=False)
+        q.items.add(item)
+        q.items.add(item2)
+        assert Event.annotated(Event.objects).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, 'foo').first().active_quotas == []
+
+    def test_active_quotas_annotation_product_inactive(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=False)
+        q.items.add(item)
+        assert Event.annotated(Event.objects).first().active_quotas == []
+
+    def test_active_quotas_annotation_product_addon(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
+        cat = ItemCategory.objects.create(
+            event=event, name='Foo', is_addon=True
+        )
+        item.category = cat
+        item.save()
+        q.items.add(item)
+        assert Event.annotated(Event.objects).first().active_quotas == []
+
+    def test_active_quotas_annotation_product_unavailable(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True, available_until=now() - timedelta(days=1))
+        q.items.add(item)
+        assert Event.annotated(Event.objects).first().active_quotas == []
+
+    def test_active_quotas_annotation_variation_not_in_quota(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
+        item.variations.create(value="foo")
+        q.items.add(item)
+        assert Event.annotated(Event.objects).first().active_quotas == []
+
+    def test_active_quotas_annotation_variation(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, active=True)
+        v = item.variations.create(value="foo")
+        item.variations.create(value="bar")
+        q.items.add(item)
+        q.variations.add(v)
+        assert Event.annotated(Event.objects).first().active_quotas == [q]
+        item.available_until = now() - timedelta(days=1)
+        item.save()
+        assert Event.annotated(Event.objects).first().active_quotas == []
+        item.available_until = None
+        item.available_from = now() + timedelta(days=1)
+        item.save()
+        assert Event.annotated(Event.objects).first().active_quotas == []
+        item.available_until = None
+        item.available_from = None
+        item.active = False
+        item.save()
+        assert Event.annotated(Event.objects).first().active_quotas == []
+        item.active = True
+        item.save()
+        assert Event.annotated(Event.objects).first().active_quotas == [q]
+        assert Event.annotated(Event.objects, 'foo').first().active_quotas == []
+        v.active = False
+        v.save()
+        assert Event.annotated(Event.objects).first().active_quotas == []
+        item.hide_without_voucher = True
+        item.save()
+        assert Event.annotated(Event.objects).first().active_quotas == []
+
 
 class SubEventTest(TestCase):
     @classmethod
@@ -1286,6 +1380,40 @@ class SubEventTest(TestCase):
         assert self.se.var_price_overrides == {
             v.pk: Decimal('30.00')
         }
+
+    def test_active_quotas_annotation(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2,
+                                 subevent=self.se)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+        q.items.add(item)
+        assert SubEvent.annotated(SubEvent.objects).first().active_quotas == [q]
+        assert SubEvent.annotated(SubEvent.objects, 'foo').first().active_quotas == []
+
+    def test_active_quotas_annotation_no_interference(self):
+        se2 = SubEvent.objects.create(
+            name='Testsub', date_from=now(), event=self.event
+        )
+        q = Quota.objects.create(event=self.event, name='Quota', size=2,
+                                 subevent=se2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+        q.items.add(item)
+        assert SubEvent.annotated(SubEvent.objects).filter(pk=self.se.pk).first().active_quotas == []
+        assert SubEvent.annotated(SubEvent.objects).filter(pk=se2.pk).first().active_quotas == [q]
+
+    def test_best_availability(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=0,
+                                 subevent=self.se)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+        q.items.add(item)
+        obj = SubEvent.annotated(SubEvent.objects).first()
+        assert len(obj.active_quotas) == 1
+        assert obj.best_availability_state == Quota.AVAILABILITY_GONE
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=1,
+                                  subevent=self.se)
+        q2.items.add(item)
+        obj = SubEvent.annotated(SubEvent.objects).first()
+        assert len(obj.active_quotas) == 2
+        assert obj.best_availability_state == Quota.AVAILABILITY_OK
 
 
 class CachedFileTestCase(TestCase):
