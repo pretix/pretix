@@ -1085,6 +1085,51 @@ class ItemTest(TestCase):
         i.active = False
         assert not i.is_available()
 
+    def test_availability_filter(self):
+        i = Item.objects.create(
+            event=self.event, name="Ticket", default_price=23,
+            active=True, available_until=now() + timedelta(days=1),
+        )
+        assert Item.objects.filter_available().exists()
+        assert not Item.objects.filter_available(channel='foo').exists()
+
+        i.available_from = now() - timedelta(days=1)
+        i.save()
+        assert Item.objects.filter_available().exists()
+        i.available_from = now() + timedelta(days=1)
+        i.available_until = None
+        i.save()
+        assert not Item.objects.filter_available().exists()
+        i.available_from = None
+        i.available_until = now() - timedelta(days=1)
+        i.save()
+        assert not Item.objects.filter_available().exists()
+        i.available_from = None
+        i.available_until = None
+        i.save()
+        assert Item.objects.filter_available().exists()
+        i.active = False
+        i.save()
+        assert not Item.objects.filter_available().exists()
+
+        cat = ItemCategory.objects.create(
+            event=self.event, name='Foo', is_addon=True
+        )
+        i.active = True
+        i.category = cat
+        i.save()
+        assert not Item.objects.filter_available().exists()
+        assert Item.objects.filter_available(allow_addons=True).exists()
+
+        i.category = None
+        i.hide_without_voucher = True
+        i.save()
+        v = Voucher.objects.create(
+            event=self.event, item=i,
+        )
+        assert not Item.objects.filter_available().exists()
+        assert Item.objects.filter_available(voucher=v).exists()
+
 
 class EventTest(TestCase):
     @classmethod

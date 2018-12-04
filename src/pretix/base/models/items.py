@@ -163,7 +163,7 @@ class ItemQuerySet(models.QuerySet):
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
             & Q(sales_channels__contains=channel)
         )
-        if allow_addons:
+        if not allow_addons:
             q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
         qs = self.filter(q)
 
@@ -1054,7 +1054,7 @@ class Quota(LoggedModel):
                        contained in that dictionary, this value will be used. Otherwise, the dict
                        will be populated accordingly.
         :param allow_cache: Allow for values to be returned from the longer-term cache, see also
-                            the docstring of this model class. Only works if ``count_waitinglist`` is
+                            the documentation of this model class. Only works if ``count_waitinglist`` is
                             set to ``True``.
 
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
