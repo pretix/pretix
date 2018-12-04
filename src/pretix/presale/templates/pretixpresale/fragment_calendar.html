@@ -45,7 +45,7 @@
                                                         <span class="fa fa-ticket"></span> {% trans "Waiting list" %}
                                                     {% elif event.event.best_availability_state == 20 %}
                                                         <span class="fa fa-ticket"></span> {% trans "Reserved" %}
-                                                    {% else %}
+                                                    {% elif event.event.best_availability_state < 20 %}
                                                         <span class="fa fa-ticket"></span> {% trans "Sold out" %}
                                                     {% endif %}
                                                 {% elif event.event.presale_has_ended %}

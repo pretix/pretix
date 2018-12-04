@@ -159,6 +159,58 @@ class EventMixin:
 
         return safe_string(json.dumps(eventdict))
 
+    @classmethod
+    def annotated(cls, qs, channel='web'):
+        from pretix.base.models import Item, ItemVariation, Quota
+
+        sq_active_item = Item.objects.filter(
+            Q(active=True)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(Q(category__isnull=True) | Q(category__is_addon=False))
+            & Q(sales_channels__contains=channel)
+            & Q(hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(variations__isnull=True)
+            & Q(quotas__pk=OuterRef('pk'))
+        )
+        sq_active_variation = ItemVariation.objects.filter(
+            Q(active=True)
+            & Q(item__active=True)
+            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
+            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
+            & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
+            & Q(item__sales_channels__contains=channel)
+            & Q(item__hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(quotas__pk=OuterRef('pk'))
+        )
+        return qs.prefetch_related(
+            Prefetch(
+                'quotas',
+                to_attr='active_quotas',
+                queryset=Quota.objects.annotate(
+                    has_active_item=Exists(sq_active_item),
+                    has_active_variation=Exists(sq_active_variation),
+                ).filter(
+                    Q(has_active_item=True) | Q(has_active_variation=True)
+                )
+            )
+        )
+
+    @cached_property
+    def best_availability_state(self):
+        from .items import Quota
+
+        if not hasattr(self, 'active_quotas'):
+            raise TypeError("Call this only if you fetched the subevents via Event/SubEvent.annotated()")
+        best = 0
+        for q in self.active_quotas:
+            res = q.availability(allow_cache=True)
+            if res[0] == Quota.AVAILABILITY_OK:
+                return res[0]
+            elif res[0] > best:
+                best = res[0]
+        return best
+
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
 class Event(EventMixin, LoggedModel):
@@ -842,23 +894,6 @@ class SubEvent(EventMixin, LoggedModel):
     def allow_delete(self):
         return not self.orderposition_set.exists()
 
-    @cached_property
-    def best_availability_state(self):
-        from .items import Quota
-
-        print(self, self.active_quotas)
-
-        if not hasattr(self, 'active_quotas'):
-            raise TypeError("Call this only if you fetched the subevents via event.subevents_annotated()")
-        best = 0
-        for q in self.active_quotas:
-            res = q.availability(allow_cache=True)
-            if res[0] == Quota.AVAILABILITY_OK:
-                return res[0]
-            elif res[0] > best:
-                best = res[0]
-        return best
-
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
@@ -868,43 +903,6 @@ class SubEvent(EventMixin, LoggedModel):
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
-
-    @classmethod
-    def annotated(cls, qs, channel='web'):
-        from pretix.base.models import Item, ItemVariation, Quota
-
-        sq_active_item = Item.objects.filter(
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(Q(category__isnull=True) | Q(category__is_addon=False))
-            & Q(sales_channels__contains=channel)
-            & Q(hide_without_voucher=False)  # TODO: does this make sense?
-            & Q(variations__isnull=True)
-            & Q(quotas__pk=OuterRef('pk'))
-        )
-        sq_active_variation = ItemVariation.objects.filter(
-            Q(active=True)
-            & Q(item__active=True)
-            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
-            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
-            & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
-            & Q(item__sales_channels__contains=channel)
-            & Q(item__hide_without_voucher=False)  # TODO: does this make sense?
-            & Q(quotas__pk=OuterRef('pk'))
-        )
-        return qs.prefetch_related(
-            Prefetch(
-                'quotas',
-                to_attr='active_quotas',
-                queryset=Quota.objects.annotate(
-                    has_active_item=Exists(sq_active_item),
-                    has_active_variation=Exists(sq_active_variation),
-                ).filter(
-                    Q(has_active_item=True) | Q(has_active_variation=True)
-                )
-            )
-        )
 
 
 def generate_invite_token():
