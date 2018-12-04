@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, OuterRef, Prefetch, Q
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -572,8 +572,10 @@ class Event(EventMixin, LoggedModel):
             )
         ).order_by('date_from', 'name')
 
-    @property
-    def subevent_list_subevents(self):
+    def subevents_annotated(self, channel):
+        return SubEvent.annotated(self.subevents, channel)
+
+    def subevents_sorted(self, queryset):
         ordering = self.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
         orderfields = {
             'date_ascending': ('date_from', 'name'),
@@ -581,7 +583,7 @@ class Event(EventMixin, LoggedModel):
             'name_ascending': ('name', 'date_from'),
             'name_descending': ('-name', 'date_from'),
         }[ordering]
-        subevs = self.subevents.filter(
+        subevs = queryset.filter(
             Q(active=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(date_to__gte=now())
@@ -840,6 +842,23 @@ class SubEvent(EventMixin, LoggedModel):
     def allow_delete(self):
         return not self.orderposition_set.exists()
 
+    @cached_property
+    def best_availability_state(self):
+        from .items import Quota
+
+        print(self, self.active_quotas)
+
+        if not hasattr(self, 'active_quotas'):
+            raise TypeError("Call this only if you fetched the subevents via event.subevents_annotated()")
+        best = 0
+        for q in self.active_quotas:
+            res = q.availability(allow_cache=True)
+            if res[0] == Quota.AVAILABILITY_OK:
+                return res[0]
+            elif res[0] > best:
+                best = res[0]
+        return best
+
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
         if self.event:
@@ -849,6 +868,43 @@ class SubEvent(EventMixin, LoggedModel):
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
+
+    @classmethod
+    def annotated(cls, qs, channel='web'):
+        from pretix.base.models import Item, ItemVariation, Quota
+
+        sq_active_item = Item.objects.filter(
+            Q(active=True)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(Q(category__isnull=True) | Q(category__is_addon=False))
+            & Q(sales_channels__contains=channel)
+            & Q(hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(variations__isnull=True)
+            & Q(quotas__pk=OuterRef('pk'))
+        )
+        sq_active_variation = ItemVariation.objects.filter(
+            Q(active=True)
+            & Q(item__active=True)
+            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
+            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
+            & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
+            & Q(item__sales_channels__contains=channel)
+            & Q(item__hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(quotas__pk=OuterRef('pk'))
+        )
+        return qs.prefetch_related(
+            Prefetch(
+                'quotas',
+                to_attr='active_quotas',
+                queryset=Quota.objects.annotate(
+                    has_active_item=Exists(sq_active_item),
+                    has_active_variation=Exists(sq_active_variation),
+                ).filter(
+                    Q(has_active_item=True) | Q(has_active_variation=True)
+                )
+            )
+        )
 
 
 def generate_invite_token():

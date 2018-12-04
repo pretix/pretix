@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.db import models
 from django.db.models import F, Max, OuterRef, Q, Subquery
 from django.dispatch import receiver
+from django.utils.timezone import now
 
 from pretix.base.models import LogEntry, Quota
 from pretix.celery_app import app
@@ -26,7 +29,8 @@ def refresh_quota_caches():
         last_activity=Subquery(last_activity, output_field=models.DateTimeField())
     ).filter(
         Q(cached_availability_time__isnull=True) |
-        Q(cached_availability_time__lt=F('last_activity'))
+        Q(cached_availability_time__lt=F('last_activity')) |
+        Q(cached_availability_time__lt=now() - timedelta(days=1), last_activity__gt=now() - timedelta(days=30))
     )
     for q in quotas:
         q.availability()

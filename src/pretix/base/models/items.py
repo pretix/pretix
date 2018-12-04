@@ -930,6 +930,16 @@ class Quota(LoggedModel):
     :type size: int
     :param items: The set of :py:class:`Item` objects this quota applies to
     :param variations: The set of :py:class:`ItemVariation` objects this quota applies to
+
+    This model keeps a cache of the quota availability that is used in places where up-to-date
+    data is not important. This cache might be out of date even though a more recent quota was
+    calculated. This is intentional to keep database writes low. Currently, the cached values
+    are written whenever the quota is being calculated throughout the system and the cache is
+    at least 120 seconds old or if the new value is qualitatively "better" than the cached one
+    (i.e. more free quota).
+
+    There's also a cronjob that refreshes the cache of every quota if there is any log entry in
+    the event that is newer than the quota's cached time.
     """
 
     AVAILABILITY_GONE = 0
@@ -1012,6 +1022,15 @@ class Quota(LoggedModel):
         This method is used to determine whether Items or ItemVariations belonging
         to this quota should currently be available for sale.
 
+        :param count_waitinglist: Whether or not take waiting list reservations into account. Defaults
+                                  to ``True``.
+        :param _cache: A dictionary mapping quota IDs to availabilities. If this quota is already
+                       contained in that dictionary, this value will be used. Otherwise, the dict
+                       will be populated accordingly.
+        :param allow_cache: Allow for values to be returned from the longer-term cache, see also
+                            the docstring of this model class. Only works if ``count_waitinglist`` is
+                            set to ``True``.
+
         :returns: a tuple where the first entry is one of the ``Quota.AVAILABILITY_`` constants
                   and the second is the number of available tickets.
         """
@@ -1027,7 +1046,10 @@ class Quota(LoggedModel):
         res = self._availability(now_dt, count_waitinglist)
 
         self.event.cache.delete('item_quota_cache')
-        if count_waitinglist and not self.cache_is_hot(now_dt):
+        rewrite_cache = count_waitinglist and (
+            not self.cache_is_hot(now_dt) or res[0] > self.cached_availability_state
+        )
+        if rewrite_cache:
             self.cached_availability_state = res[0]
             self.cached_availability_number = res[1]
             self.cached_availability_time = now_dt

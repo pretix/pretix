@@ -291,12 +291,19 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             context['after'] = after
 
             ebd = defaultdict(list)
-            add_subevents_for_days(self.request.event.subevents.all(), before, after, ebd, set(), self.request.event,
-                                   kwargs.get('cart_namespace'))
+            add_subevents_for_days(
+                self.request.event.subevents_annotated(self.request.sales_channel),
+                before, after, ebd, set(), self.request.event,
+                kwargs.get('cart_namespace')
+            )
 
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
+        else:
+            context['subevent_list'] = self.request.event.subevents_sorted(
+                self.request.event.subevents_annotated(self.request.sales_channel)
+            )
 
         context['show_cart'] = (
             context['cart']['positions'] and (
