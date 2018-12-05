@@ -25,7 +25,7 @@
                             data-asynctask-long>
                         {% csrf_token %}
                         <input type="hidden" name="exporter" value="{{ e.identifier }}" />
-                        {% bootstrap_form e.form layout='horizontal' %}
+                        {% bootstrap_form e.form layout='control' %}
                         <button class="btn btn-primary pull-right" type="submit">
                             <span class="icon icon-upload"></span> {% trans "Start export" %}
                         </button>
