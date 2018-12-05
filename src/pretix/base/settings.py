@@ -523,6 +523,10 @@ Your {event} team"""))
         'default': '',
         'type': LazyI18nString
     },
+    'voucher_explanation_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'organizer_info_text': {
         'default': '',
         'type': LazyI18nString

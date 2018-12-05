@@ -458,6 +458,11 @@
     {% if show_vouchers %}
         <section class="front-page">
             <h3>{% trans "Redeem a voucher" %}</h3>
+            {% if event.settings.voucher_explanation_text %}
+                <div>
+                    {{ event.settings.voucher_explanation_text|rich_text }}
+                </div>
+            {% endif %}
             <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
                 <div class="row-voucher">
                     <div class="col-md-8 col-sm-6 col-xs-12">

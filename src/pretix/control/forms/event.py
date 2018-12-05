@@ -981,6 +981,14 @@ class DisplaySettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea
     )
+    voucher_explanation_text = I18nFormField(
+        label=_("Voucher explanation"),
+        required=False,
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
+                    "how to obtain a voucher code.")
+    )
     show_variations_expanded = forms.BooleanField(
         label=_("Show variations of a product expanded by default"),
         required=False
