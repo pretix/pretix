@@ -183,6 +183,8 @@ with that information::
     <pretix-widget event="https://pretix.eu/demo/democon/"
         data-attendee-name-given-name="John"
         data-attendee-name-family-name="Doe"
+        data-invoice-address-name-given-name="John"
+        data-invoice-address-name-family-name="Doe"
         data-email="test@example.org"
         data-question-L9G8NG9M="Foobar">
     </pretix-widget>
@@ -199,6 +201,11 @@ This works for the pretix Button as well. Currently, the following attributes ar
   ``data-attendee-name-middle-name``, ``data-attendee-name-title``, ``data-attendee-name-calling-name``,
   ``data-attendee-name-latin-transcription``. If you don't know or don't care, you can also just pass a string as
   ``data-attendee-name``, which will pre-fill the last part of the name, whatever that is.
+
+* ``data-invoice-address-FIELD`` will  pre-fill the corresponding field of the invoice address. Possible values for
+  ``FIELD`` are ``company``, ``street``, ``zipcode``, ``city`` and ``country``, as well as fields specified by the
+  naming scheme such as ``name-title`` or ``name-given-name`` (see above). ``country`` expects a two-character
+  country code.
 
 Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
 Hosted or pretix Enterprise are active, you can pass the following fields:
