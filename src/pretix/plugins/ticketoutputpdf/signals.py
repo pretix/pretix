@@ -8,13 +8,16 @@ from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.signals import (  # NOQA: legacy import
-    event_copy_data, item_copy_data, logentry_display, logentry_object_link,
-    register_data_exporters, register_ticket_outputs,
+    event_copy_data, item_copy_data, layout_text_variables, logentry_display,
+    logentry_object_link, register_data_exporters, register_ticket_outputs,
 )
 from pretix.control.signals import item_forms
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutItemForm
 from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
+)
+from pretix.presale.style import (  # NOQA: legacy import
+    get_fonts, register_fonts,
 )
 
 
