@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-23 14:37+0000\n"
+"POT-Creation-Date: 2018-12-05 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,33 +50,6 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: pretix/static/pretixbase/js/asyncdownload.js:28
-msgid ""
-"Your request has been queued on the server and will now be processed. If "
-"this takes longer than two minutes, please contact us or go back in your "
-"browser and try again."
-msgstr ""
-
-#: pretix/static/pretixbase/js/asyncdownload.js:41
-#: pretix/static/pretixbase/js/asynctask.js:66
-#: pretix/static/pretixbase/js/asynctask.js:124
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
-msgid "An error of type {code} occurred."
-msgstr ""
-
-#: pretix/static/pretixbase/js/asyncdownload.js:54
-#: pretix/static/pretixbase/js/asynctask.js:148
-msgid "We are processing your request …"
-msgstr ""
-
-#: pretix/static/pretixbase/js/asyncdownload.js:55
-#: pretix/static/pretixbase/js/asynctask.js:156
-msgid ""
-"We are currently sending your request to the server. If this takes longer "
-"than one minute, please check your internet connection and then reload this "
-"page and try again."
-msgstr ""
-
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:95
 msgid ""
@@ -90,6 +63,12 @@ msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
+msgstr ""
+
+#: pretix/static/pretixbase/js/asynctask.js:66
+#: pretix/static/pretixbase/js/asynctask.js:124
+#: pretix/static/pretixcontrol/js/ui/mail.js:23
+msgid "An error of type {code} occurred."
 msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:69
@@ -107,6 +86,17 @@ msgstr ""
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
+msgstr ""
+
+#: pretix/static/pretixbase/js/asynctask.js:148
+msgid "We are processing your request …"
+msgstr ""
+
+#: pretix/static/pretixbase/js/asynctask.js:156
+msgid ""
+"We are currently sending your request to the server. If this takes longer "
+"than one minute, please check your internet connection and then reload this "
+"page and try again."
 msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:193

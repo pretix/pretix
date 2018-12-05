@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-23 14:37+0000\n"
+"POT-Creation-Date: 2018-12-05 16:02+0000\n"
 "PO-Revision-Date: 2018-11-08 15:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -51,39 +51,6 @@ msgstr "Kontaktiere Stripe …"
 msgid "Total"
 msgstr "Gesamt"
 
-#: pretix/static/pretixbase/js/asyncdownload.js:28
-msgid ""
-"Your request has been queued on the server and will now be processed. If "
-"this takes longer than two minutes, please contact us or go back in your "
-"browser and try again."
-msgstr ""
-"Deine Anfrage ist auf dem Server angekommen und wird nun verarbeitet. Wenn "
-"dies länger als zwei Minuten dauert, kontaktiere uns bitte oder gehe in "
-"deinem Browser einen Schritt zurück und versuche es erneut."
-
-#: pretix/static/pretixbase/js/asyncdownload.js:41
-#: pretix/static/pretixbase/js/asynctask.js:66
-#: pretix/static/pretixbase/js/asynctask.js:124
-#: pretix/static/pretixcontrol/js/ui/mail.js:23
-msgid "An error of type {code} occurred."
-msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
-
-#: pretix/static/pretixbase/js/asyncdownload.js:54
-#: pretix/static/pretixbase/js/asynctask.js:148
-msgid "We are processing your request …"
-msgstr "Wir verarbeiten deine Anfrage …"
-
-#: pretix/static/pretixbase/js/asyncdownload.js:55
-#: pretix/static/pretixbase/js/asynctask.js:156
-msgid ""
-"We are currently sending your request to the server. If this takes longer "
-"than one minute, please check your internet connection and then reload this "
-"page and try again."
-msgstr ""
-"Deine Anfrage wird an den Server gesendet. Wenn dies länger als eine Minute "
-"dauert, prüfe bitte deine Internetverbindung. Danach kannst du diese Seite "
-"neu laden und es erneut versuchen."
-
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:95
 msgid ""
@@ -103,6 +70,12 @@ msgstr ""
 "Deine Anfrage ist auf dem Server angekommen, aber wurde dort noch nicht "
 "verarbeitet. Wenn dies länger als zwei Minuten dauert, kontaktiere uns bitte "
 "oder gehe in deinem Browser einen Schritt zurück und versuche es erneut."
+
+#: pretix/static/pretixbase/js/asynctask.js:66
+#: pretix/static/pretixbase/js/asynctask.js:124
+#: pretix/static/pretixcontrol/js/ui/mail.js:23
+msgid "An error of type {code} occurred."
+msgstr "Ein Fehler vom Typ {code} ist aufgetreten."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
@@ -124,6 +97,20 @@ msgid ""
 msgstr ""
 "Wir können den Server aktuell nicht erreichen. Bitte versuche es noch "
 "einmal. Fehlercode: {code}"
+
+#: pretix/static/pretixbase/js/asynctask.js:148
+msgid "We are processing your request …"
+msgstr "Wir verarbeiten deine Anfrage …"
+
+#: pretix/static/pretixbase/js/asynctask.js:156
+msgid ""
+"We are currently sending your request to the server. If this takes longer "
+"than one minute, please check your internet connection and then reload this "
+"page and try again."
+msgstr ""
+"Deine Anfrage wird an den Server gesendet. Wenn dies länger als eine Minute "
+"dauert, prüfe bitte deine Internetverbindung. Danach kannst du diese Seite "
+"neu laden und es erneut versuchen."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:28
@@ -380,6 +367,15 @@ msgstr "Fortfahren"
 msgctxt "widget"
 msgid "See variations"
 msgstr "Varianten zeigen"
+
+#~ msgid ""
+#~ "Your request has been queued on the server and will now be processed. If "
+#~ "this takes longer than two minutes, please contact us or go back in your "
+#~ "browser and try again."
+#~ msgstr ""
+#~ "Deine Anfrage ist auf dem Server angekommen und wird nun verarbeitet. "
+#~ "Wenn dies länger als zwei Minuten dauert, kontaktiere uns bitte oder gehe "
+#~ "in deinem Browser einen Schritt zurück und versuche es erneut."
 
 #~ msgid "QR Code"
 #~ msgstr "QR-Code"
