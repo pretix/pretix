@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-23 14:37+0000\n"
-"PO-Revision-Date: 2018-09-10 16:00+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
-"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/es/>\n"
+"PO-Revision-Date: 2018-11-29 09:01+0000\n"
+"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
+"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -208,17 +208,21 @@ msgstr "Error desconocido."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:205
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "¡Tu color tiene gran contraste y es muy legible!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:209
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"¡Tu color tiene un contraste decente y es probablemente suficientemente "
+"legible!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:213
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Tu color tiene mal contraste para un texto con fondo blanco, por favor "
+"escoge un tono más oscuro."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:294
 msgid "All"

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-23 14:36+0000\n"
-"PO-Revision-Date: 2018-06-05 04:00+0000\n"
-"Last-Translator: wallber azevedo pinheiro <wallpinheiro@gmail.com>\n"
+"PO-Revision-Date: 2018-12-02 15:44+0000\n"
+"Last-Translator: Matheus Nunes <matheus@integrate.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.19.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -48,55 +48,51 @@ msgstr "Disponível"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Nome da Aplicação"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URIs de Redirecionamento"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Lista de URIs permitidas, separadas por espaço"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:57
 msgid "Client ID"
-msgstr ""
+msgstr "ID do cliente"
 
 #: pretix/api/models.py:29
-#, fuzzy
-#| msgid "Event series"
 msgid "Client secret"
-msgstr "Série de eventos"
+msgstr "Senha do cliente"
 
 #: pretix/api/models.py:75
 msgid "Enable webhook"
-msgstr ""
+msgstr "Habilitar webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "URL de destino"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Todos os eventos (incluindo os criados recentemente)"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:43
 #: pretix/base/models/organizer.py:143
 msgid "Limit to events"
-msgstr ""
+msgstr "Limitar a eventos"
 
 #: pretix/api/serializers/cart.py:56 pretix/api/serializers/order.py:526
-#, fuzzy
-#| msgid "Order is not paid."
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "O pedido não foi pago."
+msgstr "O produto \"{}\" não está associado a uma cota."
 
 #: pretix/api/serializers/cart.py:64 pretix/api/serializers/order.py:538
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Não existe quantidade suficiente em \"{}\" para executar esta ação."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/items.py:847
 #: pretix/base/models/items.py:1156
@@ -155,19 +151,20 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"A aplicação \"{application_name}\" foi autorizada para acessar sua conta."
 
 #: pretix/api/webhooks.py:113 pretix/base/notifications.py:193
 msgid "New order placed"
-msgstr ""
+msgstr "Novo pedido realizado"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:199
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Pedido marcado como pago"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:205
 #: pretix/control/templates/pretixcontrol/event/mail.html:63
 msgid "Order canceled"
-msgstr ""
+msgstr "Pedido cancelado"
 
 #: pretix/api/webhooks.py:125 pretix/base/notifications.py:211
 #, fuzzy
@@ -177,56 +174,48 @@ msgstr "O carrinho expirou"
 
 #: pretix/api/webhooks.py:129 pretix/base/notifications.py:217
 msgid "Order information changed"
-msgstr ""
+msgstr "Informações do pedido alteradas"
 
 #: pretix/api/webhooks.py:133 pretix/base/notifications.py:223
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Endereço do pedido alterado"
 
 #: pretix/api/webhooks.py:137 pretix/base/notifications.py:229
 #: pretix/control/templates/pretixcontrol/event/mail.html:54
 msgid "Order changed"
-msgstr ""
+msgstr "Pedido alterado"
 
 #: pretix/api/webhooks.py:141 pretix/base/notifications.py:235
 msgid "External refund of payment"
-msgstr ""
+msgstr "Reembolso externo do pagamento"
 
 #: pretix/api/webhooks.py:145 pretix/base/notifications.py:241
 msgid "Order refunded"
-msgstr ""
+msgstr "Pedido reembolsado"
 
 #: pretix/api/webhooks.py:149
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Order approved"
-msgstr "O carrinho expirou"
+msgstr "Pedido aprovado"
 
 #: pretix/api/webhooks.py:153
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Order denied"
-msgstr "O carrinho expirou"
+msgstr "Pedido negado"
 
 #: pretix/api/webhooks.py:157
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket checked in"
-msgstr "Design de bilhetes"
+msgstr "Este ingresso já foi validado"
 
 #: pretix/api/webhooks.py:161
-#, fuzzy
-#| msgid "The selected event was not found."
 msgid "Ticket check-in reverted"
-msgstr "O evento selecionado não foi encontrado."
+msgstr "O Check-in do ingresso foi revertido"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Compra online"
 
 #: pretix/base/email.py:127
 msgid "pretix default"
-msgstr ""
+msgstr "Padrão Pretix"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -446,7 +435,7 @@ msgstr "VAT ID"
 
 #: pretix/base/exporters/orderlist.py:86
 msgid "Date of last payment"
-msgstr ""
+msgstr "Data do último pagamento"
 
 #: pretix/base/exporters/orderlist.py:86 pretix/base/services/stats.py:148
 msgid "Fees"
@@ -477,14 +466,12 @@ msgid "Invoice numbers"
 msgstr "Número da fatura"
 
 #: pretix/base/exporters/orderlist.py:172
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of payments and refunds (CSV)"
-msgstr "Listar pedidos (CSV)"
+msgstr "Listar pagamentos e reembolsos (CSV)"
 
 #: pretix/base/exporters/orderlist.py:180
 msgid "Only successful payments"
-msgstr ""
+msgstr "Apenas pagamentos concluídos"
 
 #: pretix/base/exporters/orderlist.py:215 pretix/base/models/orders.py:182
 #: pretix/base/models/orders.py:881 pretix/base/models/orders.py:1172
@@ -492,12 +479,12 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:213
 msgid "Order"
-msgstr ""
+msgstr "Compra"
 
 #: pretix/base/exporters/orderlist.py:215
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "ID do pagamento"
 
 #: pretix/base/exporters/orderlist.py:215
 #, fuzzy
@@ -508,11 +495,8 @@ msgstr "Data do cancelamento"
 
 #: pretix/base/exporters/orderlist.py:215
 #: pretix/control/templates/pretixcontrol/order/index.html:488
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Completion date"
-msgstr "Data do cancelamento"
+msgstr "Data da conclusão"
 
 #: pretix/base/exporters/orderlist.py:216 pretix/base/models/orders.py:877
 #: pretix/base/models/orders.py:1168
@@ -522,7 +506,7 @@ msgstr "Data do cancelamento"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "Valor"
 
 #: pretix/base/exporters/orderlist.py:216
 #: pretix/control/templates/pretixcontrol/order/index.html:420
@@ -530,7 +514,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
-msgstr ""
+msgstr "Meio de pagamento"
 
 #: pretix/base/exporters/orderlist.py:243
 msgid "Quota availabilities (CSV)"
@@ -652,16 +636,12 @@ msgid "Street and Number"
 msgstr "Nome da rua e número do imóvel"
 
 #: pretix/base/forms/questions.py:333
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide a company name."
-msgstr "Você precisa informar o nome da empresa ou o seu nome."
+msgstr "Você precisa informar o nome da empresa."
 
 #: pretix/base/forms/questions.py:335
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide your name."
-msgstr "Você precisa informar o nome da empresa ou o seu nome."
+msgstr "Você precisa informar o seu nome."
 
 #: pretix/base/forms/questions.py:346 pretix/control/views/orders.py:793
 msgid "Your VAT ID does not match the selected country."
@@ -1073,11 +1053,8 @@ msgid "Setup date"
 msgstr "Data inicial"
 
 #: pretix/base/models/devices.py:53
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Initialization date"
-msgstr "Data do cancelamento"
+msgstr "Data do lançamento"
 
 #: pretix/base/models/event.py:36
 msgid "The end of the presale period has to be later than its start."
@@ -1290,7 +1267,7 @@ msgstr "O nome do proprietário só pode conter letras, números e sublinhados."
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Valores não podem conter um digito delimitador"
 
 #: pretix/base/models/invoices.py:120 pretix/base/services/invoices.py:86
 #, python-format
