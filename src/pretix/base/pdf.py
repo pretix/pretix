@@ -6,11 +6,13 @@ import subprocess
 import tempfile
 import uuid
 from collections import OrderedDict
+from functools import partial
 from io import BytesIO
 
 import bleach
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from PyPDF2 import PdfFileReader
@@ -29,7 +31,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.invoice import ThumbnailingImageReader
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order, OrderPosition, QuestionAnswer
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -191,6 +193,30 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: str(order.event.settings.organizer_info_text)
     }),
 ))
+
+
+@receiver(layout_text_variables, dispatch_uid="pretix_base_layout_text_variables_questions")
+def variables_from_questions(sender, *args, **kwargs):
+    def get_answer(op, order, event, question_id):
+        try:
+            if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
+                a = [a for a in op.answers.all() if a.question_id == question_id][0]
+            else:
+                a = op.answers.get(question_id=question_id)
+            return str(a).replace("\n", "<br/>\n")
+        except QuestionAnswer.DoesNotExist:
+            return ""
+        except IndexError:
+            return ""
+
+    d = {}
+    for q in sender.questions.all():
+        d['question_{}'.format(q.pk)] = {
+            'label': _('Question: {question}').format(question=q.question),
+            'editor_sample': _('<Answer: {question}>').format(question=q.question),
+            'evaluate': partial(get_answer, question_id=q.pk)
+        }
+    return d
 
 
 def get_variables(event):

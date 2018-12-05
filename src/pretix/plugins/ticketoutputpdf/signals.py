@@ -1,6 +1,5 @@
 import copy
 import json
-from functools import partial
 
 from django.dispatch import receiver
 from django.urls import reverse
@@ -8,18 +7,14 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.models import QuestionAnswer
 from pretix.base.signals import (  # NOQA: legacy import
-    event_copy_data, item_copy_data, layout_text_variables, logentry_display,
-    logentry_object_link, register_data_exporters, register_ticket_outputs,
+    event_copy_data, item_copy_data, logentry_display, logentry_object_link,
+    register_data_exporters, register_ticket_outputs,
 )
 from pretix.control.signals import item_forms
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutItemForm
 from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
-)
-from pretix.presale.style import (  # NOQA: legacy import
-    get_fonts, register_fonts,
 )
 
 
@@ -33,31 +28,6 @@ def register_ticket_outputs(sender, **kwargs):
 def register_data(sender, **kwargs):
     from .exporters import AllTicketsPDF
     return AllTicketsPDF
-
-
-def get_answer(op, order, event, question_id):
-    try:
-        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
-            a = [a for a in op.answers.all() if a.question_id == question_id][0]
-        else:
-            a = op.answers.get(question_id=question_id)
-        return str(a).replace("\n", "<br/>\n")
-    except QuestionAnswer.DoesNotExist:
-        return ""
-    except IndexError:
-        return ""
-
-
-@receiver(layout_text_variables, dispatch_uid="pretix_ticketoutputpdf_layout_text_variables_questions")
-def variables_from_questions(sender, *args, **kwargs):
-    d = {}
-    for q in sender.questions.all():
-        d['question_{}'.format(q.pk)] = {
-            'label': _('Question: {question}').format(question=q.question),
-            'editor_sample': _('<Answer: {question}>').format(question=q.question),
-            'evaluate': partial(get_answer, question_id=q.pk)
-        }
-    return d
 
 
 @receiver(item_forms, dispatch_uid="pretix_ticketoutputpdf_item_forms")
