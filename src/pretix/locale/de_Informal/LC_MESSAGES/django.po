@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2018-12-02 15:44+0000\n"
-"Last-Translator: Alexander Schwartz <alexander.schwartz@gmx.net>\n"
+"PO-Revision-Date: 2018-12-05 16:11+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -159,10 +159,8 @@ msgid "New order placed"
 msgstr "Neue Bestellung eingegangen"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:199
-#, fuzzy
-#| msgid "Show orders pending approval"
 msgid "New order requires approval"
-msgstr "Alle Bestellungen ohne Freigabe"
+msgstr "Neue Bestellungen mit erforderlicher Freigabe"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:205
 msgid "Order marked as paid"
@@ -223,26 +221,24 @@ msgid "pretix default"
 msgstr "pretix-Standard"
 
 #: pretix/base/exporter.py:91
-#, fuzzy
-#| msgid "Short form"
 msgid "Export format"
-msgstr "Kurzform"
+msgstr "Exportformat"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xslx)"
 
 #: pretix/base/exporter.py:94
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (mit Kommata)"
 
 #: pretix/base/exporter.py:95
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (wie Excel)"
 
 #: pretix/base/exporter.py:96
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (mit Semikolon)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -325,10 +321,8 @@ msgid "Filter by status"
 msgstr "Nach Status filtern"
 
 #: pretix/base/exporters/orderlist.py:21
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of orders"
-msgstr "Liste der Bestellungen (CSV)"
+msgstr "Liste der Bestellungen"
 
 #: pretix/base/exporters/orderlist.py:29
 msgid "Only paid orders"
@@ -489,10 +483,8 @@ msgid "Invoice numbers"
 msgstr "Rechnungsnummern"
 
 #: pretix/base/exporters/orderlist.py:169
-#, fuzzy
-#| msgid "List of payments and refunds (CSV)"
 msgid "List of payments and refunds"
-msgstr "Liste der Bezahlungen und Erstattungen (CSV)"
+msgstr "Liste der Bezahlungen und Erstattungen"
 
 #: pretix/base/exporters/orderlist.py:177
 msgid "Only successful payments"
@@ -539,10 +531,8 @@ msgid "Payment method"
 msgstr "Zahlungsmethode"
 
 #: pretix/base/exporters/orderlist.py:239
-#, fuzzy
-#| msgid "Quota availabilities (CSV)"
 msgid "Quota availabilities"
-msgstr "Kontingent-Verfügbarkeiten (CSV)"
+msgstr "Kontingent-Verfügbarkeiten"
 
 #: pretix/base/exporters/orderlist.py:243
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
@@ -1143,23 +1133,16 @@ msgid "Admission time"
 msgstr "Einlass"
 
 #: pretix/base/models/event.py:231
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show in lists"
-msgstr "Varianten zeigen"
+msgstr "In Listen anzeigen"
 
 #: pretix/base/models/event.py:232
-#, fuzzy
-#| msgid ""
-#| "If selected, this event may show up on the ticket system's start page or "
-#| "an organization profile."
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
-"Wenn diese Option aktiviert ist, darf die Veranstaltung auf der Startseite "
-"dieses Vorverkaufssystem oder auf der Profilseite eines Veranstalters "
-"angezeigt werden."
+"Wenn diese Option aktiviert ist, wird die Veranstaltung in der "
+"Veranstaltungsliste dieses Veranstalterkontos angezeigt."
 
 #: pretix/base/models/event.py:235 pretix/base/models/event.py:778
 #: pretix/control/forms/subevents.py:78
@@ -2688,10 +2671,9 @@ msgid "A new order has been placed: {order.code}"
 msgstr "Eine neue Bestellung ist eingegangen: {order.code}"
 
 #: pretix/base/notifications.py:200
-#, fuzzy, python-brace-format
-#| msgid "A new order has been placed: {order.code}"
+#, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr "Eine neue Bestellung ist eingegangen: {order.code}"
+msgstr "Eine neue Bestellung wartet auf Freigabe: {order.code}"
 
 #: pretix/base/notifications.py:206
 #, python-brace-format
@@ -5514,16 +5496,16 @@ msgid "Only respected by modern browsers."
 msgstr "Nur von modernen Browsern respektiert."
 
 #: pretix/control/forms/event.py:985
-#, fuzzy
-#| msgid "Voucher redemption"
 msgid "Voucher explanation"
-msgstr "Gutschein-Einlösung"
+msgstr "Gutschein-Erklärung"
 
 #: pretix/control/forms/event.py:989
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Dieser Text wird neben der Gutscheincode-Eingabe angezeigt. Du kannst ihn "
+"z.B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
 
 #: pretix/control/forms/event.py:993
 msgid "Show variations of a product expanded by default"
@@ -6201,10 +6183,8 @@ msgstr ""
 "mögliche Zahlungsdatum ignoriert."
 
 #: pretix/control/forms/orders.py:83
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment amount"
-msgstr "Zahlungsdatum"
+msgstr "Zahlbetrag"
 
 #: pretix/control/forms/orders.py:128
 msgid "Re-calculate taxes"
@@ -6340,18 +6320,12 @@ msgid "You need to configure the custom domain in the webserver beforehand."
 msgstr "Du musst die eigene Domain vorher im Webserver konfigurieren."
 
 #: pretix/control/forms/organizer.py:90
-#, fuzzy
-#| msgid "You can choose at most one option from this category."
-#| msgid_plural ""
-#| "You can choose up to %(max_count)s options from this category."
 msgid "You cannot choose the base domain of this installation."
-msgstr "Du kannst höchstens eine Option aus dieser Kategorie auswählen."
+msgstr "Du kannst die Basisdomain dieser Installation nicht verwenden."
 
 #: pretix/control/forms/organizer.py:94
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This domain is already in use for a different organizer."
-msgstr "Diese Referenz ist bereits in Verwendung, bitte wähle eine andere."
+msgstr "Diese Domain ist bereits in Verwendung, bitte wähle eine andere."
 
 #: pretix/control/forms/organizer.py:157
 msgid ""
@@ -6668,6 +6642,7 @@ msgstr "Die Bestellung wurde erstellt."
 #: pretix/control/logdisplay.py:176
 msgid "The order requires approval before it can continue to be processed."
 msgstr ""
+"Diese Bestellung erfordert eine Freigabe, bevor sie weiter verarbeitet wird."
 
 #: pretix/control/logdisplay.py:177 pretix/control/views/orders.py:250
 msgid "The order has been approved."
@@ -9122,6 +9097,8 @@ msgid ""
 "This product is currently not being sold since you configured below that it "
 "should only be available in a certain timeframe."
 msgstr ""
+"Dieses Produkt wird im Moment nicht verkauft, da unten konfiguriert wurde, "
+"dass es nur in einem bestimmten Zeitrum erhältlich ist."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -9268,11 +9245,9 @@ msgid "Create a new product"
 msgstr "Neues Produkt erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:59
-#, fuzzy
-#| msgid "Only available in a limited timeframe"
 msgid ""
 "Currently unavailable since a limited timeframe for this product has been set"
-msgstr "Nur in einem bestimmten Zeitraum verfügbar"
+msgstr "Derzeit nicht verfügbar, da ein beschränkter Zeitraum festgelegt wurde"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:64
 msgid "Only available in a limited timeframe"
@@ -9288,7 +9263,7 @@ msgstr "Produkt mit Varianten"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:82
 msgid "Only available as an add-on product"
-msgstr ""
+msgstr "Nur als Zusatzprodukt verfügbar"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:85
 msgid "Only visible with a voucher"
@@ -10191,16 +10166,13 @@ msgid "Mark order as paid"
 msgstr "Als bezahlt markieren"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
-#, fuzzy
-#| msgid "Do you really want to approve this order?"
 msgid "Do you really want to create a manual payment for this order?"
-msgstr "Möchten Sie diese Bestellung wirklich freigeben?"
+msgstr ""
+"Möchtest du wirklich eine manuelle Zahlung für diese Bestellung verbuchen?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:35
-#, fuzzy
-#| msgid "Complete payment"
 msgid "Create payment"
-msgstr "Zahlung abschließen"
+msgstr "Zahlung erstellen"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
@@ -12741,10 +12713,8 @@ msgstr ""
 "nicht verschickt werden."
 
 #: pretix/control/views/orders.py:721
-#, fuzzy
-#| msgid "The event has been created."
 msgid "The payment has been created successfully."
-msgstr "Die Veranstaltung wurde erstellt."
+msgstr "Die Zahlung wurde erfolgreich verbucht."
 
 #: pretix/control/views/orders.py:754 pretix/presale/views/order.py:498
 msgid "You cannot generate an invoice for this order."
