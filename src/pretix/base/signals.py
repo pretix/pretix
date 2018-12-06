@@ -183,7 +183,7 @@ register_sales_channels = django.dispatch.Signal(
 )
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
-instance of a subclass of pretix.base.channels.SalesChannel or a list of such
+instance of a subclass of ``pretix.base.channels.SalesChannel`` or a list of such
 instances.
 """
 
