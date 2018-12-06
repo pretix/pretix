@@ -12,7 +12,7 @@ Core
 
 .. automodule:: pretix.base.signals
    :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types,
-      item_copy_data
+      item_copy_data, register_sales_channels
 
 Order events
 """"""""""""
