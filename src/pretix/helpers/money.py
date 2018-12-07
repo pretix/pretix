@@ -19,6 +19,8 @@ class DecimalTextInput(TextInput):
             return None
         if isinstance(value, str):
             return value
+        if not isinstance(value, Decimal):
+            value = Decimal(value)
         return formats.localize_input(value.quantize(Decimal('1') / 10 ** self.places))
 
 

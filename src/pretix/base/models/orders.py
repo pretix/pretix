@@ -208,7 +208,7 @@ class Order(LockModel, LoggedModel):
     def pending_sum(self):
         total = self.total
         if self.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
-            total = 0
+            total = Decimal('0.00')
         payment_sum = self.payments.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
         ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')

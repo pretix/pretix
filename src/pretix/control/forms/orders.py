@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -86,7 +88,7 @@ class MarkPaidForm(ConfirmPaymentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['amount'], self.instance.event.currency)
-        self.fields['amount'].initial = max(0, self.instance.pending_sum)
+        self.fields['amount'].initial = max(Decimal('0.00'), self.instance.pending_sum)
 
 
 class ExporterForm(forms.Form):
