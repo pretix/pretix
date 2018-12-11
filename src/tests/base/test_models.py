@@ -1408,9 +1408,14 @@ class SubEventTest(TestCase):
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 1
         assert obj.best_availability_state == Quota.AVAILABILITY_GONE
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=1,
+        q2 = Quota.objects.create(event=self.event, name='Quota 2', size=1,
                                   subevent=self.se)
         q2.items.add(item)
+        obj = SubEvent.annotated(SubEvent.objects).first()
+        assert len(obj.active_quotas) == 2
+        assert obj.best_availability_state == Quota.AVAILABILITY_GONE
+        item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
+        q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 2
         assert obj.best_availability_state == Quota.AVAILABILITY_OK
