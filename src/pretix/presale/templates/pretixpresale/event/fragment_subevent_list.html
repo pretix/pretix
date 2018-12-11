@@ -16,7 +16,7 @@
                 {% endif %}
             </div>
             <div class="col-md-2 text-right">
-                {% if subev.presale_is_running %}
+                {% if subev.presale_is_running and event.settings.event_list_availability %}
                     {% if subev.best_availability_state == 100 %}
                         <span class="label label-success">{% trans "Tickets on sale" %}</span>
                     {% elif event.settings.waiting_list_enabled and subev.best_availability_state >= 0 %}
@@ -26,6 +26,8 @@
                     {% elif subev.best_availability_state < 20 %}
                         <span class="label label-danger">{% trans "Sold out" %}</span>
                     {% endif %}
+                {% elif subev.presale_is_running %}
+                    <span class="label label-success">{% trans "Tickets on sale" %}</span>
                 {% elif subev.presale_has_ended %}
                     <span class="label label-danger">{% trans "Sale over" %}</span>
                 {% elif event.settings.presale_start_show_date %}

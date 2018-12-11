@@ -204,6 +204,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'event_list_availability': {
+        'default': 'True',
+        'type': bool
+    },
     'event_list_type': {
         'default': 'list',
         'type': str

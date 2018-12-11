@@ -238,6 +238,13 @@ class OrganizerDisplaySettingsForm(SettingsForm):
             ('calendar', _('Calendar'))
         )
     )
+    event_list_availability = forms.BooleanField(
+        label=_('Show availability in event overviews'),
+        help_text=_('If checked, the list of events will show if events are sold out. This might '
+                    'make for longer page loading times if you have lots of events and the shown status might be out '
+                    'of date for up to two minutes.'),
+        required=False
+    )
     organizer_link_back = forms.BooleanField(
         label=_('Link back to organizer overview on all event pages'),
         required=False

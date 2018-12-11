@@ -38,4 +38,4 @@
         </div>
     </div>
 </form>
-{% include "pretixpresale/fragment_calendar.html" %}
+{% include "pretixpresale/fragment_calendar.html" with show_avail=event.settings.event_list_availability %}

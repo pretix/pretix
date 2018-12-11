@@ -64,7 +64,7 @@
             </div>
         </div>
     </form>
-    {% include "pretixpresale/fragment_calendar.html" %}
+    {% include "pretixpresale/fragment_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
 
     {% if multiple_timezones %}
         <div class="alert alert-info">
