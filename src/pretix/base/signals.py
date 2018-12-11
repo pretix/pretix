@@ -65,11 +65,11 @@ class EventPluginSignal(django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._sorted_receivers(sender):
             if self._is_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
-        return sorted(responses, key=lambda r: (receiver.__module__, receiver.__name__))
+        return responses
 
     def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
         """
@@ -89,7 +89,7 @@ class EventPluginSignal(django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._sorted_receivers(sender):
             if self._is_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
@@ -116,7 +116,7 @@ class EventPluginSignal(django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._sorted_receivers(sender):
             if self._is_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
@@ -124,10 +124,19 @@ class EventPluginSignal(django.dispatch.Signal):
                     responses.append((receiver, err))
                 else:
                     responses.append((receiver, response))
-        return sorted(
-            responses,
-            key=lambda response: (response[0].__module__, response[0].__name__),
+        return responses
+
+    def _sorted_receivers(self, sender):
+        orig_list = self._live_receivers(sender)
+        sorted_list = sorted(
+            orig_list,
+            key=lambda receiver: (
+                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
+                receiver.__module__,
+                receiver.__name__,
+            )
         )
+        return sorted_list
 
 
 class DeprecatedSignal(django.dispatch.Signal):
