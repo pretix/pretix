@@ -191,7 +191,7 @@ class EventMixin:
                     active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
                 ).exclude(
                     Q(active_items="") & Q(active_variations="")
-                )
+                ).select_related('event', 'subevent')
             )
         )
 
