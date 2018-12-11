@@ -77,7 +77,7 @@
                             <span class="label label-danger">{% trans "Sale over" %}</span>
                             {% elif e.settings.presale_start_show_date %}
                             <span class="label label-warning">
-                                {% blocktrans trimmed with date=subev.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                {% blocktrans trimmed with date=e.presale_start|date:"SHORT_DATE_FORMAT" %}
                                     Sale starts {{ date }}
                                 {% endblocktrans %}
                             </span>
