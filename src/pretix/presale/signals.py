@@ -26,7 +26,7 @@ footer_link = EventPluginSignal(
     providing_args=["request"]
 )
 """
-The signal ``pretix.presale.signals.footer_links`` allows you to add links to the footer of an event page. You
+The signal ``pretix.presale.signals.footer_link`` allows you to add links to the footer of an event page. You
 are expected to return a dictionary containing the keys ``label`` and ``url``.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
