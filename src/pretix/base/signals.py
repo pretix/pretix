@@ -95,6 +95,40 @@ class EventPluginSignal(django.dispatch.Signal):
                 response = receiver(signal=self, sender=sender, **named)
         return response
 
+    def send_robust(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
+        """
+        Send signal from sender to all connected receivers. If a receiver raises an exception
+        instead of returning a value, the exception is included as the result instead of
+        stopping the response chain at the offending receiver.
+
+        sender is required to be an instance of ``pretix.base.models.Event``.
+        """
+        if sender and not isinstance(sender, Event):
+            raise ValueError("Sender needs to be an event.")
+
+        responses = []
+        if (
+            not self.receivers
+            or self.sender_receivers_cache.get(sender) is NO_RECEIVERS
+        ):
+            return []
+
+        if not app_cache:
+            _populate_app_cache()
+
+        for receiver in self._live_receivers(sender):
+            if self._is_active(sender, receiver):
+                try:
+                    response = receiver(signal=self, sender=sender, **named)
+                except Exception as err:
+                    responses.append((receiver, err))
+                else:
+                    responses.append((receiver, response))
+        return sorted(
+            responses,
+            key=lambda response: (response[0].__module__, response[0].__name__),
+        )
+
 
 class DeprecatedSignal(django.dispatch.Signal):
 
