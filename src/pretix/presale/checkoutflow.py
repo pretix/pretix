@@ -23,8 +23,8 @@ from pretix.presale.forms.checkout import (
     AddOnsForm, ContactForm, InvoiceAddressForm, InvoiceNameForm,
 )
 from pretix.presale.signals import (
-    checkout_confirm_messages, checkout_flow_steps, contact_form_fields,
-    order_meta_from_request, question_form_fields,
+    checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
+    contact_form_fields, order_meta_from_request, question_form_fields,
 )
 from pretix.presale.views import CartMixin, get_cart, get_cart_total
 from pretix.presale.views.cart import (
@@ -309,6 +309,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return True
 
     @cached_property
+    def all_optional(self):
+        for recv, resp in checkout_all_optional.send(sender=self.request.event, request=self.request):
+            if resp:
+                return True
+        return False
+
+    @cached_property
     def contact_form(self):
         initial = {
             'email': (
@@ -320,7 +327,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                            event=self.request.event,
                            request=self.request,
-                           initial=initial)
+                           initial=initial, all_optional=self.all_optional)
 
     @cached_property
     def eu_reverse_charge_relevant(self):
@@ -348,13 +355,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                    request=self.request,
                                    instance=self.invoice_address,
                                    initial=initial,
-                                   validate_vat_id=False)
+                                   validate_vat_id=False, all_optional=self.all_optional)
         return InvoiceAddressForm(data=self.request.POST if self.request.method == "POST" else None,
                                   event=self.request.event,
                                   request=self.request,
                                   initial=initial,
                                   instance=self.invoice_address,
-                                  validate_vat_id=self.eu_reverse_charge_relevant)
+                                  validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
 
     def post(self, request):
         self.request = request
@@ -383,23 +390,25 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.request = request
         try:
             emailval = EmailValidator()
-            if 'email' not in self.cart_session:
+            if not self.cart_session.get('email') and not self.all_optional:
                 if warn:
                     messages.warning(request, _('Please enter a valid email address.'))
                 return False
-            emailval(self.cart_session.get('email'))
+            if self.cart_session.get('email'):
+                emailval(self.cart_session.get('email'))
         except ValidationError:
             if warn:
                 messages.warning(request, _('Please enter a valid email address.'))
             return False
 
-        if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
-            messages.warning(request, _('Please enter your invoicing address.'))
-            return False
+        if not self.all_optional:
+            if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
+                messages.warning(request, _('Please enter your invoicing address.'))
+                return False
 
-        if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
-            messages.warning(request, _('Please enter your name.'))
-            return False
+            if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
+                messages.warning(request, _('Please enter your name.'))
+                return False
 
         for cp in self._positions_for_questions:
             answ = {
@@ -585,6 +594,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     @cached_property
     def confirm_messages(self):
+        if self.all_optional:
+            return {}
         msgs = {}
         responses = checkout_confirm_messages.send(self.request.event)
         for receiver, response in responses:
@@ -603,10 +614,17 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             return self.get_result(request)
         return TemplateFlowStep.get(self, request)
 
+    @cached_property
+    def all_optional(self):
+        for recv, resp in checkout_all_optional.send(sender=self.request.event, request=self.request):
+            if resp:
+                return True
+        return False
+
     def post(self, request):
         self.request = request
 
-        if self.confirm_messages:
+        if self.confirm_messages and not self.all_optional:
             for key, msg in self.confirm_messages.items():
                 if request.POST.get('confirm_{}'.format(key)) != 'yes':
                     msg = str(_('You need to check all checkboxes on the bottom of the page.'))

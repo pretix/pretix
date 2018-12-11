@@ -29,12 +29,13 @@ class ContactForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         self.request = kwargs.pop('request')
+        self.all_optional = kwargs.pop('all_optional', False)
         super().__init__(*args, **kwargs)
 
         if self.event.settings.order_email_asked_twice:
             self.fields['email_repeat'] = forms.EmailField(
                 label=_('E-mail address (repeated)'),
-                help_text=_('Please enter the same email address again to make sure you typed it correctly.')
+                help_text=_('Please enter the same email address again to make sure you typed it correctly.'),
             )
 
         if not self.request.session.get('iframe_session', False):
@@ -44,10 +45,14 @@ class ContactForm(forms.Form):
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
 
         responses = contact_form_fields.send(self.event, request=self.request)
-        for r, response in sorted(responses, key=lambda r: str(r[0])):
+        for r, response in responses:
             for key, value in response.items():
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value
+        if self.all_optional:
+            for k, v in self.fields.items():
+                v.required = False
+                v.widget.is_required = False
 
     def clean(self):
         if self.event.settings.order_email_asked_twice and self.cleaned_data.get('email') and self.cleaned_data.get('email_repeat'):

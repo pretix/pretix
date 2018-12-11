@@ -184,3 +184,14 @@ of products.
 As with all plugin signals, the ``sender`` keyword argument will contain the event. The
 receivers are expected to return HTML.
 """
+
+checkout_all_optional = EventPluginSignal(
+    providing_args=['request']
+)
+"""
+If any receiver of this signal returns ``True``, all input fields during checkout (contact data,
+invoice address, confirmations) will be optional, except for questions. Use with care!
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
+argument will contain the request object.
+"""
