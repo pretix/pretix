@@ -38,7 +38,7 @@ if [ "$1" == "translation-spelling" ]; then
 	potypo
 fi
 if [ "$1" == "tests" ]; then
-	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt pytest-xdist
+	pip3 install -r src/requirements.txt -Ur src/requirements/dev.txt
 	cd src
 	python manage.py check
 	make all compress

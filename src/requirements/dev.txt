@@ -9,6 +9,7 @@ codecov
 coverage
 pytest==3.6.*
 pytest-django
+pytest-xdist
 isort
 pytest-rerunfailures==4.*
 pytest-mock==1.6.*
