@@ -128,7 +128,7 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
             ).annotate(
                 order_from=Coalesce('min_from', 'date_from'),
             ).order_by('order_from')
-        qs = filter_qs_by_attr(qs, self.request)
+        qs = Event.annotated(filter_qs_by_attr(qs, self.request))
         return qs
 
     def get_context_data(self, **kwargs):
@@ -314,14 +314,14 @@ class CalendarView(OrganizerViewMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, self.request.organizer.events, before, after, ebd, timezones)
-        add_subevents_for_days(filter_qs_by_attr(SubEvent.objects.filter(
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web'), before, after, ebd, timezones)
+        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
         ).prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
-        ), self.request), before, after, ebd, timezones)
+        )), self.request), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 

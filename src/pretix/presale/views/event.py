@@ -7,7 +7,7 @@ from importlib import import_module
 import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, Prefetch
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -48,23 +48,7 @@ def item_group_by_category(items):
 
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
-    items = event.items.all().filter(
-        Q(active=True)
-        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-        & Q(Q(category__isnull=True) | Q(category__is_addon=False))
-        & Q(sales_channels__contains=channel)
-    )
-
-    vouchq = Q(hide_without_voucher=False)
-    if voucher:
-        if voucher.item_id:
-            vouchq |= Q(pk=voucher.item_id)
-            items = items.filter(pk=voucher.item_id)
-        elif voucher.quota_id:
-            items = items.filter(quotas__in=[voucher.quota_id])
-
-    items = items.filter(vouchq).select_related(
+    items = event.items.filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
         Prefetch('quotas',
@@ -291,12 +275,19 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
             context['after'] = after
 
             ebd = defaultdict(list)
-            add_subevents_for_days(self.request.event.subevents.all(), before, after, ebd, set(), self.request.event,
-                                   kwargs.get('cart_namespace'))
+            add_subevents_for_days(
+                self.request.event.subevents_annotated(self.request.sales_channel),
+                before, after, ebd, set(), self.request.event,
+                kwargs.get('cart_namespace')
+            )
 
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
+        else:
+            context['subevent_list'] = self.request.event.subevents_sorted(
+                self.request.event.subevents_annotated(self.request.sales_channel)
+            )
 
         context['show_cart'] = (
             context['cart']['positions'] and (

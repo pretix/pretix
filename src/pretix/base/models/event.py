@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery
 from django.template.defaultfilters import date as _date
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -22,6 +22,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.models.base import LoggedModel
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBlacklistValidator
+from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 
@@ -158,6 +159,79 @@ class EventMixin:
                 eventdict["endDate"] = self.date_to.date().isoformat()
 
         return safe_string(json.dumps(eventdict))
+
+    @classmethod
+    def annotated(cls, qs, channel='web'):
+        from pretix.base.models import Item, ItemVariation, Quota
+
+        sq_active_item = Item.objects.filter_available(channel=channel).filter(
+            Q(variations__isnull=True)
+            & Q(quotas__pk=OuterRef('pk'))
+        ).order_by().values_list('quotas__pk').annotate(
+            items=GroupConcat('pk', delimiter=',')
+        ).values('items')
+        sq_active_variation = ItemVariation.objects.filter(
+            Q(active=True)
+            & Q(item__active=True)
+            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
+            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
+            & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
+            & Q(item__sales_channels__contains=channel)
+            & Q(item__hide_without_voucher=False)  # TODO: does this make sense?
+            & Q(quotas__pk=OuterRef('pk'))
+        ).order_by().values_list('quotas__pk').annotate(
+            items=GroupConcat('pk', delimiter=',')
+        ).values('items')
+        return qs.prefetch_related(
+            Prefetch(
+                'quotas',
+                to_attr='active_quotas',
+                queryset=Quota.objects.annotate(
+                    active_items=Subquery(sq_active_item, output_field=models.TextField()),
+                    active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
+                ).exclude(
+                    Q(active_items="") & Q(active_variations="")
+                )
+            )
+        )
+
+    @cached_property
+    def best_availability_state(self):
+        from .items import Quota
+
+        if not hasattr(self, 'active_quotas'):
+            raise TypeError("Call this only if you fetched the subevents via Event/SubEvent.annotated()")
+        items_available = set()
+        vars_available = set()
+        items_reserved = set()
+        vars_reserved = set()
+        items_gone = set()
+        vars_gone = set()
+        for q in self.active_quotas:
+            res = q.availability(allow_cache=True)
+
+            if res[0] == Quota.AVAILABILITY_OK:
+                if q.active_items:
+                    items_available.update(q.active_items.split(","))
+                if q.active_variations:
+                    vars_available.update(q.active_variations.split(","))
+            elif res[0] == Quota.AVAILABILITY_RESERVED:
+                if q.active_items:
+                    items_reserved.update(q.active_items.split(","))
+                if q.active_variations:
+                    vars_available.update(q.active_variations.split(","))
+            elif res[0] < Quota.AVAILABILITY_RESERVED:
+                if q.active_items:
+                    items_gone.update(q.active_items.split(","))
+                if q.active_variations:
+                    vars_gone.update(q.active_variations.split(","))
+        if not self.active_quotas:
+            return None
+        if items_available - items_reserved - items_gone or vars_available - vars_reserved - vars_gone:
+            return Quota.AVAILABILITY_OK
+        if items_reserved - items_gone or vars_reserved - vars_gone:
+            return Quota.AVAILABILITY_RESERVED
+        return Quota.AVAILABILITY_GONE
 
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
@@ -572,8 +646,10 @@ class Event(EventMixin, LoggedModel):
             )
         ).order_by('date_from', 'name')
 
-    @property
-    def subevent_list_subevents(self):
+    def subevents_annotated(self, channel):
+        return SubEvent.annotated(self.subevents, channel)
+
+    def subevents_sorted(self, queryset):
         ordering = self.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
         orderfields = {
             'date_ascending': ('date_from', 'name'),
@@ -581,7 +657,7 @@ class Event(EventMixin, LoggedModel):
             'name_ascending': ('name', 'date_from'),
             'name_descending': ('-name', 'date_from'),
         }[ordering]
-        subevs = self.subevents.filter(
+        subevs = queryset.filter(
             Q(active=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
                 | Q(date_to__gte=now())

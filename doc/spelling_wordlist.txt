@@ -6,6 +6,7 @@ api
 auditability
 auth
 autobuild
+availabilities
 backend
 backends
 banktransfer

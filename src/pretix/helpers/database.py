@@ -1,6 +1,7 @@
 import contextlib
 
 from django.db import transaction
+from django.db.models import Aggregate
 from django.db.models.expressions import OrderBy
 
 
@@ -57,3 +58,21 @@ class FixedOrderBy(OrderBy):
         template = template or self.template
         params = params * template.count('%(expression)s')
         return (template % placeholders).rstrip(), params
+
+
+class GroupConcat(Aggregate):
+    function = 'group_concat'
+    template = '%(function)s(%(field)s, "%(separator)s")'
+
+    def __init__(self, *expressions, **extra):
+        if 'separator' not in extra:
+            # For PostgreSQL separator is an obligatory
+            extra.update({'separator': ','})
+        super().__init__(*expressions, **extra)
+
+    def as_postgresql(self, compiler, connection):
+        return super().as_sql(
+            compiler, connection,
+            function='string_agg',
+            template="%(function)s(%(field)s::text, '%(separator)s')",
+        )
