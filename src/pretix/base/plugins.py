@@ -30,4 +30,7 @@ def get_all_plugins() -> List[type]:
             if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
                 continue
             plugins.append(meta)
-    return plugins
+    return sorted(
+        plugins,
+        key=lambda m: (0 if m.module.startswith('pretix.') else 1, str(m.name).lower().replace('pretix ', ''))
+    )
