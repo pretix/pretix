@@ -9770,7 +9770,7 @@ msgstr "<strong>zzgl.</strong> %(rate)s%% %(name)s"
 #: pretix/control/templates/pretixcontrol/order/change.html:121
 #, python-format
 msgid "<strong>incl.</strong> %(rate)s%% %(name)s"
-msgstr "<strong>zzgl.</strong> %(rate)s%% %(name)s"
+msgstr "<strong>inkl.</strong> %(rate)s%% %(name)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:126
 msgid "no taxes apply"
