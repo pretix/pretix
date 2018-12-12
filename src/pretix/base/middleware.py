@@ -189,6 +189,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"],
             'font-src': ["{static}"],
+            'media-src': ["{static}", "data:"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
             # single-sign-on this can be nearly anything so we cannot really restrict
