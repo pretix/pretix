@@ -15,7 +15,8 @@ from django_countries.fields import Country
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, Invoice, InvoiceAddress, Item, ItemCategory, Order,
-    OrderPosition, Organizer, Question, QuestionAnswer, Quota, Voucher,
+    OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer, Quota,
+    Voucher,
 )
 from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
 from pretix.testutils.sessions import get_cart_session_key
@@ -960,6 +961,36 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
         self.assertTrue(Order.objects.first().require_approval)
         self.assertEqual(OrderPosition.objects.count(), 1)
+
+    def test_require_approval_in_addon_to_free(self):
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                 price_included=True)
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=0, expires=now() - timedelta(minutes=10)
+        )
+        self.ticket.default_price = 0
+        self.ticket.save()
+        self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+
+        self.workshop1.require_approval = True
+        self.workshop1.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.workshop1,
+            price=0, expires=now() - timedelta(minutes=10),
+            addon_to=cp1
+        )
+        self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
+        self.assertTrue(Order.objects.first().require_approval)
+        self.assertEqual(OrderPayment.objects.count(), 0)
+        self.assertEqual(OrderPosition.objects.count(), 2)
 
     def test_free_price(self):
         self.ticket.free_price = True

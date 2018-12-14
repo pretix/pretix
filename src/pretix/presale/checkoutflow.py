@@ -535,6 +535,8 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for cartpos in get_cart(self.request):
             if cartpos.item.require_approval:
+                if 'payment' in self.cart_session:
+                    del self.cart_session['payment']
                 return False
 
         for p in self.request.event.get_payment_providers().values():
@@ -542,6 +544,9 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 if self._is_allowed(p, request):
                     self.cart_session['payment'] = p.identifier
                     return False
+                elif self.cart_session.get('payment') == p.identifier:
+                    # is_allowed might have changed, e.g. after add-on selection
+                    del self.cart_session['payment']
 
         return True
 

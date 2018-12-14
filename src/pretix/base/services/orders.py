@@ -532,7 +532,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 fee.tax_rule = None  # TODO: deprecate
             fee.save()
 
-        if payment_provider:
+        if payment_provider and not order.require_approval:
             order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
                 provider=payment_provider.identifier,
