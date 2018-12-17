@@ -138,6 +138,8 @@ setup(
         'defusedcsv',
         'vat_moss==0.11.0',
         'django-localflavor>=2.2',
+        'django-localflavor',
+        'jsonschema',
         'django-hijack>=2.1.10,<2.2.0',
         'openpyxl',
         'django-oauth-toolkit==1.2.*',

@@ -79,9 +79,12 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                               to_attr='_subevent_quotas',
                               queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
                  ).distinct()),
+        Prefetch('seats', to_attr='available_seats',
+                 queryset=(subevent or event).free_seats),
     ).annotate(
         quotac=Count('quotas'),
-        has_variations=Count('variations')
+        has_variations=Count('variations'),
+        requires_seat=Count('seat_category_mappings')
     ).filter(
         quotac__gt=0
     ).order_by('category__position', 'category_id', 'position', 'name')

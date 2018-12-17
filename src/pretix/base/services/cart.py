@@ -6,7 +6,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
@@ -14,7 +14,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation,
+    CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
     Voucher,
 )
 from pretix.base.models.event import SubEvent
@@ -91,15 +91,20 @@ error_messages = {
                          'product %(base)s.'),
     'addon_only': _('One of the products you selected can only be bought as an add-on to another project.'),
     'bundled_only': _('One of the products you selected can only be bought part of a bundle.'),
+    'seat_required': _('You need to select a specific seat.'),
+    'seat_invalid': _('Please select a valid seat.'),
+    'seat_forbidden': _('You can not select a seat for this position.'),
+    'seat_unavailable': _('The seat you selected has already been taken by a different. Please select a different seat.'),
+    'seat_multiple': _('You can not select the same seat multiple times.'),
 }
 
 
 class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
-                                               'addon_to', 'subevent', 'includes_tax', 'bundled'))
+                                               'addon_to', 'subevent', 'includes_tax', 'bundled', 'seat'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
-                                                     'quotas', 'subevent'))
+                                                     'quotas', 'subevent', 'seat'))
     order = {
         RemoveOperation: 10,
         ExtendOperation: 20,
@@ -188,6 +193,9 @@ class CartManager:
             i.pk: i
             for i in self.event.items.select_related('category').prefetch_related(
                 'addons', 'bundles', 'addons__addon_category', 'quotas'
+            ).annotate(
+                requires_seat=Count('seat_category_mappings'),
+                has_variations=Count('variations'),
             ).filter(
                 id__in=[i for i in item_ids if i and i not in self._items_cache]
             )
@@ -196,6 +204,8 @@ class CartManager:
             v.pk: v
             for v in ItemVariation.objects.filter(item__event=self.event).prefetch_related(
                 'quotas'
+            ).annotate(
+                requires_seat=Count('item__seat_category_mappings')
             ).select_related('item', 'item__event').filter(
                 id__in=[i for i in variation_ids if i and i not in self._variations_cache]
             )
@@ -224,6 +234,12 @@ class CartManager:
             if self._sales_channel not in op.item.sales_channels:
                 raise CartError(error_messages['unavailable'])
 
+            if op.item.has_variations and not op.variation:
+                raise CartError(error_messages['not_for_sale'])
+
+            if op.variation and op.variation.item_id != op.item.pk:
+                raise CartError(error_messages['not_for_sale'])
+
             if op.voucher and not op.voucher.applies_to(op.item, op.variation):
                 raise CartError(error_messages['voucher_invalid_item'])
 
@@ -238,6 +254,15 @@ class CartManager:
 
             if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
+
+            if op.item.requires_seat and (not op.seat or op.seat.blocked):
+                raise CartError(error_messages['seat_invalid'])
+            elif op.seat and not op.item.requires_seat:
+                raise CartError(error_messages['seat_forbidden'])
+            elif op.seat and op.seat.product != op.item:
+                raise CartError(error_messages['seat_invalid'])
+            elif op.seat and op.count > 1:
+                raise CartError('Invalid request: A seat can only be bought once.')
 
             if op.subevent:
                 tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
@@ -301,6 +326,8 @@ class CartManager:
     def extend_expired_positions(self):
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
             'item', 'variation', 'voucher', 'addon_to', 'addon_to__item'
+        ).annotate(
+            requires_seat=Count('item__seat_category_mappings'),
         ).prefetch_related(
             'item__quotas',
             'variation__quotas',
@@ -312,6 +339,8 @@ class CartManager:
             removed_positions = {op.position.pk for op in self._operations if isinstance(op, self.RemoveOperation)}
             if cp.pk in removed_positions or (cp.addon_to_id and cp.addon_to_id in removed_positions):
                 continue
+
+            cp.item.requires_seat = cp.requires_seat
 
             if cp.is_bundled:
                 try:
@@ -359,7 +388,7 @@ class CartManager:
 
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
-                price=price, quotas=quotas, subevent=cp.subevent
+                price=price, quotas=quotas, subevent=cp.subevent, seat=cp.seat
             )
             self._check_item_constraints(op)
 
@@ -402,6 +431,13 @@ class CartManager:
                     raise CartError(error_messages['voucher_invalid'])
                 else:
                     voucher_use_diff[voucher] += i['count']
+
+            seat = None
+            if i.get('seat'):
+                try:
+                    seat = (subevent or self.event).seats.get(pk=i.get('seat'))
+                except Seat.DoesNotExist:
+                    raise CartError(error_messages['seat_invalid'])
 
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.filter(subevent=subevent)
@@ -446,7 +482,7 @@ class CartManager:
                 bop = self.AddOperation(
                     count=bundle.count, item=bitem, variation=bvar, price=bprice,
                     voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
-                    includes_tax=bool(bprice.rate), bundled=[]
+                    includes_tax=bool(bprice.rate), bundled=[], seat=None
                 )
                 self._check_item_constraints(bop)
                 bundled.append(bop)
@@ -455,7 +491,7 @@ class CartManager:
 
             op = self.AddOperation(
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
-                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled
+                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled, seat=seat
             )
             self._check_item_constraints(op)
             operations.append(op)
@@ -561,7 +597,7 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=1, item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[]
+                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=cp.seat
                 )
                 self._check_item_constraints(op)
                 operations.append(op)
@@ -687,6 +723,7 @@ class CartManager:
         err = err or self._check_min_per_product()
 
         self._operations.sort(key=lambda a: self.order[type(a)])
+        seats_seen = set()
 
         for op in self._operations:
             if isinstance(op, self.RemoveOperation):
@@ -699,6 +736,11 @@ class CartManager:
             elif isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
                 # Create a CartPosition for as much items as we can
                 requested_count = quota_available_count = voucher_available_count = op.count
+
+                if op.seat:
+                    if op.seat in seats_seen:
+                        err = err or error_messages['seat_multiple']
+                    seats_seen.add(op.seat)
 
                 if op.quotas:
                     quota_available_count = min(requested_count, min(quotas_ok[q] for q in op.quotas))
@@ -745,12 +787,16 @@ class CartManager:
                     available_count = 0
 
                 if isinstance(op, self.AddOperation):
+                    if op.seat and not op.seat.is_available():
+                        available_count = 0
+                        err = err or error_messages['seat_unavailable']
+
                     for k in range(available_count):
                         cp = CartPosition(
                             event=self.event, item=op.item, variation=op.variation,
                             price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
                             voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
-                            subevent=op.subevent, includes_tax=op.includes_tax
+                            subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat
                         )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
@@ -789,7 +835,11 @@ class CartManager:
 
                         new_cart_positions.append(cp)
                 elif isinstance(op, self.ExtendOperation):
-                    if available_count == 1:
+                    if op.seat and not op.seat.is_available(ignore_cart=op.position):
+                        err = err or error_messages['seat_unavailable']
+                        op.position.addons.all().delete()
+                        op.position.delete()
+                    elif available_count == 1:
                         op.position.expires = self._expiry
                         op.position.price = op.price.gross
                         try:
@@ -818,6 +868,9 @@ class CartManager:
 
         if self._quota_diff and any(q.size is not None for q in self._quota_diff):
             # If any quotas are affected that are not unlimited, we lock
+            return True
+
+        if any(getattr(o, 'seat', False) for o in self._operations):
             return True
 
         return False
@@ -909,7 +962,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
-    :param items: A list of dicts with the keys item, variation, count, custom_price, voucher
+    :param items: A list of dicts with the keys item, variation, count, custom_price, voucher, seat ID
     :param cart_id: Session ID of a guest
     :raises CartError: On any error that occured
     """

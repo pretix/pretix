@@ -336,6 +336,8 @@ class Event(EventMixin, LoggedModel):
         verbose_name=_('Event series'),
         default=False
     )
+    seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
+                                     related_name='events')
 
     objects = ScopedManager(organizer='organizer')
 
@@ -347,6 +349,26 @@ class Event(EventMixin, LoggedModel):
 
     def __str__(self):
         return str(self.name)
+
+    @property
+    def free_seats(self):
+        from .orders import CartPosition, Order, OrderPosition
+        return self.seats.annotate(
+            has_order=Exists(
+                OrderPosition.objects.filter(
+                    order__event=self,
+                    seat_id=OuterRef('pk'),
+                    order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+                )
+            ),
+            has_cart=Exists(
+                CartPosition.objects.filter(
+                    event=self,
+                    seat_id=OuterRef('pk'),
+                    expires__gte=now()
+                )
+            )
+        ).filter(has_order=False, has_cart=False, blocked=False)
 
     @property
     def presale_has_ended(self):
@@ -874,6 +896,8 @@ class SubEvent(EventMixin, LoggedModel):
         null=True, blank=True,
         verbose_name=_("Frontpage text")
     )
+    seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
+                                     related_name='subevents')
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
@@ -887,6 +911,28 @@ class SubEvent(EventMixin, LoggedModel):
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.get_date_range_display())
+
+    @property
+    def free_seats(self):
+        from .orders import CartPosition, Order, OrderPosition
+        return self.seats.annotate(
+            has_order=Exists(
+                OrderPosition.objects.filter(
+                    order__event_id=self.event_id,
+                    subevent=self,
+                    seat_id=OuterRef('pk'),
+                    order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID]
+                )
+            ),
+            has_cart=Exists(
+                CartPosition.objects.filter(
+                    event_id=self.event_id,
+                    subevent=self,
+                    seat_id=OuterRef('pk'),
+                    expires__gte=now()
+                )
+            )
+        ).filter(has_order=False, has_cart=False, blocked=False)
 
     @cached_property
     def settings(self):

@@ -90,10 +90,26 @@ class CartActionMixin:
         if value.strip() == '' or '_' not in key:
             return
 
-        if not key.startswith('item_') and not key.startswith('variation_'):
+        if not key.startswith('item_') and not key.startswith('variation_') and not key.startswith('seat_'):
             return
 
         parts = key.split("_")
+        price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
+
+        if key.startswith('seat_'):
+            try:
+                return {
+                    'item': int(parts[1]),
+                    'variation': int(parts[2]) if len(parts) > 2 else None,
+                    'count': 1,
+                    'seat': value,
+                    'price': price,
+                    'voucher': voucher,
+                    'subevent': self.request.POST.get("subevent")
+                }
+            except ValueError:
+                raise CartError(_('Please enter numbers only.'))
+
         try:
             amount = int(value)
         except ValueError:
@@ -103,7 +119,6 @@ class CartActionMixin:
         elif amount == 0:
             return
 
-        price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
         if key.startswith('item_'):
             try:
                 return {
@@ -131,8 +146,7 @@ class CartActionMixin:
 
     def _items_from_post_data(self):
         """
-        Parses the POST data and returns a list of tuples in the
-        form (item id, variation id or None, number)
+        Parses the POST data and returns a list of dictionaries
         """
 
         # Compatibility patch that makes the frontend code a lot easier

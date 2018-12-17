@@ -9,7 +9,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Exists, F, Max, OuterRef, Q, Sum
+from django.db.models import Count, Exists, F, Max, OuterRef, Q, Sum
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -82,6 +82,8 @@ error_messages = {
                                    'affected positions have been removed from your cart.'),
     'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
                              'positions have been removed from your cart.'),
+    'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
+    'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -428,6 +430,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     products_seen = Counter()
     changed_prices = {}
     deleted_positions = set()
+    seats_seen = set()
 
     def delete(cp):
         # Delete a cart position, including parents and children, if applicable
@@ -490,6 +493,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
             break
 
+        if (cp.requires_seat and not cp.seat) or (cp.seat and not cp.requires_seat) or (cp.seat and cp.seat.product != cp.item) or cp.seat in seats_seen:
+            err = err or error_messages['seat_invalid']
+            delete(cp)
+            break
+        if cp.seat:
+            seats_seen.add(cp.seat)
+
         if cp.item.require_voucher and cp.voucher is None:
             delete(cp)
             err = err or error_messages['voucher_required']
@@ -541,6 +551,12 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.save()
             err = err or error_messages['price_changed']
             continue
+
+        if cp.seat:
+            if not cp.seat.is_available(ignore_cart=cp) or cp.seat.blocked:
+                err = err or error_messages['seat_unavailable']
+                cp.delete()
+                continue
 
         quota_ok = True
 
@@ -736,21 +752,25 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    positions = CartPosition.objects.filter(id__in=position_ids, event=event)
+    positions = CartPosition.objects.annotate(
+        requires_seat=Count('item__seat_category_mappings')
+    ).filter(
+        id__in=position_ids, event=event
+    )
 
     validate_order.send(event, payment_provider=pprov, email=email, positions=positions,
                         locale=locale, invoice_address=addr, meta_info=meta_info)
 
     lockfn = NoLockManager
     locked = False
-    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2))).exists():
+    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2)) | Q(seat__isnull=False)).exists():
         # Performance optimization: If no voucher is used and no cart position is dangerously close to its expiry date,
         # creating this order shouldn't be prone to any race conditions and we don't need to lock the event.
         locked = True
         lockfn = event.lock
 
     with lockfn() as now_dt:
-        positions = list(positions.select_related('item', 'variation', 'subevent', 'addon_to').prefetch_related('addons'))
+        positions = list(positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons'))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):

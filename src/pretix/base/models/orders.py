@@ -938,6 +938,8 @@ class AbstractPosition(models.Model):
     :type voucher: Voucher
     :param meta_info: Additional meta information on the position, JSON-encoded.
     :type meta_info: str
+    :param seat: Seat, if reserved seating is used.
+    :type seat: Seat
     """
     subevent = models.ForeignKey(
         SubEvent,
@@ -983,6 +985,9 @@ class AbstractPosition(models.Model):
     meta_info = models.TextField(
         verbose_name=_("Meta information"),
         null=True, blank=True
+    )
+    seat = models.ForeignKey(
+        'Seat', null=True, blank=True, on_delete=models.PROTECT
     )
 
     class Meta:

@@ -145,7 +145,11 @@
                             <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
                                     {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
                                 {% if nav.icon %}
-                                    <span class="fa fa-{{ nav.icon }}"></span>
+                                    {% if "<svg" in nav.icon %}
+                                        {{ nav.icon|safe }}
+                                    {% else %}
+                                        <span class="fa fa-{{ nav.icon }}"></span>
+                                    {% endif %}
                                     <span class="visible-xs-inline">{{ nav.label }}</span>
                                 {% else %}
                                     {{ nav.label }}
@@ -270,7 +274,11 @@
                                         <a href="{{ nav.url }}" {% if nav.active %}class="active"{% endif %}
                                                 {% if nav.children %}class="has-children"{% endif %}>
                                             {% if nav.icon %}
-                                                <i class="fa fa-{{ nav.icon }} fa-fw"></i>
+                                                {% if "<svg" in nav.icon %}
+                                                    {{ nav.icon|safe }}
+                                                {% else %}
+                                                    <span class="fa fa-fw fa-{{ nav.icon }}"></span>
+                                                {% endif %}
                                             {% endif %}
                                             {{ nav.label }}
                                         </a>
