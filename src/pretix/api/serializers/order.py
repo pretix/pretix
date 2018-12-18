@@ -557,7 +557,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.status = Order.STATUS_PAID
                 order.save()
                 order.payments.create(
-                    amount=order.total, provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED
+                    amount=order.total, provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                    payment_date=now()
                 )
             elif payment_provider == "free" and order.total != Decimal('0.00'):
                 raise ValidationError('You cannot use the "free" payment provider for non-free orders.')
