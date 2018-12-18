@@ -463,6 +463,15 @@ def test_custom_datetime(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_by_secret(token_client, organizer, clist, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().secret
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
 def test_only_once(token_client, organizer, clist, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, order.positions.first().pk

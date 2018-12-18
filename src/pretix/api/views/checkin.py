@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db.models import Count, F, Max, OuterRef, Prefetch, Subquery
+from django.db.models import Count, F, Max, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -264,3 +264,11 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({
                 'status': 'ok',
             }, status=201)
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        if self.kwargs['pk'].isnumeric():
+            obj = get_object_or_404(queryset, Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
+        else:
+            obj = get_object_or_404(queryset, secret=self.kwargs['pk'])
+        return obj
