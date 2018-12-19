@@ -141,3 +141,8 @@
     }
   }
 }
+@media (max-width: $screen-sm-max) {
+  .form-horizontal .control-label {
+    text-align: left;
+  }
+}

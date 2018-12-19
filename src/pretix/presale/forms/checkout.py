@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Count, Prefetch
 from django.utils.encoding import force_text
 from django.utils.formats import number_format
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.forms.questions import (
@@ -15,6 +17,7 @@ from pretix.base.models.tax import TAXED_ZERO
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBlacklistValidator
+from pretix.helpers.templatetags.thumb import thumb
 from pretix.presale.signals import contact_form_fields
 
 
@@ -174,6 +177,18 @@ class AddOnsForm(forms.Form):
             if avail[1] is not None and event.settings.show_quota_left:
                 n += ' – {}'.format(_('%(num)s currently available') % {'num': avail[1]})
 
+        if not isinstance(item_or_variation, ItemVariation) and item.picture:
+            n = escape(n)
+            n += '<br>'
+            n += '<a href="{}" class="productpicture" data-title="{}" data-lightbox={}>'.format(
+                item.picture.url, escape(escape(item.name)), item.id
+            )
+            n += '<img src="{}" alt="{}">'.format(
+                thumb(item.picture, '60x60^'),
+                escape(item.name)
+            )
+            n += '</a>'
+            n = mark_safe(n)
         return n
 
     def __init__(self, *args, **kwargs):
@@ -244,9 +259,22 @@ class AddOnsForm(forms.Form):
                              v.description)
                         )
 
+                n = i.name
+                if i.picture:
+                    n = escape(n)
+                    n += '<br>'
+                    n += '<a href="{}" class="productpicture" data-title="{}" data-lightbox="{}">'.format(
+                        i.picture.url, escape(escape(i.name)), i.id
+                    )
+                    n += '<img src="{}" alt="{}">'.format(
+                        thumb(i.picture, '60x60^'),
+                        escape(i.name)
+                    )
+                    n += '</a>'
+                    n = mark_safe(n)
                 field = AddOnVariationField(
                     choices=choices,
-                    label=i.name,
+                    label=n,
                     required=False,
                     widget=AddOnRadioSelect,
                     help_text=rich_text(str(i.description)),
