@@ -217,8 +217,12 @@ class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
         cf.type = 'application/pdf'
         cf.expires = now() + timedelta(days=3)
         cf.save()
+        if 'position' in request.GET:
+            positions = [p.pk for p in order.positions.filter(pk=request.GET.get('position'))]
+        else:
+            positions = [p.pk for p in order.positions.all()]
         return self.do(
             str(cf.id),
             self.request.event.pk,
-            [order.pk],
+            positions,
         )

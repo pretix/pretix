@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+<form action="{% url "plugins:badges:print" event=event.slug organizer=event.organizer.slug %}?code={{ order.code }}&position={{ position.pk }}"
+        method="post" data-asynctask data-asynctask-download data-asynctask-long class="form-inline helper-display-inline">
+    {% csrf_token %}
+    <button class="btn btn-default btn-xs" type="submit">
+        <span class="fa fa-print"></span>
+        {% trans "Badge" %}
+    </button>
+</form>

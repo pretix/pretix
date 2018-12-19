@@ -12,7 +12,9 @@ from pretix.base.signals import (
     event_copy_data, item_copy_data, logentry_display, logentry_object_link,
     register_data_exporters,
 )
-from pretix.control.signals import item_forms, nav_event, order_info
+from pretix.control.signals import (
+    item_forms, nav_event, order_info, order_position_buttons,
+)
 from pretix.plugins.badges.forms import BadgeItemForm
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
 
@@ -93,6 +95,20 @@ def event_copy_data_receiver(sender, other, question_map, item_map, **kwargs):
 def register_pdf(sender, **kwargs):
     from .exporters import BadgeExporter
     return BadgeExporter
+
+
+@receiver(order_position_buttons, dispatch_uid="badges_control_order_buttons")
+def control_order_position_info(sender: Event, position, request, order: Order, **kwargs):
+
+    template = get_template('pretixplugins/badges/control_order_position_buttons.html')
+
+    ctx = {
+        'order': order,
+        'request': request,
+        'event': sender,
+        'position': position
+    }
+    return template.render(ctx, request=request).strip()
 
 
 @receiver(order_info, dispatch_uid="badges_control_order_info")
