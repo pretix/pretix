@@ -12,7 +12,9 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Count
-from django.http import FileResponse, Http404, HttpResponseNotAllowed
+from django.http import (
+    FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import formats
@@ -34,7 +36,9 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
+from pretix.base.models.orders import (
+    OrderFee, OrderPayment, OrderPosition, OrderRefund,
+)
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import export
@@ -49,7 +53,10 @@ from pretix.base.services.orders import (
     extend_order, mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.stats import order_overview
-from pretix.base.signals import register_data_exporters
+from pretix.base.services.tickets import generate
+from pretix.base.signals import (
+    register_data_exporters, register_ticket_outputs,
+)
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
@@ -162,7 +169,23 @@ class OrderDetail(OrderView):
 
         ctx['overpaid'] = self.order.pending_sum * -1
         ctx['sales_channel'] = get_all_sales_channels().get(self.order.sales_channel)
+        ctx['download_buttons'] = self.download_buttons
         return ctx
+
+    @cached_property
+    def download_buttons(self):
+        buttons = []
+
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            buttons.append({
+                'text': provider.download_button_text or 'Ticket',
+                'icon': provider.download_button_icon or 'fa-download',
+                'identifier': provider.identifier,
+                'multi': provider.multi_download_enabled
+            })
+        return buttons
 
     def get_items(self):
         queryset = self.object.positions.all()
@@ -208,6 +231,100 @@ class OrderDetail(OrderView):
             'net_total': self.object.net_total,
             'tax_total': self.object.tax_total,
         }
+
+
+class OrderDownload(AsyncAction, OrderView):
+    task = generate
+    permission = 'can_view_orders'
+
+    def get_success_url(self, value):
+        return self.get_self_url()
+
+    def get_error_url(self):
+        return self.get_order_url()
+
+    def get_self_url(self):
+        return reverse('control:event.order.download.ticket', kwargs=self.kwargs)
+
+    @cached_property
+    def output(self):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if provider.identifier == self.kwargs.get('output'):
+                return provider
+
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            return None
+
+    def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        ct = self.get_last_ct()
+        if ct:
+            return self.success(ct)
+        return self.http_method_not_allowed(request)
+
+    def post(self, request, *args, **kwargs):
+        if not self.output:
+            return self.error(_('You requested an invalid ticket output type.'))
+        if not self.order_position:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
+            return self.error(_('Ticket download is not enabled for add-on products.'))
+        if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):
+            return self.error(_('Ticket download is not enabled for non-admission products.'))
+
+        ct = self.get_last_ct()
+        if ct:
+            return self.success(ct)
+        return self.do('orderposition' if 'position' in kwargs else 'order',
+                       self.order_position.pk if 'position' in kwargs else self.order.pk,
+                       self.output.identifier)
+
+    def get_success_message(self, value):
+        return ""
+
+    def success(self, value):
+        if "ajax" in self.request.POST or "ajax" in self.request.GET:
+            return JsonResponse({
+                'ready': True,
+                'success': True,
+                'redirect': self.get_success_url(value),
+                'message': str(self.get_success_message(value))
+            })
+        if isinstance(value, CachedTicket):
+            resp = FileResponse(value.file.file, content_type=value.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                self.output.identifier, value.extension
+            )
+            return resp
+        elif isinstance(value, CachedCombinedTicket):
+            resp = FileResponse(value.file.file, content_type=value.type)
+            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+            )
+            return resp
+        else:
+            return redirect(self.get_self_url())
+
+    def get_last_ct(self):
+        if 'position' in self.kwargs:
+            ct = CachedTicket.objects.filter(
+                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+            ).last()
+        else:
+            ct = CachedCombinedTicket.objects.filter(
+                order=self.order, provider=self.output.identifier, file__isnull=False
+            ).last()
+        if not ct or not ct.file:
+            return None
+        return ct
 
 
 class OrderComment(OrderView):
