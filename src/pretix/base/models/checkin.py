@@ -20,6 +20,9 @@ class CheckinList(LoggedModel):
                                                       'order have not been paid. This only works with pretixdesk '
                                                       '0.3.0 or newer or pretixdroid 1.9 or newer.'))
 
+    class Meta:
+        ordering = ('subevent__date_from', 'name')
+
     @staticmethod
     def annotate_with_numbers(qs, event):
         """
