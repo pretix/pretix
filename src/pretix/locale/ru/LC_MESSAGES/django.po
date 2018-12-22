@@ -8,46 +8,48 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-01-02 08:20+0000\n"
+"Last-Translator: Alexey Zh <write2aracon@gmail.com>\n"
+"Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
+"ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
 "4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
 #: pretix/control/views/dashboards.py:369
 msgid "Shop disabled"
-msgstr ""
+msgstr "Магазин отключен"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:354 pretix/control/forms/filter.py:466
 #: pretix/control/templates/pretixcontrol/events/index.html:124
 #: pretix/control/templates/pretixcontrol/subevents/index.html:112
 msgid "Presale over"
-msgstr ""
+msgstr "Предпродажа окончена"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:353 pretix/control/forms/filter.py:465
 #: pretix/control/templates/pretixcontrol/events/index.html:126
 #: pretix/control/templates/pretixcontrol/subevents/index.html:114
 msgid "Presale not started"
-msgstr ""
+msgstr "Предпродажа не началась"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:128
 #: pretix/control/templates/pretixcontrol/subevents/index.html:116
 #: pretix/control/views/dashboards.py:375
 msgid "On sale"
-msgstr ""
+msgstr "В продаже"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Название приложения"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
@@ -55,11 +57,11 @@ msgstr ""
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Список разрешённых URI, разделённых пробелами"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:57
 msgid "Client ID"
-msgstr ""
+msgstr "ID клиента"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
@@ -67,7 +69,7 @@ msgstr ""
 
 #: pretix/api/models.py:75
 msgid "Enable webhook"
-msgstr ""
+msgstr "Включить вебхук"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
@@ -77,7 +79,7 @@ msgstr ""
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Все мероприятия (включая вновь созданные)"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:43
 #: pretix/base/models/organizer.py:143
@@ -528,7 +530,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:243 pretix/control/views/item.py:606
 msgid "Paid orders"
-msgstr ""
+msgstr "Оплаченные заказы"
 
 #: pretix/base/exporters/orderlist.py:243 pretix/control/views/item.py:611
 msgid "Pending orders"
@@ -8929,7 +8931,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:422
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:224
 msgid "Total"
-msgstr ""
+msgstr "Итого"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:409
 msgid "Payments"
@@ -12277,7 +12279,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Комментарий:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -13476,7 +13478,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Дизайн билета"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
