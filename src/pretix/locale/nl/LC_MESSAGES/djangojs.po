@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2018-11-09 12:05+0000\n"
+"PO-Revision-Date: 2018-12-26 12:19+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -185,17 +185,20 @@ msgstr "Onbekende fout."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:205
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Uw kleur heeft een goed contrast, en is gemakkelijk te lezen!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:209
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Uw kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:213
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Uw kleur heeft een slecht contrast voor tekst op een witte achtergrond, kies "
+"een donkerdere kleur."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:294
 msgid "All"
