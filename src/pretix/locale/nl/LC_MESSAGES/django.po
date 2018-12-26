@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2018-11-13 13:18+0000\n"
+"PO-Revision-Date: 2018-12-26 12:29+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -158,10 +158,8 @@ msgid "New order placed"
 msgstr "Nieuwe bestelling geplaatst"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:199
-#, fuzzy
-#| msgid "Show orders pending approval"
 msgid "New order requires approval"
-msgstr "Toon bestellingen in afwachting van goedkeuring"
+msgstr "Nieuwe bestelling vereist goedkeuring"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:205
 msgid "Order marked as paid"
@@ -215,33 +213,31 @@ msgstr "Ticketcheck-in teruggedraaid"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Online winkel"
 
 #: pretix/base/email.py:127
 msgid "pretix default"
 msgstr "pretix-standaard"
 
 #: pretix/base/exporter.py:91
-#, fuzzy
-#| msgid "Short form"
 msgid "Export format"
-msgstr "Korte vorm"
+msgstr "Exportformaat"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:94
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (met komma's)"
 
 #: pretix/base/exporter.py:95
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel-stijl)"
 
 #: pretix/base/exporter.py:96
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (met puntkomma's)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -324,10 +320,8 @@ msgid "Filter by status"
 msgstr "Filter op status"
 
 #: pretix/base/exporters/orderlist.py:21
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of orders"
-msgstr "Lijst  van bestellingen (CSV)"
+msgstr "Lijst van bestellingen"
 
 #: pretix/base/exporters/orderlist.py:29
 msgid "Only paid orders"
@@ -488,10 +482,8 @@ msgid "Invoice numbers"
 msgstr "Factuurnummers"
 
 #: pretix/base/exporters/orderlist.py:169
-#, fuzzy
-#| msgid "List of payments and refunds (CSV)"
 msgid "List of payments and refunds"
-msgstr "Lijst van betalingen en terugbetalingen (CSV)"
+msgstr "Lijst van betalingen en terugbetalingen"
 
 #: pretix/base/exporters/orderlist.py:177
 msgid "Only successful payments"
@@ -538,10 +530,8 @@ msgid "Payment method"
 msgstr "Betalingsmethode"
 
 #: pretix/base/exporters/orderlist.py:239
-#, fuzzy
-#| msgid "Quota availabilities (CSV)"
 msgid "Quota availabilities"
-msgstr "Quota beschikbaarheid (CSV)"
+msgstr "Quota beschikbaarheid"
 
 #: pretix/base/exporters/orderlist.py:243
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
@@ -1138,22 +1128,16 @@ msgid "Admission time"
 msgstr "Toegangstijd"
 
 #: pretix/base/models/event.py:231
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show in lists"
-msgstr "Toon varianten"
+msgstr "Toon in lijsten"
 
 #: pretix/base/models/event.py:232
-#, fuzzy
-#| msgid ""
-#| "If selected, this event may show up on the ticket system's start page or "
-#| "an organization profile."
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
-"Indien geselecteerd kan het evenement zichtbaar zijn op de startpagina van "
-"het ticketsysteem of op een organisatieprofiel."
+"Indien geselecteerd zal dit evenement zichtbaar zijn op de lijst van "
+"evenementen van uw organisatoraccount."
 
 #: pretix/base/models/event.py:235 pretix/base/models/event.py:778
 #: pretix/control/forms/subevents.py:78
@@ -1296,7 +1280,7 @@ msgstr ""
 
 #: pretix/base/models/fields.py:12
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Geen waarde kan het scheidingsteken bevatten."
 
 #: pretix/base/models/invoices.py:120 pretix/base/services/invoices.py:86
 #, python-format
@@ -1577,10 +1561,8 @@ msgstr ""
 "prijsberekening."
 
 #: pretix/base/models/items.py:336 pretix/control/forms/item.py:311
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channels"
-msgstr "Wijzigingen opslaan"
+msgstr "Verkoopkanalen"
 
 #: pretix/base/models/items.py:343 pretix/base/models/vouchers.py:139
 #: pretix/base/models/waitinglist.py:51 pretix/control/forms/filter.py:753
@@ -2675,10 +2657,11 @@ msgid "A new order has been placed: {order.code}"
 msgstr "Er is een nieuwe bestelling geplaatst: {order.code}"
 
 #: pretix/base/notifications.py:200
-#, fuzzy, python-brace-format
-#| msgid "A new order has been placed: {order.code}"
+#, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr "Er is een nieuwe bestelling geplaatst: {order.code}"
+msgstr ""
+"Er is een nieuwe bestelling geplaatst die moet worden goedgekeurd: "
+"{order.code}"
 
 #: pretix/base/notifications.py:206
 #, python-brace-format
@@ -3026,16 +3009,12 @@ msgid "2017-05-31 22:00"
 msgstr "31-05-2017 22:00"
 
 #: pretix/base/pdf.py:128
-#, fuzzy
-#| msgid "Event end time"
 msgid "Event end date"
-msgstr "Eindtijd van het evenement"
+msgstr "Einddatum van het evenement"
 
 #: pretix/base/pdf.py:129
-#, fuzzy
-#| msgid "2017-05-31 20:00"
 msgid "2017-05-31"
-msgstr "31-05-2017 20:00"
+msgstr "31-05-2017"
 
 #: pretix/base/pdf.py:137
 msgid "22:00"
@@ -5464,19 +5443,19 @@ msgstr "Voer de hexadecimale code van een kleur in, bijv. #990000."
 
 #: pretix/control/forms/event.py:946 pretix/control/forms/organizer.py:201
 msgid "Accent color for success"
-msgstr ""
+msgstr "Accentkleur voor succes"
 
 #: pretix/control/forms/event.py:947 pretix/control/forms/organizer.py:202
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "We raden sterk aan om een groentint te gebruiken."
 
 #: pretix/control/forms/event.py:956 pretix/control/forms/organizer.py:211
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Accentkleur voor fouten"
 
 #: pretix/control/forms/event.py:957
 msgid "We strongly suggest to use a dark shade of red."
-msgstr ""
+msgstr "We raden sterk aan om een roodtint te gebruiken."
 
 #: pretix/control/forms/event.py:969
 msgid ""
@@ -5498,16 +5477,17 @@ msgid "Only respected by modern browsers."
 msgstr "Wordt alleen gebruikt door moderne browsers."
 
 #: pretix/control/forms/event.py:985
-#, fuzzy
-#| msgid "Voucher redemption"
 msgid "Voucher explanation"
-msgstr "Voucher verzilveren"
+msgstr "Voucher-uitleg"
 
 #: pretix/control/forms/event.py:989
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Deze tekst zal worden getoond naast het invoerveld voor een vouchercode. U "
+"kunt dit bijvoorbeeld gebruiken om uit te leggen hoe een voucher te "
+"verkrijgen."
 
 #: pretix/control/forms/event.py:993
 msgid "Show variations of a product expanded by default"
@@ -6182,10 +6162,8 @@ msgstr ""
 "betalingen worden uitgevoerd."
 
 #: pretix/control/forms/orders.py:83
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment amount"
-msgstr "Betaaldatum"
+msgstr "Te betalen bedrag"
 
 #: pretix/control/forms/orders.py:128
 msgid "Re-calculate taxes"
@@ -6322,18 +6300,12 @@ msgid "You need to configure the custom domain in the webserver beforehand."
 msgstr "U moet vooraf het aangepaste domein in de webserver instellen."
 
 #: pretix/control/forms/organizer.py:90
-#, fuzzy
-#| msgid "You can choose at most one option from this category."
-#| msgid_plural ""
-#| "You can choose up to %(max_count)s options from this category."
 msgid "You cannot choose the base domain of this installation."
-msgstr "U kunt maximaal één optie kiezen uit deze categorie."
+msgstr "U kunt niet het basisdomein van deze installatie kiezen."
 
 #: pretix/control/forms/organizer.py:94
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This domain is already in use for a different organizer."
-msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
+msgstr "Dit domein is al in gebruik voor een andere organisator."
 
 #: pretix/control/forms/organizer.py:157
 msgid ""
@@ -6357,7 +6329,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:212
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "We raden sterk aan om een roodtint te gebruiken."
 
 #: pretix/control/forms/organizer.py:222
 msgid "Homepage text"
@@ -6647,7 +6619,7 @@ msgstr "De bestelling is aangemaakt."
 
 #: pretix/control/logdisplay.py:176
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "De bestelling moet worden goedgekeurd voordat hij kan worden verwerkt."
 
 #: pretix/control/logdisplay.py:177 pretix/control/views/orders.py:250
 msgid "The order has been approved."
@@ -9099,6 +9071,8 @@ msgid ""
 "This product is currently not being sold since you configured below that it "
 "should only be available in a certain timeframe."
 msgstr ""
+"Dit product is momenteel niet te koop, omdat u hieronder heeft ingesteld dat "
+"het alleen binnen een bepaalde tijd beschikbaar moet zijn."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -9246,11 +9220,11 @@ msgid "Create a new product"
 msgstr "Nieuw product aanmaken"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:59
-#, fuzzy
-#| msgid "Only available in a limited timeframe"
 msgid ""
 "Currently unavailable since a limited timeframe for this product has been set"
-msgstr "Alleen binnen een beperkte tijd beschikbaar"
+msgstr ""
+"Momenteel niet beschikbaar omdat een beperkte verkoopperiode is ingesteld "
+"voor dit product"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:64
 msgid "Only available in a limited timeframe"
@@ -9266,7 +9240,7 @@ msgstr "Product met varianten"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:82
 msgid "Only available as an add-on product"
-msgstr ""
+msgstr "Alleen beschikbaar als add-onproduct"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:85
 msgid "Only visible with a voucher"
@@ -9926,10 +9900,8 @@ msgid "Order details"
 msgstr "Bestellingsdetails"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:118
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channel"
-msgstr "Wijzigingen opslaan"
+msgstr "Verkoopkanaal"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:129
 msgid "Expiry date"
@@ -10167,16 +10139,12 @@ msgid "Mark order as paid"
 msgstr "Markeer bestelling als betaald"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
-#, fuzzy
-#| msgid "Do you really want to approve this order?"
 msgid "Do you really want to create a manual payment for this order?"
-msgstr "Wilt u deze bestelling echt goedkeuren?"
+msgstr "Wilt u echt een handmatige betaling aanmaken voor deze bestelling?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:35
-#, fuzzy
-#| msgid "Complete payment"
 msgid "Create payment"
-msgstr "Voltooi betaling"
+msgstr "Betaling aanmaken"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
@@ -12709,10 +12677,8 @@ msgstr ""
 "bevestigingsmail versturen."
 
 #: pretix/control/views/orders.py:721
-#, fuzzy
-#| msgid "The event has been created."
 msgid "The payment has been created successfully."
-msgstr "Het evenement is aangemaakt."
+msgstr "De betaling is succesvol aangemaakt."
 
 #: pretix/control/views/orders.py:754 pretix/presale/views/order.py:498
 msgid "You cannot generate an invoice for this order."
@@ -13860,10 +13826,8 @@ msgid "This plugin allows you to receive payments via PayPal"
 msgstr "Deze plug-in staat u toe om betalingen te ontvangen via PayPal"
 
 #: pretix/plugins/paypal/payment.py:47
-#, fuzzy
-#| msgid "SEPA bank account"
 msgid "PayPal account"
-msgstr "SEPA-bankrekening"
+msgstr "PayPal-account"
 
 #: pretix/plugins/paypal/payment.py:60 pretix/plugins/stripe/payment.py:126
 #, python-brace-format
@@ -13879,31 +13843,23 @@ msgid "Endpoint"
 msgstr "Endpoint"
 
 #: pretix/plugins/paypal/payment.py:103
-#, fuzzy
-#| msgid ""
-#| "To accept payments via Stripe, you will need an account at Stripe. By "
-#| "clicking on the following button, you can either create a new Stripe "
-#| "account connect pretix to an existing one."
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
 "connect pretix to an existing one."
 msgstr ""
-"Om betalingen via Stripe te accepteren heeft u een account bij Stripe nodig. "
-"Door te klikken op de volgende knop kunt u een nieuw Stripe-account "
+"Om betalingen via PayPal te accepteren heeft u een PayPal-account nodig. "
+"Door op de volgende knop te klikken kunt u een nieuw PayPal-account "
 "aanmaken, of pretix met een bestaand account verbinden."
 
 #: pretix/plugins/paypal/payment.py:107
-#, fuzzy, python-brace-format
-#| msgid "Connect with Stripe"
+#, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr "Verbinden met Stripe"
+msgstr "Verbinden met {icon} PayPal"
 
 #: pretix/plugins/paypal/payment.py:117
-#, fuzzy
-#| msgid "Disconnect from Stripe"
 msgid "Disconnect from PayPal"
-msgstr "Verbinding met Stripe verbreken"
+msgstr "Verbinding met PayPal verbreken"
 
 #: pretix/plugins/paypal/payment.py:121
 msgid ""
@@ -13960,30 +13916,24 @@ msgid "Payment reversed."
 msgstr "Betaling omgekeerd."
 
 #: pretix/plugins/paypal/signals.py:34
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Payment pending."
-msgstr "Betaling in afwachting"
+msgstr "Betaling in afwachting."
 
 #: pretix/plugins/paypal/signals.py:43
 msgid "PayPal reported an event: {}"
 msgstr "PayPal meldt: {}"
 
 #: pretix/plugins/paypal/signals.py:68
-#, fuzzy
-#| msgid "Stripe Connect: Client ID"
 msgid "PayPal Connect: Client ID"
-msgstr "Stripe Connect: Client ID"
+msgstr "PayPal Connect: Client-ID"
 
 #: pretix/plugins/paypal/signals.py:72
-#, fuzzy
-#| msgid "Stripe Connect: Secret key"
 msgid "PayPal Connect: Secret key"
-msgstr "Stripe Connect: Geheime sleutel"
+msgstr "PayPal Connect: Geheime sleutel"
 
 #: pretix/plugins/paypal/signals.py:76
 msgid "PayPal Connect Endpoint"
-msgstr ""
+msgstr "PayPal Connect-endpoint"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -14082,22 +14032,16 @@ msgid "Click here in order to open the window."
 msgstr "Klik hier om het venster te openen."
 
 #: pretix/plugins/paypal/views.py:45 pretix/plugins/paypal/views.py:58
-#, fuzzy
-#| msgid "An error occurred during connecting with Stripe, please try again."
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met Stripe, probeer het opnieuw."
+"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
 
 #: pretix/plugins/paypal/views.py:61
-#, fuzzy
-#| msgid ""
-#| "Your Stripe account is now connected to pretix. You can change the "
-#| "settings in detail below."
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Uw Stripe-account is nu verbonden met pretix. U kunt hieronder de "
+"Uw PayPal-account is nu verbonden met pretix. U kunt hieronder de "
 "instellingen wijzigen."
 
 #: pretix/plugins/paypal/views.py:102
@@ -14109,10 +14053,8 @@ msgid "It looks like you canceled the PayPal payment"
 msgstr "Het lijkt erop dat u de PayPal-betaling heeft geannuleerd"
 
 #: pretix/plugins/paypal/views.py:246
-#, fuzzy
-#| msgid "Your Stripe account has been disconnected."
 msgid "Your PayPal account has been disconnected."
-msgstr "De verbinding met uw Stripe-account is verbroken."
+msgstr "De verbinding met uw PayPal-account is verbroken."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
@@ -15010,14 +14952,13 @@ msgid "All PDF tickets in one file"
 msgstr "Alle PDF-tickets in één bestand"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
-#, fuzzy, python-brace-format
-#| msgid "PDF ticket layout"
+#, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr "PDF-ticketlay-out"
+msgstr "PDF-ticketlay-out voor {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
-msgstr ""
+msgstr "(zoals hierboven)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
