@@ -143,10 +143,12 @@ class CartManager:
         for cp in self.positions:
             if cp.subevent and cp.subevent.presale_start and self.now_dt < cp.subevent.presale_start:
                 err = error_messages['some_subevent_not_started']
+                cp.addons.all().delete()
                 cp.delete()
 
             if cp.subevent and cp.subevent.presale_end and self.now_dt > cp.subevent.presale_end:
                 err = error_messages['some_subevent_ended']
+                cp.addons.all().delete()
                 cp.delete()
         return err
 
