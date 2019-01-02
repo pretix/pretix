@@ -199,7 +199,7 @@ class Forgot(TemplateView):
             has_redis = settings.HAS_REDIS
 
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email__iexact=email)
 
                 if has_redis:
                     from django_redis import get_redis_connection

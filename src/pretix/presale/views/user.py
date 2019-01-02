@@ -36,7 +36,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
             else:
                 rc.setex('pretix_resend_{}'.format(user), 3600 * 24, '1')
 
-        orders = self.request.event.orders.filter(email=user)
+        orders = self.request.event.orders.filter(email__iexact=user)
         order_context = []
 
         for order in orders:

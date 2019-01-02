@@ -57,7 +57,7 @@ class UserEditForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if User.objects.filter(Q(email=email) & ~Q(pk=self.instance.pk)).exists():
+        if User.objects.filter(Q(email__iexact=email) & ~Q(pk=self.instance.pk)).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_identifier'],
                 code='duplicate_identifier',

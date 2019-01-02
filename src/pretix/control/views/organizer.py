@@ -575,9 +575,9 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         elif "user" in self.request.POST and self.add_form.is_valid() and self.add_form.has_changed():
 
             try:
-                user = User.objects.get(email=self.add_form.cleaned_data['user'])
+                user = User.objects.get(email__iexact=self.add_form.cleaned_data['user'])
             except User.DoesNotExist:
-                if self.object.invites.filter(email=self.add_form.cleaned_data['user']).exists():
+                if self.object.invites.filter(email__iexact=self.add_form.cleaned_data['user']).exists():
                     messages.error(self.request, _('This user already has been invited for this team.'))
                     return self.get(request, *args, **kwargs)
 
