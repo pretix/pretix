@@ -124,7 +124,7 @@ class Paypal(BasePaymentProvider):
             )
 
     def init_api(self):
-        if self.settings.connect_client_id:
+        if self.settings.connect_client_id and not self.settings.secret:
             paypalrestsdk.set_config(
                 mode="sandbox" if "sandbox" in self.settings.connect_endpoint else 'live',
                 client_id=self.settings.connect_client_id,
