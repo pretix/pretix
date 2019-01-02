@@ -108,7 +108,7 @@ setup(
         'kombu==4.2.*',
         'django-statici18n==1.8.*',
         'inlinestyler==0.2.*',
-        'BeautifulSoup4',
+        'BeautifulSoup4==4.6.*',
         'slimit',
         'lxml',
         'static3==0.7.*',
