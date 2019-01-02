@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2019-01-02 10:36+0000\n"
+"PO-Revision-Date: 2019-01-02 14:42+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -294,7 +294,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:851
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:42
 msgid "Payment provider"
-msgstr "Betalingsprovider"
+msgstr "Betaalmethode"
 
 #: pretix/base/exporters/invoices.py:92 pretix/control/forms/filter.py:92
 #: pretix/control/forms/filter.py:853
@@ -349,7 +349,7 @@ msgstr "Bestelcode"
 #: pretix/control/templates/pretixcontrol/search/orders.html:48
 #: pretix/plugins/reports/exporters.py:354
 msgid "Order total"
-msgstr "Totaal van bestelling"
+msgstr "Totaalbedrag van bestelling"
 
 #: pretix/base/exporters/orderlist.py:73 pretix/base/exporters/orderlist.py:210
 #: pretix/base/models/orders.py:122 pretix/control/forms/filter.py:347
@@ -461,7 +461,7 @@ msgstr "Toeslagen"
 #: pretix/base/exporters/orderlist.py:82
 #: pretix/control/templates/pretixcontrol/order/index.html:121
 msgid "Order locale"
-msgstr "Locale van bestelling"
+msgstr "Taal van bestelling"
 
 #: pretix/base/exporters/orderlist.py:87
 #, python-brace-format
@@ -1110,7 +1110,7 @@ msgstr "Winkel is live"
 
 #: pretix/base/models/event.py:222
 msgid "Event currency"
-msgstr "Evenement valuta"
+msgstr "Munteenheid van evenement"
 
 #: pretix/base/models/event.py:225 pretix/base/models/event.py:771
 #: pretix/control/forms/event.py:999 pretix/control/forms/subevents.py:58
@@ -1165,7 +1165,7 @@ msgstr "Optioneel. Er worden geen producten verkocht vóór deze datum."
 
 #: pretix/base/models/event.py:247 pretix/base/models/event.py:790
 msgid "Location"
-msgstr "Plaats"
+msgstr "Locatie"
 
 #: pretix/base/models/event.py:251 pretix/control/navigation.py:44
 msgid "Plugins"
@@ -1494,11 +1494,11 @@ msgid ""
 "cannot cancel paid orders on their own and you can cancel orders at all "
 "times, regardless of this setting"
 msgstr ""
-"Als dit actief is en de algemene instellingen van het evenement dit toestaat "
-"kunnen bestellingen die dit product bevatten door de gebruiker geannuleerd "
-"worden, totdat de bestelling betaald is. Gebruikers kunnen betaalde "
-"bestellingen niet zelf annuleren. Je kan zelf altijd alle bestellingen "
-"annuleren, ongeacht deze instelling."
+"Als dit is ingeschakeld en de algemene instellingen van het evenement dit "
+"toestaat kunnen bestellingen die dit product bevatten door de gebruiker "
+"geannuleerd worden, totdat de bestelling betaald is. Gebruikers kunnen "
+"betaalde bestellingen niet zelf annuleren. Je kan zelf altijd alle "
+"bestellingen annuleren, ongeacht deze instelling."
 
 #: pretix/base/models/items.py:309
 msgid "Minimum amount per order"
@@ -1929,7 +1929,7 @@ msgstr "terugbetaald"
 
 #: pretix/base/models/orders.py:137
 msgid "Locale"
-msgstr "Landinstelling"
+msgstr "Taal"
 
 #: pretix/base/models/orders.py:144 pretix/base/models/orders.py:1548
 msgid "Expiration date"
@@ -2160,7 +2160,7 @@ msgstr "Bestelling positie"
 
 #: pretix/base/models/orders.py:1418 pretix/base/notifications.py:182
 msgid "Order positions"
-msgstr "Bestelling posities"
+msgstr "Bestellingsplaatsen"
 
 #: pretix/base/models/orders.py:1541
 msgid "Cart ID (e.g. session key)"
@@ -5114,7 +5114,7 @@ msgstr "Binnenlands belastingnummer"
 
 #: pretix/control/forms/event.py:658
 msgid "EU VAT ID"
-msgstr "EU-BTW-nummer"
+msgstr "EU-btw-nummer"
 
 #: pretix/control/forms/event.py:665
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -7661,7 +7661,7 @@ msgstr "draaiend in ontwikkelmodus"
 #: pretix/control/templates/pretixcontrol/base.html:358
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "Je aanvraag is in behandeling …"
+msgstr "We verwerken je aanvraag…"
 
 #: pretix/control/templates/pretixcontrol/base.html:360
 #: pretix/presale/templates/pretixpresale/base.html:81
