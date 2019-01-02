@@ -370,6 +370,7 @@ ALL_LANGUAGES = [
     ('de', _('German')),
     ('de-informal', _('German (informal)')),
     ('nl', _('Dutch')),
+    ('nl-informal', _('Dutch (informal)')),
     ('da', _('Danish')),
     ('fr', _('French')),
     ('pt-br', _('Portuguese (Brazil)')),
@@ -395,6 +396,12 @@ EXTRA_LANG_INFO = {
         'code': 'de-informal',
         'name': 'German (informal)',
         'name_local': 'Deutsch'
+    },
+    'nl-informal': {
+        'bidi': False,
+        'code': 'nl-informal',
+        'name': 'Dutch (informal)',
+        'name_local': 'Nederlands'
     },
 }
 
