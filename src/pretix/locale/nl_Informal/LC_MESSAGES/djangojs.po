@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2019-01-02 10:54+0000\n"
+"PO-Revision-Date: 2019-01-02 14:42+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -32,7 +32,7 @@ msgstr "Opmerking:"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr "Gemaakte bestellingen"
+msgstr "Geplaatste bestellingen"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -100,7 +100,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
-msgstr "Je aanvraag is in behandeling …"
+msgstr "We verwerken je aanvraag…"
 
 #: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
