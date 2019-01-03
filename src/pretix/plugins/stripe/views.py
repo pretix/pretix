@@ -258,15 +258,17 @@ def charge_webhook(event, event_json, charge_id, rso):
                         amount=a,
                         info=str(charge['dispute'])
                     )
-    elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
-        if charge['status'] == 'succeeded':
-            try:
-                payment.confirm()
-            except LockTimeoutException:
-                return HttpResponse("Lock timeout, please try again.", status=503)
-            except Quota.QuotaExceededException:
-                pass
-        elif charge['status'] == 'failed':
+    elif charge['status'] == 'succeeded' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
+                                                               OrderPayment.PAYMENT_STATE_CREATED,
+                                                               OrderPayment.PAYMENT_STATE_CANCELED,
+                                                               OrderPayment.PAYMENT_STATE_FAILED):
+        try:
+            payment.confirm()
+        except LockTimeoutException:
+            return HttpResponse("Lock timeout, please try again.", status=503)
+        except Quota.QuotaExceededException:
+            pass
+    elif charge['status'] == 'failed' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             payment.info = str(charge)
             payment.state = OrderPayment.PAYMENT_STATE_FAILED
             payment.save()
