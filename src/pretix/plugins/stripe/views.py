@@ -431,13 +431,16 @@ class ReturnView(StripeOrderView, View):
                 finally:
                     if 'payment_stripe_token' in request.session:
                         del request.session['payment_stripe_token']
-            elif src.status == 'consumed' and (self.payment.info_data.get('id', '').startswith('py_') or
-                                               self.payment.info_data.get('id', '').startswith('ch_')):
+            elif src.status == 'consumed':
                 # Webhook was faster, wow! ;)
                 if 'payment_stripe_token' in request.session:
                     del request.session['payment_stripe_token']
                 return self._redirect_to_order()
-            else:
+            elif src.status == 'pending':
+                self.payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                self.payment.info = str(src)
+                self.payment.save()
+            else:  # failed or canceled
                 self.payment.state = OrderPayment.PAYMENT_STATE_FAILED
                 self.payment.info = str(src)
                 self.payment.save()
