@@ -1079,6 +1079,33 @@ def test_process_refund(client, env):
 
 
 @pytest.mark.django_db
+def test_process_refund_overpaid_externally(client, env):
+    env[2].payments.first().confirm()
+    env[2].payments.create(
+        state='confirmed',
+        provider='stripe',
+        amount=Decimal('14.00'),
+        payment_date=now()
+    )
+    assert env[2].pending_sum == -14
+    r = env[2].refunds.create(
+        provider='stripe',
+        state='external',
+        source='external',
+        amount=Decimal('14.00'),
+        execution_date=now(),
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    assert 'alert-success' in response.rendered_content
+    r.refresh_from_db()
+    assert r.state == OrderRefund.REFUND_STATE_DONE
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+    assert env[2].pending_sum == 0
+
+
+@pytest.mark.django_db
 def test_process_refund_invalid_state(client, env):
     r = env[2].refunds.create(
         provider='stripe',

@@ -464,7 +464,7 @@ class OrderRefundProcess(OrderView):
 
             if self.request.POST.get("action") == "r":
                 mark_order_refunded(self.order, user=self.request.user)
-            else:
+            elif not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
                 self.order.status = Order.STATUS_PENDING
                 self.order.set_expires(
                     now(),
@@ -750,13 +750,14 @@ class OrderRefundView(OrderView):
                         if self.start_form.cleaned_data.get('action') == 'mark_refunded':
                             mark_order_refunded(self.order, user=self.request.user)
                         elif self.start_form.cleaned_data.get('action') == 'mark_pending':
-                            self.order.status = Order.STATUS_PENDING
-                            self.order.set_expires(
-                                now(),
-                                self.order.event.subevents.filter(
-                                    id__in=self.order.positions.values_list('subevent_id', flat=True))
-                            )
-                            self.order.save(update_fields=['status', 'expires'])
+                            if not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
+                                self.order.status = Order.STATUS_PENDING
+                                self.order.set_expires(
+                                    now(),
+                                    self.order.event.subevents.filter(
+                                        id__in=self.order.positions.values_list('subevent_id', flat=True))
+                                )
+                                self.order.save(update_fields=['status', 'expires'])
 
                     return redirect(self.get_order_url())
                 else:

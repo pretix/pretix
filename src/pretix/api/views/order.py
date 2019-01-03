@@ -627,7 +627,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         if request.data.get('mark_refunded', False):
             mark_order_refunded(refund.order, user=self.request.user if self.request.user.is_authenticated else None,
                                 auth=self.request.auth)
-        else:
+        elif not (refund.order.status == Order.STATUS_PAID and refund.order.pending_sum <= 0):
             refund.order.status = Order.STATUS_PENDING
             refund.order.set_expires(
                 now(),
