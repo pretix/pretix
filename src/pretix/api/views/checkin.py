@@ -258,11 +258,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         except CheckInError as e:
             return Response({
                 'status': 'error',
-                'reason': e.code
+                'reason': e.code,
+                'data': OrderPositionSerializer(op).data
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
+                'data': OrderPositionSerializer(op).data
             }, status=201)
 
     def get_object(self):

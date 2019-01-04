@@ -1,4 +1,5 @@
 import logging
+import smtplib
 from email.utils import formataddr
 from typing import Any, Dict, List, Union
 
@@ -170,8 +171,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         chain(*task_chain).apply_async()
 
 
-@app.task
-def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sender: str,
+@app.task(bind=True)
+def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
                    order: int=None, attach_tickets=False) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
@@ -219,7 +220,34 @@ def mail_send_task(*args, to: List[str], subject: str, body: str, html: str, sen
 
     try:
         backend.send_messages([email])
-    except Exception:
+    except smtplib.SMTPResponseException as e:
+        if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
+            self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
+        logger.exception('Error sending email')
+
+        if order:
+            order.log_action(
+                'pretix.event.order.email.error',
+                data={
+                    'subject': 'SMTP code {}'.format(e.smtp_code),
+                    'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
+                    'recipient': '',
+                    'invoices': [],
+                }
+            )
+
+        raise SendMailException('Failed to send an email to {}.'.format(to))
+    except Exception as e:
+        if order:
+            order.log_action(
+                'pretix.event.order.email.error',
+                data={
+                    'subject': 'Internal error',
+                    'message': str(e),
+                    'recipient': '',
+                    'invoices': [],
+                }
+            )
         logger.exception('Error sending email')
         raise SendMailException('Failed to send an email to {}.'.format(to))
 
