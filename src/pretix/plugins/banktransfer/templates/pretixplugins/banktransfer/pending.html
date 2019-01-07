@@ -23,6 +23,9 @@
             <strong>{% trans "Amount:" %}</strong> {{ amount|money:event.currency }}<br/>
             <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
         </p>
+        <p>
+            {% trans "After you sent the bank transfer, you can close this window. We will send you an email as soon as we received your payment." %}
+        </p>
     </div>
     {% if settings.bank_details_type == "sepa" %}
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
