@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2019-01-06 02:00+0000\n"
+"PO-Revision-Date: 2019-01-08 13:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -242,7 +242,7 @@ msgstr "CSV (met puntkomma's)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
-msgstr "Antwoorden op vragen over het uploaden van bestanden"
+msgstr "Antwoorden op bestandsuploadvragen"
 
 #: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:748
 #: pretix/control/navigation.py:161
@@ -448,7 +448,7 @@ msgstr "Land"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:216
 msgid "VAT ID"
-msgstr "BTW-nummer"
+msgstr "Btw-nummer"
 
 #: pretix/base/exporters/orderlist.py:82
 msgid "Date of last payment"
@@ -510,7 +510,7 @@ msgstr "Aanmaakdatum"
 #: pretix/base/exporters/orderlist.py:210
 #: pretix/control/templates/pretixcontrol/order/index.html:488
 msgid "Completion date"
-msgstr "Voltooingsdatum"
+msgstr "Voltooiingsdatum"
 
 #: pretix/base/exporters/orderlist.py:211 pretix/base/models/orders.py:878
 #: pretix/base/models/orders.py:1169
@@ -606,7 +606,7 @@ msgstr "Voer een correct e-mailadres en wachtwoord in."
 
 #: pretix/base/forms/auth.py:23
 msgid "This account is inactive."
-msgstr "Dit account is inactief."
+msgstr "Dit account is uitgeschakeld."
 
 #: pretix/base/forms/auth.py:76
 msgid ""
@@ -759,7 +759,7 @@ msgstr ""
 #: pretix/base/forms/validators.py:39
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "Ongeldige tijdelijke aanduiding(en): %(value)s"
+msgstr "Ongeldige plaatsaanduiding(en): %(value)s"
 
 #: pretix/base/forms/widgets.py:124 pretix/base/forms/widgets.py:129
 #: pretix/base/models/orders.py:1582
@@ -926,7 +926,7 @@ msgid ""
 "Bank on {date}, this corresponds to:"
 msgstr ""
 "Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de Europese "
-"Centrale Bank op {date}, komt dit overeen met:"
+"Centrale Bank op {date} komt dit overeen met:"
 
 #: pretix/base/invoice.py:548
 #, python-brace-format
@@ -936,7 +936,7 @@ msgid ""
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
 "Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de Europese "
-"Centrale Bank op {date}, komt het factuurtotaal uit op {total}."
+"Centrale Bank op {date} komt het factuurtotaal uit op {total}."
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1136,7 +1136,7 @@ msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
-"Indien geselecteerd zal dit evenement zichtbaar zijn op de lijst van "
+"Als dit is ingeschakeld zal dit evenement zichtbaar zijn op de lijst van "
 "evenementen van jouw organisatoraccount."
 
 #: pretix/base/models/event.py:235 pretix/base/models/event.py:778
@@ -1256,7 +1256,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:794 pretix/control/forms/event.py:980
 msgid "Frontpage text"
-msgstr "Voorpagina tekst"
+msgstr "Voorpaginatekst"
 
 #: pretix/base/models/event.py:801
 msgid "Date in event series"
@@ -1264,13 +1264,12 @@ msgstr "Datum in evenementenreeks"
 
 #: pretix/base/models/event.py:802
 msgid "Dates in event series"
-msgstr "Data in evenementenreeks"
+msgstr "Datums in evenementenreeks"
 
 #: pretix/base/models/event.py:934
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
-"Mag geen spaties of speciale tekens bevatten, met uitzondering van "
-"onderstrepingstekens"
+"Mag geen spaties of speciale tekens bevatten, maar wel onderstrepingstekens"
 
 #: pretix/base/models/event.py:939
 msgid "The property name may only contain letters, numbers and underscores."
@@ -1323,9 +1322,9 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
-"Indien geselecteerd zijn de producten in deze categorie niet los te koop. Ze "
-"kunnen alleen worden gekocht in combinatie met een product waarbij deze "
-"categorie is ingesteld als mogelijke bron van add-onproducten."
+"Als dit is ingeschakeld zijn de producten in deze categorie niet los te "
+"koop. Ze kunnen alleen worden gekocht in combinatie met een product waarbij "
+"deze categorie is ingesteld als mogelijke bron van add-onproducten."
 
 #: pretix/base/models/items.py:67 pretix/base/pdf.py:78
 #: pretix/control/templates/pretixcontrol/items/category.html:4
@@ -1373,7 +1372,7 @@ msgstr "Dit wordt onder de productnaam in lijsten weergegeven."
 
 #: pretix/base/models/items.py:236 pretix/base/models/items.py:490
 msgid "Default price"
-msgstr "Standaard prijs"
+msgstr "Standaardprijs"
 
 #: pretix/base/models/items.py:237
 msgid ""
@@ -1652,8 +1651,8 @@ msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"Indien geselecteerd is het toevoegen van add-ons aan dit kaartje gratis, ook "
-"als de add-ons los wel geld kosten."
+"Als dit is ingeschakeld is het toevoegen van add-ons aan dit kaartje gratis, "
+"ook als de add-ons los wel geld kosten."
 
 #: pretix/base/models/items.py:623
 msgid "The add-on's category must belong to the same event as the item."
@@ -1679,7 +1678,7 @@ msgstr "Het maximale aantal moet groter zijn dan het minimum aantal."
 #: pretix/base/models/items.py:688
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgid "Number"
-msgstr "Nummer"
+msgstr "Getal"
 
 #: pretix/base/models/items.py:689
 msgid "Text (one line)"
@@ -1790,7 +1789,7 @@ msgstr "Ongeldige optie geselecteerd."
 
 #: pretix/base/models/items.py:819
 msgid "Invalid number input."
-msgstr "Ongeldige nummerinvoer."
+msgstr "Ongeldige getalinvoer."
 
 #: pretix/base/models/items.py:826
 msgid "Invalid date input."
@@ -1909,7 +1908,7 @@ msgstr "Belastingregel {val}"
 
 #: pretix/base/models/orders.py:107
 msgid "pending"
-msgstr "in afwachting"
+msgstr "openstaand"
 
 #: pretix/base/models/orders.py:108
 msgid "paid"
@@ -2044,7 +2043,7 @@ msgstr "aangemaakt"
 #: pretix/base/models/orders.py:866
 msgctxt "payment_state"
 msgid "pending"
-msgstr "in afwachting"
+msgstr "openstaand"
 
 #: pretix/base/models/orders.py:867
 msgctxt "payment_state"
@@ -2156,7 +2155,7 @@ msgstr "Belastingwaarde"
 
 #: pretix/base/models/orders.py:1417
 msgid "Order position"
-msgstr "Bestelling positie"
+msgstr "Bestellingspositie"
 
 #: pretix/base/models/orders.py:1418 pretix/base/notifications.py:182
 msgid "Order positions"
@@ -2164,15 +2163,15 @@ msgstr "Bestellingsplaatsen"
 
 #: pretix/base/models/orders.py:1541
 msgid "Cart ID (e.g. session key)"
-msgstr "Winkelwagen ID (bijv. sessiesleutel)"
+msgstr "Winkelwagen-ID (bijv. sessiesleutel)"
 
 #: pretix/base/models/orders.py:1556
 msgid "Cart position"
-msgstr "Winkelwagen positie"
+msgstr "Winkelwagenpositie"
 
 #: pretix/base/models/orders.py:1557
 msgid "Cart positions"
-msgstr "Winkelwagen posities"
+msgstr "Winkelwagenposities"
 
 #: pretix/base/models/orders.py:1583 pretix/control/forms/event.py:620
 msgid "Company name"
@@ -2295,7 +2294,7 @@ msgstr "Teams"
 #: pretix/base/models/organizer.py:239
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr "Uitnodiging voor '{team}' voor '{email}'"
+msgstr "Uitnodiging voor team '{team}' voor '{email}'"
 
 #: pretix/base/models/tax.py:66
 msgid "Should be short, e.g. \"VAT\""
@@ -2335,7 +2334,7 @@ msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
-"Je land van verblijf. Dit is het land waar de EU-verleggingsregel niet van "
+"Je vestigingsland. Dit is het land waar de EU-verleggingsregel niet van "
 "toepassing is, indien hierboven ingesteld."
 
 #: pretix/base/models/tax.py:117
@@ -2463,7 +2462,7 @@ msgid ""
 msgstr ""
 "Je kan dit veld gebruiken om meerdere vouchers te groeperen. Als dezelfde "
 "waarde bij meerdere vouchers wordt ingevoerd kan je statistieken bekijken "
-"over hoe veel er zijn ingewisseld etc."
+"over hoeveel er zijn ingewisseld etc."
 
 #: pretix/base/models/vouchers.py:176
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2884,7 +2883,7 @@ msgstr ""
 
 #: pretix/base/payment.py:753
 msgid "Payment process description for pending orders"
-msgstr "Beschrijving van betalingsproces voor bestellingen in afwachting"
+msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:754
 #, python-brace-format
@@ -2893,9 +2892,9 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can "
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
-"Deze tekst zal worden getoond op de bevestigingspagina van bestellingen in "
-"afwachting. De tekst moet de gebruiker informeren hoe verder te gaan met de "
-"betaling. Je kan de plaatsaanduidingen {order}, {total}, {currency}, en "
+"Deze tekst zal worden getoond op de bevestigingspagina van openstaande "
+"bestellingen. De tekst moet de gebruiker informeren hoe verder te gaan met "
+"de betaling. Je kan de plaatsaanduidingen {order}, {total}, {currency}, en "
 "{total_with_currency} gebruiken."
 
 #: pretix/base/payment.py:800
@@ -2978,7 +2977,7 @@ msgstr "31 mei 2017"
 
 #: pretix/base/pdf.py:105
 msgid "Event date range"
-msgstr "Evenement datumbereik"
+msgstr "Datumbereik evenement"
 
 #: pretix/base/pdf.py:106
 msgid "May 31st – June 4th, 2017"
@@ -3038,7 +3037,7 @@ msgstr "19:00"
 
 #: pretix/base/pdf.py:160
 msgid "Event location"
-msgstr "Evenement locatie"
+msgstr "Evenementlocatie"
 
 #: pretix/base/pdf.py:161 pretix/control/forms/event.py:642
 msgid "Random City"
@@ -3610,7 +3609,7 @@ msgstr ""
 #: pretix/base/services/orders.py:768
 msgid "Only pending or paid orders can be changed."
 msgstr ""
-"Alleen bestellingen in afwachting of betaalde bestellingen kunnen worden "
+"Alleen openstaande bestellingen of betaalde bestellingen kunnen worden "
 "veranderd."
 
 #: pretix/base/services/orders.py:769
@@ -4529,7 +4528,7 @@ msgstr "Standaardtaal"
 
 #: pretix/control/forms/event.py:79
 msgid "Sales tax rate"
-msgstr "BTW-tarief"
+msgstr "Btw-tarief"
 
 #: pretix/control/forms/event.py:80
 msgid ""
@@ -4537,7 +4536,7 @@ msgid ""
 "applicable tax rate here in percent. If you have a more complicated tax "
 "situation, you can add more tax rates and detailed configuration later."
 msgstr ""
-"Moet je BTW over je kaartjes betalen? Zoja, voer dan hier het toe te passen "
+"Moet je btw over je kaartjes betalen? Zoja, voer dan hier het toe te passen "
 "belastingtarief in procenten in. Als je een ingewikkeldere belastingsituatie "
 "hebt kan je later meer belastingtarieven en gedetailleerde instellingen "
 "toevoegen."
@@ -4936,9 +4935,9 @@ msgid ""
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
 "Als dit is ingeschakeld zullen alle onbetaalde bestellingen automatisch van "
-"'in afwachting' naar 'verlopen' gaan na het eind van de betalingstermijn. "
-"Dit betekent dat deze kaartjes weer vrij worden gegeven en kunnen worden "
-"besteld door andere klanten."
+"'openstaand' naar 'verlopen' gaan na het eind van de betalingstermijn. Dit "
+"betekent dat deze kaartjes weer vrij worden gegeven en kunnen worden besteld "
+"door andere klanten."
 
 #: pretix/control/forms/event.py:468
 msgid "Accept late payments"
@@ -4998,13 +4997,13 @@ msgstr "Verplicht klantnaam"
 
 #: pretix/control/forms/event.py:565
 msgid "Ask for VAT ID"
-msgstr "Vraag om BTW-nummer"
+msgstr "Vraag om btw-nummer"
 
 #: pretix/control/forms/event.py:566
 msgid ""
 "Does only work if an invoice address is asked for. VAT ID is not required."
 msgstr ""
-"Werkt alleen als een factuuradres wordt gevraagd. BTW-nummer is niet "
+"Werkt alleen als een factuuradres wordt gevraagd. Btw-nummer is niet "
 "verplicht."
 
 #: pretix/control/forms/event.py:571
@@ -5126,7 +5125,7 @@ msgstr "Introductietekst"
 
 #: pretix/control/forms/event.py:670
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr "Zal worden geprint op elke factuur boven de bedragen."
+msgstr "Zal boven de bedragen worden geprint op elke factuur."
 
 #: pretix/control/forms/event.py:677
 msgid ""
@@ -5149,7 +5148,7 @@ msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
-"bijvoorbeeld je bankgegevens, wettelijk verplichte gegevens zoals je BTW-"
+"bijvoorbeeld je bankgegevens, wettelijk verplichte gegevens zoals je btw-"
 "nummer, registratienummers, etc."
 
 #: pretix/control/forms/event.py:693
@@ -5563,11 +5562,11 @@ msgstr "Zakelijk"
 
 #: pretix/control/forms/event.py:1099
 msgid "Business with valid VAT ID"
-msgstr "Zakelijk met geldig BTW-nummer"
+msgstr "Zakelijk met geldig btw-nummer"
 
 #: pretix/control/forms/event.py:1105
 msgid "Charge VAT"
-msgstr "Reken BTW"
+msgstr "Reken btw"
 
 #: pretix/control/forms/event.py:1106
 msgid "Reverse charge"
@@ -5575,7 +5574,7 @@ msgstr "Omgekeerde belastingheffing"
 
 #: pretix/control/forms/event.py:1107
 msgid "No VAT"
-msgstr "Geen BTW"
+msgstr "Geen btw"
 
 #: pretix/control/forms/event.py:1136
 msgid "Pre-selected voucher"
@@ -5644,8 +5643,8 @@ msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
-"Standaard vragen we om namen maar verplichten we ze niet. Je kan dit "
-"uitschakelen in de instellingen."
+"Standaard vragen we om namen maar verplichten we ze niet. Je kan het vragen "
+"naar namen uitschakelen in de instellingen."
 
 #: pretix/control/forms/event.py:1257
 msgid "Payment via Stripe"
@@ -5716,17 +5715,17 @@ msgstr "Betaald"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:43
 #: pretix/plugins/reports/exporters.py:195
 msgid "Pending"
-msgstr "In afwachting"
+msgstr "Openstaand"
 
 #: pretix/control/forms/filter.py:102 pretix/control/forms/filter.py:203
 #: pretix/control/templates/pretixcontrol/items/question.html:23
 msgid "Pending (overdue)"
-msgstr "In afwachting (achterstallig)"
+msgstr "Openstaand (achterstallig)"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:204
 #: pretix/control/templates/pretixcontrol/items/question.html:22
 msgid "Pending or paid"
-msgstr "In afwachting of betaald"
+msgstr "Openstaand of betaald"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:205
 #: pretix/control/forms/filter.py:717
@@ -5741,7 +5740,7 @@ msgstr "Verlopen"
 #: pretix/control/forms/filter.py:105 pretix/control/forms/filter.py:206
 #: pretix/control/templates/pretixcontrol/items/question.html:25
 msgid "Pending or expired"
-msgstr "In afwachting of verlopen"
+msgstr "Openstaand of verlopen"
 
 #: pretix/control/forms/filter.py:106 pretix/control/forms/filter.py:207
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -5782,7 +5781,7 @@ msgstr "Alle data"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
 msgid "Approval pending"
-msgstr "In afwachting van goedkeuring"
+msgstr "Wacht op goedkeuring"
 
 #: pretix/control/forms/filter.py:210
 msgid "Overpaid"
@@ -5794,7 +5793,7 @@ msgstr "Onderbetaald"
 
 #: pretix/control/forms/filter.py:212
 msgid "Pending (but fully paid)"
-msgstr "In afwachting (maar volledig betaald)"
+msgstr "Openstaand (maar volledig betaald)"
 
 #: pretix/control/forms/filter.py:309 pretix/control/forms/filter.py:314
 #: pretix/control/forms/filter.py:477 pretix/control/forms/filter.py:482
@@ -5818,7 +5817,7 @@ msgstr "Winkel live en voorverkoop actief"
 
 #: pretix/control/forms/filter.py:352 pretix/control/forms/filter.py:659
 msgid "Inactive"
-msgstr "Inactief"
+msgstr "Uitgeschakeld"
 
 #: pretix/control/forms/filter.py:359 pretix/control/forms/subevents.py:288
 #: pretix/control/forms/subevents.py:327
@@ -6112,7 +6111,7 @@ msgid ""
 msgstr ""
 "De variant \"%s\" kan niet worden verwijderd omdat deze al is besteld door "
 "een gebruiker of zich momenteel in de winkelwagen van een gebruiker bevindt. "
-"Je kan de variant in plaats daarvan instellen als \"inactief\"."
+"Je kan de variant in plaats daarvan instellen als \"uitgeschakeld\"."
 
 #: pretix/control/forms/item.py:436
 msgid "You added the same add-on category twice"
@@ -6170,7 +6169,7 @@ msgid ""
 "care and only if you need to. Note that rounding differences might occur in "
 "this procedure."
 msgstr ""
-"Deze handeling her-controleert of belasting moet worden betaald over de "
+"Deze handeling controleert opnieuw of belasting moet worden betaald over de "
 "producten door bijvoorbeeld ingestelde omgekeerde belastingheffingsregels, "
 "en verandert na de controle de prijzen en belastingwaarden. Dit is nuttig na "
 "bijvoorbeeld een factuuradresverandering. Gebruik dit voorzichtig, en alleen "
@@ -6208,7 +6207,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:190 pretix/control/forms/orders.py:290
 msgid "inactive"
-msgstr "inactief"
+msgstr "uitgeschakeld"
 
 #: pretix/control/forms/orders.py:231
 msgctxt "subevent"
@@ -6265,7 +6264,7 @@ msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr ""
-"Markeer de bestelling als 'in afwachting' en sta de gebruiker toe het "
+"Markeer de bestelling als 'openstaand' en sta de gebruiker toe het "
 "openstaande bedrag met een andere betalingsmethode te betalen."
 
 #: pretix/control/forms/orders.py:372
@@ -6583,7 +6582,7 @@ msgstr "De bestelling is aangemerkt als onbetaald."
 
 #: pretix/control/logdisplay.py:169
 msgid "The order's secret has been changed."
-msgstr "Het geheim van de bestelling is veranderd."
+msgstr "Het geheim van de bestelling is aangepast."
 
 #: pretix/control/logdisplay.py:170
 msgid "The order's expiry date has been changed."
@@ -6680,8 +6679,8 @@ msgstr ""
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
 msgstr ""
-"Een email is verstuurd om de gebruiker te melden dat de bestelling bijna "
-"verloopt."
+"Een email is verstuurd om de gebruiker te waarschuwen dat de bestelling "
+"bijna verloopt."
 
 #: pretix/control/logdisplay.py:195
 msgid ""
@@ -6953,7 +6952,7 @@ msgstr "De vraag is verwijderd."
 
 #: pretix/control/logdisplay.py:255
 msgid "The question has been changed."
-msgstr "De vraag is veranderd."
+msgstr "De vraag is aangepast."
 
 #: pretix/control/logdisplay.py:256
 msgid "The tax rule has been added."
@@ -7045,7 +7044,7 @@ msgstr "Een inschrijving is verwijderd van de wachtlijst."
 
 #: pretix/control/logdisplay.py:279
 msgid "An entry has been changed on the waiting list."
-msgstr "Een inschrijving is veranderd op de wachtlijst."
+msgstr "Een inschrijving op de wachtlijst is aangepast."
 
 #: pretix/control/logdisplay.py:280
 msgid "An entry has been added to the waiting list."
@@ -8154,24 +8153,24 @@ msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
-"Dit evenement bevat <strong>terugbetalingen in afwachting</strong> die je "
-"uit moet voeren."
+"Dit evenement bevat <strong>openstaande terugbetalingen</strong> die je uit "
+"moet voeren."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:34
 msgid "Show pending refunds"
-msgstr "Toon terugbetalingen in afwachting"
+msgstr "Toon openstaande terugbetalingen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:39
 msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
-"Dit evenement bevat <strong>goedkeuringen in afwachting</strong> die je moet "
+"Dit evenement bevat <strong>openstaande goedkeuringen</strong> die je moet "
 "controleren."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:43
 msgid "Show orders pending approval"
-msgstr "Toon bestellingen in afwachting van goedkeuring"
+msgstr "Toon bestellingen wachtend op goedkeuring"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:48
 msgid ""
@@ -8956,7 +8955,7 @@ msgid ""
 "installation. Update checks are performed on a daily basis if your cronjob "
 "is set up properly."
 msgstr ""
-"Geen updatecontroles zijn uitgevoerd sinds de laatste update van deze "
+"Er is nog geen updatecontrole uitgevoerd sinds de laatste update van deze "
 "installatie. Updatecontroles worden dagelijks uitgevoerd als je cronjob goed "
 "is ingesteld."
 
@@ -9177,7 +9176,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Sold out (pending orders)"
-msgstr "Uitverkocht (bestellingen in afwachting)"
+msgstr "Uitverkocht (openstaande bestellingen)"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:6
 #, python-format
@@ -9785,7 +9784,7 @@ msgstr "Contactgegevens veranderen"
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:5
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:9
 msgid "Change locale information"
-msgstr "Locale-informatie veranderen"
+msgstr "Taalinstelling veranderen"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html:18
 msgid "This language will be used whenever emails are sent to the users."
@@ -10270,8 +10269,8 @@ msgid ""
 msgstr ""
 "Betalingen die je aanmerkt voor automatische terugbetaling zullen "
 "onmiddelijk het terugbetaalverzoek communiceren aan de betalingsprovider. "
-"Handmatige terugbetalingen zullen worden aangemaakt als terugbetalingen in "
-"afwachting, je kan deze later als uitgevoerd markeren, wanneer je "
+"Handmatige terugbetalingen zullen worden aangemaakt als openstaande "
+"terugbetalingen, je kan deze later als uitgevoerd markeren, wanneer je "
 "daadwerkelijk het geld hebt overgemaakt naar de klant."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
@@ -10398,7 +10397,7 @@ msgstr "Posities"
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/orders/index.html:134
 msgid "REFUND PENDING"
-msgstr "TERUGBETALING IN AFWACHTING"
+msgstr "OPENSTAANDE TERUGBETALING"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
 msgid "OVERPAID"
@@ -12408,7 +12407,7 @@ msgstr "Kon de opmerking niet bijwerken."
 
 #: pretix/control/views/event.py:995 pretix/control/views/main.py:181
 msgid "VAT"
-msgstr "BTW"
+msgstr "Btw"
 
 #: pretix/control/views/event.py:1022
 msgid "The new tax rule has been created."
@@ -12515,7 +12514,7 @@ msgstr "Beschikbaar quotum"
 
 #: pretix/control/views/item.py:637
 msgid "Waiting list (pending)"
-msgstr "Wachtlijst (in afwachting)"
+msgstr "Wachtlijst (openstaand)"
 
 #: pretix/control/views/item.py:644
 msgid "Currently for sale"
@@ -12690,7 +12689,7 @@ msgstr "Er bestaat al een factuur voor deze bestelling."
 
 #: pretix/control/views/orders.py:776 pretix/control/views/orders.py:780
 msgid "No VAT ID specified."
-msgstr "Geen BTW-nummer opgegeven."
+msgstr "Geen btw-nummer opgegeven."
 
 #: pretix/control/views/orders.py:784
 msgid "No country specified."
@@ -12699,24 +12698,24 @@ msgstr "Geen land opgegeven."
 #: pretix/control/views/orders.py:788
 msgid "VAT ID could not be checked since a non-EU country has been specified."
 msgstr ""
-"BTW-nummer kon niet worden gecontroleerd, omdat een land van buiten de EU "
+"Btw-nummer kon niet worden gecontroleerd, omdat een land van buiten de EU "
 "was opgegeven."
 
 #: pretix/control/views/orders.py:804
 msgid "This VAT ID is not valid."
-msgstr "Dit BTW-nummer is niet geldig."
+msgstr "Dit btw-nummer is niet geldig."
 
 #: pretix/control/views/orders.py:807
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
-"Je BTW-nummer kon niet worden gecontroleerd, omdat de BTW-controledienst van "
+"Je btw-nummer kon niet worden gecontroleerd, omdat de btw-controledienst van "
 "jouw land momenteel niet beschikbaar is."
 
 #: pretix/control/views/orders.py:810
 msgid "This VAT ID is valid."
-msgstr "Dit BTW-nummer is geldig."
+msgstr "Dit btw-nummer is geldig."
 
 #: pretix/control/views/orders.py:824 pretix/control/views/orders.py:849
 msgid "Unknown invoice."
@@ -12768,13 +12767,12 @@ msgstr "We konden je verzoek niet verwerken, omdat de server het te druk heeft."
 
 #: pretix/control/views/orders.py:978
 msgid "This action is only allowed for pending orders."
-msgstr "Deze actie is alleen toegestaan voor bestellingen in afwachting."
+msgstr "Deze actie is alleen toegestaan voor openstaande bestellingen."
 
 #: pretix/control/views/orders.py:1006
 msgid "This action is only allowed for pending or paid orders."
 msgstr ""
-"Deze actie is alleen toegestaan voor bestellingen in afwachting en betaalde "
-"bestellingen."
+"Deze actie is alleen toegestaan voor openstaande en betaalde bestellingen."
 
 #: pretix/control/views/orders.py:1119
 msgid "An error occurred. Please see the details below."
@@ -13233,7 +13231,7 @@ msgstr "Badges van gasten"
 #: pretix/plugins/badges/exporters.py:88
 #: pretix/plugins/ticketoutputpdf/exporters.py:32
 msgid "Include pending orders"
-msgstr "Inclusief bestellingen in afwachting"
+msgstr "Inclusief openstaande bestellingen"
 
 #: pretix/plugins/badges/exporters.py:93
 #: pretix/plugins/checkinlists/exporters.py:49
@@ -13917,7 +13915,7 @@ msgstr "Betaling omgekeerd."
 
 #: pretix/plugins/paypal/signals.py:34
 msgid "Payment pending."
-msgstr "Betaling in afwachting."
+msgstr "Betaling staat open."
 
 #: pretix/plugins/paypal/signals.py:43
 msgid "PayPal reported an event: {}"
@@ -14330,7 +14328,7 @@ msgstr "Stuur alleen naar klanten van"
 
 #: pretix/plugins/sendmail/forms.py:52 pretix/plugins/sendmail/views.py:153
 msgid "pending with payment overdue"
-msgstr "in afwachting met verlopen betaling"
+msgstr "openstaand met verlopen betaling"
 
 #: pretix/plugins/sendmail/forms.py:55
 msgid "Send to customers with order status"
@@ -14710,7 +14708,7 @@ msgstr "Transactie bijgewerkt."
 
 #: pretix/plugins/stripe/signals.py:55
 msgid "Charge pending"
-msgstr "Transactie in afwachting"
+msgstr "Transactie staat open"
 
 #: pretix/plugins/stripe/signals.py:56
 msgid "Payment authorized."
@@ -15485,7 +15483,7 @@ msgstr "Bestelling bevestigd"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr "Betaling in afwachting"
+msgstr "Betaling openstaand"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
@@ -15713,7 +15711,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "Een betaling van %(total)s is nog in afwachting voor deze bestelling."
+msgstr "Een betaling van %(total)s staat nog open voor deze bestelling."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:61
 #, python-format
@@ -16062,7 +16060,7 @@ msgstr "De betalingsmethode voor deze bestelling kan niet veranderd worden."
 
 #: pretix/presale/views/order.py:342
 msgid "A payment is currently pending for this order."
-msgstr "Een betaling is momenteel in afwachting voor deze bestelling."
+msgstr "Een betaling staat momenteel open voor deze bestelling."
 
 #: pretix/presale/views/order.py:550
 msgid "You cannot modify this order"
