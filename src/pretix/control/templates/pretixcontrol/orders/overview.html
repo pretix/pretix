@@ -30,7 +30,7 @@
             <thead>
                 <tr>
                     <th>{% trans "Product" %}</th>
-                    <th>{% trans "Canceled" %}</th>
+                    <th>{% trans "Canceled" %}¹</th>
                     <th>{% trans "Expired" %}</th>
                     <th colspan="3">{% trans "Purchased" %}</th>
                 </tr>
@@ -109,4 +109,7 @@
             </tfoot>
         </table>
     </div>
+    <p class="help-block">
+        ¹ {% trans "If you click links in this column, you will only find orders that are canceled completely, while the numbers also include single canceled positions within valid orders." %}
+    </p>
 {% endblock %}
