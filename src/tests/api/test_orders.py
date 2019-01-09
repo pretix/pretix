@@ -104,6 +104,16 @@ def order(event, item, taxrule, question):
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
+        OrderPosition.objects.create(
+            order=o,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
+            secret="YBiYJrmF5ufiTLdV1iDf",
+            pseudonymization_id="JKLM",
+            canceled=True
+        )
         op.answers.create(question=question, answer='S')
         return o
 
@@ -693,6 +703,14 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
 
 
 @pytest.mark.django_db
+def test_orderposition_detail_no_canceled(token_client, organizer, event, order, item, question):
+    op = order.all_positions.filter(canceled=True).first()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
 def test_orderposition_delete(token_client, organizer, event, order, item, question):
     op = order.positions.first()
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
@@ -720,7 +738,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
     ))
     assert resp.status_code == 204
     assert order.positions.count() == 1
-    assert order.all_positions.count() == 2
+    assert order.all_positions.count() == 3
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
 

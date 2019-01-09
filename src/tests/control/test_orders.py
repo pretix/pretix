@@ -53,6 +53,14 @@ def env():
         price=Decimal("14"),
         attendee_name_parts={'full_name': "Peter", "_scheme": "full"}
     )
+    OrderPosition.objects.create(
+        order=o,
+        item=ticket,
+        variation=None,
+        price=Decimal("14"),
+        canceled=True,
+        attendee_name_parts={'full_name': "Lukas Gelöscht", "_scheme": "full"}
+    )
     return event, user, o, ticket
 
 
@@ -125,6 +133,7 @@ def test_order_detail(client, env):
     response = client.get('/control/event/dummy/dummy/orders/FOO/')
     assert 'Early-bird' in response.rendered_content
     assert 'Peter' in response.rendered_content
+    assert 'Lukas Gelöscht' in response.rendered_content
 
 
 @pytest.mark.django_db
@@ -776,6 +785,11 @@ class OrderChangeTests(SoupTest):
             order=self.order, item=self.ticket, variation=None,
             price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter", "_scheme": "full"}
         )
+        self.op3 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Lukas", "_scheme": "full"},
+            canceled=True
+        )
         self.quota = self.event.quotas.create(name="All", size=100)
         self.quota.items.add(self.ticket)
         self.quota.items.add(self.shirt)
@@ -784,6 +798,14 @@ class OrderChangeTests(SoupTest):
         t.members.add(user)
         t.limit_events.add(self.event)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+    def test_do_not_show_canceled(self):
+        r = self.client.get('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ))
+        assert self.op1.secret[:5] in r.rendered_content
+        assert self.op2.secret[:5] in r.rendered_content
+        assert self.op3.secret[:5] not in r.rendered_content
 
     def test_change_item_success(self):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(

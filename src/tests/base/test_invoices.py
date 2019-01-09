@@ -58,6 +58,14 @@ def env():
         price=Decimal("42.00"),
         positionid=2,
     )
+    OrderPosition.objects.create(
+        order=o,
+        item=t_shirt,
+        variation=variation,
+        price=Decimal("42.00"),
+        positionid=3,
+        canceled=True
+    )
     gs = GlobalSettingsObject()
     gs.settings.ecb_rates_date = date.today()
     gs.settings.ecb_rates_dict = json.dumps({

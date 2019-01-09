@@ -186,10 +186,18 @@ class Order(LockModel, LoggedModel):
 
     @property
     def fees(self):
+        """
+        Related manager for all non-canceled fees. Use ``all_fees`` instead if you want
+        canceled positions as well.
+        """
         return self.all_fees(manager='objects')
 
     @property
     def positions(self):
+        """
+        Related manager for all non-canceled positions. Use ``all_positions`` instead if you want
+        canceled positions as well.
+        """
         return self.all_positions(manager='objects')
 
     @cached_property
@@ -334,7 +342,7 @@ class Order(LockModel, LoggedModel):
 
     @cached_property
     def tax_total(self):
-        return (self.positions.filter(canceled=False).aggregate(s=Sum('tax_value'))['s'] or 0) + (self.fees.aggregate(s=Sum('tax_value'))['s'] or 0)
+        return (self.positions.aggregate(s=Sum('tax_value'))['s'] or 0) + (self.fees.aggregate(s=Sum('tax_value'))['s'] or 0)
 
     @property
     def net_total(self):
@@ -1272,6 +1280,9 @@ class OrderFee(models.Model):
     An OrderFee object represents a fee that is added to the order total independently of
     the actual positions. This might for example be a payment or a shipping fee.
 
+    The default ``OrderFee.objects`` manager only contains fees that are not ``canceled``. If
+    you ant all objects, you need to use ``OrderFee.all`` instead.
+
     :param value: Gross price of this fee
     :type value: Decimal
     :param order: Order this fee is charged with
@@ -1391,6 +1402,9 @@ class OrderPosition(AbstractPosition):
     An OrderPosition is one line of an order, representing one ordered item
     of a specified type (or variation). This has all properties of
     AbstractPosition.
+
+    The default ``OrderPosition.objects`` manager only contains fees that are not ``canceled``. If
+    you ant all objects, you need to use ``OrderPosition.all`` instead.
 
     :param order: The order this position is a part of
     :type order: Order

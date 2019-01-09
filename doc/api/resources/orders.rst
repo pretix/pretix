@@ -57,9 +57,9 @@ invoice_address                       object                     Invoice address
 └ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
-positions                             list of objects            List of order positions (see below)
-fees                                  list of objects            List of fees included in the order total (i.e.
-                                                                 payment fees)
+positions                             list of objects            List of non-canceled order positions (see below)
+fees                                  list of objects            List of non-canceled fees included in the order total
+                                                                 (i.e. payment fees)
 ├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
                                                                  ``other``)
 ├ value                               money (string)             Fee amount
@@ -1064,6 +1064,8 @@ List of all order positions
 
    The order positions endpoint has been extended by the filter queries ``voucher``, ``voucher__code`` and
    ``pseudonymization_id``.
+
+.. note:: Individually canceled order positions are currently not visible via the API at all.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 

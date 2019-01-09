@@ -63,6 +63,14 @@ class OrdersTest(TestCase):
             price=Decimal("23"),
             attendee_name_parts={'full_name': "Peter"}
         )
+        self.deleted_pos = OrderPosition.objects.create(
+            order=self.order,
+            item=self.ticket,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={'full_name': "Lukas"},
+            canceled=True
+        )
         self.not_my_order = Order.objects.create(
             status=Order.STATUS_PENDING,
             event=self.event,
@@ -130,6 +138,8 @@ class OrdersTest(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         assert len(doc.select(".cart-row")) > 0
         assert "pending" in doc.select(".label-warning")[0].text.lower()
+        assert "Peter" in response.rendered_content
+        assert "Lukas" not in response.rendered_content
 
     def test_orders_modify_invalid(self):
         self.order.status = Order.STATUS_CANCELED
@@ -169,6 +179,8 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % self.ticket_pos.id)), 1)
+        assert "Peter" in response.rendered_content
+        assert "Lukas" not in response.rendered_content
 
         # Not all required fields filled out, expect failure
         response = self.client.post(
