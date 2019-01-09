@@ -139,6 +139,7 @@ setup(
         'django-hijack>=2.1.10,<2.2.0',
         'openpyxl',
         'django-oauth-toolkit==1.2.*',
+        'oauthlib==2.1.*',
         'idna==2.6',  # required by current requests
     ],
     extras_require={
