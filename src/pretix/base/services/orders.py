@@ -1031,7 +1031,8 @@ class OrderChangeManager:
                         'old_price': opa.price,
                     })
                     opa.canceled = True
-                    Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=F('redeemed') - 1)
+                    if opa.voucher:
+                        Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=F('redeemed') - 1)
                     opa.save(update_fields=['canceled'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1042,7 +1043,8 @@ class OrderChangeManager:
                     'addon_to': None,
                 })
                 op.position.canceled = True
-                Voucher.objects.filter(pk=op.voucher.pk).update(redeemed=F('redeemed') - 1)
+                if op.voucher:
+                    Voucher.objects.filter(pk=op.voucher.pk).update(redeemed=F('redeemed') - 1)
                 op.position.save(update_fields=['canceled'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
