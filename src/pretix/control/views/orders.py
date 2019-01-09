@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, IntegerField, OuterRef, Subquery
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
 )
@@ -82,9 +82,12 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     permission = 'can_view_orders'
 
     def get_queryset(self):
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
         qs = Order.objects.filter(
             event=self.request.event
-        ).annotate(pcnt=Count('all_positions', distinct=True)).select_related('invoice_address')
+        ).annotate(pcnt=Subquery(s, output_field=IntegerField())).select_related('invoice_address')
 
         qs = Order.annotate_overpayments(qs)
 
