@@ -14,6 +14,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from PyPDF2 import PdfFileReader
 from pytz import timezone
@@ -191,6 +192,22 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Organizer info text"),
         "editor_sample": _("Event organizer info text"),
         "evaluate": lambda op, order, ev: str(order.event.settings.organizer_info_text)
+    }),
+    ("now_datetime", {
+        "label": _("Printing date and time"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            now().astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATETIME_FORMAT"
+        )
+    }),
+    ("now_time", {
+        "label": _("Printing time"),
+        "editor_sample": _("19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            now().astimezone(timezone(ev.settings.timezone)),
+            "TIME_FORMAT"
+        ) if ev.date_admission else ""
     }),
 ))
 
