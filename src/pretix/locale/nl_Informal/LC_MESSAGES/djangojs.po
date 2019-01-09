@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2019-01-02 08:20+0000\n"
-"Last-Translator: amefad <fame@libero.it>\n"
-"Language-Team: Italian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/it/>\n"
-"Language: it\n"
+"PO-Revision-Date: 2019-01-08 21:00+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/nl_Informal/>\n"
+"Language: nl_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,33 +23,33 @@ msgstr ""
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr "Segna come pagato"
+msgstr "Gemarkeerd als betaald"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr "Commento:"
+msgstr "Opmerking:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr "Ordini inviati"
+msgstr "Geplaatste bestellingen"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Ordini pagati"
+msgstr "Betaalde bestellingen"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr "Ricavi totali"
+msgstr "Volledige omzet"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr "Sto contattando Stripe …"
+msgstr "Verbinding maken met Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr "Totale"
+msgstr "Totaal"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:95
@@ -57,9 +57,8 @@ msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
-"La tua richiesta è stata inviata al server e verrà ora elaborata. A seconda "
-"della dimensione del tuo evento questo passaggio può durare fino ad alcuni "
-"minuti."
+"Je aanvraag is in behandeling op de server. Afhankelijk van de grootte van "
+"het evenement kan dit een paar minuten duren."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:101
@@ -68,40 +67,40 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
-"La tua richiesta è stata accettata dal server ma è ancora in attesa di "
-"elaborazione. Se l'attesa dura più a lungo di due minuti di ti invitiamo a "
-"contattarci o di tornare al browser e riprovare."
+"Je verzoek is aangekomen op de server, maar wordt nog niet verwerkt. Neem "
+"contact met ons op als dit langer dan twee minuten duurt, of ga terug in je "
+"browser en probeer het opnieuw."
 
 #: pretix/static/pretixbase/js/asynctask.js:66
 #: pretix/static/pretixbase/js/asynctask.js:124
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
-msgstr "Si è verificato un errore {code}."
+msgstr "Er is een fout opgetreden met code {code}."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Al momento il server non è raggiungibile, ma continueremo a provare. Codice "
-"dell'ultimo errore: {code}"
+"De server is op dit moment niet bereikbaar, we proberen het opnieuw. Laatste "
+"foutcode: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:115
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
-msgstr "La richiesta ha impiegato troppo tempo. Si prega di riprovare."
+msgstr "De aanvraag duurde te lang, probeer het alsjeblieft opnieuw."
 
 #: pretix/static/pretixbase/js/asynctask.js:127
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
-"Al momento il server non è raggiungibile. Si prega di riprovare. Codice "
-"dell'errore: {code}"
+"De server is op dit moment niet bereikbaar, probeer het alsjeblieft opnieuw. "
+"Foutcode: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
-msgstr "Stiamo elaborando la tua richiesta …"
+msgstr "We verwerken je aanvraag…"
 
 #: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
@@ -109,208 +108,214 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"Stiamo inviando la tua richiesta al server. Se questa operazione richiede "
-"più di un minuto si prega di verificare la connessione internet e ricaricare "
-"la pagina per riprovare l'invio."
+"Je aanvraag wordt naar de server verstuurd. Controleer je internetverbinding "
+"en probeer het opnieuw als dit langer dan een minuut duurt."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:28
 msgid "Close message"
-msgstr "Messaggio di chiusura"
+msgstr "Sluit bericht"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr "Copiato!"
+msgstr "Gekopieerd!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr "Usa i tasti Ctrl-C per copiare!"
+msgstr "Gebruik Ctrl-C om te kopiëren!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
-msgstr "Scansiona QR del lead"
+msgstr "QR-code voor lead-scanning"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr "Check-in con QR"
+msgstr "QR-code voor check-in"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr "Il file PDF di sfondo non può essere caricato per le seguenti ragioni:"
+msgstr ""
+"Het PDF-achtergrondbestand kon niet geladen worden om de volgende reden:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
-msgstr "Gruppo di oggetti"
+msgstr "Groep van objecten"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
-msgstr "Oggetto testo"
+msgstr "Tekstobject"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
-msgstr ""
+msgstr "Barcodegebied"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Mogelijk gemaakt door pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "Object"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
-msgstr ""
+msgstr "Kaartjesontwerp"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "Opslaan mislukt."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:735
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "Wil je de editor verlaten zonder je wijzigingen op te slaan?"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:749
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
-msgstr ""
+msgstr "Er is iets misgegaan."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "Bezig met het genereren van berichten …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:43
 msgid "Unknown error."
-msgstr ""
+msgstr "Onbekende fout."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:205
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Je kleur heeft een goed contrast, en is gemakkelijk te lezen!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:209
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Je kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:213
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Je kleur heeft een slecht contrast voor tekst op een witte achtergrond, kies "
+"een donkerdere kleur."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:294
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:295
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Gebruik intern een andere naam"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
-msgstr ""
+msgstr "Andere"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:70
 msgid "Count"
-msgstr ""
+msgstr "Aantal"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(één andere datum)"
+msgstr[1] "({num} andere datums)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "De items in je winkelwagen zijn niet meer voor je gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Winkelwagen is verlopen"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
+msgstr[0] "De items in je winkelwagen zijn voor je gereserveerd voor één minuut."
 msgstr[1] ""
+"De items in je winkelwagen zijn voor je gereserveerd voor {num} minuten."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Uitverkocht"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Kopen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Gereserveerd"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "GRATIS"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "vanaf %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "incl. %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "nu beschikbaar: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Alleen beschikbaar met een voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "minimale hoeveelheid om te bestellen: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Sluit kaartjeswinkel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "De kaartjeswinkel kon niet geladen worden."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr ""
+"De winkelwagen kon niet gemaakt worden. Probeer het later alsjeblieft "
+"opnieuw."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Wachtlijst"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
@@ -318,11 +323,13 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Je hebt momenteel een actieve winkelwagen voor dit evenement. Als je meer "
+"producten selecteert worden deze toegevoegd aan je bestaande winkelwagen."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Doorgaan met afrekenen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
@@ -330,33 +337,35 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">"
+"ticketsysteem mogelijk gemaakt door pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Verzilver een voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Verzilveren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Vouchercode"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Ga verder"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "Zie variaties"

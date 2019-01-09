@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2018-12-02 15:44+0000\n"
-"Last-Translator: Matheus Nunes <matheus@integrate.com.br>\n"
+"PO-Revision-Date: 2018-12-11 15:15+0000\n"
+"Last-Translator: Bruno Damasceno Martins <bdm2943@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -231,19 +231,19 @@ msgstr "Formulário curto"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:94
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (com vírgulas)"
 
 #: pretix/base/exporter.py:95
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Estilo Excel)"
 
 #: pretix/base/exporter.py:96
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (com ponto e vírgula)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -332,10 +332,8 @@ msgid "Filter by status"
 msgstr "Filtrar por status"
 
 #: pretix/base/exporters/orderlist.py:21
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "List of orders"
-msgstr "Listar pedidos (CSV)"
+msgstr "Listar pedidos"
 
 #: pretix/base/exporters/orderlist.py:29
 msgid "Only paid orders"
