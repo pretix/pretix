@@ -7,7 +7,11 @@
         <span class="label label-warning {{ class }}">{% trans "Pending" %}</span>
     {% endif %}
 {% elif order.status == "p" %}
-    <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
+    {% if order.count_positions == 0 %}
+        <span class="label label-info {{ class }}">{% trans "Canceled (paid fee)" %}</span>
+    {% else %}
+        <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
+    {% endif %}
 {% elif order.status == "e" %} {# expired #}
     <span class="label label-danger {{ class }}">{% trans "Expired" %}</span>
 {% elif order.status == "c" %}

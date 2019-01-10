@@ -100,7 +100,7 @@ class OrderFilterForm(FilterForm):
         label=_('Order status'),
         choices=(
             ('', _('All orders')),
-            (Order.STATUS_PAID, _('Paid')),
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
             (Order.STATUS_PENDING, _('Pending')),
             ('o', _('Pending (overdue)')),
             (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
@@ -200,7 +200,7 @@ class EventOrderFilterForm(OrderFilterForm):
         label=_('Order status'),
         choices=(
             ('', _('All orders')),
-            (Order.STATUS_PAID, _('Paid')),
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
             (Order.STATUS_PENDING, _('Pending')),
             ('o', _('Pending (overdue)')),
             (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),

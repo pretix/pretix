@@ -50,11 +50,6 @@
                                 {% trans "Cancel order" %}
                             </a>
                         {% endif %}
-                        {% if order.payment_refund_sum > 0 %}
-                            <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
-                                {% trans "Create a refund" %}
-                            </a>
-                        {% endif %}
                     {% endif %}
 
                     <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
@@ -488,6 +483,11 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if order.payment_refund_sum > 0 %}
+                                    <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                        {% trans "Create a refund" %}
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

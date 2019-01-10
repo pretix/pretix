@@ -367,8 +367,7 @@ class OrderRefundForm(forms.Form):
         required=False,
         widget=forms.RadioSelect,
         choices=(
-            ('mark_refunded', _('Mark the complete order as refunded. The order will be canceled and all tickets will '
-                                'no longer work. This can not be reverted.')),
+            ('mark_refunded', _('Cancel the order. All tickets will no longer work. This can not be reverted.')),
             ('mark_pending', _('Mark the order as pending and allow the user to pay the open amount with another '
                                'payment method.')),
             ('do_nothing', _('Do nothing and keep the order as it is.')),

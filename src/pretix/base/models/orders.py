@@ -192,6 +192,12 @@ class Order(LockModel, LoggedModel):
         """
         return self.all_fees(manager='objects')
 
+    @cached_property
+    def count_positions(self):
+        if hasattr(self, 'pcnt'):
+            return self.pcnt or 0
+        return self.positions.count()
+
     @property
     def positions(self):
         """
@@ -350,7 +356,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID)
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and self.positions.exists()
         )
 
     @staticmethod
