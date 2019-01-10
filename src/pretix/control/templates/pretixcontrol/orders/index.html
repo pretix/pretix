@@ -142,7 +142,7 @@
                             {% endif %}
                             {{ o.total|money:request.event.currency }}
                         </td>
-                        <td class="text-right">{{ o.pcnt }}</td>
+                        <td class="text-right">{{ o.pcnt|default_if_none:"0" }}</td>
                         <td class="text-right">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
                     </tr>
                 {% endfor %}

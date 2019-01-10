@@ -234,7 +234,7 @@ def generate_invoice(order: Order, trigger_pdf=True):
     if trigger_pdf:
         invoice_pdf(invoice.pk)
 
-    if order.status in (Order.STATUS_CANCELED, Order.STATUS_REFUNDED):
+    if order.status == Order.STATUS_CANCELED:
         generate_cancellation(invoice, trigger_pdf)
 
     return invoice

@@ -54,11 +54,6 @@ class ActionView(View):
                 'status': 'error',
                 'message': _('The order is already marked as paid.')
             })
-        elif trans.order.status == Order.STATUS_REFUNDED:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('The order has already been refunded.')
-            })
         elif trans.order.status == Order.STATUS_CANCELED:
             return JsonResponse({
                 'status': 'error',
@@ -170,8 +165,8 @@ class ActionView(View):
         qs = self.order_qs().order_by('pk').annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no')).filter(
             code
             | Q(email__icontains=u)
-            | Q(positions__attendee_name_cached__icontains=u)
-            | Q(positions__attendee_email__icontains=u)
+            | Q(all_positions__attendee_name_cached__icontains=u)
+            | Q(all_positions__attendee_email__icontains=u)
             | Q(invoice_address__name_cached__icontains=u)
             | Q(invoice_address__company__icontains=u)
             | Q(invoices__invoice_no=u)

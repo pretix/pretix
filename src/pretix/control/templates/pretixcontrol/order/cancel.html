@@ -10,6 +10,12 @@
     <p>{% blocktrans trimmed %}
         Do you really want to cancel this order? You cannot revert this action.
     {% endblocktrans %}</p>
+    {% if order.payment_refund_sum > 0 %}
+        <p>{% blocktrans trimmed %}
+            This will <strong>not</strong> automatically transfer the money back, but you will be offered options to
+            refund the payment afterwards.
+        {% endblocktrans %}</p>
+    {% endif %}
 
     <form method="post" href="">
         {% csrf_token %}

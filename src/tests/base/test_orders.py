@@ -616,6 +616,26 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.order.positions.count() == 1
         assert self.order.total == self.op2.price
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+
+    def test_cancel_with_addon(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.positions.count() == 3
+
+        self.ocm.cancel(self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 1
+        assert self.order.total == self.op2.price
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+        assert self.op1.addons.first().canceled
 
     def test_free_to_paid(self):
         self.order.status = Order.STATUS_PAID

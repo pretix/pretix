@@ -70,7 +70,6 @@ class Order(LockModel, LoggedModel):
         * ``STATUS_PAID``
         * ``STATUS_EXPIRED``
         * ``STATUS_CANCELED``
-        * ``STATUS_REFUNDED``
 
     :param event: The event this order belongs to
     :type event: Event
@@ -102,13 +101,12 @@ class Order(LockModel, LoggedModel):
     STATUS_PAID = "p"
     STATUS_EXPIRED = "e"
     STATUS_CANCELED = "c"
-    STATUS_REFUNDED = "r"
+    STATUS_REFUNDED = "c"  # deprecated
     STATUS_CHOICE = (
         (STATUS_PENDING, _("pending")),
         (STATUS_PAID, _("paid")),
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELED, _("canceled")),
-        (STATUS_REFUNDED, _("refunded"))
     )
 
     code = models.CharField(
@@ -186,6 +184,28 @@ class Order(LockModel, LoggedModel):
     def __str__(self):
         return self.full_code
 
+    @property
+    def fees(self):
+        """
+        Related manager for all non-canceled fees. Use ``all_fees`` instead if you want
+        canceled positions as well.
+        """
+        return self.all_fees(manager='objects')
+
+    @cached_property
+    def count_positions(self):
+        if hasattr(self, 'pcnt'):
+            return self.pcnt or 0
+        return self.positions.count()
+
+    @property
+    def positions(self):
+        """
+        Related manager for all non-canceled positions. Use ``all_positions`` instead if you want
+        canceled positions as well.
+        """
+        return self.all_positions(manager='objects')
+
     @cached_property
     def meta_info_data(self):
         try:
@@ -207,7 +227,7 @@ class Order(LockModel, LoggedModel):
     @property
     def pending_sum(self):
         total = self.total
-        if self.status in (Order.STATUS_REFUNDED, Order.STATUS_CANCELED):
+        if self.status == Order.STATUS_CANCELED:
             total = Decimal('0.00')
         payment_sum = self.payments.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
@@ -248,9 +268,9 @@ class Order(LockModel, LoggedModel):
             pending_sum_rc=-1 * Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
         ).annotate(
             is_overpaid=Case(
-                When(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0),
+                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0),
                      then=Value('1')),
-                When(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0),
+                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
@@ -336,8 +356,7 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status == Order.STATUS_PENDING
-            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and self.positions.exists()
         )
 
     @staticmethod
@@ -399,7 +418,10 @@ class Order(LockModel, LoggedModel):
         """
         positions = self.positions.all().select_related('item')
         cancelable = all([op.item.allow_cancel for op in positions])
-        return self.cancel_allowed() and self.event.settings.cancel_allow_user and cancelable
+        return (
+            self.status == Order.STATUS_PENDING
+            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
+        ) and self.event.settings.cancel_allow_user and cancelable
 
     @property
     def is_expired_by_time(self):
@@ -1254,10 +1276,18 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
+class ActivePositionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(canceled=False)
+
+
 class OrderFee(models.Model):
     """
     An OrderFee object represents a fee that is added to the order total independently of
     the actual positions. This might for example be a payment or a shipping fee.
+
+    The default ``OrderFee.objects`` manager only contains fees that are not ``canceled``. If
+    you ant all objects, you need to use ``OrderFee.all`` instead.
 
     :param value: Gross price of this fee
     :type value: Decimal
@@ -1275,16 +1305,20 @@ class OrderFee(models.Model):
     :type tax_rule: TaxRule
     :param tax_value: The tax amount included in the price
     :type tax_value: Decimal
+    :param canceled: True, if this position is canceled and should no longer be regarded
+    :type canceled: bool
     """
     FEE_TYPE_PAYMENT = "payment"
     FEE_TYPE_SHIPPING = "shipping"
     FEE_TYPE_SERVICE = "service"
+    FEE_TYPE_CANCELLATION = "cancellation"
     FEE_TYPE_OTHER = "other"
     FEE_TYPE_GIFTCARD = "giftcard"
     FEE_TYPES = (
         (FEE_TYPE_PAYMENT, _("Payment fee")),
         (FEE_TYPE_SHIPPING, _("Shipping fee")),
         (FEE_TYPE_SERVICE, _("Service fee")),
+        (FEE_TYPE_CANCELLATION, _("Cancellation fee")),
         (FEE_TYPE_OTHER, _("Other fees")),
         (FEE_TYPE_GIFTCARD, _("Gift card")),
     )
@@ -1296,7 +1330,7 @@ class OrderFee(models.Model):
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
-        related_name='fees',
+        related_name='all_fees',
         on_delete=models.PROTECT
     )
     fee_type = models.CharField(
@@ -1317,6 +1351,10 @@ class OrderFee(models.Model):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
+    canceled = models.BooleanField(default=False)
+
+    all = models.Manager()
+    objects = ActivePositionManager()
 
     @property
     def net_value(self):
@@ -1371,6 +1409,9 @@ class OrderPosition(AbstractPosition):
     of a specified type (or variation). This has all properties of
     AbstractPosition.
 
+    The default ``OrderPosition.objects`` manager only contains fees that are not ``canceled``. If
+    you ant all objects, you need to use ``OrderPosition.all`` instead.
+
     :param order: The order this position is a part of
     :type order: Order
     :param positionid: A local ID of this position, counted for each order individually
@@ -1383,6 +1424,8 @@ class OrderPosition(AbstractPosition):
     :type tax_value: Decimal
     :param secret: The secret used for ticket QR codes
     :type secret: str
+    :param canceled: True, if this position is canceled and should no longer be regarded
+    :type canceled: bool
     :param pseudonymization_id: The QR code content for lead scanning
     :type pseudonymization_id: str
     """
@@ -1390,7 +1433,7 @@ class OrderPosition(AbstractPosition):
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
-        related_name='positions',
+        related_name='all_positions',
         on_delete=models.PROTECT
     )
     tax_rate = models.DecimalField(
@@ -1412,6 +1455,10 @@ class OrderPosition(AbstractPosition):
         unique=True,
         db_index=True
     )
+    canceled = models.BooleanField(default=False)
+
+    all = models.Manager()
+    objects = ActivePositionManager()
 
     class Meta:
         verbose_name = _("Order position")
@@ -1492,7 +1539,7 @@ class OrderPosition(AbstractPosition):
             self._calculate_tax()
         self.order.touch()
         if self.pk is None:
-            while OrderPosition.objects.filter(secret=self.secret).exists():
+            while OrderPosition.all.filter(secret=self.secret).exists():
                 self.secret = generate_position_secret()
 
         if not self.pseudonymization_id:
@@ -1508,7 +1555,7 @@ class OrderPosition(AbstractPosition):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=10, allowed_chars=charset)
-            if not OrderPosition.objects.filter(pseudonymization_id=code).exists():
+            if not OrderPosition.all.filter(pseudonymization_id=code).exists():
                 self.pseudonymization_id = code
                 return
 

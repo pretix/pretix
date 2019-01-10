@@ -100,14 +100,13 @@ class OrderFilterForm(FilterForm):
         label=_('Order status'),
         choices=(
             ('', _('All orders')),
-            ('p', _('Paid')),
-            ('n', _('Pending')),
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            (Order.STATUS_PENDING, _('Pending')),
             ('o', _('Pending (overdue)')),
-            ('np', _('Pending or paid')),
-            ('e', _('Expired')),
-            ('ne', _('Pending or expired')),
-            ('c', _('Canceled')),
-            ('r', _('Refunded')),
+            (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
+            (Order.STATUS_EXPIRED, _('Expired')),
+            (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
+            (Order.STATUS_CANCELED, _('Canceled')),
         ),
         required=False,
     )
@@ -201,14 +200,13 @@ class EventOrderFilterForm(OrderFilterForm):
         label=_('Order status'),
         choices=(
             ('', _('All orders')),
-            ('p', _('Paid')),
-            ('n', _('Pending')),
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            (Order.STATUS_PENDING, _('Pending')),
             ('o', _('Pending (overdue)')),
-            ('np', _('Pending or paid')),
-            ('e', _('Expired')),
-            ('ne', _('Pending or expired')),
-            ('c', _('Canceled')),
-            ('r', _('Refunded')),
+            (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
+            (Order.STATUS_EXPIRED, _('Expired')),
+            (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
+            (Order.STATUS_CANCELED, _('Canceled')),
             ('pa', _('Approval pending')),
             ('overpaid', _('Overpaid')),
             ('underpaid', _('Underpaid')),
@@ -246,10 +244,10 @@ class EventOrderFilterForm(OrderFilterForm):
         qs = super().filter_qs(qs)
 
         if fdata.get('item'):
-            qs = qs.filter(positions__item=fdata.get('item'))
+            qs = qs.filter(all_positions__item=fdata.get('item'), all_positions__canceled=False)
 
         if fdata.get('subevent'):
-            qs = qs.filter(positions__subevent=fdata.get('subevent'))
+            qs = qs.filter(all_positions__subevent=fdata.get('subevent'), all_positions__canceled=False)
 
         if fdata.get('question') and fdata.get('answer') is not None:
             q = fdata.get('question')
@@ -278,8 +276,8 @@ class EventOrderFilterForm(OrderFilterForm):
 
         if fdata.get('status') == 'overpaid':
             qs = qs.filter(
-                Q(~Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_t__lt=0))
-                | Q(Q(status__in=(Order.STATUS_REFUNDED, Order.STATUS_CANCELED)) & Q(pending_sum_rc__lt=0))
+                Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
+                | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
             )
         elif fdata.get('status') == 'pendingpaid':
             qs = qs.filter(

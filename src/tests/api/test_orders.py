@@ -104,6 +104,16 @@ def order(event, item, taxrule, question):
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
         )
+        OrderPosition.objects.create(
+            order=o,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
+            secret="YBiYJrmF5ufiTLdV1iDf",
+            pseudonymization_id="JKLM",
+            canceled=True
+        )
         op.answers.create(question=question, answer='S')
         return o
 
@@ -509,7 +519,7 @@ def test_refund_process_mark_refunded(token_client, organizer, event, order):
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
     order.refresh_from_db()
-    assert order.status == Order.STATUS_REFUNDED
+    assert order.status == Order.STATUS_CANCELED
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
@@ -693,6 +703,14 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
 
 
 @pytest.mark.django_db
+def test_orderposition_detail_no_canceled(token_client, organizer, event, order, item, question):
+    op = order.all_positions.filter(canceled=True).first()
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
 def test_orderposition_delete(token_client, organizer, event, order, item, question):
     op = order.positions.first()
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
@@ -720,6 +738,7 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
     ))
     assert resp.status_code == 204
     assert order.positions.count() == 1
+    assert order.all_positions.count() == 3
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
 
@@ -952,8 +971,8 @@ def test_order_mark_canceled_pending_no_email(token_client, organizer, event, or
 
 
 @pytest.mark.django_db
-def test_order_mark_canceled_paid(token_client, organizer, event, order):
-    order.status = Order.STATUS_PAID
+def test_order_mark_canceled_expired(token_client, organizer, event, order):
+    order.status = Order.STATUS_EXPIRED
     order.save()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
@@ -962,7 +981,7 @@ def test_order_mark_canceled_paid(token_client, organizer, event, order):
     )
     assert resp.status_code == 400
     order.refresh_from_db()
-    assert order.status == Order.STATUS_PAID
+    assert order.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db
@@ -975,7 +994,7 @@ def test_order_mark_paid_refunded(token_client, organizer, event, order):
         )
     )
     assert resp.status_code == 200
-    assert resp.data['status'] == Order.STATUS_REFUNDED
+    assert resp.data['status'] == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db
@@ -2411,7 +2430,7 @@ def test_refund_create_mark_refunded(token_client, organizer, event, order):
     assert r.info_data == {"foo": "bar"}
     assert r.payment.local_id == 2
     order.refresh_from_db()
-    assert order.status == Order.STATUS_REFUNDED
+    assert order.status == Order.STATUS_CANCELED
 
 
 @pytest.mark.django_db

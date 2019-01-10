@@ -50,11 +50,6 @@
                                 {% trans "Cancel order" %}
                             </a>
                         {% endif %}
-                        {% if order.payment_refund_sum > 0 %}
-                            <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
-                                {% trans "Create a refund" %}
-                            </a>
-                        {% endif %}
                     {% endif %}
 
                     <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
@@ -171,11 +166,11 @@
                                                     action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}
                                                 <button class="btn btn-default btn-xs"
-                                                        {% if order.status != "r" and order.status != "c" %}
+                                                        {% if order.status != "c" %}
                                                             data-toggle="tooltip"
                                                             title="{% trans 'Generate a cancellation document for this invoice and create a new invoice with a new invoice number.' %}"
                                                         {% endif %}>
-                                                    {% if order.status == "r" or order.status == "c" %}
+                                                    {% if order.status == "c" %}
                                                         {% trans "Generate cancellation" %}
                                                     {% else %}
                                                         {% trans "Cancel and reissue" %}
@@ -234,7 +229,7 @@
                 </div>
                 <div class="panel-body">
                     {% for line in items.positions %}
-                        <div class="row-fluid product-row">
+                        <div class="row-fluid product-row {% if line.canceled %}pos-canceled{% endif %}">
                             <div class="col-md-9 col-xs-6">
                                 {% if line.addon_to %}
                                     <span class="addon-signifier">+</span>
@@ -260,24 +255,26 @@
                                     <br/>
                                     <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                                 {% endif %}
-                                <div class="position-buttons">
-                                    {% if not line.addon_to or request.event.settings.ticket_download_addons %}
-                                        {% if line.item.admission or request.event.settings.ticket_download_nonadm %}
-                                            {% for b in download_buttons %}
-                                                <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
-                                                        method="post" data-asynctask data-asynctask-download
-                                                        class="form-inline helper-display-inline">
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="btn btn-xs btn-default">
-                                                        <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                                                    </button>
-                                                </form>
-                                            {% endfor %}
+                                {% if not line.canceled %}
+                                    <div class="position-buttons">
+                                        {% if not line.addon_to or request.event.settings.ticket_download_addons %}
+                                            {% if line.item.admission or request.event.settings.ticket_download_nonadm %}
+                                                {% for b in download_buttons %}
+                                                    <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
+                                                            method="post" data-asynctask data-asynctask-download
+                                                            class="form-inline helper-display-inline">
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="btn btn-xs btn-default">
+                                                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                                        </button>
+                                                    </form>
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                    {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
-                                </div>
+                                        {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
+                                    </div>
+                                {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
                                         {% if line.item.admission and event.settings.attendee_names_asked %}
@@ -486,6 +483,11 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if order.payment_refund_sum > 0 %}
+                                    <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                        {% trans "Create a refund" %}
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

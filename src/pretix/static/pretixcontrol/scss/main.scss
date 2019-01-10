@@ -600,3 +600,7 @@ details summary {
     padding-left: 20px;
 }
 
+.pos-canceled * {
+    color: $brand-danger;
+    text-decoration: line-through !important;
+}

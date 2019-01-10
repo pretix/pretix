@@ -65,9 +65,11 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
         if form.cleaned_data.get('item'):
-            orders = orders.filter(positions__item=form.cleaned_data.get('item'))
+            orders = orders.filter(all_positions__item=form.cleaned_data.get('item'),
+                                   all_positions__canceled=False)
         if form.cleaned_data.get('subevent'):
-            orders = orders.filter(positions__subevent__in=(form.cleaned_data.get('subevent'),))
+            orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
+                                   all_positions__canceled=False)
         orders = orders.distinct()
 
         self.output = {}

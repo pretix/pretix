@@ -1,8 +1,8 @@
-from django.db.models import Q
+from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.utils.functional import cached_property
 from django.views.generic import ListView
 
-from pretix.base.models import Order
+from pretix.base.models import Order, OrderPosition
 from pretix.control.forms.filter import OrderSearchFilterForm
 from pretix.control.views import LargeResultSetPaginator, PaginationMixin
 
@@ -24,6 +24,12 @@ class OrderSearch(PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = Order.objects.select_related('invoice_address')
+
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        qs = qs.annotate(pcnt=Subquery(s, output_field=IntegerField()))
+
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
                 Q(event__organizer_id__in=self.request.user.teams.filter(

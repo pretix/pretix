@@ -740,7 +740,7 @@ class OrderTestCase(BaseQuotaTestCase):
         q = Question.objects.create(question='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
         self.item1.questions.add(q)
         assert self.order.can_modify_answers
-        self.order.status = Order.STATUS_REFUNDED
+        self.order.status = Order.STATUS_CANCELED
         assert not self.order.can_modify_answers
         self.order.status = Order.STATUS_PAID
         assert self.order.can_modify_answers
@@ -963,7 +963,7 @@ class OrderTestCase(BaseQuotaTestCase):
         assert o.has_external_refund
 
     def test_pending_order_pending_refund(self):
-        self.order.status = Order.STATUS_REFUNDED
+        self.order.status = Order.STATUS_CANCELED
         self.order.save()
         self.order.payments.create(
             amount=Decimal('46.00'),
@@ -1022,6 +1022,14 @@ class OrderTestCase(BaseQuotaTestCase):
         assert o.is_pending_with_full_payment
         assert not o.has_pending_refund
         assert not o.has_external_refund
+
+    def test_canceled_positions(self):
+        self.op1.canceled = True
+        self.op1.save()
+        assert OrderPosition.objects.count() == 1
+        assert OrderPosition.all.count() == 2
+        assert self.order.positions.count() == 1
+        assert self.order.all_positions.count() == 2
 
 
 class ItemCategoryTest(TestCase):

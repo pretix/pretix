@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Any, Dict, Iterable, List, Tuple
 
-from django.db.models import Count, Sum
+from django.db.models import Case, Count, F, Sum, Value, When
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import Event, Item, ItemCategory, Order, OrderPosition
@@ -79,18 +79,22 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
         'variations'
     ).order_by('category__position', 'category_id', 'position', 'name')
 
-    qs = OrderPosition.objects
+    qs = OrderPosition.all
     if subevent:
         qs = qs.filter(subevent=subevent)
     counters = qs.filter(
         order__event=event
+    ).annotate(
+        status=Case(
+            When(canceled=True, then=Value('c')),
+            default=F('order__status')
+        )
     ).values(
-        'item', 'variation', 'order__status'
+        'item', 'variation', 'status'
     ).annotate(cnt=Count('id'), price=Sum('price'), tax_value=Sum('tax_value')).order_by()
 
     states = {
         'canceled': Order.STATUS_CANCELED,
-        'refunded': Order.STATUS_REFUNDED,
         'paid': Order.STATUS_PAID,
         'pending': Order.STATUS_PENDING,
         'expired': Order.STATUS_EXPIRED,
@@ -99,7 +103,7 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
     for l, s in states.items():
         num[l] = {
             (p['item'], p['variation']): (p['cnt'], p['price'], p['price'] - p['tax_value'])
-            for p in counters if p['order__status'] == s
+            for p in counters if p['status'] == s
         }
 
     num['total'] = dictsum(num['pending'], num['paid'])
@@ -149,16 +153,21 @@ def order_overview(event: Event, subevent: SubEvent=None) -> Tuple[List[Tuple[It
     payment_items = []
 
     if not subevent:
-        counters = OrderFee.objects.filter(
+        counters = OrderFee.all.filter(
             order__event=event
+        ).annotate(
+            status=Case(
+                When(canceled=True, then=Value('c')),
+                default=F('order__status')
+            )
         ).values(
-            'fee_type', 'internal_type', 'order__status'
+            'fee_type', 'internal_type', 'status'
         ).annotate(cnt=Count('id'), value=Sum('value'), tax_value=Sum('tax_value')).order_by()
 
         for l, s in states.items():
             num[l] = {
                 (o['fee_type'], o['internal_type']): (o['cnt'], o['value'], o['value'] - o['tax_value'])
-                for o in counters if o['order__status'] == s
+                for o in counters if o['status'] == s
             }
         num['total'] = dictsum(num['pending'], num['paid'])
 

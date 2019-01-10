@@ -30,13 +30,11 @@
             <thead>
                 <tr>
                     <th>{% trans "Product" %}</th>
-                    <th>{% trans "Canceled" %}</th>
-                    <th>{% trans "Refunded" %}</th>
+                    <th>{% trans "Canceled" %}¹</th>
                     <th>{% trans "Expired" %}</th>
                     <th colspan="3">{% trans "Purchased" %}</th>
                 </tr>
                 <tr>
-                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -51,7 +49,6 @@
                         <tr class="category">
                             <th>{{ tup.0 }}</th>
                             <th>{{ tup.0.num.canceled|togglesum:request.event.currency }}</th>
-                            <th>{{ tup.0.num.refunded|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.expired|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.pending|togglesum:request.event.currency }}</th>
                             <th>{{ tup.0.num.paid|togglesum:request.event.currency }}</th>
@@ -64,11 +61,6 @@
                             <td>
                                 <a href="{{ listurl }}?item={{ item.id }}&amp;status=c&amp;provider={{ item.provider }}">
                                     {{ item.num.canceled|togglesum:request.event.currency }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{{ listurl }}?item={{ item.id }}&amp;status=r&amp;provider={{ item.provider }}">
-                                    {{ item.num.refunded|togglesum:request.event.currency }}
                                 </a>
                             </td>
                             <td>
@@ -95,7 +87,6 @@
                                 <tr class="variation {% if tup.0 %}categorized{% endif %}">
                                     <td>{{ var }}</td>
                                     <td>{{ var.num.canceled|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num.refunded|togglesum:request.event.currency }}</td>
                                     <td>{{ var.num.expired|togglesum:request.event.currency }}</td>
                                     <td>{{ var.num.pending|togglesum:request.event.currency }}</td>
                                     <td>{{ var.num.paid|togglesum:request.event.currency }}</td>
@@ -110,7 +101,6 @@
                 <tr class="total">
                     <th>{% trans "Total" %}</th>
                     <th>{{ total.num.canceled|togglesum:request.event.currency }}</th>
-                    <th>{{ total.num.refunded|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.expired|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.pending|togglesum:request.event.currency }}</th>
                     <th>{{ total.num.paid|togglesum:request.event.currency }}</th>
@@ -119,4 +109,7 @@
             </tfoot>
         </table>
     </div>
+    <p class="help-block">
+        ¹ {% trans "If you click links in this column, you will only find orders that are canceled completely, while the numbers also include single canceled positions within valid orders." %}
+    </p>
 {% endblock %}

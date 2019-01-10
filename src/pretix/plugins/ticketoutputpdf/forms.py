@@ -45,5 +45,5 @@ class TicketLayoutItemForm(forms.ModelForm):
             order_position__item_id=self.instance.item, provider='pdf'
         ).delete()
         CachedCombinedTicket.objects.filter(
-            order__positions__item=self.instance.item
+            order__all_positions__item=self.instance.item
         ).delete()
