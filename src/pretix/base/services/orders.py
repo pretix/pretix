@@ -1173,7 +1173,7 @@ class OrderChangeManager:
         return payment_sum - refund_sum
 
     def _recalculate_total_and_payment_fee(self):
-        total = sum([p.price for p in self.order.positions.all() if not p.canceled]) + sum([f.value for f in self.order.fees.all()])
+        total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
         payment_fee = Decimal('0.00')
         if self.open_payment:
             current_fee = Decimal('0.00')

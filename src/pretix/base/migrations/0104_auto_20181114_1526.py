@@ -8,8 +8,7 @@ from django.db import migrations, models
 
 def change_refunded_to_canceled(apps, schema_editor):
     Order = apps.get_model('pretixbase', 'Order')
-    Order.objects.filter(status='r').update(status='c', total=0)
-    Order.objects.filter(status='c').update(total=0)
+    Order.objects.filter(status='r').update(status='c')
 
 
 class Migration(migrations.Migration):

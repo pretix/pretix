@@ -421,7 +421,7 @@ class Order(LockModel, LoggedModel):
         return (
             self.status == Order.STATUS_PENDING
             or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
-        ) and self.event.settings.cancel_allow_user and cancelable
+        ) and self.event.settings.cancel_allow_user and cancelable and self.positions.exists()
 
     @property
     def is_expired_by_time(self):
