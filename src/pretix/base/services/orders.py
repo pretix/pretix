@@ -1043,8 +1043,8 @@ class OrderChangeManager:
                     'addon_to': None,
                 })
                 op.position.canceled = True
-                if op.voucher:
-                    Voucher.objects.filter(pk=op.voucher.pk).update(redeemed=F('redeemed') - 1)
+                if op.position.voucher:
+                    Voucher.objects.filter(pk=op.position.voucher.pk).update(redeemed=F('redeemed') - 1)
                 op.position.save(update_fields=['canceled'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
