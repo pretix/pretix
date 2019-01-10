@@ -90,7 +90,8 @@ class CancelForm(ConfirmPaymentForm):
         label=_('Keep a cancellation fee of'),
         help_text=_('If you keep a fee, all positions within this order will be canceled and the order will be reduced '
                     'to a paid cancellation fee. Payment and shipping fees will be canceled as well, so include them '
-                    'in your cancellation fee if you want to keep them.'),
+                    'in your cancellation fee if you want to keep them. Please always enter a gross value, '
+                    'tax will be calculated automatically.'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -102,6 +103,12 @@ class CancelForm(ConfirmPaymentForm):
             self.fields['cancellation_fee'].max_value = prs
         else:
             del self.fields['cancellation_fee']
+
+    def clean_cancellation_fee(self):
+        val = self.cleaned_data['cancellation_fee']
+        if val > self.instance.payment_refund_sum:
+            raise ValidationError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
+        return val
 
 
 class MarkPaidForm(ConfirmPaymentForm):

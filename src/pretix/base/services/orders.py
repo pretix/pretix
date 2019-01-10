@@ -342,8 +342,9 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             order.status = Order.STATUS_PAID
             order.total = f.value
             order.save(update_fields=['status', 'total'])
-            if i:
-                generate_invoice(order)
+
+        if i:
+            generate_invoice(order)
     else:
         with order.event.lock():
             order.status = Order.STATUS_CANCELED

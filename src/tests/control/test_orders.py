@@ -11,7 +11,7 @@ from tests.base import SoupTest
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
+    Event, InvoiceAddress, Item, Order, OrderFee, OrderPayment, OrderPosition,
     OrderRefund, Organizer, Question, QuestionAnswer, Quota, Team, User,
 )
 from pretix.base.payment import PaymentException
@@ -305,6 +305,91 @@ def test_order_cancel_free(client, env):
     })
     o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_CANCELED
+
+
+@pytest.mark.django_db
+def test_order_cancel_paid_keep_fee(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=o.total)
+    o.status = Order.STATUS_PAID
+    o.save()
+    tr7 = o.event.tax_rules.create(rate=Decimal('7.00'))
+    o.event.settings.tax_rate_default = tr7
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'c',
+        'cancellation_fee': '6.00'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert not o.positions.exists()
+    assert o.all_positions.exists()
+    f = o.fees.get()
+    assert f.fee_type == OrderFee.FEE_TYPE_CANCELLATION
+    assert f.value == Decimal('6.00')
+    assert f.tax_value == Decimal('0.39')
+    assert f.tax_rate == Decimal('7')
+    assert f.tax_rule == tr7
+    assert o.status == Order.STATUS_PAID
+    assert o.total == Decimal('6.00')
+    assert o.pending_sum == Decimal('-8.00')
+
+
+@pytest.mark.django_db
+def test_order_cancel_pending_keep_fee(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=Decimal('8.00'))
+    o.status = Order.STATUS_PENDING
+    o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'c',
+        'cancellation_fee': '6.00'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert not o.positions.exists()
+    assert o.all_positions.exists()
+    f = o.fees.get()
+    assert f.fee_type == OrderFee.FEE_TYPE_CANCELLATION
+    assert f.value == Decimal('6.00')
+    assert o.status == Order.STATUS_PAID
+    assert o.total == Decimal('6.00')
+    assert o.pending_sum == Decimal('-2.00')
+
+
+@pytest.mark.django_db
+def test_order_cancel_pending_fee_too_high(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=Decimal('4.00'))
+    o.status = Order.STATUS_PENDING
+    o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'c',
+        'cancellation_fee': '6.00'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert o.positions.exists()
+    assert not o.fees.exists()
+    assert o.status == Order.STATUS_PENDING
+    assert o.total == Decimal('14.00')
+
+
+@pytest.mark.django_db
+def test_order_cancel_unpaid_no_fees_allowed(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'c',
+        'cancellation_fee': '6.00'
+    })
+    o = Order.objects.get(id=env[2].id)
+    assert o.positions.exists()
+    assert not o.fees.exists()
+    assert o.status == Order.STATUS_CANCELED
+    assert o.total == Decimal('14.00')
 
 
 @pytest.mark.django_db
