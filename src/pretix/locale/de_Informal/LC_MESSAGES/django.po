@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-10 15:57+0000\n"
-"PO-Revision-Date: 2018-12-11 11:54+0000\n"
-"Last-Translator: Alexander Schwartz <alexander.schwartz@gmx.net>\n"
+"PO-Revision-Date: 2019-01-10 16:21+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -2139,10 +2139,8 @@ msgid "Service fee"
 msgstr "Servicegebühr"
 
 #: pretix/base/models/orders.py:1321
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation fee"
-msgstr "Rechnungskorrektur"
+msgstr "Stornogebühr"
 
 #: pretix/base/models/orders.py:1322
 msgid "Other fees"
@@ -3097,22 +3095,16 @@ msgid "Event organizer info text"
 msgstr "Information zum Veranstalter"
 
 #: pretix/base/pdf.py:197
-#, fuzzy
-#| msgid "Creation date"
 msgid "Printing date"
-msgstr "Erstellungszeitpunkt"
+msgstr "Druckdatum"
 
 #: pretix/base/pdf.py:205
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Printing date and time"
-msgstr "Veranstaltungsdatum und Uhrzeit"
+msgstr "Druckdatum und -uhrzeit"
 
 #: pretix/base/pdf.py:213
-#, fuzzy
-#| msgid "Restriction by time"
 msgid "Printing time"
-msgstr "Zeitliche Beschränkung"
+msgstr "Druckzeit"
 
 #: pretix/base/pdf.py:240
 #, python-brace-format
@@ -3369,10 +3361,8 @@ msgstr ""
 "erworben werden."
 
 #: pretix/base/services/checkin.py:95
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "This order position has been canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Bestellposition wurde storniert."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
@@ -5748,7 +5738,7 @@ msgstr "Alle Bestellungen"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:203
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Bezahlt (oder storniert mit Gebühr)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:204
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -6286,16 +6276,11 @@ msgid "Message"
 msgstr "Nachricht"
 
 #: pretix/control/forms/orders.py:370
-#, fuzzy
-#| msgid ""
-#| "Mark the complete order as refunded. The order will be canceled and all "
-#| "tickets will no longer work. This can not be reverted."
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
-"Markiere die komplette Bestellung als erstattet. Die Bestellung wird "
-"storniert und alle Tickets funktionieren nicht mehr. Dies kann nicht "
-"rückgängig gemacht werden."
+"Storniere die komplette Bestellung. Alle Tickets funktionieren nicht mehr. "
+"Dies kann nicht rückgängig gemacht werden."
 
 #: pretix/control/forms/orders.py:371
 msgid ""
@@ -6396,10 +6381,8 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: pretix/control/forms/organizer.py:242
-#, fuzzy
-#| msgid "Date in event series"
 msgid "Show availability in event overviews"
-msgstr "Termin in Veranstaltungsreihe"
+msgstr "Verfügbarkeit in der Veranstaltungsübersicht anzeigen"
 
 #: pretix/control/forms/organizer.py:243
 msgid ""
@@ -6407,6 +6390,9 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Zeige in der Liste der Veranstaltungen an, ob Veranstaltungen ausverkauft "
+"sind. Dies kann zu längeren Ladezeiten führen und der Verfügbarkeitsstatus "
+"wird ggf. mit Verzögerungen von bis zu zwei Minuten aktualisiert."
 
 #: pretix/control/forms/organizer.py:249
 msgid "Link back to organizer overview on all event pages"
@@ -6549,10 +6535,9 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:66
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} ({old_item}, {old_price}) removed."
+#, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "Position #{posid} ({old_item}, {old_price}) entfernt."
+msgstr "Position #{posid} ({old_item}, {old_price}) storniert."
 
 #: pretix/control/logdisplay.py:77
 #, python-brace-format
@@ -6720,7 +6705,7 @@ msgstr "Eine E-Mail unbekannten Typs wurde verschickt."
 
 #: pretix/control/logdisplay.py:190
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "Das Versenden einer E-Mail ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:191
 msgid "A custom email has been sent."
@@ -9694,6 +9679,9 @@ msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
 msgstr ""
+"Das bezahlte Geld wird durch diesen Schritt <strong>nicht</strong> "
+"automatisch zurückerstattet, aber im nächsten Schritt kannst du "
+"Erstattungsoptionen auswählen."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:26
 #: pretix/control/templates/pretixcontrol/order/deny.html:19
@@ -9832,10 +9820,8 @@ msgid "Generate a new secret"
 msgstr "Neuen Ticket-Code generieren"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:148
-#, fuzzy
-#| msgid "Cart position"
 msgid "Cancel position"
-msgstr "Produkt im Warenkorb"
+msgstr "Position stornieren"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:151
 msgid "Removing this position will also remove all add-ons to this position."
@@ -10447,10 +10433,8 @@ msgstr "Exportieren"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
-#, fuzzy
-#| msgid "Cancel and reissue"
 msgid "Canceled (paid fee)"
-msgstr "Stornieren und neu ausstellen"
+msgstr "storniert (bezahlte Gebühr)"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
@@ -10540,6 +10524,9 @@ msgid ""
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
 msgstr ""
+"Wenn du Links in dieser Spalte anklickst, findest du nur vollständig "
+"stornierte Bestellungen, während die Zahlen auch einzeln stornierte "
+"Positionen innerhalb gültiger Bestellungen beinhalten."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
@@ -12800,16 +12787,12 @@ msgid "The payment has been created successfully."
 msgstr "Die Zahlung wurde erfolgreich verbucht."
 
 #: pretix/control/views/orders.py:855
-#, fuzzy
-#| msgid ""
-#| "The order has been marked as refunded. Please transfer the money back to "
-#| "the buyer manually."
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
-"Die Bestellung wurde als erstattet markiert. Bitte überweise den Betrag "
-"manuell an den Käufer zurück."
+"Die Bestellung wurde als erstattet markiert. Du kannst nun auswählen, wie du "
+"das Geld zurückerstatten möchtest."
 
 #: pretix/control/views/orders.py:895 pretix/presale/views/order.py:498
 msgid "You cannot generate an invoice for this order."
@@ -13411,10 +13394,8 @@ msgid "Print badges"
 msgstr "Badges drucken"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
-#, fuzzy
-#| msgid "Badges"
 msgid "Badge"
-msgstr "Badges"
+msgstr "Badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
@@ -13790,6 +13771,9 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Nachdem du die Banküberweisung ausgeführt hast, kannst du dieses Fenster "
+"schließen. Wir schicken dir eine E-Mail, sobald wir deine Zahlung erhalten "
+"haben."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:57
 msgid "Open banking app"
@@ -16297,10 +16281,8 @@ msgid "Dutch"
 msgstr "Niederländisch"
 
 #: pretix/settings.py:373
-#, fuzzy
-#| msgid "German (informal)"
 msgid "Dutch (informal)"
-msgstr "Deutsch (Du)"
+msgstr "Niederländisch (informell)"
 
 #: pretix/settings.py:374
 msgid "Danish"
