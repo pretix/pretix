@@ -241,12 +241,6 @@ def register_default_notification_types(sender, **kwargs):
             _('External refund of payment'),
             _('An external refund for {order.code} has occurred.')
         ),
-        ParametrizedOrderNotificationType(
-            sender,
-            'pretix.event.order.refunded',
-            _('Order refunded'),
-            _('Order {order.code} has been refunded.')
-        ),
         ActionRequiredNotificationType(
             sender,
         )

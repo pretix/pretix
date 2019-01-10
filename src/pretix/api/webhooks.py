@@ -145,10 +145,6 @@ def register_default_webhook_events(sender, **kwargs):
             _('External refund of payment'),
         ),
         ParametrizedOrderWebhookEvent(
-            'pretix.event.order.refunded',
-            _('Order refunded'),
-        ),
-        ParametrizedOrderWebhookEvent(
             'pretix.event.order.approved',
             _('Order approved'),
         ),
