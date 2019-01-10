@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-05 16:05+0000\n"
-"PO-Revision-Date: 2019-01-08 21:00+0000\n"
+"PO-Revision-Date: 2019-01-09 23:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -8471,7 +8471,7 @@ msgstr "Geïnstalleerde plugins"
 #: pretix/control/views/vouchers.py:178 pretix/plugins/badges/views.py:88
 #: pretix/plugins/ticketoutputpdf/views.py:130
 msgid "Your changes have been saved."
-msgstr "Uw bewerkingen zijn opgeslagen."
+msgstr "Uw wijzigingen zijn opgeslagen."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
