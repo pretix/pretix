@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-11 14:47+0000\n"
-"PO-Revision-Date: 2019-01-10 16:21+0000\n"
+"PO-Revision-Date: 2019-01-11 14:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1496,6 +1496,10 @@ msgid ""
 "this is unchecked, orders containing this product can not be canceled by "
 "users but only by you."
 msgstr ""
+"Wenn diese Option aktiviert ist, greifen die üblichen Stornobedingungen der "
+"Veranstaltungen. Wenn sie deaktiviert ist, können Bestellungen mit diesem "
+"Produkt niemals von Kunden selbst storniert werden, unabhängig von der "
+"veranstaltungsweiten Einstellung."
 
 #: pretix/base/models/items.py:334
 msgid "Minimum amount per order"
@@ -3581,6 +3585,8 @@ msgstr "Du kannst diese Bestellung nicht stornieren."
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
+"Die Stornogebühr darf nicht größer sein als der Betrag, der für diese "
+"Bestellung bereits bezahlt wurde."
 
 #: pretix/base/services/orders.py:371
 #, python-format
@@ -6184,10 +6190,8 @@ msgid "Notify user by e-mail"
 msgstr "Benutzer per E-Mail benachrichtigen"
 
 #: pretix/control/forms/orders.py:90
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Keep a cancellation fee of"
-msgstr "Stornogebühr"
+msgstr "Stornogebühr einbehalten"
 
 #: pretix/control/forms/orders.py:91
 msgid ""
@@ -6197,6 +6201,12 @@ msgid ""
 "want to keep them. Please always enter a gross value, tax will be calculated "
 "automatically."
 msgstr ""
+"Wenn du eine Gebühr einbehältst, werden alle Positionen dieser Bestellung "
+"einzeln storniert. Die Bestellung selbst bleibt als bezahlte Bestellung "
+"vorhanden und enthält nur noch die Stornogebühr. Zahlungs- und "
+"Versandgebühren werden ebenfalls storniert und müssen ggf. manuell in die "
+"Stornogebühr aufgenommen werden. Bitte gib einen Bruttobetrag ein, die "
+"Steuern werden automatisch berechnet."
 
 #: pretix/control/forms/orders.py:119
 msgid "Payment amount"
