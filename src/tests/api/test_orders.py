@@ -363,7 +363,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
         organizer.slug, event.slug, order.code
     ), format='json', data={
         'amount': '25.00',
-        'mark_refunded': False
+        'mark_canceled': False
     })
     assert resp.status_code == 400
     assert resp.data == {'amount': ['Invalid refund amount, only 23.00 are available to refund.']}
@@ -372,7 +372,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
         organizer.slug, event.slug, order.code
     ), format='json', data={
         'amount': '20.00',
-        'mark_refunded': False
+        'mark_canceled': False
     })
     assert resp.status_code == 400
     assert resp.data == {'amount': ['Partial refund not available for this payment method.']}
@@ -380,7 +380,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={
-        'mark_refunded': False
+        'mark_canceled': False
     })
     assert resp.status_code == 400
     assert resp.data == {'amount': ['Full refund not available for this payment method.']}
@@ -389,7 +389,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
         organizer.slug, event.slug, order.code
     ), format='json', data={
         'amount': '23.00',
-        'mark_refunded': False
+        'mark_canceled': False
     })
     assert resp.status_code == 400
     assert resp.data == {'amount': ['Full refund not available for this payment method.']}
@@ -398,7 +398,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
         organizer.slug, event.slug, order.code
     ), format='json', data={
         'amount': '23.00',
-        'mark_refunded': False
+        'mark_canceled': False
     })
     assert resp.status_code == 400
     assert resp.data == {'detail': 'Invalid state of payment.'}
@@ -431,7 +431,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={
         'amount': '23.00',
-        'mark_refunded': False,
+        'mark_canceled': False,
     })
     assert resp.status_code == 200
     r = order.refunds.get(local_id=resp.data['local_id'])
@@ -464,7 +464,7 @@ def test_payment_refund_unavailable(token_client, organizer, event, order, monke
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={
         'amount': '23.00',
-        'mark_refunded': False,
+        'mark_canceled': False,
     })
     assert resp.status_code == 400
     assert resp.data == {'detail': 'External error: We had trouble communicating with Stripe. Please try again and contact support if the problem persists.'}
@@ -514,7 +514,7 @@ def test_refund_process_mark_refunded(token_client, organizer, event, order):
     p.create_external_refund()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
-    ), format='json', data={'mark_refunded': True})
+    ), format='json', data={'mark_canceled': True})
     r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -523,7 +523,7 @@ def test_refund_process_mark_refunded(token_client, organizer, event, order):
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
-    ), format='json', data={'mark_refunded': True})
+    ), format='json', data={'mark_canceled': True})
     assert resp.status_code == 400
 
 
@@ -533,7 +533,7 @@ def test_refund_process_mark_pending(token_client, organizer, event, order):
     p.create_external_refund()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
-    ), format='json', data={'mark_refunded': False})
+    ), format='json', data={'mark_canceled': False})
     r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -956,6 +956,20 @@ def test_order_mark_canceled_pending(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_mark_canceled_pending_fee_not_allowed(token_client, organizer, event, order):
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
+            organizer.slug, event.slug, order.code
+        ), data={
+            'cancellation_fee': '7.00'
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'detail': 'The cancellation fee cannot be higher than the payment credit of this order.'}
+
+
+@pytest.mark.django_db
 def test_order_mark_canceled_pending_no_email(token_client, organizer, event, order):
     djmail.outbox = []
     resp = token_client.post(
@@ -982,6 +996,25 @@ def test_order_mark_canceled_expired(token_client, organizer, event, order):
     assert resp.status_code == 400
     order.refresh_from_db()
     assert order.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_order_mark_paid_canceled_keep_fee(token_client, organizer, event, order):
+    order.status = Order.STATUS_PAID
+    order.save()
+    order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=order.total)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
+            organizer.slug, event.slug, order.code
+        ), data={
+            'cancellation_fee': '6.00'
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_PAID
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+    assert order.total == Decimal('6.00')
 
 
 @pytest.mark.django_db
@@ -2415,7 +2448,7 @@ def test_refund_create(token_client, organizer, event, order):
 @pytest.mark.django_db
 def test_refund_create_mark_refunded(token_client, organizer, event, order):
     res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
-    res['mark_refunded'] = True
+    res['mark_canceled'] = True
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
             organizer.slug, event.slug, order.code

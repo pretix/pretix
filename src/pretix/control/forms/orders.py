@@ -77,6 +77,40 @@ class ConfirmPaymentForm(forms.Form):
             del self.fields['force']
 
 
+class CancelForm(ConfirmPaymentForm):
+    send_email = forms.BooleanField(
+        required=False,
+        label=_('Notify user by e-mail'),
+        initial=True
+    )
+    cancellation_fee = forms.DecimalField(
+        required=False,
+        max_digits=10, decimal_places=2,
+        localize=True,
+        label=_('Keep a cancellation fee of'),
+        help_text=_('If you keep a fee, all positions within this order will be canceled and the order will be reduced '
+                    'to a paid cancellation fee. Payment and shipping fees will be canceled as well, so include them '
+                    'in your cancellation fee if you want to keep them. Please always enter a gross value, '
+                    'tax will be calculated automatically.'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        prs = self.instance.payment_refund_sum
+        if prs > 0:
+            change_decimal_field(self.fields['cancellation_fee'], self.instance.event.currency)
+            self.fields['cancellation_fee'].initial = Decimal('0.00')
+            self.fields['cancellation_fee'].max_value = prs
+        else:
+            del self.fields['cancellation_fee']
+
+    def clean_cancellation_fee(self):
+        val = self.cleaned_data['cancellation_fee']
+        if val > self.instance.payment_refund_sum:
+            raise ValidationError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
+        return val
+
+
 class MarkPaidForm(ConfirmPaymentForm):
     amount = forms.DecimalField(
         required=True,

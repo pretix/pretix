@@ -126,6 +126,11 @@ last_modified                         datetime                   Last modificati
 
    The ``sales_channel`` attribute has been added.
 
+.. versionchanged:: 2.4:
+
+   ``order.status`` can no longer be ``r``, ``…/mark_canceled/`` now accepts a ``cancellation_fee`` parameter and
+   ``…/mark_refunded/`` has been deprecated.
+
 .. _order-position-resource:
 
 Order position resource
@@ -775,7 +780,10 @@ Order state operations
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_canceled/
 
-   Marks a pending order as canceled.
+   Cancels an order. For a pending order, this will set the order to status ``c``. For a paid order, this will set
+   the order to status ``c`` if no ``cancellation_fee`` is passed. If you do pass a ``cancellation_fee``, the order
+   will instead stay paid, but all positions will be removed (or marked as canceled) and replaced by the cancellation
+   fee as the only component of the order.
 
    **Example request**:
 
@@ -787,7 +795,8 @@ Order state operations
       Content-Type: text/json
 
       {
-          "send_email": true
+          "send_email": true,
+          "cancellation_fee": null
       }
 
    **Example response**:
@@ -844,44 +853,6 @@ Order state operations
    :param code: The ``code`` field of the order to modify
    :statuscode 200: no error
    :statuscode 400: The order cannot be marked as unpaid since the current order status does not allow it.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order does not exist.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_refunded/
-
-   Marks a paid order as refunded.
-
-   .. warning:: In the current implementation, this will **bypass** the payment provider, i.e. the money will **not** be
-                transferred back to the user automatically, the order will only be *marked* as refunded within pretix.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/mark_expired/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "code": "ABC12",
-        "status": "c",
-        ...
-      }
-
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param code: The ``code`` field of the order to modify
-   :statuscode 200: no error
-   :statuscode 400: The order cannot be marked as expired since the current order status does not allow it.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.
@@ -1502,7 +1473,7 @@ Order payment endpoints
 
       {
         "amount": "23.00",
-        "mark_refunded": false
+        "mark_canceled": false
       }
 
 
@@ -1649,7 +1620,7 @@ Order refund endpoints
         "payment": 1,
         "execution_date": null,
         "provider": "manual",
-        "mark_refunded": false
+        "mark_canceled": false
       }
 
    **Example response**:
@@ -1719,7 +1690,7 @@ Order refund endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/refunds/(local_id)/process/
 
-   Acts on an external refund, either marks the order as refunded or pending. Only allowed in state ``external``.
+   Acts on an external refund, either marks the order as canceled or pending. Only allowed in state ``external``.
 
    **Example request**:
 
@@ -1730,7 +1701,7 @@ Order refund endpoints
       Accept: application/json, text/javascript
       Content-Type: application/json
 
-      {"mark_refunded": false}
+      {"mark_canceled": false}
 
    **Example response**:
 

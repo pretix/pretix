@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 import django_filters
 import pytz
@@ -186,6 +187,12 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     @detail_route(methods=['POST'])
     def mark_canceled(self, request, **kwargs):
         send_mail = request.data.get('send_email', True)
+        cancellation_fee = request.data.get('cancellation_fee', None)
+        if cancellation_fee:
+            try:
+                cancellation_fee = float(Decimal(cancellation_fee))
+            except:
+                cancellation_fee = None
 
         order = self.get_object()
         if not order.cancel_allowed():
@@ -194,14 +201,21 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        cancel_order(
-            order,
-            user=request.user if request.user.is_authenticated else None,
-            api_token=request.auth if isinstance(request.auth, TeamAPIToken) else None,
-            device=request.auth if isinstance(request.auth, Device) else None,
-            oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
-            send_mail=send_mail
-        )
+        try:
+            cancel_order(
+                order,
+                user=request.user if request.user.is_authenticated else None,
+                api_token=request.auth if isinstance(request.auth, TeamAPIToken) else None,
+                device=request.auth if isinstance(request.auth, Device) else None,
+                oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
+                send_mail=send_mail,
+                cancellation_fee=cancellation_fee
+            )
+        except OrderError as e:
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         return self.retrieve(request, [], **kwargs)
 
     @detail_route(methods=['POST'])
@@ -515,7 +529,10 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
         amount = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
             request.data.get('amount', str(payment.amount))
         )
-        mark_refunded = request.data.get('mark_refunded', False)
+        if 'mark_refunded' in request.data:
+            mark_refunded = request.data.get('mark_refunded', False)
+        else:
+            mark_refunded = request.data.get('mark_canceled', False)
 
         if payment.state != OrderPayment.PAYMENT_STATE_CONFIRMED:
             return Response({'detail': 'Invalid state of payment.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -624,7 +641,11 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             return Response({'detail': 'Invalid state of refund'}, status=status.HTTP_400_BAD_REQUEST)
 
         refund.done(user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
-        if request.data.get('mark_refunded', False):
+        if 'mark_refunded' in request.data:
+            mark_refunded = request.data.get('mark_refunded', False)
+        else:
+            mark_refunded = request.data.get('mark_canceled', False)
+        if mark_refunded:
             mark_order_refunded(refund.order, user=self.request.user if self.request.user.is_authenticated else None,
                                 auth=self.request.auth)
         elif not (refund.order.status == Order.STATUS_PAID and refund.order.pending_sum <= 0):
@@ -653,7 +674,10 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return ctx
 
     def create(self, request, *args, **kwargs):
-        mark_refunded = request.data.pop('mark_refunded', False)
+        if 'mark_refunded' in request.data:
+            mark_refunded = request.data.pop('mark_refunded', False)
+        else:
+            mark_refunded = request.data.pop('mark_canceled', False)
         serializer = OrderRefundCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():

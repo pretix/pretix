@@ -127,6 +127,19 @@ class QuotaTestCase(BaseQuotaTestCase):
 
         self.assertEqual(quota2.availability(), (Quota.AVAILABILITY_OK, 1))
 
+    def test_position_canceled(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 3
+        self.quota.save()
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=4)
+        op = OrderPosition.objects.create(order=order, item=self.item1, price=2)
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+        op.canceled = True
+        op.save()
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 3))
+
     def test_reserved(self):
         self.quota.items.add(self.item1)
         self.quota.size = 3

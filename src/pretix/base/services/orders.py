@@ -293,7 +293,8 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 @transaction.atomic
-def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None):
+def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
+                  cancellation_fee=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -309,20 +310,52 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         device = Device.objects.get(pk=device)
     if isinstance(oauth_application, int):
         oauth_application = OAuthApplication.objects.get(pk=oauth_application)
-    with order.event.lock():
-        if not order.cancel_allowed():
-            raise OrderError(_('You cannot cancel this order.'))
-        order.status = Order.STATUS_CANCELED
-        order.save(update_fields=['status'])
 
-    order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device)
+    if not order.cancel_allowed():
+        raise OrderError(_('You cannot cancel this order.'))
     i = order.invoices.filter(is_cancellation=False).last()
     if i:
         generate_cancellation(i)
 
-    for position in order.positions.all():
-        if position.voucher:
-            Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+    if cancellation_fee:
+        with order.event.lock():
+            for position in order.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+                position.canceled = True
+                position.save(update_fields=['canceled'])
+            for fee in order.fees.all():
+                fee.canceled = True
+                fee.save(update_fields=['canceled'])
+
+            f = OrderFee(
+                fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                value=cancellation_fee,
+                tax_rule=order.event.settings.tax_rate_default,
+                order=order,
+            )
+            f._calculate_tax()
+            f.save()
+
+            if order.payment_refund_sum < cancellation_fee:
+                raise OrderError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
+            order.status = Order.STATUS_PAID
+            order.total = f.value
+            order.save(update_fields=['status', 'total'])
+
+        if i:
+            generate_invoice(order)
+    else:
+        with order.event.lock():
+            order.status = Order.STATUS_CANCELED
+            order.save(update_fields=['status'])
+
+        for position in order.positions.all():
+            if position.voucher:
+                Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+
+    order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
+                     data={'cancellation_fee': cancellation_fee})
 
     if send_mail:
         email_template = order.event.settings.mail_text_order_canceled
@@ -1331,10 +1364,11 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
-                 device=None):
+                 device=None, cancellation_fee=None):
     try:
         try:
-            return _cancel_order(order, user, send_mail, api_token, device, oauth_application)
+            return _cancel_order(order, user, send_mail, api_token, device, oauth_application,
+                                 cancellation_fee)
         except LockTimeoutException:
             self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
