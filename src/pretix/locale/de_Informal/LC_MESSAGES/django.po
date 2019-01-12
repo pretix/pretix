@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-12 15:54+0000\n"
-"PO-Revision-Date: 2019-01-11 14:57+0000\n"
+"PO-Revision-Date: 2019-01-12 16:02+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -747,12 +747,10 @@ msgid "Individual customer"
 msgstr "Privatkunde"
 
 #: pretix/base/invoice.py:56
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Page %d"
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Seite %d"
+msgstr "Seite %d von %d"
 
 #: pretix/base/invoice.py:236
 msgctxt "invoice"
@@ -844,7 +842,7 @@ msgstr "Kundenseitige Referenz: {reference}"
 #: pretix/base/invoice.py:426
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Leistungsempfänger"
 
 #: pretix/base/invoice.py:448 pretix/base/invoice.py:456
 msgctxt "invoice"
@@ -2188,7 +2186,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1647
 msgid "Beneficiary"
-msgstr ""
+msgstr "Leistungsempfänger"
 
 #: pretix/base/models/organizer.py:35
 msgid ""
@@ -5039,10 +5037,8 @@ msgstr ""
 "Eingabe ist freiwillig."
 
 #: pretix/control/forms/event.py:571
-#, fuzzy
-#| msgid "Ask for invoice address"
 msgid "Ask for beneficiary"
-msgstr "Rechnungsadresse erfragen"
+msgstr "Nach abweichendem Leistungsempfänger fragen"
 
 #: pretix/control/forms/event.py:576
 msgid "Show free products on invoices"
