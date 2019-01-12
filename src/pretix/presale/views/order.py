@@ -18,7 +18,7 @@ from django.views.generic import TemplateView, View
 
 from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
 from pretix.base.models.orders import (
-    CachedCombinedTicket, OrderFee, OrderPayment, QuestionAnswer,
+    CachedCombinedTicket, OrderFee, OrderPayment, OrderRefund, QuestionAnswer,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -145,6 +145,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
 
         elif self.order.status == Order.STATUS_PAID:
             ctx['can_pay'] = False
+
+        ctx['refunds'] = self.order.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_CREATED)
+        )
+
         return ctx
 
 

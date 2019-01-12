@@ -84,6 +84,25 @@
             </div>
         </div>
     {% endif %}
+    {% if order.status == "p" or order.status == "c" %}
+        {% if refunds %}
+            <div class="alert alert-info">
+                {% for r in refunds %}
+                    {% if r.state == "created" or r.state == "transit" %}
+                        {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                            A refund of {{ amount }} will be sent out to you soon, please be patient.
+                        {% endblocktrans %}
+                    {% elif r.state == "done" %}
+                        {% blocktrans trimmed with amount=r.amount|money:request.event.currency %}
+                            A refund of {{ amount }} has been sent to you. Depending on the payment method, please allow for up to 14 days until it shows up
+                            on your statement.
+                        {% endblocktrans %}
+                    {% endif %}
+                    {% if not forloop.last %}<br />{% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
     {% if can_download and download_buttons and order.count_positions %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
