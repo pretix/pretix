@@ -1409,8 +1409,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
                                 notify_admin = True
                 else:
                     notify_admin = True
-                    pass  # TODO
 
+            if notify_admin:
+                order.log_action('pretix.event.order.refund.requested')
             if error:
                 raise OrderError(
                     _('There was an error while trying to send the money back to you. Please contact the event organizer for further information.')

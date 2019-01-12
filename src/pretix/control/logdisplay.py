@@ -212,6 +212,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.quotaexceeded': _('The order could not be marked as paid: {message}'),
         'pretix.event.order.refund.created': _('Refund {local_id} has been created.'),
         'pretix.event.order.refund.created.externally': _('Refund {local_id} has been created by an external entity.'),
+        'pretix.event.order.refund.requested': _('The customer requested you to issue a refund.'),
         'pretix.event.order.refund.done': _('Refund {local_id} has been completed.'),
         'pretix.event.order.refund.canceled': _('Refund {local_id} has been canceled.'),
         'pretix.event.order.refund.failed': _('Refund {local_id} has failed.'),

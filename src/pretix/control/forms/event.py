@@ -446,7 +446,8 @@ class CancelSettingsForm(SettingsForm):
     )
     cancel_allow_user_paid = forms.BooleanField(
         label=_("Customers can cancel their paid orders"),
-        help_text=_("Paid money will be automatically paid back if the payment method allows it. Otherwise, a manual refund will be created for you to process manually."),
+        help_text=_("Paid money will be automatically paid back if the payment method allows it. "
+                    "Otherwise, a manual refund will be created for you to process manually."),
         required=False
     )
     cancel_allow_user_paid_keep = forms.DecimalField(
