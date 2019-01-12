@@ -32,12 +32,35 @@ from pretix.base.templatetags.money import money_filter
 logger = logging.getLogger(__name__)
 
 
+class NumberedCanvas(Canvas):
+    def __init__(self, *args, **kwargs):
+        self.font_regular = kwargs.pop('font_regular')
+        super().__init__(*args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        num_pages = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self.draw_page_number(num_pages)
+            Canvas.showPage(self)
+        Canvas.save(self)
+
+    def draw_page_number(self, page_count):
+        self.saveState()
+        self.setFont(self.font_regular, 8)
+        self.drawRightString(self._pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d of %d") % (self._pageNumber, page_count,))
+        self.restoreState()
+
+
 class BaseInvoiceRenderer:
     """
     This is the base class for all invoice renderers.
     """
-    font_regular = 'OpenSans'
-    font_bold = 'OpenSansBd'
 
     def __init__(self, event: Event):
         self.event = event
@@ -82,6 +105,9 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
     top_margin = 20 * mm
     bottom_margin = 15 * mm
     doc_template_class = BaseDocTemplate
+    canvas_class = Canvas
+    font_regular = 'OpenSans'
+    font_bold = 'OpenSansBd'
 
     def _init(self):
         """
@@ -174,7 +200,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
             )
         ])
         story = self._get_story(doc)
-        doc.build(story)
+        doc.build(story, canvasmaker=self.canvas_class)
         return doc
 
     def generate(self, invoice: Invoice):
@@ -209,10 +235,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     identifier = 'classic'
     verbose_name = pgettext('invoice', 'Classic renderer (pretix 1.0)')
 
+    def canvas_class(self, *args, **kwargs):
+        kwargs['font_regular'] = self.font_regular
+        return NumberedCanvas(*args, **kwargs)
+
     def _on_other_page(self, canvas: Canvas, doc):
         canvas.saveState()
         canvas.setFont(self.font_regular, 8)
-        canvas.drawRightString(self.pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d") % (doc.page,))
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
             canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
@@ -237,7 +266,6 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         canvas.saveState()
         canvas.setFont(self.font_regular, 8)
-        canvas.drawRightString(self.pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d") % (doc.page,))
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
             canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
