@@ -231,7 +231,7 @@ class OrderDetail(OrderView):
             'positions': positions,
             'raw': cartpos,
             'total': self.object.total,
-            'fees': self.object.fees.all(),
+            'fees': self.object.all_fees.all(),
             'net_total': self.object.net_total,
             'tax_total': self.object.tax_total,
         }

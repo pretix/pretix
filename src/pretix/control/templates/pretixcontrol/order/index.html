@@ -351,7 +351,7 @@
                         </div>
                     {% endfor %}
                     {% for fee in items.fees %}
-                        <div class="row-fluid product-row">
+                        <div class="row-fluid product-row {% if fee.canceled %}pos-canceled{% endif %}">
                             <div class="col-md-4 col-xs-6">
                                 <strong>{{ fee.get_fee_type_display }}</strong>
                                 {% if fee.description %}
