@@ -41,10 +41,10 @@ from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile
 from pretix.control.forms.event import (
-    CommentForm, DisplaySettingsForm, EventDeleteForm, EventMetaValueForm,
-    EventSettingsForm, EventUpdateForm, InvoiceSettingsForm, MailSettingsForm,
-    PaymentSettingsForm, ProviderForm, QuickSetupForm,
-    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    CancelSettingsForm, CommentForm, DisplaySettingsForm, EventDeleteForm,
+    EventMetaValueForm, EventSettingsForm, EventUpdateForm,
+    InvoiceSettingsForm, MailSettingsForm, PaymentSettingsForm, ProviderForm,
+    QuickSetupForm, QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -402,6 +402,19 @@ class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
                 'event': self.request.event.slug
             })
         return reverse('control:event.settings.invoice', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+
+class CancelSettings(EventSettingsViewMixin, EventSettingsFormView):
+    model = Event
+    form_class = CancelSettingsForm
+    template_name = 'pretixcontrol/event/cancel.html'
+    permission = 'can_change_event_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.cancel', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })

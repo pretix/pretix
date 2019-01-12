@@ -28,6 +28,7 @@ from django_countries.fields import CountryField
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
@@ -356,8 +357,100 @@ class Order(LockModel, LoggedModel):
 
     def cancel_allowed(self):
         return (
-            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and self.positions.exists()
+            self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and self.count_positions
         )
+
+    @cached_property
+    def user_cancel_deadline(self):
+        if self.status == Order.STATUS_PAID:
+            until = self.event.settings.get('cancel_allow_user_paid_until', as_type=RelativeDateWrapper)
+        else:
+            until = self.event.settings.get('cancel_allow_user_until', as_type=RelativeDateWrapper)
+        if until:
+            if self.event.has_subevents:
+                return min([
+                    until.datetime(se)
+                    for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+                ])
+            else:
+                return until.datetime(self.event)
+
+    @cached_property
+    def user_cancel_fee(self):
+        fee = Decimal('0.00')
+        if self.event.settings.cancel_allow_user_paid_keep:
+            fee += self.event.settings.cancel_allow_user_paid_keep
+        if self.event.settings.cancel_allow_user_paid_keep_percentage:
+            fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * self.total
+        if self.event.settings.cancel_allow_user_paid_keep_fees:
+            fee += self.fees.filter(
+                fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE)
+            ).aggregate(
+                s=Sum('value')
+            )['s'] or 0
+        return round_decimal(fee, self.event.currency)
+
+    @property
+    def user_cancel_allowed(self) -> bool:
+        """
+        Returns whether or not this order can be canceled by the user.
+        """
+        positions = list(self.positions.all().select_related('item'))
+        cancelable = all([op.item.allow_cancel for op in positions])
+        if not cancelable or not positions:
+            return False
+        if self.user_cancel_deadline and now() > self.user_cancel_deadline:
+            return False
+        if self.status == Order.STATUS_PENDING:
+            return self.event.settings.cancel_allow_user
+        elif self.status == Order.STATUS_PAID:
+            if self.total == Decimal('0.00'):
+                return self.event.settings.cancel_allow_user
+            return self.event.settings.cancel_allow_user_paid
+        return False
+
+    def propose_auto_refunds(self, amount: Decimal, payments: list=None):
+        # Algorithm to choose which payments are to be refunded to create the least hassle
+        payments = payments or self.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        for p in payments:
+            p.full_refund_possible = p.payment_provider.payment_refund_supported(p)
+            p.partial_refund_possible = p.payment_provider.payment_partial_refund_supported(p)
+            p.propose_refund = Decimal('0.00')
+            p.available_amount = p.amount - p.refunded_amount
+
+        unused_payments = set(p for p in payments if p.full_refund_possible or p.partial_refund_possible)
+        to_refund = amount
+        proposals = {}
+
+        while to_refund and unused_payments:
+            bigger = sorted([p for p in unused_payments if p.available_amount > to_refund],
+                            key=lambda p: p.available_amount)
+            same = [p for p in unused_payments if p.available_amount == to_refund]
+            smaller = sorted([p for p in unused_payments if p.available_amount < to_refund],
+                             key=lambda p: p.available_amount,
+                             reverse=True)
+            if same:
+                for payment in same:
+                    if payment.full_refund_possible or payment.partial_refund_possible:
+                        proposals[payment] = payment.available_amount
+                        to_refund -= payment.available_amount
+                        unused_payments.remove(payment)
+                        break
+            elif bigger:
+                for payment in bigger:
+                    if payment.partial_refund_possible:
+                        proposals[payment] = to_refund
+                        to_refund -= to_refund
+                        unused_payments.remove(payment)
+                        break
+            elif smaller:
+                for payment in smaller:
+                    if payment.full_refund_possible or payment.partial_refund_possible:
+                        proposals[payment] = payment.available_amount
+                        to_refund -= payment.available_amount
+                        unused_payments.remove(payment)
+                        break
+        return proposals
 
     @staticmethod
     def normalize_code(code):
@@ -410,18 +503,6 @@ class Order(LockModel, LoggedModel):
                 return True
 
         return False  # nothing there to modify
-
-    @property
-    def can_user_cancel(self) -> bool:
-        """
-        Returns whether or not this order can be canceled by the user.
-        """
-        positions = self.positions.all().select_related('item')
-        cancelable = all([op.item.allow_cancel for op in positions])
-        return (
-            self.status == Order.STATUS_PENDING
-            or (self.status == Order.STATUS_PAID and self.total == Decimal('0.00'))
-        ) and self.event.settings.cancel_allow_user and cancelable and self.positions.exists()
 
     @property
     def is_expired_by_time(self):

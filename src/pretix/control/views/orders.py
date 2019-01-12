@@ -583,51 +583,15 @@ class OrderRefundView(OrderView):
         )
 
     def choose_form(self):
-        payments = self.order.payments.filter(
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED
-        )
-        for p in payments:
-            p.full_refund_possible = p.payment_provider.payment_refund_supported(p)
-            p.partial_refund_possible = p.payment_provider.payment_partial_refund_supported(p)
-            p.propose_refund = Decimal('0.00')
-            p.available_amount = p.amount - p.refunded_amount
-
-        unused_payments = set(p for p in payments if p.full_refund_possible or p.partial_refund_possible)
-
-        # Algorithm to choose which payments are to be refunded to create the least hassle
+        payments = list(self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED))
         if self.start_form.cleaned_data.get('mode') == 'full':
-            to_refund = full_refund = self.order.payment_refund_sum
+            full_refund = self.order.payment_refund_sum
         else:
-            to_refund = full_refund = self.start_form.cleaned_data.get('partial_amount')
-
-        while to_refund and unused_payments:
-            bigger = sorted([p for p in unused_payments if p.available_amount > to_refund],
-                            key=lambda p: p.available_amount)
-            same = [p for p in unused_payments if p.available_amount == to_refund]
-            smaller = sorted([p for p in unused_payments if p.available_amount < to_refund],
-                             key=lambda p: p.available_amount,
-                             reverse=True)
-            if same:
-                for payment in same:
-                    if payment.full_refund_possible or payment.partial_refund_possible:
-                        payment.propose_refund = payment.available_amount
-                        to_refund -= payment.available_amount
-                        unused_payments.remove(payment)
-                        break
-            elif bigger:
-                for payment in bigger:
-                    if payment.partial_refund_possible:
-                        payment.propose_refund = to_refund
-                        to_refund -= to_refund
-                        unused_payments.remove(payment)
-                        break
-            elif smaller:
-                for payment in smaller:
-                    if payment.full_refund_possible or payment.partial_refund_possible:
-                        payment.propose_refund = payment.available_amount
-                        to_refund -= payment.available_amount
-                        unused_payments.remove(payment)
-                        break
+            full_refund = self.start_form.cleaned_data.get('partial_amount')
+        proposals = self.order.propose_auto_refunds(full_refund, payments=payments)
+        to_refund = full_refund - sum(proposals.values())
+        for p in payments:
+            p.propose_refund = proposals.get(p, 0)
 
         if 'perform' in self.request.POST:
             refund_selected = Decimal('0.00')

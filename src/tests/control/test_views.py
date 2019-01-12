@@ -114,6 +114,7 @@ def logged_in_client(client, event):
     ('/control/event/{orga}/{event}/settings/widget', 200),
     # ('/control/event/{orga}/{event}/settings/tickets/preview/(?P<output>[^/]+)', 200),
     ('/control/event/{orga}/{event}/settings/email', 200),
+    ('/control/event/{orga}/{event}/settings/cancel', 200),
     ('/control/event/{orga}/{event}/settings/invoice', 200),
     ('/control/event/{orga}/{event}/settings/invoice/preview', 200),
     ('/control/event/{orga}/{event}/settings/display', 200),

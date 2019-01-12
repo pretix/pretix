@@ -566,7 +566,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         self.kwargs = kwargs
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.can_user_cancel:
+        if not self.order.user_cancel_allowed:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
@@ -577,6 +577,10 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
+        refund_amount = self.order.total - self.order.user_cancel_fee
+        proposals = self.order.propose_auto_refunds(refund_amount)
+        ctx['refund_amount'] = refund_amount
+        ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
         return ctx
 
 
@@ -594,10 +598,13 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.can_user_cancel:
+        if not self.order.user_cancel_allowed:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
-        return self.do(self.order.pk)
+        fee = None
+        if self.order.status == Order.STATUS_PAID and self.order.total != Decimal('0.00'):
+            fee = self.order.user_cancel_fee
+        return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

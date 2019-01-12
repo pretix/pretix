@@ -845,7 +845,7 @@ class OrderTestCase(BaseQuotaTestCase):
                                     admission=True, allow_cancel=True)
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel
+        assert self.order.user_cancel_allowed
 
     def test_can_cancel_order_multiple(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -856,14 +856,14 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel
+        assert self.order.user_cancel_allowed
 
     def test_can_not_cancel_order(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=False)
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_can_not_cancel_order_multiple(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -874,7 +874,7 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_can_not_cancel_order_multiple_mixed(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -885,7 +885,7 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_no_duplicate_position_secret(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -895,7 +895,7 @@ class OrderTestCase(BaseQuotaTestCase):
         p2 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
                                           variation=None, price=23)
         assert p1.secret != p2.secret
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_paid_order_underpaid(self):
         self.order.status = Order.STATUS_PAID

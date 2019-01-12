@@ -214,6 +214,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.refund.created.externally': _('Refund {local_id} has been created by an external entity.'),
         'pretix.event.order.refund.done': _('Refund {local_id} has been completed.'),
         'pretix.event.order.refund.canceled': _('Refund {local_id} has been canceled.'),
+        'pretix.event.order.refund.failed': _('Refund {local_id} has failed.'),
         'pretix.control.auth.user.created': _('The user has been created.'),
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
