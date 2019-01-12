@@ -84,7 +84,7 @@
             </div>
         </div>
     {% endif %}
-    {% if can_download and download_buttons %}
+    {% if can_download and download_buttons and order.count_positions %}
         <div class="alert alert-info">
             {% blocktrans trimmed %}
                 You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
