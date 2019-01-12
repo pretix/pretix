@@ -275,10 +275,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
     class Meta:
         model = InvoiceAddress
         fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'vat_id',
-                  'internal_reference')
+                  'internal_reference', 'beneficiary')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={'rows': 2, 'placeholder': _('Street and Number')}),
+            'beneficiary': forms.Textarea(attrs={'rows': 3}),
             'company': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1'}),
             'internal_reference': forms.TextInput,
@@ -324,6 +325,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             self.fields['name_parts'].widget.attrs['data-required-if'] = '#id_is_business_0'
             self.fields['name_parts'].widget.attrs['data-no-required-attr'] = '1'
             self.fields['company'].widget.attrs['data-required-if'] = '#id_is_business_1'
+
+        if not event.settings.invoice_address_beneficiary:
+            del self.fields['beneficiary']
 
     def clean(self):
         data = self.cleaned_data

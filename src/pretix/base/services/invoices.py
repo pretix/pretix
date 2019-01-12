@@ -81,6 +81,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             invoice.invoice_to_zipcode = ia.zipcode
             invoice.invoice_to_city = ia.city
             invoice.invoice_to_country = ia.country
+            invoice.invoice_to_beneficiary = ia.beneficiary
 
             if ia.vat_id:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
@@ -310,6 +311,7 @@ def build_preview_invoice_pdf(event):
             invoice.invoice_to_name, invoice.invoice_to_street,
             invoice.invoice_to_zipcode, invoice.invoice_to_city
         )
+        invoice.invoice_to_beneficiary = ''
         invoice.file = None
         invoice.save()
         invoice.lines.all().delete()

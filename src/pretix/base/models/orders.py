@@ -1643,6 +1643,10 @@ class InvoiceAddress(models.Model):
         help_text=_('This reference will be printed on your invoice for your convenience.'),
         blank=True
     )
+    beneficiary = models.TextField(
+        verbose_name=_('Beneficiary'),
+        blank=True
+    )
 
     def save(self, **kwargs):
         if self.order:

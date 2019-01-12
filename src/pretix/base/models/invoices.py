@@ -91,6 +91,7 @@ class Invoice(models.Model):
     invoice_to_city = models.TextField(null=True)
     invoice_to_country = CountryField(null=True)
     invoice_to_vat_id = models.TextField(null=True)
+    invoice_to_beneficiary = models.TextField(null=True)
     date = models.DateField(default=today)
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)

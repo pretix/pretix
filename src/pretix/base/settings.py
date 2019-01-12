@@ -64,6 +64,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_address_beneficiary': {
+        'default': 'False',
+        'type': bool,
+    },
     'invoice_address_vatid': {
         'default': 'False',
         'type': bool,

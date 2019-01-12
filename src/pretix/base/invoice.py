@@ -4,6 +4,7 @@ from decimal import Decimal
 from io import BytesIO
 from typing import Tuple
 
+import bleach
 import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
@@ -389,6 +390,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         if self.invoice.internal_reference:
             story.append(Paragraph(
                 pgettext('invoice', 'Customer reference: {reference}').format(reference=self.invoice.internal_reference),
+                self.stylesheet['Normal']
+            ))
+
+        if self.invoice.invoice_to_beneficiary:
+            story.append(Paragraph(
+                pgettext('invoice', 'Beneficiary') + ':<br />' +
+                bleach.clean(self.invoice.invoice_to_beneficiary, tags=[]).replace("\n", "<br />\n"),
                 self.stylesheet['Normal']
             ))
 
