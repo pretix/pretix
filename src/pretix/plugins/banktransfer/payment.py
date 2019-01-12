@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
+from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 
@@ -88,8 +89,17 @@ class BankTransfer(BasePaymentProvider):
                     ),
                 }},
                 required=False
+            )),
+            ('public_name', I18nFormField(
+                label=_('Payment method name'),
+                widget=I18nTextInput,
+                required=False
             ))
         ])
+
+    @property
+    def public_name(self):
+        return str(self.settings.get('public_name', as_type=LazyI18nString)) or self.verbose_name
 
     @property
     def settings_form_fields(self):
