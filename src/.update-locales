@@ -34,4 +34,5 @@ git push
 # Unlock Weblate
 for c in $COMPONENTS; do
 	wlc unlock $c;
+	wlc pull $c;
 done
