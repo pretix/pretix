@@ -35,6 +35,8 @@ class BaseInvoiceRenderer:
     """
     This is the base class for all invoice renderers.
     """
+    font_regular = 'OpenSans'
+    font_bold = 'OpenSansBd'
 
     def __init__(self, event: Event):
         self.event = event
@@ -92,10 +94,10 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         Get a stylesheet. By default, this contains the "Normal" and "Heading1" styles.
         """
         stylesheet = StyleSheet1()
-        stylesheet.add(ParagraphStyle(name='Normal', fontName='OpenSans', fontSize=10, leading=12))
-        stylesheet.add(ParagraphStyle(name='Heading1', fontName='OpenSansBd', fontSize=15, leading=15 * 1.2))
-        stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName='OpenSansBd', fontSize=8, leading=12))
-        stylesheet.add(ParagraphStyle(name='Fineprint', fontName='OpenSans', fontSize=8, leading=10))
+        stylesheet.add(ParagraphStyle(name='Normal', fontName=self.font_regular, fontSize=10, leading=12))
+        stylesheet.add(ParagraphStyle(name='Heading1', fontName=self.font_bold, fontSize=15, leading=15 * 1.2))
+        stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName=self.font_bold, fontSize=8, leading=12))
+        stylesheet.add(ParagraphStyle(name='Fineprint', fontName=self.font_regular, fontSize=8, leading=10))
         return stylesheet
 
     def _register_fonts(self):
@@ -208,7 +210,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
     def _on_other_page(self, canvas: Canvas, doc):
         canvas.saveState()
-        canvas.setFont('OpenSans', 8)
+        canvas.setFont(self.font_regular, 8)
         canvas.drawRightString(self.pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d") % (doc.page,))
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
@@ -233,72 +235,72 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         canvas.setTitle(pgettext('invoice', 'Invoice {num}').format(num=self.invoice.number))
 
         canvas.saveState()
-        canvas.setFont('OpenSans', 8)
+        canvas.setFont(self.font_regular, 8)
         canvas.drawRightString(self.pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d") % (doc.page,))
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
             canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
 
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
-        textobject.setFont('OpenSansBd', 8)
+        textobject.setFont(self.font_bold, 8)
         textobject.textLine(pgettext('invoice', 'Invoice from').upper())
         canvas.drawText(textobject)
 
         self._draw_invoice_from(canvas)
 
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
-        textobject.setFont('OpenSansBd', 8)
+        textobject.setFont(self.font_bold, 8)
         textobject.textLine(pgettext('invoice', 'Invoice to').upper())
         canvas.drawText(textobject)
 
         self._draw_invoice_to(canvas)
 
         textobject = canvas.beginText(125 * mm, (297 - 38) * mm)
-        textobject.setFont('OpenSansBd', 8)
+        textobject.setFont(self.font_bold, 8)
         textobject.textLine(pgettext('invoice', 'Order code').upper())
         textobject.moveCursor(0, 5)
-        textobject.setFont('OpenSans', 10)
+        textobject.setFont(self.font_regular, 10)
         textobject.textLine(self.invoice.order.full_code)
         canvas.drawText(textobject)
 
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
-        textobject.setFont('OpenSansBd', 8)
+        textobject.setFont(self.font_bold, 8)
         if self.invoice.is_cancellation:
             textobject.textLine(pgettext('invoice', 'Cancellation number').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.number)
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSansBd', 8)
+            textobject.setFont(self.font_bold, 8)
             textobject.textLine(pgettext('invoice', 'Original invoice').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.refers.number)
         else:
             textobject.textLine(pgettext('invoice', 'Invoice number').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.number)
         textobject.moveCursor(0, 5)
 
         if self.invoice.is_cancellation:
-            textobject.setFont('OpenSansBd', 8)
+            textobject.setFont(self.font_bold, 8)
             textobject.textLine(pgettext('invoice', 'Cancellation date').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSansBd', 8)
+            textobject.setFont(self.font_bold, 8)
             textobject.textLine(pgettext('invoice', 'Original invoice date').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.refers.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
         else:
-            textobject.setFont('OpenSansBd', 8)
+            textobject.setFont(self.font_bold, 8)
             textobject.textLine(pgettext('invoice', 'Invoice date').upper())
             textobject.moveCursor(0, 5)
-            textobject.setFont('OpenSans', 10)
+            textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
 
@@ -349,7 +351,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         p.drawOn(canvas, 125 * mm, (297 - 17) * mm - p_size[1])
 
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
-        textobject.setFont('OpenSansBd', 8)
+        textobject.setFont(self.font_bold, 8)
         textobject.textLine(pgettext('invoice', 'Event').upper())
         canvas.drawText(textobject)
 
@@ -400,8 +402,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         tstyledata = [
             ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('FONTNAME', (0, 0), (-1, 0), 'OpenSansBd'),
-            ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
+            ('FONTNAME', (0, 0), (-1, 0), self.font_bold),
+            ('FONTNAME', (0, -1), (-1, -1), self.font_bold),
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
         ]
@@ -469,7 +471,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
-            ('FONTNAME', (0, 0), (-1, -1), 'OpenSans'),
+            ('FONTNAME', (0, 0), (-1, -1), self.font_regular),
         ]
         thead = [
             pgettext('invoice', 'Tax rate'),
