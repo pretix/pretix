@@ -268,22 +268,22 @@ class Order(LockModel, LoggedModel):
             pending_sum_rc=-1 * Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
         ).annotate(
             is_overpaid=Case(
-                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0),
+                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
                      then=Value('1')),
-                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0),
+                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
             ),
             is_pending_with_full_payment=Case(
-                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=-1e-8)
                      & Q(require_approval=False),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
             ),
             is_underpaid=Case(
-                When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=0),
+                When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
                      then=Value('1')),
                 default=Value('0'),
                 output_field=models.IntegerField()
