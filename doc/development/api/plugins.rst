@@ -79,6 +79,9 @@ human-readable error messages. We recommend using the ``django.utils.functional.
 decorator, as it might get called a lot. You can also implement ``compatibility_warnings``,
 those will be displayed but not block the plugin execution.
 
+The ``AppConfig`` class may implement a method ``is_available(event)`` that checks if a plugin
+is available for a specific event. If not, it will not be shown in the plugin list of that event.
+
 Plugin registration
 -------------------
 

@@ -759,7 +759,7 @@ class Event(EventMixin, LoggedModel):
 
         plugins_active = self.get_plugins()
         plugins_available = {
-            p.module: p for p in get_all_plugins()
+            p.module: p for p in get_all_plugins(self)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 

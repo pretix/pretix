@@ -188,7 +188,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         from pretix.base.plugins import get_all_plugins
 
         context = super().get_context_data(*args, **kwargs)
-        context['plugins'] = [p for p in get_all_plugins() if not p.name.startswith('.')
+        context['plugins'] = [p for p in get_all_plugins(self.object) if not p.name.startswith('.')
                               and getattr(p, 'visible', True)]
         context['plugins_active'] = self.object.get_plugins()
         return context
@@ -204,7 +204,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         self.object = self.get_object()
 
         plugins_available = {
-            p.module: p for p in get_all_plugins()
+            p.module: p for p in get_all_plugins(self.object)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 

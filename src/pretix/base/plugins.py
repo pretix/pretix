@@ -17,7 +17,7 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def get_all_plugins() -> List[type]:
+def get_all_plugins(event=None) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
     """
@@ -29,6 +29,11 @@ def get_all_plugins() -> List[type]:
             meta.app = app
             if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
                 continue
+
+            if hasattr(app, 'is_available') and event:
+                if not app.is_available(event):
+                    continue
+
             plugins.append(meta)
     return sorted(
         plugins,

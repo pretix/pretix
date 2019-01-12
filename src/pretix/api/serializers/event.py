@@ -95,7 +95,7 @@ class EventSerializer(I18nAwareModelSerializer):
         from pretix.base.plugins import get_all_plugins
 
         plugins_available = {
-            p.module for p in get_all_plugins()
+            p.module for p in get_all_plugins(self.instance)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
