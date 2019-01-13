@@ -1369,9 +1369,9 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
                                 cancellation_fee)
-            notify_admin = True
-            error = False
             if try_auto_refund:
+                notify_admin = False
+                error = False
                 order = Order.objects.get(pk=order)
                 refund_amount = order.pending_sum * -1
                 proposals = order.propose_auto_refunds(refund_amount)
@@ -1410,12 +1410,12 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
                 else:
                     notify_admin = True
 
-            if notify_admin:
-                order.log_action('pretix.event.order.refund.requested')
-            if error:
-                raise OrderError(
-                    _('There was an error while trying to send the money back to you. Please contact the event organizer for further information.')
-                )
+                if notify_admin:
+                    order.log_action('pretix.event.order.refund.requested')
+                if error:
+                    raise OrderError(
+                        _('There was an error while trying to send the money back to you. Please contact the event organizer for further information.')
+                    )
             return ret
         except LockTimeoutException:
             self.retry()

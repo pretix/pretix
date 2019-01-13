@@ -362,7 +362,7 @@ class Order(LockModel, LoggedModel):
 
     @cached_property
     def user_cancel_deadline(self):
-        if self.status == Order.STATUS_PAID:
+        if self.status == Order.STATUS_PAID and self.total != Decimal('0.00'):
             until = self.event.settings.get('cancel_allow_user_paid_until', as_type=RelativeDateWrapper)
         else:
             until = self.event.settings.get('cancel_allow_user_until', as_type=RelativeDateWrapper)
@@ -423,33 +423,38 @@ class Order(LockModel, LoggedModel):
         proposals = {}
 
         while to_refund and unused_payments:
-            bigger = sorted([p for p in unused_payments if p.available_amount > to_refund],
-                            key=lambda p: p.available_amount)
-            same = [p for p in unused_payments if p.available_amount == to_refund]
-            smaller = sorted([p for p in unused_payments if p.available_amount < to_refund],
-                             key=lambda p: p.available_amount,
-                             reverse=True)
+            bigger = sorted([
+                p for p in unused_payments
+                if p.available_amount > to_refund
+                and p.partial_refund_possible
+            ], key=lambda p: p.available_amount)
+            same = [
+                p for p in unused_payments
+                if p.available_amount == to_refund
+                and (p.full_refund_possible or p.partial_refund_possible)
+            ]
+            smaller = sorted([
+                p for p in unused_payments
+                if p.available_amount < to_refund
+                and (p.full_refund_possible or p.partial_refund_possible)
+            ], key=lambda p: p.available_amount, reverse=True)
             if same:
-                for payment in same:
-                    if payment.full_refund_possible or payment.partial_refund_possible:
-                        proposals[payment] = payment.available_amount
-                        to_refund -= payment.available_amount
-                        unused_payments.remove(payment)
-                        break
+                payment = same[0]
+                proposals[payment] = payment.available_amount
+                to_refund -= payment.available_amount
+                unused_payments.remove(payment)
             elif bigger:
-                for payment in bigger:
-                    if payment.partial_refund_possible:
-                        proposals[payment] = to_refund
-                        to_refund -= to_refund
-                        unused_payments.remove(payment)
-                        break
+                payment = bigger[0]
+                proposals[payment] = to_refund
+                to_refund -= to_refund
+                unused_payments.remove(payment)
             elif smaller:
-                for payment in smaller:
-                    if payment.full_refund_possible or payment.partial_refund_possible:
-                        proposals[payment] = payment.available_amount
-                        to_refund -= payment.available_amount
-                        unused_payments.remove(payment)
-                        break
+                payment = smaller[0]
+                proposals[payment] = payment.available_amount
+                to_refund -= payment.available_amount
+                unused_payments.remove(payment)
+            else:
+                break
         return proposals
 
     @staticmethod
