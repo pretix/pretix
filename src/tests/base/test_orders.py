@@ -18,8 +18,8 @@ from pretix.base.payment import FreeOrderProvider
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _create_order, approve_order, deny_order,
-    expire_orders, send_download_reminders, send_expiry_warnings,
+    OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
+    deny_order, expire_orders, send_download_reminders, send_expiry_warnings,
 )
 
 
@@ -399,6 +399,132 @@ class DownloadReminderTests(TestCase):
         self.event.settings.mail_days_download_reminder = 2
         send_download_reminders(sender=self.event)
         assert len(djmail.outbox) == 0
+
+
+class OrderCancelTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(organizer=o, name='Dummy', slug='dummy', date_from=now(),
+                                          plugins='tests.testdummy')
+        self.order = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, locale='en',
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal('46.00'),
+        )
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                          default_price=Decimal('23.00'), admission=True)
+        self.op1 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+        )
+        self.op2 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None,
+            price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
+        )
+        generate_invoice(self.order)
+        djmail.outbox = []
+
+    def test_cancel_canceled(self):
+        self.order.status = Order.STATUS_CANCELED
+        self.order.save()
+        with pytest.raises(OrderError):
+            cancel_order(self.order.pk)
+
+    def test_cancel_send_mail(self):
+        cancel_order(self.order.pk, send_mail=True)
+        assert len(djmail.outbox) == 1
+
+    def test_cancel_send_no_mail(self):
+        cancel_order(self.order.pk, send_mail=False)
+        assert len(djmail.outbox) == 0
+
+    def test_cancel_unpaid(self):
+        cancel_order(self.order.pk)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
+        assert self.order.invoices.count() == 2
+
+    def test_cancel_unpaid_with_voucher(self):
+        self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
+        self.op1.save()
+        cancel_order(self.order.pk)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
+        self.op1.voucher.refresh_from_db()
+        assert self.op1.voucher.redeemed == 0
+        assert self.order.invoices.count() == 2
+
+    def test_cancel_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        cancel_order(self.order.pk)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
+        assert self.order.invoices.count() == 2
+
+    def test_cancel_paid_with_too_high_fee(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
+        with pytest.raises(OrderError):
+            cancel_order(self.order.pk, cancellation_fee=50)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        assert self.order.total == 46
+
+    def test_cancel_paid_with_fee(self):
+        f = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_SHIPPING, value=2.5)
+        self.order.status = Order.STATUS_PAID
+        self.order.total = 48.5
+        self.order.save()
+        self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
+        self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
+        self.op1.save()
+        cancel_order(self.order.pk, cancellation_fee=2.5)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+        self.op2.refresh_from_db()
+        assert self.op2.canceled
+        f.refresh_from_db()
+        assert f.canceled
+        assert self.order.total == 2.5
+        assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
+        self.op1.voucher.refresh_from_db()
+        assert self.op1.voucher.redeemed == 0
+        assert self.order.invoices.count() == 3
+        assert not self.order.invoices.last().is_cancellation
+
+    def test_auto_refund_possible(self):
+        p1 = self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('44.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_BUYER
+        assert r.payment == p1
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
+        assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
+
+    def test_auto_refund_impossible(self):
+        self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_fullrefund'
+        )
+        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        assert not self.order.refunds.exists()
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 
 
 class OrderChangeManagerTests(TestCase):

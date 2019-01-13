@@ -1405,7 +1405,7 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
                             error = True
                             notify_admin = True
                         else:
-                            if r.state != OrderRefund.REFUND_STATE_CREATED:
+                            if r.state != OrderRefund.REFUND_STATE_DONE:
                                 notify_admin = True
                 else:
                     notify_admin = True

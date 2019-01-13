@@ -2,7 +2,7 @@ import logging
 
 from django.http import HttpRequest
 
-from pretix.base.models import OrderPayment
+from pretix.base.models import OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 
 logger = logging.getLogger('tests.testdummy.ticketoutput')
@@ -25,6 +25,9 @@ class DummyFullRefundablePaymentProvider(BasePaymentProvider):
     verbose_name = 'Test dummy'
     abort_pending_allowed = False
 
+    def execute_refund(self, refund: OrderRefund):
+        refund.done()
+
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         pass
 
@@ -39,6 +42,9 @@ class DummyPartialRefundablePaymentProvider(BasePaymentProvider):
     identifier = 'testdummy_partialrefund'
     verbose_name = 'Test dummy'
     abort_pending_allowed = False
+
+    def execute_refund(self, refund: OrderRefund):
+        refund.done()
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         pass
