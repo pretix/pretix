@@ -276,7 +276,7 @@ class Order(LockModel, LoggedModel):
                 output_field=models.IntegerField()
             ),
             is_pending_with_full_payment=Case(
-                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=-1e-8)
+                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=1e-8)
                      & Q(require_approval=False),
                      then=Value('1')),
                 default=Value('0'),
