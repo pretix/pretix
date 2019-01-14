@@ -244,6 +244,14 @@ def variables_from_questions(sender, *args, **kwargs):
     return d
 
 
+def _get_attendee_name_part(key, op, order, ev):
+    return op.attendee_name_parts.get(key, '')
+
+
+def _get_ia_name_part(key, op, order, ev):
+    return order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+
+
 def get_variables(event):
     v = copy.copy(DEFAULT_VARIABLES)
 
@@ -252,7 +260,7 @@ def get_variables(event):
         v['attendee_name_%s' % key] = {
             'label': _("Attendee name: {part}").format(part=label),
             'editor_sample': scheme['sample'][key],
-            'evaluate': lambda op, order, ev: op.attendee_name_parts.get(key, '')
+            'evaluate': partial(_get_attendee_name_part, key)
         }
 
     v['invoice_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
@@ -262,7 +270,7 @@ def get_variables(event):
         v['invoice_name_%s' % key] = {
             'label': _("Invoice address name: {part}").format(part=label),
             'editor_sample': scheme['sample'][key],
-            "evaluate": lambda op, order, ev: order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+            "evaluate": partial(_get_ia_name_part, key)
         }
 
     for recv, res in layout_text_variables.send(sender=event):
