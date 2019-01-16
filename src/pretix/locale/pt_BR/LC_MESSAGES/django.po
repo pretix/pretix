@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: Bruno <buccalon@gmail.com>\n"
+"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -5056,8 +5056,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1952
 msgid "All variations must belong to an item contained in the items list."
-msgstr ""
-"Todas as variações devem pertencer a um item contido na lista de itens."
+msgstr "Todas as variações devem pertencer a um item contido na lista de itens."
 
 #: pretix/base/models/items.py:1963
 msgid ""
