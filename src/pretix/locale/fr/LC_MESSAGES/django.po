@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-12 15:54+0000\n"
-"PO-Revision-Date: 2018-07-19 14:45+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-01-16 22:00+0000\n"
+"Last-Translator: Guillaume Petit <gpetit@edelzone.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -36,15 +36,13 @@ msgid "Client secret"
 msgstr "Secret de client"
 
 #: pretix/api/models.py:75
-#, fuzzy
-#| msgid "Enable"
 msgid "Enable webhook"
-msgstr "Activer"
+msgstr "Activer le support webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "URL cible"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
