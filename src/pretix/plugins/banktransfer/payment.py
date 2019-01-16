@@ -99,7 +99,7 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def public_name(self):
-        return str(self.settings.get('public_name', as_type=LazyI18nString)) or self.verbose_name
+        return str(self.settings.get('public_name', as_type=LazyI18nString) or self.verbose_name)
 
     @property
     def settings_form_fields(self):
