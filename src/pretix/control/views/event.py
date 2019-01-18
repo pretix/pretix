@@ -419,6 +419,30 @@ class CancelSettings(EventSettingsViewMixin, EventSettingsFormView):
             'event': self.request.event.slug
         })
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['gets_notification'] = self.request.user.notifications_send and (
+            (
+                self.request.user.notification_settings.filter(
+                    event=self.request.event,
+                    action_type='pretix.event.order.refund.requested',
+                    enabled=True
+                ).exists()
+            ) or (
+                self.request.user.notification_settings.filter(
+                    event__isnull=True,
+                    action_type='pretix.event.order.refund.requested',
+                    enabled=True
+                ).exists() and not
+                self.request.user.notification_settings.filter(
+                    event=self.request.event,
+                    action_type='pretix.event.order.refund.requested',
+                    enabled=False
+                ).exists()
+            )
+        )
+        return ctx
+
 
 class InvoicePreview(EventPermissionRequiredMixin, View):
     permission = 'can_change_event_settings'

@@ -18,6 +18,18 @@
             {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
             {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
             {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
+            {% if not gets_notification %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed %}
+                        If a user requests cancels a paid order and the money can not be refunded automatically, e.g.
+                        due to the selected payment method, you will need to take manual action. However, you have
+                        currently turned off notifications for this event.
+                    {% endblocktrans %}
+                    <a href="{% url "control:user.settings.notifications" %}" class="btn btn-default">
+                        {% trans "Change notification settings" %}
+                    </a>
+                </div>
+            {% endif %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
