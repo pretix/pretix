@@ -44,6 +44,10 @@ footer {
     h3 {
         margin-top: 0;
     }
+
+	p:last-child {
+		margin-bottom: 20px;
+	}
 }
 
 .container > .alert {

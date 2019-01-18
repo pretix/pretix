@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    <title>{{ django_settings.PRETIX_INSTANCE_NAME }}</title>
     {% compress css %}
         <link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/auth.scss" %}"/>
     {% endcompress %}

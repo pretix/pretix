@@ -34,6 +34,7 @@ def contextprocessor(request):
     ctx = {
         'url_name': url.url_name,
         'settings': settings,
+        'django_settings': settings,
         'DEBUG': settings.DEBUG,
     }
     _html_head = []

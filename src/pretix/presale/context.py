@@ -79,5 +79,6 @@ def contextprocessor(request):
     ctx['js_time_format'] = get_javascript_format_without_seconds('TIME_INPUT_FORMATS')
     ctx['js_locale'] = get_moment_locale()
     ctx['settings'] = pretix_settings
+    ctx['django_settings'] = settings
 
     return ctx

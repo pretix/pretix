@@ -1,30 +1,26 @@
+{% extends "pretixcontrol/auth/base.html" %}
+{% load bootstrap3 %}
 {% load i18n %}
-{% load compress %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
-    {% compress css %}
-        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/index.scss" %}"/>
-    {% endcompress %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <div class="container">
-        <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
-
-        <h1>{% trans "Hello!" %}</h1>
+{% block content %}
+    <div class="form-signin" action="" method="post">
+        <h3>{% trans "Hello!" %}</h3>
         <p>
-            {% trans "There is nothing to see here yet." %}
+            {% blocktrans trimmed with a_attr="href='http://pretix.eu'" %}
+                This is a self-hosted installation of <a {{ a_attr }}>pretix, your free and open source ticket sales
+                software</a>.
+            {% endblocktrans %}
         </p>
         <p>
-            {% with "href='http://pretix.eu'" as a_attr %}
-                {% blocktrans trimmed %}
-                    <a {{ a_attr }}>pretix – your free and open source ticket sales software</a>.
-                {% endblocktrans %}
-            {% endwith %}
+            {% blocktrans trimmed %}
+                If you're looking to buy a ticket, you need to follow a direct link to an event or organizer profile.
+            {% endblocktrans %}
         </p>
+        <p>
+            {% blocktrans trimmed with a_attr="href='/control/'" %}
+                If you're looking to configure this installation, please <a {{ a_attr }}>head over here</a>.
+            {% endblocktrans %}
+        </p>
+        <p>{% trans "Enjoy!" %}</p>
     </div>
-</body>
-</html>
+{% endblock %}
