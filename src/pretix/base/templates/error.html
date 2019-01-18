@@ -1,6 +1,6 @@
 {% load compress %}
 {% load i18n %}
-{% load static %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +16,6 @@
 <div class="container">
     {% block content %}{% endblock %}
 </div>
-<script src="{% static "pretixbase/js/errors.js" %}"></script>
 </body>
+<script src="{% static "pretixbase/js/errors.js" %}"></script>
 </html>

@@ -1,13 +1,17 @@
 {% extends "error.html" %}
 {% load i18n %}
+{% load staticfiles %}
 {% block title %}{% trans "Bad Request" %}{% endblock %}
 {% block content %}
-    <i class="fa fa-frown-o big-icon"></i>
-    <h1>{% trans "Bad Request" %}</h1>
-    <p>{% trans "We were unable to parse your request." %}</p>
-    <p>{{ exception }}</p>
-    <p class="links">
-        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
-        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
-    </p>
+    <i class="fa fa-frown-o fa-fw big-icon"></i>
+    <div class="error-details">
+        <h1>{% trans "Bad Request" %}</h1>
+        <p>{% trans "We were unable to parse your request." %}</p>
+        <p>{{ exception }}</p>
+        <p class="links">
+            <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+            &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
+        </p>
+        <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
+    </div>
 {% endblock %}

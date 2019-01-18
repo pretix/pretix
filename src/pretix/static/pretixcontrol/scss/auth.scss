@@ -4,7 +4,7 @@
 @import "../../pretixbase/scss/_theme.scss";
 
 body {
-	background: #eee;
+	background: #fbf7fc;
 }
 
 footer {
@@ -14,20 +14,25 @@ footer {
 }
 
 .logo {
-    width: 330px;
+    width: 200px;
     margin: auto;
     display: block;
     margin-top: 10%;
+	margin-bottom: 30px;
     height: auto;
     max-width: 100%;
 }
 .form-signin {
 	@extend .well;
 
+	background: white;
+	box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+	border: 1px solid white;
+
 	max-width: 330px;
 	margin: auto;
 	padding-bottom: 0;
-	
+
 	.control-label {
 		display: none;
 	}

@@ -1,23 +1,27 @@
 {% extends "error.html" %}
 {% load i18n %}
+{% load staticfiles %}
 {% block title %}{% trans "Internal Server Error" %}{% endblock %}
 {% block content %}
-    <i class="fa fa-bolt big-icon"></i>
-    <h1>{% trans "Internal Server Error" %}</h1>
-    <p>{% trans "We had trouble processing your request." %}</p>
-    <p>{% trans "If this problem persists, please contact us." %}</p>
-    {% if request.sentry.id %}
-        <p>
-            {% blocktrans trimmed %}
-                If you contact us, please send us the following code:
-            {% endblocktrans %}
-            <br>
-            {{ request.sentry.id }}
+    <i class="fa fa-bolt big-icon fa-fw"></i>
+    <div class="error-details">
+        <h1>{% trans "Internal Server Error" %}</h1>
+        <p>{% trans "We had trouble processing your request." %}</p>
+        <p>{% trans "If this problem persists, please contact us." %}</p>
+        {% if request.sentry.id %}
+            <p>
+                {% blocktrans trimmed %}
+                    If you contact us, please send us the following code:
+                {% endblocktrans %}
+                <br>
+                {{ request.sentry.id }}
+            </p>
+        {% endif %}
+        <p>{{ exception }}</p>
+        <p class="links">
+            <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+            &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
         </p>
-    {% endif %}
-    <p>{{ exception }}</p>
-    <p class="links">
-        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
-        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
-    </p>
+        <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
+    </div>
 {% endblock %}
