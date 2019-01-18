@@ -114,7 +114,15 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
+        is_new = not self.pk
         super().save(*args, **kwargs)
+        if is_new:
+            self.notification_settings.create(
+                action_type='pretix.event.order.refund.requested',
+                event=None,
+                method='mail',
+                enabled=True
+            )
 
     def __str__(self):
         return self.email

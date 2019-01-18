@@ -1,6 +1,7 @@
 import json
 from collections import OrderedDict
 from datetime import datetime
+from decimal import Decimal
 from typing import Any
 
 from django.conf import settings
@@ -223,6 +224,30 @@ DEFAULTS = {
     'cancel_allow_user': {
         'default': 'True',
         'type': bool
+    },
+    'cancel_allow_user_until': {
+        'default': None,
+        'type': RelativeDateWrapper,
+    },
+    'cancel_allow_user_paid': {
+        'default': 'False',
+        'type': bool,
+    },
+    'cancel_allow_user_paid_keep': {
+        'default': '0.00',
+        'type': Decimal,
+    },
+    'cancel_allow_user_paid_keep_fees': {
+        'default': 'False',
+        'type': bool,
+    },
+    'cancel_allow_user_paid_keep_percentage': {
+        'default': '0.00',
+        'type': Decimal,
+    },
+    'cancel_allow_user_paid_until': {
+        'default': None,
+        'type': RelativeDateWrapper,
     },
     'contact_mail': {
         'default': None,

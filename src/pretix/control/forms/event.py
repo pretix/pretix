@@ -435,6 +435,39 @@ class EventSettingsForm(SettingsForm):
         )
 
 
+class CancelSettingsForm(SettingsForm):
+    cancel_allow_user = forms.BooleanField(
+        label=_("Customers can cancel their unpaid orders"),
+        required=False
+    )
+    cancel_allow_user_until = RelativeDateTimeField(
+        label=_("Do not allow cancellations after"),
+        required=False
+    )
+    cancel_allow_user_paid = forms.BooleanField(
+        label=_("Customers can cancel their paid orders"),
+        help_text=_("Paid money will be automatically paid back if the payment method allows it. "
+                    "Otherwise, a manual refund will be created for you to process manually."),
+        required=False
+    )
+    cancel_allow_user_paid_keep = forms.DecimalField(
+        label=_("Keep a fixed cancellation fee"),
+        required=False
+    )
+    cancel_allow_user_paid_keep_fees = forms.BooleanField(
+        label=_("Keep payment, shipping and service fees"),
+        required=False
+    )
+    cancel_allow_user_paid_keep_percentage = forms.DecimalField(
+        label=_("Keep a percentual cancellation fee"),
+        required=False
+    )
+    cancel_allow_user_paid_until = RelativeDateTimeField(
+        label=_("Do not allow cancellations after"),
+        required=False
+    )
+
+
 class PaymentSettingsForm(SettingsForm):
     payment_term_days = forms.IntegerField(
         label=_('Payment term in days'),

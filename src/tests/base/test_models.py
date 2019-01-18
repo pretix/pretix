@@ -16,8 +16,8 @@ from django.utils.timezone import now
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CartPosition, CheckinList, Event, Item, ItemCategory,
-    ItemVariation, Order, OrderPayment, OrderPosition, OrderRefund, Organizer,
-    Question, Quota, User, Voucher, WaitingListEntry,
+    ItemVariation, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    Organizer, Question, Quota, User, Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
@@ -45,7 +45,7 @@ class BaseQuotaTestCase(TestCase):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
         self.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
-            date_from=now(),
+            date_from=now(), plugins='tests.testdummy'
         )
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -600,7 +600,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order = Order.objects.create(
             status=Order.STATUS_PENDING, event=self.event,
             datetime=now() - timedelta(days=5),
-            expires=now() + timedelta(days=5), total=46
+            expires=now() + timedelta(days=5), total=46,
         )
         self.quota.items.add(self.item1)
         self.op1 = OrderPosition.objects.create(order=self.order, item=self.item1,
@@ -845,7 +845,25 @@ class OrderTestCase(BaseQuotaTestCase):
                                     admission=True, allow_cancel=True)
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel
+        assert self.order.user_cancel_allowed
+        self.event.settings.cancel_allow_user = False
+        assert not self.order.user_cancel_allowed
+
+    def test_can_cancel_order_free(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('0.00')
+        self.order.save()
+        assert self.order.user_cancel_allowed
+        self.event.settings.cancel_allow_user = False
+        assert not self.order.user_cancel_allowed
+
+    def test_can_cancel_order_paid(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        assert not self.order.user_cancel_allowed
+        self.event.settings.cancel_allow_user = False
+        self.event.settings.cancel_allow_user_paid = True
+        assert self.order.user_cancel_allowed
 
     def test_can_cancel_order_multiple(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -856,14 +874,14 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel
+        assert self.order.user_cancel_allowed
 
     def test_can_not_cancel_order(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=False)
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_can_not_cancel_order_multiple(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -874,7 +892,7 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_can_not_cancel_order_multiple_mixed(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -885,7 +903,7 @@ class OrderTestCase(BaseQuotaTestCase):
                                      variation=None, price=23)
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=None, price=23)
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
 
     def test_no_duplicate_position_secret(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
@@ -895,7 +913,119 @@ class OrderTestCase(BaseQuotaTestCase):
         p2 = OrderPosition.objects.create(order=self.order, item=item1, secret='ABC',
                                           variation=None, price=23)
         assert p1.secret != p2.secret
-        assert self.order.can_user_cancel is False
+        assert self.order.user_cancel_allowed is False
+
+    def test_user_cancel_absolute_deadline_unpaid_no_subevents(self):
+        assert self.order.user_cancel_deadline is None
+        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+            now() + timedelta(days=1)
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline > now()
+        assert self.order.user_cancel_allowed
+        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+            now() - timedelta(days=1)
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline < now()
+        assert not self.order.user_cancel_allowed
+
+    def test_user_cancel_relative_deadline_unpaid_no_subevents(self):
+        self.event.date_from = now() + timedelta(days=3)
+        self.event.save()
+
+        assert self.order.user_cancel_deadline is None
+        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from')
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline > now()
+        assert self.order.user_cancel_allowed
+        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+            RelativeDate(days_before=4, time=datetime.time(14, 0, 0), base_date_name='date_from')
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline < now()
+        assert not self.order.user_cancel_allowed
+
+    def test_user_cancel_absolute_deadline_paid_no_subevents(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.event.settings.cancel_allow_user_paid = True
+        assert self.order.user_cancel_deadline is None
+        self.event.settings.set('cancel_allow_user_paid_until', RelativeDateWrapper(
+            now() + timedelta(days=1)
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_allowed
+        assert self.order.user_cancel_deadline > now()
+        self.event.settings.set('cancel_allow_user_paid_until', RelativeDateWrapper(
+            now() - timedelta(days=1)
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline < now()
+        assert not self.order.user_cancel_allowed
+
+    def test_user_cancel_relative_deadline_paid_no_subevents(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.event.date_from = now() + timedelta(days=3)
+        self.event.save()
+        self.event.settings.cancel_allow_user_paid = True
+
+        assert self.order.user_cancel_deadline is None
+        self.event.settings.set('cancel_allow_user_paid_until', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from')
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline > now()
+        assert self.order.user_cancel_allowed
+        self.event.settings.set('cancel_allow_user_paid_until', RelativeDateWrapper(
+            RelativeDate(days_before=4, time=datetime.time(14, 0, 0), base_date_name='date_from')
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline < now()
+        assert not self.order.user_cancel_allowed
+
+    def test_user_cancel_relative_deadline_to_subevents(self):
+        self.event.date_from = now() + timedelta(days=3)
+        self.event.has_subevents = True
+        self.event.save()
+        se1 = self.event.subevents.create(name="SE1", date_from=now() + timedelta(days=10))
+        se2 = self.event.subevents.create(name="SE2", date_from=now() + timedelta(days=1))
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se2
+        self.op2.save()
+
+        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from')
+        ))
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline < now()
+        self.op2.subevent = se1
+        self.op2.save()
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_deadline > now()
+
+    def test_user_cancel_fee(self):
+        self.order.fees.create(fee_type=OrderFee.FEE_TYPE_SHIPPING, value=Decimal('2.00'))
+        self.order.total = 48
+        self.order.save()
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('0.00')
+
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('2.50')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('2.50')
+
+        self.event.settings.cancel_allow_user_paid_keep_percentage = Decimal('10.0')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('7.30')
+
+        self.event.settings.cancel_allow_user_paid_keep_fees = True
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('9.30')
 
     def test_paid_order_underpaid(self):
         self.order.status = Order.STATUS_PAID
@@ -1043,6 +1173,43 @@ class OrderTestCase(BaseQuotaTestCase):
         assert OrderPosition.all.count() == 2
         assert self.order.positions.count() == 1
         assert self.order.all_positions.count() == 2
+
+    def test_propose_auto_refunds(self):
+        p1 = self.order.payments.create(
+            amount=Decimal('23.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_fullrefund'
+        )
+        p2 = self.order.payments.create(
+            amount=Decimal('10.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy_partialrefund'
+        )
+        self.order.payments.create(
+            amount=Decimal('13.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='testdummy'
+        )
+        assert self.order.propose_auto_refunds(Decimal('23.00')) == {
+            p1: Decimal('23.00')
+        }
+        assert self.order.propose_auto_refunds(Decimal('10.00')) == {
+            p2: Decimal('10.00')
+        }
+        assert self.order.propose_auto_refunds(Decimal('5.00')) == {
+            p2: Decimal('5.00')
+        }
+        assert self.order.propose_auto_refunds(Decimal('20.00')) == {
+            p2: Decimal('10.00')
+        }
+        assert self.order.propose_auto_refunds(Decimal('25.00')) == {
+            p1: Decimal('23.00'),
+            p2: Decimal('2.00'),
+        }
+        assert self.order.propose_auto_refunds(Decimal('35.00')) == {
+            p1: Decimal('23.00'),
+            p2: Decimal('10.00'),
+        }
 
 
 class ItemCategoryTest(TestCase):

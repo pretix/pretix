@@ -89,6 +89,14 @@ def get_event_navigation(request: HttpRequest):
                 'active': url.url_name == 'event.settings.invoice',
             },
             {
+                'label': pgettext_lazy('action', 'Cancellation'),
+                'url': reverse('control:event.settings.cancel', kwargs={
+                    'event': request.event.slug,
+                    'organizer': request.event.organizer.slug,
+                }),
+                'active': url.url_name == 'event.settings.cancel',
+            },
+            {
                 'label': _('Widget'),
                 'url': reverse('control:event.settings.widget', kwargs={
                     'event': request.event.slug,

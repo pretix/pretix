@@ -168,7 +168,7 @@
                             {% for i in invoices %}
                                 <li>
                                     <a href="{% eventurl event "presale:event.invoice.download" invoice=i.pk secret=order.secret order=order.code %}">
-                                        {% if i.is_cancellation %}{% trans "Cancellation" %}{% else %}{% trans "Invoice" %}{% endif %}
+                                        {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
                                 </li>
                             {% endfor %}
@@ -245,16 +245,57 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
-    {% if order.can_user_cancel %}
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <p>
-                    <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+    {% if order.cancel_allowed %}
+        <div class="panel panel-primary cart">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Cancellation" context "action" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                {% if order.user_cancel_allowed %}
+                    {% if order.status == "p" and order.total != 0 %}
+                        {% if order.user_cancel_fee %}
+                            <p>
+                                {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                                    You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
+                                    will be kept and you will receive a refund of the remainder to your original payment method.
+                                {% endblocktrans %}
+                                {% trans "This will invalidate all of your tickets." %}
+                            </p>
+                        {% else %}
+                            <p>
+                                {% blocktrans trimmed %}
+                                    You can cancel this order and receive a full refund to your original payment method.
+                                {% endblocktrans %}
+                                {% trans "This will invalidate all of your tickets." %}
+                            </p>
+                        {% endif %}
+                        <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+                           class="btn btn-danger">
+                            <span class="fa fa-remove"></span>
+                            {% trans "Cancel order" %}
+                        </a>
+                    {% else %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                You can cancel this order using the following button.
+                            {% endblocktrans %}
+                            {% trans "This will invalidate all of your tickets." %}
+                        </p>
+                        <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                             class="btn btn-danger">
-                        <span class="fa fa-remove"></span>
-                        {% trans "Cancel order" %}
-                    </a>
-                </p>
+                            <span class="fa fa-remove"></span>
+                            {% trans "Cancel order" %}
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            You can not cancel this order yourself. Please contact the event organizer for more information.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
             </div>
         </div>
     {% endif %}
