@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-12 15:54+0000\n"
-"PO-Revision-Date: 2019-01-12 16:02+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2019-01-18 03:06+0000\n"
+"Last-Translator: sohalt <pretix-translate@sohalt.net>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -11516,7 +11516,7 @@ msgstr "Gib den angezeigten Code hier ein:"
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr "Zeiten Faktor für zukünftige Anmeldungen erfordern"
+msgstr "Zweiten Faktor für zukünftige Anmeldungen erfordern"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
