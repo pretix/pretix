@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-18 16:34+0000\n"
+"PO-Revision-Date: 2019-01-18 16:37+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -8217,7 +8217,7 @@ msgstr "Stornierung von ausstehenden oder kostenlosen Bestellungen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:15
 msgid "Cancellation of paid orders"
-msgstr "Stornierung von bezahlten  Bestellungen"
+msgstr "Stornierung von bezahlten Bestellungen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:23
 msgid ""
