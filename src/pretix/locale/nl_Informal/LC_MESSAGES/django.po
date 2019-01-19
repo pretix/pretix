@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-19 21:13+0000\n"
+"PO-Revision-Date: 2019-01-20 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -1629,7 +1629,7 @@ msgstr "Dit wordt weergegeven onder de variantnaam in lijsten."
 #: pretix/base/models/items.py:510 pretix/base/models/items.py:633
 #: pretix/base/models/items.py:762
 msgid "Position"
-msgstr "Positie"
+msgstr "Plaats"
 
 #: pretix/base/models/items.py:519 pretix/base/models/vouchers.py:148
 #: pretix/base/models/waitinglist.py:59
@@ -6582,7 +6582,7 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
-"Positie #{posid}: {old_item} ({old_price}) veranderd in {new_item} "
+"Plaats #{posid}: {old_item} ({old_price}) veranderd in {new_item} "
 "({new_price})."
 
 #: pretix/control/logdisplay.py:48
@@ -6591,18 +6591,18 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Positie #{posid}: Evenementsdatum \"{old_event}\" ({old_price}) veranderd in "
+"Plaats #{posid}: Evenementsdatum \"{old_event}\" ({old_price}) veranderd in "
 "\"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:56
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "Prijs van positie #{posid} veranderd van {old_price} naar {new_price}."
+msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:66
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "Positie #{posid} ({old_item}, {old_price}) geannuleerd."
+msgstr "Plaats #{posid} ({old_item}, {old_price}) geannuleerd."
 
 #: pretix/control/logdisplay.py:77
 #, python-brace-format
@@ -6610,13 +6610,13 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
-"Positie #{posid} aangemaakt: {item} ({price}) als add-on bij positie "
+"Plaats #{posid} aangemaakt: {item} ({price}) als add-on bij plaats "
 "#{addon_to}."
 
 #: pretix/control/logdisplay.py:84
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr "Positie #{posid} aangemaakt: {item} ({price})."
+msgstr "Plaats #{posid} aangemaakt: {item} ({price})."
 
 #: pretix/control/logdisplay.py:90
 #, python-brace-format
@@ -6628,8 +6628,8 @@ msgstr "Een nieuw geheim is gegenereerd voor plaats #{posid}."
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
-"Positie #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe "
-"bestelling: {order}"
+"Plaats #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe bestelling:"
+" {order}"
 
 #: pretix/control/logdisplay.py:109
 #, python-brace-format
@@ -6647,12 +6647,12 @@ msgstr "(onbekend)"
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr "Positie #{posid} is ingecheckt op {datetime} voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is ingecheckt op {datetime} voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:140
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr "Positie #{posid} is ingecheckt voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is ingecheckt voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:147
 #, python-brace-format
@@ -6660,7 +6660,7 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
-"Een scan voor positie #{posid} om {datetime} voor lijst \"{list}\" is "
+"Een scan voor plaats #{posid} om {datetime} voor lijst \"{list}\" is "
 "geüpload, terwijl het kaartje al is gescand."
 
 #: pretix/control/logdisplay.py:155
@@ -6669,8 +6669,8 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
-"Positie #{posid} is gescand en geweigerd omdat het al is gescand op lijst "
-"\"{list}\"."
+"Plaats #{posid} is gescand en geweigerd omdat het al is gescand op lijst \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:166
 msgid "The event's internal comment has been updated."
@@ -7253,7 +7253,7 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"Positie #{posid} is handmatig gemarkeerd als ingecheckt op {datetime} op "
+"Plaats #{posid} is handmatig gemarkeerd als ingecheckt op {datetime} op "
 "lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:354
@@ -7261,12 +7261,12 @@ msgstr ""
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"Positie #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
+"Plaats #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:369
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "De check-in van positie #{posid} op lijst \"{list}\" is teruggedraaid."
+msgstr "De check-in van plaats #{posid} op lijst \"{list}\" is teruggedraaid."
 
 #: pretix/control/logdisplay.py:375
 #, python-brace-format
@@ -9877,7 +9877,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:66
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr "Add-on voor positie #%(posid)s"
+msgstr "Add-on voor plaats #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:82
 msgid "Ticket secret:"
@@ -9932,7 +9932,7 @@ msgstr "Annuleer plaats"
 #: pretix/control/templates/pretixcontrol/order/change.html:151
 msgid "Removing this position will also remove all add-ons to this position."
 msgstr ""
-"Deze positie verwijderen zal ook alle add-ons van deze positie verwijderen."
+"Deze plaats verwijderen zal ook alle add-ons van deze plaats verwijderen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:163
 msgid "Add product"
