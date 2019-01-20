@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-19 21:39+0000\n"
+"PO-Revision-Date: 2019-01-21 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -12379,7 +12379,7 @@ msgstr "De gekozen lijst is verwijderd."
 
 #: pretix/control/views/dashboards.py:74
 msgid "Attendees (ordered)"
-msgstr "Gasten (gesorteerd)"
+msgstr "Gasten (besteld)"
 
 #: pretix/control/views/dashboards.py:83
 msgid "Attendees (paid)"
