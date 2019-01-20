@@ -1,8 +1,8 @@
 django-debug-toolbar==1.9.1
 sqlparse==0.2.1  # pinned due to difficulties with django-debug-toolbar
 # Testing requirements
-pep8==1.5.7  # exact requirement by flake8 2.4.0
-pyflakes==1.1.0  # later version causes problems currently
+pycodestyle >= 2.4.0, < 2.5.0 # requirement by flake8 3.6.0
+pyflakes >= 2.0.0, < 2.1.0 # requirement by flake8 3.6.0
 pep8-naming
 flake8
 codecov

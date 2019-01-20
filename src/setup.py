@@ -146,8 +146,8 @@ setup(
         'dev': [
             'django-debug-toolbar==1.9.1',
             'sqlparse==0.2.1',
-            'pep8==1.5.7',
-            'pyflakes==1.1.0',
+            'pycodestyle >= 2.4.0, < 2.5.0',
+            'pyflakes >= 2.0.0, < 2.1.0',
             'flake8',
             'pep8-naming',
             'coveralls',
