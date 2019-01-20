@@ -9,9 +9,9 @@
         <div class="alert alert-warning">
             {% trans "This voucher already has been used. It is not recommended to modify it." %}
             <ul>
-            {% for op in voucher.orderposition_set.all %}
-                <li><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=op.order.code %}">
-                    {% blocktrans with code=op.order.code %}Order {{ code }}{% endblocktrans %}
+            {% for order in voucher.distinct_orders %}
+                <li><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% blocktrans with code=order.code %}Order {{ code }}{% endblocktrans %}
                 </a></li>
             {% endfor %}
             </ul>
