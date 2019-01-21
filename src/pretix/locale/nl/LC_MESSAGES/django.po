@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-09 23:00+0000\n"
+"PO-Revision-Date: 2019-01-21 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -771,12 +771,10 @@ msgid "Individual customer"
 msgstr "Particuliere klant"
 
 #: pretix/base/invoice.py:56
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Page %d"
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Pagina %d"
+msgstr "Pagina %d van %d"
 
 #: pretix/base/invoice.py:236
 msgctxt "invoice"
@@ -870,7 +868,7 @@ msgstr "Klantkenmerk: {reference}"
 #: pretix/base/invoice.py:426
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Ontvanger"
 
 #: pretix/base/invoice.py:448 pretix/base/invoice.py:456
 msgctxt "invoice"
@@ -1501,6 +1499,10 @@ msgid ""
 "this is unchecked, orders containing this product can not be canceled by "
 "users but only by you."
 msgstr ""
+"Als dit is ingeschakeld zijn de normale annuleringsinstellingen van dit "
+"evenement van toepassing. Als dit is uitgeschakeld kunnen bestellingen die "
+"dit product bevatten niet door gebruikers worden geannuleerd, maar alleen "
+"door u."
 
 #: pretix/base/models/items.py:334
 msgid "Minimum amount per order"
@@ -1626,7 +1628,7 @@ msgstr "Dit wordt weergegeven onder de variantnaam in lijsten."
 #: pretix/base/models/items.py:510 pretix/base/models/items.py:633
 #: pretix/base/models/items.py:762
 msgid "Position"
-msgstr "Positie"
+msgstr "Plaats"
 
 #: pretix/base/models/items.py:519 pretix/base/models/vouchers.py:148
 #: pretix/base/models/waitinglist.py:59
@@ -2132,10 +2134,8 @@ msgid "Service fee"
 msgstr "Servicekosten"
 
 #: pretix/base/models/orders.py:1407
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation fee"
-msgstr "Annulering"
+msgstr "Annuleringskosten"
 
 #: pretix/base/models/orders.py:1408
 msgid "Other fees"
@@ -2203,7 +2203,7 @@ msgstr "Dit kenmerk wordt voor u op de factuur afgedrukt."
 
 #: pretix/base/models/orders.py:1733
 msgid "Beneficiary"
-msgstr ""
+msgstr "Ontvanger"
 
 #: pretix/base/models/organizer.py:35
 msgid ""
@@ -2708,16 +2708,13 @@ msgid "An external refund for {order.code} has occurred."
 msgstr "Een externe terugbetaling voor {order.code} is opgetreden."
 
 #: pretix/base/notifications.py:247
-#, fuzzy
-#| msgid "Refunded"
 msgid "Refund requested"
-msgstr "Terugbetaald"
+msgstr "Terugbetaling aangevraagd"
 
 #: pretix/base/notifications.py:248
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been redeemed in order {order_code}."
+#, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "De voucher is verzilverd in bestelling {order_code}."
+msgstr "U bent gevraagd om bestelling {order.code} terug te betalen."
 
 #: pretix/base/payment.py:44 pretix/control/forms/event.py:565
 #: pretix/control/forms/event.py:1104
@@ -3104,22 +3101,16 @@ msgid "Event organizer info text"
 msgstr "Informatietekst van de organisator van het evenement"
 
 #: pretix/base/pdf.py:197
-#, fuzzy
-#| msgid "Creation date"
 msgid "Printing date"
-msgstr "Aanmaakdatum"
+msgstr "Printdatum"
 
 #: pretix/base/pdf.py:205
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Printing date and time"
-msgstr "Begindatum en tijd van evenement"
+msgstr "Printdatum en -tijd"
 
 #: pretix/base/pdf.py:213
-#, fuzzy
-#| msgid "Event begin time"
 msgid "Printing time"
-msgstr "Begintijd van evenement"
+msgstr "Printtijd"
 
 #: pretix/base/pdf.py:240
 #, python-brace-format
@@ -3370,10 +3361,8 @@ msgstr ""
 "add-on bij een ander product."
 
 #: pretix/base/services/checkin.py:95
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "This order position has been canceled."
-msgstr "De bestelling is geannuleerd."
+msgstr "Deze plaats is geannuleerd."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
@@ -3596,6 +3585,8 @@ msgstr "U kunt deze bestelling niet annuleren."
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
+"De annuleringskosten kunnen niet hoger zijn dan het bedrag dat voor deze "
+"bestelling is betaald."
 
 #: pretix/base/services/orders.py:371
 #, python-format
@@ -3696,6 +3687,8 @@ msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"Er is iets misgegaan toen we het geld naar u over probeerden te maken. Neem "
+"contact op met de organisator van het evenement voor meer informatie."
 
 #: pretix/base/services/shredder.py:73
 msgid ""
@@ -4937,44 +4930,37 @@ msgid "Ask for {fields}, display like {example}"
 msgstr "Vraag naar {fields}, toon als {example}"
 
 #: pretix/control/forms/event.py:440
-#, fuzzy
-#| msgid "Allow users to cancel unpaid orders"
 msgid "Customers can cancel their unpaid orders"
-msgstr "Sta gebruikers toe onbetaalde bestellingen te annuleren"
+msgstr "Klanten kunnen hun onbetaalde bestellingen annuleren"
 
 #: pretix/control/forms/event.py:444 pretix/control/forms/event.py:466
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Do not allow cancellations after"
-msgstr "Annulering"
+msgstr "Sta annuleren toe tot"
 
 #: pretix/control/forms/event.py:448
-#, fuzzy
-#| msgid "Allow users to cancel unpaid orders"
 msgid "Customers can cancel their paid orders"
-msgstr "Sta gebruikers toe onbetaalde bestellingen te annuleren"
+msgstr "Klanten kunnen hun betaalde bestellingen annuleren"
 
 #: pretix/control/forms/event.py:449
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Het betaalde geld zal automatisch worden terugbetaald als de "
+"betalingsmethode dit toestaat. Als dit niet zo is zal er een handmatige "
+"terugbetaling worden aangemaakt, die u zelf zult moeten verwerken."
 
 #: pretix/control/forms/event.py:454
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a fixed cancellation fee"
-msgstr "Annulering"
+msgstr "Houd een vast bedrag als annuleringskosten in"
 
 #: pretix/control/forms/event.py:458
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Houd betalings-, verzend- en servicekosten in"
 
 #: pretix/control/forms/event.py:462
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a percentual cancellation fee"
-msgstr "Annulering"
+msgstr "Houd een percentage van het bedrag in als annuleringskosten"
 
 #: pretix/control/forms/event.py:473
 msgid "Payment term in days"
@@ -5107,10 +5093,8 @@ msgstr ""
 "verplicht."
 
 #: pretix/control/forms/event.py:604
-#, fuzzy
-#| msgid "Ask for invoice address"
 msgid "Ask for beneficiary"
-msgstr "Vraag om factuuradres"
+msgstr "Vraag om ontvanger"
 
 #: pretix/control/forms/event.py:609
 msgid "Show free products on invoices"
@@ -5807,7 +5791,7 @@ msgstr "Alle bestellingen"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:203
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Betaald (of geannuleerd met betaalde kosten)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:204
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -6251,10 +6235,8 @@ msgid "Notify user by e-mail"
 msgstr "Stel de gebruiker per e-mail op de hoogte"
 
 #: pretix/control/forms/orders.py:90
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a cancellation fee of"
-msgstr "Annulering"
+msgstr "Houd annuleringskosten in van"
 
 #: pretix/control/forms/orders.py:91
 msgid ""
@@ -6264,6 +6246,11 @@ msgid ""
 "want to keep them. Please always enter a gross value, tax will be calculated "
 "automatically."
 msgstr ""
+"Als u kosten inhoudt zullen alle plaatsen in deze bestelling worden "
+"geannuleerd, en zal de bestelling alleen de betaalde annuleringskosten "
+"bevatten. Betalingskosten en verzendkosten zullen ook worden geannuleerd, "
+"tel deze op bij de annuleringskosten als u deze kosten niet terug wilt "
+"betalen. Voer een bruto bedrag in, belasting zal automatisch worden berekend."
 
 #: pretix/control/forms/orders.py:119
 msgid "Payment amount"
@@ -6364,16 +6351,11 @@ msgid "Message"
 msgstr "Bericht"
 
 #: pretix/control/forms/orders.py:404
-#, fuzzy
-#| msgid ""
-#| "Mark the complete order as refunded. The order will be canceled and all "
-#| "tickets will no longer work. This can not be reverted."
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
-"Markeer de gehele bestelling als terugbetaald. De bestelling zal worden "
-"geannuleerd, en alle tickets zullen niet langer werken. Deze actie kan niet "
-"ongedaan worden gemaakt."
+"Annuleer de bestelling. Alle tickets zullen niet meer werken. Dit kan niet "
+"worden teruggedraaid."
 
 #: pretix/control/forms/orders.py:405
 msgid ""
@@ -6474,10 +6456,8 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: pretix/control/forms/organizer.py:242
-#, fuzzy
-#| msgid "Date in event series"
 msgid "Show availability in event overviews"
-msgstr "Datum in evenementenreeks"
+msgstr "Toon beschikbaarheid in evenementsoverzichten"
 
 #: pretix/control/forms/organizer.py:243
 msgid ""
@@ -6485,6 +6465,10 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Als dit is ingeschakeld zal de lijst van evenementen aangeven of evenementen "
+"zijn uitverkocht. Als u veel evenementen heeft kan dit ervoor zorgen dat het "
+"laden van uw pagina langer duurt, en de getoonde status kan tot twee minuten "
+"achterlopen."
 
 #: pretix/control/forms/organizer.py:249
 msgid "Link back to organizer overview on all event pages"
@@ -6625,10 +6609,9 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "Prijs van positie #{posid} veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:66
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} ({old_item}, {old_price}) removed."
+#, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "Positie #{posid} ({old_item}, {old_price}) verwijderd."
+msgstr "Plaats #{posid} ({old_item}, {old_price}) geannuleerd."
 
 #: pretix/control/logdisplay.py:77
 #, python-brace-format
@@ -6636,13 +6619,13 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
-"Positie #{posid} aangemaakt: {item} ({price}) als add-on bij positie "
+"Plaats #{posid} aangemaakt: {item} ({price}) als add-on bij plaats "
 "#{addon_to}."
 
 #: pretix/control/logdisplay.py:84
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr "Positie #{posid} aangemaakt: {item} ({price})."
+msgstr "Plaats #{posid} aangemaakt: {item} ({price})."
 
 #: pretix/control/logdisplay.py:90
 #, python-brace-format
@@ -6673,12 +6656,12 @@ msgstr "(onbekend)"
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr "Positie #{posid} is ingecheckt op {datetime} voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is ingecheckt op {datetime} voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:140
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr "Positie #{posid} is ingecheckt voor lijst \"{list}\"."
+msgstr "Plaats #{posid} is ingecheckt voor lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:147
 #, python-brace-format
@@ -6795,7 +6778,7 @@ msgstr "Een onbekend type e-mail is verzonden."
 
 #: pretix/control/logdisplay.py:190
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "Het versturen van een email is mislukt."
 
 #: pretix/control/logdisplay.py:191
 msgid "A custom email has been sent."
@@ -6918,7 +6901,7 @@ msgstr "Terugbetaling {local_id} is aangemaakt door een externe entiteit."
 
 #: pretix/control/logdisplay.py:215
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "De klant heeft u om een terugbetaling gevraagd."
 
 #: pretix/control/logdisplay.py:216
 #, python-brace-format
@@ -6931,10 +6914,9 @@ msgid "Refund {local_id} has been canceled."
 msgstr "Terugbetaling {local_id} is geannuleerd."
 
 #: pretix/control/logdisplay.py:218
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has failed."
+#, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr "Betaling {local_id} is mislukt."
+msgstr "Terugbetaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:219
 msgid "The user has been created."
@@ -7293,7 +7275,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:369
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "De check-in van positie #{posid} op lijst \"{list}\" is teruggedraaid."
+msgstr "De check-in van plaats #{posid} op lijst \"{list}\" is teruggedraaid."
 
 #: pretix/control/logdisplay.py:375
 #, python-brace-format
@@ -7417,8 +7399,6 @@ msgstr "Facturering"
 
 #: pretix/control/navigation.py:92
 #: pretix/presale/templates/pretixpresale/event/order.html:252
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "action"
 msgid "Cancellation"
 msgstr "Annulering"
@@ -8195,22 +8175,16 @@ msgid "No issues. Awesome!"
 msgstr "Geen problemen. Super!"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation settings"
-msgstr "Annulering"
+msgstr "Annuleringsinstellingen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:10
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of unpaid or free orders"
-msgstr "Annulering"
+msgstr "Annulering van onbetaalde of gratis instellingen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:15
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of paid orders"
-msgstr "Annulering"
+msgstr "Annulering van betaalde bestellingen"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:23
 msgid ""
@@ -8219,6 +8193,10 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
+"Als een gebruiker een betaalde bestelling annuleert en het geld niet "
+"automatisch kan worden terugbetaald, bijvoorbeeld door de gekozen "
+"betalingsmethode, dan zult u handmatig actie moeten ondernemen. U heeft "
+"echter notificaties voor dit evenement uitgeschakeld."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:29
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
@@ -9427,8 +9405,6 @@ msgid "Only visible with a voucher"
 msgstr "Alleen zichtbaar met een voucher"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:88
-#, fuzzy
-#| msgid "Can only bought using a voucher"
 msgid "Can only be bought using a voucher"
 msgstr "Kan alleen worden gekocht met een voucher"
 
@@ -9819,6 +9795,8 @@ msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
 msgstr ""
+"Dit zal <strong>niet</strong> automatisch het geld overmaken, maar u zult "
+"hierna opties krijgen om de betaling terug te betalen."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:38
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:47
@@ -9952,10 +9930,8 @@ msgid "Generate a new secret"
 msgstr "Genereer een nieuw geheim"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:148
-#, fuzzy
-#| msgid "Cart position"
 msgid "Cancel position"
-msgstr "Winkelwagenpositie"
+msgstr "Annuleer plaats"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:151
 msgid "Removing this position will also remove all add-ons to this position."
@@ -10560,10 +10536,8 @@ msgstr "Start export"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
-#, fuzzy
-#| msgid "Cancel and reissue"
 msgid "Canceled (paid fee)"
-msgstr "Annuleren en opnieuw uitgeven"
+msgstr "Geannuleerd (betaalde kosten)"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
@@ -10653,6 +10627,9 @@ msgid ""
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
 msgstr ""
+"Als u op links in deze kolom klikt zult u alleen bestellingen vinden die "
+"helemaal zijn geannuleerd, maar de aantallen kunnen ook losse geannuleerde "
+"plaatsen binnen geldige bestellingen meetellen."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
@@ -12402,7 +12379,7 @@ msgstr "De gekozen lijst is verwijderd."
 
 #: pretix/control/views/dashboards.py:74
 msgid "Attendees (ordered)"
-msgstr "Gasten (gesorteerd)"
+msgstr "Gasten (besteld)"
 
 #: pretix/control/views/dashboards.py:83
 msgid "Attendees (paid)"
@@ -12903,16 +12880,12 @@ msgid "The payment has been created successfully."
 msgstr "De betaling is succesvol aangemaakt."
 
 #: pretix/control/views/orders.py:832
-#, fuzzy
-#| msgid ""
-#| "The order has been marked as refunded. Please transfer the money back to "
-#| "the buyer manually."
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
-"De bestelling is gemarkeerd als terugbetaald. Stuur het geld handmatig terug "
-"naar de koper."
+"De bestelling is geannuleerd. U kunt nu kiezen hoe u het geld over wilt "
+"maken naar de gebruiker."
 
 #: pretix/control/views/orders.py:873 pretix/presale/views/order.py:503
 msgid "You cannot generate an invoice for this order."
@@ -13510,10 +13483,8 @@ msgid "Print badges"
 msgstr "Print badges"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
-#, fuzzy
-#| msgid "Badges"
 msgid "Badge"
-msgstr "Badges"
+msgstr "Badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
@@ -13891,6 +13862,8 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Nadat u de bankoverschrijving heeft verstuurd kunt u dit venster sluiten. We "
+"zullen u een email sturen wanneer we uw betaling hebben ontvangen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:57
 msgid "Open banking app"
@@ -15980,6 +15953,7 @@ msgstr "Betaal nu"
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Een terugbetaling van %(amount)s zal binnenkort naar u worden overgemaakt."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:96
 #, python-format
@@ -15987,6 +15961,9 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Een terugbetaling van %(amount)s is naar u overgemaakt. Afhankelijk van de "
+"betalingsmethode kan het tot 14 dagen duren tot dit op uw afschrift "
+"zichtbaar is."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid ""
@@ -16025,31 +16002,36 @@ msgid ""
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder "
 "to your original payment method."
 msgstr ""
+"U kunt deze bestelling annuleren. Als u dit doet zal <strong>%(fee)s</strong>"
+" aan annuleringskosten worden ingehouden, en zal het resterende bedrag "
+"worden teruggestort naar het betalingsmiddel waarmee u betaalde."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:264
 #: pretix/presale/templates/pretixpresale/event/order.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:284
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
 msgid "This will invalidate all of your tickets."
-msgstr ""
+msgstr "Dit zal al uw tickets ongeldig maken."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:268
 msgid ""
 "You can cancel this order and receive a full refund to your original payment "
 "method."
 msgstr ""
+"U kunt deze bestelling annuleren en al uw geld teruggestort krijgen naar het "
+"betalingsmiddel waar u oorspronkelijk mee betaalde."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:281
-#, fuzzy
-#| msgid "You cannot cancel this order."
 msgid "You can cancel this order using the following button."
-msgstr "U kunt deze bestelling niet annuleren."
+msgstr "U kunt deze bestelling annuleren met de volgende knop."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:294
 msgid ""
 "You can not cancel this order yourself. Please contact the event organizer "
 "for more information."
 msgstr ""
+"U kunt deze bestelling niet zelf annuleren. Neem contact op met de "
+"organisator van het evenement voor meer informatie."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
@@ -16063,6 +16045,10 @@ msgid ""
 "original payment method. Depending on the payment method, please allow for "
 "up to two weeks before this appears on your statement."
 msgstr ""
+"Het terug te betalen bedrag (%(amount)s) zal automatisch worden teruggestort "
+"op het betalingsmiddel waarmee u heeft betaald. Afhankelijk van de "
+"betalingsmethode kan dit tot twee weken duren voordat dit op uw afschrift "
+"verschijnt."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:29
 #, python-format
@@ -16072,6 +16058,10 @@ msgid ""
 "event organizer will need to initiate the transfer manually. Please be "
 "patient as this might take a bit longer."
 msgstr ""
+"Met de betalingsmethode die u heeft gebruikt kan het terug te betalen bedrag "
+"(%(amount)s) <strong>niet automatisch worden teruggestort</strong>. In "
+"plaats hiervan moet de organisator het geld handmatig overmaken, wat iets "
+"langer kan duren."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:4
 msgid "Modify order"
@@ -16214,32 +16204,32 @@ msgid "Hello!"
 msgstr "Hallo!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "<a %(a_attr)s>pretix – your free and open source ticket sales software</"
-#| "a>."
+#, python-format
 msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
-"<a %(a_attr)s> pretix – uw vrije en open-source ticketverkoopsoftware</a>."
+"Dit is een zelfgehoste installatie van <a %(a_attr)s> pretix – uw vrije en "
+"open-source ticketverkoopsoftware</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
 msgstr ""
+"Als u een ticket wilt kopen moet u een directe link volgen naar een "
+"evenement of organisatorprofiel."
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
 msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
-msgstr ""
+msgstr "Als u deze installatie wilt instellen <a %(a_attr)s>klikt u hier</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Veel plezier!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
@@ -16461,10 +16451,8 @@ msgid "Dutch"
 msgstr "Nederlands"
 
 #: pretix/settings.py:373
-#, fuzzy
-#| msgid "German (informal)"
 msgid "Dutch (informal)"
-msgstr "Duits (informeel)"
+msgstr "Nederlands (informeel)"
 
 #: pretix/settings.py:374
 msgid "Danish"
