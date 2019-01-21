@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import formset_factory
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import (
     pgettext, pgettext_lazy, ugettext_lazy as _,
@@ -159,6 +161,15 @@ class EventWizardBasicsForm(I18nModelForm):
         return slug
 
 
+class EventChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return mark_safe('{}<br /><span class="text-muted">{} · {}</span>'.format(
+            escape(str(obj)),
+            obj.get_date_range_display() if not obj.has_subevents else _("Event series"),
+            obj.slug
+        ))
+
+
 class EventWizardCopyForm(forms.Form):
 
     @staticmethod
@@ -177,7 +188,7 @@ class EventWizardCopyForm(forms.Form):
         kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-        self.fields['copy_from_event'] = forms.ModelChoiceField(
+        self.fields['copy_from_event'] = EventChoiceField(
             label=_("Copy configuration from"),
             queryset=EventWizardCopyForm.copy_from_queryset(self.user),
             widget=forms.RadioSelect,
