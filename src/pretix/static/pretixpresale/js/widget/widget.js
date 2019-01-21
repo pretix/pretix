@@ -232,12 +232,12 @@ Vue.component('pricebox', {
         taxline: function () {
             if (this.$root.display_net_prices) {
                 return django.interpolate(strings.tax_plus, {
-                    'rate': floatformat(this.price.rate, 2),
+                    'rate': autofloatformat(this.price.rate, 2),
                     'taxname': this.price.name
                 }, true);
             } else {
                 return django.interpolate(strings.tax_incl, {
-                    'rate': floatformat(this.price.rate, 2),
+                    'rate': autofloatformat(this.price.rate, 2),
                     'taxname': this.price.name
                 }, true);
             }

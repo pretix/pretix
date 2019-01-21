@@ -294,11 +294,11 @@
                                                         </ins>
                                                     {% endif %}
                                                     {% if var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
-                                                        <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
+                                                        <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
                                                             <strong>plus</strong> {{ rate }}% {{ name }}
                                                         {% endblocktrans %}</small>
                                                     {% elif var.display_price.rate and var.display_price.gross %}
-                                                        <small>{% blocktrans trimmed with rate=var.display_price.rate name=var.display_price.name %}
+                                                        <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
                                                             incl. {{ rate }}% {{ name }}
                                                         {% endblocktrans %}</small>
                                                     {% endif %}
@@ -398,11 +398,11 @@
                                             </ins>
                                         {% endif %}
                                         {% if item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
-                                            <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
+                                            <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
                                                 <strong>plus</strong> {{ rate }}% {{ name }}
                                             {% endblocktrans %}</small>
                                         {% elif item.display_price.rate and item.display_price.gross %}
-                                            <small>{% blocktrans trimmed with rate=item.display_price.rate name=item.display_price.name %}
+                                            <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
                                                 incl. {{ rate }}% {{ name }}
                                             {% endblocktrans %}</small>
                                         {% endif %}
