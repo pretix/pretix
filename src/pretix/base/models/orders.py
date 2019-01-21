@@ -395,8 +395,14 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
-        positions = list(self.positions.all().select_related('item'))
-        cancelable = all([op.item.allow_cancel for op in positions])
+        from .checkin import Checkin
+
+        positions = list(
+            self.positions.all().annotate(
+                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
+            ).select_related('item')
+        )
+        cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
         if not cancelable or not positions:
             return False
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
