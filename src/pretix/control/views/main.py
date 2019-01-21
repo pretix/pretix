@@ -176,12 +176,6 @@ class EventWizard(SessionWizardView):
                     active=True
                 )
 
-            if basics_data['tax_rate']:
-                event.settings.tax_rate_default = event.tax_rules.create(
-                    name=LazyI18nString.from_gettext(ugettext('VAT')),
-                    rate=basics_data['tax_rate']
-                )
-
             logdata = {}
             for f in form_list:
                 logdata.update({
@@ -203,6 +197,13 @@ class EventWizard(SessionWizardView):
                     name=_('Default'),
                     all_products=True
                 )
+
+            if basics_data['tax_rate']:
+                if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:
+                    event.settings.tax_rate_default = event.tax_rules.create(
+                        name=LazyI18nString.from_gettext(ugettext('VAT')),
+                        rate=basics_data['tax_rate']
+                    )
 
             event.settings.set('timezone', basics_data['timezone'])
             event.settings.set('locale', basics_data['locale'])

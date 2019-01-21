@@ -543,6 +543,7 @@ class Event(EventMixin, LoggedModel):
             else:
                 s.save()
 
+        self.settings.flush()
         event_copy_data.send(
             sender=self, other=other,
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,

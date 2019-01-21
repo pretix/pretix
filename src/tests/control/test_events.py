@@ -580,6 +580,75 @@ class EventsTest(SoupTest):
         assert ev.has_subevents
         assert ev.subevents.count() == 1
 
+    def test_create_event_copy_success(self):
+        tr = self.event1.tax_rules.create(
+            rate=19, name="VAT"
+        )
+        self.event1.items.create(
+            name='Early-bird ticket',
+            category=None, default_price=23, tax_rule=tr,
+            admission=True
+        )
+        self.event1.settings.tax_rate_default = tr
+        doc = self.get_doc('/control/events/add')
+        tabletext = doc.select("form")[0].text
+        self.assertIn("CCC", tabletext)
+        self.assertNotIn("MRM", tabletext)
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+        assert doc.select("#id_basics-name_1")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+
+        assert doc.select("#id_copy-copy_from_event_1")
+
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'copy-copy_from_event': self.event1.pk
+        })
+
+        ev = Event.objects.get(slug='33c3')
+        assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
+        assert ev.settings.locales == ['en', 'de']
+        assert ev.settings.locale == 'en'
+        assert ev.currency == 'EUR'
+        assert ev.settings.timezone == 'Europe/Berlin'
+        assert ev.organizer == self.orga1
+        assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
+        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+
+        berlin_tz = timezone('Europe/Berlin')
+        assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
+        assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
+        assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
+        assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+
+        assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
+
     def test_create_event_only_date_from(self):
         # date_to, presale_start & presale_end are optional fields
         self.post_doc('/control/events/add', {
