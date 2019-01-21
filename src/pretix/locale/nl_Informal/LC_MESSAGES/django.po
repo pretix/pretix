@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-21 05:00+0000\n"
+"PO-Revision-Date: 2019-01-22 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -2177,7 +2177,7 @@ msgstr "Winkelwagenpositie"
 
 #: pretix/base/models/orders.py:1690
 msgid "Cart positions"
-msgstr "Winkelwagenposities"
+msgstr "Winkelwagenplaatsen"
 
 #: pretix/base/models/orders.py:1716 pretix/control/forms/event.py:658
 msgid "Company name"
@@ -4232,8 +4232,8 @@ msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
-"Dit zal alle namen van aanwezigen van bestelposities verwijderen, samen met "
-"opgeslagen veranderingen hieraan."
+"Dit zal alle namen van aanwezigen van bestelde plaatsen verwijderen, samen "
+"met opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:236
 msgid "Invoice addresses"
@@ -10563,7 +10563,7 @@ msgstr "Verwijder filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
-msgstr "Posities"
+msgstr "Plaatsen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/orders/index.html:134
