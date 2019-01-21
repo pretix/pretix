@@ -214,13 +214,13 @@ Vue.component('pricebox', {
     computed: {
         display_price: function () {
             if (this.$root.display_net_prices) {
-                return roundTo(parseFloat(this.price.net), 2).toFixed(2);
+                return floatformat(parseFloat(this.price.net), 2);
             } else {
-                return roundTo(parseFloat(this.price.gross), 2).toFixed(2);
+                return floatformat(parseFloat(this.price.gross), 2);
             }
         },
         original_line: function () {
-            return this.$root.currency + " " + roundTo(parseFloat(this.original_price), 2).toFixed(2);
+            return this.$root.currency + " " + floatformat(parseFloat(this.original_price), 2);
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
