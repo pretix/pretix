@@ -1,11 +1,13 @@
 import datetime
+import decimal
 import json
 
 from django.utils.timezone import now
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Item, ItemVariation, Organizer, Quota, Team, User, Voucher,
+    Event, Item, ItemVariation, Order, OrderPosition, Organizer, Quota, Team,
+    User, Voucher,
 )
 
 
@@ -517,3 +519,39 @@ class VoucherFormTest(SoupTest):
             'block_quota': 'on',
             'subevent': se1.pk
         }, expected_failure=True)
+
+    def test_order_warning_deduplication(self):
+        shirt_voucher = Voucher.objects.create(
+            event=self.event, item=self.shirt, price_mode='set', value=0.0, max_usages=100
+        )
+
+        shirt_order = Order.objects.create(
+            code='DEDUP', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PAID,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=0, locale='en'
+        )
+
+        OrderPosition.objects.create(
+            order=shirt_order,
+            item=self.shirt,
+            variation=self.shirt_red,
+            price=decimal.Decimal("0"),
+            voucher=shirt_voucher
+        )
+
+        OrderPosition.objects.create(
+            order=shirt_order,
+            item=self.shirt,
+            variation=self.shirt_blue,
+            price=decimal.Decimal("0"),
+            voucher=shirt_voucher
+        )
+
+        shirt_voucher.redeemed = 2
+        shirt_voucher.save()
+
+        doc = self.get_doc('/control/event/%s/%s/vouchers/%s/' % (self.orga.slug, self.event.slug, shirt_voucher.pk))
+
+        assert len(doc.select('.alert-warning ul li')) == 1  # Check that there's exactly 1 item in the warning list
+        assert doc.text.count('Order DEDUP') == 1  # Check that the order is listed exactly once

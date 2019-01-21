@@ -13,6 +13,7 @@ from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Quota
+from .orders import Order
 
 
 def _generate_random_code(prefix=None):
@@ -380,3 +381,11 @@ class Voucher(LoggedModel):
                 return p.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
             return p
         return original_price
+
+    def distinct_orders(self):
+        """
+        Return the list of orders where this voucher has been used.
+        Each order will appear at most once.
+        """
+
+        return Order.objects.filter(all_positions__voucher__in=[self]).distinct()
