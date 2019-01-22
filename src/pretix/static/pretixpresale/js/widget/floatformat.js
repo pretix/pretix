@@ -29,7 +29,6 @@ var floatformat = function (val, places) {
 
 var autofloatformat = function (val, places) {
     "use strict";
-    console.log(val, roundTo(val, 0))
     if (val == roundTo(val, 0)) {
         places = 0;
     }
