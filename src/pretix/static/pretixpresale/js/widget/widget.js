@@ -68,9 +68,9 @@ var api = {
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    callback(JSON.parse(xhr.responseText));
+                    callback(JSON.parse(xhr.responseText), xhr);
                 } else {
-                    console.error(xhr.statusText);
+                    err_callback(xhr, e);
                 }
             }
         };
@@ -103,12 +103,11 @@ var api = {
                 if (xhr.status === 200) {
                     callback(JSON.parse(xhr.responseText));
                 } else {
-                    console.error(xhr.statusText);
+                    err_callback(xhr, e);
                 }
             }
         };
         xhr.onerror = function (e) {
-            console.error(xhr.statusText);
             err_callback(xhr, e);
         };
         xhr.send(params);
@@ -393,7 +392,9 @@ Vue.component('category', {
 var shared_methods = {
     buy: function (event) {
         if (this.$root.useIframe) {
-            event.preventDefault();
+            if (event) {
+                event.preventDefault();
+            }
         } else {
             return;
         }
@@ -408,6 +409,13 @@ var shared_methods = {
         }
     },
     buy_error_callback: function (xhr, data) {
+        if (xhr.status === 405) {
+            // Likely a redirect!
+            this.$root.event_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/cart/add") - 18);
+            this.$root.overlay.frame_loading = false;
+            this.buy();
+            return;
+        }
         this.$root.overlay.error_message = strings['cart_error'];
         this.$root.overlay.frame_loading = false;
     },
@@ -422,8 +430,10 @@ var shared_methods = {
     buy_callback: function (data) {
         if (data.redirect) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
-            this.$root.cart_id = data.cart_id;
-            setCookie(this.$root.cookieName, data.cart_id, 30);
+            if (data.cart_id) {
+                this.$root.cart_id = data.cart_id;
+                setCookie(this.$root.cookieName, data.cart_id, 30);
+            }
             if (data.redirect.substr(0, 1) === '/') {
                 data.redirect = this.$root.event_url.replace(/^([^\/]+:\/\/[^\/]+)\/.*$/, "$1") + data.redirect;
             }
@@ -676,7 +686,16 @@ var shared_root_methods = {
             url += "&cart_id=" + cart_id;
         }
         var root = this.$root;
-        api._getJSON(url, function (data) {
+        api._getJSON(url, function (data, xhr) {
+            if (xhr.responseURL !== url) {
+                var new_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/widget/product_list?") + 1);
+                if (root.subevent) {
+                    new_url = new_url.substr(0, new_url.lastIndexOf("/", new_url.length - 1) + 1);
+                }
+                root.event_url = new_url;
+                root.reload();
+                return;
+            }
             root.categories = data.items_by_category;
             root.currency = data.currency;
             root.display_net_prices = data.display_net_prices;
@@ -708,8 +727,9 @@ var shared_root_computed = {
     },
     voucherFormTarget: function () {
         var form_target = this.event_url + 'w/' + widget_id + '/redeem?iframe=1&locale=' + lang;
-        if (getCookie(this.cookieName)) {
-            form_target += "&take_cart_id=" + getCookie(this.cookieName);
+        var cookie = getCookie(this.cookieName);
+        if (cookie) {
+            form_target += "&take_cart_id=" + cookie;
         }
         if (this.subevent) {
             form_target += "&subevent=" + this.subevent;
@@ -722,8 +742,9 @@ var shared_root_computed = {
             checkout_url += "checkout/start";
         }
         var form_target = this.event_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + encodeURIComponent(checkout_url);
-        if (getCookie(this.cookieName)) {
-            form_target += "&take_cart_id=" + getCookie(this.cookieName);
+        var cookie = getCookie(this.cookieName);
+        if (cookie) {
+            form_target += "&take_cart_id=" + cookie;
         }
         return form_target
     },

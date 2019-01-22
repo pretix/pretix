@@ -60,7 +60,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if request.port and request.port not in (80, 443):
                     domain = '%s:%d' % (domain, request.port)
                 path = request.get_full_path().split("/", 2)[-1]
-                return redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+                r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+                r['Access-Control-Allow-Origin'] = '*'
+                return r
 
         if hasattr(request, 'event'):
             # Restrict locales to the ones available for this event
