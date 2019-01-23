@@ -99,7 +99,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     answers = {a.question: a for a in op.answers.all()}
     require_answers = []
     for q in op.item.checkin_questions:
-        if q not in given_answers:
+        if q not in given_answers and q not in answers:
             require_answers.append(q)
 
     _save_answers(op, answers, given_answers)
