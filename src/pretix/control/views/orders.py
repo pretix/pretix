@@ -1255,6 +1255,7 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
     permission = 'can_change_orders'
     template_name = 'pretixcontrol/order/change_questions.html'
     only_user_visible = False
+    all_optional = True
 
     def post(self, request, *args, **kwargs):
         failed = not self.save() or not self.invoice_form.is_valid()

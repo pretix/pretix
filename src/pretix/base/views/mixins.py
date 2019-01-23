@@ -146,6 +146,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     invoice_form_class = BaseInvoiceAddressForm
     invoice_name_form_class = BaseInvoiceNameForm
     only_user_visible = True
+    all_optional = False
 
     @cached_property
     def _positions_for_questions(self):
@@ -189,12 +190,14 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
             return self.invoice_name_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
-                instance=self.invoice_address, validate_vat_id=False
+                instance=self.invoice_address, validate_vat_id=False,
+                all_optional=self.all_optional
             )
         return self.invoice_form_class(
             data=self.request.POST if self.request.method == "POST" else None,
             event=self.request.event,
-            instance=self.invoice_address, validate_vat_id=False
+            instance=self.invoice_address, validate_vat_id=False,
+            all_optional=self.all_optional,
         )
 
     def get_context_data(self, **kwargs):
