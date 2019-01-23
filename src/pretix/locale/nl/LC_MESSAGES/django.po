@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-22 04:00+0000\n"
+"PO-Revision-Date: 2019-01-24 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2160,11 +2160,11 @@ msgstr "Belastingwaarde"
 
 #: pretix/base/models/orders.py:1550
 msgid "Order position"
-msgstr "Bestellingspositie"
+msgstr "Besteld product"
 
 #: pretix/base/models/orders.py:1551 pretix/base/notifications.py:182
 msgid "Order positions"
-msgstr "Bestellingsplaatsen"
+msgstr "Bestelde producten"
 
 #: pretix/base/models/orders.py:1674
 msgid "Cart ID (e.g. session key)"
@@ -2176,7 +2176,7 @@ msgstr "Winkelwagenpositie"
 
 #: pretix/base/models/orders.py:1690
 msgid "Cart positions"
-msgstr "Winkelwagenplaatsen"
+msgstr "Producten in winkelwagen"
 
 #: pretix/base/models/orders.py:1716 pretix/control/forms/event.py:658
 msgid "Company name"
@@ -3250,7 +3250,7 @@ msgid ""
 "positions have been removed from your cart."
 msgstr ""
 "De voorverkoopperiode van dit evenement is nog niet begonnen. De getroffen "
-"plaatsen zijn uit uw winkelwagen verwijderd."
+"tickets zijn uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/cart.py:65 pretix/base/services/orders.py:75
 msgid ""
@@ -3362,12 +3362,11 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
-msgstr "Deze plaats is geannuleerd."
+msgstr "Dit ticket is geannuleerd."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
-msgstr ""
-"Deze bestellingspositie heeft een ongeldig product voor deze inchecklijst."
+msgstr "Dit ticket heeft een ongeldig product voor deze inchecklijst."
 
 #: pretix/base/services/checkin.py:116
 msgid "This order is not marked as paid."
@@ -4241,8 +4240,8 @@ msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
-"Dit zal alle namen van aanwezigen van bestelde plaatsen verwijderen, samen "
-"met opgeslagen veranderingen hieraan."
+"Dit zal alle namen van gasten op bestelde tickets verwijderen, samen met "
+"opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:236
 msgid "Invoice addresses"
@@ -6591,7 +6590,7 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
-"Positie #{posid}: {old_item} ({old_price}) veranderd in {new_item} "
+"Plaats #{posid}: {old_item} ({old_price}) veranderd in {new_item} "
 "({new_price})."
 
 #: pretix/control/logdisplay.py:48
@@ -6600,13 +6599,13 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Positie #{posid}: Evenementsdatum \"{old_event}\" ({old_price}) veranderd in "
+"Plaats #{posid}: Evenementsdatum \"{old_event}\" ({old_price}) veranderd in "
 "\"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:56
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "Prijs van positie #{posid} veranderd van {old_price} naar {new_price}."
+msgstr "Prijs van plaats #{posid} veranderd van {old_price} naar {new_price}."
 
 #: pretix/control/logdisplay.py:66
 #, python-brace-format
@@ -6637,8 +6636,8 @@ msgstr "Een nieuw geheim is gegenereerd voor plaats #{posid}."
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
-"Positie #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe "
-"bestelling: {order}"
+"Plaats #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe bestelling:"
+" {order}"
 
 #: pretix/control/logdisplay.py:109
 #, python-brace-format
@@ -6669,7 +6668,7 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
-"Een scan voor positie #{posid} om {datetime} voor lijst \"{list}\" is "
+"Een scan voor plaats #{posid} om {datetime} voor lijst \"{list}\" is "
 "geüpload, terwijl het ticket al is gescand."
 
 #: pretix/control/logdisplay.py:155
@@ -6678,8 +6677,8 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
-"Positie #{posid} is gescand en geweigerd omdat het al is gescand op lijst "
-"\"{list}\"."
+"Plaats #{posid} is gescand en geweigerd omdat het al is gescand op lijst \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:166
 msgid "The event's internal comment has been updated."
@@ -7262,7 +7261,7 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
-"Positie #{posid} is handmatig gemarkeerd als ingecheckt op {datetime} op "
+"Plaats #{posid} is handmatig gemarkeerd als ingecheckt op {datetime} op "
 "lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:354
@@ -7270,7 +7269,7 @@ msgstr ""
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
-"Positie #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
+"Plaats #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:369
 #, python-brace-format
@@ -9881,7 +9880,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:66
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr "Add-on voor positie #%(posid)s"
+msgstr "Add-on voor plaats #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:82
 msgid "Ticket secret:"
@@ -9936,7 +9935,7 @@ msgstr "Annuleer plaats"
 #: pretix/control/templates/pretixcontrol/order/change.html:151
 msgid "Removing this position will also remove all add-ons to this position."
 msgstr ""
-"Deze positie verwijderen zal ook alle add-ons van deze positie verwijderen."
+"Deze positie verwijderen zal ook alle add-ons van deze plaats verwijderen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:163
 msgid "Add product"
