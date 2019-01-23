@@ -157,7 +157,7 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % self.ticket_pos.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % self.ticket_pos.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post(
@@ -178,7 +178,7 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % self.ticket_pos.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % self.ticket_pos.id)), 1)
         assert "Peter" in response.rendered_content
         assert "Lukas" not in response.rendered_content
 
@@ -207,7 +207,7 @@ class OrdersTest(TestCase):
         response = self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
         # Not all fields filled out, expect success
@@ -230,7 +230,7 @@ class OrdersTest(TestCase):
         response = self.client.get('/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
                                                                   self.order.secret))
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (
             self.ticket_pos.id, self.question.id))), 1)
 
         # Not all required fields filled out, expect failure

@@ -171,10 +171,10 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
 
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.id, q1.id))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q2.id))), 1)
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr2.id, q2.id))), 1)
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (cr1.id, q1.id))), 1)
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (cr2.id, q1.id))), 1)
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (cr1.id, q2.id))), 1)
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (cr2.id, q2.id))), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -477,7 +477,7 @@ class CheckoutTestCase(TestCase):
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
 
-        self.assertEqual(len(doc.select('input[name=%s-question_%s]' % (cr1.id, q1.id))), 1)
+        self.assertEqual(len(doc.select('input[name="%s-question_%s"]' % (cr1.id, q1.id))), 1)
 
         f = SimpleUploadedFile("testfile.txt", b"file_content")
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -510,7 +510,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_email]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_email"]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -540,7 +540,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -571,10 +571,10 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_1]' % cr1.id)), 1)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_2]' % cr1.id)), 1)
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_3]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_1"]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_2"]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_3"]' % cr1.id)), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -606,7 +606,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=%s-attendee_name_parts_0]' % cr1.id)), 1)
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % cr1.id)), 1)
 
         # Not all fields filled out, expect success
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -630,7 +630,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=city]')), 1)
+        self.assertEqual(len(doc.select('input[name="city"]')), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -680,7 +680,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=city]')), 1)
+        self.assertEqual(len(doc.select('input[name="city"]')), 1)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -703,8 +703,8 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=name_parts_0]')), 1)
-        self.assertEqual(len(doc.select('input[name=street]')), 0)
+        self.assertEqual(len(doc.select('input[name="name_parts_0"]')), 1)
+        self.assertEqual(len(doc.select('input[name="street"]')), 0)
 
         # Not all required fields filled out, expect failure
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -731,7 +731,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 2)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
@@ -748,14 +748,14 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 2)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10)
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 1)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 1)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
@@ -773,7 +773,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 1)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 1)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
@@ -797,7 +797,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 2)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
@@ -821,7 +821,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 2)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
@@ -845,7 +845,7 @@ class CheckoutTestCase(TestCase):
         )
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
-        self.assertEqual(len(doc.select('input[name=payment]')), 1)
+        self.assertEqual(len(doc.select('input[name="payment"]')), 1)
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
             'payment': 'banktransfer'
         }, follow=True)
