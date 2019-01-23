@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2019-01-22 04:00+0000\n"
+"PO-Revision-Date: 2019-01-24 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -2161,11 +2161,11 @@ msgstr "Belastingwaarde"
 
 #: pretix/base/models/orders.py:1550
 msgid "Order position"
-msgstr "Bestellingspositie"
+msgstr "Besteld product"
 
 #: pretix/base/models/orders.py:1551 pretix/base/notifications.py:182
 msgid "Order positions"
-msgstr "Bestellingsplaatsen"
+msgstr "Bestelde producten"
 
 #: pretix/base/models/orders.py:1674
 msgid "Cart ID (e.g. session key)"
@@ -2173,11 +2173,11 @@ msgstr "Winkelwagen-ID (bijv. sessiesleutel)"
 
 #: pretix/base/models/orders.py:1689
 msgid "Cart position"
-msgstr "Winkelwagenpositie"
+msgstr "Product in winkelwagen"
 
 #: pretix/base/models/orders.py:1690
 msgid "Cart positions"
-msgstr "Winkelwagenplaatsen"
+msgstr "Producten in winkelwagen"
 
 #: pretix/base/models/orders.py:1716 pretix/control/forms/event.py:658
 msgid "Company name"
@@ -3362,12 +3362,11 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
-msgstr "Deze plaats is geannuleerd."
+msgstr "Dit kaartje is geannuleerd."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
-msgstr ""
-"Deze bestellingspositie heeft een ongeldig product voor deze inchecklijst."
+msgstr "Dit kaartje heeft een ongeldig product voor deze inchecklijst."
 
 #: pretix/base/services/checkin.py:116
 msgid "This order is not marked as paid."
@@ -4232,8 +4231,8 @@ msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
-"Dit zal alle namen van aanwezigen van bestelde plaatsen verwijderen, samen "
-"met opgeslagen veranderingen hieraan."
+"Dit zal alle namen van gasten op bestelde kaartjes verwijderen, samen met "
+"opgeslagen veranderingen hieraan."
 
 #: pretix/base/shredder.py:236
 msgid "Invoice addresses"
