@@ -310,6 +310,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         device = Device.objects.get(pk=device)
     if isinstance(oauth_application, int):
         oauth_application = OAuthApplication.objects.get(pk=oauth_application)
+    if isinstance(cancellation_fee, str):
+        cancellation_fee = Decimal(cancellation_fee)
 
     if not order.cancel_allowed():
         raise OrderError(_('You cannot cancel this order.'))
