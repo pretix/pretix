@@ -36,7 +36,7 @@
                 item to an existing or newly created quota.
             {% endblocktrans %}
         </div>
-    {% elif not object.is_available_by_time %}
+    {% elif object.pk and not object.is_available_by_time %}
         <div class="alert alert-warning">
             {% blocktrans trimmed %}
                 This product is currently not being sold since you configured below that it should only be available in a certain timeframe.
