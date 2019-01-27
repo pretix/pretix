@@ -312,7 +312,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             data['value'] = LazyI18nString(data['value'])
 
     if logentry.action_type in plains:
-        data = defaultdict(lambda: '?', data)
+        if type(data) == list:
+            data = [ defaultdict(lambda: '?', d) for d in data ]
+        else:
+            data = defaultdict(lambda: '?', data)
         return plains[logentry.action_type].format_map(data)
 
     if logentry.action_type.startswith('pretix.event.order.changed'):
