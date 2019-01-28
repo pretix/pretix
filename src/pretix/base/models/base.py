@@ -76,8 +76,10 @@ class LoggingMixin:
             kwargs['api_token'] = api_token
 
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, **kwargs)
-        if data:
+        if isinstance(data, dict):
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
+        elif data:
+            raise TypeError("You should only supply dictionaries as log data.")
         if save:
             logentry.save()
 
