@@ -124,12 +124,12 @@ class VoucherViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             with transaction.atomic():
                 serializer.save(event=self.request.event)
-                for i in serializer.instance:
-                    i.log_action(
+                for i, v in enumerate(serializer.instance):
+                    v.log_action(
                         'pretix.voucher.added',
                         user=self.request.user,
                         auth=self.request.auth,
-                        data=self.request.data
+                        data=self.request.data[i]
                     )
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
