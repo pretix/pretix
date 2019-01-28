@@ -64,7 +64,7 @@ To build and run pretix, you will need the following debian packages::
 
     # apt-get install git build-essential python-dev python-virtualenv python3 python3-pip \
                       python3-dev libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
-                      gettext libpq-dev libmysqlclient-dev libjpeg-dev
+                      gettext libpq-dev libmysqlclient-dev libjpeg-dev libopenjp2-7-dev
 
 Config file
 -----------
