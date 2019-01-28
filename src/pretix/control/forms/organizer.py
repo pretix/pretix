@@ -262,6 +262,13 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         ],
         help_text=_('Only respected by modern browsers.')
     )
+    favicon = ExtFileField(
+        label=_('Favicon'),
+        ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg"),
+        required=False,
+        help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
+                    'We recommend a size of at least 200x200px to accomodate most devices.')
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
