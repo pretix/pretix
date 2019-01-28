@@ -98,9 +98,9 @@ def test_assign_order_amount_incorrect(env, client):
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
         'action_{}'.format(trans.pk): 'assign:{}'.format(env[2].code)
     }).content.decode('utf-8'))
-    assert r['status'] == 'error'
+    assert r['status'] == 'ok'
     trans.refresh_from_db()
-    assert trans.state == BankTransaction.STATE_NOMATCH
+    assert trans.state == BankTransaction.STATE_VALID
 
 
 @pytest.mark.django_db

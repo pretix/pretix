@@ -599,12 +599,3 @@ def test_event_with_order_position_not_delete(token_client, organizer, event, it
     assert resp.content.decode() == '{"detail":"The event can not be deleted as it already contains orders. Please ' \
                                     'set \'live\' to false to hide the event and take the shop offline instead."}'
     assert organizer.events.filter(pk=event.id).exists()
-
-
-@pytest.mark.django_db
-def test_event_with_cart_position_not_delete(token_client, organizer, event, item, cart_position):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
-    assert resp.status_code == 403
-    assert resp.content.decode() == '{"detail":"The event could not be deleted as some constraints (e.g. data ' \
-                                    'created by plug-ins) do not allow it."}'
-    assert organizer.events.filter(pk=event.id).exists()
