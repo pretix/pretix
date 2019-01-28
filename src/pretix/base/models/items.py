@@ -1111,16 +1111,16 @@ class Quota(LoggedModel):
 
         size_left -= self.count_blocking_vouchers(now_dt)
         if size_left <= 0:
-            return Quota.AVAILABILITY_RESERVED, 0
-
-        size_left -= self.count_in_cart(now_dt)
-        if size_left <= 0:
-            return Quota.AVAILABILITY_RESERVED, 0
+            return Quota.AVAILABILITY_ORDERED, 0
 
         if count_waitinglist:
             size_left -= self.count_waiting_list_pending()
             if size_left <= 0:
-                return Quota.AVAILABILITY_RESERVED, 0
+                return Quota.AVAILABILITY_ORDERED, 0
+
+        size_left -= self.count_in_cart(now_dt)
+        if size_left <= 0:
+            return Quota.AVAILABILITY_RESERVED, 0
 
         return Quota.AVAILABILITY_OK, size_left
 
