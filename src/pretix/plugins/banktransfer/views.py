@@ -41,11 +41,6 @@ class ActionView(View):
         })
 
     def _retry(self, trans):
-        if trans.amount != trans.order.total:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('The transaction amount is incorrect.')
-            })
         return self._accept_ignore_amount(trans)
 
     def _accept_ignore_amount(self, trans):
