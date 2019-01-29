@@ -83,23 +83,46 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     permission = 'can_view_orders'
 
     def get_queryset(self):
-        s = OrderPosition.objects.filter(
-            order=OuterRef('pk')
-        ).order_by().values('order').annotate(k=Count('id')).values('k')
         qs = Order.objects.filter(
             event=self.request.event
-        ).annotate(pcnt=Subquery(s, output_field=IntegerField())).select_related('invoice_address')
-
-        qs = Order.annotate_overpayments(qs)
+        ).select_related('invoice_address')
 
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
-        return qs.distinct()
+        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+
+        # Only compute this annotations for this page (query optimization)
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        annotated = {
+            o['pk']: o
+            for o in
+            Order.annotate_overpayments(Order.objects).filter(
+                pk__in=[o.pk for o in ctx['orders']]
+            ).annotate(
+                pcnt=Subquery(s, output_field=IntegerField())
+            ).values(
+                'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
+                'has_pending_refund'
+            )
+        }
+
+        for o in ctx['orders']:
+            if o.pk not in annotated:
+                continue
+            o.pcnt = annotated.get(o.pk)['pcnt']
+            o.is_overpaid = annotated.get(o.pk)['is_overpaid']
+            o.is_underpaid = annotated.get(o.pk)['is_underpaid']
+            o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
+            o.has_external_refund = annotated.get(o.pk)['has_external_refund']
+            o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
+
         return ctx
 
     @cached_property

@@ -20,15 +20,32 @@ class OrderSearch(PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
+
+        # Only compute this annotations for this page (query optimization)
+        s = OrderPosition.objects.filter(
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(k=Count('id')).values('k')
+        annotated = {
+            o['pk']: o
+            for o in
+            Order.objects.filter(
+                pk__in=[o.pk for o in ctx['orders']]
+            ).annotate(
+                pcnt=Subquery(s, output_field=IntegerField())
+            ).values(
+                'pk', 'pcnt',
+            )
+        }
+
+        for o in ctx['orders']:
+            if o.pk not in annotated:
+                continue
+            o.pcnt = annotated.get(o.pk)['pcnt']
+
         return ctx
 
     def get_queryset(self):
         qs = Order.objects.select_related('invoice_address')
-
-        s = OrderPosition.objects.filter(
-            order=OuterRef('pk')
-        ).order_by().values('order').annotate(k=Count('id')).values('k')
-        qs = qs.annotate(pcnt=Subquery(s, output_field=IntegerField()))
 
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(

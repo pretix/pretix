@@ -175,7 +175,7 @@ class OrderFilterForm(FilterForm):
 
 class EventOrderFilterForm(OrderFilterForm):
     orders = {'code': 'code', 'email': 'email', 'total': 'total',
-              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt'}
+              'datetime': 'datetime', 'status': 'status'}
 
     item = forms.ModelChoiceField(
         label=_('Products'),
@@ -275,16 +275,19 @@ class EventOrderFilterForm(OrderFilterForm):
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
 
         if fdata.get('status') == 'overpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
             qs = qs.filter(
                 Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
                 | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
             )
         elif fdata.get('status') == 'pendingpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
             qs = qs.filter(
                 Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
                 & Q(require_approval=False)
             )
         elif fdata.get('status') == 'underpaid':
+            qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
             qs = qs.filter(
                 status=Order.STATUS_PAID,
                 pending_sum_t__gt=0
@@ -300,7 +303,7 @@ class EventOrderFilterForm(OrderFilterForm):
 
 class OrderSearchFilterForm(OrderFilterForm):
     orders = {'code': 'code', 'email': 'email', 'total': 'total',
-              'datetime': 'datetime', 'status': 'status', 'pcnt': 'pcnt',
+              'datetime': 'datetime', 'status': 'status',
               'event': 'event'}
 
     organizer = forms.ModelChoiceField(

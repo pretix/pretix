@@ -137,7 +137,7 @@ class Order(LockModel, LoggedModel):
     )
     secret = models.CharField(max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
-        verbose_name=_("Date")
+        verbose_name=_("Date"), db_index=True
     )
     expires = models.DateTimeField(
         verbose_name=_("Expiration date")
@@ -240,7 +240,7 @@ class Order(LockModel, LoggedModel):
         return total - payment_sum + refund_sum
 
     @classmethod
-    def annotate_overpayments(cls, qs):
+    def annotate_overpayments(cls, qs, results=True, refunds=True, sums=False):
         payment_sum = OrderPayment.objects.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             order=OuterRef('pk')
@@ -258,38 +258,47 @@ class Order(LockModel, LoggedModel):
             state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
             order=OuterRef('pk')
         )
+        payment_sum_sq = Subquery(payment_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10))
+        refund_sum_sq = Subquery(refund_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10))
+        if sums:
+            qs = qs.annotate(
+                payment_sum=payment_sum_sq,
+                refund_sum=refund_sum_sq,
+            )
 
         qs = qs.annotate(
-            payment_sum=Subquery(payment_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10)),
-            refund_sum=Subquery(refund_sum, output_field=models.DecimalField(decimal_places=2, max_digits=10)),
-            has_external_refund=Exists(external_refund),
-            has_pending_refund=Exists(pending_refund),
-        ).annotate(
-            pending_sum_t=F('total') - Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
-            pending_sum_rc=-1 * Coalesce(F('payment_sum'), 0) + Coalesce(F('refund_sum'), 0),
-        ).annotate(
-            is_overpaid=Case(
-                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
-                     then=Value('1')),
-                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
-                     then=Value('1')),
-                default=Value('0'),
-                output_field=models.IntegerField()
-            ),
-            is_pending_with_full_payment=Case(
-                When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=1e-8)
-                     & Q(require_approval=False),
-                     then=Value('1')),
-                default=Value('0'),
-                output_field=models.IntegerField()
-            ),
-            is_underpaid=Case(
-                When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
-                     then=Value('1')),
-                default=Value('0'),
-                output_field=models.IntegerField()
-            )
+            pending_sum_t=F('total') - Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
+            pending_sum_rc=-1 * Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
         )
+        if refunds:
+            qs = qs.annotate(
+                has_external_refund=Exists(external_refund),
+                has_pending_refund=Exists(pending_refund),
+            )
+        if results:
+            qs = qs.annotate(
+                is_overpaid=Case(
+                    When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
+                         then=Value('1')),
+                    When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
+                         then=Value('1')),
+                    default=Value('0'),
+                    output_field=models.IntegerField()
+                ),
+                is_pending_with_full_payment=Case(
+                    When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=1e-8)
+                         & Q(require_approval=False),
+                         then=Value('1')),
+                    default=Value('0'),
+                    output_field=models.IntegerField()
+                ),
+                is_underpaid=Case(
+                    When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
+                         then=Value('1')),
+                    default=Value('0'),
+                    output_field=models.IntegerField()
+                )
+            )
         return qs
 
     @property
