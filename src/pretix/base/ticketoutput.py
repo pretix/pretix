@@ -70,14 +70,12 @@ class BaseTicketOutput:
         If you override this method, make sure that positions that are addons (i.e. ``addon_to``
         is set) are only outputted if the event setting ``ticket_download_addons`` is active.
         Do the same for positions that are non-admission without ``ticket_download_nonadm`` active.
+        If you want, you can just iterate over ``order.positions_with_tickets`` which applies the
+        appropriate filters for you.
         """
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
-                for pos in order.positions.all():
-                    if pos.addon_to_id and not self.event.settings.ticket_download_addons:
-                        continue
-                    if not pos.item.admission and not self.event.settings.ticket_download_nonadm:
-                        continue
+                for pos in order.positions_with_tickets:
                     fname, __, content = self.generate(pos)
                     zipf.writestr('{}-{}{}'.format(
                         order.code, pos.positionid, os.path.splitext(fname)[1]

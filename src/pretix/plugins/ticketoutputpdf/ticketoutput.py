@@ -73,12 +73,7 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate_order(self, order: Order):
         merger = PdfFileMerger()
         with language(order.locale):
-            for op in order.positions.all():
-                if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                    continue
-                if not op.item.admission and not self.event.settings.ticket_download_nonadm:
-                    continue
-
+            for op in order.positions_with_tickets:
                 layout = self.layout_map.get(
                     (op.item_id, order.sales_channel),
                     self.layout_map.get(

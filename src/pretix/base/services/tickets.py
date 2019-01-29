@@ -117,6 +117,8 @@ def get_tickets_for_order(order):
 
         if p.multi_download_enabled:
             try:
+                if len(order.positions_with_tickets) == 0:
+                    continue
                 ct = CachedCombinedTicket.objects.filter(
                     order=order, provider=p.identifier, file__isnull=False
                 ).last()
@@ -132,11 +134,7 @@ def get_tickets_for_order(order):
             except:
                 logger.exception('Failed to generate ticket.')
         else:
-            for pos in order.positions.all():
-                if pos.addon_to and not order.event.settings.ticket_download_addons:
-                    continue
-                if not pos.item.admission and not order.event.settings.ticket_download_nonadm:
-                    continue
+            for pos in order.positions_with_tickets:
                 try:
                     ct = CachedTicket.objects.filter(
                         order_position=pos, provider=p.identifier, file__isnull=False

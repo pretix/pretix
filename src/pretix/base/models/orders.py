@@ -686,6 +686,15 @@ class Order(LockModel, LoggedModel):
                     }
                 )
 
+    @property
+    def positions_with_tickets(self):
+        for op in self.positions.all():
+            if op.addon_to_id and not self.event.settings.ticket_download_addons:
+                continue
+            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+                continue
+            yield op
+
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)

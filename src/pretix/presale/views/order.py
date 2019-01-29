@@ -94,7 +94,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
-        ctx['can_download'] = can_download and self.order.ticket_download_available
+        ctx['can_download'] = can_download and self.order.ticket_download_available and self.order.positions_with_tickets
         ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
