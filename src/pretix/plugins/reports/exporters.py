@@ -22,7 +22,7 @@ from pretix.base.services.stats import order_overview
 
 
 class ReportlabExportMixin:
-    multiBuild = False
+    multiBuild = False  # noqa
 
     @property
     def pagesize(self):

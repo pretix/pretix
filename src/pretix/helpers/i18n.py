@@ -86,8 +86,8 @@ moment_locales = {
     'te', 'tzm', 'zh-cn',
 }
 
-toJavascript_re = re.compile(r'(?<!\w)(' + '|'.join(date_conversion_to_moment.keys()) + r')\b')
-toJavascriptOut_re = re.compile(r'(?<!\w)(' + '|'.join(out_date_conversion_to_moment.keys()) + r')\b')
+toJavascript_re = re.compile(r'(?<!\w)(' + '|'.join(date_conversion_to_moment.keys()) + r')\b')  # noqa
+toJavascriptOut_re = re.compile(r'(?<!\w)(' + '|'.join(out_date_conversion_to_moment.keys()) + r')\b')  # noqa
 
 
 def get_javascript_output_format(format_name):
