@@ -358,8 +358,8 @@ class Event(EventMixin, LoggedModel):
         OrderPosition.all.filter(order__event=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order__event=self).delete()
         OrderFee.objects.filter(order__event=self).delete()
-        OrderPayment.objects.filter(order__event=self).delete()
         OrderRefund.objects.filter(order__event=self).delete()
+        OrderPayment.objects.filter(order__event=self).delete()
         self.orders.all().delete()
 
     def save(self, *args, **kwargs):
