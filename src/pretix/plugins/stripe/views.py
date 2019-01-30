@@ -269,14 +269,14 @@ def charge_webhook(event, event_json, charge_id, rso):
         except Quota.QuotaExceededException:
             pass
     elif charge['status'] == 'failed' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
-            payment.info = str(charge)
-            payment.state = OrderPayment.PAYMENT_STATE_FAILED
-            payment.save()
-            payment.order.log_action('pretix.event.order.payment.failed', {
-                'local_id': payment.local_id,
-                'provider': payment.provider,
-                'info': str(charge)
-            })
+        payment.info = str(charge)
+        payment.state = OrderPayment.PAYMENT_STATE_FAILED
+        payment.save()
+        payment.order.log_action('pretix.event.order.payment.failed', {
+            'local_id': payment.local_id,
+            'provider': payment.provider,
+            'info': str(charge)
+        })
 
     return HttpResponse(status=200)
 
