@@ -23,7 +23,7 @@ that we'll provide in this plugin::
 
 
     @receiver(register_invoice_renderers, dispatch_uid="output_custom")
-    def register_infoice_renderers(sender, **kwargs):
+    def register_invoice_renderers(sender, **kwargs):
         from .invoice import MyInvoiceRenderer
         return MyInvoiceRenderer
 
