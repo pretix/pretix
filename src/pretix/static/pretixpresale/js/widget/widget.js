@@ -409,7 +409,7 @@ var shared_methods = {
         }
     },
     buy_error_callback: function (xhr, data) {
-        if (xhr.status === 405) {
+        if (xhr.status === 405 && typeof xhr.responseURL !== "undefined") {
             // Likely a redirect!
             this.$root.event_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/cart/add") - 18);
             this.$root.overlay.frame_loading = false;
@@ -687,7 +687,7 @@ var shared_root_methods = {
         }
         var root = this.$root;
         api._getJSON(url, function (data, xhr) {
-            if (xhr.responseURL !== url) {
+            if (typeof xhr.responseURL !== "undefined" && xhr.responseURL !== url) {
                 var new_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/widget/product_list?") + 1);
                 if (root.subevent) {
                     new_url = new_url.substr(0, new_url.lastIndexOf("/", new_url.length - 1) + 1);
