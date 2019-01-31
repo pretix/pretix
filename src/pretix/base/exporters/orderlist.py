@@ -18,7 +18,7 @@ from ..signals import register_data_exporters
 
 class OrderListExporter(ListExporter):
     identifier = 'orderlist'
-    verbose_name = ugettext_lazy('List of orders')
+    verbose_name = ugettext_lazy('Order data')
 
     @property
     def additional_form_fields(self):
@@ -166,7 +166,7 @@ class OrderListExporter(ListExporter):
 
 class PaymentListExporter(ListExporter):
     identifier = 'paymentlist'
-    verbose_name = ugettext_lazy('List of payments and refunds')
+    verbose_name = ugettext_lazy('Order payments and refunds')
 
     @property
     def additional_form_fields(self):

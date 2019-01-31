@@ -10,7 +10,7 @@ from ..signals import register_data_exporters
 
 class JSONExporter(BaseExporter):
     identifier = 'json'
-    verbose_name = 'JSON'
+    verbose_name = 'Order data (JSON)'
 
     def render(self, form_data):
         jo = {
