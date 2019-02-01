@@ -93,6 +93,10 @@ DEFAULTS = {
         'default': '30',
         'type': int
     },
+    'payment_explanation': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'payment_term_days': {
         'default': '14',
         'type': int

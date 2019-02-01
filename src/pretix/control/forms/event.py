@@ -517,6 +517,16 @@ class PaymentSettingsForm(SettingsForm):
         help_text=_("The tax rule that applies for additional fees you configured for single payment methods. This "
                     "will set the tax rate and reverse charge rules, other settings of the tax rule are ignored.")
     )
+    payment_explanation = I18nFormField(
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {
+            'rows': 3,
+        }},
+        required=False,
+        label=_("Guidance text"),
+        help_text=_("This text will be shown above the payment options. You can explain the choices to the user here, "
+                    "if you want.")
+    )
 
     def clean(self):
         cleaned_data = super().clean()

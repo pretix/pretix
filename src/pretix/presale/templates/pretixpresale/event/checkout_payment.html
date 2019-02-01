@@ -2,8 +2,12 @@
 {% load i18n %}
 {% load money %}
 {% load bootstrap3 %}
+{% load rich_text %}
 {% block inner %}
     <p>{% trans "Please select how you want to pay." %}</p>
+    {% if event.settings.payment_explanation %}
+        {{ event.settings.payment_explanation|rich_text }}
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         <div class="panel-group" id="payment_accordion">
