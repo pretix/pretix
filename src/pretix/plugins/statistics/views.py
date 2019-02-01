@@ -117,6 +117,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             ctx['obp_data'] = json.dumps([
                 {
                     'item': item_names[item],
+                    'item_short': item_names[item] if len(item_names[item]) < 15 else (item_names[item][:15] + "…"),
                     'ordered': cnt,
                     'paid': num_paid.get(item, 0)
                 } for item, cnt in num_ordered.items()
