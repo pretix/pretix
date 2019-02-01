@@ -1,7 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load order_overview %}
-{% block title %}{% trans "Sales overview" %}{% endblock %}
+{% block title %}{% trans "Order overview" %}{% endblock %}
 {% block content %}
     {% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug as listurl %}
     <div class="pull-right">
