@@ -38,8 +38,6 @@
                                                 You need to choose {{ min_count }} options from this category.
                                             {% endblocktrans %}
                                         {% elif c.min_count == 0 and c.max_count >= c.form.fields|length %}
-                                            {% blocktrans %}
-                                            {% endblocktrans %}
                                         {% else %}
                                             {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}
                                                 You can choose between {{ min_count }} and {{ max_count }} options from
