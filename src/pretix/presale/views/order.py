@@ -102,8 +102,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             order=self.order
         )
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
-            self.request.event.settings.ticket_download_nonadm or
-            [p.item.admission for p in ctx['cart']['positions']].count(True) > 1
+            [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
         ctx['invoices'] = list(self.order.invoices.all())
         can_generate_invoice = (
@@ -685,10 +684,8 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         if not self.order.ticket_download_available:
             return self.error(_('Ticket download is not (yet) enabled for this order.'))
-        if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
-            return self.error(_('Ticket download is not enabled for add-on products.'))
-        if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):
-            return self.error(_('Ticket download is not enabled for non-admission products.'))
+        if 'position' in kwargs and not self.order_position.generate_ticket:
+            return self.error(_('Ticket download is not enabled for this product.'))
 
         ct = self.get_last_ct()
         if ct:

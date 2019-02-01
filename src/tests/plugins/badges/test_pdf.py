@@ -9,6 +9,7 @@ from PyPDF2 import PdfFileReader
 from pretix.base.models import (
     Event, Item, ItemVariation, Order, OrderPosition, Organizer,
 )
+from pretix.base.services.orders import OrderError
 from pretix.plugins.badges.exporters import BadgeExporter
 
 
@@ -43,21 +44,17 @@ def test_generate_pdf(env):
     event, order, shirt = env
     event.badge_layouts.create(name="Default", default=True)
     e = BadgeExporter(event)
-    fname, ftype, buf = e.render({
-        'items': [shirt.pk],
-        'include_pending': False
-    })
-    assert ftype == 'application/pdf'
-    pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 0
+    with pytest.raises(OrderError):
+        e.render({
+            'items': [shirt.pk],
+            'include_pending': False
+        })
 
-    fname, ftype, buf = e.render({
-        'items': [],
-        'include_pending': True
-    })
-    assert ftype == 'application/pdf'
-    pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 0
+    with pytest.raises(OrderError):
+        e.render({
+            'items': [],
+            'include_pending': True
+        })
 
     fname, ftype, buf = e.render({
         'items': [shirt.pk],

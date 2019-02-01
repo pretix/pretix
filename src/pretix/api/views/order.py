@@ -456,10 +456,8 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
 
         if pos.order.status != Order.STATUS_PAID:
             raise PermissionDenied("Downloads are not available for unpaid orders.")
-        if pos.addon_to_id and not request.event.settings.ticket_download_addons:
-            raise PermissionDenied("Downloads are not enabled for add-on products.")
-        if not pos.item.admission and not request.event.settings.ticket_download_nonadm:
-            raise PermissionDenied("Downloads are not enabled for non-admission products.")
+        if not pos.generate_ticket:
+            raise PermissionDenied("Downloads are not enabled for this product.")
 
         ct = CachedTicket.objects.filter(
             order_position=pos, provider=provider.identifier, file__isnull=False

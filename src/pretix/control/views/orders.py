@@ -301,10 +301,8 @@ class OrderDownload(AsyncAction, OrderView):
             return self.error(_('You requested an invalid ticket output type.'))
         if not self.order_position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if 'position' in kwargs and (self.order_position.addon_to and not self.request.event.settings.ticket_download_addons):
-            return self.error(_('Ticket download is not enabled for add-on products.'))
-        if 'position' in kwargs and (not self.order_position.item.admission and not self.request.event.settings.ticket_download_nonadm):
-            return self.error(_('Ticket download is not enabled for non-admission products.'))
+        if 'position' in kwargs and not self.order_position.generate_ticket:
+            return self.error(_('Ticket download is not enabled for this product.'))
 
         ct = self.get_last_ct()
         if ct:

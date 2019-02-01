@@ -689,9 +689,7 @@ class Order(LockModel, LoggedModel):
     @property
     def positions_with_tickets(self):
         for op in self.positions.all():
-            if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                continue
-            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+            if not op.generate_ticket:
                 continue
             yield op
 
@@ -1578,6 +1576,15 @@ class OrderPosition(AbstractPosition):
     @cached_property
     def sort_key(self):
         return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0
+
+    @property
+    def generate_ticket(self):
+        if self.item.generate_tickets is not None:
+            return self.item.generate_tickets
+        return (
+            (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
+            (self.event.settings.ticket_download_nonadm or self.item.admission)
+        )
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:

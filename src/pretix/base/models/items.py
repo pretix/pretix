@@ -287,6 +287,10 @@ class Item(LoggedModel):
         ),
         default=False
     )
+    generate_tickets = models.NullBooleanField(
+        verbose_name=_("Generate tickets"),
+        blank=True, null=True,
+    )
     position = models.IntegerField(
         default=0
     )

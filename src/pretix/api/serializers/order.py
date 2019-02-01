@@ -114,9 +114,7 @@ class PositionDownloadsField(serializers.Field):
         if instance.order.status != Order.STATUS_PAID:
             if instance.order.status != Order.STATUS_PENDING or instance.order.require_approval or not instance.order.event.settings.ticket_download_pending:
                 return []
-        if instance.addon_to_id and not instance.order.event.settings.ticket_download_addons:
-            return []
-        if not instance.item.admission and not instance.order.event.settings.ticket_download_nonadm:
+        if not instance.generate_ticket:
             return []
 
         request = self.context['request']

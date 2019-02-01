@@ -221,6 +221,7 @@ TEST_ITEM_RES = {
     "tax_rule": None,
     "admission": False,
     "position": 0,
+    "generate_tickets": None,
     "picture": None,
     "available_from": None,
     "available_until": None,

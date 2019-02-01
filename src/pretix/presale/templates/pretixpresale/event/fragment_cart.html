@@ -56,20 +56,18 @@
             {% endif %}
         </div>
 
-        {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}
+        {% if download and line.generate_ticket %}
             <div class="download-desktop">
-                {% if not line.addon_to or event.settings.ticket_download_addons %}
-                    {% for b in download_buttons %}
-                        <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                            </button>
-                        </form>
-                    {% endfor %}
-                {% endif %}
+                {% for b in download_buttons %}
+                    <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                            method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                        </button>
+                    </form>
+                {% endfor %}
             </div>
         {% elif line.addon_to %}
             <div class="count">&nbsp;</div>
@@ -149,20 +147,18 @@
                 {% endif %}
             {% endif %}
         </div>
-        {% if download and line.item.admission|default:event.settings.ticket_download_nonadm %}
+        {% if download and line.generate_ticket %}
             <div class="download-mobile">
-                {% if not line.addon_to or event.settings.ticket_download_addons %}
-                    {% for b in download_buttons %}
-                        <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
-                            method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                               class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                            </button>
-                        </form>
-                    {% endfor %}
-                {% endif %}
+                {% for b in download_buttons %}
+                    <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                        method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                           class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                        </button>
+                    </form>
+                {% endfor %}
             </div>
         {% endif %}
         <div class="clearfix"></div>

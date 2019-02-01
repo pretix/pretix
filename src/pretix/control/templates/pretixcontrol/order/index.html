@@ -257,20 +257,18 @@
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
-                                        {% if not line.addon_to or request.event.settings.ticket_download_addons %}
-                                            {% if line.item.admission or request.event.settings.ticket_download_nonadm %}
-                                                {% for b in download_buttons %}
-                                                    <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
-                                                            method="post" data-asynctask data-asynctask-download
-                                                            class="form-inline helper-display-inline">
-                                                        {% csrf_token %}
-                                                        <button type="submit"
-                                                                class="btn btn-xs btn-default">
-                                                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                                                        </button>
-                                                    </form>
-                                                {% endfor %}
-                                            {% endif %}
+                                        {% if line.generate_ticket %}
+                                            {% for b in download_buttons %}
+                                                <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
+                                                        method="post" data-asynctask data-asynctask-download
+                                                        class="form-inline helper-display-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="btn btn-xs btn-default">
+                                                        <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                                    </button>
+                                                </form>
+                                            {% endfor %}
                                         {% endif %}
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
                                     </div>

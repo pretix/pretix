@@ -297,6 +297,16 @@ class ItemCreateForm(I18nModelForm):
         ]
 
 
+class TicketNullBooleanSelect(forms.NullBooleanSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ('1', _('Choose automatically depending on event settings')),
+            ('2', _('Yes, if ticket generation is enabled in general')),
+            ('3', _('Never')),
+        )
+        super(forms.NullBooleanSelect, self).__init__(attrs, choices)
+
+
 class ItemUpdateForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -340,6 +350,7 @@ class ItemUpdateForm(I18nModelForm):
             'max_per_order',
             'min_per_order',
             'checkin_attention',
+            'generate_tickets',
             'original_price'
         ]
         field_classes = {
@@ -349,6 +360,7 @@ class ItemUpdateForm(I18nModelForm):
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
+            'generate_tickets': TicketNullBooleanSelect()
         }
 
 

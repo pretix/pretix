@@ -64,6 +64,12 @@ original_price                        money (string)             An original pri
 require_approval                      boolean                    If ``True``, orders with this product will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
+generate_tickets                      boolean                    If ``False``, tickets are never generated for this
+                                                                 product, regardless of other settings. If ``True``,
+                                                                 tickets are generated even if this is a
+                                                                 non-admission or add-on product, regardless of event
+                                                                 settings. If this is ``null``, regular ticketing
+                                                                 rules apply.
 has_variations                        boolean                    Shows whether or not this item has variations.
 variations                            list of objects            A list with one object for each variation of this item.
                                                                  Can be empty. Only writable during creation,
@@ -110,6 +116,10 @@ addons                                list of objects            Definition of a
 .. versionchanged:: 2.3
 
    The ``sales_channels`` attribute has been added.
+
+.. versionchanged:: 2.4
+
+   The ``generate_tickets`` attribute has been added.
 
 Notes
 -----
@@ -174,6 +184,7 @@ Endpoints
             "max_per_order": null,
             "checkin_attention": false,
             "has_variations": false,
+            "generate_tickets": null,
             "require_approval": false,
             "variations": [
               {
@@ -256,6 +267,7 @@ Endpoints
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
+        "generate_tickets": null,
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
@@ -323,6 +335,7 @@ Endpoints
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
+        "generate_tickets": null,
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
@@ -379,6 +392,7 @@ Endpoints
         "allow_cancel": true,
         "min_per_order": null,
         "max_per_order": null,
+        "generate_tickets": null,
         "checkin_attention": false,
         "has_variations": true,
         "require_approval": false,
@@ -462,6 +476,7 @@ Endpoints
         "available_until": null,
         "require_voucher": false,
         "hide_without_voucher": false,
+        "generate_tickets": null,
         "allow_cancel": true,
         "min_per_order": null,
         "max_per_order": null,

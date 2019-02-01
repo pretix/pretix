@@ -77,9 +77,7 @@ class AllTicketsPDF(BaseExporter):
             )
 
         for op in qs:
-            if op.addon_to_id and not self.event.settings.ticket_download_addons:
-                continue
-            if not op.item.admission and not self.event.settings.ticket_download_nonadm:
+            if not op.generate_ticket:
                 continue
 
             with language(op.order.locale):
