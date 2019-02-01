@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-18 16:25+0000\n"
-"PO-Revision-Date: 2018-12-02 15:44+0000\n"
-"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
+"PO-Revision-Date: 2019-01-28 16:30+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -227,19 +227,19 @@ msgstr "Forma corta"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:94
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (separado por comas)"
 
 #: pretix/base/exporter.py:95
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (estilo Excel)"
 
 #: pretix/base/exporter.py:96
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (con punto y coma)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -883,7 +883,7 @@ msgstr "Referencia del cliente: {reference}"
 #: pretix/base/invoice.py:426
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Beneficiario"
 
 #: pretix/base/invoice.py:448 pretix/base/invoice.py:456
 msgctxt "invoice"
@@ -1520,6 +1520,9 @@ msgid ""
 "this is unchecked, orders containing this product can not be canceled by "
 "users but only by you."
 msgstr ""
+"Si está chequeado, aplica la configuración usual de cancelación para este "
+"evento. Si no está chequeado, las ordenes conteniendo este producto no "
+"pueden ser canceladas por los usuarios, solo por usted."
 
 #: pretix/base/models/items.py:334
 msgid "Minimum amount per order"
@@ -2225,7 +2228,7 @@ msgstr "Esta referencia se imprimirá en su factura para su conveniencia."
 
 #: pretix/base/models/orders.py:1733
 msgid "Beneficiary"
-msgstr ""
+msgstr "Beneficiario"
 
 #: pretix/base/models/organizer.py:35
 msgid ""
@@ -3615,6 +3618,8 @@ msgstr "No puede cancelar este pedido."
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
+"La cuota de cancelación no puede ser mayor que el crédito de pago para esta "
+"orden."
 
 #: pretix/base/services/orders.py:371
 #, python-format
@@ -3712,6 +3717,8 @@ msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"Sucedió un error al tratar de devolverle el dinero. Por favor contacte al "
+"organizador del evento por información adicional."
 
 #: pretix/base/services/shredder.py:73
 msgid ""
@@ -4999,6 +5006,9 @@ msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"El dinero pagado será automáticamente devuelto si el método de pago lo "
+"permite. De otra manera, un reembolso manual será creado para ser procesado "
+"por usted."
 
 #: pretix/control/forms/event.py:454
 #, fuzzy
@@ -5008,7 +5018,7 @@ msgstr "Cancelación"
 
 #: pretix/control/forms/event.py:458
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Conservar cuota de pago, envío y servicios"
 
 #: pretix/control/forms/event.py:462
 #, fuzzy
@@ -5629,6 +5639,9 @@ msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Este texto será mostrado cerca de la casilla de ingreso para el código de "
+"descuento. Puede utilizarlo, por ejemplo, para explicar como obtener un "
+"código de descuento."
 
 #: pretix/control/forms/event.py:1031
 msgid "Show variations of a product expanded by default"
@@ -5849,7 +5862,7 @@ msgstr "Todas las ordenes"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:203
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Pagado (o cancelado con tarifa de pago)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:204
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -6307,6 +6320,11 @@ msgid ""
 "want to keep them. Please always enter a gross value, tax will be calculated "
 "automatically."
 msgstr ""
+"Si usted retiene una tarifa, todas las posiciones en esta orden serán "
+"canceladas y la orden será reducida a una tarifa de cancelación pagada. Las "
+"tarifas de pago y envío también serán canceladas, por lo que deberá "
+"incluirlas en la tarifa de cancelación si desea retenerlas. Porfavor siempre "
+"ingrese un valor bruto, el impuesto será calculado automáticamente."
 
 #: pretix/control/forms/orders.py:119
 #, fuzzy
@@ -6537,6 +6555,10 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Si está chequeado, la lista de eventos será mostrada si los eventos están "
+"agotados. Esto puede causar que los tiempos de carga de la página sean más "
+"prolongados en caso de que tenga muchos eventos y el estatus puede no estar "
+"sincronizado hasta por dos minutos."
 
 #: pretix/control/forms/organizer.py:249
 msgid "Link back to organizer overview on all event pages"
@@ -6804,7 +6826,7 @@ msgstr "Se ha creado la orden."
 
 #: pretix/control/logdisplay.py:176
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "La orden requiere aprobación antes que pueda continuar a ser procesada."
 
 #: pretix/control/logdisplay.py:177 pretix/control/views/orders.py:371
 msgid "The order has been approved."
@@ -6859,7 +6881,7 @@ msgstr "Se ha enviado un tipo de correo electrónico no identificado."
 
 #: pretix/control/logdisplay.py:190
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "El envío de email ha fallado."
 
 #: pretix/control/logdisplay.py:191
 msgid "A custom email has been sent."
@@ -6983,7 +7005,7 @@ msgstr "El reembolso {local_id} ha sido creado por una entidad externa."
 
 #: pretix/control/logdisplay.py:215
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "El cliente le ha solicitado emitir un reembolso."
 
 #: pretix/control/logdisplay.py:216
 #, python-brace-format
@@ -8281,22 +8303,16 @@ msgid "No issues. Awesome!"
 msgstr "No hay problemas. ¡Increíble!"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation settings"
-msgstr "Cancelación"
+msgstr "Configuraciones de Cancelación"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:10
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of unpaid or free orders"
-msgstr "Cancelación"
+msgstr "Cancelación de órdenes no pagadas o gratuitas"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:15
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of paid orders"
-msgstr "Cancelación"
+msgstr "Cancelación de órdenes pagadas"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:23
 msgid ""
