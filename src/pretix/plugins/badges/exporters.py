@@ -9,6 +9,7 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models import Exists, OuterRef
 from django.db.models.functions import Coalesce
 from django.utils.translation import ugettext as _
 from jsonfallback.functions import JSONExtract
@@ -20,11 +21,14 @@ from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
+from pretix.base.services.orders import OrderError
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
 
 
 def _renderer(event, layout):
+    if layout is None:
+        return None
     if isinstance(layout.background, File) and layout.background.name:
         bgf = default_storage.open(layout.background.name, "rb")
     else:
@@ -45,10 +49,12 @@ def render_pdf(event, positions):
         default_renderer = None
     merger = PdfFileMerger()
 
+    any = False
     for op in positions:
         r = renderermap.get(op.item_id, default_renderer)
         if not r:
             continue
+        any = True
 
         with language(op.order.locale):
             buffer = BytesIO()
@@ -62,6 +68,8 @@ def render_pdf(event, positions):
     merger.write(outbuffer)
     merger.close()
     outbuffer.seek(0)
+    if not any:
+        raise OrderError(_("None of the selected products is configured to print badges."))
     return outbuffer
 
 
@@ -76,7 +84,9 @@ class BadgeExporter(BaseExporter):
             [
                 ('items',
                  forms.ModelMultipleChoiceField(
-                     queryset=self.event.items.all(),
+                     queryset=self.event.items.annotate(
+                         no_badging=Exists(BadgeItem.objects.filter(item=OuterRef('pk'), layout__isnull=True))
+                     ).exclude(no_badging=True),
                      label=_('Limit to products'),
                      widget=forms.CheckboxSelectMultiple(
                          attrs={'class': 'scrolling-multiple-choice'}

@@ -46,6 +46,9 @@ class BadgeLayout(LoggedModel):
 
 
 class BadgeItem(models.Model):
+    # If no BadgeItem exists => use default
+    # If BadgeItem exists with layout=None => don't print
     item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='badge_assignment',
                                 on_delete=models.CASCADE)
-    layout = models.ForeignKey('BadgeLayout', on_delete=models.CASCADE, related_name='item_assignments')
+    layout = models.ForeignKey('BadgeLayout', on_delete=models.CASCADE, related_name='item_assignments',
+                               null=True, blank=True)

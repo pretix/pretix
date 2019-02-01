@@ -1,5 +1,6 @@
 import copy
 import json
+from collections import defaultdict
 
 from django.dispatch import receiver
 from django.template.loader import get_template
@@ -97,11 +98,27 @@ def register_pdf(sender, **kwargs):
     return BadgeExporter
 
 
+def _cached_rendermap(event):
+    if hasattr(event, '_cached_rendermap'):
+        return event._cached_renderermap
+    renderermap = {
+        bi.item_id: bi.layout_id
+        for bi in BadgeItem.objects.select_related('layout').filter(item__event=event)
+    }
+    try:
+        default_renderer = event.badge_layouts.get(default=True).pk
+    except BadgeLayout.DoesNotExist:
+        default_renderer = None
+    event._cached_renderermap = defaultdict(lambda: default_renderer)
+    event._cached_renderermap.update(renderermap)
+    return event._cached_renderermap
+
+
 @receiver(order_position_buttons, dispatch_uid="badges_control_order_buttons")
 def control_order_position_info(sender: Event, position, request, order: Order, **kwargs):
-
+    if _cached_rendermap(sender)[position.item_id] is None:
+        return ''
     template = get_template('pretixplugins/badges/control_order_position_buttons.html')
-
     ctx = {
         'order': order,
         'request': request,
@@ -113,6 +130,9 @@ def control_order_position_info(sender: Event, position, request, order: Order, 
 
 @receiver(order_info, dispatch_uid="badges_control_order_info")
 def control_order_info(sender: Event, request, order: Order, **kwargs):
+    cm = _cached_rendermap(sender)
+    if all(cm[p.item_id] is None for p in order.positions.all()):
+        return ''
 
     template = get_template('pretixplugins/badges/control_order_info.html')
 
