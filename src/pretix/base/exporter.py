@@ -154,7 +154,7 @@ class MultiSheetListExporter(ListExporter):
     @property
     def export_form_fields(self) -> dict:
         choices = [
-            ('xlsx', _('Excel (.xlsx)')),
+            ('xlsx', _('Combined Excel (.xlsx)')),
         ]
         for s, l in self.sheets:
             choices += [
