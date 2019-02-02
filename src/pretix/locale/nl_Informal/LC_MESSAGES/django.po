@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-02-02 21:32+0000\n"
+"PO-Revision-Date: 2019-02-03 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -743,7 +743,7 @@ msgstr "Oneindig"
 
 #: pretix/base/exporters/orderlist.py:462
 msgid "Invoice data"
-msgstr "Factuurdatums"
+msgstr "Factuurgegevens"
 
 #: pretix/base/exporters/orderlist.py:467 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:149
