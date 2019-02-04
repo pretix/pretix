@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-01-24 00:00+0000\n"
+"PO-Revision-Date: 2019-02-03 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -237,10 +237,8 @@ msgid "CSV (with semicolons)"
 msgstr "CSV (met puntkomma's)"
 
 #: pretix/base/exporter.py:157
-#, fuzzy
-#| msgid "Excel (.xlsx)"
 msgid "Combined Excel (.xlsx)"
-msgstr "Excel (.xlsx)"
+msgstr "Gecombineerde Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -323,10 +321,8 @@ msgid "Filter by status"
 msgstr "Filter op status"
 
 #: pretix/base/exporters/orderlist.py:23
-#, fuzzy
-#| msgid "Order date"
 msgid "Order data"
-msgstr "Besteldatum"
+msgstr "Besteldatums"
 
 #: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:182
 #: pretix/control/navigation.py:181
@@ -342,10 +338,8 @@ msgid "Order positions"
 msgstr "Bestelde producten"
 
 #: pretix/base/exporters/orderlist.py:30
-#, fuzzy
-#| msgid "Other fees"
 msgid "Order fees"
-msgstr "Overige kosten"
+msgstr "Bestelkosten"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
@@ -542,10 +536,8 @@ msgid "Invoice numbers"
 msgstr "Factuurnummers"
 
 #: pretix/base/exporters/orderlist.py:195
-#, fuzzy
-#| msgid "Device type"
 msgid "Fee type"
-msgstr "Type apparaat"
+msgstr "Soort kosten"
 
 #: pretix/base/exporters/orderlist.py:196
 #: pretix/base/exporters/orderlist.py:556 pretix/base/models/items.py:257
@@ -589,10 +581,8 @@ msgid "Invoice address name"
 msgstr "Naam factuuradres"
 
 #: pretix/base/exporters/orderlist.py:266
-#, fuzzy
-#| msgid "Position"
 msgid "Position ID"
-msgstr "Plaats"
+msgstr "Plaatsnummer"
 
 #: pretix/base/exporters/orderlist.py:270 pretix/base/models/items.py:372
 #: pretix/base/models/vouchers.py:140 pretix/base/models/waitinglist.py:51
@@ -643,13 +633,11 @@ msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:285
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "Pseudonimisatie-ID"
 
 #: pretix/base/exporters/orderlist.py:362
-#, fuzzy
-#| msgid "List of payments and refunds"
 msgid "Order payments and refunds"
-msgstr "Lijst van betalingen en terugbetalingen"
+msgstr "Betalingen en terugbetalingen van bestelling"
 
 #: pretix/base/exporters/orderlist.py:370
 msgid "Only successful payments"
@@ -678,10 +666,8 @@ msgid "Completion date"
 msgstr "Voltooiingsdatum"
 
 #: pretix/base/exporters/orderlist.py:404
-#, fuzzy
-#| msgid "Status"
 msgid "Status code"
-msgstr "Status"
+msgstr "Statuscode"
 
 #: pretix/base/exporters/orderlist.py:404 pretix/base/models/orders.py:1008
 #: pretix/base/models/orders.py:1299
@@ -756,11 +742,8 @@ msgid "Infinite"
 msgstr "Oneindig"
 
 #: pretix/base/exporters/orderlist.py:462
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice data"
-msgstr "Factuurdatum"
+msgstr "Factuurgegevens"
 
 #: pretix/base/exporters/orderlist.py:467 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:149
@@ -771,16 +754,11 @@ msgid "Invoices"
 msgstr "Facturen"
 
 #: pretix/base/exporters/orderlist.py:468
-#, fuzzy
-#| msgid "Invoice numbers"
 msgid "Invoice lines"
-msgstr "Factuurnummers"
+msgstr "Factuurregels"
 
 #: pretix/base/exporters/orderlist.py:474
 #: pretix/base/exporters/orderlist.py:554
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice number"
 msgid "Invoice number"
 msgstr "Factuurnummer"
 
@@ -803,17 +781,13 @@ msgstr "E-mailadres"
 
 #: pretix/base/exporters/orderlist.py:478
 #: pretix/base/exporters/orderlist.py:566
-#, fuzzy
-#| msgid "Invoice style"
 msgid "Invoice type"
-msgstr "Factuurstijl"
+msgstr "Factuurtype"
 
 #: pretix/base/exporters/orderlist.py:479
 #: pretix/base/exporters/orderlist.py:567
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation of"
-msgstr "Annuleringskosten"
+msgstr "Annulering van"
 
 #: pretix/base/exporters/orderlist.py:480 pretix/base/models/auth.py:90
 #: pretix/control/forms/event.py:1185 pretix/control/views/waitinglist.py:200
@@ -834,19 +808,13 @@ msgstr "Taal"
 #: pretix/base/exporters/orderlist.py:572
 #: pretix/base/exporters/orderlist.py:573
 #: pretix/base/exporters/orderlist.py:574
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice number"
 msgid "Invoice sender:"
-msgstr "Factuurnummer"
+msgstr "Verzender van factuur:"
 
 #: pretix/base/exporters/orderlist.py:486
 #: pretix/base/exporters/orderlist.py:573
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Tax ID: %s"
 msgid "Tax ID"
-msgstr "Belastingnummer: %s"
+msgstr "Belastingnummer"
 
 #: pretix/base/exporters/orderlist.py:488
 #: pretix/base/exporters/orderlist.py:489
@@ -866,17 +834,13 @@ msgstr "Belastingnummer: %s"
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/base/exporters/orderlist.py:582
 #: pretix/base/exporters/orderlist.py:583
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Invoice recipient:"
-msgstr "Factuurinstellingen"
+msgstr "Ontvanger van factuur:"
 
 #: pretix/base/exporters/orderlist.py:490
 #: pretix/base/exporters/orderlist.py:577
-#, fuzzy
-#| msgid "Sender address"
 msgid "Street address"
-msgstr "Afzenderadres"
+msgstr "Adres"
 
 #: pretix/base/exporters/orderlist.py:495
 #: pretix/base/exporters/orderlist.py:582 pretix/base/models/orders.py:1764
@@ -895,32 +859,23 @@ msgid "Reverse charge"
 msgstr "Omgekeerde belastingheffing"
 
 #: pretix/base/exporters/orderlist.py:498
-#, fuzzy
-#| msgid "Event currency"
 msgid "Shown foreign currency"
-msgstr "Munteenheid van evenement"
+msgstr "Getoonde andere munteenheid"
 
 #: pretix/base/exporters/orderlist.py:499
-#, fuzzy
-#| msgid "Event currency"
 msgid "Foreign currency rate"
-msgstr "Munteenheid van evenement"
+msgstr "Wisselkoers van andere munteenheid"
 
 #: pretix/base/exporters/orderlist.py:500
-#, fuzzy
-#| msgid "Total value"
 msgid "Total value (with taxes)"
-msgstr "Totaalwaarde"
+msgstr "Totaalbedrag (inclusief belasting)"
 
 #: pretix/base/exporters/orderlist.py:501
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Totaalbedrag (exclusief belasting)"
 
 #: pretix/base/exporters/orderlist.py:527
 #: pretix/base/exporters/orderlist.py:602
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation"
 msgid "Cancellation"
 msgstr "Annulering"
 
@@ -952,26 +907,20 @@ msgid "No"
 msgstr "Nee"
 
 #: pretix/base/exporters/orderlist.py:555
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Line number"
-msgstr "Minimum aantal"
+msgstr "Regelnummer"
 
 #: pretix/base/exporters/orderlist.py:557 pretix/control/forms/orders.py:203
 msgid "Gross price"
 msgstr "Bruto-prijs"
 
 #: pretix/base/exporters/orderlist.py:558
-#, fuzzy
-#| msgid "Default price"
 msgid "Net price"
-msgstr "Standaardprijs"
+msgstr "Nettoprijs"
 
 #: pretix/base/exporters/orderlist.py:561
-#, fuzzy
-#| msgid "Team name"
 msgid "Tax name"
-msgstr "Teamnaam"
+msgstr "Belastingnaam"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
@@ -1791,10 +1740,8 @@ msgstr ""
 "Of het kopen van dit product iemand toestaat om je evenement te betreden"
 
 #: pretix/base/models/items.py:291
-#, fuzzy
-#| msgid "Generate invoices"
 msgid "Generate tickets"
-msgstr "Genereer facturen"
+msgstr "Genereer kaartjes"
 
 #: pretix/base/models/items.py:298
 msgid "Product picture"
@@ -5300,16 +5247,16 @@ msgstr ""
 "belastingregel worden genegeerd."
 
 #: pretix/control/forms/event.py:526
-#, fuzzy
-#| msgid "Multiline text"
 msgid "Guidance text"
-msgstr "Tekst (meerdere regels)"
+msgstr "Hulptekst"
 
 #: pretix/control/forms/event.py:527
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"Deze tekst wordt boven de betalingsopties getoond. Als je wilt kan je hier "
+"de opties aan de gebruiker uitleggen."
 
 #: pretix/control/forms/event.py:538
 msgid "The last payment date cannot be before the end of presale."
@@ -6422,15 +6369,15 @@ msgstr "Kies een quotum."
 
 #: pretix/control/forms/item.py:303
 msgid "Choose automatically depending on event settings"
-msgstr ""
+msgstr "Kies automatisch op basis van de evenementsinstellingen"
 
 #: pretix/control/forms/item.py:304
 msgid "Yes, if ticket generation is enabled in general"
-msgstr ""
+msgstr "Ja, als kaartjes genereren in het algemeen is ingeschakeld"
 
 #: pretix/control/forms/item.py:305
 msgid "Never"
-msgstr ""
+msgstr "Nooit"
 
 #: pretix/control/forms/item.py:316
 msgid ""
@@ -6740,13 +6687,16 @@ msgstr "Kies alle talen waarin je organisatorpagina beschikbaar moet zijn."
 
 #: pretix/control/forms/organizer.py:266
 msgid "Favicon"
-msgstr ""
+msgstr "Favicon"
 
 #: pretix/control/forms/organizer.py:269
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accomodate most devices."
 msgstr ""
+"Als je een favicon opgeeft zullen we dit tonen in plaats van het standaard "
+"pretix-icoon. We raden een grootte van ten minste 200x200px aan, om de "
+"meeste apparaten te ondersteunen."
 
 #: pretix/control/forms/organizer.py:283
 msgctxt "webhooks"
@@ -13028,10 +12978,8 @@ msgstr ""
 "Onbekende bestelcode of niet gemachtigd om deze bestelling te bekijken."
 
 #: pretix/control/views/orders.py:305 pretix/presale/views/order.py:688
-#, fuzzy
-#| msgid "Ticket download is not enabled for add-on products."
 msgid "Ticket download is not enabled for this product."
-msgstr "Kaartjes downloaden is niet ingeschakeld voor add-onproducten."
+msgstr "Kaartjes downloaden is niet ingeschakeld voor dit product."
 
 #: pretix/control/views/orders.py:413
 msgid "The order has been denied and is therefore now canceled."
@@ -13695,10 +13643,8 @@ msgstr ""
 "gasten."
 
 #: pretix/plugins/badges/exporters.py:72
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "None of the selected products is configured to print badges."
-msgstr "Het gekozen product is niet actief of heeft geen ingestelde prijs."
+msgstr "Geen van de gekozen producten is ingesteld om badges te printen."
 
 #: pretix/plugins/badges/exporters.py:78
 msgid "Attendee badges"
@@ -13717,10 +13663,8 @@ msgid "Sort by"
 msgstr "Sorteren op"
 
 #: pretix/plugins/badges/forms.py:21
-#, fuzzy
-#| msgid "Print badges"
 msgid "(Do not print badges)"
-msgstr "Print badges"
+msgstr "(Geen badges printen)"
 
 #: pretix/plugins/badges/forms.py:53
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
@@ -15737,18 +15681,12 @@ msgstr[0] "Je moet precies één optie kiezen uit deze categorie."
 msgstr[1] "Je moet %(min_count)s opties kiezen uit deze categorie."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:41
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "                                    Waiting, product %(num)sx available\n"
-#| "                                "
 msgid ""
 "\n"
 "                                            "
 msgstr ""
 "\n"
-"                                    Wachtend, product %(num)sx beschikbaar\n"
-"                                "
+"                                            "
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:44
 #, python-format
