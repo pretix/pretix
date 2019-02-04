@@ -192,6 +192,9 @@ class Invoice(models.Model):
         unique_together = ('organizer', 'prefix', 'invoice_no')
         ordering = ('date', 'invoice_no',)
 
+    def __repr__(self):
+        return '<Invoice {} / {}>'.format(self.full_invoice_no, self.pk)
+
 
 class InvoiceLine(models.Model):
     """
