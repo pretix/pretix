@@ -582,7 +582,9 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 _('Invoice recipient:') + ' ' + _('Beneficiary'),
                 _('Invoice recipient:') + ' ' + _('Internal reference'),
             ]
-            qs = InvoiceLine.objects.order_by('invoice__full_invoice_no', 'position').select_related(
+            qs = InvoiceLine.objects.filter(
+                invoice__event=self.event
+            ).order_by('invoice__full_invoice_no', 'position').select_related(
                 'invoice', 'invoice__order', 'invoice__refers'
             )
             for l in qs:
@@ -620,7 +622,7 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 ]
 
     def get_filename(self):
-        return '{}_payments'.format(self.event.slug)
+        return '{}_invoices'.format(self.event.slug)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
