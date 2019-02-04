@@ -546,8 +546,8 @@ class InvoiceDataExporter(MultiSheetListExporter):
                     _('Yes') if i.reverse_charge else _('No'),
                     i.foreign_currency_display,
                     i.foreign_currency_rate,
-                    i.total_gross,
-                    Decimal(i.total_net).quantize(Decimal('0.01')),
+                    i.total_gross if i.total_gross else Decimal('0.00'),
+                    Decimal(i.total_net if i.total_net else '0.00').quantize(Decimal('0.01')),
                 ]
         elif sheet == 'lines':
             yield [
