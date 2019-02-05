@@ -587,6 +587,7 @@ if config.has_option('sentry', 'dsn'):
 
     )
     ignore_logger('pretix.base.tasks')
+    ignore_logger('django.security.DisallowedHost')
     setup_custom_filters()
 
 CELERY_TASK_SERIALIZER = 'json'
