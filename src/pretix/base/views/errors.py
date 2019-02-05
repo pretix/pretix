@@ -7,6 +7,7 @@ from django.template.loader import get_template
 from django.utils.functional import Promise
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import requires_csrf_token
+from sentry_sdk import last_event_id
 
 
 def csrf_failure(request, reason=""):
@@ -65,5 +66,6 @@ def server_error(request):
     except TemplateDoesNotExist:
         return HttpResponseServerError('<h1>Server Error (500)</h1>', content_type='text/html')
     return HttpResponseServerError(template.render({
-        'request': request
+        'request': request,
+        'sentry_event_id': last_event_id(),
     }))

@@ -1,6 +1,7 @@
 import configparser
 import os
 import sys
+
 from urllib.parse import urlparse
 
 from kombu import Queue
@@ -564,15 +565,19 @@ LOGGING = {
 }
 
 if config.has_option('sentry', 'dsn'):
-    INSTALLED_APPS += [
-        'pretix.sentry.App',
-    ]
-    RAVEN_CONFIG = {
-        'dsn': config.get('sentry', 'dsn'),
-        'transport': 'raven.transport.threaded_requests.ThreadedRequestsHTTPTransport',
-        'release': __version__,
-        'environment': SITE_URL,
-    }
+    import sentry_sdk
+    from sentry_sdk.integrations.celery import CeleryIntegration
+    from sentry_sdk.integrations.logging import ignore_logger
+    from .sentry import PretixSentryIntegration
+
+    sentry_sdk.init(
+        dsn=config.get('sentry', 'dsn'),
+        integrations=[PretixSentryIntegration(), CeleryIntegration()],
+        environment=SITE_URL,
+        release=__version__,
+        send_default_pii=False
+    )
+    ignore_logger('pretix.base.tasks')
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

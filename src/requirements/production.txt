@@ -29,7 +29,7 @@ csscompressor
 django-markup
 markdown<=2.2
 bleach==2.*
-raven
+sentry-sdk==0.7.*
 babel
 django-i18nfield>=1.4.0
 django-hijack>=2.1.10,<2.2.0

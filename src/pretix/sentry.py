@@ -1,50 +1,96 @@
-from threading import Lock
+import re
+import weakref
+from collections import OrderedDict
 
-from raven.contrib.celery import SentryCeleryHandler
-from raven.contrib.django.apps import RavenConfig
-from raven.contrib.django.models import (
-    SentryDjangoHandler, client, get_client, install_middleware,
-    register_serializers,
-)
+from sentry_sdk import Hub
+from sentry_sdk.integrations.django import DjangoIntegration, _set_user_info
+from sentry_sdk.utils import capture_internal_exceptions
 
-_setup_lock = Lock()
-
-_initialized = False
-
-
-class CustomSentryDjangoHandler(SentryDjangoHandler):
-    def install_celery(self):
-        self.celery_handler = SentryCeleryHandler(client, ignore_expected=True).install()
-
-
-def initialize():
-    global _initialized
-
-    with _setup_lock:
-        if _initialized:
-            return
-
-        _initialized = True
-
-        try:
-            register_serializers()
-            install_middleware(
-                'raven.contrib.django.middleware.SentryMiddleware',
-                (
-                    'raven.contrib.django.middleware.SentryMiddleware',
-                    'raven.contrib.django.middleware.SentryLogMiddleware'))
-            install_middleware(
-                'raven.contrib.django.middleware.DjangoRestFrameworkCompatMiddleware')
-
-            handler = CustomSentryDjangoHandler()
-            handler.install()
-
-            # instantiate client so hooks get registered
-            get_client()  # NOQA
-        except Exception:
-            _initialized = False
+MASK = '*' * 8
+KEYS = frozenset([
+    'password',
+    'secret',
+    'passwd',
+    'authorization',
+    'api_key',
+    'apikey',
+    'sentry_dsn',
+    'access_token',
+    'session',
+])
+VALUES_RE = re.compile(r'^(?:\d[ -]*?){13,16}$')
 
 
-class App(RavenConfig):
-    def ready(self):
-        initialize()
+def scrub_data(data):
+    if isinstance(data, dict):
+        for k, v in data.items():
+            if isinstance(k, bytes):
+                key = k.decode('utf-8', 'replace')
+            else:
+                key = k
+            key = key.lower()
+            data[k] = scrub_data(v)
+            for blk in KEYS:
+                if blk in key:
+                    data[k] = MASK
+    elif isinstance(data, list):
+        for i, l in enumerate(list(data)):
+            data[i] = scrub_data(l)
+    elif isinstance(data, str):
+        if '=' in data:
+            # at this point we've assumed it's a standard HTTP query
+            # or cookie
+            if '&' in data:
+                delimiter = '&'
+            else:
+                delimiter = ';'
+
+            qd = scrub_data(OrderedDict(e.split('=', 1) if '=' in e else (e, None) for e in data.split(delimiter)))
+            return delimiter.join((k + '=' + v if v is not None else k) for k, v in qd.items())
+        if VALUES_RE.match(data):
+            return MASK
+    return data
+
+
+def _make_event_processor(weak_request, integration):
+    def event_processor(event, hint):
+        request = weak_request()
+        if request is None:
+            return event
+
+        with capture_internal_exceptions():
+            _set_user_info(request, event)
+            request_info = event.setdefault("request", {})
+            request_info["cookies"] = dict(request.COOKIES)
+
+        scrub_data(event.get("request", {}))
+        if 'exception' in event:
+            exc = event.get("exception", {})
+            for val in exc.get('values', []):
+                stack = val.get('stacktrace', {})
+                for frame in stack.get('frames', []):
+                    scrub_data(frame['vars'])
+        return event
+
+    return event_processor
+
+
+class PretixSentryIntegration(DjangoIntegration):
+    @staticmethod
+    def setup_once():
+        DjangoIntegration.setup_once()
+        from django.core.handlers.base import BaseHandler
+
+        old_get_response = BaseHandler.get_response
+
+        def sentry_patched_get_response(self, request):
+            hub = Hub.current
+            integration = hub.get_integration(DjangoIntegration)
+            if integration is not None:
+                with hub.configure_scope() as scope:
+                    scope.add_event_processor(
+                        _make_event_processor(weakref.ref(request), integration)
+                    )
+            return old_get_response(self, request)
+
+        BaseHandler.get_response = sentry_patched_get_response

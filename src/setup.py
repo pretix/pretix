@@ -117,7 +117,7 @@ setup(
         'django-markup',
         'markdown<=2.2',
         'bleach==2.*',
-        'raven',
+        'sentry-sdk==0.7.*',
         'babel',
         'paypalrestsdk==1.13.*',
         'pycparser==2.13',
