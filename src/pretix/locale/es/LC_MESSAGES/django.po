@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-01-28 16:30+0000\n"
+"PO-Revision-Date: 2019-02-05 10:26+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -1486,7 +1486,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:288 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "La ficha solo puede contener letras, números, puntos y guiones."
+msgstr "La URL semántica solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:292 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
