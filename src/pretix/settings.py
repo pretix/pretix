@@ -1,4 +1,5 @@
 import configparser
+import logging
 import os
 import sys
 
@@ -567,17 +568,28 @@ LOGGING = {
 if config.has_option('sentry', 'dsn'):
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
-    from sentry_sdk.integrations.logging import ignore_logger
+    from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
     from .sentry import PretixSentryIntegration
 
     sentry_sdk.init(
         dsn=config.get('sentry', 'dsn'),
-        integrations=[PretixSentryIntegration(), CeleryIntegration()],
+        integrations=[
+            PretixSentryIntegration(),
+            CeleryIntegration(),
+            LoggingIntegration(
+                level=logging.INFO,
+                event_level=logging.CRITICAL
+            )
+        ],
         environment=SITE_URL,
         release=__version__,
-        send_default_pii=False
+        send_default_pii=False,
+
     )
     ignore_logger('pretix.base.tasks')
+    ignore_logger('pretix.plugins.stripe')
+    ignore_logger('pretix.plugins.paypal')
+    ignore_logger('pretix.plugins.banktransfer')
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
