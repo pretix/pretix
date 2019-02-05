@@ -117,7 +117,7 @@ def get_tickets_for_order(order):
 
         if p.multi_download_enabled:
             try:
-                if len(order.positions_with_tickets) == 0:
+                if len(list(order.positions_with_tickets)) == 0:
                     continue
                 ct = CachedCombinedTicket.objects.filter(
                     order=order, provider=p.identifier, file__isnull=False
