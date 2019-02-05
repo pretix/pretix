@@ -569,7 +569,7 @@ if config.has_option('sentry', 'dsn'):
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
-    from .sentry import PretixSentryIntegration
+    from .sentry import PretixSentryIntegration, setup_custom_filters
 
     sentry_sdk.init(
         dsn=config.get('sentry', 'dsn'),
@@ -587,9 +587,7 @@ if config.has_option('sentry', 'dsn'):
 
     )
     ignore_logger('pretix.base.tasks')
-    ignore_logger('pretix.plugins.stripe')
-    ignore_logger('pretix.plugins.paypal')
-    ignore_logger('pretix.plugins.banktransfer')
+    setup_custom_filters()
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

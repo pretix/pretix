@@ -2,6 +2,7 @@ import re
 import weakref
 from collections import OrderedDict
 
+from celery.exceptions import Retry
 from sentry_sdk import Hub
 from sentry_sdk.integrations.django import DjangoIntegration, _set_user_info
 from sentry_sdk.utils import capture_internal_exceptions
@@ -94,3 +95,15 @@ class PretixSentryIntegration(DjangoIntegration):
             return old_get_response(self, request)
 
         BaseHandler.get_response = sentry_patched_get_response
+
+
+def ignore_retry(event, hint):
+    with capture_internal_exceptions():
+        if isinstance(hint["exc_info"][1], Retry):
+            return None
+
+
+def setup_custom_filters():
+    hub = Hub.current
+    with hub.configure_scope() as scope:
+        scope.add_event_processor(ignore_retry)
