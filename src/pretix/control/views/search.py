@@ -60,7 +60,7 @@ class OrderSearch(PaginationMixin, ListView):
 
         return qs.only(
             'id', 'invoice_address__name_cached', 'invoice_address__name_parts', 'code', 'event', 'email',
-            'datetime', 'total', 'status'
+            'datetime', 'total', 'status', 'require_approval'
         ).prefetch_related(
             'event', 'event__organizer'
         )
