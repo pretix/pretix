@@ -371,7 +371,7 @@ class CartManager:
         # could cancel each other out quota-wise). However, we are not taking this performance
         # penalty for now as there is currently no outside interface that would allow building
         # such a transaction.
-        for cp in self.positions.all():
+        for cp in self.positions.filter(addon_to__isnull=True):
             self._operations.append(self.RemoveOperation(position=cp))
 
     def set_addons(self, addons):
@@ -653,6 +653,7 @@ class CartManager:
                         op.position.price = op.price.gross
                         op.position.save()
                     elif available_count == 0:
+                        op.position.addons.all().delete()
                         op.position.delete()
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
