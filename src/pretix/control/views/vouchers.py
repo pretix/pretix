@@ -345,6 +345,7 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
             for obj in self.objects:
                 if obj.allow_delete():
                     obj.log_action('pretix.voucher.deleted', user=self.request.user)
+                    obj.cartposition_set.all().delete()
                     obj.delete()
                 else:
                     obj.log_action('pretix.voucher.changed', user=self.request.user, data={
