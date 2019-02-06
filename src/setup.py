@@ -127,7 +127,7 @@ setup(
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',
         'django-i18nfield>=1.4.0',
-        'django-jsonfallback',
+        'django-jsonfallback>=2.1.1',
         'psycopg2-binary',
         'vobject==0.9.*',
         'pycountry',
