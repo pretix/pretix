@@ -101,6 +101,7 @@ def ignore_retry(event, hint):
     with capture_internal_exceptions():
         if isinstance(hint["exc_info"][1], Retry):
             return None
+    return event
 
 
 def setup_custom_filters():
