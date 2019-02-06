@@ -10,6 +10,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
 from django.db.models import F, Max, Q, Sum
+from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -255,7 +256,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
     for position in order.positions.all():
         if position.voucher:
-            Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+            Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
     if send_mail:
         try:
@@ -323,7 +324,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         with order.event.lock():
             for position in order.positions.all():
                 if position.voucher:
-                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                 position.canceled = True
                 position.save(update_fields=['canceled'])
             for fee in order.fees.all():
@@ -354,7 +355,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         for position in order.positions.all():
             if position.voucher:
-                Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=F('redeemed') - 1)
+                Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
     order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                      data={'cancellation_fee': cancellation_fee})
@@ -1067,7 +1068,7 @@ class OrderChangeManager:
                     })
                     opa.canceled = True
                     if opa.voucher:
-                        Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=F('redeemed') - 1)
+                        Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                     opa.save(update_fields=['canceled'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1079,7 +1080,7 @@ class OrderChangeManager:
                 })
                 op.position.canceled = True
                 if op.position.voucher:
-                    Voucher.objects.filter(pk=op.position.voucher.pk).update(redeemed=F('redeemed') - 1)
+                    Voucher.objects.filter(pk=op.position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
                 op.position.save(update_fields=['canceled'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
