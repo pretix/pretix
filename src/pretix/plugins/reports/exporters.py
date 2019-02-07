@@ -12,6 +12,7 @@ from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import pgettext, pgettext_lazy, ugettext as _
+from reportlab.lib import colors
 
 from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter
@@ -162,11 +163,10 @@ class OverviewReport(Report):
         tstyledata = [
             ('SPAN', (1, 0), (2, 0)),
             ('SPAN', (3, 0), (4, 0)),
-            ('SPAN', (5, 0), (6, 0)),
-            ('SPAN', (7, 0), (-1, 0)),
+            ('SPAN', (5, 0), (-1, 0)),
+            ('SPAN', (5, 1), (6, 1)),
             ('SPAN', (7, 1), (8, 1)),
             ('SPAN', (9, 1), (10, 1)),
-            ('SPAN', (11, 1), (12, 1)),
             ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
             ('ALIGN', (1, 2), (-1, -1), 'RIGHT'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -192,11 +192,10 @@ class OverviewReport(Report):
                 '', '', '', '', ''
             ],
             [
-                '', '', '', '', '', '', '', _('Pending'), '', _('Paid'), '', _('Total'), ''
+                '', '', '', '', '', _('Pending'), '', _('Paid'), '', _('Total'), ''
             ],
             [
                 '',
-                _('#'), self.event.currency,
                 _('#'), self.event.currency,
                 _('#'), self.event.currency,
                 _('#'), self.event.currency,
