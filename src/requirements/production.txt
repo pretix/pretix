@@ -36,7 +36,7 @@ django-hijack>=2.1.10,<2.2.0
 openpyxl
 django-oauth-toolkit==1.2.*
 oauthlib==2.1.*
-django-jsonfallback>=2.1.1
+django-jsonfallback>=2.1.2
 psycopg2-binary
 # Stripe
 stripe==2.0.*
