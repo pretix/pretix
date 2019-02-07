@@ -788,9 +788,9 @@ class ManualPayment(BasePaymentProvider):
         msg = str(self.settings.get('email_instructions', as_type=LazyI18nString)).format_map(self.format_map(order))
         return msg
 
-    def order_pending_render(self, request, order) -> str:
+    def payment_pending_render(self, request, payment) -> str:
         return rich_text(
-            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(order))
+            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(payment.order))
         )
 
 
