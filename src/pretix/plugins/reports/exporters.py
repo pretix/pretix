@@ -172,7 +172,12 @@ class OverviewReport(Report):
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('FONTNAME', (0, 0), (-1, 1), 'OpenSansBd'),
             ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
-            ('FONTSIZE', (0, 0), (-1, -1), 9)
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('LINEBEFORE', (1, 0), (1, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (3, 0), (3, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (5, 0), (5, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (7, 1), (7, -1), 1, colors.lightgrey),
+            ('LINEBEFORE', (9, 1), (9, -1), 1, colors.lightgrey),
         ]
 
         story = [
