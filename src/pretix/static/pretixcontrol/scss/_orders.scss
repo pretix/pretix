@@ -1,4 +1,9 @@
 .table-product-overview {
+
+    td:last-child, th:last-child {
+        border-right: 1px solid #ddd;
+    }
+
     .item.categorized td:first-child {
         padding-left: 20px;
     }
@@ -9,7 +14,13 @@
         padding-left: 40px;
     }
     td:not(:first-child),
-    th:not(:first-child) {
+    th:not(:first-child):not(.text-center) {
+        border-left: 1px solid #ddd;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
+    td:not(:first-child),
+    th:not(:first-child):not(.text-center) {
         text-align: right;
     }
     span.sum-net, span.sum-gross {
@@ -17,6 +28,14 @@
     }
     tfoot {
         border-top: 2px solid #ddd;
+    }
+}
+@media(min-device-width: $screen-lg-min) {
+    .table-product-overview {
+        td:not(:first-child),
+        th:not(:first-child):not(.text-center) {
+            width: 150px;
+        }
     }
 }
 
