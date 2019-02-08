@@ -21,7 +21,7 @@
             <span class="fa fa-download"></span>
             {% trans "PDF" %}
         </a>
-        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlistcsv&checkinlistcsv-list={{ checkinlist.pk }}"
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlist&checkinlist-list={{ checkinlist.pk }}"
                 class="btn btn-default" target="_blank">
             <span class="fa fa-download"></span>
             {% trans "CSV" %}
