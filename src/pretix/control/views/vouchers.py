@@ -105,7 +105,10 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
             redeemed=Sum('redeemed')
         )
         for t in tags:
-            t['percentage'] = int((t['redeemed'] / t['total']) * 100)
+            if t['total'] == 0:
+                t['percentage'] = 0
+            else:
+                t['percentage'] = int((t['redeemed'] / t['total']) * 100)
 
         ctx['tags'] = tags
         return ctx
