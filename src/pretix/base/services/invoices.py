@@ -142,6 +142,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             InvoiceLine.objects.create(
                 position=i, invoice=invoice, description=desc,
                 gross_value=p.price, tax_value=p.tax_value,
+                subevent=p.subevent, event_date_from=(p.subevent.date_from if p.subevent else invoice.event.date_from),
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 

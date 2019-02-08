@@ -212,6 +212,10 @@ class InvoiceLine(models.Model):
     :type tax_rate: decimal.Decimal
     :param tax_name: The name of the applied tax rate
     :type tax_name: str
+    :param subevent: The subevent this line refers to
+    :type subevent: SubEvent
+    :param event_date_from: Event date of the (sub)event at the time the invoice was created
+    :type event_date_from: datetime
     """
     invoice = models.ForeignKey('Invoice', related_name='lines', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(default=0)
@@ -220,6 +224,8 @@ class InvoiceLine(models.Model):
     tax_value = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
     tax_name = models.CharField(max_length=190)
+    subevent = models.ForeignKey('SubEvent', null=True, blank=True, on_delete=models.PROTECT)
+    event_date_from = models.DateTimeField(null=True)
 
     @property
     def net_value(self):

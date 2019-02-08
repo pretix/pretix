@@ -559,6 +559,7 @@ class InvoiceDataExporter(MultiSheetListExporter):
                 _('Tax value'),
                 _('Tax rate'),
                 _('Tax name'),
+                _('Event start date'),
 
                 _('Date'),
                 _('Order code'),
@@ -598,6 +599,7 @@ class InvoiceDataExporter(MultiSheetListExporter):
                     l.tax_value,
                     l.tax_rate,
                     l.tax_name,
+                    date_format(l.event_date_from, "SHORT_DATE_FORMAT") if l.event_date_from else "",
                     date_format(i.date, "SHORT_DATE_FORMAT"),
                     i.order.code,
                     i.order.email,
