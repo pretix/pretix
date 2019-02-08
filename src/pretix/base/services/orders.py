@@ -1410,7 +1410,7 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
                         else:
                             if r.state != OrderRefund.REFUND_STATE_DONE:
                                 notify_admin = True
-                else:
+                elif refund_amount != Decimal('0.00'):
                     notify_admin = True
 
                 if notify_admin:
