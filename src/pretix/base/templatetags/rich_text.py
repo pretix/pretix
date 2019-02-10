@@ -84,7 +84,7 @@ def markdown_compile(source):
             source,
             extensions=[
                 'markdown.extensions.sane_lists',
-                # 'markdown.extensions.nl2br',  # TODO: Enable, but check backwards-compatibility issues e.g. with mails
+                'markdown.extensions.nl2br'
             ]
         ),
         tags=ALLOWED_TAGS,
