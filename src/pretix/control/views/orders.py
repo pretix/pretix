@@ -1229,7 +1229,7 @@ class OrderChange(OrderView):
                         variation = ItemVariation.objects.get(pk=varid, item=item)
                     else:
                         variation = None
-                    ocm.change_item(p, item, variation)
+                    ocm.change_item(p, item, variation, keep_price=p.form.cleaned_data['change_product_keep_price'])
                 elif p.form.cleaned_data['operation'] == 'price':
                     ocm.change_price(p, p.form.cleaned_data['price'])
                 elif p.form.cleaned_data['operation'] == 'subevent':

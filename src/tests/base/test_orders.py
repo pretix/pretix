@@ -678,6 +678,17 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.change_item(self.op1, self.shirt, None)
 
+    def test_change_item_keep_price(self):
+        p = self.op1.price
+        tv = self.op1.tax_value
+        self.ocm.change_item(self.op1, self.shirt, None, keep_price=True)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.shirt
+        assert self.op1.price == p
+        assert self.op1.tax_value == tv
+
     def test_change_item_success(self):
         self.ocm.change_item(self.op1, self.shirt, None)
         self.ocm.commit()

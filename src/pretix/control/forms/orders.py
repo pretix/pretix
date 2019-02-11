@@ -286,6 +286,7 @@ class OrderPositionChangeForm(forms.Form):
             ('secret', 'Regenerate secret'),
         )
     )
+    change_product_keep_price = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')

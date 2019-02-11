@@ -95,6 +95,10 @@
                                 {% trans "Change product to" %}
                                 {% bootstrap_field position.form.itemvar layout='inline' %}
                             </label>
+                            <label class="checkbox">
+                                {{ position.form.change_product_keep_price }}
+                                {% trans "Keep price the same" %}
+                            </label>
                         </div>
                         {% if request.event.has_subevents %}
                             <div class="radio">

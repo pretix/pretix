@@ -815,12 +815,17 @@ class OrderChangeManager:
         self.notify = notify
         self._invoice_dirty = False
 
-    def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
+    def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation], keep_price=False):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
 
-        price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent,
-                          invoice_address=self._invoice_address)
+        if keep_price:
+            price = TaxedPrice(gross=position.price, net=position.price - position.tax_value,
+                               tax=position.tax_value, rate=position.tax_rate,
+                               name=position.tax_rule.name)
+        else:
+            price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent,
+                              invoice_address=self._invoice_address)
 
         if price is None:  # NOQA
             raise OrderError(self.error_messages['product_invalid'])
