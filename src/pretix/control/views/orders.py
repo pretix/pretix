@@ -1259,7 +1259,7 @@ class OrderChange(OrderView):
             messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
-                ocm.commit()
+                ocm.commit(check_quotas=not self.other_form.cleaned_data['ignore_quotas'])
             except OrderError as e:
                 messages.error(self.request, str(e))
             else:

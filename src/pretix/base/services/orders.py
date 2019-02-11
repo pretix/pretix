@@ -1306,7 +1306,7 @@ class OrderChangeManager:
             except SendMailException:
                 logger.exception('Order changed email could not be sent')
 
-    def commit(self):
+    def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
             raise OrderError(error_messages['internal'])
@@ -1323,7 +1323,8 @@ class OrderChangeManager:
             with self.order.event.lock():
                 if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
                     raise OrderError(self.error_messages['not_pending_or_paid'])
-                self._check_quotas()
+                if check_quotas:
+                    self._check_quotas()
                 self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()

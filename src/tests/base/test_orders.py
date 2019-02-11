@@ -816,6 +816,14 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.item == self.ticket
 
+    def test_quota_ignore(self):
+        q = self.event.quotas.create(name='Test', size=0)
+        q.items.add(self.shirt)
+        self.ocm.change_item(self.op1, self.shirt, None)
+        self.ocm.commit(check_quotas=False)
+        self.op1.refresh_from_db()
+        assert self.op1.item == self.shirt
+
     def test_quota_full_but_in_same(self):
         q = self.event.quotas.create(name='Test', size=0)
         q.items.add(self.shirt)

@@ -206,6 +206,9 @@
                 </div>
             </div>
         </div>
+        <div class="">
+            {% bootstrap_field other_form.ignore_quotas layout="" %}
+        </div>
         <div class="form-group submit-group">
             <a class="btn btn-default btn-lg"
                     href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">

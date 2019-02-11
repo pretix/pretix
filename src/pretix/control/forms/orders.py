@@ -177,6 +177,10 @@ class OtherOperationsForm(forms.Form):
             'Send an email to the customer notifying that their order has been changed.'
         )
     )
+    ignore_quotas = forms.BooleanField(
+        label=_('Allow to overbook quotas when performing this operation'),
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('order')
