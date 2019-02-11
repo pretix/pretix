@@ -135,13 +135,31 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/checkin/lists.html'
 
     def get_queryset(self):
-        qs = self.request.event.checkin_lists.prefetch_related("limit_products")
-        qs = CheckinList.annotate_with_numbers(qs, self.request.event)
+        qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related("limit_products")
 
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)
         return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        clists = list(ctx['checkinlists'])
+
+        # Optimization: Fetch expensive columns for this page only
+        annotations = {
+            a['pk']: a
+            for a in CheckinList.annotate_with_numbers(CheckinList.objects.filter(pk__in=[l.pk for l in clists]), self.request.event).values(
+                'pk', 'checkin_count', 'position_count', 'percent'
+            )
+        }
+        for cl in clists:
+            cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
+            cl.checkin_count = annotations.get(cl.pk, {}).get('checkin_count', 0)
+            cl.position_count = annotations.get(cl.pk, {}).get('position_count', 0)
+            cl.percent_count = annotations.get(cl.pk, {}).get('percent_count', 0)
+        ctx['checkinlists'] = clists
+        return ctx
 
 
 class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
