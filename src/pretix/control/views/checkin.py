@@ -154,7 +154,8 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             )
         }
         for cl in clists:
-            cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
+            if cl.subevent:
+                cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
             cl.checkin_count = annotations.get(cl.pk, {}).get('checkin_count', 0)
             cl.position_count = annotations.get(cl.pk, {}).get('position_count', 0)
             cl.percent_count = annotations.get(cl.pk, {}).get('percent_count', 0)
