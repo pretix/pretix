@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -460,7 +462,7 @@ class PaymentStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def _total_order_value(self):
         total = get_cart_total(self.request)
         total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address, None)])
-        return total
+        return Decimal(total)
 
     @cached_property
     def provider_forms(self):

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
+from decimal import Decimal
 from functools import wraps
 from itertools import groupby
 
@@ -198,7 +199,7 @@ def get_cart_total(request):
         else:
             request._cart_total_cache = CartPosition.objects.filter(
                 cart_id=get_or_create_cart_id(request), event=request.event
-            ).aggregate(sum=Sum('price'))['sum'] or 0
+            ).aggregate(sum=Sum('price'))['sum'] or Decimal('0.00')
     return request._cart_total_cache
 
 
