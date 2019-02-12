@@ -1517,6 +1517,7 @@ def test_refund_paid_order_automatically_failed(client, env, monkeypatch):
     p.info_data = {
         'id': 'foo'
     }
+    p.save()
     p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
 
@@ -1556,6 +1557,7 @@ def test_refund_paid_order_automatically(client, env, monkeypatch):
     p.info_data = {
         'id': 'foo'
     }
+    p.save()
     p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
 

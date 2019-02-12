@@ -1098,9 +1098,23 @@ class OrderPayment(models.Model):
         from pretix.base.services.mail import SendMailException
         from pretix.multidomain.urlreverse import build_absolute_uri
 
-        self.state = self.PAYMENT_STATE_CONFIRMED
-        self.payment_date = now()
-        self.save()
+        with transaction.atomic():
+            locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
+            if locked_instance.state == self.PAYMENT_STATE_CONFIRMED:
+                # Race condition detected, this payment is already confirmed
+                return
+
+            locked_instance.state = self.PAYMENT_STATE_CONFIRMED
+            locked_instance.payment_date = now()
+            locked_instance.info = self.info  # required for backwards compatibility
+            locked_instance.save(update_fields=['state', 'payment_date', 'info'])
+
+            # Do a cheap manual "refresh from db" on non-complex fields
+            for field in self._meta.concrete_fields:
+                if not field.is_relation:
+                    setattr(self, field.attname, getattr(locked_instance, field.attname))
+
+        self.refresh_from_db()
 
         self.order.log_action('pretix.event.order.payment.confirmed', {
             'local_id': self.local_id,
