@@ -251,6 +251,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
+                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
                 ]
@@ -259,10 +261,14 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({
                 'status': 'error',
                 'reason': e.code,
+                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
+                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=201)
 
     def get_object(self):

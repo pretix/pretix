@@ -565,7 +565,10 @@ Order position endpoints
       Content-Type: application/json
 
       {
-        "status": "ok"
+        "status": "ok",
+        "position": {
+          …
+        }
       }
 
    **Example response with required questions**:
@@ -576,7 +579,10 @@ Order position endpoints
       Content-Type: text/json
 
       {
-        "status": "incomplete"
+        "status": "incomplete",
+        "position": {
+          …
+        },
         "questions": [
           {
             "id": 1,
@@ -621,6 +627,9 @@ Order position endpoints
       {
         "status": "error",
         "reason": "unpaid",
+        "position": {
+          …
+        }
       }
 
    Possible error reasons:
