@@ -90,6 +90,8 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         time_attrs = dict(attrs)
         date_attrs.setdefault('class', 'form-control splitdatetimepart')
         time_attrs.setdefault('class', 'form-control splitdatetimepart')
+        date_attrs.setdefault('autocomplete', 'off')
+        time_attrs.setdefault('autocomplete', 'off')
         date_attrs['class'] += ' datepickerfield'
         time_attrs['class'] += ' timepickerfield'
 
