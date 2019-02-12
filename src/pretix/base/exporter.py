@@ -209,7 +209,7 @@ class MultiSheetListExporter(ListExporter):
             sheet, f = form_data.get('_format').split(':')
             if f == 'default':
                 return self._render_sheet_csv(form_data, sheet, quoting=csv.QUOTE_NONNUMERIC, delimiter=',')
-            elif f == 'csv-excel':
+            elif f == 'excel':
                 return self._render_sheet_csv(form_data, sheet, dialect='excel')
             elif f == 'semicolon':
                 return self._render_sheet_csv(form_data, sheet, dialect='excel', delimiter=';')
