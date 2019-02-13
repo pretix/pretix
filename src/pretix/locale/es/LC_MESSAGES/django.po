@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-02-12 14:40+0000\n"
+"PO-Revision-Date: 2019-02-13 14:00+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -8956,7 +8956,7 @@ msgstr "Habilitado"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:113
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 msgid "Disabled"
-msgstr "Discapacitado"
+msgstr "Deshabilitado"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:41
 msgid ""
