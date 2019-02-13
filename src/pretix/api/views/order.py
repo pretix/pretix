@@ -392,6 +392,7 @@ class OrderPositionFilter(FilterSet):
             | Q(addon_to__attendee_name_cached__icontains=value)
             | Q(order__code__istartswith=value)
             | Q(order__invoice_address__name_cached__icontains=value)
+            | Q(order__email__icontains=value)
         )
 
     def has_checkin_qs(self, queryset, name, value):
