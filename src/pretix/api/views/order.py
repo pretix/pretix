@@ -26,8 +26,8 @@ from pretix.api.serializers.order import (
     OrderRefundSerializer, OrderSerializer,
 )
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Device, Invoice, Order, OrderPayment,
-    OrderPosition, OrderRefund, Quota, TeamAPIToken,
+    CachedCombinedTicket, CachedTicket, Device, Event, Invoice, Order,
+    OrderPayment, OrderPosition, OrderRefund, Quota, TeamAPIToken,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -83,6 +83,7 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                     'positions',
                     OrderPosition.objects.all().prefetch_related(
                         'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        'item__category', 'addon_to',
                         Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
                     )
                 )
@@ -435,11 +436,33 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
     }
 
     def get_queryset(self):
-        return OrderPosition.objects.filter(order__event=self.request.event).prefetch_related(
-            'checkins', 'answers', 'answers__options', 'answers__question'
-        ).select_related(
-            'item', 'order', 'order__event', 'order__event__organizer'
-        )
+        qs = OrderPosition.objects.filter(order__event=self.request.event)
+        if self.request.query_params.get('pdf_data', 'false') == 'true':
+            qs = qs.prefetch_related(
+                'checkins', 'answers', 'answers__options', 'answers__question',
+                Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
+                Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
+                    Prefetch(
+                        'event',
+                        Event.objects.select_related('organizer')
+                    ),
+                    Prefetch(
+                        'positions',
+                        OrderPosition.objects.prefetch_related(
+                            'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        )
+                    )
+                ))
+            ).select_related(
+                'item', 'variation', 'item__category', 'addon_to'
+            )
+        else:
+            qs = qs.prefetch_related(
+                'checkins', 'answers', 'answers__options', 'answers__question'
+            ).select_related(
+                'item', 'order', 'order__event', 'order__event__organizer'
+            )
+        return qs
 
     def _get_output_provider(self, identifier):
         responses = register_ticket_outputs.send(self.request.event)

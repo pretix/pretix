@@ -16,7 +16,9 @@ from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
-from pretix.base.models import Checkin, CheckinList, Order, OrderPosition
+from pretix.base.models import (
+    Checkin, CheckinList, Event, Order, OrderPosition,
+)
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, perform_checkin,
 )
@@ -201,12 +203,39 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             subevent=self.checkinlist.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
-        ).prefetch_related(
-            Prefetch(
-                lookup='checkins',
-                queryset=Checkin.objects.filter(list_id=self.checkinlist.pk)
+        )
+        if self.request.query_params.get('pdf_data', 'false') == 'true':
+            qs = qs.prefetch_related(
+                Prefetch(
+                    lookup='checkins',
+                    queryset=Checkin.objects.filter(list_id=self.checkinlist.pk)
+                ),
+                'checkins', 'answers', 'answers__options', 'answers__question',
+                Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
+                Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
+                    Prefetch(
+                        'event',
+                        Event.objects.select_related('organizer')
+                    ),
+                    Prefetch(
+                        'positions',
+                        OrderPosition.objects.prefetch_related(
+                            'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        )
+                    )
+                ))
+            ).select_related(
+                'item', 'variation', 'item__category', 'addon_to'
             )
-        ).select_related('item', 'variation', 'order', 'addon_to')
+        else:
+            qs = qs.prefetch_related(
+                Prefetch(
+                    lookup='checkins',
+                    queryset=Checkin.objects.filter(list_id=self.checkinlist.pk)
+                ),
+                'answers', 'answers__options', 'answers__question',
+                Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
+            ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address')
 
         if not self.checkinlist.all_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
