@@ -3,6 +3,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.conf import settings
 from django_countries.fields import Country
 from pytz import UTC
 
@@ -150,7 +151,6 @@ def test_event_list(token_client, organizer, event):
 def test_event_get(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
-    print(resp.data)
     assert TEST_EVENT_RES == resp.data
 
 
@@ -183,6 +183,7 @@ def test_event_create(token_client, organizer, event, meta_prop):
     assert organizer.events.get(slug="2030").meta_values.filter(
         property__name=meta_prop.name, value="Conference"
     ).exists()
+    assert organizer.events.get(slug="2030").plugins == settings.PRETIX_PLUGINS_DEFAULT
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils.functional import cached_property
@@ -108,7 +109,7 @@ class EventSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
-        plugins = validated_data.pop('plugins', None)
+        plugins = validated_data.pop('plugins', settings.PRETIX_PLUGINS_DEFAULT.split(','))
         event = super().create(validated_data)
 
         # Meta data
@@ -122,6 +123,7 @@ class EventSerializer(I18nAwareModelSerializer):
         # Plugins
         if plugins is not None:
             event.set_active_plugins(plugins)
+        event.save(update_fields=['plugins'])
 
         return event
 
