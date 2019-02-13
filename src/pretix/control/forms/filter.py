@@ -207,10 +207,11 @@ class EventOrderFilterForm(OrderFilterForm):
             (Order.STATUS_EXPIRED, _('Expired')),
             (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
             (Order.STATUS_CANCELED, _('Canceled')),
+            ('cp', _('Canceled (or with paid fee)')),
             ('pa', _('Approval pending')),
             ('overpaid', _('Overpaid')),
             ('underpaid', _('Underpaid')),
-            ('pendingpaid', _('Pending (but fully paid)'))
+            ('pendingpaid', _('Pending (but fully paid)')),
         ),
         required=False,
     )
@@ -296,6 +297,15 @@ class EventOrderFilterForm(OrderFilterForm):
             qs = qs.filter(
                 status=Order.STATUS_PENDING,
                 require_approval=True
+            )
+        elif fdata.get('status') == 'cp':
+            s = OrderPosition.objects.filter(
+                order=OuterRef('pk')
+            )
+            qs = qs.annotate(
+                has_pc=Exists(s)
+            ).filter(
+                Q(status=Order.STATUS_PAID, has_pc=False) | Q(status=Order.STATUS_CANCELED)
             )
 
         return qs
