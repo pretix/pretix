@@ -125,6 +125,23 @@ Example::
     Indicates if the database backend is a MySQL/MariaDB Galera cluster and
     turns on some optimizations/special case handlers. Default: ``False``
 
+Database replica settings
+-------------------------
+
+If you use a replicated database setup, pretix expects that the default database connection always points to the primary database node.
+Routing read queries to a replica on databse layer is **strongly** discouraged since this can lead to inaccurate such as more tickets
+being sold than are actually available.
+
+However, pretix can still make use of a database replica to keep some expensive queries with that can tolerate some latency from your
+primary database, such as backend search queries. The ``replica`` configuration section can have the same settings as the ``database``
+section (except for the ``backend`` setting) and will default back to the ``database`` settings for all values that are not given. This
+way, you just need to specify the settings that are different for the replica.
+
+Example::
+
+    [replica]
+    host=192.168.0.2
+
 URLs
 ----
 

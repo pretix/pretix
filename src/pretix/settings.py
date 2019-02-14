@@ -92,6 +92,23 @@ DATABASES = {
         } if 'mysql' in db_backend else {}
     }
 }
+DATABASE_REPLICA = 'default'
+if config.has_section('replica'):
+    DATABASE_REPLICA = 'replica'
+    DATABASES['replica'] = {
+        'ENGINE': 'django.db.backends.' + db_backend,
+        'NAME': config.get('replica', 'name', fallback=DATABASES['default']['NAME']),
+        'USER': config.get('replica', 'user', fallback=DATABASES['default']['USER']),
+        'PASSWORD': config.get('replica', 'password', fallback=DATABASES['default']['PASSWORD']),
+        'HOST': config.get('replica', 'host', fallback=DATABASES['default']['HOST']),
+        'PORT': config.get('replica', 'port', fallback=DATABASES['default']['PORT']),
+        'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'OPTIONS': db_options,
+        'TEST': {
+            'CHARSET': 'utf8mb4',
+            'COLLATION': 'utf8mb4_unicode_ci',
+        } if 'mysql' in db_backend else {}
+    }
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
