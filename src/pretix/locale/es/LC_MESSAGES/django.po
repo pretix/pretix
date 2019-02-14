@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-02-13 14:00+0000\n"
+"PO-Revision-Date: 2019-02-14 09:15+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -10836,7 +10836,7 @@ msgstr "Mantenga la transferencia como para hacer"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr "Reembolso de la marca como hecho"
+msgstr "Marcar reembolso como hecho"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:118
 msgid ""
