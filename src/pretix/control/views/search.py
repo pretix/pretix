@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.utils.functional import cached_property
 from django.views.generic import ListView
@@ -28,7 +29,7 @@ class OrderSearch(PaginationMixin, ListView):
         annotated = {
             o['pk']: o
             for o in
-            Order.objects.filter(
+            Order.objects.using(settings.DATABASE_REPLICA).filter(
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField())
@@ -45,7 +46,7 @@ class OrderSearch(PaginationMixin, ListView):
         return ctx
 
     def get_queryset(self):
-        qs = Order.objects.select_related('invoice_address')
+        qs = Order.objects.select_related('invoice_address').using(settings.DATABASE_REPLICA)
 
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
