@@ -129,7 +129,7 @@ Database replica settings
 -------------------------
 
 If you use a replicated database setup, pretix expects that the default database connection always points to the primary database node.
-Routing read queries to a replica on databse layer is **strongly** discouraged since this can lead to inaccurate such as more tickets
+Routing read queries to a replica on database layer is **strongly** discouraged since this can lead to inaccurate such as more tickets
 being sold than are actually available.
 
 However, pretix can still make use of a database replica to keep some expensive queries with that can tolerate some latency from your
