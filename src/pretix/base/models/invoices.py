@@ -233,3 +233,6 @@ class InvoiceLine(models.Model):
 
     class Meta:
         ordering = ('position', 'pk')
+
+    def __str__(self):
+        return 'Line {} of invoice {}'.format(self.position, self.invoice)

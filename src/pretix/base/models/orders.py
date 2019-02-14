@@ -1037,6 +1037,9 @@ class OrderPayment(models.Model):
     class Meta:
         ordering = ('local_id',)
 
+    def __str__(self):
+        return self.full_id
+
     @property
     def info_data(self):
         """
@@ -1342,6 +1345,9 @@ class OrderRefund(models.Model):
 
     class Meta:
         ordering = ('local_id',)
+
+    def __str__(self):
+        return self.full_id
 
     @property
     def info_data(self):
