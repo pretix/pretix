@@ -693,6 +693,45 @@ class Order(LockModel, LoggedModel):
                 continue
             yield op
 
+    def index(self, save=True):
+        from .index import OrderSearchIndex
+        indexed_strings = [
+            self.code,
+            self.full_code,
+            self.email,
+            self.comment,
+        ]
+        try:
+            indexed_strings.append(self.invoice_address.name_cached)
+            indexed_strings.append(self.invoice_address.company)
+        except InvoiceAddress.DoesNotExist:
+            pass
+        for p in self.all_positions.all():
+            indexed_strings.append(p.attendee_name_cached)
+            indexed_strings.append(p.attendee_email)
+            indexed_strings.append(p.secret)
+        pprovs = set()
+        for p in self.payments.all():
+            pprovs.add(p.provider)
+        if save:
+            return OrderSearchIndex.objects.update_or_create(
+                order=self,
+                defaults={
+                    'event': self.event,
+                    'organizer': self.event.organizer,
+                    'search_body': '\x1E'.join([str(v) for v in indexed_strings if v]),
+                    'payment_providers': '\x1E' + '\x1E'.join([str(v) for v in pprovs if v]) + '\x1E',
+                }
+            )[0]
+        else:
+            return OrderSearchIndex(
+                order=self,
+                event=self.event,
+                organizer=self.event.organizer,
+                search_body='\x1E'.join([str(v) for v in indexed_strings if v]),
+                payment_providers='\x1E' + '\x1E'.join([str(v) for v in pprovs if v]) + '\x1E',
+            )
+
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)

@@ -7,6 +7,7 @@ from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,
 )
+from .index import OrderSearchIndex
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
