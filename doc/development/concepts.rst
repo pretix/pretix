@@ -82,6 +82,12 @@ Orders
 ^^^^^^
 
 If a customer completes the checkout process, an **Order** will be created containing all the entered information.
-An order can be in one of currently five states that are listed in the diagram below:
+An order can be in one of currently four states that are listed in the diagram below:
 
 .. image:: /images/order_states.png
+
+There are additional "fake" states that are displayed like states but not represented as states in the system:
+
+* An order is considered **canceled (with paid fee)** if it is in **paid** status but does not include any non-cancelled positions.
+
+* An order is considered **requiring approval** if it is in **pending** status with the ``require_approval`` attribute set to ``True``.

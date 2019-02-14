@@ -4,7 +4,6 @@ Pending: Order is expecting payment\nOrder reduces quotas
 Expired: Payment period is over\nOrder does not affect quotas
 Paid: Order was successful\nOrder reduces quotas
 Canceled: Order has been canceled\nOrder does not affect quotas
-Refunded: Order has been refunded\nOrder does not affect quotas
 
 [*] --> Pending: customer\nplaces order
 Pending --> Paid: successful payment
@@ -12,8 +11,9 @@ Pending --> Expired: automatically\nor manually\non admin action
 Expired --> Paid: if payment is received\nonly if quota left
 Expired --> Canceled
 Expired --> Pending: manually\non admin action
-Paid --> Refunded: manually on\nadmin action\nor if an external\npayment provider\nnotifies about a\npayment refund
+Paid --> Canceled: manually on\nadmin action\nor if an external\npayment provider\nnotifies about a\npayment refund
 Pending --> Canceled: on admin or\ncustomer action
 Paid -> Pending: manually on admin action
+[*] --> Paid: customer\nplaces free order
 
 @enduml
