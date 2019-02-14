@@ -924,6 +924,17 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.status == Order.STATUS_PAID
         assert self.order.payments.last().provider == 'free'
 
+    def test_change_price_to_free_require_approval(self):
+        self.order.require_approval = True
+        self.order.save()
+        self.ocm = OrderChangeManager(self.order, None)
+        self.ocm.change_price(self.op1, Decimal('0.00'))
+        self.ocm.change_price(self.op2, Decimal('0.00'))
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.total == 0
+        assert self.order.status == Order.STATUS_PENDING
+
     def test_change_paid_same_price(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
@@ -1170,6 +1181,30 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == Decimal('23.00')
         assert self.order.positions.count() == 1
         assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('23.00')
+        assert o2.positions.count() == 1
+        assert o2.code != self.order.code
+        assert o2.secret != self.order.secret
+        assert o2.datetime > self.order.datetime
+        assert self.op2.secret != old_secret
+        assert not self.order.invoices.exists()
+        assert not o2.invoices.exists()
+
+    def test_split_require_approval(self):
+        self.op2.item.require_approval = True
+        self.op2.item.save()
+        self.order.require_approval = True
+        self.order.save()
+        old_secret = self.op2.secret
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+        assert self.order.total == Decimal('23.00')
+        assert self.order.positions.count() == 1
+        assert self.op2.order != self.order
+        assert self.op2.order.require_approval
         o2 = self.op2.order
         assert o2.total == Decimal('23.00')
         assert o2.positions.count() == 1

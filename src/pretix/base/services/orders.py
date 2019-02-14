@@ -962,7 +962,7 @@ class OrderChangeManager:
                 )
                 self.order.save()
         elif self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and self._totaldiff < 0:
-            if self.order.pending_sum <= Decimal('0.00'):
+            if self.order.pending_sum <= Decimal('0.00') and not self.order.require_approval:
                 self.order.status = Order.STATUS_PAID
                 self.order.save()
             elif self.open_payment:
@@ -982,7 +982,7 @@ class OrderChangeManager:
                 }, user=self.user, auth=self.auth)
 
     def _check_paid_to_free(self):
-        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)):
+        if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
             # if the order becomes free, mark it paid using the 'free' provider
             # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
             # or positions got split off to a new order (split_order with positive total)
@@ -997,7 +997,7 @@ class OrderChangeManager:
             except Quota.QuotaExceededException:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
-        if self.split_order and self.split_order.total == 0:
+        if self.split_order and self.split_order.total == 0 and not self.split_order.require_approval:
             p = self.split_order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
                 provider='free',
@@ -1125,6 +1125,7 @@ class OrderChangeManager:
         split_order.code = None
         split_order.datetime = now()
         split_order.secret = generate_secret()
+        split_order.require_approval = self.order.require_approval and any(p.item.require_approval for p in split_positions)
         split_order.save()
         split_order.log_action('pretix.event.order.changed.split_from', user=self.user, auth=self.auth, data={
             'original_order': self.order.code
