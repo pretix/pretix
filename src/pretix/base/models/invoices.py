@@ -118,8 +118,8 @@ class Invoice(models.Model):
             self.invoice_from,
             (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
             str(self.invoice_from_country),
-            pgettext("invoice", "VAT-ID: %s" % self.invoice_from_vat_id) if self.invoice_from_vat_id else "",
-            pgettext("invoice", "Tax ID: %s" % self.invoice_from_tax_id) if self.invoice_from_tax_id else "",
+            pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
+            pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id if self.invoice_from_tax_id else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
