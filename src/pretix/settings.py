@@ -636,6 +636,7 @@ BOOTSTRAP3 = {
         'default': 'bootstrap3.renderers.FieldRenderer',
         'inline': 'bootstrap3.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+        'checkout': 'pretix.presale.forms.renderers.CheckoutFieldRenderer',
     },
 }
 
