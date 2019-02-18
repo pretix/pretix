@@ -17,9 +17,6 @@ class LocaleSet(NoSearchIndexViewMixin, View):
 
         locale = request.GET.get('locale')
         if locale in [lc for lc, ll in settings.LANGUAGES]:
-            if request.user.is_authenticated:
-                request.user.locale = locale
-                request.user.save()
 
             max_age = 10 * 365 * 24 * 60 * 60
             resp.set_cookie(settings.LANGUAGE_COOKIE_NAME, locale, max_age=max_age,
