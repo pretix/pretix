@@ -129,13 +129,22 @@ def get_language_from_request(request: HttpRequest) -> str:
     if _supported is None:
         _supported = OrderedDict(settings.LANGUAGES)
 
-    return (
-        get_language_from_user_settings(request)
-        or get_language_from_session_or_cookie(request)
-        or get_language_from_browser(request)
-        or get_language_from_event(request)
-        or get_default_language()
-    )
+    if request.path.startswith(get_script_prefix() + 'control'):
+        return (
+            get_language_from_user_settings(request)
+            or get_language_from_session_or_cookie(request)
+            or get_language_from_browser(request)
+            or get_language_from_event(request)
+            or get_default_language()
+        )
+    else:
+        return (
+            get_language_from_session_or_cookie(request)
+            or get_language_from_user_settings(request)
+            or get_language_from_browser(request)
+            or get_language_from_event(request)
+            or get_default_language()
+        )
 
 
 def _parse_csp(header):
