@@ -57,8 +57,7 @@
                 <div class="locales">
                     {% for l in languages %}
                         <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                            {{ l.name_local }}
-                        </a>
+                            {{ l.name_local }}</a>
                     {% endfor %}
                 </div>
             {% endif %}
