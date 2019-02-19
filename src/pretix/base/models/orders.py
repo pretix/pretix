@@ -188,6 +188,22 @@ class Order(LockModel, LoggedModel):
     def __str__(self):
         return self.full_code
 
+    def gracefully_delete(self, user=None, auth=None):
+        if not self.testmode:
+            raise TypeError("Only test mode orders can be deleted.")
+        self.event.log_action(
+            'pretix.event.order.deleted', user=user, auth=auth,
+            data={
+                'code': self.code,
+            }
+        )
+        OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order=self).delete()
+        OrderFee.all.filter(order=self).delete()
+        self.refunds.all().delete()
+        self.payments.all().delete()
+        self.delete()
+
     @property
     def fees(self):
         """

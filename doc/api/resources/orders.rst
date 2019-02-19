@@ -135,7 +135,7 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 2.5:
 
-   The ``testmode`` attribute has been added.
+   The ``testmode`` attribute has been added and ``DELETE`` has been implemented for orders.
 
 .. _order-position-resource:
 
@@ -560,6 +560,37 @@ Order ticket download
    :statuscode 404: The requested order or output provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
+
+Deleting orders
+---------------
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
+
+   Deletes an order. Works only if the order has ``testmode`` set to ``true``.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param code: The ``code`` field of the order to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource **or** the order may not be deleted.
+   :statuscode 404: The requested order does not exist.
 
 Creating orders
 ---------------

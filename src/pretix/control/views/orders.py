@@ -407,18 +407,7 @@ class OrderDelete(OrderView):
         if self.order.testmode:
             try:
                 with transaction.atomic():
-                    self.request.organizer.log_action(
-                        'pretix.event.order.deleted', user=self.request.user,
-                        data={
-                            'code': self.order.code,
-                        }
-                    )
-                    self.order.all_positions.filter(addon_to__isnull=False).delete()
-                    self.order.all_positions.all().delete()
-                    self.order.all_fees.all().delete()
-                    self.order.refunds.all().delete()
-                    self.order.payments.all().delete()
-                    self.order.delete()
+                    self.order.gracefully_delete(user=self.request.user)
                 messages.success(self.request, _('The order has been deleted.'))
                 return redirect(reverse('control:event.orders', kwargs={
                     'event': self.request.event.slug,

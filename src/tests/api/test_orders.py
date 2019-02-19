@@ -2525,3 +2525,26 @@ def test_refund_create_invalid_payment(token_client, organizer, event, order):
         ), format='json', data=res
     )
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_order_delete(token_client, organizer, event, order):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_delete_test_mode(token_client, organizer, event, order):
+    order.testmode = True
+    order.save()
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 204
+    assert not Order.objects.filter(code=order.code).exists()

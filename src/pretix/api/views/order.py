@@ -16,7 +16,7 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
@@ -55,7 +55,7 @@ class OrderFilter(FilterSet):
         fields = ['code', 'status', 'email', 'locale', 'require_approval']
 
 
-class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class OrderViewSet(DestroyModelMixin, CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -378,6 +378,13 @@ class OrderViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+    def perform_destroy(self, instance):
+        if not instance.testmode:
+            raise PermissionDenied('Only test mode orders can be deleted.')
+
+        with transaction.atomic():
+            self.get_object().gracefully_delete(user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
 
 
 class OrderPositionFilter(FilterSet):
