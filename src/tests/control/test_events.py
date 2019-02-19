@@ -248,8 +248,24 @@ class EventsTest(SoupTest):
                             {'plugin:pretix.plugins.paypal': 'disable'})
         self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.paypal\"]")[0].text)
 
+    def test_testmode_enable(self):
+        self.event1.testmode = False
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'testmode': 'true'})
+        self.event1.refresh_from_db()
+        assert self.event1.testmode
+
+    def test_testmode_disable(self):
+        self.event1.testmode = True
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'testmode': 'false'})
+        self.event1.refresh_from_db()
+        assert not self.event1.testmode
+
     def test_live_disable(self):
-        self.event1.live = False
+        self.event1.live = True
         self.event1.save()
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'live': 'false'})

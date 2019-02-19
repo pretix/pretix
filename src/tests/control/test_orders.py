@@ -126,6 +126,15 @@ def test_order_list(client, env):
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=%d' % (q.pk, qo2.pk))
     assert 'FOO' not in response.rendered_content
 
+    response = client.get('/control/event/dummy/dummy/orders/?status=testmode')
+    assert 'FOO' not in response.rendered_content
+    assert 'TEST MODE' not in response.rendered_content
+    env[2].testmode = True
+    env[2].save()
+    response = client.get('/control/event/dummy/dummy/orders/?status=testmode')
+    assert 'FOO' in response.rendered_content
+    assert 'TEST MODE' in response.rendered_content
+
 
 @pytest.mark.django_db
 def test_order_detail(client, env):
@@ -134,6 +143,16 @@ def test_order_detail(client, env):
     assert 'Early-bird' in response.rendered_content
     assert 'Peter' in response.rendered_content
     assert 'Lukas Gelöscht' in response.rendered_content
+    assert 'TEST MODE' not in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_order_detail_show_test_mode(client, env):
+    env[2].testmode = True
+    env[2].save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/control/event/dummy/dummy/orders/FOO/')
+    assert 'TEST MODE' in response.rendered_content
 
 
 @pytest.mark.django_db
@@ -258,6 +277,26 @@ def test_order_deny(client, env):
     assert res.status_code < 400
     assert o.status == Order.STATUS_CANCELED
     assert o.require_approval
+
+
+@pytest.mark.django_db
+def test_order_delete_require_testmode(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    res = client.get('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    assert 'alert-danger' in res.rendered_content
+    assert 'Only orders created in test mode can be deleted' in res.rendered_content
+    res = client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    assert Order.objects.get(id=env[2].id)
+
+
+@pytest.mark.django_db
+def test_order_delete(client, env):
+    o = Order.objects.get(id=env[2].id)
+    o.testmode = True
+    o.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    assert not Order.objects.filter(id=env[2].id).exists()
 
 
 @pytest.mark.django_db
