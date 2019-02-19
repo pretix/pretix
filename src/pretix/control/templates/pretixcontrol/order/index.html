@@ -16,6 +16,9 @@
         {% blocktrans trimmed with code=order.code %}
             Order details: {{ code }}
         {% endblocktrans %}
+        {% if order.testmode %}
+            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+        {% endif %}
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     {% if 'can_change_orders' in request.eventpermset %}

@@ -76,6 +76,8 @@ class Order(LockModel, LoggedModel):
     :type event: Event
     :param email: The email of the person who ordered this
     :type email: str
+    :param testmode: Whether this is a test mode order
+    :type testmode: bool
     :param locale: The locale of this order
     :type locale: str
     :param secret: A secret string that is required to modify the order
@@ -121,6 +123,7 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Status"),
         db_index=True
     )
+    testmode = models.BooleanField(default=False)
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),

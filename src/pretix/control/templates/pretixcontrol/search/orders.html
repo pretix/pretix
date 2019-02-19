@@ -62,6 +62,9 @@
                                 {{ o.event.slug|upper }}-{{ o.code }}
                             </a>
                         </strong>
+                        {% if o.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
                     </td>
                     <td>{{ o.event.name }}</td>
                     <td>
