@@ -321,7 +321,7 @@ class Event(EventMixin, LoggedModel):
         verbose_name=_("Location"),
     )
     plugins = models.TextField(
-        null=True, blank=True,
+        null=False, blank=True,
         verbose_name=_("Plugins"),
     )
     comment = models.TextField(
