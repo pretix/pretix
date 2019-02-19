@@ -242,6 +242,8 @@ class Event(EventMixin, LoggedModel):
 
     :param organizer: The organizer this event belongs to
     :type organizer: Organizer
+    :param testmode: This event is in test mode
+    :type testmode: bool
     :param name: This event's full title
     :type name: str
     :param slug: A short, alphanumeric, all-lowercase name for use in URLs. The slug has to
@@ -271,6 +273,7 @@ class Event(EventMixin, LoggedModel):
     settings_namespace = 'event'
     CURRENCY_CHOICES = [(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES]
     organizer = models.ForeignKey(Organizer, related_name="events", on_delete=models.PROTECT)
+    testmode = models.BooleanField(default=False)
     name = I18nCharField(
         max_length=200,
         verbose_name=_("Event name"),

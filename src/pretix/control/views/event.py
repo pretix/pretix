@@ -854,6 +854,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['issues'] = self.request.event.live_issues
+        ctx['actual_orders'] = self.request.event.orders.filter(testmode=False).exists()
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -871,6 +872,20 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
                 'pretix.event.live.deactivated', user=self.request.user, data={}
             )
             messages.success(self.request, _('We\'ve taken your shop down. You can re-enable it whenever you want!'))
+        elif request.POST.get("testmode") == "true":
+            request.event.testmode = True
+            request.event.save()
+            self.request.event.log_action(
+                'pretix.event.testmode.activated', user=self.request.user, data={}
+            )
+            messages.success(self.request, _('Your shop is now in test mode!'))
+        elif request.POST.get("testmode") == "false":
+            request.event.testmode = False
+            request.event.save()
+            self.request.event.log_action(
+                'pretix.event.testmode.deactivated', user=self.request.user, data={}
+            )
+            messages.success(self.request, _('We\'ve disabled test mode for you. Let\'s sell some real tickets!'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:

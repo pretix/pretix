@@ -235,6 +235,14 @@
                             </ul>
                         </div>
                         <ul class="nav" id="side-menu">
+                            {% if request.event and request.event.testmode %}
+                                <li class="testmode">
+                                    <a href="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}">
+                                        <i class="fa fa-warning fa-fw"></i>
+                                        {% trans "TEST MODE" %}
+                                    </a>
+                                </li>
+                            {% endif %}
                             {% block nav %}
                                 {% for nav in nav_items %}
                                     <li>

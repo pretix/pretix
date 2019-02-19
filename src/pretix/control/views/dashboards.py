@@ -183,8 +183,20 @@ def shop_state_widget(sender, **kwargs):
         'priority': 1000,
         'content': '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>'.format(
             t1=_('Your ticket shop is'), t2=_('Click here to change'),
-            state=_('live') if sender.live else _('not yet public'),
-            icon='fa-check-circle' if sender.live else 'fa-times-circle',
+            state=_('live') if sender.live and not sender.testmode else (
+                _('live and in test mode') if sender.live else (
+                    _('not yet public') if not sender.testmode else (
+                        _('in private test mode')
+                    )
+                )
+            ),
+            icon='fa-check-circle' if sender.live and not sender.testmode else (
+                'fa-warning' if sender.live else (
+                    'fa-times-circle' if not sender.testmode else (
+                        'fa-times-circle'
+                    )
+                )
+            ),
             cls='live' if sender.live else 'off'
         ),
         'url': reverse('control:event.live', kwargs={

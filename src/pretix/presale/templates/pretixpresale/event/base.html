@@ -28,7 +28,7 @@
 {% endblock %}
 {% block page %}
     <div class="page-header">
-        {% if request.event.settings.organizer_link_back  %}
+        {% if request.event.settings.organizer_link_back %}
             <p>
                 <a href="{% eventurl request.organizer "presale:organizer.index" %}">
                     &laquo; {% blocktrans trimmed with name=request.organizer.name %}
@@ -64,6 +64,13 @@
         </div>
         <div class="clearfix"></div>
     </div>
+    {% if request.event.testmode %}
+        <div class="alert alert-warning">
+            <strong>
+                {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
+            </strong>
+        </div>
+    {% endif %}
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }}">
@@ -73,6 +80,13 @@
     {% endif %}
     {% block content %}
     {% endblock %}
+    {% if request.event.testmode %}
+        <div class="alert alert-warning">
+            <strong>
+                {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
+            </strong>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block footer %}
     {% if request.event.settings.contact_mail %}

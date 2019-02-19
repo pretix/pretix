@@ -130,6 +130,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 body_plain += "\r\n\r\n-- \r\n"
 
             if order:
+                if order.testmode:
+                    subject = "[TESTMODE] " + subject
                 body_plain += _(
                     "You are receiving this email because you placed an order for {event}."
                 ).format(event=event.name)
