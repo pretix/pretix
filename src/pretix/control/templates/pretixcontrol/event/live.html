@@ -91,6 +91,9 @@
                         {% trans "Please note that test orders still count into your quotas, actually use vouchers and might perform actual payments. The only difference is that you can delete test orders. Use at your own risk!" %}
                     </strong>
                 </p>
+                <p>
+                    {% trans "Also, test mode only covers the main web shop. Orders created through other sales channels such as the box office or resellers module are still created as production orders." %}
+                </p>
                 {% if actual_orders %}
                     <div class="alert alert-danger">
                         {% trans "It looks like you already have some real orders in your shop. We do not recommend enabling test mode if your customers already know your shop, as it will confuse them." %}
