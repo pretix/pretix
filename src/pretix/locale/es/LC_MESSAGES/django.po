@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-01 16:27+0000\n"
-"PO-Revision-Date: 2019-01-28 16:30+0000\n"
+"PO-Revision-Date: 2019-02-14 09:15+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -644,7 +644,7 @@ msgstr "Correo electrónico del participante"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:7
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr "Comprobante"
+msgstr "Vale"
 
 #: pretix/base/exporters/orderlist.py:285
 msgid "Pseudonymization ID"
@@ -732,7 +732,7 @@ msgstr "Órdenes pendientes"
 
 #: pretix/base/exporters/orderlist.py:437
 msgid "Blocking vouchers"
-msgstr "Comprobantes bloqueados"
+msgstr "Vales bloqueados"
 
 #: pretix/base/exporters/orderlist.py:438 pretix/control/views/item.py:621
 msgid "Current user's carts"
@@ -817,10 +817,8 @@ msgstr "Estilo de factura"
 
 #: pretix/base/exporters/orderlist.py:479
 #: pretix/base/exporters/orderlist.py:567
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of"
-msgstr "Cancelación"
+msgstr "Cancelación de"
 
 #: pretix/base/exporters/orderlist.py:480 pretix/base/models/auth.py:90
 #: pretix/control/forms/event.py:1185 pretix/control/views/waitinglist.py:200
@@ -1486,7 +1484,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:288 pretix/base/models/organizer.py:40
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "La ficha solo puede contener letras, números, puntos y guiones."
+msgstr "La URL semántica solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:292 pretix/base/models/organizer.py:44
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -1835,15 +1833,15 @@ msgstr "Este producto no será vendido después de la fecha dada."
 
 #: pretix/base/models/items.py:313
 msgid "This product can only be bought using a voucher."
-msgstr "Este producto solo se puede comprar usando un comprobante."
+msgstr "Este producto solo se puede comprar usando un vale."
 
 #: pretix/base/models/items.py:315
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"Para comprar este productos, el usuario necesita un comprobante para aplicar "
-"a este producto ya sea directamente o por una cuota."
+"Para comprar este producto, el usuario necesita un vale aplicable a este "
+"producto, ya sea directamente o por una cuota."
 
 #: pretix/base/models/items.py:319
 msgid "Buying this product requires approval"
@@ -2246,7 +2244,7 @@ msgstr "Orden {val}"
 #: pretix/base/models/log.py:101
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "Comprobante {val}…"
+msgstr "Vale {val}…"
 
 #: pretix/base/models/log.py:111
 #, python-brace-format
@@ -2467,10 +2465,8 @@ msgid "Service fee"
 msgstr "Tarifa por servicio"
 
 #: pretix/base/models/orders.py:1429
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation fee"
-msgstr "Cancelación"
+msgstr "Tarifa de cancelación"
 
 #: pretix/base/models/orders.py:1430
 msgid "Other fees"
@@ -2591,11 +2587,11 @@ msgstr "Puede cambiar órdenes"
 
 #: pretix/base/models/organizer.py:178
 msgid "Can view vouchers"
-msgstr "Puede ver recibos"
+msgstr "Puede ver vales"
 
 #: pretix/base/models/organizer.py:182
 msgid "Can change vouchers"
-msgstr "Puede cambiar recibos"
+msgstr "Puede cambiar vales"
 
 #: pretix/base/models/organizer.py:186
 #, python-format
@@ -2700,7 +2696,7 @@ msgstr "Reducir el precio del producto en (%)"
 #: pretix/plugins/checkinlists/exporters.py:322
 #: pretix/presale/templates/pretixpresale/event/index.html:472
 msgid "Voucher code"
-msgstr "Código del recibo"
+msgstr "Código del vale"
 
 #: pretix/base/models/vouchers.py:101 pretix/control/views/vouchers.py:62
 msgid "Maximum usages"
@@ -2750,7 +2746,7 @@ msgstr "Modo precio"
 
 #: pretix/base/models/vouchers.py:135
 msgid "Voucher value"
-msgstr "Valor del recibo"
+msgstr "Valor del vale"
 
 #: pretix/base/models/vouchers.py:143 pretix/control/forms/vouchers.py:24
 msgid "This product is added to the user's cart if the voucher is redeemed."
@@ -2780,15 +2776,15 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Puede utilizar este campo para agrupar varios documentos. Si introduce el "
-"mismo valor para varios documentos, puede obtener estadísticas sobre cuántos "
-"de ellos se han canjeado, etc."
+"Puede utilizar este campo para agrupar multiples vales. Si introduce el "
+"mismo valor para varios vales, puede obtener estadísticas sobre cuántos de "
+"ellos se han canjeado, etc."
 
 #: pretix/base/models/vouchers.py:178 pretix/control/navigation.py:234
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:7
 msgid "Vouchers"
-msgstr "Comprobantes"
+msgstr "Vales"
 
 #: pretix/base/models/vouchers.py:203
 msgid "You cannot select a quota that belongs to a different event."
@@ -2826,7 +2822,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:218
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr "Actualmente no es posible crear documentos para productos adicionales."
+msgstr "Actualmente no es posible crear vales para productos adicionales."
 
 #: pretix/base/models/vouchers.py:220 pretix/base/models/vouchers.py:309
 msgid "You need to specify either a quota or a product."
@@ -2845,7 +2841,7 @@ msgstr ""
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
-"Si desea que este documento bloquee la cuota, debe seleccionar una fecha "
+"Si desea que este vale bloquee la cuota, debe seleccionar una fecha "
 "específica."
 
 #: pretix/base/models/vouchers.py:238
@@ -2871,7 +2867,7 @@ msgstr "En lista de espera desde"
 
 #: pretix/base/models/waitinglist.py:44
 msgid "Assigned voucher"
-msgstr "Recibo asignado"
+msgstr "Vale asignado"
 
 #: pretix/base/models/waitinglist.py:53
 msgid "The product the user waits for."
@@ -3580,11 +3576,10 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Este código de descuento está actualmente bloqueado ya que está contenido en "
-"un carrito de la compra. Esto puede significar que otra persona está "
-"canjeando este vale ahora mismo, o que usted intentó canjearlo antes pero no "
-"completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
-"minutos."
+"Este código de vale está actualmente bloqueado ya que está contenido en un "
+"carrito de la compra. Esto puede significar que otra persona está canjeando "
+"este vale ahora mismo, o que usted intentó canjearlo antes pero no completó "
+"el proceso de pago. Puede intentar utilizarlo de nuevo en %d minutos."
 
 #: pretix/base/services/cart.py:74
 #, python-format
@@ -3597,19 +3592,19 @@ msgid ""
 "cart if you want to use it for a different product."
 msgstr ""
 "Ya ha utilizado este código de vale. Elimine la línea asociada de su carrito "
-"si desea utilizarla para un producto diferente."
+"si desea utilizarlo para un producto diferente."
 
 #: pretix/base/services/cart.py:77
 msgid "This voucher is expired."
-msgstr "El recibo ha expirado."
+msgstr "El vale ha expirado."
 
 #: pretix/base/services/cart.py:78
 msgid "This voucher is not valid for this product."
-msgstr "El recibo no es válido para este producto."
+msgstr "El vale no es válido para este producto."
 
 #: pretix/base/services/cart.py:80
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "Su bono es válido para un producto que actualmente no está a la venta."
+msgstr "Su vale es válido para un producto que actualmente no está a la venta."
 
 #: pretix/base/services/cart.py:81
 msgctxt "subevent"
@@ -3819,8 +3814,8 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"El código de descuento utilizado para uno de los artículos de su carrito ya "
-"ha sido utilizado el máximo número de veces permitido. Hemos quitado este "
+"El código de vale utilizado para uno de los artículos de su carrito ya ha "
+"sido utilizado el máximo número de veces permitido. Hemos quitado este "
 "artículo de su carrito."
 
 #: pretix/base/services/orders.py:67
@@ -3887,7 +3882,7 @@ msgstr "No puede cancelar este pedido."
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
-"La cuota de cancelación no puede ser mayor que el crédito de pago para esta "
+"La tarifa de cancelación no puede ser mayor que el crédito de pago para esta "
 "orden."
 
 #: pretix/base/services/orders.py:373
@@ -5239,10 +5234,8 @@ msgid "Customers can cancel their unpaid orders"
 msgstr "Permitir a los usuarios cancelar pedidos no pagados"
 
 #: pretix/control/forms/event.py:450 pretix/control/forms/event.py:472
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Do not allow cancellations after"
-msgstr "Cancelación"
+msgstr "No permitir cancelaciones después de"
 
 #: pretix/control/forms/event.py:454
 #, fuzzy
@@ -5260,20 +5253,16 @@ msgstr ""
 "por usted."
 
 #: pretix/control/forms/event.py:460
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a fixed cancellation fee"
-msgstr "Cancelación"
+msgstr "Mantener una tarifa de cancelación fija"
 
 #: pretix/control/forms/event.py:464
 msgid "Keep payment, shipping and service fees"
 msgstr "Conservar cuota de pago, envío y servicios"
 
 #: pretix/control/forms/event.py:468
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a percentual cancellation fee"
-msgstr "Cancelación"
+msgstr "Mantener una tarifa de cancelación porcentual"
 
 #: pretix/control/forms/event.py:479
 msgid "Payment term in days"
@@ -6350,7 +6339,7 @@ msgstr "Filtrar por etiqueta"
 
 #: pretix/control/forms/filter.py:766 pretix/control/forms/filter.py:768
 msgid "Search voucher"
-msgstr "Buscar recibo"
+msgstr "Buscar vale"
 
 #: pretix/control/forms/filter.py:808 pretix/control/forms/vouchers.py:92
 #: pretix/control/views/typeahead.py:295
@@ -6576,10 +6565,8 @@ msgid "Notify user by e-mail"
 msgstr "Notificar al usuario por correo electrónico"
 
 #: pretix/control/forms/orders.py:90
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Keep a cancellation fee of"
-msgstr "Cancelación"
+msgstr "Mantener una tarifa de cancelación de"
 
 #: pretix/control/forms/orders.py:91
 msgid ""
@@ -8969,7 +8956,7 @@ msgstr "Habilitado"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:113
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 msgid "Disabled"
-msgstr "Discapacitado"
+msgstr "Deshabilitado"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:41
 msgid ""
@@ -8986,7 +8973,7 @@ msgstr "Parametrizaciones generales de pago"
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:13
 #: pretix/control/templates/pretixcontrol/events/create_base.html:23
 msgid "Back"
-msgstr "Espalda"
+msgstr "Atrás"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
@@ -10849,7 +10836,7 @@ msgstr "Mantenga la transferencia como para hacer"
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr "Reembolso de la marca como hecho"
+msgstr "Marcar reembolso como hecho"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:118
 msgid ""
@@ -12522,7 +12509,7 @@ msgstr "Crear un nuevo vale"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:74
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:82
 msgid "Create multiple new vouchers"
-msgstr "Crear varios nuevos vales"
+msgstr "Crear múltiples vales nuevos"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:85
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
@@ -16153,7 +16140,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
 msgid "Place binding order"
-msgstr "Realizar un pedido vinculante"
+msgstr "Colocar orden de compra"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:186
 msgid "Submit registration"
@@ -16575,6 +16562,9 @@ msgid ""
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder "
 "to your original payment method."
 msgstr ""
+"Puede cancelar esta orden. En este caso, una tarifa de cancelación de "
+"<strong>%(fee)s</strong> será retenida y recibirá un retorno del resto a su "
+"método de pago original."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:264
 #: pretix/presale/templates/pretixpresale/event/order.html:271
