@@ -59,8 +59,7 @@
                     <td>
                         <strong>
                             <a href="{% url "control:event.order" event=o.event.slug organizer=o.event.organizer.slug code=o.code %}">
-                                {{ o.event.slug|upper }}-{{ o.code }}
-                            </a>
+                                {{ o.event.slug|upper }}-{{ o.code }}</a>
                         </strong>
                         {% if o.testmode %}
                             <span class="label label-warning">{% trans "TEST MODE" %}</span>

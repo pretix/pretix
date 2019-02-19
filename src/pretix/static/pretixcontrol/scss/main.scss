@@ -604,3 +604,7 @@ details summary {
     color: $brand-danger;
     text-decoration: line-through !important;
 }
+
+h1 .label {
+    display: inline-block;
+}

@@ -81,7 +81,7 @@
     {% block content %}
     {% endblock %}
     {% if request.event.testmode %}
-        <div class="alert alert-warning">
+        <div class="alert alert-testmode alert-warning">
             <strong>
                 {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
             </strong>

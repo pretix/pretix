@@ -281,6 +281,12 @@ details summary {
 form.download-btn-form {
     display: inline;
 }
+.alert-testmode {
+    margin-top: 20px;
+}
+h2 .label {
+    display: inline-block;
+}
 
 @import "_iframe.scss";
 @import "_a11y.scss";
