@@ -882,6 +882,7 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         elif request.POST.get("testmode") == "false":
             request.event.testmode = False
             request.event.save()
+            request.event.cache.delete('complain_testmode_orders')
             self.request.event.log_action(
                 'pretix.event.testmode.deactivated', user=self.request.user, data={}
             )

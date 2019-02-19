@@ -181,6 +181,7 @@ TEST_REFUNDS_RES = [
 TEST_ORDER_RES = {
     "code": "FOO",
     "status": "n",
+    "testmode": False,
     "secret": "k24fiuwvu8kxz3y1",
     "email": "dummy@dummy.test",
     "locale": "en",
@@ -240,6 +241,11 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?code=FOO'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?code=BAR'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?testmode=false'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?testmode=true'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?status=n'.format(organizer.slug, event.slug))
@@ -1352,6 +1358,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
     assert o.sales_channel == "web"
+    assert not o.testmode
 
     p = o.payments.first()
     assert p.provider == "banktransfer"
@@ -1421,6 +1428,22 @@ def test_order_create_sales_channel_invalid(token_client, organizer, event, item
     )
     assert resp.status_code == 400
     assert resp.data == {'sales_channel': ['Unknown sales channel.']}
+
+
+@pytest.mark.django_db
+def test_order_create_in_test_mode(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['testmode'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    o = Order.objects.get(code=resp.data['code'])
+    assert o.testmode
 
 
 @pytest.mark.django_db

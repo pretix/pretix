@@ -77,6 +77,7 @@ def cart_position(event, item, variations):
 TEST_EVENT_RES = {
     "name": {"en": "Dummy"},
     "live": False,
+    "testmode": False,
     "currency": "EUR",
     "date_from": "2017-12-27T10:00:00Z",
     "date_to": None,
@@ -180,6 +181,7 @@ def test_event_create(token_client, organizer, event, meta_prop):
         format='json'
     )
     assert resp.status_code == 201
+    assert not organizer.events.get(slug="2030").testmode
     assert organizer.events.get(slug="2030").meta_values.filter(
         property__name=meta_prop.name, value="Conference"
     ).exists()
@@ -275,6 +277,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
                 "en": "Demo Conference 2020 Test"
             },
             "live": False,
+            "testmode": True,
             "currency": "EUR",
             "date_from": "2018-12-27T10:00:00Z",
             "date_to": "2018-12-28T10:00:00Z",
@@ -298,6 +301,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     cloned_event = Event.objects.get(organizer=organizer.pk, slug='2030')
     assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
     assert cloned_event.is_public is False
+    assert cloned_event.testmode
     assert organizer.events.get(slug="2030").meta_values.filter(
         property__name=meta_prop.name, value="Conference"
     ).exists()
@@ -491,6 +495,30 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Meta data property \'test\' does not exist."]}'
+
+
+@pytest.mark.django_db
+def test_event_test_mode(token_client, organizer, event):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "testmode": True
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.testmode
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "testmode": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert not event.testmode
 
 
 @pytest.mark.django_db

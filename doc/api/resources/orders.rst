@@ -26,6 +26,8 @@ status                                string                     Order status, o
                                                                  * ``p`` – paid
                                                                  * ``e`` – expired
                                                                  * ``c`` – canceled
+testmode                              boolean                    If ``True``, this order was created when the event was in
+                                                                 test mode. Only orders in test mode can be deleted.
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 locale                                string                     The locale used for communication with this customer
@@ -130,6 +132,10 @@ last_modified                         datetime                   Last modificati
 
    ``order.status`` can no longer be ``r``, ``…/mark_canceled/`` now accepts a ``cancellation_fee`` parameter and
    ``…/mark_refunded/`` has been deprecated.
+
+.. versionchanged:: 2.5:
+
+   The ``testmode`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -272,6 +278,7 @@ List of all orders
           {
             "code": "ABC12",
             "status": "p",
+            "testmode": false,
             "secret": "k24fiuwvu8kxz3y1",
             "email": "tester@example.org",
             "locale": "en",
@@ -370,6 +377,7 @@ List of all orders
                            ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
+   :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
    :query boolean require_approval: If set to ``true`` or ``false``, only categories with this value for the field
                                     ``require_approval`` will be returned.
    :query string email: Only return orders created with the given email address
@@ -409,6 +417,7 @@ Fetching individual orders
       {
         "code": "ABC12",
         "status": "p",
+        "testmode": false,
         "secret": "k24fiuwvu8kxz3y1",
         "email": "tester@example.org",
         "locale": "en",
@@ -606,6 +615,7 @@ Creating orders
      or in state ``confirmed``, depending on this value. If you create a paid order, the ``order_paid`` signal will
      **not** be sent out to plugins and no email will be sent. If you want that behavior, create an unpaid order and
      then call the ``mark_paid`` API method.
+   * ``testmode`` (optional) – Defaults to ``false``
    * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
      order creation is successful. Any quotas that become free by this operation will be credited to your order
      creation.

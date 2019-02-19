@@ -229,7 +229,7 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
+        fields = ('code', 'status', 'testmode', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
                   'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
                   'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel')
 
@@ -411,7 +411,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
+        fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts')
 
     def validate_payment_provider(self, pp):
