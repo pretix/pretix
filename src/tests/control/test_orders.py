@@ -285,7 +285,7 @@ def test_order_delete_require_testmode(client, env):
     res = client.get('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
     assert 'alert-danger' in res.rendered_content
     assert 'Only orders created in test mode can be deleted' in res.rendered_content
-    res = client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
     assert Order.objects.get(id=env[2].id)
 
 
