@@ -150,6 +150,8 @@ class Invoice(models.Model):
         if not self.prefix:
             self.prefix = self.event.settings.invoice_numbers_prefix or (self.event.slug.upper() + '-')
         if not self.invoice_no:
+            if self.order.testmode:
+                self.prefix += 'TEST-'
             for i in range(10):
                 if self.event.settings.get('invoice_numbers_consecutive'):
                     self.invoice_no = self._get_numeric_invoice_number()

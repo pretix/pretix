@@ -291,18 +291,28 @@ def test_invoice_numbers(env):
     )
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
                        tax_value=Decimal('0.00'))
+    testorder = Order.objects.create(
+        code='BAR', event=event, email='dummy2@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=0, testmode=True,
+        locale='en'
+    )
     inv1 = generate_invoice(order)
     inv2 = generate_invoice(order)
+    invt1 = generate_invoice(testorder)
 
     event.settings.set('invoice_numbers_consecutive', False)
     inv3 = generate_invoice(order)
     inv4 = generate_invoice(order)
     inv21 = generate_invoice(order2)
+    invt2 = generate_invoice(testorder)
     inv22 = generate_invoice(order2)
 
     event.settings.set('invoice_numbers_consecutive', True)
     inv5 = generate_invoice(order)
     inv6 = generate_invoice(order)
+    invt3 = generate_invoice(testorder)
     inv7 = generate_invoice(order)
     Invoice.objects.filter(pk=inv6.pk).delete()  # This should never ever happen, but what if it happens anyway?
     inv8 = generate_invoice(order)
@@ -327,6 +337,10 @@ def test_invoice_numbers(env):
     # test Invoice.number, too
     assert inv1.number == '{}-00001'.format(event.slug.upper())
     assert inv3.number == '{}-{}-3'.format(event.slug.upper(), order.code)
+
+    assert invt1.number == '{}-TEST-00001'.format(event.slug.upper())
+    assert invt2.number == '{}-TEST-{}-2'.format(event.slug.upper(), testorder.code)
+    assert invt3.number == '{}-TEST-00002'.format(event.slug.upper())
 
 
 @pytest.mark.django_db
