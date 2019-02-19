@@ -261,7 +261,7 @@ class EventsTest(SoupTest):
         self.event1.settings.set('payment_banktransfer__enabled', True)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary"))
+        assert len(doc.select("input[name=live]"))
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'live': 'true'})
         self.event1.refresh_from_db()
@@ -272,19 +272,19 @@ class EventsTest(SoupTest):
         self.event1.settings.set('payment_banktransfer__enabled', False)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary"))
+        assert len(doc.select("input[name=live]"))
 
     def test_live_require_payment_method(self):
         self.event1.items.create(name='Test', default_price=5)
         self.event1.settings.set('payment_banktransfer__enabled', False)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary")) == 0
+        assert len(doc.select("input[name=live]")) == 0
 
     def test_live_require_a_quota(self):
         self.event1.settings.set('payment_banktransfer__enabled', True)
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary")) == 0
+        assert len(doc.select("input[name=live]")) == 0
 
     def test_payment_settings_provider(self):
         self.get_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug))
