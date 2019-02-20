@@ -202,6 +202,7 @@ class Order(LockModel, LoggedModel):
         OrderFee.all.filter(order=self).delete()
         self.refunds.all().delete()
         self.payments.all().delete()
+        self.event.cache.delete('complain_testmode_orders')
         self.delete()
 
     @property
