@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-02-20 03:00+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-02-20 19:53+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -1573,11 +1573,11 @@ msgstr ""
 
 #: pretix/base/models/event.py:805
 msgid "The event slug cannot be changed."
-msgstr "El evento slug no se puede cambiar."
+msgstr "La URL semántica del evento no se puede cambiar."
 
 #: pretix/base/models/event.py:808
 msgid "This slug has already been used for a different event."
-msgstr "Esta babosa ya ha sido usada para un evento diferente."
+msgstr "Esta URL semántica ya ha sido usada para un evento diferente."
 
 #: pretix/base/models/event.py:814
 msgid "The event cannot end before it starts."
@@ -2473,8 +2473,8 @@ msgid ""
 "your organizer accounts and your events."
 msgstr ""
 "Debe ser corto, sólo debe contener letras minúsculas, números, puntos y "
-"guiones. Cada babosa sólo se puede usar una vez. Esto se utiliza en las URL "
-"para referirse a sus cuentas de organizador y a sus eventos."
+"guiones. Cada URL semántica sólo se puede usar una vez. Esto se utiliza en "
+"las URL para referirse a sus cuentas de organizador y a sus eventos."
 
 #: pretix/base/models/organizer.py:49 pretix/control/forms/event.py:56
 #: pretix/control/forms/filter.py:325 pretix/control/forms/filter.py:516
@@ -4830,7 +4830,8 @@ msgstr ""
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr ""
-"Ya usaste esta bala para un evento diferente. Por favor, elija uno nuevo."
+"Ya usó esta URL semántica para un evento diferente. Por favor, elija una "
+"nueva."
 
 #: pretix/control/forms/event.py:74
 msgid "Event timezone"
@@ -5407,7 +5408,7 @@ msgid ""
 "once over all of your events. This setting only affects future invoices."
 msgstr ""
 "Esto se enviará por adelantado a los números de factura. Si deja este campo "
-"vacío, se utilizará la barra de eventos seguida de un guión. Atención: Si "
+"vacío, se utilizará la URL semántica seguida de un guión. Atención: Si "
 "varios eventos dentro de la misma organización utilizan el mismo valor en "
 "este campo, compartirán su rango de números, es decir, cada número completo "
 "se utilizará como máximo de una vez en todos los eventos. Esta "
@@ -5986,7 +5987,7 @@ msgstr "La contraseña que introdujo no era correcta."
 
 #: pretix/control/forms/event.py:1235 pretix/control/forms/organizer.py:41
 msgid "The slug you entered was not correct."
-msgstr "La bala que introdujo no era correcta."
+msgstr "La URL semántica que introdujo no era correcta."
 
 #: pretix/control/forms/event.py:1239
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
@@ -5995,7 +5996,7 @@ msgstr "Tu contraseña"
 
 #: pretix/control/forms/event.py:1244 pretix/control/forms/organizer.py:45
 msgid "Event slug"
-msgstr "Bala de eventos"
+msgstr "URL semántica del evento"
 
 #: pretix/control/forms/event.py:1286
 msgid "Ticket downloads"
@@ -6693,7 +6694,7 @@ msgstr "Es necesario especificar un importe para un reembolso parcial."
 
 #: pretix/control/forms/organizer.py:22
 msgid "This slug is already in use. Please choose a different one."
-msgstr "Esta pieza ya está en uso. Por favor, elija uno diferente."
+msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
 
 #: pretix/control/forms/organizer.py:80
 msgid "Custom domain"
@@ -11181,16 +11182,13 @@ msgstr ""
 "productos, cuotas, preguntas, vales, listas, etc."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
-#, fuzzy, python-format
-#| msgid ""
-#| "To confirm you really want this, please type out the event's short name "
-#| "(\"%(slug)s\") here:"
+#, python-format
 msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
 "Para confirmar que realmente lo desea, escriba aquí el nombre corto del "
-"evento (\"%(slug)s\"):"
+"organizador (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
