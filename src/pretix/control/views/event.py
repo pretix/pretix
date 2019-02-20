@@ -854,23 +854,55 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['issues'] = self.request.event.live_issues
+        ctx['actual_orders'] = self.request.event.orders.filter(testmode=False).exists()
         return ctx
 
     def post(self, request, *args, **kwargs):
         if request.POST.get("live") == "true" and not self.request.event.live_issues:
-            request.event.live = True
-            request.event.save()
-            self.request.event.log_action(
-                'pretix.event.live.activated', user=self.request.user, data={}
-            )
+            with transaction.atomic():
+                request.event.live = True
+                request.event.save()
+                self.request.event.log_action(
+                    'pretix.event.live.activated', user=self.request.user, data={}
+                )
             messages.success(self.request, _('Your shop is live now!'))
         elif request.POST.get("live") == "false":
-            request.event.live = False
-            request.event.save()
-            self.request.event.log_action(
-                'pretix.event.live.deactivated', user=self.request.user, data={}
-            )
+            with transaction.atomic():
+                request.event.live = False
+                request.event.save()
+                self.request.event.log_action(
+                    'pretix.event.live.deactivated', user=self.request.user, data={}
+                )
             messages.success(self.request, _('We\'ve taken your shop down. You can re-enable it whenever you want!'))
+        elif request.POST.get("testmode") == "true":
+            with transaction.atomic():
+                request.event.testmode = True
+                request.event.save()
+                self.request.event.log_action(
+                    'pretix.event.testmode.activated', user=self.request.user, data={}
+                )
+            messages.success(self.request, _('Your shop is now in test mode!'))
+        elif request.POST.get("testmode") == "false":
+            with transaction.atomic():
+                request.event.testmode = False
+                request.event.save()
+                self.request.event.log_action(
+                    'pretix.event.testmode.deactivated', user=self.request.user, data={
+                        'delete': (request.POST.get("delete") == "yes")
+                    }
+                )
+            request.event.cache.delete('complain_testmode_orders')
+            if request.POST.get("delete") == "yes":
+                try:
+                    with transaction.atomic():
+                        for order in request.event.orders.filter(testmode=True):
+                            order.gracefully_delete(user=self.request.user)
+                except ProtectedError:
+                    messages.error(self.request, _('An order could not be deleted as some constraints (e.g. data '
+                                                   'created by plug-ins) do not allow it.'))
+                else:
+                    request.event.cache.set('complain_testmode_orders', False, 30)
+            messages.success(self.request, _('We\'ve disabled test mode for you. Let\'s sell some real tickets!'))
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:

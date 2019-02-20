@@ -11,7 +11,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, IntegerField, OuterRef, Subquery
+from django.db.models import (
+    Count, IntegerField, OuterRef, ProtectedError, Subquery,
+)
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
 )
@@ -394,6 +396,35 @@ class OrderApprove(OrderView):
 
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/approve.html', {
+            'order': self.order,
+        })
+
+
+class OrderDelete(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        if self.order.testmode:
+            try:
+                with transaction.atomic():
+                    self.order.gracefully_delete(user=self.request.user)
+                messages.success(self.request, _('The order has been deleted.'))
+                return redirect(reverse('control:event.orders', kwargs={
+                    'event': self.request.event.slug,
+                    'organizer': self.request.organizer.slug,
+                }))
+            except ProtectedError:
+                messages.error(self.request, _('The order could not be deleted as some constraints (e.g. data created '
+                                               'by plug-ins) do not allow it.'))
+                return self.get(self.request, *self.args, **self.kwargs)
+
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        if not self.order.testmode:
+            messages.error(self.request, _('Only orders created in test mode can be deleted.'))
+            return redirect(self.get_order_url())
+        return render(self.request, 'pretixcontrol/order/delete.html', {
             'order': self.order,
         })
 

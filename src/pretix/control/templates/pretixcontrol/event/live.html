@@ -3,49 +3,113 @@
 {% load bootstrap3 %}
 {% block content %}
     <h1>{% trans "Shop status" %}</h1>
-    {% if request.event.live %}
-        <p>
-            {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
-        </p>
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="live" value="false">
-
-            <div class="form-group submit-group">
-                <button type="submit" class="btn btn-primary btn-save">
-                    {% trans "Go offline" %}
-                </button>
-            </div>
-        </form>
-    {% else %}
-        <p>
-            {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
-        </p>
-        {% if issues|length > 0 %}
-            <div class="alert alert-warning">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Shop visibility" %}
+        </div>
+        <div class="panel-body">
+            {% if request.event.live %}
                 <p>
-                    {% trans "To publish your ticket shop, you first need to resolve the following issues:" %}
+                    {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
                 </p>
-                <ul>
-                    {% for issue in issues %}
-                        <li>{{ issue|safe }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% else %}
-            <p>
-                {% trans "If you want to, you can publish your ticket shop now." %}
-            </p>
-            <form action="" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="live" value="true">
-
-                <div class="form-group submit-group">
-                    <button type="submit" class="btn btn-primary btn-save">
-                        {% trans "Go live" %}
+                <form action="" method="post" class="text-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="live" value="false">
+                    <button type="submit" class="btn btn-lg btn-danger btn-save">
+                        {% trans "Go offline" %}
                     </button>
-                </div>
-            </form>
-        {% endif %}
-    {% endif %}
+                </form>
+            {% else %}
+                {% if issues|length > 0 %}
+                    <p>
+                        {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
+                    </p>
+                    <div class="alert alert-warning">
+                        <p>
+                            {% trans "To publish your ticket shop, you first need to resolve the following issues:" %}
+                        </p>
+                        <ul>
+                            {% for issue in issues %}
+                                <li>{{ issue|safe }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="test-right">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save" disabled>
+                            {% trans "Go live" %}
+                        </button>
+                    </div>
+                {% else %}
+                    <p>
+                        {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
+                    </p>
+                    <p>
+                        {% trans "If you want to, you can publish your ticket shop now." %}
+                    </p>
+                    <form action="" method="post" class="text-right">
+                        {% csrf_token %}
+                        <input type="hidden" name="live" value="true">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save">
+                            {% trans "Go live" %}
+                        </button>
+                    </form>
+                {% endif %}
+            {% endif %}
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Test mode" %}
+        </div>
+        <div class="panel-body">
+            {% if request.event.testmode %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="testmode" value="false">
+                    <p>
+                        {% trans "Your shop is currently in test mode. All orders are not persistant and can be deleted at any point." %}
+                    </p>
+                    <div class="form-inline">
+                        <label class="checkbox">
+                            <input type="checkbox" name="delete" value="yes" />
+                            {% trans "Permanently delete all orders created in test mode" %}
+                        </label>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-lg btn-primary btn-save">
+                            {% trans "Disable test mode" %}
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <p>
+                    {% trans "Your shop is currently in production mode." %}
+                </p>
+                <p>
+                    {% trans "If you want to do some test orders, you can enable test mode for your shop. As long as the shop is in test mode, all orders that are created are marked as test orders and can be deleted again." %}
+                    <strong>
+                        {% trans "Please note that test orders still count into your quotas, actually use vouchers and might perform actual payments. The only difference is that you can delete test orders. Use at your own risk!" %}
+                    </strong>
+                </p>
+                <p>
+                    {% trans "Also, test mode only covers the main web shop. Orders created through other sales channels such as the box office or resellers module are still created as production orders." %}
+                </p>
+                {% if actual_orders %}
+                    <div class="alert alert-danger">
+                        {% trans "It looks like you already have some real orders in your shop. We do not recommend enabling test mode if your customers already know your shop, as it will confuse them." %}
+                    </div>
+                {% endif %}
+                <form action="" method="post" class="text-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="testmode" value="true">
+                    <button type="submit" class="btn btn-danger btn-lg btn-save">
+                        {% trans "Enable test mode" %}
+                    </button>
+                </form>
+
+            {% endif %}
+            <div class="clear"></div>
+        </div>
+    </div>
 {% endblock %}

@@ -212,6 +212,7 @@ class EventOrderFilterForm(OrderFilterForm):
             ('overpaid', _('Overpaid')),
             ('underpaid', _('Underpaid')),
             ('pendingpaid', _('Pending (but fully paid)')),
+            ('testmode', _('Test mode')),
         ),
         required=False,
     )
@@ -297,6 +298,10 @@ class EventOrderFilterForm(OrderFilterForm):
             qs = qs.filter(
                 status=Order.STATUS_PENDING,
                 require_approval=True
+            )
+        elif fdata.get('status') == 'testmode':
+            qs = qs.filter(
+                testmode=True
             )
         elif fdata.get('status') == 'cp':
             s = OrderPosition.objects.filter(

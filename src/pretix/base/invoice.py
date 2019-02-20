@@ -9,7 +9,7 @@ import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
-from django.utils.translation import pgettext
+from django.utils.translation import pgettext, ugettext
 from PIL.Image import BICUBIC
 from reportlab.lib import pagesizes
 from reportlab.lib.enums import TA_LEFT
@@ -266,6 +266,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         canvas.saveState()
         canvas.setFont(self.font_regular, 8)
+
+        if self.invoice.order.testmode:
+            canvas.saveState()
+            canvas.setFont('OpenSansBd', 30)
+            canvas.setFillColorRGB(32, 0, 0)
+            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, ugettext('TEST MODE'))
+            canvas.restoreState()
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
             canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())

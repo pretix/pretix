@@ -15,6 +15,7 @@ name                                  multi-lingual string       The event's ful
 slug                                  string                     A short form of the name, used e.g. in URLs.
 live                                  boolean                    If ``true``, the event ticket shop is publicly
                                                                  available.
+testmode                              boolean                    If ``true``, the ticket shop is in test mode.
 currency                              string                     The currency this event is handled in.
 date_from                             datetime                   The event's start date
 date_to                               datetime                   The event's end date (or ``null``)
@@ -44,6 +45,10 @@ plugins                               list                       A list of packa
 .. versionchanged:: 2.1
 
    Filters have been added to the list of events.
+
+.. versionchanged:: 2.5
+
+   The ``testmode`` attribute has been added.
 
 Endpoints
 ---------
@@ -79,6 +84,7 @@ Endpoints
             "name": {"en": "Sample Conference"},
             "slug": "sampleconf",
             "live": false,
+            "testmode": false,
             "currency": "EUR",
             "date_from": "2017-12-27T10:00:00Z",
             "date_to": null,
@@ -137,6 +143,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -183,6 +190,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -211,6 +219,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -259,6 +268,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -287,6 +297,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
@@ -347,6 +358,7 @@ Endpoints
         "name": {"en": "Sample Conference"},
         "slug": "sampleconf",
         "live": false,
+        "testmode": false,
         "currency": "EUR",
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,

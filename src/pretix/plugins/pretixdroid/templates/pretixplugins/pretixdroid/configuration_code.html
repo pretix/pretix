@@ -63,6 +63,11 @@
         </p>
         <h2>{% trans "3. Start scanning tickets" %}</h2>
         <script type="text/javascript" src="{% static "pretixplugins/pretixdroid/pretixdroid.js" %}"></script>
+        {% if request.event.testmode %}
+            <div class="alert-info">
+                {% trans "Test mode orders will only be scanned if you scan online. If you scan in asynchronous mode, test mode orders won't be there." %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

@@ -44,6 +44,9 @@
         {% blocktrans trimmed with code=order.code %}
             Your order: {{ code }}
         {% endblocktrans %}
+        {% if order.testmode %}
+            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+        {% endif %}
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
         <div class="clearfix"></div>
     </h2>

@@ -102,6 +102,11 @@ class BankTransfer(BasePaymentProvider):
         return str(self.settings.get('public_name', as_type=LazyI18nString) or self.verbose_name)
 
     @property
+    def test_mode_message(self):
+        return _('In test mode, you can just manually mark this order as paid in the backend after it has been '
+                 'created.')
+
+    @property
     def settings_form_fields(self):
         d = OrderedDict(
             list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + [

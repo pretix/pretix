@@ -248,8 +248,60 @@ class EventsTest(SoupTest):
                             {'plugin:pretix.plugins.paypal': 'disable'})
         self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.paypal\"]")[0].text)
 
+    def test_testmode_enable(self):
+        self.event1.testmode = False
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'testmode': 'true'})
+        self.event1.refresh_from_db()
+        assert self.event1.testmode
+
+    def test_testmode_disable(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, locale='en', testmode=True
+        )
+        o2 = Order.objects.create(
+            code='FOO2', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, locale='en'
+        )
+        self.event1.testmode = True
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'testmode': 'false'})
+        self.event1.refresh_from_db()
+        assert not self.event1.testmode
+        assert Order.objects.filter(pk=o.pk).exists()
+        assert Order.objects.filter(pk=o2.pk).exists()
+
+    def test_testmode_disable_delete(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, locale='en', testmode=True
+        )
+        o2 = Order.objects.create(
+            code='FOO2', event=self.event1, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + datetime.timedelta(days=10),
+            total=14, locale='en'
+        )
+        self.event1.testmode = True
+        self.event1.save()
+        self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
+                      {'testmode': 'false', 'delete': 'yes'})
+        self.event1.refresh_from_db()
+        assert not self.event1.testmode
+        assert not Order.objects.filter(pk=o.pk).exists()
+        assert Order.objects.filter(pk=o2.pk).exists()
+
     def test_live_disable(self):
-        self.event1.live = False
+        self.event1.live = True
         self.event1.save()
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'live': 'false'})
@@ -261,7 +313,7 @@ class EventsTest(SoupTest):
         self.event1.settings.set('payment_banktransfer__enabled', True)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary"))
+        assert len(doc.select("input[name=live]"))
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'live': 'true'})
         self.event1.refresh_from_db()
@@ -272,19 +324,19 @@ class EventsTest(SoupTest):
         self.event1.settings.set('payment_banktransfer__enabled', False)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary"))
+        assert len(doc.select("input[name=live]"))
 
     def test_live_require_payment_method(self):
         self.event1.items.create(name='Test', default_price=5)
         self.event1.settings.set('payment_banktransfer__enabled', False)
         self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary")) == 0
+        assert len(doc.select("input[name=live]")) == 0
 
     def test_live_require_a_quota(self):
         self.event1.settings.set('payment_banktransfer__enabled', True)
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
-        assert len(doc.select(".btn-primary")) == 0
+        assert len(doc.select("input[name=live]")) == 0
 
     def test_payment_settings_provider(self):
         self.get_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug))

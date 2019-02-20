@@ -48,7 +48,7 @@ class EventSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('name', 'slug', 'live', 'currency', 'date_from',
+        fields = ('name', 'slug', 'live', 'testmode', 'currency', 'date_from',
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'has_subevents', 'meta_data', 'plugins')
 

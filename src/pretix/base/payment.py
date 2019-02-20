@@ -88,6 +88,18 @@ class BasePaymentProvider:
         """
         return self.settings.get('_enabled', as_type=bool)
 
+    @property
+    def test_mode_message(self) -> str:
+        """
+        If this property is set to a string, this will be displayed when this payment provider is selected
+        while the event is in test mode. You should use it to explain to your user how your plugin behaves,
+        e.g. if it falls back to a test mode automatically as well or if actual payments will be performed.
+
+        If you do not set this (or, return ``None``), pretix will show a default message warning the user
+        that this plugin does not support test mode payments.
+        """
+        return None
+
     def calculate_fee(self, price: Decimal) -> Decimal:
         """
         Calculate the fee for this payment provider which will be added to
@@ -712,6 +724,11 @@ class BoxOfficeProvider(BasePaymentProvider):
 class ManualPayment(BasePaymentProvider):
     identifier = 'manual'
     verbose_name = _('Manual payment')
+
+    @property
+    def test_mode_message(self):
+        return _('In test mode, you can just manually mark this order as paid in the backend after it has been '
+                 'created.')
 
     @property
     def is_implicit(self):

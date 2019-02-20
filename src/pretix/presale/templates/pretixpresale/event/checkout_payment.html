@@ -31,6 +31,20 @@
                     <div id="payment_{{ p.provider.identifier }}"
                             class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
                         <div class="panel-body form-horizontal">
+                            {% if request.event.testmode %}
+                                {% if p.provider.test_mode_message %}
+                                    <div class="alert alert-info">
+                                        {{ p.provider.test_mode_message }}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        {% trans "This payment provider does not provide support for testmode." %}
+                                        <strong>
+                                            {% trans "If you continue, actual money might be transferred." %}
+                                        </strong>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                             {{ p.form }}
                         </div>
                     </div>

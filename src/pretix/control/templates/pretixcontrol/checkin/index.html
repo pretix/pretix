@@ -89,6 +89,9 @@
                                 {% if e.order.status == "n" %}
                                     <span class="label label-warning">{% trans "unpaid" %}</span>
                                 {% endif %}
+                                {% if e.order.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
                             </td>
                             <td>{{ e.item }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
                             <td>{{ e.order.email }}</td>

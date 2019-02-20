@@ -76,6 +76,8 @@ class Order(LockModel, LoggedModel):
     :type event: Event
     :param email: The email of the person who ordered this
     :type email: str
+    :param testmode: Whether this is a test mode order
+    :type testmode: bool
     :param locale: The locale of this order
     :type locale: str
     :param secret: A secret string that is required to modify the order
@@ -121,6 +123,7 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Status"),
         db_index=True
     )
+    testmode = models.BooleanField(default=False)
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
@@ -184,6 +187,23 @@ class Order(LockModel, LoggedModel):
 
     def __str__(self):
         return self.full_code
+
+    def gracefully_delete(self, user=None, auth=None):
+        if not self.testmode:
+            raise TypeError("Only test mode orders can be deleted.")
+        self.event.log_action(
+            'pretix.event.order.deleted', user=user, auth=auth,
+            data={
+                'code': self.code,
+            }
+        )
+        OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order=self).delete()
+        OrderFee.all.filter(order=self).delete()
+        self.refunds.all().delete()
+        self.payments.all().delete()
+        self.event.cache.delete('complain_testmode_orders')
+        self.delete()
 
     @property
     def fees(self):
@@ -490,6 +510,10 @@ class Order(LockModel, LoggedModel):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            if self.testmode:
+                # Subtle way to recognize test orders while debugging: They all contain a 0 at the second place,
+                # even though zeros are not used outside test mode.
+                code = code[0] + "0" + code[2:]
             if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return

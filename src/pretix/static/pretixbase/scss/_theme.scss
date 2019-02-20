@@ -1,6 +1,14 @@
 .sidebar-nav li > a > .fa {
   color: $navbar-inverse-bg;
 }
+.nav .testmode a {
+  background: $brand-warning;
+  color: black;
+  font-weight: bold;
+  &:hover, &:active, &:focus {
+    background: $btn-warning-border;
+  }
+}
 
 .btn {
   border-width: 0px;

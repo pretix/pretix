@@ -533,6 +533,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             datetime=now_dt,
             locale=locale,
             total=total,
+            testmode=event.testmode,
             meta_info=json.dumps(meta_info or {}),
             require_approval=any(p.item.require_approval for p in positions),
             sales_channel=sales_channel

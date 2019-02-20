@@ -114,9 +114,11 @@
                             <strong>
                                 <a
                                         href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
-                                    {{ o.code }}
-                                </a>
+                                    {{ o.code }}</a>
                             </strong>
+                            {% if o.testmode %}
+                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                            {% endif %}
                         </td>
                         <td>
                             {{ o.email|default_if_none:"" }}

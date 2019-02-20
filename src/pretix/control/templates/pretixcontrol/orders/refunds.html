@@ -55,6 +55,9 @@
                                 <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code %}">
                                     {{ r.order.code }}</a>-R-{{ r.local_id }}
                             </strong>
+                            {% if r.order.testmode %}
+                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                            {% endif %}
                         </td>
                         <td>
                             {{ r.payment_provider.verbose_name }}

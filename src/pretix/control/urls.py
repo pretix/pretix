@@ -222,6 +222,8 @@ urlpatterns = [
             name='event.order.approve'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/deny$', orders.OrderDeny.as_view(),
             name='event.order.deny'),
+        url(r'^orders/(?P<code>[0-9A-Z]+)/delete$', orders.OrderDelete.as_view(),
+            name='event.order.delete'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/info', orders.OrderModifyInformation.as_view(),
             name='event.order.info'),
         url(r'^orders/(?P<code>[0-9A-Z]+)/sendmail$', orders.OrderSendMail.as_view(),

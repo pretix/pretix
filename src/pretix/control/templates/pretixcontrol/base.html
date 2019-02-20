@@ -235,6 +235,14 @@
                             </ul>
                         </div>
                         <ul class="nav" id="side-menu">
+                            {% if request.event and request.event.testmode %}
+                                <li class="testmode">
+                                    <a href="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}">
+                                        <i class="fa fa-warning fa-fw"></i>
+                                        {% trans "TEST MODE" %}
+                                    </a>
+                                </li>
+                            {% endif %}
                             {% block nav %}
                                 {% for nav in nav_items %}
                                     <li>
@@ -316,6 +324,20 @@
                                 {{ message|linebreaksbr }}
                             </div>
                         {% endfor %}
+                    {% endif %}
+                    {% if complain_testmode_orders %}
+                        <div class="alert alert-warning">
+                            {% blocktrans trimmed %}
+                                Your event contains <strong>test mode orders</strong> even though <strong>test mode has been disabled</strong>.
+                                You should delete those orders to make sure they do not show up in your reports and statistics and block people from
+                                actually buying tickets.
+                            {% endblocktrans %}
+                            <strong>
+                                <a href="{% url "control:event.orders" event=request.event.slug organizer=request.organizer.slug %}?status=testmode">
+                                    {% trans "Show all test mode orders" %}
+                                </a>
+                            </strong>
+                        </div>
                     {% endif %}
                     {% if warning_update_check_active %}
                         <div class="alert alert-info">

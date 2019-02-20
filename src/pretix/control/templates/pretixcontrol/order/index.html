@@ -16,6 +16,9 @@
         {% blocktrans trimmed with code=order.code %}
             Order details: {{ code }}
         {% endblocktrans %}
+        {% if order.testmode %}
+            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+        {% endif %}
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right" %}
     </h1>
     {% if 'can_change_orders' in request.eventpermset %}
@@ -24,6 +27,13 @@
             {% csrf_token %}
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group" role="group">
+                    {% if order.testmode %}
+                        <a href="{% url "control:event.order.delete" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                                class="btn btn-danger">
+                            <span class="fa fa-trash"></span>
+                            {% trans "Delete" %}
+                        </a>
+                    {% endif %}
                     {% if order.require_approval and order.status == 'n' %}
                         <a href="{% url "control:event.order.approve" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
                                 class="btn btn-primary">

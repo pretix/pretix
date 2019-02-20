@@ -26,6 +26,8 @@ status                                string                     Order status, o
                                                                  * ``p`` – paid
                                                                  * ``e`` – expired
                                                                  * ``c`` – canceled
+testmode                              boolean                    If ``True``, this order was created when the event was in
+                                                                 test mode. Only orders in test mode can be deleted.
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 locale                                string                     The locale used for communication with this customer
@@ -130,6 +132,10 @@ last_modified                         datetime                   Last modificati
 
    ``order.status`` can no longer be ``r``, ``…/mark_canceled/`` now accepts a ``cancellation_fee`` parameter and
    ``…/mark_refunded/`` has been deprecated.
+
+.. versionchanged:: 2.5:
+
+   The ``testmode`` attribute has been added and ``DELETE`` has been implemented for orders.
 
 .. _order-position-resource:
 
@@ -272,6 +278,7 @@ List of all orders
           {
             "code": "ABC12",
             "status": "p",
+            "testmode": false,
             "secret": "k24fiuwvu8kxz3y1",
             "email": "tester@example.org",
             "locale": "en",
@@ -370,11 +377,14 @@ List of all orders
                            ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
+   :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
    :query boolean require_approval: If set to ``true`` or ``false``, only categories with this value for the field
                                     ``require_approval`` will be returned.
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
-   :query datetime modified_since: Only return orders that have changed since the given date
+   :query datetime modified_since: Only return orders that have changed since the given date. Be careful: We only
+       recommend using this in combination with ``testmode=false``, since test mode orders can vanish at any time and
+       you will not notice it using this method.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
@@ -409,6 +419,7 @@ Fetching individual orders
       {
         "code": "ABC12",
         "status": "p",
+        "testmode": false,
         "secret": "k24fiuwvu8kxz3y1",
         "email": "tester@example.org",
         "locale": "en",
@@ -552,6 +563,37 @@ Order ticket download
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
 
+Deleting orders
+---------------
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
+
+   Deletes an order. Works only if the order has ``testmode`` set to ``true``.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param code: The ``code`` field of the order to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource **or** the order may not be deleted.
+   :statuscode 404: The requested order does not exist.
+
 Creating orders
 ---------------
 
@@ -606,6 +648,7 @@ Creating orders
      or in state ``confirmed``, depending on this value. If you create a paid order, the ``order_paid`` signal will
      **not** be sent out to plugins and no email will be sent. If you want that behavior, create an unpaid order and
      then call the ``mark_paid`` API method.
+   * ``testmode`` (optional) – Defaults to ``false``
    * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
      order creation is successful. Any quotas that become free by this operation will be credited to your order
      creation.

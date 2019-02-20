@@ -4,22 +4,10 @@ FAQ and Troubleshooting
 How can I test my shop before taking it live?
 ---------------------------------------------
 
-There are multiple ways to do this.
-
-First, you could just create some orders in your real shop and cancel/refund them later. If you don't want to process
-real payments for the tests, you can either use a "manual" payment method like bank transfer and just mark the orders
-as paid with the button in the backend, or if you want to use e.g. Stripe, you can configure pretix to use your keys
-for the Stripe test system and use their test credit cars. Read our :ref:`Stripe documentation <stripe>` for more
-information.
-
-Second, you could create a separate event, just for testing. In the last step of the :ref:`event creation process <event_create>`,
-you can specify that you want to copy all settings from your real event, so you don't have to do all of it twice.
-
-We are planning to add a dedicated test mode in a later version of pretix.
-
-If you are using the hosted service at pretix.eu and want to get rid of the test orders completely, contact us at
-support@pretix.eu and we can remove them for you. Please note that we only are able to do that *before* you have
-received any real orders (i.e. taken the shop public). We won't charge any fees for test orders or test events.
+On your event dashboard, click on the first tile that shows your shop status. On the lower part of this page, you can
+place your event into "test mode". In "test mode", everything behaves the same, but orders created during test mode can
+later be fully deleted. Be sure to actually delete them when or after you turn off test mode, since test mode orders
+still count toward your quotas and are included in your reports.
 
 How do I delete an event?
 -------------------------
