@@ -55,7 +55,7 @@ def contextprocessor(request):
         if not request.event.testmode:
             complain_testmode_orders = request.event.cache.get('complain_testmode_orders')
             if complain_testmode_orders is None:
-                complain_testmode_orders = request.event.orders.filter(testmode=False)
+                complain_testmode_orders = request.event.orders.filter(testmode=False).exists()
                 request.event.cache.set('complain_testmode_orders', complain_testmode_orders, 30)
             ctx['complain_testmode_orders'] = complain_testmode_orders
         else:
