@@ -2959,7 +2959,7 @@ msgstr "Reembolso solicitado"
 #: pretix/base/notifications.py:249
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "Has sido requerido para emitir un reembolso para {order_code}."
+msgstr "Has sido requerido para emitir un reembolso para {order.code}."
 
 #: pretix/base/payment.py:44 pretix/control/forms/event.py:581
 #: pretix/control/forms/event.py:1127
