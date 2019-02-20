@@ -332,6 +332,7 @@ class ApiDownloadView(ApiView):
             order__event=self.event,
             order__status__in=[Order.STATUS_PAID] + ([Order.STATUS_PENDING] if self.config.list.include_pending else
                                                      []),
+            order__testmode=False,
             subevent=self.config.list.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)

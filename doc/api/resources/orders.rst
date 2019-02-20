@@ -382,7 +382,9 @@ List of all orders
                                     ``require_approval`` will be returned.
    :query string email: Only return orders created with the given email address
    :query string locale: Only return orders with the given customer locale
-   :query datetime modified_since: Only return orders that have changed since the given date
+   :query datetime modified_since: Only return orders that have changed since the given date. Be careful: We only
+       recommend using this in combination with ``testmode=false``, since test mode orders can vanish at any time and
+       you will not notice it using this method.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
