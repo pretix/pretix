@@ -47,12 +47,11 @@ class OrderFilter(FilterSet):
     email = django_filters.CharFilter(field_name='email', lookup_expr='iexact')
     code = django_filters.CharFilter(field_name='code', lookup_expr='iexact')
     status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
-    testmode = django_filters.BooleanFilter(field_name='testmode')
     modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
 
     class Meta:
         model = Order
-        fields = ['code', 'status', 'email', 'locale', 'require_approval']
+        fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
 
 
 class OrderViewSet(DestroyModelMixin, CreateModelMixin, viewsets.ReadOnlyModelViewSet):
