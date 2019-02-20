@@ -574,8 +574,12 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return locales
 
     @cached_property
+    def meta_properties(self):
+        return [p.name for p in self.request.organizer.meta_properties.all()]
+
+    @cached_property
     def items(self):
-        return {
+        kv = {
             'mail_text_order_placed': ['total', 'currency', 'date', 'invoice_company', 'total_with_currency',
                                        'event', 'payment_info', 'url', 'invoice_name'],
             'mail_text_order_paid': ['event', 'url', 'invoice_name', 'invoice_company', 'payment_info'],
@@ -596,6 +600,10 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'mail_text_order_denied': ['total', 'currency', 'date', 'invoice_company',
                                        'total_with_currency', 'event', 'url', 'invoice_name'],
         }
+        for v in kv.values():
+            for p in self.meta_properties:
+                v.append('meta_' + p)
+        return kv
 
     @cached_property
     def base_data(self):
@@ -607,7 +615,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         orders = [' - {} - {}'.format(self.generate_order_fullname(self.request.event.slug, order['code']),
                                       self.generate_order_url(order['code'], order['secret']))
                   for order in user_orders]
-        return {
+        d = {
             'event': self.request.event.name,
             'total': 42.23,
             'total_with_currency': LazyCurrencyNumber(42.23, self.request.event.currency),
@@ -620,8 +628,11 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
             'invoice_name': _('John Doe'),
             'invoice_company': _('Sample Corporation'),
             'common': _('An individial text with a reason can be inserted here.'),
-            'payment_info': _('Please transfer money to this bank account: 9999-9999-9999-9999')
+            'payment_info': _('Please transfer money to this bank account: 9999-9999-9999-9999'),
         }
+        for k, v in self.request.event.meta_data.items():
+            d['meta_' + k] = v
+        return d
 
     def generate_order_url(self, code, secret):
         return build_absolute_uri('presale:event.order', kwargs={

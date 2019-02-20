@@ -79,6 +79,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
     headers = headers or {}
 
     with language(locale):
+        if isinstance(context, dict) and event:
+            for k, v in event.meta_data.items():
+                context['meta_' + k] = v
+
         if isinstance(context, dict) and order:
             try:
                 context.update({

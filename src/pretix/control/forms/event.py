@@ -973,6 +973,13 @@ class MailSettingsForm(SettingsForm):
         self.fields['mail_html_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
+        keys = list(event.meta_data.keys())
+        for k, v in self.fields.items():
+            if k.startswith('mail_text_'):
+                v.help_text = str(v.help_text) + ', ' + ', '.join({
+                    '{meta_' + p + '}' for p in keys
+                })
+                v.validators[0].limit_value += ['{meta_' + p + '}' for p in keys]
 
     def clean(self):
         data = self.cleaned_data
