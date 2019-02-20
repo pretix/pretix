@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.i18n import language
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
     Question, QuestionAnswer,
@@ -140,20 +141,21 @@ class PdfDataSerializer(serializers.Field):
         res = {}
 
         ev = instance.subevent or instance.order.event
-        # This needs to have some extra performance improvements to avoid creating hundreds of queries when
-        # we serialize a list.
+        with language(instance.order.locale):
+            # This needs to have some extra performance improvements to avoid creating hundreds of queries when
+            # we serialize a list.
 
-        if 'vars' not in self.context:
-            self.context['vars'] = get_variables(self.context['request'].event)
+            if 'vars' not in self.context:
+                self.context['vars'] = get_variables(self.context['request'].event)
 
-        for k, f in self.context['vars'].items():
-            res[k] = f['evaluate'](instance, instance.order, ev)
+            for k, f in self.context['vars'].items():
+                res[k] = f['evaluate'](instance, instance.order, ev)
 
-        if not hasattr(ev, '_cached_meta_data'):
-            ev._cached_meta_data = ev.meta_data
+            if not hasattr(ev, '_cached_meta_data'):
+                ev._cached_meta_data = ev.meta_data
 
-        for k, v in ev._cached_meta_data.items():
-            res['meta:' + k] = v
+            for k, v in ev._cached_meta_data.items():
+                res['meta:' + k] = v
 
         return res
 
