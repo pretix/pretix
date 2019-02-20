@@ -77,6 +77,13 @@ class LoggingMixin:
 
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, **kwargs)
         if isinstance(data, dict):
+            sensitivekeys = ['password', 'smtp_password', 'payment_stripe_secret_key', 'payment_paypal_secret',
+                             'payment_mollie_api_key', 'payment_sofort_api_key', 'payment_wirecard_secret']
+
+            for k, v in data.items():
+                if k in sensitivekeys:
+                    data[k] = "********"
+
             logentry.data = json.dumps(data, cls=CustomJSONEncoder)
         elif data:
             raise TypeError("You should only supply dictionaries as log data.")
