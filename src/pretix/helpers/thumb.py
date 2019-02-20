@@ -32,7 +32,7 @@ def get_sizes(size, imgsize):
                    (0, int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
                     imgsize[0] * hfactor, int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2))
         elif wfactor > hfactor:
-            return (int(size[0]), int(imgsize[1] * hfactor)), \
+            return (int(size[0]), int(imgsize[1] * wfactor)), \
                    (0, int((imgsize[1] * wfactor - size[1]) / 2), size[0], int((imgsize[1] * wfactor + size[1]) / 2))
         else:
             return (int(imgsize[0] * hfactor), int(size[1])), \
