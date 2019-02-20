@@ -1815,6 +1815,7 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         assert Order.objects.last().testmode
+        assert Order.objects.last().code[1] == "0"
 
     def test_do_not_create_testmode_order_without_testmode(self):
         CartPosition.objects.create(
@@ -1829,3 +1830,4 @@ class CheckoutTestCase(TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         assert not Order.objects.last().testmode
+        assert "0" not in Order.objects.last().code

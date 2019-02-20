@@ -64,16 +64,24 @@
         </div>
         <div class="panel-body">
             {% if request.event.testmode %}
-                <form action="" method="post" class="pull-right">
+                <form action="" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="testmode" value="false">
-                    <button type="submit" class="btn btn-lg btn-primary btn-save">
-                        {% trans "Disable test mode" %}
-                    </button>
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-lg btn-primary btn-save">
+                            {% trans "Disable test mode" %}
+                        </button>
+                    </div>
+                    <p>
+                        {% trans "Your shop is currently in test mode. All orders are not persistant and can be deleted at any point." %}
+                    </p>
+                    <div class="form-inline">
+                        <label class="checkbox">
+                            <input type="checkbox" name="delete" value="yes" />
+                            {% trans "Permanently delete all orders created in test mode" %}
+                        </label>
+                    </div>
                 </form>
-                <p>
-                    {% trans "Your shop is currently in test mode. All orders are not persistant and can be deleted at any point." %}
-                </p>
             {% else %}
                 <form action="" method="post" class="pull-right">
                     {% csrf_token %}

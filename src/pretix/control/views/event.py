@@ -883,6 +883,16 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             request.event.testmode = False
             request.event.save()
             request.event.cache.delete('complain_testmode_orders')
+            if request.POST.get("delete") == "yes":
+                try:
+                    with transaction.atomic():
+                        for order in request.event.orders.filter(testmode=True):
+                            order.gracefully_delete(user=self.request.user)
+                except ProtectedError:
+                    messages.error(self.request, _('An order could not be deleted as some constraints (e.g. data '
+                                                   'created by plug-ins) do not allow it.'))
+                else:
+                    request.event.cache.set('complain_testmode_orders', False, 30)
             self.request.event.log_action(
                 'pretix.event.testmode.deactivated', user=self.request.user, data={}
             )
