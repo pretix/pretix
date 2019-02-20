@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-02-20 03:00+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-02-20 19:53+0000\n"
+"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -924,10 +924,8 @@ msgid "Tax name"
 msgstr "Nombre del impuesto"
 
 #: pretix/base/exporters/orderlist.py:562
-#, fuzzy
-#| msgid "Event start time"
 msgid "Event start date"
-msgstr "Hora de inicio del evento"
+msgstr "Fecha de inicio del evento"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
@@ -1129,7 +1127,7 @@ msgstr "Factura {num}"
 #: pretix/control/templates/pretixcontrol/search/orders.html:65
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "TEST MODE"
-msgstr ""
+msgstr "MODO DE PRUEBA"
 
 #: pretix/base/invoice.py:282
 msgctxt "invoice"
@@ -1573,11 +1571,11 @@ msgstr ""
 
 #: pretix/base/models/event.py:805
 msgid "The event slug cannot be changed."
-msgstr "El evento slug no se puede cambiar."
+msgstr "La URL semántica del evento no se puede cambiar."
 
 #: pretix/base/models/event.py:808
 msgid "This slug has already been used for a different event."
-msgstr "Esta babosa ya ha sido usada para un evento diferente."
+msgstr "Esta URL semántica ya ha sido usada para un evento diferente."
 
 #: pretix/base/models/event.py:814
 msgid "The event cannot end before it starts."
@@ -2473,8 +2471,8 @@ msgid ""
 "your organizer accounts and your events."
 msgstr ""
 "Debe ser corto, sólo debe contener letras minúsculas, números, puntos y "
-"guiones. Cada babosa sólo se puede usar una vez. Esto se utiliza en las URL "
-"para referirse a sus cuentas de organizador y a sus eventos."
+"guiones. Cada URL semántica sólo se puede usar una vez. Esto se utiliza en "
+"las URL para referirse a sus cuentas de organizador y a sus eventos."
 
 #: pretix/base/models/organizer.py:49 pretix/control/forms/event.py:56
 #: pretix/control/forms/filter.py:325 pretix/control/forms/filter.py:516
@@ -2896,10 +2894,8 @@ msgid "View all unresolved problems"
 msgstr "Ver todos los problemas sin resolver"
 
 #: pretix/base/notifications.py:180
-#, fuzzy
-#| msgid "Payment date"
 msgid "Pending amount"
-msgstr "Fecha de pago"
+msgstr "Monto pendiente"
 
 #: pretix/base/notifications.py:182 pretix/control/forms/filter.py:100
 #: pretix/control/forms/filter.py:200
@@ -2961,10 +2957,9 @@ msgid "Refund requested"
 msgstr "Reembolso solicitado"
 
 #: pretix/base/notifications.py:249
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been redeemed in order {order_code}."
+#, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "El vale ha sido canjeado en orden {order_code}."
+msgstr "Has sido requerido para emitir un reembolso para {order_code}."
 
 #: pretix/base/payment.py:44 pretix/control/forms/event.py:581
 #: pretix/control/forms/event.py:1127
@@ -3113,6 +3108,8 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"En modo de prueba, puedes simplemente marcar manualmente esta orden como "
+"pagada en el backend después de que haya sido creada."
 
 #: pretix/base/payment.py:752 pretix/plugins/banktransfer/payment.py:94
 msgid "Payment method name"
@@ -3350,22 +3347,16 @@ msgid "Event organizer info text"
 msgstr "Texto de información del organizador del evento"
 
 #: pretix/base/pdf.py:197
-#, fuzzy
-#| msgid "Creation date"
 msgid "Printing date"
-msgstr "Fecha de creación"
+msgstr "Fecha de impresión"
 
 #: pretix/base/pdf.py:205
-#, fuzzy
-#| msgid "Event begin date and time"
 msgid "Printing date and time"
-msgstr "Fecha y hora de inicio de evento"
+msgstr "Fecha y hora de impresión"
 
 #: pretix/base/pdf.py:213
-#, fuzzy
-#| msgid "Event begin time"
 msgid "Printing time"
-msgstr "Hora de inicio de evento"
+msgstr "Hora de impresión"
 
 #: pretix/base/pdf.py:240
 #, python-brace-format
@@ -4406,10 +4397,8 @@ msgstr ""
 #: pretix/base/settings.py:619 pretix/base/settings.py:632
 #: pretix/base/settings.py:682 pretix/base/settings.py:695
 #: pretix/base/settings.py:709
-#, fuzzy
-#| msgid "Event name"
 msgid "Given name"
-msgstr "Nombre del evento"
+msgstr "Nombre dado"
 
 #: pretix/base/settings.py:620 pretix/base/settings.py:633
 #: pretix/base/settings.py:649 pretix/base/settings.py:666
@@ -4830,7 +4819,8 @@ msgstr ""
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr ""
-"Ya usaste esta bala para un evento diferente. Por favor, elija uno nuevo."
+"Ya usó esta URL semántica para un evento diferente. Por favor, elija una "
+"nueva."
 
 #: pretix/control/forms/event.py:74
 msgid "Event timezone"
@@ -5407,7 +5397,7 @@ msgid ""
 "once over all of your events. This setting only affects future invoices."
 msgstr ""
 "Esto se enviará por adelantado a los números de factura. Si deja este campo "
-"vacío, se utilizará la barra de eventos seguida de un guión. Atención: Si "
+"vacío, se utilizará la URL semántica seguida de un guión. Atención: Si "
 "varios eventos dentro de la misma organización utilizan el mismo valor en "
 "este campo, compartirán su rango de números, es decir, cada número completo "
 "se utilizará como máximo de una vez en todos los eventos. Esta "
@@ -5986,7 +5976,7 @@ msgstr "La contraseña que introdujo no era correcta."
 
 #: pretix/control/forms/event.py:1235 pretix/control/forms/organizer.py:41
 msgid "The slug you entered was not correct."
-msgstr "La bala que introdujo no era correcta."
+msgstr "La URL semántica que introdujo no era correcta."
 
 #: pretix/control/forms/event.py:1239
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
@@ -5995,7 +5985,7 @@ msgstr "Tu contraseña"
 
 #: pretix/control/forms/event.py:1244 pretix/control/forms/organizer.py:45
 msgid "Event slug"
-msgstr "Bala de eventos"
+msgstr "URL semántica del evento"
 
 #: pretix/control/forms/event.py:1286
 msgid "Ticket downloads"
@@ -6597,7 +6587,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:181
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
+msgstr "Permitir sobrevender cupos cuando se realice esta operación"
 
 #: pretix/control/forms/orders.py:192
 msgid "Add a new product to the order"
@@ -6693,7 +6683,7 @@ msgstr "Es necesario especificar un importe para un reembolso parcial."
 
 #: pretix/control/forms/organizer.py:22
 msgid "This slug is already in use. Please choose a different one."
-msgstr "Esta pieza ya está en uso. Por favor, elija uno diferente."
+msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
 
 #: pretix/control/forms/organizer.py:80
 msgid "Custom domain"
@@ -8163,6 +8153,10 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"Tu evento contiene <strong>ordenes de modo de prueba</strong> a pesar de que "
+"<strong> el modo de prueba se ha deshabilitado</strong>. Deberías eliminar "
+"estas ordenes para asegurarte que no se muestren en tus reportes "
+"estadísticos y bloquear la compra de tickets a las personas."
 
 #: pretix/control/templates/pretixcontrol/base.html:337
 #, fuzzy
@@ -8886,10 +8880,12 @@ msgid ""
 "Your shop is currently in test mode. All orders are not persistant and can "
 "be deleted at any point."
 msgstr ""
+"Tu tienda está actualmente en modo de prueba. Todas estas órdenes no son "
+"persistentes y pueden ser eliminadas en cualquier momento."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:76
 msgid "Permanently delete all orders created in test mode"
-msgstr ""
+msgstr "Eliminar permanentemente todas las ordenes creadas en modo de prueba"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:81
 #, fuzzy
@@ -8909,6 +8905,10 @@ msgid ""
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
 msgstr ""
+"Si deseas hacer algunas ordenes de prueba, puedes habilitar el modo de "
+"prueba para tu tienda. Siempre y cuando la tienda esté en modo de prueba, "
+"todas las ordenes creadas son marcadas como ordenes de prueba y pueden ser "
+"eliminadas de nuevo."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:92
 msgid ""
@@ -8916,6 +8916,10 @@ msgid ""
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
 msgstr ""
+"Por favor tomar en cuenta que las ordenes de prueba todavía se toman en "
+"cuenta en tus cupos, usan comprobantes y pueden efectuar pagos reales. La "
+"única diferencia es que puedes eliminar ordenes de prueba. Úsalo bajo tu "
+"propio riesgo!"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:96
 msgid ""
@@ -8923,6 +8927,9 @@ msgid ""
 "sales channels such as the box office or resellers module are still created "
 "as production orders."
 msgstr ""
+"El modo de prueba solo cubre la tienda principal. Ordenes creadas a través "
+"de otros canales de ventas como la tauilla o el módulo de revendedores, "
+"todavía se crean como ordenes de producción."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:100
 msgid ""
@@ -8930,6 +8937,9 @@ msgid ""
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
 msgstr ""
+"Parece que todavía tienes algunas órdenes reales en tu tienda. No "
+"recomendamos habilitar el modo de prueba si tus clientes ya conocen de tu "
+"tienda, porque podría confundirlos."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:107
 #, fuzzy
@@ -10399,7 +10409,7 @@ msgstr "Cambiar producto a"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:100
 msgid "Keep price the same"
-msgstr ""
+msgstr "Mantener el mismo precio"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:108
 msgctxt "subevent"
@@ -11153,6 +11163,9 @@ msgid ""
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
 msgstr ""
+"Si das clic en enlaces de esta columna, solo encontrarás ordenes que son "
+"canceladas completamente,  mientras que los números también incluyen "
+"posiciones canceladas únicas dentro de ordenes válidas."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
@@ -11181,16 +11194,13 @@ msgstr ""
 "productos, cuotas, preguntas, vales, listas, etc."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
-#, fuzzy, python-format
-#| msgid ""
-#| "To confirm you really want this, please type out the event's short name "
-#| "(\"%(slug)s\") here:"
+#, python-format
 msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
 "Para confirmar que realmente lo desea, escriba aquí el nombre corto del "
-"evento (\"%(slug)s\"):"
+"organizador (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
@@ -13014,7 +13024,7 @@ msgstr "en directo"
 
 #: pretix/control/views/dashboards.py:187
 msgid "live and in test mode"
-msgstr ""
+msgstr "en vivo y en modo de prueba"
 
 #: pretix/control/views/dashboards.py:188
 msgid "not yet public"
@@ -13181,6 +13191,8 @@ msgstr ""
 #: pretix/control/views/event.py:905
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
 msgstr ""
+"Hemos deshabilitado el modo de prueba para ti. !Vendamos algunos boletos "
+"reales!"
 
 #: pretix/control/views/event.py:922
 msgid "This event can not be deleted."
@@ -14571,6 +14583,8 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Después de que envíes la transferencia bancaria, puedes cerrar esta ventana. "
+"Te enviaremos un correo tan pronto como recibamos tu pago."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:57
 msgid "Open banking app"
@@ -14746,6 +14760,9 @@ msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"La sandbox de PayPal está siendo usada, puedes probar sin enviar dinero "
+"realmente pero necesitarás un usuario para la sandbox de PayPal para iniciar "
+"sesión."
 
 #: pretix/plugins/paypal/payment.py:59
 #, fuzzy
@@ -15190,6 +15207,9 @@ msgid ""
 "Test mode orders will only be scanned if you scan online. If you scan in "
 "asynchronous mode, test mode orders won't be there."
 msgstr ""
+"Las ordenes en modo de prueba solamente serán escaneadas si lo haces en "
+"línea. Si escaneas en modo asíncrono, las ordenes en modo de prueba no se "
+"encontrarán ahí."
 
 #: pretix/plugins/pretixdroid/views.py:46
 #: pretix/plugins/pretixdroid/views.py:109
@@ -15435,6 +15455,8 @@ msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
+"Si tu evento está en modo de prueba, siempre usaremos el API de prueba de "
+"Stripe, sin importar esta configuración."
 
 #: pretix/plugins/stripe/payment.py:128
 msgid "Publishable key"
@@ -15548,6 +15570,9 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"El plugin de Stripe esta operando en modo de prueba. Puedes usar una de <a "
+"{args}>varias tarjetas de prueba</a> para realizar una transacción. No se "
+"transferirá nada de dinero."
 
 #: pretix/plugins/stripe/payment.py:315 pretix/plugins/stripe/payment.py:631
 #: pretix/plugins/stripe/payment.py:722 pretix/plugins/stripe/payment.py:780
