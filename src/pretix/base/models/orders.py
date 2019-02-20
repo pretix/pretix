@@ -509,6 +509,10 @@ class Order(LockModel, LoggedModel):
         charset = list('ABCDEFGHJKLMNPQRSTUVWXYZ3789')
         while True:
             code = get_random_string(length=settings.ENTROPY['order_code'], allowed_chars=charset)
+            if self.testmode:
+                # Subtle way to recognize test orders while debugging: They all contain a 0 at the second place,
+                # even though zeros are not used outside test mode.
+                code = code[0] + "0" + code[2:]
             if not Order.objects.filter(event__organizer=self.event.organizer, code=code).exists():
                 self.code = code
                 return
