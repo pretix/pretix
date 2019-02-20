@@ -27,7 +27,7 @@ class CustomSMTPBackend(EmailBackend):
             if code != 250:
                 logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
                 raise SMTPResponseException(code, resp)
-            (code, resp) = self.connection.rcpt('test@example.com')
+            (code, resp) = self.connection.rcpt('testdummy@pretix.eu')
             if (code != 250) and (code != 251):
                 logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
                 raise SMTPResponseException(code, resp)
