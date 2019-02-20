@@ -9,23 +9,18 @@
         </div>
         <div class="panel-body">
             {% if request.event.live %}
-                <form action="" method="post" class="pull-right">
+                <p>
+                    {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
+                </p>
+                <form action="" method="post" class="text-right">
                     {% csrf_token %}
                     <input type="hidden" name="live" value="false">
                     <button type="submit" class="btn btn-lg btn-danger btn-save">
                         {% trans "Go offline" %}
                     </button>
                 </form>
-                <p>
-                    {% trans "Your shop is currently live. If you take it down, it will only be visible to you and your team." %}
-                </p>
             {% else %}
                 {% if issues|length > 0 %}
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-primary btn-lg btn-save" disabled>
-                            {% trans "Go live" %}
-                        </button>
-                    </div>
                     <p>
                         {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
                     </p>
@@ -39,20 +34,25 @@
                             {% endfor %}
                         </ul>
                     </div>
-                {% else %}
-                    <form action="" method="post" class="pull-right">
-                        {% csrf_token %}
-                        <input type="hidden" name="live" value="true">
-                        <button type="submit" class="btn btn-primary btn-lg btn-save">
+                    <div class="test-right">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save" disabled>
                             {% trans "Go live" %}
                         </button>
-                    </form>
+                    </div>
+                {% else %}
                     <p>
                         {% trans "Your ticket shop is currently not live. It is thus only visible to you and your team, not to any visitors." %}
                     </p>
                     <p>
                         {% trans "If you want to, you can publish your ticket shop now." %}
                     </p>
+                    <form action="" method="post" class="text-right">
+                        {% csrf_token %}
+                        <input type="hidden" name="live" value="true">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save">
+                            {% trans "Go live" %}
+                        </button>
+                    </form>
                 {% endif %}
             {% endif %}
             <div class="clear"></div>
@@ -67,11 +67,6 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="testmode" value="false">
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-lg btn-primary btn-save">
-                            {% trans "Disable test mode" %}
-                        </button>
-                    </div>
                     <p>
                         {% trans "Your shop is currently in test mode. All orders are not persistant and can be deleted at any point." %}
                     </p>
@@ -81,15 +76,13 @@
                             {% trans "Permanently delete all orders created in test mode" %}
                         </label>
                     </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-lg btn-primary btn-save">
+                            {% trans "Disable test mode" %}
+                        </button>
+                    </div>
                 </form>
             {% else %}
-                <form action="" method="post" class="pull-right">
-                    {% csrf_token %}
-                    <input type="hidden" name="testmode" value="true">
-                    <button type="submit" class="btn btn-danger btn-lg btn-save">
-                        {% trans "Enable test mode" %}
-                    </button>
-                </form>
                 <p>
                     {% trans "Your shop is currently in production mode." %}
                 </p>
@@ -107,6 +100,13 @@
                         {% trans "It looks like you already have some real orders in your shop. We do not recommend enabling test mode if your customers already know your shop, as it will confuse them." %}
                     </div>
                 {% endif %}
+                <form action="" method="post" class="text-right">
+                    {% csrf_token %}
+                    <input type="hidden" name="testmode" value="true">
+                    <button type="submit" class="btn btn-danger btn-lg btn-save">
+                        {% trans "Enable test mode" %}
+                    </button>
+                </form>
 
             {% endif %}
             <div class="clear"></div>
