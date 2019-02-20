@@ -114,6 +114,8 @@ The provider class
 
    .. autoattribute:: is_meta
 
+   .. autoattribute:: test_mode_message
+
 
 Additional views
 ----------------

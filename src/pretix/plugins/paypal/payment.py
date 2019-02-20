@@ -37,6 +37,18 @@ class Paypal(BasePaymentProvider):
         self.settings = SettingsSandbox('payment', 'paypal', event)
 
     @property
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret:
+            # in OAuth mode, sandbox mode needs to be set global
+            is_sandbox = self.settings.connect_endpoint == 'sandbox'
+        else:
+            is_sandbox = self.settings.get('endpoint') == 'sandbox'
+        if is_sandbox:
+            return _('The PayPal sandbox is being used, you can test without actually sending money but you will need a '
+                     'PayPal sandbox user to log in.')
+        return None
+
+    @property
     def settings_form_fields(self):
         if self.settings.connect_client_id and not self.settings.secret:
             # PayPal connect

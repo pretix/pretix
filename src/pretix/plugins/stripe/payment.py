@@ -14,6 +14,7 @@ from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 from django_countries import countries
@@ -111,6 +112,8 @@ class StripeSettingsHolder(BasePaymentProvider):
                              ('live', pgettext('stripe', 'Live')),
                              ('test', pgettext('stripe', 'Testing')),
                          ),
+                         help_text=_('If your event is in test mode, we will always use Stripe\'s test API, '
+                                     'regardless of this setting.')
                      )),
                 ]
             else:
@@ -231,6 +234,21 @@ class StripeMethod(BasePaymentProvider):
         self.settings = SettingsSandbox('payment', 'stripe', event)
 
     @property
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            is_testmode = True
+        else:
+            is_testmode = '_test_' in self.settings.secret_key
+        if is_testmode:
+            return mark_safe(
+                _('The Stripe plugin is operating in test mode. You can use one of <a {args}>many test '
+                  'cards</a> to perform a transaction. No money will actually be transferred.').format(
+                    args='href="https://stripe.com/docs/testing#cards" target="_blank"'
+                )
+            )
+        return None
+
+    @property
     def settings_form_fields(self):
         return {}
 
@@ -262,7 +280,7 @@ class StripeMethod(BasePaymentProvider):
     @property
     def api_kwargs(self):
         if self.settings.connect_client_id and self.settings.connect_user_id:
-            if self.settings.get('endpoint', 'live') == 'live':
+            if self.settings.get('endpoint', 'live') == 'live' and not self.event.testmode:
                 kwargs = {
                     'api_key': self.settings.connect_secret_key,
                     'stripe_account': self.settings.connect_user_id
