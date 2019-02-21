@@ -614,6 +614,36 @@ $(function () {
         return false;
     });
 
+    $("button[data-toggle=qrcode]").click(function (e) {
+        e.preventDefault();
+        var $current = $(".qr-code-overlay[data-qrcode=" + $(this).attr("data-qrcode") + "]");
+        if ($current.length) {
+            $(".qr-code-overlay").attr("data-qrcode", "").slideUp(200);
+            return false;
+        }
+        $(".qr-code-overlay").remove();
+        var $div = $("<div>").addClass("qr-code-overlay").attr("data-qrcode", $(this).attr("data-qrcode"));
+        $div.appendTo($("body"));
+        var offset = $(this).offset();
+        $div.css("top", offset.top + $(this).outerHeight() + 10).css("left", offset.left);
+        var $child = $("<div>");
+        $child.appendTo($div);
+        $child.qrcode(
+            {
+                text: $(this).attr("data-qrcode"),
+                correctLevel: 0,  // M
+                width: 196,
+                height: 196
+            }
+        );
+        $div.append(gettext("Click to close"));
+        $div.slideDown(200);
+        $div.click(function (e) {
+            $(".qr-code-overlay").slideUp(200);
+        });
+        return false;
+    });
+
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));
 });

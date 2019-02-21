@@ -280,6 +280,10 @@
                                                 </form>
                                             {% endfor %}
                                         {% endif %}
+                                        <button type="submit" data-toggle="qrcode" data-qrcode="{{ line.secret }}"
+                                                class="btn btn-xs btn-default">
+                                            <span class="fa fa-qrcode"></span> {% trans "Ticket secret" %}
+                                        </button>
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
                                     </div>
                                 {% endif %}

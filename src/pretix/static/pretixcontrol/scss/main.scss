@@ -608,3 +608,13 @@ details summary {
 h1 .label {
     display: inline-block;
 }
+
+.qr-code-overlay {
+    display: none;
+    position: absolute;
+    padding: 30px;
+    background: white;
+    text-align: center;
+    border-radius: $border-radius-small;
+    box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+}
