@@ -639,7 +639,7 @@ $(function () {
         $div.append(gettext("Click to close"));
         $div.slideDown(200);
         $div.click(function (e) {
-            $(".qr-code-overlay").slideUp(200);
+            $(".qr-code-overlay").attr("data-qrcode", "").slideUp(200);
         });
         return false;
     });
