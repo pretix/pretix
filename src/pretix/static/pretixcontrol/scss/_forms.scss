@@ -190,6 +190,15 @@ div.mail-preview {
     width: 1% !important;
   }
 }
+.input-group-smaller-height {
+  .form-control {
+    height: 32px;
+  }
+  .btn {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
 .input-group-btn .btn {
   padding-bottom: 7px;
 }
@@ -202,7 +211,9 @@ div.mail-preview {
     display: inline-block;
     width: 80px;
   }
-
+}
+input[type=number].short {
+  width: 80px !important;
 }
 .metadata-group {
   .form-group {
