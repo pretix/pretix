@@ -130,6 +130,7 @@
                                                                 max="{{ item.order_max }}"
                                                                 id="variation_{{ item.id }}_{{ var.id }}"
                                                                 name="variation_{{ item.id }}_{{ var.id }}"
+                                                                {% if options == 1 %}value="1"{% endif %}
                                                                 title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
                                                     {% else %}
                                                         <label>
@@ -207,6 +208,7 @@
                                                     max="{{ item.order_max }}"
                                                     id="item_{{ item.id }}"
                                                     name="item_{{ item.id }}"
+                                                    {% if options == 1 %}value="1"{% endif %}
                                                     title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
                                         {% else %}
                                             <label>
