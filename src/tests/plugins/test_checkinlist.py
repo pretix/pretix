@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 
 import pytest
+import pytz
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
@@ -25,7 +26,7 @@ def event():
     order_paid = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
-        datetime=now(), expires=now() + datetime.timedelta(days=10),
+        datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=pytz.UTC), expires=now() + datetime.timedelta(days=10),
         total=33, locale='en'
     )
     item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
@@ -64,11 +65,11 @@ def test_csv_simple(event):
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title","Attendee name:
  First name","Attendee name: Middle name","Attendee name: Family name","Product","Price","Checked in","Secret",
-"E-mail","Company","Voucher code"
+"E-mail","Company","Voucher code","Order date"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 """)
 
 
@@ -87,11 +88,11 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Secret","E-mail","Company","Voucher code"
+"Checked in","Secret","E-mail","Company","Voucher code","Order date"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 """)
     c = CSVCheckinList(event)
     _, _, content = c.render({
@@ -103,9 +104,9 @@ def test_csv_order_by_name_parts(event):  # noqa
     })
     assert clean(content.decode()) == clean(""""Order code","Attendee name","Attendee name: Title",
 "Attendee name: First name","Attendee name: Middle name","Attendee name: Family name","Product","Price",
-"Checked in","Secret","E-mail","Company","Voucher code"
+"Checked in","Secret","E-mail","Company","Voucher code","Order date"
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","hutjztuxhkbtwnesv2suqv26k6ttytxx",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 "FOO","Mrs Andrea J Zulu","Mrs","Andrea","J","Zulu","Ticket","13.00","","ggsngqtnmhx74jswjngw3fk8pfwz2a7k",
-"dummy@dummy.test","",""
+"dummy@dummy.test","","","2019-02-22"
 """)
