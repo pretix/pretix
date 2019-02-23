@@ -118,7 +118,8 @@ class ReportlabExportMixin:
 
         canvas.setFont('OpenSans', 10)
         canvas.drawString(15 * mm, self.pagesize[1] - 15 * mm,
-                          "%s – %s" % (self.event.organizer.name, self.event.name))
+                          "%s – %s – %s" % (self.event.organizer.name, self.event.name,
+                                            self.event.get_date_range_display()))
         canvas.drawRightString(self.pagesize[0] - 15 * mm, self.pagesize[1] - 15 * mm,
                                settings.PRETIX_INSTANCE_NAME)
         canvas.setStrokeColorRGB(0, 0, 0)
