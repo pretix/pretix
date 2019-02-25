@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-02-02 21:41+0000\n"
+"PO-Revision-Date: 2019-02-26 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:122
@@ -922,10 +922,8 @@ msgid "Tax name"
 msgstr "Belastingnaam"
 
 #: pretix/base/exporters/orderlist.py:562
-#, fuzzy
-#| msgid "Event start time"
 msgid "Event start date"
-msgstr "Starttijd van het evenement"
+msgstr "Startdatum van het evenement"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
@@ -1126,7 +1124,7 @@ msgstr "Factuur {num}"
 #: pretix/control/templates/pretixcontrol/search/orders.html:65
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "TEST MODE"
-msgstr ""
+msgstr "TESTMODUS"
 
 #: pretix/base/invoice.py:282
 msgctxt "invoice"
@@ -2892,10 +2890,8 @@ msgid "View all unresolved problems"
 msgstr "Bekijk alle onopgeloste problemen"
 
 #: pretix/base/notifications.py:180
-#, fuzzy
-#| msgid "Payment amount"
 msgid "Pending amount"
-msgstr "Te betalen bedrag"
+msgstr "Openstaand bedrag"
 
 #: pretix/base/notifications.py:182 pretix/control/forms/filter.py:100
 #: pretix/control/forms/filter.py:200
@@ -3113,6 +3109,8 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"In de testmodus kunt u de bestelling handmatig als betaald markeren in de "
+"backend."
 
 #: pretix/base/payment.py:752 pretix/plugins/banktransfer/payment.py:94
 msgid "Payment method name"
@@ -6089,10 +6087,8 @@ msgid "All dates"
 msgstr "Alle data"
 
 #: pretix/control/forms/filter.py:210
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (or with paid fee)"
-msgstr "Geannuleerd (betaalde kosten)"
+msgstr "Geannuleerd (of met betaalde kosten)"
 
 #: pretix/control/forms/filter.py:211
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
@@ -6114,10 +6110,8 @@ msgstr "Openstaand (maar volledig betaald)"
 
 #: pretix/control/forms/filter.py:215
 #: pretix/control/templates/pretixcontrol/event/live.html:63
-#, fuzzy
-#| msgid "Price mode"
 msgid "Test mode"
-msgstr "Prijsberekening"
+msgstr "Testmodus"
 
 #: pretix/control/forms/filter.py:328 pretix/control/forms/filter.py:333
 #: pretix/control/forms/filter.py:519 pretix/control/forms/filter.py:524
@@ -6549,7 +6543,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:181
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
+msgstr "Quota overboeken bij deze handeling toestaan"
 
 #: pretix/control/forms/orders.py:192
 msgid "Add a new product to the order"
@@ -6993,11 +6987,9 @@ msgid "The order has been canceled."
 msgstr "De bestelling is geannuleerd."
 
 #: pretix/control/logdisplay.py:175
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected date has been deleted."
+#, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr "De geselecteerde datum is verwijderd."
+msgstr "De testbestelling {code} is verwijderd."
 
 #: pretix/control/logdisplay.py:176
 msgid "The order has been created."
@@ -7410,17 +7402,12 @@ msgid "The shop has been taken offline."
 msgstr "De winkel is offline gehaald."
 
 #: pretix/control/logdisplay.py:272
-#, fuzzy
-#| msgid "The shop has been taken live."
 msgid "The shop has been taken into test mode."
-msgstr "De winkel is live gezet."
+msgstr "De winkel is in testmodus gezet."
 
 #: pretix/control/logdisplay.py:273
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been disabled."
 msgid "The test mode has been disabled."
-msgstr "De geselecteerde datums zijn uitgeschakeld."
+msgstr "De testmodus is uitgeschakeld."
 
 #: pretix/control/logdisplay.py:274
 msgid "The event has been created."
@@ -8064,12 +8051,14 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"Uw evenement bevat <strong>testbestellingen</strong> ook al is <strong>de "
+"testmodus uitgeschakeld</strong>. U moet deze bestellingen verwijderen, om "
+"ervoor te zorgen dat de testbestellingen niet in uw rapporten en "
+"statistieken voorkomen, en klanten niet verhinderen echte tickets te kopen."
 
 #: pretix/control/templates/pretixcontrol/base.html:337
-#, fuzzy
-#| msgid "Show affected orders"
 msgid "Show all test mode orders"
-msgstr "Toon getroffen bestellingen"
+msgstr "Toon alle testbestellingen"
 
 #: pretix/control/templates/pretixcontrol/base.html:345
 msgid ""
@@ -8732,10 +8721,8 @@ msgid "Shop status"
 msgstr "Winkelstatus"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:8
-#, fuzzy
-#| msgid "Shop is live"
 msgid "Shop visibility"
-msgstr "Winkel is live"
+msgstr "Winkelzichtbaarheid"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:13
 msgid ""
@@ -8774,22 +8761,20 @@ msgid ""
 "Your shop is currently in test mode. All orders are not persistant and can "
 "be deleted at any point."
 msgstr ""
+"Uw winkel staat momenteel in testmodus. Alle bestellingen zijn niet "
+"permanent, en kunnen op elk moment worden verwijderd."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:76
 msgid "Permanently delete all orders created in test mode"
-msgstr ""
+msgstr "Alle bestellingen die in testmodus zijn gemaakt permanent verwijderen"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:81
-#, fuzzy
-#| msgid "Disable selected"
 msgid "Disable test mode"
-msgstr "Schakel geselecteerde uit"
+msgstr "Schakel testmodus uit"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:87
-#, fuzzy
-#| msgid "A payment is currently pending for this order."
 msgid "Your shop is currently in production mode."
-msgstr "Een betaling staat momenteel open voor deze bestelling."
+msgstr "Uw winkel staat in de productiemodus."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:90
 msgid ""
@@ -8797,6 +8782,10 @@ msgid ""
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
 msgstr ""
+"Als u testbestellingen wilt maken kunt u de testmodus inschakelen voor uw "
+"winkel. Zolang de winkel in testmodus is zullen alle bestellingen die worden "
+"aangemaakt als testbestellingen gemarkeerd worden, en kunnen ze ook "
+"verwijderd worden."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:92
 msgid ""
@@ -8804,6 +8793,9 @@ msgid ""
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
 msgstr ""
+"Merk op dat testbestellingen nog steeds meetellen in uw quota, vouchers "
+"kunnen gebruiken en echte betalingen zouden kunnen doen. Het enige verschil "
+"is dat u testbestellingen kunt verwijderen. Gebruik op eigen risico!"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:96
 msgid ""
@@ -8811,6 +8803,9 @@ msgid ""
 "sales channels such as the box office or resellers module are still created "
 "as production orders."
 msgstr ""
+"De testmodus is alleen van toepassing op de hoofdwebshop. Bestellingen die "
+"worden aangemaakt via andere kanalen, zoals een wederverkoper, zullen nog "
+"steeds als productiebestellingen worden aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:100
 msgid ""
@@ -8818,12 +8813,13 @@ msgid ""
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
 msgstr ""
+"Het lijkt erop dat u al een aantal echte bestellingen heeft in uw winkel. We "
+"raden aan om de testmodus niet in te schakelen als klanten al bekend zijn "
+"met uw winkel omdat dit verwarrend kan zijn."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:107
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Enable test mode"
-msgstr "Betaalmethode inschakelen"
+msgstr "Testmodus inschakelen"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:10
 msgid "All actions"
@@ -10266,7 +10262,7 @@ msgstr "Verander product naar"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:100
 msgid "Keep price the same"
-msgstr ""
+msgstr "Prijs gelijk houden"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:108
 msgctxt "subevent"
@@ -10362,27 +10358,20 @@ msgstr "(optioneel)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
-#, fuzzy
-#| msgid "Delete organizer"
 msgid "Delete order"
-msgstr "Verwijder organisator"
+msgstr "Verwijder bestelling"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:10
-#, fuzzy
-#| msgid ""
-#| "Do you really want to cancel this order? You cannot revert this action."
 msgid ""
 "Do you really want to delete this order? <strong>You really cannot revert "
 "this action and we can't either.</strong>"
 msgstr ""
-"Weet u zeker dat u de bestelling wilt annuleren? U kunt deze actie niet "
-"terugdraaien."
+"Wilt u deze bestelling echt verwijderen? <strong>U kunt deze actie echt niet "
+"ongedaan maken, en wij kunnen dit ook niet.</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:25
-#, fuzzy
-#| msgid "Yes, deny order"
 msgid "Yes, delete order"
-msgstr "Ja, bestelling weigeren"
+msgstr "Ja, bestelling verwijderen"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:4
 #: pretix/control/templates/pretixcontrol/order/deny.html:8
@@ -12811,17 +12800,15 @@ msgstr "live"
 
 #: pretix/control/views/dashboards.py:187
 msgid "live and in test mode"
-msgstr ""
+msgstr "live en in testmodus"
 
 #: pretix/control/views/dashboards.py:188
 msgid "not yet public"
 msgstr "nog niet openbaar"
 
 #: pretix/control/views/dashboards.py:189
-#, fuzzy
-#| msgid "Generate widget code"
 msgid "in private test mode"
-msgstr "Genereer widgetcode"
+msgstr "in privétestmodus"
 
 #: pretix/control/views/dashboards.py:217
 #, python-brace-format
@@ -12958,26 +12945,22 @@ msgstr ""
 "dit wilt!"
 
 #: pretix/control/views/event.py:884
-#, fuzzy
-#| msgid "Your shop is live now!"
 msgid "Your shop is now in test mode!"
-msgstr "Uw winkel is nu live!"
+msgstr "Uw winkel staat nu in testmodus!"
 
 #: pretix/control/views/event.py:901
-#, fuzzy
-#| msgid ""
-#| "The organizer could not be deleted as some constraints (e.g. data created "
-#| "by plug-ins) do not allow it."
 msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"De organisator kon niet worden verwijderd omdat sommige beperkingen (bijv. "
+"Een bestelling kon niet worden verwijderd omdat sommige beperkingen (bijv. "
 "data aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/event.py:905
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
 msgstr ""
+"We hebben de testmodus voor u uitgeschakeld. Veel succes met de echte "
+"ticketverkoop!"
 
 #: pretix/control/views/event.py:922
 msgid "This event can not be deleted."
@@ -13189,28 +13172,22 @@ msgid "Ticket download is not enabled for this product."
 msgstr "Tickets downloaden is niet ingeschakeld voor dit product."
 
 #: pretix/control/views/orders.py:411
-#, fuzzy
-#| msgid "The order has been denied."
 msgid "The order has been deleted."
-msgstr "De bestelling is geweigerd."
+msgstr "De bestelling is verwijderd."
 
 #: pretix/control/views/orders.py:417
-#, fuzzy
-#| msgid ""
-#| "The organizer could not be deleted as some constraints (e.g. data created "
-#| "by plug-ins) do not allow it."
 msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"De organisator kon niet worden verwijderd omdat sommige beperkingen (bijv. "
+"De bestelling kon niet worden verwijderd omdat sommige beperkingen (bijv. "
 "data aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/orders.py:425
-#, fuzzy
-#| msgid "The selected team cannot be deleted."
 msgid "Only orders created in test mode can be deleted."
-msgstr "Het gekozen team kan niet worden verwijderd."
+msgstr ""
+"Alleen bestellingen die in de testmodus zijn aangemaakt kunnen worden "
+"verwijderd."
 
 #: pretix/control/views/orders.py:444
 msgid "The order has been denied and is therefore now canceled."
@@ -14488,6 +14465,9 @@ msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"De PayPal-sandbox wordt gebruikt. U kunt betalingen testen zonder "
+"daadwerkelijk geld over te maken, maar u zult een PayPal-sandboxgebruiker "
+"nodig hebben om in te loggen."
 
 #: pretix/plugins/paypal/payment.py:59
 msgid "PayPal account"
@@ -14909,6 +14889,8 @@ msgid ""
 "Test mode orders will only be scanned if you scan online. If you scan in "
 "asynchronous mode, test mode orders won't be there."
 msgstr ""
+"Testbestellingen zullen alleen worden gescand als u online scant. Als u in "
+"de asynchrone modus scant zullen testbestellingen niet worden herkend."
 
 #: pretix/plugins/pretixdroid/views.py:46
 #: pretix/plugins/pretixdroid/views.py:109
@@ -15155,6 +15137,8 @@ msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
+"Als uw evenement in testmodus is zullen we altijd de test-API van Stripe "
+"gebruiken, onafhankelijk van deze instelling."
 
 #: pretix/plugins/stripe/payment.py:128
 msgid "Publishable key"
@@ -15268,6 +15252,9 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"De Stripe-plugin staat in de testmodus. U kunt een van <a {args}>vele "
+"testkaarten</a> gebruiken om een betaling uit te voeren. Er zal geen echt "
+"geld worden overgemaakt."
 
 #: pretix/plugins/stripe/payment.py:315 pretix/plugins/stripe/payment.py:631
 #: pretix/plugins/stripe/payment.py:722 pretix/plugins/stripe/payment.py:780
@@ -15914,6 +15901,9 @@ msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
 msgstr ""
+"Deze ticketwinkel staat momenteel in de testmodus. Voer alstublieft geen "
+"echte aankopen uit, omdat uw bestelling op ieder moment verwijderd kan "
+"worden."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:93
 msgid "Contact event organizer"
@@ -16055,17 +16045,12 @@ msgid "Please select how you want to pay."
 msgstr "Selecteer hoe u wilt betalen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
-#, fuzzy
-#| msgid ""
-#| "This payment provider does not exist or the respective plugin is disabled."
 msgid "This payment provider does not provide support for testmode."
-msgstr ""
-"Deze betalingsprovider bestaat niet of de bijbehorende plug-in is "
-"uitgeschakeld."
+msgstr "Deze betalingsprovider heeft geen ondersteuning voor de testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "Als u doorgaat wordt er mogelijk echt geld overgemaakt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
 msgid "There are no payment providers enabled."
