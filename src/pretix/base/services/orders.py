@@ -823,7 +823,7 @@ class OrderChangeManager:
         if keep_price:
             price = TaxedPrice(gross=position.price, net=position.price - position.tax_value,
                                tax=position.tax_value, rate=position.tax_rate,
-                               name=position.tax_rule.name)
+                               name=position.tax_rule.name if position.tax_rule else None)
         else:
             price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent,
                               invoice_address=self._invoice_address)
