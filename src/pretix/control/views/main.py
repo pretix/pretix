@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import (
     F, IntegerField, Max, Min, OuterRef, Prefetch, Subquery, Sum,
@@ -94,7 +95,10 @@ class EventList(PaginationMixin, ListView):
 
 
 def condition_copy(wizard):
-    return EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
+    return (
+        not wizard.clone_from and
+        EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
+    )
 
 
 class EventWizard(SafeSessionWizardView):
@@ -111,6 +115,49 @@ class EventWizard(SafeSessionWizardView):
     condition_dict = {
         'copy': condition_copy
     }
+
+    def get_form_initial(self, step):
+        initial = super().get_form_initial(step)
+        if self.clone_from:
+            if step == 'foundation':
+                initial['organizer'] = self.clone_from.organizer
+                initial['locales'] = self.clone_from.settings.locales
+                initial['has_subevents'] = self.clone_from.has_subevents
+            elif step == 'basics':
+                initial['name'] = self.clone_from.name
+                initial['slug'] = self.clone_from.slug + '-2'
+                initial['currency'] = self.clone_from.currency
+                initial['date_from'] = self.clone_from.date_from
+                initial['date_to'] = self.clone_from.date_to
+                initial['presale_start'] = self.clone_from.presale_start
+                initial['presale_end'] = self.clone_from.presale_end
+                initial['location'] = self.clone_from.location
+                initial['timezone'] = self.clone_from.settings.timezone
+                initial['locale'] = self.clone_from.settings.locale
+                if self.clone_from.settings.tax_rate_default:
+                    initial['tax_rate'] = self.clone_from.settings.tax_rate_default.rate
+
+        return initial
+
+    def dispatch(self, request, *args, **kwargs):
+        self.clone_from = None
+        if 'clone' in self.request.GET:
+            try:
+                clone_from = Event.objects.select_related('organizer').get(pk=self.request.GET.get("clone"))
+            except Event.DoesNotExist:
+                allow = False
+            else:
+                allow = (
+                    request.user.has_event_permission(clone_from.organizer, clone_from,
+                                                      'can_change_event_settings', request)
+                    and request.user.has_event_permission(clone_from.organizer, clone_from,
+                                                          'can_change_items', request)
+                )
+            if not allow:
+                messages.error(self.request, _('You do not have permission to clone this event.'))
+            else:
+                self.clone_from = clone_from
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form, **kwargs)
@@ -193,6 +240,8 @@ class EventWizard(SafeSessionWizardView):
             if copy_data and copy_data['copy_from_event']:
                 from_event = copy_data['copy_from_event']
                 event.copy_data_from(from_event)
+            elif self.clone_from:
+                event.copy_data_from(self.clone_from)
             elif event.has_subevents:
                 event.checkin_lists.create(
                     name=str(se),
@@ -216,7 +265,7 @@ class EventWizard(SafeSessionWizardView):
             event.settings.set('locale', basics_data['locale'])
             event.settings.set('locales', foundation_data['locales'])
 
-        if (copy_data and copy_data['copy_from_event']) or event.has_subevents:
+        if (copy_data and copy_data['copy_from_event']) or self.clone_from or event.has_subevents:
             return redirect(reverse('control:event.settings', kwargs={
                 'organizer': event.organizer.slug,
                 'event': event.slug,

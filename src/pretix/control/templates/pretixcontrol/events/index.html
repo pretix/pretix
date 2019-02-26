@@ -72,10 +72,12 @@
                     <a href="?{% url_replace request 'ordering' '-sum_tickets_paid' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'sum_tickets_paid' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
-                <th class="text-right">
+                <th>
                     {% trans "Status" %}
                     <a href="?{% url_replace request 'ordering' '-live' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'live' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th class="text-right">
                 </th>
             </tr>
             </thead>
@@ -117,7 +119,7 @@
                             </a>
                         {% endif %}
                     </td>
-                    <td class="text-right">
+                    <td>
                         {% if not e.live %}
                             <span class="label label-danger">{% trans "Shop disabled" %}</span>
                         {% elif e.presale_has_ended %}
@@ -127,6 +129,12 @@
                         {% else %}
                             <span class="label label-success">{% trans "On sale" %}</span>
                         {% endif %}
+                    </td>
+                    <td class="text-right">
+                        <a href="{% url "control:events.add" %}?clone={{ e.pk }}" class="btn btn-sm btn-default"
+                            title="{% trans "Clone event" %}" data-toggle="tooltip">
+                            <span class="fa fa-copy"></span>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
