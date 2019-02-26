@@ -133,6 +133,13 @@ class EventWizard(SessionWizardView):
         }
         if step != 'foundation':
             fdata = self.get_cleaned_data_for_step('foundation')
+            if fdata is None:
+                fdata = {
+                    'organizer': Organizer(slug='_nonexisting'),
+                    'has_subevents': False,
+                    'locales': ['en']
+                }
+                # The show must go on, we catch this error in render()
             kwargs.update(fdata)
         return kwargs
 
