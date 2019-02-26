@@ -15,6 +15,7 @@
             <tr>
                 <th>{% trans "Event name" %}</th>
                 <th>{% trans "Start date" %}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -25,13 +26,28 @@
                                 href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
                     </td>
                     <td>{{ e.get_date_from_display }}</td>
+                    <td class="text-right">
+                        <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}"
+                                class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
+                                data-toggle="tooltip">
+                            <span class="fa fa-eye"></span>
+                        </a>
+                        {% if "can_create_events" in request.orgapermset %}
+                            <a href="{% url "control:events.add" %}?clone={{ e.pk }}" class="btn btn-sm btn-default"
+                                    title="{% trans "Clone event" %}" data-toggle="tooltip">
+                                <span class="fa fa-copy"></span>
+                            </a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     {% endif %}
-    <a href="{% url "control:events.add" %}" class="btn btn-default">
-        <span class="fa fa-plus"></span>
-        {% trans "Create a new event" %}
-    </a>
+    {% if "can_create_events" in request.orgapermset %}
+        <a href="{% url "control:events.add" %}" class="btn btn-default">
+            <span class="fa fa-plus"></span>
+            {% trans "Create a new event" %}
+        </a>
+    {% endif %}
 {% endblock %}

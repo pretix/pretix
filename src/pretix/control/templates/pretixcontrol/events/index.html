@@ -131,6 +131,11 @@
                         {% endif %}
                     </td>
                     <td class="text-right">
+                        <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}"
+                                class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
+                                data-toggle="tooltip">
+                            <span class="fa fa-eye"></span>
+                        </a>
                         <a href="{% url "control:events.add" %}?clone={{ e.pk }}" class="btn btn-sm btn-default"
                             title="{% trans "Clone event" %}" data-toggle="tooltip">
                             <span class="fa fa-copy"></span>
