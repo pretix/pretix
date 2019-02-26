@@ -10,6 +10,7 @@
         <form action="" method="post" class="form-horizontal">
             {% csrf_token %}
             {{ wizard.management_form }}
+            {{ wizard.prefix_form }}
             {% bootstrap_form_errors form %}
             {% block form %}
             {% endblock %}

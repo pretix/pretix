@@ -1,9 +1,11 @@
 import logging
 
 import i18nfield.forms
+from django import forms
 from django.forms.models import ModelFormMetaclass
 from django.utils import six
 from django.utils.crypto import get_random_string
+from formtools.wizard.views import SessionWizardView
 from hierarkey.forms import HierarkeyForm
 
 from pretix.base.models import Event
@@ -71,3 +73,29 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
             fname = '%s/%s.%s.%s' % (self.obj.slug, name, nonce, name.split('.')[-1])
         # TODO: make sure pub is always correct
         return 'pub/' + fname
+
+
+class PrefixForm(forms.Form):
+    prefix = forms.CharField(widget=forms.HiddenInput)
+
+
+class SafeSessionWizardView(SessionWizardView):
+    def get_prefix(self, request, *args, **kwargs):
+        if hasattr(request, '_session_wizard_prefix'):
+            return request._session_wizard_prefix
+        prefix_form = PrefixForm(self.request.POST, prefix=super().get_prefix(request, *args, **kwargs))
+        if not prefix_form.is_valid():
+            request._session_wizard_prefix = get_random_string(length=24)
+        else:
+            request._session_wizard_prefix = prefix_form.cleaned_data['prefix']
+        return request._session_wizard_prefix
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        context['wizard']['prefix_form'] = PrefixForm(
+            prefix=super().get_prefix(self.request),
+            initial={
+                'prefix': self.get_prefix(self.request)
+            }
+        )
+        return context

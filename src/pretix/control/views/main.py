@@ -12,9 +12,9 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views import View
 from django.views.generic import ListView
-from formtools.wizard.views import SessionWizardView
 from i18nfield.strings import LazyI18nString
 
+from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
 from pretix.base.models import Event, Organizer, Quota, Team
 from pretix.control.forms.event import (
@@ -97,7 +97,7 @@ def condition_copy(wizard):
     return EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
 
 
-class EventWizard(SessionWizardView):
+class EventWizard(SafeSessionWizardView):
     form_list = [
         ('foundation', EventWizardFoundationForm),
         ('basics', EventWizardBasicsForm),

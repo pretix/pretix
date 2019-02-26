@@ -473,6 +473,7 @@ class EventsTest(SoupTest):
     def test_create_event_unauthorized(self):
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga2.pk,
             'foundation-locales': ('en', 'de')
         })
@@ -481,12 +482,14 @@ class EventsTest(SoupTest):
     def test_create_invalid_default_language(self):
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('de',)
         })
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
@@ -505,6 +508,7 @@ class EventsTest(SoupTest):
 
     def test_create_duplicate_slug(self):
         doc = self.post_doc('/control/events/add', {
+            'event_wizard-prefix': 'event_wizard',
             'event_wizard-current_step': 'foundation',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('de', 'en')
@@ -512,6 +516,7 @@ class EventsTest(SoupTest):
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '31c3',
@@ -540,6 +545,7 @@ class EventsTest(SoupTest):
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('en', 'de')
         })
@@ -548,6 +554,7 @@ class EventsTest(SoupTest):
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
@@ -571,6 +578,7 @@ class EventsTest(SoupTest):
 
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': ''
         })
 
@@ -599,6 +607,7 @@ class EventsTest(SoupTest):
         self.assertNotIn("MRM", tabletext)
 
         doc = self.post_doc('/control/events/add', {
+            'event_wizard-prefix': 'event_wizard',
             'event_wizard-current_step': 'foundation',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('en', 'de'),
@@ -606,6 +615,7 @@ class EventsTest(SoupTest):
         })
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
@@ -626,6 +636,7 @@ class EventsTest(SoupTest):
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': ''
         })
         ev = Event.objects.get(slug='33c3')
@@ -649,6 +660,7 @@ class EventsTest(SoupTest):
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('en', 'de')
         })
@@ -657,6 +669,7 @@ class EventsTest(SoupTest):
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-name_1': '33C3',
             'basics-slug': '33c3',
@@ -680,6 +693,7 @@ class EventsTest(SoupTest):
 
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': self.event1.pk
         })
 
@@ -705,11 +719,13 @@ class EventsTest(SoupTest):
         # date_to, presale_start & presale_end are optional fields
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': 'en'
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-slug': '33c3',
             'basics-date_from_0': '2016-12-27',
@@ -728,6 +744,7 @@ class EventsTest(SoupTest):
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': ''
         })
 
@@ -749,11 +766,13 @@ class EventsTest(SoupTest):
         # date_from is mandatory
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': 'en'
         })
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-slug': '33c3',
             'basics-date_from_0': '',
@@ -775,12 +794,14 @@ class EventsTest(SoupTest):
     def test_create_event_currency_symbol(self):
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': 'en'
         })
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-slug': '31c4',
             'basics-date_from_0': '2016-12-27',
@@ -802,12 +823,14 @@ class EventsTest(SoupTest):
     def test_create_event_non_iso_currency(self):
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': 'en'
         })
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-slug': '31c5',
             'basics-date_from_0': '2016-12-27',
