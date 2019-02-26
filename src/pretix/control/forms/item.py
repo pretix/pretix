@@ -239,6 +239,9 @@ class ItemCreateForm(I18nModelForm):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
                 quota = self.cleaned_data.get('quota_add_existing')
                 quota.items.add(self.instance)
+                quota.log_action('pretix.event.quota.changed', user=self.request.user, data={
+                    'item_added': self.instance.pk
+                })
             elif self.cleaned_data.get('quota_option') == self.NEW:
                 quota_name = self.cleaned_data.get('quota_add_new_name')
                 quota_size = self.cleaned_data.get('quota_add_new_size')
@@ -247,6 +250,11 @@ class ItemCreateForm(I18nModelForm):
                     event=self.event, name=quota_name, size=quota_size
                 )
                 quota.items.add(self.instance)
+                quota.log_action('pretix.event.quota.added', user=self.request.user, data={
+                    'name': quota_name,
+                    'size': quota_size,
+                    'items': [self.instance.pk]
+                })
 
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
