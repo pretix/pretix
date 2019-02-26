@@ -817,7 +817,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
         """
         newinst = Item(event=self.request.event)
         kwargs = super().get_form_kwargs()
-        kwargs.update({'instance': newinst})
+        kwargs.update({'instance': newinst, 'user': self.request.user})
         return kwargs
 
     def form_invalid(self, form):

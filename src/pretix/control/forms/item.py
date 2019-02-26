@@ -160,6 +160,7 @@ class ItemCreateForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
+        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
@@ -239,7 +240,7 @@ class ItemCreateForm(I18nModelForm):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
                 quota = self.cleaned_data.get('quota_add_existing')
                 quota.items.add(self.instance)
-                quota.log_action('pretix.event.quota.changed', user=self.request.user, data={
+                quota.log_action('pretix.event.quota.changed', user=self.user, data={
                     'item_added': self.instance.pk
                 })
             elif self.cleaned_data.get('quota_option') == self.NEW:
@@ -250,7 +251,7 @@ class ItemCreateForm(I18nModelForm):
                     event=self.event, name=quota_name, size=quota_size
                 )
                 quota.items.add(self.instance)
-                quota.log_action('pretix.event.quota.added', user=self.request.user, data={
+                quota.log_action('pretix.event.quota.added', user=self.user, data={
                     'name': quota_name,
                     'size': quota_size,
                     'items': [self.instance.pk]
