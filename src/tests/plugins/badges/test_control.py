@@ -99,11 +99,13 @@ class BadgeLayoutFormTest(SoupTest):
         BadgeItem.objects.create(item=self.item1, layout=bl2)
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
             'foundation-organizer': self.orga1.pk,
             'foundation-locales': ('en',)
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
             'basics-name_0': '33C3',
             'basics-slug': '33c3',
             'basics-date_from_0': '2016-12-27',
@@ -118,6 +120,7 @@ class BadgeLayoutFormTest(SoupTest):
         })
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': self.event1.pk
         })
 
