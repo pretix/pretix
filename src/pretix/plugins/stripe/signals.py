@@ -34,7 +34,14 @@ def html_head_presale(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if provider.settings.get('_enabled', as_type=bool) and ("checkout" in url.url_name or "order.pay" in url.url_name):
         template = get_template('pretixplugins/stripe/presale_head.html')
-        ctx = {'event': sender, 'settings': provider.settings}
+        ctx = {
+            'event': sender,
+            'settings': provider.settings,
+            'testmode': (
+                (provider.settings.get('endpoint', 'live') == 'test' or sender.testmode)
+                and provider.settings.publishable_test_key
+            )
+        }
         return template.render(ctx)
     else:
         return ""
