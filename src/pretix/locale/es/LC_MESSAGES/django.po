@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-02-20 19:53+0000\n"
-"Last-Translator: arabestia <sergioadalbertor@gmail.com>\n"
+"PO-Revision-Date: 2019-02-28 00:00+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -3608,10 +3608,8 @@ msgstr ""
 "complemento de otro proyecto."
 
 #: pretix/base/services/checkin.py:95
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "This order position has been canceled."
-msgstr "El pedido ha sido cancelado."
+msgstr "La posición de esta orden ha sido cancelada."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
@@ -4404,10 +4402,8 @@ msgstr "Nombre dado"
 #: pretix/base/settings.py:649 pretix/base/settings.py:666
 #: pretix/base/settings.py:681 pretix/base/settings.py:696
 #: pretix/base/settings.py:710
-#, fuzzy
-#| msgid "Full name"
 msgid "Family name"
-msgstr "Nombre completo"
+msgstr "Apellido"
 
 #: pretix/base/settings.py:624 pretix/base/settings.py:640
 #: pretix/base/settings.py:655 pretix/base/settings.py:673
@@ -5030,10 +5026,8 @@ msgstr ""
 "Exigir a los clientes que rellenen los nombres de todos los asistentes."
 
 #: pretix/control/forms/event.py:354
-#, fuzzy
-#| msgid "Payment information"
 msgid "Name format"
-msgstr "Información de pago"
+msgstr "Nombre del formato"
 
 #: pretix/control/forms/event.py:355
 msgid ""
@@ -5180,20 +5174,16 @@ msgid "Ask for {fields}, display like {example}"
 msgstr "Pregunta por {fields}, despliega como {example}"
 
 #: pretix/control/forms/event.py:446
-#, fuzzy
-#| msgid "Allow users to cancel unpaid orders"
 msgid "Customers can cancel their unpaid orders"
-msgstr "Permitir a los usuarios cancelar pedidos no pagados"
+msgstr "Clientes pueden cancelar sus ordenes no pagadas"
 
 #: pretix/control/forms/event.py:450 pretix/control/forms/event.py:472
 msgid "Do not allow cancellations after"
 msgstr "No permitir cancelaciones después de"
 
 #: pretix/control/forms/event.py:454
-#, fuzzy
-#| msgid "Allow users to cancel unpaid orders"
 msgid "Customers can cancel their paid orders"
-msgstr "Permitir a los usuarios cancelar pedidos no pagados"
+msgstr "Clientes pueden cancelar ordenes pagadas"
 
 #: pretix/control/forms/event.py:455
 msgid ""
@@ -5308,10 +5298,8 @@ msgstr ""
 "y las reglas de inversión del sujeto pasivo."
 
 #: pretix/control/forms/event.py:526
-#, fuzzy
-#| msgid "Multiline text"
 msgid "Guidance text"
-msgstr "Texto multilíneas"
+msgstr "Texto guía"
 
 #: pretix/control/forms/event.py:527
 msgid ""
@@ -5357,10 +5345,8 @@ msgstr ""
 "IVA."
 
 #: pretix/control/forms/event.py:620
-#, fuzzy
-#| msgid "Ask for invoice address"
 msgid "Ask for beneficiary"
-msgstr "Solicitar la dirección de facturación"
+msgstr "Solicitar el beneficiario"
 
 #: pretix/control/forms/event.py:625
 msgid "Show free products on invoices"
@@ -5833,10 +5819,8 @@ msgid "Only respected by modern browsers."
 msgstr "Sólo respetado por los navegadores modernos."
 
 #: pretix/control/forms/event.py:1046
-#, fuzzy
-#| msgid "Voucher redemption"
 msgid "Voucher explanation"
-msgstr "Canje de vales"
+msgstr "Explicación del vale"
 
 #: pretix/control/forms/event.py:1050
 msgid ""
@@ -6124,10 +6108,8 @@ msgid "All dates"
 msgstr "Todas las fechas"
 
 #: pretix/control/forms/filter.py:210
-#, fuzzy
-#| msgid "Cancel and reissue"
 msgid "Canceled (or with paid fee)"
-msgstr "Cancelar y volver a emitir"
+msgstr "Cancelado (o con tarifa pagada)"
 
 #: pretix/control/forms/filter.py:211
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
@@ -6149,10 +6131,8 @@ msgstr "Pendiente (pero pagado completamente)"
 
 #: pretix/control/forms/filter.py:215
 #: pretix/control/templates/pretixcontrol/event/live.html:63
-#, fuzzy
-#| msgid "Price mode"
 msgid "Test mode"
-msgstr "Modo precio"
+msgstr "Modo prueba"
 
 #: pretix/control/forms/filter.py:328 pretix/control/forms/filter.py:333
 #: pretix/control/forms/filter.py:519 pretix/control/forms/filter.py:524
@@ -6550,10 +6530,8 @@ msgstr ""
 "ingrese un valor bruto, el impuesto será calculado automáticamente."
 
 #: pretix/control/forms/orders.py:119
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment amount"
-msgstr "Fecha de pago"
+msgstr "Monto de pago"
 
 #: pretix/control/forms/orders.py:164
 msgid "Re-calculate taxes"
@@ -6651,15 +6629,11 @@ msgid "Message"
 msgstr "Mensaje"
 
 #: pretix/control/forms/orders.py:409
-#, fuzzy
-#| msgid ""
-#| "Mark the complete order as refunded. The order will be canceled and all "
-#| "tickets will no longer work. This can not be reverted."
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
-"Marque el pedido completo como reembolsado. La orden será cancelada y todos "
-"los tickets ya no funcionarán. Esto no se puede revertir."
+"Cancelar la orden. Todos los tickets ya no funcionarán. Esto no se puede "
+"revertir."
 
 #: pretix/control/forms/orders.py:410
 msgid ""
@@ -6695,18 +6669,12 @@ msgstr ""
 "Debe configurar previamente el dominio personalizado en el servidor web."
 
 #: pretix/control/forms/organizer.py:90
-#, fuzzy
-#| msgid "You can choose at most one option from this category."
-#| msgid_plural ""
-#| "You can choose up to %(max_count)s options from this category."
 msgid "You cannot choose the base domain of this installation."
-msgstr "Puedes elegir como máximo una opción en esta categoría."
+msgstr "No puede elegir el dominio base de esta instalación."
 
 #: pretix/control/forms/organizer.py:94
-#, fuzzy
-#| msgid "This identifier is already used for a different question."
 msgid "This domain is already in use for a different organizer."
-msgstr "Este identificador ya se utiliza para una pregunta diferente."
+msgstr "Este dominio ya se utiliza para un organizador diferente."
 
 #: pretix/control/forms/organizer.py:157
 msgid ""
