@@ -292,6 +292,25 @@
                             {% trans "Cancel order" %}
                         </a>
                     {% endif %}
+                {% elif order.user_cancel_partial_positions %}
+                    {% if order.status == "p" and order.total != 0 %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                You can cancel parts of this order and receive a refund to your original payment method.
+                            {% endblocktrans %}
+                        </p>
+                    {% else %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                You can cancel parts of this order.
+                            {% endblocktrans %}
+                        </p>
+                    {% endif %}
+                    <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+                       class="btn btn-danger">
+                        <span class="fa fa-remove"></span>
+                        {% trans "Start cancellation" %}
+                    </a>
                 {% else %}
                     <p>
                         {% blocktrans trimmed %}

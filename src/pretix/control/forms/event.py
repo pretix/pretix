@@ -450,6 +450,10 @@ class CancelSettingsForm(SettingsForm):
         label=_("Do not allow cancellations after"),
         required=False
     )
+    cancel_allow_user_per_position = forms.BooleanField(
+        label=_("Customers can cancel individual products in their order"),
+        required=False
+    )
     cancel_allow_user_paid = forms.BooleanField(
         label=_("Customers can cancel their paid orders"),
         help_text=_("Paid money will be automatically paid back if the payment method allows it. "
@@ -470,6 +474,10 @@ class CancelSettingsForm(SettingsForm):
     )
     cancel_allow_user_paid_until = RelativeDateTimeField(
         label=_("Do not allow cancellations after"),
+        required=False
+    )
+    cancel_allow_user_paid_per_position = forms.BooleanField(
+        label=_("Customers can cancel individual products in their order"),
         required=False
     )
 

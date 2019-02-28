@@ -558,28 +558,49 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
-    template_name = "pretixpresale/event/order_cancel.html"
+
+    def get_template_names(self):
+        if self.cancellable_positions and not self.selected_positions:
+            return ["pretixpresale/event/order_cancel_choose.html"]
+        else:
+            return ["pretixpresale/event/order_cancel.html"]
+
+    @cached_property
+    def selected_positions(self):
+        if self.request.method == "POST":
+            return [
+                p for p in self.order.user_cancel_partial_positions
+                if str(p.pk) in self.request.POST.getlist("position")
+            ]
+        return []
+
+    @cached_property
+    def cancellable_positions(self):
+        return self.order.user_cancel_partial_positions
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.user_cancel_allowed:
+        if not self.order.user_cancel_allowed and not self.cancellable_positions:
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
-        refund_amount = self.order.total - self.order.user_cancel_fee
+        total = sum(p.price for p in self.selected_positions) if self.selected_positions else self.order.total - self.order.pending_sum
+        refund_amount = total - self.order.user_partial_cancel_fee(total)
         proposals = self.order.propose_auto_refunds(refund_amount)
         ctx['refund_amount'] = refund_amount
         ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
+        ctx['cancellable_positions'] = self.cancellable_positions
+        ctx['selected_positions'] = self.selected_positions
         return ctx
 
 

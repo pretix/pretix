@@ -10,6 +10,7 @@
             <legend>{% trans "Cancellation of unpaid or free orders" %}</legend>
             {% bootstrap_field form.cancel_allow_user layout="control" %}
             {% bootstrap_field form.cancel_allow_user_until layout="control" %}
+            {% bootstrap_field form.cancel_allow_user_per_position layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Cancellation of paid orders" %}</legend>
@@ -18,6 +19,7 @@
             {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
             {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
             {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
+            {% bootstrap_field form.cancel_allow_user_paid_per_position layout="control" %}
             {% if not gets_notification %}
                 <div class="alert alert-warning">
                     {% blocktrans trimmed %}

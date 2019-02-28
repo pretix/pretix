@@ -9,13 +9,28 @@
             Cancel order: {{ code }}
         {% endblocktrans %}
     </h2>
-    <p>
-        {% blocktrans trimmed %}
-            Do you really want to cancel this order? You cannot revert this action.
-        {% endblocktrans %}
-        {% trans "This will invalidate all of your tickets." %}
-    </p>
-    {% if can_auto_refund %}
+    {% if selected_positions %}
+        <p>
+            {% trans "The following positions of your order will be canceled:" %}
+        </p>
+        <ul>
+            {% for pos in selected_positions %}
+                <li>
+                    #{{ pos.positionid }} –
+                    {{ pos.item }} {% if pos.variation %}– {{ pos.variation }}{% endif %}
+                    {% if pos.attendee_name %}({{ pos.attendee_name }}){% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            {% blocktrans trimmed %}
+                Do you really want to cancel this order? You cannot revert this action.
+            {% endblocktrans %}
+            {% trans "This will invalidate all of your tickets." %}
+        </p>
+    {% endif %}
+    {% if can_auto_refund and refund_amount != 0 %}
         <p>
             <strong>
                 {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
@@ -24,7 +39,7 @@
                 {% endblocktrans %}
             </strong>
         </p>
-    {% else %}
+    {% elif refund_amount != 0 %}
         <div class="alert alert-warning">
             {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
                 With to the payment method you used, the refund amount of {{ amount }} <strong>can not be sent back to you automatically</strong>. Instead, the

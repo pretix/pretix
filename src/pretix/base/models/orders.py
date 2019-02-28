@@ -12,7 +12,7 @@ import pytz
 from django.conf import settings
 from django.db import models, transaction
 from django.db.models import (
-    Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
+    Case, Exists, F, Max, OuterRef, Prefetch, Q, Subquery, Sum, Value, When,
 )
 from django.db.models.functions import Coalesce
 from django.db.models.signals import post_delete
@@ -404,20 +404,75 @@ class Order(LockModel, LoggedModel):
             else:
                 return until.datetime(self.event)
 
-    @cached_property
-    def user_cancel_fee(self):
+    def user_partial_cancel_fee(self, total: Decimal):
         fee = Decimal('0.00')
         if self.event.settings.cancel_allow_user_paid_keep:
             fee += self.event.settings.cancel_allow_user_paid_keep
         if self.event.settings.cancel_allow_user_paid_keep_percentage:
-            fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * self.total
-        if self.event.settings.cancel_allow_user_paid_keep_fees:
+            fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * total
+        if self.event.settings.cancel_allow_user_paid_keep_fees and self.total == total:
             fee += self.fees.filter(
                 fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE)
             ).aggregate(
                 s=Sum('value')
             )['s'] or 0
         return round_decimal(fee, self.event.currency)
+
+    @cached_property
+    def user_cancel_fee(self):
+        return self.user_partial_cancel_fee(self.total)
+
+    @property
+    def user_cancel_partial_positions(self) -> list:
+        """
+        Returns a list of positions in this order that can be cancelled individually.
+        """
+        from .checkin import Checkin
+
+        if self.user_cancel_deadline and now() > self.user_cancel_deadline:
+            return []
+
+        if self.status == Order.STATUS_PENDING:
+            if not self.event.settings.cancel_allow_user or not self.event.settings.cancel_allow_user_per_position:
+                return []
+        elif self.status == Order.STATUS_PAID:
+            if not self.event.settings.cancel_allow_user_paid or not self.event.settings.cancel_allow_user_paid_per_position:
+                return []
+            if self.total == Decimal('0.00'):
+                if not self.event.settings.cancel_allow_user or not self.event.settings.cancel_allow_user_per_position:
+                    return []
+        else:
+            return []
+
+        pos = list(
+            self.positions.annotate(
+                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
+            ).filter(
+                has_checkin=False,
+                item__allow_cancel=True
+            ).select_related('item', 'addon_to').prefetch_related(
+                'item__addons',
+                Prefetch(
+                    'addon_to__addons',
+                    to_attr='siblings'
+                )
+            ).distinct()
+        )
+        allowed = []
+        for p in pos:
+            if p.addon_to_id:
+                addonconf = [a for a in p.item.addons.all() if a.category_id == p.item.category_id]
+                if len(addonconf) > 0:
+                    addonconf = addonconf[0]
+                    if addonconf.min_count > 0 and len(p.siblings) <= addonconf.min_count:
+                        continue
+
+            allowed.append(p)
+
+        if len(allowed) == self.positions.count():
+            return []
+
+        return pos
 
     @property
     def user_cancel_allowed(self) -> bool:

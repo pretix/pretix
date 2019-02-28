@@ -1,0 +1,70 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% load eventurl %}
+{% block title %}{% trans "Cancel order" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed with code=order.code %}
+            Cancel order: {{ code }}
+        {% endblocktrans %}
+    </h2>
+
+    <form method="post"
+          {% if order.status == "p" and order.total != 0 %}
+              action=""
+          {% else %}
+              action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask
+          {% endif %}
+    >
+        {% csrf_token %}
+
+        <p>
+            {% blocktrans trimmed %}
+                Please choose which parts of your order you want to cancel:
+            {% endblocktrans %}
+        </p>
+
+        {% for pos in cancellable_positions %}
+            <div class="checkbox">
+                <label for="id_pos_{{ pos.pk }}">
+                    <input type="checkbox" name="position" value="{{ pos.pk }}"
+                           class="scrolling-multiple-choice" checked="checked" id="id_pos_{{ pos.pk }}">
+                    #{{ pos.positionid }} –
+                    {{ pos.item }} {% if pos.variation %}– {{ pos.variation }}{% endif %}
+                    {% if pos.attendee_name %}({{ pos.attendee_name }}){% endif %}
+                </label>
+            </div>
+        {% endfor %}
+
+        {% if order.status == "p" and order.total != 0 %}
+            <p>
+                {% blocktrans trimmed %}
+                    Before your purchase is cancelled, you will be shown the refund amount and asked to confirm the cancellation.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                   href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                {% if order.status == "p" and order.total != 0 %}
+                    <button class="btn btn-block btn-primary btn-lg" type="submit">
+                        {% trans "Calculate refund amount" %}
+                    </button>
+                {% else %}
+                    <button class="btn btn-block btn-danger btn-lg" type="submit">
+                        {% trans "Yes, cancel order" %}
+                    </button>
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+
+{% endblock %}
