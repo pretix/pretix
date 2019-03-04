@@ -167,6 +167,9 @@ class Checkin(models.Model):
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
 
+    class Meta:
+        unique_together = (('list', 'position'),)
+
     def __repr__(self):
         return "<Checkin: pos {} on list '{}' at {}>".format(
             self.position, self.list, self.datetime
