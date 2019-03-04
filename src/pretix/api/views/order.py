@@ -397,6 +397,8 @@ class OrderPositionFilter(FilterSet):
             Q(secret__istartswith=value)
             | Q(attendee_name_cached__icontains=value)
             | Q(addon_to__attendee_name_cached__icontains=value)
+            | Q(attendee_email__icontains=value)
+            | Q(addon_to__attendee_email__icontains=value)
             | Q(order__code__istartswith=value)
             | Q(order__invoice_address__name_cached__icontains=value)
             | Q(order__email__icontains=value)
