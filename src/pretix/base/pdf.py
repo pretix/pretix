@@ -110,7 +110,18 @@ DEFAULT_VARIABLES = OrderedDict((
     ("event_begin", {
         "label": _("Event begin date and time"),
         "editor_sample": _("2017-05-31 20:00"),
-        "evaluate": lambda op, order, ev: ev.get_date_from_display(show_times=True)
+        "evaluate": lambda op, order, ev: date_format(
+            ev.date_from.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATETIME_FORMAT"
+        ) if ev.date_from else ""
+    }),
+    ("event_begin_date", {
+        "label": _("Event begin date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: date_format(
+            ev.date_from.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATE_FORMAT"
+        ) if ev.date_from else ""
     }),
     ("event_begin_time", {
         "label": _("Event begin time"),
