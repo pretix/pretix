@@ -31,11 +31,12 @@ def run_update_check(sender, **kwargs):
 @app.task
 def update_check():
     gs = GlobalSettingsObject()
-    if not gs.settings.update_check_perform:
-        return
 
     if not gs.settings.update_check_id:
         gs.settings.set('update_check_id', uuid.uuid4().hex)
+
+    if not gs.settings.update_check_perform:
+        return
 
     if 'runserver' in sys.argv:
         gs.settings.set('update_check_last', now())
