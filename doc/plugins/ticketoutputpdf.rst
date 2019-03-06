@@ -114,3 +114,44 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/ticketlayoutitems/
+
+   Returns a list of all assignments of items to layouts
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/democon/ticketlayoutitems/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "layout": 2,
+            "item": 3,
+            "sales_channel": web
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of a valid event
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
