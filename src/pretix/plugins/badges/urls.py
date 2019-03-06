@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from pretix.api.urls import event_router
-from pretix.plugins.badges.api import BadgeLayoutViewSet
+from pretix.plugins.badges.api import BadgeItemViewSet, BadgeLayoutViewSet
 
 from .views import (
     LayoutCreate, LayoutDelete, LayoutEditorView, LayoutListView,
@@ -23,3 +23,4 @@ urlpatterns = [
         LayoutEditorView.as_view(), name='edit'),
 ]
 event_router.register('badgelayouts', BadgeLayoutViewSet)
+event_router.register('badgeitems', BadgeItemViewSet)

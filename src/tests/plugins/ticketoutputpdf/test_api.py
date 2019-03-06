@@ -46,6 +46,12 @@ def test_api_list(env, client):
             env[0].slug, env[0].organizer.slug)).content.decode('utf-8')
     )
     assert r['results'] == [res]
+    r = json.loads(
+        client.get('/api/v1/organizers/{}/events/{}/ticketlayoutitems/'.format(
+            env[0].slug, env[0].organizer.slug)).content.decode('utf-8')
+    )
+    assert r['results'] == [{'item': env[3].pk, 'layout': env[2].pk, 'id': env[2].item_assignments.first().pk,
+                             'sales_channel': 'web'}]
 
 
 @pytest.mark.django_db

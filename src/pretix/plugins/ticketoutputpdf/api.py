@@ -10,12 +10,19 @@ class ItemAssignmentSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = TicketLayoutItem
+        fields = ('id', 'layout', 'item', 'sales_channel')
+
+
+class NestedItemAssignmentSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = TicketLayoutItem
         fields = ('item', 'sales_channel')
 
 
 class TicketLayoutSerializer(I18nAwareModelSerializer):
     layout = CompatibleJSONField()
-    item_assignments = ItemAssignmentSerializer(many=True)
+    item_assignments = NestedItemAssignmentSerializer(many=True)
 
     class Meta:
         model = TicketLayout
@@ -29,3 +36,12 @@ class TicketLayoutViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.request.event.ticket_layouts.all()
+
+
+class TicketLayoutItemViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ItemAssignmentSerializer
+    queryset = TicketLayoutItem.objects.none()
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        return TicketLayoutItem.objects.filter(item__event=self.request.event)
