@@ -670,15 +670,15 @@ class CartManager:
         self._check_max_cart_size()
         self._calculate_expiry()
 
-        with self.event.lock() as now_dt:
-            with transaction.atomic():
-                self.now_dt = now_dt
-                self._extend_expiry_of_valid_existing_positions()
-                err = self._delete_out_of_timeframe()
-                err = self.extend_expired_positions() or err
-                err = self._perform_operations() or err
-            if err:
-                raise CartError(err)
+        # with self.event.lock() as now_dt:
+        with transaction.atomic():
+            self.now_dt = now()
+            self._extend_expiry_of_valid_existing_positions()
+            err = self._delete_out_of_timeframe()
+            err = self.extend_expired_positions() or err
+            err = self._perform_operations() or err
+        if err:
+            raise CartError(err)
 
 
 def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress):
