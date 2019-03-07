@@ -179,6 +179,10 @@ METRICS_PASSPHRASE = config.get('metrics', 'passphrase', fallback="")
 CACHES = {
     'default': {
         'BACKEND': 'pretix.helpers.cache.CustomDummyCache',
+    },
+    'file': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django_cache',
     }
 }
 REAL_CACHE_USED = False
@@ -488,6 +492,8 @@ COMPRESS_PRECOMPILERS = (
 )
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
+
+COMPRESS_CACHE_BACKEND = 'file'
 
 COMPRESS_CSS_FILTERS = (
     # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
