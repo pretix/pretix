@@ -76,6 +76,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -100,6 +101,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -114,6 +116,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview'
@@ -130,6 +133,7 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       },
                                      follow=True)
@@ -154,6 +158,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'items': item.pk,
                                       'subject_0': 'Test subject',
                                       'message_0': 'Test message',
                                       'subject_1': 'Benutzer',
@@ -189,6 +194,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se1.pk
@@ -201,6 +207,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se2.pk
@@ -220,6 +227,7 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'items': order.positions.first().item_id,
                                       'subject_0': '{code} Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview'

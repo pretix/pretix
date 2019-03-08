@@ -42,6 +42,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     'message': LazyI18nString(logentry.parsed_data['message']),
                     'subject': LazyI18nString(logentry.parsed_data['subject']),
                     'sendto': logentry.parsed_data['sendto'],
+                    'items': self.request.event.items.filter(id__in=[a['id'] for a in logentry.parsed_data['items']]),
                 }
                 if logentry.parsed_data.get('subevent'):
                     try:
@@ -64,9 +65,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
         orders = qs.filter(statusq)
-        if form.cleaned_data.get('item'):
-            orders = orders.filter(all_positions__item=form.cleaned_data.get('item'),
-                                   all_positions__canceled=False)
+        orders = orders.filter(all_positions__item_id__in=[i.pk for i in form.cleaned_data.get('items')],
+                               all_positions__canceled=False)
         if form.cleaned_data.get('subevent'):
             orders = orders.filter(all_positions__subevent__in=(form.cleaned_data.get('subevent'),),
                                    all_positions__canceled=False)

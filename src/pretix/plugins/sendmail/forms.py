@@ -12,11 +12,13 @@ class MailForm(forms.Form):
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
-    item = forms.ModelChoiceField(
-        Item.objects.none(),
+    items = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice'}
+        ),
         label=_('Only send to people who bought'),
-        required=False,
-        empty_label=_('Any product')
+        required=True,
+        queryset=Item.objects.none()
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
@@ -53,10 +55,18 @@ class MailForm(forms.Form):
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
             label=_("Send to customers with order status"),
-            widget=forms.CheckboxSelectMultiple,
+            widget=forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice'}
+            ),
             choices=choices
         )
-        self.fields['item'].queryset = event.items.all()
+        if not self.initial.get('sendto'):
+            self.initial['sendto'] = ['p', 'n']
+
+        self.fields['items'].queryset = event.items.all()
+        if not self.initial.get('items'):
+            self.initial['items'] = event.items.all()
+
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
             self.fields['subevent'].widget = Select2(
