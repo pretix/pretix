@@ -145,12 +145,15 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
         qs = LogEntry.objects.filter(
             event=self.request.event,
             action_type='pretix.plugins.sendmail.sent'
-        )
+        ).select_related('event', 'user')
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
 
+        itemcache = {
+            i.pk: str(i) for i in self.request.event.items.all()
+        }
         status = dict(Order.STATUS_CHOICE)
         status['overdue'] = _('pending with payment overdue')
         status['r'] = status['c']
@@ -164,6 +167,9 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
                 }
             log.pdata['sendto'] = [
                 status[s] for s in log.pdata['sendto']
+            ]
+            log.pdata['items'] = [
+                itemcache[i['id']] for i in log.pdata.get('items', [])
             ]
             if log.pdata.get('subevent'):
                 try:

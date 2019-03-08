@@ -16,10 +16,13 @@
                         {% if log.display %}
                             <br/><span class="fa fa-comment-o fa-fw"></span> {{ log.display }}
                         {% endif %}
-                        <br/><span class="fa fa-shopping-cart fa-fw"></span> {% trans "Sent to orders:" %}
+                        <br/><span class="fa fa-tag fa-fw"></span> {% trans "Sent to orders:" %}
                         {% for status in log.parsed_data.sendto %}
                             {{ status }}{% if forloop.revcounter > 1 %},{% endif %}
                         {% endfor %}
+                        {% if log.pdata.items %}
+                            <br/><span class="fa fa-shopping-cart fa-fw"></span> {{ log.pdata.items|join:", " }}
+                        {% endif %}
                         {% if log.pdata.subevent_obj %}
                             <br/><span class="fa fa-calendar fa-fw"></span> {{ log.pdata.subevent_obj }}
                         {% endif %}
