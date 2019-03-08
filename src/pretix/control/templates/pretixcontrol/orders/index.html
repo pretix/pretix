@@ -85,7 +85,7 @@
             </p>
         {% endif %}
         <div class="table-responsive">
-            <table class="table table-condensed table-hover">
+            <table class="table table-condensed table-hover table-orders">
                 <thead>
                 <tr>
                     <th>{% trans "Order code" %}
@@ -147,6 +147,30 @@
                     </tr>
                 {% endfor %}
                 </tbody>
+                {% if sums %}
+                    <tfoot>
+                    <tr>
+                        <th>{% trans "Sum over all pages" %}</th>
+                        <th></th>
+                        <th>
+                            {% blocktrans trimmed count s=sums.c %}
+                                1 order
+                            {% plural %}
+                                {{ s }} orders
+                            {% endblocktrans %}
+                        </th>
+                        <th class="text-right">
+                            {{ sums.s|money:request.event.currency }}
+                        </th>
+                        <th class="text-right">
+                            {% if sums.pc %}
+                                {{ sums.pc }}
+                            {% endif %}
+                        </th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                {% endif %}
             </table>
         </div>
         {% include "pretixcontrol/pagination.html" %}

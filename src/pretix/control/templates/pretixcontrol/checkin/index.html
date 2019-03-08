@@ -70,6 +70,7 @@
                       <a href="?{% url_replace request 'ordering' 'email'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Name" %} <a href="?{% url_replace request 'ordering' '-name'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'name'%}"><i class="fa fa-caret-up"></i></a></th>
+                        <th>{% trans "Ticket code" %}</th>
                         <th>{% trans "Status" %} <a href="?{% url_replace request 'ordering' '-status'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'status'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Timestamp" %} <a href="?{% url_replace request 'ordering' '-timestamp'%}"><i class="fa fa-caret-down"></i></a>
@@ -101,6 +102,9 @@
                                 {% elif e.attendee_name %}
                                     {{ e.attendee_name }}
                                 {% endif %}
+                            </td>
+                            <td>
+                                {{ e.secret|slice:":10" }}…
                             </td>
                             <td>
                                 {% if not e.last_checked_in %}

@@ -13,7 +13,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import (
     Count, IntegerField, OuterRef, ProtectedError, Q, Subquery,
-)
+    Sum)
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
 )
@@ -126,6 +126,15 @@ class OrderList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
 
+        if ctx['page_obj'].paginator.count < 1000:
+            # Performance safeguard: Only count positions if the data set is small
+            ctx['sums'] = self.get_queryset().annotate(
+                pcnt=Subquery(s, output_field=IntegerField())
+            ).aggregate(
+                s=Sum('total'), pc=Sum('pcnt'), c=Count('id')
+            )
+        else:
+            ctx['sums'] = self.get_queryset().aggregate(s=Sum('total'), c=Count('id'))
         return ctx
 
     @cached_property
