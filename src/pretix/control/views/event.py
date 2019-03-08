@@ -53,8 +53,8 @@ from pretix.multidomain.urlreverse import get_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
-from . import CreateView, PaginationMixin, UpdateView
 from ..logdisplay import OVERVIEW_BLACKLIST
+from . import CreateView, PaginationMixin, UpdateView
 
 
 class EventSettingsViewMixin:

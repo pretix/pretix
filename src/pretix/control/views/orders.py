@@ -12,8 +12,8 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, IntegerField, OuterRef, ProtectedError, Q, Subquery,
-    Sum)
+    Count, IntegerField, OuterRef, ProtectedError, Q, Subquery, Sum,
+)
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
 )
