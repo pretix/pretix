@@ -228,7 +228,8 @@ def webhook(request, *args, **kwargs):
                 payment.create_external_refund(
                     amount=payment.amount - known_sum
                 )
-    elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED) and sale['state'] == 'completed':
+    elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
+                           OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED) and sale['state'] == 'completed':
         try:
             payment.confirm()
         except Quota.QuotaExceededException:
