@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, IntegerField, OuterRef, ProtectedError, Subquery,
+    Count, IntegerField, OuterRef, ProtectedError, Q, Subquery,
 )
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
@@ -1602,6 +1602,13 @@ class OrderGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:
+            try:
+                i = self.request.event.invoices.get(Q(invoice_no=code) | Q(full_invoice_no=code))
+                return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
+                                code=i.order.code)
+            except Invoice.DoesNotExist:
+                pass
+
             messages.error(request, _('There is no order with the given order code.'))
             return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
 
