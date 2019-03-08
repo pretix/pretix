@@ -1086,7 +1086,7 @@ class OrderPayment(models.Model):
         """
         return self.order.event.get_payment_providers().get(self.provider)
 
-    def _mark_paid(self, force, count_waitinglist, user, auth):
+    def _mark_paid(self, force, count_waitinglist, user, auth, overpaid=False):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
         if not force and can_be_paid is not True:
@@ -1103,6 +1103,9 @@ class OrderPayment(models.Model):
             'date': self.payment_date,
             'force': force
         }, user=user, auth=auth)
+
+        if overpaid:
+            self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text=''):
@@ -1168,10 +1171,10 @@ class OrderPayment(models.Model):
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
             with transaction.atomic():
-                self._mark_paid(force, count_waitinglist, user, auth)
+                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total)
         else:
             with self.order.event.lock():
-                self._mark_paid(force, count_waitinglist, user, auth)
+                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total)
 
         invoice = None
         if invoice_qualified(self.order):

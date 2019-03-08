@@ -238,6 +238,12 @@ def register_default_notification_types(sender, **kwargs):
         ),
         ParametrizedOrderNotificationType(
             sender,
+            'pretix.event.order.overpaid',
+            _('Order has been overpaid'),
+            _('Order {order.code} has been overpaid.')
+        ),
+        ParametrizedOrderNotificationType(
+            sender,
             'pretix.event.order.refund.created.externally',
             _('External refund of payment'),
             _('An external refund for {order.code} has occurred.')

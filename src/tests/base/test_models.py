@@ -616,6 +616,7 @@ class OrderTestCase(BaseQuotaTestCase):
         ).confirm()
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
+        assert not self.order.all_logentries().filter(action_type='pretix.event.order.overpaid').exists()
 
     def test_paid_expired_available(self):
         self.event.settings.payment_term_last = (now() + timedelta(days=2)).strftime('%Y-%m-%d')
@@ -741,6 +742,16 @@ class OrderTestCase(BaseQuotaTestCase):
         ).confirm(count_waitinglist=False)
         self.order = Order.objects.get(id=self.order.id)
         self.assertEqual(self.order.status, Order.STATUS_PAID)
+
+    def test_paid_overpaid(self):
+        self.quota.size = 2
+        self.quota.save()
+        self.order.payments.create(
+            provider='manual', amount=self.order.total + 2
+        ).confirm(count_waitinglist=False)
+        self.order = Order.objects.get(id=self.order.id)
+        self.assertEqual(self.order.status, Order.STATUS_PAID)
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.overpaid').exists()
 
     def test_can_modify_answers(self):
         self.event.settings.set('invoice_address_asked', False)
