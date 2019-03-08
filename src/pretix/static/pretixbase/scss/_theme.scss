@@ -157,6 +157,12 @@
   -webkit-box-shadow: none;
 }
 
+.pagination > li.page-current > a:hover, .pagination > li.page-current > a:focus {
+  color: #7f5a91;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
 @include table-row-variant('success', lighten($brand-success, 40%));
 @include table-row-variant('info', lighten($brand-info, 30%));
 @include table-row-variant('warning', lighten($brand-warning, 40%));
