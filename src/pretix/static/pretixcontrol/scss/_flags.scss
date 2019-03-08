@@ -12,250 +12,256 @@ pre[lang] {
   padding-top: 8px;
   margin-bottom: 20px;
 }
+div[lang] {
+  background: no-repeat 10px 12px;
+  padding-left: 34px;
+  padding-top: 8px;
+  min-height: 30px;
+}
 
-pre[lang=ad], input[lang=ad], textarea[lang=ad] { background-image: url(static('pretixbase/img/flags/ad.png')); }
-pre[lang=ae], input[lang=ae], textarea[lang=ae] { background-image: url(static('pretixbase/img/flags/ae.png')); }
-pre[lang=af], input[lang=af], textarea[lang=af] { background-image: url(static('pretixbase/img/flags/af.png')); }
-pre[lang=ag], input[lang=ag], textarea[lang=ag] { background-image: url(static('pretixbase/img/flags/ag.png')); }
-pre[lang=ai], input[lang=ai], textarea[lang=ai] { background-image: url(static('pretixbase/img/flags/ai.png')); }
-pre[lang=al], input[lang=al], textarea[lang=al] { background-image: url(static('pretixbase/img/flags/al.png')); }
-pre[lang=am], input[lang=am], textarea[lang=am] { background-image: url(static('pretixbase/img/flags/am.png')); }
-pre[lang=an], input[lang=an], textarea[lang=an] { background-image: url(static('pretixbase/img/flags/an.png')); }
-pre[lang=ao], input[lang=ao], textarea[lang=ao] { background-image: url(static('pretixbase/img/flags/ao.png')); }
-pre[lang=ar], input[lang=ar], textarea[lang=ar] { background-image: url(static('pretixbase/img/flags/ar.png')); }
-pre[lang=as], input[lang=as], textarea[lang=as] { background-image: url(static('pretixbase/img/flags/as.png')); }
-pre[lang=at], input[lang=at], textarea[lang=at] { background-image: url(static('pretixbase/img/flags/at.png')); }
-pre[lang=au], input[lang=au], textarea[lang=au] { background-image: url(static('pretixbase/img/flags/au.png')); }
-pre[lang=aw], input[lang=aw], textarea[lang=aw] { background-image: url(static('pretixbase/img/flags/aw.png')); }
-pre[lang=ax], input[lang=ax], textarea[lang=ax] { background-image: url(static('pretixbase/img/flags/ax.png')); }
-pre[lang=az], input[lang=az], textarea[lang=az] { background-image: url(static('pretixbase/img/flags/az.png')); }
-pre[lang=ba], input[lang=ba], textarea[lang=ba] { background-image: url(static('pretixbase/img/flags/ba.png')); }
-pre[lang=bb], input[lang=bb], textarea[lang=bb] { background-image: url(static('pretixbase/img/flags/bb.png')); }
-pre[lang=bd], input[lang=bd], textarea[lang=bd] { background-image: url(static('pretixbase/img/flags/bd.png')); }
-pre[lang=be], input[lang=be], textarea[lang=be] { background-image: url(static('pretixbase/img/flags/be.png')); }
-pre[lang=bf], input[lang=bf], textarea[lang=bf] { background-image: url(static('pretixbase/img/flags/bf.png')); }
-pre[lang=bg], input[lang=bg], textarea[lang=bg] { background-image: url(static('pretixbase/img/flags/bg.png')); }
-pre[lang=bh], input[lang=bh], textarea[lang=bh] { background-image: url(static('pretixbase/img/flags/bh.png')); }
-pre[lang=bi], input[lang=bi], textarea[lang=bi] { background-image: url(static('pretixbase/img/flags/bi.png')); }
-pre[lang=bj], input[lang=bj], textarea[lang=bj] { background-image: url(static('pretixbase/img/flags/bj.png')); }
-pre[lang=bm], input[lang=bm], textarea[lang=bm] { background-image: url(static('pretixbase/img/flags/bm.png')); }
-pre[lang=bn], input[lang=bn], textarea[lang=bn] { background-image: url(static('pretixbase/img/flags/bn.png')); }
-pre[lang=bo], input[lang=bo], textarea[lang=bo] { background-image: url(static('pretixbase/img/flags/bo.png')); }
-pre[lang=br], input[lang=br], textarea[lang=br] { background-image: url(static('pretixbase/img/flags/br.png')); }
-pre[lang=pt-br], input[lang=pt-br], textarea[lang=pt-br] { background-image: url(static('pretixbase/img/flags/br.png')); }
-pre[lang=bs], input[lang=bs], textarea[lang=bs] { background-image: url(static('pretixbase/img/flags/bs.png')); }
-pre[lang=bt], input[lang=bt], textarea[lang=bt] { background-image: url(static('pretixbase/img/flags/bt.png')); }
-pre[lang=bv], input[lang=bv], textarea[lang=bv] { background-image: url(static('pretixbase/img/flags/bv.png')); }
-pre[lang=bw], input[lang=bw], textarea[lang=bw] { background-image: url(static('pretixbase/img/flags/bw.png')); }
-pre[lang=by], input[lang=by], textarea[lang=by] { background-image: url(static('pretixbase/img/flags/by.png')); }
-pre[lang=bz], input[lang=bz], textarea[lang=bz] { background-image: url(static('pretixbase/img/flags/bz.png')); }
-pre[lang=ca], input[lang=ca], textarea[lang=ca] { background-image: url(static('pretixbase/img/flags/ca.png')); }
-pre[lang=cc], input[lang=cc], textarea[lang=cc] { background-image: url(static('pretixbase/img/flags/cc.png')); }
-pre[lang=cd], input[lang=cd], textarea[lang=cd] { background-image: url(static('pretixbase/img/flags/cd.png')); }
-pre[lang=cf], input[lang=cf], textarea[lang=cf] { background-image: url(static('pretixbase/img/flags/cf.png')); }
-pre[lang=cg], input[lang=cg], textarea[lang=cg] { background-image: url(static('pretixbase/img/flags/cg.png')); }
-pre[lang=ch], input[lang=ch], textarea[lang=ch] { background-image: url(static('pretixbase/img/flags/ch.png')); }
-pre[lang=ci], input[lang=ci], textarea[lang=ci] { background-image: url(static('pretixbase/img/flags/ci.png')); }
-pre[lang=ck], input[lang=ck], textarea[lang=ck] { background-image: url(static('pretixbase/img/flags/ck.png')); }
-pre[lang=cl], input[lang=cl], textarea[lang=cl] { background-image: url(static('pretixbase/img/flags/cl.png')); }
-pre[lang=cm], input[lang=cm], textarea[lang=cm] { background-image: url(static('pretixbase/img/flags/cm.png')); }
-pre[lang=cn], input[lang=cn], textarea[lang=cn] { background-image: url(static('pretixbase/img/flags/cn.png')); }
-pre[lang=co], input[lang=co], textarea[lang=co] { background-image: url(static('pretixbase/img/flags/co.png')); }
-pre[lang=cr], input[lang=cr], textarea[lang=cr] { background-image: url(static('pretixbase/img/flags/cr.png')); }
-pre[lang=cs], input[lang=cs], textarea[lang=cs] { background-image: url(static('pretixbase/img/flags/cs.png')); }
-pre[lang=cu], input[lang=cu], textarea[lang=cu] { background-image: url(static('pretixbase/img/flags/cu.png')); }
-pre[lang=cv], input[lang=cv], textarea[lang=cv] { background-image: url(static('pretixbase/img/flags/cv.png')); }
-pre[lang=cx], input[lang=cx], textarea[lang=cx] { background-image: url(static('pretixbase/img/flags/cx.png')); }
-pre[lang=cy], input[lang=cy], textarea[lang=cy] { background-image: url(static('pretixbase/img/flags/cy.png')); }
-pre[lang=cz], input[lang=cz], textarea[lang=cz] { background-image: url(static('pretixbase/img/flags/cz.png')); }
-pre[lang=de], input[lang=de], textarea[lang=de] { background-image: url(static('pretixbase/img/flags/de.png')); }
-pre[lang=de-informal], input[lang=de-informal], textarea[lang=de-informal] { background-image: url(static('pretixbase/img/flags/de-informal.png')); }
-pre[lang=dj], input[lang=dj], textarea[lang=dj] { background-image: url(static('pretixbase/img/flags/dj.png')); }
-pre[lang=da], input[lang=da], textarea[lang=da] { background-image: url(static('pretixbase/img/flags/dk.png')); }
-pre[lang=dk], input[lang=dk], textarea[lang=dk] { background-image: url(static('pretixbase/img/flags/dk.png')); }
-pre[lang=dm], input[lang=dm], textarea[lang=dm] { background-image: url(static('pretixbase/img/flags/dm.png')); }
-pre[lang=do], input[lang=do], textarea[lang=do] { background-image: url(static('pretixbase/img/flags/do.png')); }
-pre[lang=dz], input[lang=dz], textarea[lang=dz] { background-image: url(static('pretixbase/img/flags/dz.png')); }
-pre[lang=ec], input[lang=ec], textarea[lang=ec] { background-image: url(static('pretixbase/img/flags/ec.png')); }
-pre[lang=ee], input[lang=ee], textarea[lang=ee] { background-image: url(static('pretixbase/img/flags/ee.png')); }
-pre[lang=eg], input[lang=eg], textarea[lang=eg] { background-image: url(static('pretixbase/img/flags/eg.png')); }
-pre[lang=eh], input[lang=eh], textarea[lang=eh] { background-image: url(static('pretixbase/img/flags/eh.png')); }
-pre[lang=er], input[lang=er], textarea[lang=er] { background-image: url(static('pretixbase/img/flags/er.png')); }
-pre[lang=es], input[lang=es], textarea[lang=es] { background-image: url(static('pretixbase/img/flags/es.png')); }
-pre[lang=et], input[lang=et], textarea[lang=et] { background-image: url(static('pretixbase/img/flags/et.png')); }
-pre[lang=fi], input[lang=fi], textarea[lang=fi] { background-image: url(static('pretixbase/img/flags/fi.png')); }
-pre[lang=fj], input[lang=fj], textarea[lang=fj] { background-image: url(static('pretixbase/img/flags/fj.png')); }
-pre[lang=fk], input[lang=fk], textarea[lang=fk] { background-image: url(static('pretixbase/img/flags/fk.png')); }
-pre[lang=fm], input[lang=fm], textarea[lang=fm] { background-image: url(static('pretixbase/img/flags/fm.png')); }
-pre[lang=fo], input[lang=fo], textarea[lang=fo] { background-image: url(static('pretixbase/img/flags/fo.png')); }
-pre[lang=fr], input[lang=fr], textarea[lang=fr] { background-image: url(static('pretixbase/img/flags/fr.png')); }
-pre[lang=ga], input[lang=ga], textarea[lang=ga] { background-image: url(static('pretixbase/img/flags/ga.png')); }
-pre[lang=gb], input[lang=gb], textarea[lang=gb] { background-image: url(static('pretixbase/img/flags/gb.png')); }
-pre[lang=gd], input[lang=gd], textarea[lang=gd] { background-image: url(static('pretixbase/img/flags/gd.png')); }
-pre[lang=ge], input[lang=ge], textarea[lang=ge] { background-image: url(static('pretixbase/img/flags/ge.png')); }
-pre[lang=gf], input[lang=gf], textarea[lang=gf] { background-image: url(static('pretixbase/img/flags/gf.png')); }
-pre[lang=gh], input[lang=gh], textarea[lang=gh] { background-image: url(static('pretixbase/img/flags/gh.png')); }
-pre[lang=gi], input[lang=gi], textarea[lang=gi] { background-image: url(static('pretixbase/img/flags/gi.png')); }
-pre[lang=gl], input[lang=gl], textarea[lang=gl] { background-image: url(static('pretixbase/img/flags/gl.png')); }
-pre[lang=gm], input[lang=gm], textarea[lang=gm] { background-image: url(static('pretixbase/img/flags/gm.png')); }
-pre[lang=gn], input[lang=gn], textarea[lang=gn] { background-image: url(static('pretixbase/img/flags/gn.png')); }
-pre[lang=gp], input[lang=gp], textarea[lang=gp] { background-image: url(static('pretixbase/img/flags/gp.png')); }
-pre[lang=gq], input[lang=gq], textarea[lang=gq] { background-image: url(static('pretixbase/img/flags/gq.png')); }
-pre[lang=gr], input[lang=gr], textarea[lang=gr] { background-image: url(static('pretixbase/img/flags/gr.png')); }
-pre[lang=gs], input[lang=gs], textarea[lang=gs] { background-image: url(static('pretixbase/img/flags/gs.png')); }
-pre[lang=gt], input[lang=gt], textarea[lang=gt] { background-image: url(static('pretixbase/img/flags/gt.png')); }
-pre[lang=gu], input[lang=gu], textarea[lang=gu] { background-image: url(static('pretixbase/img/flags/gu.png')); }
-pre[lang=gw], input[lang=gw], textarea[lang=gw] { background-image: url(static('pretixbase/img/flags/gw.png')); }
-pre[lang=gy], input[lang=gy], textarea[lang=gy] { background-image: url(static('pretixbase/img/flags/gy.png')); }
-pre[lang=hk], input[lang=hk], textarea[lang=hk] { background-image: url(static('pretixbase/img/flags/hk.png')); }
-pre[lang=hm], input[lang=hm], textarea[lang=hm] { background-image: url(static('pretixbase/img/flags/hm.png')); }
-pre[lang=hn], input[lang=hn], textarea[lang=hn] { background-image: url(static('pretixbase/img/flags/hn.png')); }
-pre[lang=hr], input[lang=hr], textarea[lang=hr] { background-image: url(static('pretixbase/img/flags/hr.png')); }
-pre[lang=ht], input[lang=ht], textarea[lang=ht] { background-image: url(static('pretixbase/img/flags/ht.png')); }
-pre[lang=hu], input[lang=hu], textarea[lang=hu] { background-image: url(static('pretixbase/img/flags/hu.png')); }
-pre[lang=id], input[lang=id], textarea[lang=id] { background-image: url(static('pretixbase/img/flags/id.png')); }
-pre[lang=ie], input[lang=ie], textarea[lang=ie] { background-image: url(static('pretixbase/img/flags/ie.png')); }
-pre[lang=il], input[lang=il], textarea[lang=il] { background-image: url(static('pretixbase/img/flags/il.png')); }
-pre[lang=in], input[lang=in], textarea[lang=in] { background-image: url(static('pretixbase/img/flags/in.png')); }
-pre[lang=io], input[lang=io], textarea[lang=io] { background-image: url(static('pretixbase/img/flags/io.png')); }
-pre[lang=iq], input[lang=iq], textarea[lang=iq] { background-image: url(static('pretixbase/img/flags/iq.png')); }
-pre[lang=ir], input[lang=ir], textarea[lang=ir] { background-image: url(static('pretixbase/img/flags/ir.png')); }
-pre[lang=is], input[lang=is], textarea[lang=is] { background-image: url(static('pretixbase/img/flags/is.png')); }
-pre[lang=it], input[lang=it], textarea[lang=it] { background-image: url(static('pretixbase/img/flags/it.png')); }
-pre[lang=jm], input[lang=jm], textarea[lang=jm] { background-image: url(static('pretixbase/img/flags/jm.png')); }
-pre[lang=jo], input[lang=jo], textarea[lang=jo] { background-image: url(static('pretixbase/img/flags/jo.png')); }
-pre[lang=jp], input[lang=jp], textarea[lang=jp] { background-image: url(static('pretixbase/img/flags/jp.png')); }
-pre[lang=ke], input[lang=ke], textarea[lang=ke] { background-image: url(static('pretixbase/img/flags/ke.png')); }
-pre[lang=kg], input[lang=kg], textarea[lang=kg] { background-image: url(static('pretixbase/img/flags/kg.png')); }
-pre[lang=kh], input[lang=kh], textarea[lang=kh] { background-image: url(static('pretixbase/img/flags/kh.png')); }
-pre[lang=ki], input[lang=ki], textarea[lang=ki] { background-image: url(static('pretixbase/img/flags/ki.png')); }
-pre[lang=km], input[lang=km], textarea[lang=km] { background-image: url(static('pretixbase/img/flags/km.png')); }
-pre[lang=kn], input[lang=kn], textarea[lang=kn] { background-image: url(static('pretixbase/img/flags/kn.png')); }
-pre[lang=kp], input[lang=kp], textarea[lang=kp] { background-image: url(static('pretixbase/img/flags/kp.png')); }
-pre[lang=kr], input[lang=kr], textarea[lang=kr] { background-image: url(static('pretixbase/img/flags/kr.png')); }
-pre[lang=kw], input[lang=kw], textarea[lang=kw] { background-image: url(static('pretixbase/img/flags/kw.png')); }
-pre[lang=ky], input[lang=ky], textarea[lang=ky] { background-image: url(static('pretixbase/img/flags/ky.png')); }
-pre[lang=kz], input[lang=kz], textarea[lang=kz] { background-image: url(static('pretixbase/img/flags/kz.png')); }
-pre[lang=la], input[lang=la], textarea[lang=la] { background-image: url(static('pretixbase/img/flags/la.png')); }
-pre[lang=lb], input[lang=lb], textarea[lang=lb] { background-image: url(static('pretixbase/img/flags/lb.png')); }
-pre[lang=lc], input[lang=lc], textarea[lang=lc] { background-image: url(static('pretixbase/img/flags/lc.png')); }
-pre[lang=li], input[lang=li], textarea[lang=li] { background-image: url(static('pretixbase/img/flags/li.png')); }
-pre[lang=lk], input[lang=lk], textarea[lang=lk] { background-image: url(static('pretixbase/img/flags/lk.png')); }
-pre[lang=lr], input[lang=lr], textarea[lang=lr] { background-image: url(static('pretixbase/img/flags/lr.png')); }
-pre[lang=ls], input[lang=ls], textarea[lang=ls] { background-image: url(static('pretixbase/img/flags/ls.png')); }
-pre[lang=lt], input[lang=lt], textarea[lang=lt] { background-image: url(static('pretixbase/img/flags/lt.png')); }
-pre[lang=lu], input[lang=lu], textarea[lang=lu] { background-image: url(static('pretixbase/img/flags/lu.png')); }
-pre[lang=lv], input[lang=lv], textarea[lang=lv] { background-image: url(static('pretixbase/img/flags/lv.png')); }
-pre[lang=ly], input[lang=ly], textarea[lang=ly] { background-image: url(static('pretixbase/img/flags/ly.png')); }
-pre[lang=ma], input[lang=ma], textarea[lang=ma] { background-image: url(static('pretixbase/img/flags/ma.png')); }
-pre[lang=mc], input[lang=mc], textarea[lang=mc] { background-image: url(static('pretixbase/img/flags/mc.png')); }
-pre[lang=md], input[lang=md], textarea[lang=md] { background-image: url(static('pretixbase/img/flags/md.png')); }
-pre[lang=me], input[lang=me], textarea[lang=me] { background-image: url(static('pretixbase/img/flags/me.png')); }
-pre[lang=mg], input[lang=mg], textarea[lang=mg] { background-image: url(static('pretixbase/img/flags/mg.png')); }
-pre[lang=mh], input[lang=mh], textarea[lang=mh] { background-image: url(static('pretixbase/img/flags/mh.png')); }
-pre[lang=mk], input[lang=mk], textarea[lang=mk] { background-image: url(static('pretixbase/img/flags/mk.png')); }
-pre[lang=ml], input[lang=ml], textarea[lang=ml] { background-image: url(static('pretixbase/img/flags/ml.png')); }
-pre[lang=mm], input[lang=mm], textarea[lang=mm] { background-image: url(static('pretixbase/img/flags/mm.png')); }
-pre[lang=mn], input[lang=mn], textarea[lang=mn] { background-image: url(static('pretixbase/img/flags/mn.png')); }
-pre[lang=mo], input[lang=mo], textarea[lang=mo] { background-image: url(static('pretixbase/img/flags/mo.png')); }
-pre[lang=mp], input[lang=mp], textarea[lang=mp] { background-image: url(static('pretixbase/img/flags/mp.png')); }
-pre[lang=mq], input[lang=mq], textarea[lang=mq] { background-image: url(static('pretixbase/img/flags/mq.png')); }
-pre[lang=mr], input[lang=mr], textarea[lang=mr] { background-image: url(static('pretixbase/img/flags/mr.png')); }
-pre[lang=ms], input[lang=ms], textarea[lang=ms] { background-image: url(static('pretixbase/img/flags/ms.png')); }
-pre[lang=mt], input[lang=mt], textarea[lang=mt] { background-image: url(static('pretixbase/img/flags/mt.png')); }
-pre[lang=mu], input[lang=mu], textarea[lang=mu] { background-image: url(static('pretixbase/img/flags/mu.png')); }
-pre[lang=mv], input[lang=mv], textarea[lang=mv] { background-image: url(static('pretixbase/img/flags/mv.png')); }
-pre[lang=mw], input[lang=mw], textarea[lang=mw] { background-image: url(static('pretixbase/img/flags/mw.png')); }
-pre[lang=mx], input[lang=mx], textarea[lang=mx] { background-image: url(static('pretixbase/img/flags/mx.png')); }
-pre[lang=my], input[lang=my], textarea[lang=my] { background-image: url(static('pretixbase/img/flags/my.png')); }
-pre[lang=mz], input[lang=mz], textarea[lang=mz] { background-image: url(static('pretixbase/img/flags/mz.png')); }
-pre[lang=na], input[lang=na], textarea[lang=na] { background-image: url(static('pretixbase/img/flags/na.png')); }
-pre[lang=nc], input[lang=nc], textarea[lang=nc] { background-image: url(static('pretixbase/img/flags/nc.png')); }
-pre[lang=ne], input[lang=ne], textarea[lang=ne] { background-image: url(static('pretixbase/img/flags/ne.png')); }
-pre[lang=nf], input[lang=nf], textarea[lang=nf] { background-image: url(static('pretixbase/img/flags/nf.png')); }
-pre[lang=ng], input[lang=ng], textarea[lang=ng] { background-image: url(static('pretixbase/img/flags/ng.png')); }
-pre[lang=ni], input[lang=ni], textarea[lang=ni] { background-image: url(static('pretixbase/img/flags/ni.png')); }
-pre[lang=nl], input[lang=nl], textarea[lang=nl] { background-image: url(static('pretixbase/img/flags/nl.png')); }
-pre[lang=nl-informal], input[lang=nl-informal], textarea[lang=nl-informal] { background-image: url(static('pretixbase/img/flags/nl.png')); }
-pre[lang=no], input[lang=no], textarea[lang=no] { background-image: url(static('pretixbase/img/flags/no.png')); }
-pre[lang=np], input[lang=np], textarea[lang=np] { background-image: url(static('pretixbase/img/flags/np.png')); }
-pre[lang=nr], input[lang=nr], textarea[lang=nr] { background-image: url(static('pretixbase/img/flags/nr.png')); }
-pre[lang=nu], input[lang=nu], textarea[lang=nu] { background-image: url(static('pretixbase/img/flags/nu.png')); }
-pre[lang=nz], input[lang=nz], textarea[lang=nz] { background-image: url(static('pretixbase/img/flags/nz.png')); }
-pre[lang=om], input[lang=om], textarea[lang=om] { background-image: url(static('pretixbase/img/flags/om.png')); }
-pre[lang=pa], input[lang=pa], textarea[lang=pa] { background-image: url(static('pretixbase/img/flags/pa.png')); }
-pre[lang=pe], input[lang=pe], textarea[lang=pe] { background-image: url(static('pretixbase/img/flags/pe.png')); }
-pre[lang=pf], input[lang=pf], textarea[lang=pf] { background-image: url(static('pretixbase/img/flags/pf.png')); }
-pre[lang=pg], input[lang=pg], textarea[lang=pg] { background-image: url(static('pretixbase/img/flags/pg.png')); }
-pre[lang=ph], input[lang=ph], textarea[lang=ph] { background-image: url(static('pretixbase/img/flags/ph.png')); }
-pre[lang=pk], input[lang=pk], textarea[lang=pk] { background-image: url(static('pretixbase/img/flags/pk.png')); }
-pre[lang=pl], input[lang=pl], textarea[lang=pl] { background-image: url(static('pretixbase/img/flags/pl.png')); }
-pre[lang=pm], input[lang=pm], textarea[lang=pm] { background-image: url(static('pretixbase/img/flags/pm.png')); }
-pre[lang=pn], input[lang=pn], textarea[lang=pn] { background-image: url(static('pretixbase/img/flags/pn.png')); }
-pre[lang=pr], input[lang=pr], textarea[lang=pr] { background-image: url(static('pretixbase/img/flags/pr.png')); }
-pre[lang=ps], input[lang=ps], textarea[lang=ps] { background-image: url(static('pretixbase/img/flags/ps.png')); }
-pre[lang=pt], input[lang=pt], textarea[lang=pt] { background-image: url(static('pretixbase/img/flags/pt.png')); }
-pre[lang=pw], input[lang=pw], textarea[lang=pw] { background-image: url(static('pretixbase/img/flags/pw.png')); }
-pre[lang=py], input[lang=py], textarea[lang=py] { background-image: url(static('pretixbase/img/flags/py.png')); }
-pre[lang=qa], input[lang=qa], textarea[lang=qa] { background-image: url(static('pretixbase/img/flags/qa.png')); }
-pre[lang=re], input[lang=re], textarea[lang=re] { background-image: url(static('pretixbase/img/flags/re.png')); }
-pre[lang=ro], input[lang=ro], textarea[lang=ro] { background-image: url(static('pretixbase/img/flags/ro.png')); }
-pre[lang=rs], input[lang=rs], textarea[lang=rs] { background-image: url(static('pretixbase/img/flags/rs.png')); }
-pre[lang=ru], input[lang=ru], textarea[lang=ru] { background-image: url(static('pretixbase/img/flags/ru.png')); }
-pre[lang=rw], input[lang=rw], textarea[lang=rw] { background-image: url(static('pretixbase/img/flags/rw.png')); }
-pre[lang=sa], input[lang=sa], textarea[lang=sa] { background-image: url(static('pretixbase/img/flags/sa.png')); }
-pre[lang=sb], input[lang=sb], textarea[lang=sb] { background-image: url(static('pretixbase/img/flags/sb.png')); }
-pre[lang=sc], input[lang=sc], textarea[lang=sc] { background-image: url(static('pretixbase/img/flags/sc.png')); }
-pre[lang=sd], input[lang=sd], textarea[lang=sd] { background-image: url(static('pretixbase/img/flags/sd.png')); }
-pre[lang=se], input[lang=se], textarea[lang=se] { background-image: url(static('pretixbase/img/flags/se.png')); }
-pre[lang=sg], input[lang=sg], textarea[lang=sg] { background-image: url(static('pretixbase/img/flags/sg.png')); }
-pre[lang=sh], input[lang=sh], textarea[lang=sh] { background-image: url(static('pretixbase/img/flags/sh.png')); }
-pre[lang=si], input[lang=si], textarea[lang=si] { background-image: url(static('pretixbase/img/flags/si.png')); }
-pre[lang=sj], input[lang=sj], textarea[lang=sj] { background-image: url(static('pretixbase/img/flags/sj.png')); }
-pre[lang=sk], input[lang=sk], textarea[lang=sk] { background-image: url(static('pretixbase/img/flags/sk.png')); }
-pre[lang=sl], input[lang=sl], textarea[lang=sl] { background-image: url(static('pretixbase/img/flags/sl.png')); }
-pre[lang=sm], input[lang=sm], textarea[lang=sm] { background-image: url(static('pretixbase/img/flags/sm.png')); }
-pre[lang=sn], input[lang=sn], textarea[lang=sn] { background-image: url(static('pretixbase/img/flags/sn.png')); }
-pre[lang=so], input[lang=so], textarea[lang=so] { background-image: url(static('pretixbase/img/flags/so.png')); }
-pre[lang=sr], input[lang=sr], textarea[lang=sr] { background-image: url(static('pretixbase/img/flags/sr.png')); }
-pre[lang=st], input[lang=st], textarea[lang=st] { background-image: url(static('pretixbase/img/flags/st.png')); }
-pre[lang=sv], input[lang=sv], textarea[lang=sv] { background-image: url(static('pretixbase/img/flags/sv.png')); }
-pre[lang=sy], input[lang=sy], textarea[lang=sy] { background-image: url(static('pretixbase/img/flags/sy.png')); }
-pre[lang=sz], input[lang=sz], textarea[lang=sz] { background-image: url(static('pretixbase/img/flags/sz.png')); }
-pre[lang=tc], input[lang=tc], textarea[lang=tc] { background-image: url(static('pretixbase/img/flags/tc.png')); }
-pre[lang=td], input[lang=td], textarea[lang=td] { background-image: url(static('pretixbase/img/flags/td.png')); }
-pre[lang=tf], input[lang=tf], textarea[lang=tf] { background-image: url(static('pretixbase/img/flags/tf.png')); }
-pre[lang=tg], input[lang=tg], textarea[lang=tg] { background-image: url(static('pretixbase/img/flags/tg.png')); }
-pre[lang=th], input[lang=th], textarea[lang=th] { background-image: url(static('pretixbase/img/flags/th.png')); }
-pre[lang=tj], input[lang=tj], textarea[lang=tj] { background-image: url(static('pretixbase/img/flags/tj.png')); }
-pre[lang=tk], input[lang=tk], textarea[lang=tk] { background-image: url(static('pretixbase/img/flags/tk.png')); }
-pre[lang=tl], input[lang=tl], textarea[lang=tl] { background-image: url(static('pretixbase/img/flags/tl.png')); }
-pre[lang=tm], input[lang=tm], textarea[lang=tm] { background-image: url(static('pretixbase/img/flags/tm.png')); }
-pre[lang=tn], input[lang=tn], textarea[lang=tn] { background-image: url(static('pretixbase/img/flags/tn.png')); }
-pre[lang=to], input[lang=to], textarea[lang=to] { background-image: url(static('pretixbase/img/flags/to.png')); }
-pre[lang=tr], input[lang=tr], textarea[lang=tr] { background-image: url(static('pretixbase/img/flags/tr.png')); }
-pre[lang=tt], input[lang=tt], textarea[lang=tt] { background-image: url(static('pretixbase/img/flags/tt.png')); }
-pre[lang=tv], input[lang=tv], textarea[lang=tv] { background-image: url(static('pretixbase/img/flags/tv.png')); }
-pre[lang=tw], input[lang=tw], textarea[lang=tw] { background-image: url(static('pretixbase/img/flags/tw.png')); }
-pre[lang=tz], input[lang=tz], textarea[lang=tz] { background-image: url(static('pretixbase/img/flags/tz.png')); }
-pre[lang=ua], input[lang=ua], textarea[lang=ua] { background-image: url(static('pretixbase/img/flags/ua.png')); }
-pre[lang=ug], input[lang=ug], textarea[lang=ug] { background-image: url(static('pretixbase/img/flags/ug.png')); }
-pre[lang=um], input[lang=um], textarea[lang=um] { background-image: url(static('pretixbase/img/flags/um.png')); }
-pre[lang=us], input[lang=us], textarea[lang=us] { background-image: url(static('pretixbase/img/flags/us.png')); }
-pre[lang=uy], input[lang=uy], textarea[lang=uy] { background-image: url(static('pretixbase/img/flags/uy.png')); }
-pre[lang=uz], input[lang=uz], textarea[lang=uz] { background-image: url(static('pretixbase/img/flags/uz.png')); }
-pre[lang=va], input[lang=va], textarea[lang=va] { background-image: url(static('pretixbase/img/flags/va.png')); }
-pre[lang=vc], input[lang=vc], textarea[lang=vc] { background-image: url(static('pretixbase/img/flags/vc.png')); }
-pre[lang=ve], input[lang=ve], textarea[lang=ve] { background-image: url(static('pretixbase/img/flags/ve.png')); }
-pre[lang=vg], input[lang=vg], textarea[lang=vg] { background-image: url(static('pretixbase/img/flags/vg.png')); }
-pre[lang=vi], input[lang=vi], textarea[lang=vi] { background-image: url(static('pretixbase/img/flags/vi.png')); }
-pre[lang=vn], input[lang=vn], textarea[lang=vn] { background-image: url(static('pretixbase/img/flags/vn.png')); }
-pre[lang=vu], input[lang=vu], textarea[lang=vu] { background-image: url(static('pretixbase/img/flags/vu.png')); }
-pre[lang=wf], input[lang=wf], textarea[lang=wf] { background-image: url(static('pretixbase/img/flags/wf.png')); }
-pre[lang=ws], input[lang=ws], textarea[lang=ws] { background-image: url(static('pretixbase/img/flags/ws.png')); }
-pre[lang=ye], input[lang=ye], textarea[lang=ye] { background-image: url(static('pretixbase/img/flags/ye.png')); }
-pre[lang=yt], input[lang=yt], textarea[lang=yt] { background-image: url(static('pretixbase/img/flags/yt.png')); }
-pre[lang=za], input[lang=za], textarea[lang=za] { background-image: url(static('pretixbase/img/flags/za.png')); }
-pre[lang=zm], input[lang=zm], textarea[lang=zm] { background-image: url(static('pretixbase/img/flags/zm.png')); }
-pre[lang=zw], input[lang=zw], textarea[lang=zw] { background-image: url(static('pretixbase/img/flags/zw.png')); }
-pre[lang=en], input[lang=en], textarea[lang=en] { background-image: url(static('pretixbase/img/flags/gb.png')); }
+pre[lang=ad], input[lang=ad], textarea[lang=ad], div[lang=ad] { background-image: url(static('pretixbase/img/flags/ad.png')); }
+pre[lang=ae], input[lang=ae], textarea[lang=ae], div[lang=ae] { background-image: url(static('pretixbase/img/flags/ae.png')); }
+pre[lang=af], input[lang=af], textarea[lang=af], div[lang=af] { background-image: url(static('pretixbase/img/flags/af.png')); }
+pre[lang=ag], input[lang=ag], textarea[lang=ag], div[lang=ag] { background-image: url(static('pretixbase/img/flags/ag.png')); }
+pre[lang=ai], input[lang=ai], textarea[lang=ai], div[lang=ai] { background-image: url(static('pretixbase/img/flags/ai.png')); }
+pre[lang=al], input[lang=al], textarea[lang=al], div[lang=al] { background-image: url(static('pretixbase/img/flags/al.png')); }
+pre[lang=am], input[lang=am], textarea[lang=am], div[lang=am] { background-image: url(static('pretixbase/img/flags/am.png')); }
+pre[lang=an], input[lang=an], textarea[lang=an], div[lang=an] { background-image: url(static('pretixbase/img/flags/an.png')); }
+pre[lang=ao], input[lang=ao], textarea[lang=ao], div[lang=ao] { background-image: url(static('pretixbase/img/flags/ao.png')); }
+pre[lang=ar], input[lang=ar], textarea[lang=ar], div[lang=ar] { background-image: url(static('pretixbase/img/flags/ar.png')); }
+pre[lang=as], input[lang=as], textarea[lang=as], div[lang=as] { background-image: url(static('pretixbase/img/flags/as.png')); }
+pre[lang=at], input[lang=at], textarea[lang=at], div[lang=at] { background-image: url(static('pretixbase/img/flags/at.png')); }
+pre[lang=au], input[lang=au], textarea[lang=au], div[lang=au] { background-image: url(static('pretixbase/img/flags/au.png')); }
+pre[lang=aw], input[lang=aw], textarea[lang=aw], div[lang=aw] { background-image: url(static('pretixbase/img/flags/aw.png')); }
+pre[lang=ax], input[lang=ax], textarea[lang=ax], div[lang=ax] { background-image: url(static('pretixbase/img/flags/ax.png')); }
+pre[lang=az], input[lang=az], textarea[lang=az], div[lang=az] { background-image: url(static('pretixbase/img/flags/az.png')); }
+pre[lang=ba], input[lang=ba], textarea[lang=ba], div[lang=ba] { background-image: url(static('pretixbase/img/flags/ba.png')); }
+pre[lang=bb], input[lang=bb], textarea[lang=bb], div[lang=bb] { background-image: url(static('pretixbase/img/flags/bb.png')); }
+pre[lang=bd], input[lang=bd], textarea[lang=bd], div[lang=bd] { background-image: url(static('pretixbase/img/flags/bd.png')); }
+pre[lang=be], input[lang=be], textarea[lang=be], div[lang=be] { background-image: url(static('pretixbase/img/flags/be.png')); }
+pre[lang=bf], input[lang=bf], textarea[lang=bf], div[lang=bf] { background-image: url(static('pretixbase/img/flags/bf.png')); }
+pre[lang=bg], input[lang=bg], textarea[lang=bg], div[lang=bg] { background-image: url(static('pretixbase/img/flags/bg.png')); }
+pre[lang=bh], input[lang=bh], textarea[lang=bh], div[lang=bh] { background-image: url(static('pretixbase/img/flags/bh.png')); }
+pre[lang=bi], input[lang=bi], textarea[lang=bi], div[lang=bi] { background-image: url(static('pretixbase/img/flags/bi.png')); }
+pre[lang=bj], input[lang=bj], textarea[lang=bj], div[lang=bj] { background-image: url(static('pretixbase/img/flags/bj.png')); }
+pre[lang=bm], input[lang=bm], textarea[lang=bm], div[lang=bm] { background-image: url(static('pretixbase/img/flags/bm.png')); }
+pre[lang=bn], input[lang=bn], textarea[lang=bn], div[lang=bn] { background-image: url(static('pretixbase/img/flags/bn.png')); }
+pre[lang=bo], input[lang=bo], textarea[lang=bo], div[lang=bo] { background-image: url(static('pretixbase/img/flags/bo.png')); }
+pre[lang=br], input[lang=br], textarea[lang=br], div[lang=br] { background-image: url(static('pretixbase/img/flags/br.png')); }
+pre[lang=pt-br], input[lang=pt-br], textarea[lang=pt-br], div[lang=pt-br] { background-image: url(static('pretixbase/img/flags/br.png')); }
+pre[lang=bs], input[lang=bs], textarea[lang=bs], div[lang=bs] { background-image: url(static('pretixbase/img/flags/bs.png')); }
+pre[lang=bt], input[lang=bt], textarea[lang=bt], div[lang=bt] { background-image: url(static('pretixbase/img/flags/bt.png')); }
+pre[lang=bv], input[lang=bv], textarea[lang=bv], div[lang=bv] { background-image: url(static('pretixbase/img/flags/bv.png')); }
+pre[lang=bw], input[lang=bw], textarea[lang=bw], div[lang=bw] { background-image: url(static('pretixbase/img/flags/bw.png')); }
+pre[lang=by], input[lang=by], textarea[lang=by], div[lang=by] { background-image: url(static('pretixbase/img/flags/by.png')); }
+pre[lang=bz], input[lang=bz], textarea[lang=bz], div[lang=bz] { background-image: url(static('pretixbase/img/flags/bz.png')); }
+pre[lang=ca], input[lang=ca], textarea[lang=ca], div[lang=ca] { background-image: url(static('pretixbase/img/flags/ca.png')); }
+pre[lang=cc], input[lang=cc], textarea[lang=cc], div[lang=cc] { background-image: url(static('pretixbase/img/flags/cc.png')); }
+pre[lang=cd], input[lang=cd], textarea[lang=cd], div[lang=cd] { background-image: url(static('pretixbase/img/flags/cd.png')); }
+pre[lang=cf], input[lang=cf], textarea[lang=cf], div[lang=cf] { background-image: url(static('pretixbase/img/flags/cf.png')); }
+pre[lang=cg], input[lang=cg], textarea[lang=cg], div[lang=cg] { background-image: url(static('pretixbase/img/flags/cg.png')); }
+pre[lang=ch], input[lang=ch], textarea[lang=ch], div[lang=ch] { background-image: url(static('pretixbase/img/flags/ch.png')); }
+pre[lang=ci], input[lang=ci], textarea[lang=ci], div[lang=ci] { background-image: url(static('pretixbase/img/flags/ci.png')); }
+pre[lang=ck], input[lang=ck], textarea[lang=ck], div[lang=ck] { background-image: url(static('pretixbase/img/flags/ck.png')); }
+pre[lang=cl], input[lang=cl], textarea[lang=cl], div[lang=cl] { background-image: url(static('pretixbase/img/flags/cl.png')); }
+pre[lang=cm], input[lang=cm], textarea[lang=cm], div[lang=cm] { background-image: url(static('pretixbase/img/flags/cm.png')); }
+pre[lang=cn], input[lang=cn], textarea[lang=cn], div[lang=cn] { background-image: url(static('pretixbase/img/flags/cn.png')); }
+pre[lang=co], input[lang=co], textarea[lang=co], div[lang=co] { background-image: url(static('pretixbase/img/flags/co.png')); }
+pre[lang=cr], input[lang=cr], textarea[lang=cr], div[lang=cr] { background-image: url(static('pretixbase/img/flags/cr.png')); }
+pre[lang=cs], input[lang=cs], textarea[lang=cs], div[lang=cs] { background-image: url(static('pretixbase/img/flags/cs.png')); }
+pre[lang=cu], input[lang=cu], textarea[lang=cu], div[lang=cu] { background-image: url(static('pretixbase/img/flags/cu.png')); }
+pre[lang=cv], input[lang=cv], textarea[lang=cv], div[lang=cv] { background-image: url(static('pretixbase/img/flags/cv.png')); }
+pre[lang=cx], input[lang=cx], textarea[lang=cx], div[lang=cx] { background-image: url(static('pretixbase/img/flags/cx.png')); }
+pre[lang=cy], input[lang=cy], textarea[lang=cy], div[lang=cy] { background-image: url(static('pretixbase/img/flags/cy.png')); }
+pre[lang=cz], input[lang=cz], textarea[lang=cz], div[lang=cz] { background-image: url(static('pretixbase/img/flags/cz.png')); }
+pre[lang=de], input[lang=de], textarea[lang=de], div[lang=de] { background-image: url(static('pretixbase/img/flags/de.png')); }
+pre[lang=de-informal], input[lang=de-informal], textarea[lang=de-informal], div[lang=de-informal] { background-image: url(static('pretixbase/img/flags/de-informal.png')); }
+pre[lang=dj], input[lang=dj], textarea[lang=dj], div[lang=dj] { background-image: url(static('pretixbase/img/flags/dj.png')); }
+pre[lang=da], input[lang=da], textarea[lang=da], div[lang=da] { background-image: url(static('pretixbase/img/flags/dk.png')); }
+pre[lang=dk], input[lang=dk], textarea[lang=dk], div[lang=dk] { background-image: url(static('pretixbase/img/flags/dk.png')); }
+pre[lang=dm], input[lang=dm], textarea[lang=dm], div[lang=dm] { background-image: url(static('pretixbase/img/flags/dm.png')); }
+pre[lang=do], input[lang=do], textarea[lang=do], div[lang=do] { background-image: url(static('pretixbase/img/flags/do.png')); }
+pre[lang=dz], input[lang=dz], textarea[lang=dz], div[lang=dz] { background-image: url(static('pretixbase/img/flags/dz.png')); }
+pre[lang=ec], input[lang=ec], textarea[lang=ec], div[lang=ec] { background-image: url(static('pretixbase/img/flags/ec.png')); }
+pre[lang=ee], input[lang=ee], textarea[lang=ee], div[lang=ee] { background-image: url(static('pretixbase/img/flags/ee.png')); }
+pre[lang=eg], input[lang=eg], textarea[lang=eg], div[lang=eg] { background-image: url(static('pretixbase/img/flags/eg.png')); }
+pre[lang=eh], input[lang=eh], textarea[lang=eh], div[lang=eh] { background-image: url(static('pretixbase/img/flags/eh.png')); }
+pre[lang=er], input[lang=er], textarea[lang=er], div[lang=er] { background-image: url(static('pretixbase/img/flags/er.png')); }
+pre[lang=es], input[lang=es], textarea[lang=es], div[lang=es] { background-image: url(static('pretixbase/img/flags/es.png')); }
+pre[lang=et], input[lang=et], textarea[lang=et], div[lang=et] { background-image: url(static('pretixbase/img/flags/et.png')); }
+pre[lang=fi], input[lang=fi], textarea[lang=fi], div[lang=fi] { background-image: url(static('pretixbase/img/flags/fi.png')); }
+pre[lang=fj], input[lang=fj], textarea[lang=fj], div[lang=fj] { background-image: url(static('pretixbase/img/flags/fj.png')); }
+pre[lang=fk], input[lang=fk], textarea[lang=fk], div[lang=fk] { background-image: url(static('pretixbase/img/flags/fk.png')); }
+pre[lang=fm], input[lang=fm], textarea[lang=fm], div[lang=fm] { background-image: url(static('pretixbase/img/flags/fm.png')); }
+pre[lang=fo], input[lang=fo], textarea[lang=fo], div[lang=fo] { background-image: url(static('pretixbase/img/flags/fo.png')); }
+pre[lang=fr], input[lang=fr], textarea[lang=fr], div[lang=fr] { background-image: url(static('pretixbase/img/flags/fr.png')); }
+pre[lang=ga], input[lang=ga], textarea[lang=ga], div[lang=ga] { background-image: url(static('pretixbase/img/flags/ga.png')); }
+pre[lang=gb], input[lang=gb], textarea[lang=gb], div[lang=gb] { background-image: url(static('pretixbase/img/flags/gb.png')); }
+pre[lang=gd], input[lang=gd], textarea[lang=gd], div[lang=gd] { background-image: url(static('pretixbase/img/flags/gd.png')); }
+pre[lang=ge], input[lang=ge], textarea[lang=ge], div[lang=ge] { background-image: url(static('pretixbase/img/flags/ge.png')); }
+pre[lang=gf], input[lang=gf], textarea[lang=gf], div[lang=gf] { background-image: url(static('pretixbase/img/flags/gf.png')); }
+pre[lang=gh], input[lang=gh], textarea[lang=gh], div[lang=gh] { background-image: url(static('pretixbase/img/flags/gh.png')); }
+pre[lang=gi], input[lang=gi], textarea[lang=gi], div[lang=gi] { background-image: url(static('pretixbase/img/flags/gi.png')); }
+pre[lang=gl], input[lang=gl], textarea[lang=gl], div[lang=gl] { background-image: url(static('pretixbase/img/flags/gl.png')); }
+pre[lang=gm], input[lang=gm], textarea[lang=gm], div[lang=gm] { background-image: url(static('pretixbase/img/flags/gm.png')); }
+pre[lang=gn], input[lang=gn], textarea[lang=gn], div[lang=gn] { background-image: url(static('pretixbase/img/flags/gn.png')); }
+pre[lang=gp], input[lang=gp], textarea[lang=gp], div[lang=gp] { background-image: url(static('pretixbase/img/flags/gp.png')); }
+pre[lang=gq], input[lang=gq], textarea[lang=gq], div[lang=gq] { background-image: url(static('pretixbase/img/flags/gq.png')); }
+pre[lang=gr], input[lang=gr], textarea[lang=gr], div[lang=gr] { background-image: url(static('pretixbase/img/flags/gr.png')); }
+pre[lang=gs], input[lang=gs], textarea[lang=gs], div[lang=gs] { background-image: url(static('pretixbase/img/flags/gs.png')); }
+pre[lang=gt], input[lang=gt], textarea[lang=gt], div[lang=gt] { background-image: url(static('pretixbase/img/flags/gt.png')); }
+pre[lang=gu], input[lang=gu], textarea[lang=gu], div[lang=gu] { background-image: url(static('pretixbase/img/flags/gu.png')); }
+pre[lang=gw], input[lang=gw], textarea[lang=gw], div[lang=gw] { background-image: url(static('pretixbase/img/flags/gw.png')); }
+pre[lang=gy], input[lang=gy], textarea[lang=gy], div[lang=gy] { background-image: url(static('pretixbase/img/flags/gy.png')); }
+pre[lang=hk], input[lang=hk], textarea[lang=hk], div[lang=hk] { background-image: url(static('pretixbase/img/flags/hk.png')); }
+pre[lang=hm], input[lang=hm], textarea[lang=hm], div[lang=hm] { background-image: url(static('pretixbase/img/flags/hm.png')); }
+pre[lang=hn], input[lang=hn], textarea[lang=hn], div[lang=hn] { background-image: url(static('pretixbase/img/flags/hn.png')); }
+pre[lang=hr], input[lang=hr], textarea[lang=hr], div[lang=hr] { background-image: url(static('pretixbase/img/flags/hr.png')); }
+pre[lang=ht], input[lang=ht], textarea[lang=ht], div[lang=ht] { background-image: url(static('pretixbase/img/flags/ht.png')); }
+pre[lang=hu], input[lang=hu], textarea[lang=hu], div[lang=hu] { background-image: url(static('pretixbase/img/flags/hu.png')); }
+pre[lang=id], input[lang=id], textarea[lang=id], div[lang=id] { background-image: url(static('pretixbase/img/flags/id.png')); }
+pre[lang=ie], input[lang=ie], textarea[lang=ie], div[lang=ie] { background-image: url(static('pretixbase/img/flags/ie.png')); }
+pre[lang=il], input[lang=il], textarea[lang=il], div[lang=il] { background-image: url(static('pretixbase/img/flags/il.png')); }
+pre[lang=in], input[lang=in], textarea[lang=in], div[lang=in] { background-image: url(static('pretixbase/img/flags/in.png')); }
+pre[lang=io], input[lang=io], textarea[lang=io], div[lang=io] { background-image: url(static('pretixbase/img/flags/io.png')); }
+pre[lang=iq], input[lang=iq], textarea[lang=iq], div[lang=iq] { background-image: url(static('pretixbase/img/flags/iq.png')); }
+pre[lang=ir], input[lang=ir], textarea[lang=ir], div[lang=ir] { background-image: url(static('pretixbase/img/flags/ir.png')); }
+pre[lang=is], input[lang=is], textarea[lang=is], div[lang=is] { background-image: url(static('pretixbase/img/flags/is.png')); }
+pre[lang=it], input[lang=it], textarea[lang=it], div[lang=it] { background-image: url(static('pretixbase/img/flags/it.png')); }
+pre[lang=jm], input[lang=jm], textarea[lang=jm], div[lang=jm] { background-image: url(static('pretixbase/img/flags/jm.png')); }
+pre[lang=jo], input[lang=jo], textarea[lang=jo], div[lang=jo] { background-image: url(static('pretixbase/img/flags/jo.png')); }
+pre[lang=jp], input[lang=jp], textarea[lang=jp], div[lang=jp] { background-image: url(static('pretixbase/img/flags/jp.png')); }
+pre[lang=ke], input[lang=ke], textarea[lang=ke], div[lang=ke] { background-image: url(static('pretixbase/img/flags/ke.png')); }
+pre[lang=kg], input[lang=kg], textarea[lang=kg], div[lang=kg] { background-image: url(static('pretixbase/img/flags/kg.png')); }
+pre[lang=kh], input[lang=kh], textarea[lang=kh], div[lang=kh] { background-image: url(static('pretixbase/img/flags/kh.png')); }
+pre[lang=ki], input[lang=ki], textarea[lang=ki], div[lang=ki] { background-image: url(static('pretixbase/img/flags/ki.png')); }
+pre[lang=km], input[lang=km], textarea[lang=km], div[lang=km] { background-image: url(static('pretixbase/img/flags/km.png')); }
+pre[lang=kn], input[lang=kn], textarea[lang=kn], div[lang=kn] { background-image: url(static('pretixbase/img/flags/kn.png')); }
+pre[lang=kp], input[lang=kp], textarea[lang=kp], div[lang=kp] { background-image: url(static('pretixbase/img/flags/kp.png')); }
+pre[lang=kr], input[lang=kr], textarea[lang=kr], div[lang=kr] { background-image: url(static('pretixbase/img/flags/kr.png')); }
+pre[lang=kw], input[lang=kw], textarea[lang=kw], div[lang=kw] { background-image: url(static('pretixbase/img/flags/kw.png')); }
+pre[lang=ky], input[lang=ky], textarea[lang=ky], div[lang=ky] { background-image: url(static('pretixbase/img/flags/ky.png')); }
+pre[lang=kz], input[lang=kz], textarea[lang=kz], div[lang=kz] { background-image: url(static('pretixbase/img/flags/kz.png')); }
+pre[lang=la], input[lang=la], textarea[lang=la], div[lang=la] { background-image: url(static('pretixbase/img/flags/la.png')); }
+pre[lang=lb], input[lang=lb], textarea[lang=lb], div[lang=lb] { background-image: url(static('pretixbase/img/flags/lb.png')); }
+pre[lang=lc], input[lang=lc], textarea[lang=lc], div[lang=lc] { background-image: url(static('pretixbase/img/flags/lc.png')); }
+pre[lang=li], input[lang=li], textarea[lang=li], div[lang=li] { background-image: url(static('pretixbase/img/flags/li.png')); }
+pre[lang=lk], input[lang=lk], textarea[lang=lk], div[lang=lk] { background-image: url(static('pretixbase/img/flags/lk.png')); }
+pre[lang=lr], input[lang=lr], textarea[lang=lr], div[lang=lr] { background-image: url(static('pretixbase/img/flags/lr.png')); }
+pre[lang=ls], input[lang=ls], textarea[lang=ls], div[lang=ls] { background-image: url(static('pretixbase/img/flags/ls.png')); }
+pre[lang=lt], input[lang=lt], textarea[lang=lt], div[lang=lt] { background-image: url(static('pretixbase/img/flags/lt.png')); }
+pre[lang=lu], input[lang=lu], textarea[lang=lu], div[lang=lu] { background-image: url(static('pretixbase/img/flags/lu.png')); }
+pre[lang=lv], input[lang=lv], textarea[lang=lv], div[lang=lv] { background-image: url(static('pretixbase/img/flags/lv.png')); }
+pre[lang=ly], input[lang=ly], textarea[lang=ly], div[lang=ly] { background-image: url(static('pretixbase/img/flags/ly.png')); }
+pre[lang=ma], input[lang=ma], textarea[lang=ma], div[lang=ma] { background-image: url(static('pretixbase/img/flags/ma.png')); }
+pre[lang=mc], input[lang=mc], textarea[lang=mc], div[lang=mc] { background-image: url(static('pretixbase/img/flags/mc.png')); }
+pre[lang=md], input[lang=md], textarea[lang=md], div[lang=md] { background-image: url(static('pretixbase/img/flags/md.png')); }
+pre[lang=me], input[lang=me], textarea[lang=me], div[lang=me] { background-image: url(static('pretixbase/img/flags/me.png')); }
+pre[lang=mg], input[lang=mg], textarea[lang=mg], div[lang=mg] { background-image: url(static('pretixbase/img/flags/mg.png')); }
+pre[lang=mh], input[lang=mh], textarea[lang=mh], div[lang=mh] { background-image: url(static('pretixbase/img/flags/mh.png')); }
+pre[lang=mk], input[lang=mk], textarea[lang=mk], div[lang=mk] { background-image: url(static('pretixbase/img/flags/mk.png')); }
+pre[lang=ml], input[lang=ml], textarea[lang=ml], div[lang=ml] { background-image: url(static('pretixbase/img/flags/ml.png')); }
+pre[lang=mm], input[lang=mm], textarea[lang=mm], div[lang=mm] { background-image: url(static('pretixbase/img/flags/mm.png')); }
+pre[lang=mn], input[lang=mn], textarea[lang=mn], div[lang=mn] { background-image: url(static('pretixbase/img/flags/mn.png')); }
+pre[lang=mo], input[lang=mo], textarea[lang=mo], div[lang=mo] { background-image: url(static('pretixbase/img/flags/mo.png')); }
+pre[lang=mp], input[lang=mp], textarea[lang=mp], div[lang=mp] { background-image: url(static('pretixbase/img/flags/mp.png')); }
+pre[lang=mq], input[lang=mq], textarea[lang=mq], div[lang=mq] { background-image: url(static('pretixbase/img/flags/mq.png')); }
+pre[lang=mr], input[lang=mr], textarea[lang=mr], div[lang=mr] { background-image: url(static('pretixbase/img/flags/mr.png')); }
+pre[lang=ms], input[lang=ms], textarea[lang=ms], div[lang=ms] { background-image: url(static('pretixbase/img/flags/ms.png')); }
+pre[lang=mt], input[lang=mt], textarea[lang=mt], div[lang=mt] { background-image: url(static('pretixbase/img/flags/mt.png')); }
+pre[lang=mu], input[lang=mu], textarea[lang=mu], div[lang=mu] { background-image: url(static('pretixbase/img/flags/mu.png')); }
+pre[lang=mv], input[lang=mv], textarea[lang=mv], div[lang=mv] { background-image: url(static('pretixbase/img/flags/mv.png')); }
+pre[lang=mw], input[lang=mw], textarea[lang=mw], div[lang=mw] { background-image: url(static('pretixbase/img/flags/mw.png')); }
+pre[lang=mx], input[lang=mx], textarea[lang=mx], div[lang=mx] { background-image: url(static('pretixbase/img/flags/mx.png')); }
+pre[lang=my], input[lang=my], textarea[lang=my], div[lang=my] { background-image: url(static('pretixbase/img/flags/my.png')); }
+pre[lang=mz], input[lang=mz], textarea[lang=mz], div[lang=mz] { background-image: url(static('pretixbase/img/flags/mz.png')); }
+pre[lang=na], input[lang=na], textarea[lang=na], div[lang=na] { background-image: url(static('pretixbase/img/flags/na.png')); }
+pre[lang=nc], input[lang=nc], textarea[lang=nc], div[lang=nc] { background-image: url(static('pretixbase/img/flags/nc.png')); }
+pre[lang=ne], input[lang=ne], textarea[lang=ne], div[lang=ne] { background-image: url(static('pretixbase/img/flags/ne.png')); }
+pre[lang=nf], input[lang=nf], textarea[lang=nf], div[lang=nf] { background-image: url(static('pretixbase/img/flags/nf.png')); }
+pre[lang=ng], input[lang=ng], textarea[lang=ng], div[lang=ng] { background-image: url(static('pretixbase/img/flags/ng.png')); }
+pre[lang=ni], input[lang=ni], textarea[lang=ni], div[lang=ni] { background-image: url(static('pretixbase/img/flags/ni.png')); }
+pre[lang=nl], input[lang=nl], textarea[lang=nl], div[lang=nl] { background-image: url(static('pretixbase/img/flags/nl.png')); }
+pre[lang=nl-informal], input[lang=nl-informal], textarea[lang=nl-informal], div[lang=nl-informal] { background-image: url(static('pretixbase/img/flags/nl.png')); }
+pre[lang=no], input[lang=no], textarea[lang=no], div[lang=no] { background-image: url(static('pretixbase/img/flags/no.png')); }
+pre[lang=np], input[lang=np], textarea[lang=np], div[lang=np] { background-image: url(static('pretixbase/img/flags/np.png')); }
+pre[lang=nr], input[lang=nr], textarea[lang=nr], div[lang=nr] { background-image: url(static('pretixbase/img/flags/nr.png')); }
+pre[lang=nu], input[lang=nu], textarea[lang=nu], div[lang=nu] { background-image: url(static('pretixbase/img/flags/nu.png')); }
+pre[lang=nz], input[lang=nz], textarea[lang=nz], div[lang=nz] { background-image: url(static('pretixbase/img/flags/nz.png')); }
+pre[lang=om], input[lang=om], textarea[lang=om], div[lang=om] { background-image: url(static('pretixbase/img/flags/om.png')); }
+pre[lang=pa], input[lang=pa], textarea[lang=pa], div[lang=pa] { background-image: url(static('pretixbase/img/flags/pa.png')); }
+pre[lang=pe], input[lang=pe], textarea[lang=pe], div[lang=pe] { background-image: url(static('pretixbase/img/flags/pe.png')); }
+pre[lang=pf], input[lang=pf], textarea[lang=pf], div[lang=pf] { background-image: url(static('pretixbase/img/flags/pf.png')); }
+pre[lang=pg], input[lang=pg], textarea[lang=pg], div[lang=pg] { background-image: url(static('pretixbase/img/flags/pg.png')); }
+pre[lang=ph], input[lang=ph], textarea[lang=ph], div[lang=ph] { background-image: url(static('pretixbase/img/flags/ph.png')); }
+pre[lang=pk], input[lang=pk], textarea[lang=pk], div[lang=pk] { background-image: url(static('pretixbase/img/flags/pk.png')); }
+pre[lang=pl], input[lang=pl], textarea[lang=pl], div[lang=pl] { background-image: url(static('pretixbase/img/flags/pl.png')); }
+pre[lang=pm], input[lang=pm], textarea[lang=pm], div[lang=pm] { background-image: url(static('pretixbase/img/flags/pm.png')); }
+pre[lang=pn], input[lang=pn], textarea[lang=pn], div[lang=pn] { background-image: url(static('pretixbase/img/flags/pn.png')); }
+pre[lang=pr], input[lang=pr], textarea[lang=pr], div[lang=pr] { background-image: url(static('pretixbase/img/flags/pr.png')); }
+pre[lang=ps], input[lang=ps], textarea[lang=ps], div[lang=ps] { background-image: url(static('pretixbase/img/flags/ps.png')); }
+pre[lang=pt], input[lang=pt], textarea[lang=pt], div[lang=pt] { background-image: url(static('pretixbase/img/flags/pt.png')); }
+pre[lang=pw], input[lang=pw], textarea[lang=pw], div[lang=pw] { background-image: url(static('pretixbase/img/flags/pw.png')); }
+pre[lang=py], input[lang=py], textarea[lang=py], div[lang=py] { background-image: url(static('pretixbase/img/flags/py.png')); }
+pre[lang=qa], input[lang=qa], textarea[lang=qa], div[lang=qa] { background-image: url(static('pretixbase/img/flags/qa.png')); }
+pre[lang=re], input[lang=re], textarea[lang=re], div[lang=re] { background-image: url(static('pretixbase/img/flags/re.png')); }
+pre[lang=ro], input[lang=ro], textarea[lang=ro], div[lang=ro] { background-image: url(static('pretixbase/img/flags/ro.png')); }
+pre[lang=rs], input[lang=rs], textarea[lang=rs], div[lang=rs] { background-image: url(static('pretixbase/img/flags/rs.png')); }
+pre[lang=ru], input[lang=ru], textarea[lang=ru], div[lang=ru] { background-image: url(static('pretixbase/img/flags/ru.png')); }
+pre[lang=rw], input[lang=rw], textarea[lang=rw], div[lang=rw] { background-image: url(static('pretixbase/img/flags/rw.png')); }
+pre[lang=sa], input[lang=sa], textarea[lang=sa], div[lang=sa] { background-image: url(static('pretixbase/img/flags/sa.png')); }
+pre[lang=sb], input[lang=sb], textarea[lang=sb], div[lang=sb] { background-image: url(static('pretixbase/img/flags/sb.png')); }
+pre[lang=sc], input[lang=sc], textarea[lang=sc], div[lang=sc] { background-image: url(static('pretixbase/img/flags/sc.png')); }
+pre[lang=sd], input[lang=sd], textarea[lang=sd], div[lang=sd] { background-image: url(static('pretixbase/img/flags/sd.png')); }
+pre[lang=se], input[lang=se], textarea[lang=se], div[lang=se] { background-image: url(static('pretixbase/img/flags/se.png')); }
+pre[lang=sg], input[lang=sg], textarea[lang=sg], div[lang=sg] { background-image: url(static('pretixbase/img/flags/sg.png')); }
+pre[lang=sh], input[lang=sh], textarea[lang=sh], div[lang=sh] { background-image: url(static('pretixbase/img/flags/sh.png')); }
+pre[lang=si], input[lang=si], textarea[lang=si], div[lang=si] { background-image: url(static('pretixbase/img/flags/si.png')); }
+pre[lang=sj], input[lang=sj], textarea[lang=sj], div[lang=sj] { background-image: url(static('pretixbase/img/flags/sj.png')); }
+pre[lang=sk], input[lang=sk], textarea[lang=sk], div[lang=sk] { background-image: url(static('pretixbase/img/flags/sk.png')); }
+pre[lang=sl], input[lang=sl], textarea[lang=sl], div[lang=sl] { background-image: url(static('pretixbase/img/flags/sl.png')); }
+pre[lang=sm], input[lang=sm], textarea[lang=sm], div[lang=sm] { background-image: url(static('pretixbase/img/flags/sm.png')); }
+pre[lang=sn], input[lang=sn], textarea[lang=sn], div[lang=sn] { background-image: url(static('pretixbase/img/flags/sn.png')); }
+pre[lang=so], input[lang=so], textarea[lang=so], div[lang=so] { background-image: url(static('pretixbase/img/flags/so.png')); }
+pre[lang=sr], input[lang=sr], textarea[lang=sr], div[lang=sr] { background-image: url(static('pretixbase/img/flags/sr.png')); }
+pre[lang=st], input[lang=st], textarea[lang=st], div[lang=st] { background-image: url(static('pretixbase/img/flags/st.png')); }
+pre[lang=sv], input[lang=sv], textarea[lang=sv], div[lang=sv] { background-image: url(static('pretixbase/img/flags/sv.png')); }
+pre[lang=sy], input[lang=sy], textarea[lang=sy], div[lang=sy] { background-image: url(static('pretixbase/img/flags/sy.png')); }
+pre[lang=sz], input[lang=sz], textarea[lang=sz], div[lang=sz] { background-image: url(static('pretixbase/img/flags/sz.png')); }
+pre[lang=tc], input[lang=tc], textarea[lang=tc], div[lang=tc] { background-image: url(static('pretixbase/img/flags/tc.png')); }
+pre[lang=td], input[lang=td], textarea[lang=td], div[lang=td] { background-image: url(static('pretixbase/img/flags/td.png')); }
+pre[lang=tf], input[lang=tf], textarea[lang=tf], div[lang=tf] { background-image: url(static('pretixbase/img/flags/tf.png')); }
+pre[lang=tg], input[lang=tg], textarea[lang=tg], div[lang=tg] { background-image: url(static('pretixbase/img/flags/tg.png')); }
+pre[lang=th], input[lang=th], textarea[lang=th], div[lang=th] { background-image: url(static('pretixbase/img/flags/th.png')); }
+pre[lang=tj], input[lang=tj], textarea[lang=tj], div[lang=tj] { background-image: url(static('pretixbase/img/flags/tj.png')); }
+pre[lang=tk], input[lang=tk], textarea[lang=tk], div[lang=tk] { background-image: url(static('pretixbase/img/flags/tk.png')); }
+pre[lang=tl], input[lang=tl], textarea[lang=tl], div[lang=tl] { background-image: url(static('pretixbase/img/flags/tl.png')); }
+pre[lang=tm], input[lang=tm], textarea[lang=tm], div[lang=tm] { background-image: url(static('pretixbase/img/flags/tm.png')); }
+pre[lang=tn], input[lang=tn], textarea[lang=tn], div[lang=tn] { background-image: url(static('pretixbase/img/flags/tn.png')); }
+pre[lang=to], input[lang=to], textarea[lang=to], div[lang=to] { background-image: url(static('pretixbase/img/flags/to.png')); }
+pre[lang=tr], input[lang=tr], textarea[lang=tr], div[lang=tr] { background-image: url(static('pretixbase/img/flags/tr.png')); }
+pre[lang=tt], input[lang=tt], textarea[lang=tt], div[lang=tt] { background-image: url(static('pretixbase/img/flags/tt.png')); }
+pre[lang=tv], input[lang=tv], textarea[lang=tv], div[lang=tv] { background-image: url(static('pretixbase/img/flags/tv.png')); }
+pre[lang=tw], input[lang=tw], textarea[lang=tw], div[lang=tw] { background-image: url(static('pretixbase/img/flags/tw.png')); }
+pre[lang=tz], input[lang=tz], textarea[lang=tz], div[lang=tz] { background-image: url(static('pretixbase/img/flags/tz.png')); }
+pre[lang=ua], input[lang=ua], textarea[lang=ua], div[lang=ua] { background-image: url(static('pretixbase/img/flags/ua.png')); }
+pre[lang=ug], input[lang=ug], textarea[lang=ug], div[lang=ug] { background-image: url(static('pretixbase/img/flags/ug.png')); }
+pre[lang=um], input[lang=um], textarea[lang=um], div[lang=um] { background-image: url(static('pretixbase/img/flags/um.png')); }
+pre[lang=us], input[lang=us], textarea[lang=us], div[lang=us] { background-image: url(static('pretixbase/img/flags/us.png')); }
+pre[lang=uy], input[lang=uy], textarea[lang=uy], div[lang=uy] { background-image: url(static('pretixbase/img/flags/uy.png')); }
+pre[lang=uz], input[lang=uz], textarea[lang=uz], div[lang=uz] { background-image: url(static('pretixbase/img/flags/uz.png')); }
+pre[lang=va], input[lang=va], textarea[lang=va], div[lang=va] { background-image: url(static('pretixbase/img/flags/va.png')); }
+pre[lang=vc], input[lang=vc], textarea[lang=vc], div[lang=vc] { background-image: url(static('pretixbase/img/flags/vc.png')); }
+pre[lang=ve], input[lang=ve], textarea[lang=ve], div[lang=ve] { background-image: url(static('pretixbase/img/flags/ve.png')); }
+pre[lang=vg], input[lang=vg], textarea[lang=vg], div[lang=vg] { background-image: url(static('pretixbase/img/flags/vg.png')); }
+pre[lang=vi], input[lang=vi], textarea[lang=vi], div[lang=vi] { background-image: url(static('pretixbase/img/flags/vi.png')); }
+pre[lang=vn], input[lang=vn], textarea[lang=vn], div[lang=vn] { background-image: url(static('pretixbase/img/flags/vn.png')); }
+pre[lang=vu], input[lang=vu], textarea[lang=vu], div[lang=vu] { background-image: url(static('pretixbase/img/flags/vu.png')); }
+pre[lang=wf], input[lang=wf], textarea[lang=wf], div[lang=wf] { background-image: url(static('pretixbase/img/flags/wf.png')); }
+pre[lang=ws], input[lang=ws], textarea[lang=ws], div[lang=ws] { background-image: url(static('pretixbase/img/flags/ws.png')); }
+pre[lang=ye], input[lang=ye], textarea[lang=ye], div[lang=ye] { background-image: url(static('pretixbase/img/flags/ye.png')); }
+pre[lang=yt], input[lang=yt], textarea[lang=yt], div[lang=yt] { background-image: url(static('pretixbase/img/flags/yt.png')); }
+pre[lang=za], input[lang=za], textarea[lang=za], div[lang=za] { background-image: url(static('pretixbase/img/flags/za.png')); }
+pre[lang=zm], input[lang=zm], textarea[lang=zm], div[lang=zm] { background-image: url(static('pretixbase/img/flags/zm.png')); }
+pre[lang=zw], input[lang=zw], textarea[lang=zw], div[lang=zw] { background-image: url(static('pretixbase/img/flags/zw.png')); }
+pre[lang=en], input[lang=en], textarea[lang=en], div[lang=en] { background-image: url(static('pretixbase/img/flags/gb.png')); }

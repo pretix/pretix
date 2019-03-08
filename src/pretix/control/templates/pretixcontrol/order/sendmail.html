@@ -22,13 +22,10 @@
                 <fieldset>
                     <legend>{% trans "E-mail preview" %}</legend>
                     <div class="tab-pane mail-preview-group">
-                        <pre lang="" class="mail-preview">
-                            {% for segment in preview_output %}
-                                {% spaceless %}
-                                    {{ segment|linebreaksbr }}
-                                {% endspaceless %}
-                            {% endfor %}
-                        </pre>
+                        <div lang="{{ order.locale }}" class="mail-preview">
+                            <strong>{{ preview_output.subject }}</strong><br><br>
+                            {{ preview_output.html|safe }}
+                        </div>
                     </div>
                 </fieldset>
             {% endif %}

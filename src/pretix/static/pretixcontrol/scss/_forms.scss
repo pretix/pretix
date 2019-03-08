@@ -144,7 +144,8 @@ div.mail-preview {
   @include border-bottom-radius(0px);
   border-top-width: 0;
   margin-bottom: 0;
-  padding: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
 
   &:first-child {
     @include border-top-radius($input-border-radius);

@@ -18,12 +18,11 @@
             <fieldset>
             <legend>{% trans "E-mail preview" %}</legend>
                 <div class="tab-pane mail-preview-group">
-                    {% for locale, segments in output.items %}
-                        <pre lang="{{ locale }}" class="mail-preview">{% spaceless %}
-                            {% for value in segments %}
-                                {{ value|linebreaksbr }}
-                            {% endfor %}
-                        {% endspaceless %}</pre>
+                    {% for locale, out in output.items %}
+                        <div lang="{{ locale }}" class="mail-preview">
+                            <strong>{{ out.subject }}</strong><br><br>
+                            {{ out.html|safe }}
+                        </div>
                     {% endfor %}
                 </div>
             </fieldset>

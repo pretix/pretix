@@ -60,6 +60,7 @@ from pretix.base.signals import (
     register_data_exporters, register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import EventOrderFilterForm, RefundFilterForm
@@ -1483,10 +1484,10 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
-            self.preview_output = []
-            self.preview_output.append(
-                _('Subject: {subject}').format(subject=form.cleaned_data['subject']))
-            self.preview_output.append(email_content)
+            self.preview_output = {
+                'subject': _('Subject: {subject}').format(subject=form.cleaned_data['subject']),
+                'html': markdown_compile_email(email_content)
+            }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
             try:

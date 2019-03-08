@@ -13,6 +13,7 @@ from django.views.generic import FormView, ListView
 from pretix.base.i18n import LazyI18nString, language
 from pretix.base.models import LogEntry, Order
 from pretix.base.models.event import SubEvent
+from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.sendmail.tasks import send_mails
@@ -95,16 +96,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         'invoice_company': _('Sample Company LLC')
                     }
 
-                    self.output[l] = []
-
                     subject = form.cleaned_data['subject'].localize(l)
                     preview_subject = subject.format_map(context_dict)
-                    self.output[l].append(
-                        _('Subject: {subject}').format(subject=preview_subject))
-
                     message = form.cleaned_data['message'].localize(l)
-                    preview_text = message.format_map(context_dict)
-                    self.output[l].append(preview_text)
+                    preview_text = markdown_compile_email(message.format_map(context_dict))
+
+                    self.output[l] = {
+                        'subject': _('Subject: {subject}').format(subject=preview_subject),
+                        'html': preview_text,
+                    }
 
             return self.get(self.request, *self.args, **self.kwargs)
 
