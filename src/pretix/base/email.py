@@ -1,8 +1,6 @@
 import logging
 from smtplib import SMTPResponseException
 
-import bleach
-import markdown
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend
 from django.dispatch import receiver
@@ -12,7 +10,7 @@ from inlinestyler.utils import inline_css
 
 from pretix.base.models import Event, Order
 from pretix.base.signals import register_html_mail_renderers
-from pretix.base.templatetags.rich_text import markdown_compile
+from pretix.base.templatetags.rich_text import markdown_compile_email
 
 logger = logging.getLogger('pretix.base.email')
 
@@ -98,7 +96,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
         raise NotImplementedError()
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order: Order) -> str:
-        body_md = bleach.linkify(markdown_compile(plain_body))
+        body_md = markdown_compile_email(plain_body)
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,
@@ -112,7 +110,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
         if plain_signature:
             signature_md = plain_signature.replace('\n', '<br>\n')
-            signature_md = bleach.linkify(bleach.clean(markdown.markdown(signature_md), tags=bleach.ALLOWED_TAGS + ['p', 'br']))
+            signature_md = markdown_compile_email(signature_md)
             htmlctx['signature'] = signature_md
 
         if order:

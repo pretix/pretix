@@ -5,7 +5,6 @@ from datetime import timedelta
 from decimal import Decimal
 from urllib.parse import urlsplit
 
-import bleach
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
@@ -39,7 +38,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
-from pretix.base.templatetags.rich_text import markdown_compile
+from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
     CancelSettingsForm, CommentForm, DisplaySettingsForm, EventDeleteForm,
     EventMetaValueForm, EventSettingsForm, EventUpdateForm,
@@ -664,9 +663,9 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
                     with translation.override(self.supported_locale[idx]):
-                        msgs[self.supported_locale[idx]] = bleach.linkify(markdown_compile(
+                        msgs[self.supported_locale[idx]] = markdown_compile_email(
                             v.format_map(self.placeholders(preview_item))
-                        ))
+                        )
 
         return JsonResponse({
             'item': preview_item,

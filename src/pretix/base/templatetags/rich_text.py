@@ -78,6 +78,21 @@ def abslink_callback(attrs, new=False):
     return attrs
 
 
+def markdown_compile_email(source):
+    return bleach.linkify(bleach.clean(
+        markdown.markdown(
+            source,
+            extensions=[
+                'markdown.extensions.sane_lists',
+                #  'markdown.extensions.nl2br' # disabled for backwards-compatibility
+            ]
+        ),
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRIBUTES,
+        protocols=ALLOWED_PROTOCOLS,
+    ))
+
+
 def markdown_compile(source):
     return bleach.clean(
         markdown.markdown(
