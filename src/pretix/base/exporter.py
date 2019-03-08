@@ -92,7 +92,7 @@ class ListExporter(BaseExporter):
                      choices=(
                          ('xlsx', _('Excel (.xlsx)')),
                          ('default', _('CSV (with commas)')),
-                         ('excel', _('CSV (Excel-style)')),
+                         ('csv-excel', _('CSV (Excel-style)')),
                          ('semicolon', _('CSV (with semicolons)')),
                      ),
                  )),
