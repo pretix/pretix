@@ -160,7 +160,9 @@
                             {% endblocktrans %}
                         </th>
                         <th class="text-right">
-                            {{ sums.s|money:request.event.currency }}
+                            {% if sums.s|default_if_none:"none" != "none" %}
+                                {{ sums.s|money:request.event.currency }}
+                            {% endif %}
                         </th>
                         <th class="text-right">
                             {% if sums.pc %}
