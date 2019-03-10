@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:22+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -217,8 +217,7 @@ msgstr "未知的销售渠道。"
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
-"事件不能创建为“实时”。在销售活动开始之前，必须将配额和付款添加到活动中。"
+msgstr "事件不能创建为“实时”。在销售活动开始之前，必须将配额和付款添加到活动中。"
 
 #: pretix/api/serializers/event.py:228 pretix/api/serializers/event.py:526
 #, python-brace-format
@@ -1138,8 +1137,7 @@ msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
-msgstr ""
-"只包含与此付款提供者至少有一次付款尝试的订单的发票。注意，这可能包括一些订单"
+msgstr "只包含与此付款提供者至少有一次付款尝试的订单的发票。注意，这可能包括一些订单"
 "的发票，这些发票最终已全部或部分由另一家供应商支付。"
 
 #: pretix/base/exporters/invoices.py:125
@@ -4235,8 +4233,8 @@ msgid ""
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
 "如果您在此选择配额，此产品将仅在该配额不可用时显示。如果结合隐藏已售完产品的"
-"选项，这允许您在产品售完后将其换成更贵的产品。这两种产品可能会在短时间内可"
-"见，而引用配额中的所有票证都已保留，但尚未售出。"
+"选项，这允许您在产品售完后将其换成更贵的产品。这两种产品可能会在短时间内可见"
+"，而引用配额中的所有票证都已保留，但尚未售出。"
 
 #: pretix/base/models/items.py:500
 msgid ""
@@ -4656,8 +4654,7 @@ msgid ""
 "value of the total gross price. This might be important in cases of mixed "
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
-msgstr ""
-"如果设置，将显示此捆绑商品负责总价的给定值。这在混合税收的情况下可能很重要，"
+msgstr "如果设置，将显示此捆绑商品负责总价的给定值。这在混合税收的情况下可能很重要，"
 "但在其他情况下可以保留为空白。此值不会添加到基本商品的价格中。"
 
 #: pretix/base/models/items.py:1386
@@ -4933,8 +4930,7 @@ msgid ""
 "If you enable this, when the quota is sold out once, no more tickets will be "
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
-msgstr ""
-"如果启用此功能，则配额一旦售罄，就不会再售出任何门票，即使通过取消或过期订单"
+msgstr "如果启用此功能，则配额一旦售罄，就不会再售出任何门票，即使通过取消或过期订单"
 "再次获得门票也是如此。当然，您可以随时手动将其重新打开。"
 
 #: pretix/base/models/items.py:1871
@@ -7333,8 +7329,7 @@ msgstr "您不能多次选择同一座位。"
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
-msgstr ""
-"您输入了礼品卡而不是优惠券。稍后要求您提供付款详细信息时，可以输入礼品卡。"
+msgstr "您输入了礼品卡而不是优惠券。稍后要求您提供付款详细信息时，可以输入礼品卡。"
 
 #: pretix/base/services/cart.py:203
 msgid ""
@@ -7830,8 +7825,7 @@ msgstr "您订单中的座位之一无效，我们从您的购物车中删除了
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
-msgstr ""
-"在此期间，您订单中的一个座位已被选走，我们已从您的购物车中删除了该位置。"
+msgstr "在此期间，您订单中的一个座位已被选走，我们已从您的购物车中删除了该位置。"
 
 #: pretix/base/services/orders.py:194
 #, fuzzy, python-format
@@ -7889,8 +7883,7 @@ msgid ""
 "While trying to place your order, we noticed that the order total has "
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
-msgstr ""
-"在尝试下订单时，我们注意到订单总价已更改。可能是某一个价格刚刚改变了，或者您"
+msgstr "在尝试下订单时，我们注意到订单总价已更改。可能是某一个价格刚刚改变了，或者您"
 "使用的礼品卡在此期间使用了。请检查以下价格，然后重试。"
 
 #: pretix/base/services/orders.py:1441
@@ -8027,8 +8020,7 @@ msgid ""
 "country is currently not available. We will therefore need to charge VAT on "
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
-msgstr ""
-"您的增值税ID无法查询，因为您所在国家的增值税查询服务目前无法使用。因此，我们"
+msgstr "您的增值税ID无法查询，因为您所在国家的增值税查询服务目前无法使用。因此，我们"
 "需要在您的发票上收取增值税。您可以通过增值税退税程序取回税款。"
 
 #: pretix/base/services/tax.py:45 pretix/base/services/tax.py:183
@@ -8045,8 +8037,7 @@ msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
-msgstr ""
-"您的增值税ID无法查询，因为您所在国家的增值税查询服务返回了一个错误的结果。因"
+msgstr "您的增值税ID无法查询，因为您所在国家的增值税查询服务返回了一个错误的结果。因"
 "此，我们需要在您的发票上收取增值税。请联系支持手动解决此问题。"
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:96
@@ -8515,8 +8506,7 @@ msgid ""
 "This will be prepended to invoice numbers of cancellations. If you leave "
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
-msgstr ""
-"这将预先写在取消订单的发票号码上。如果该字段为空，则将使用与常规发票配置相同"
+msgstr "这将预先写在取消订单的发票号码上。如果该字段为空，则将使用与常规发票配置相同"
 "的编号方案。"
 
 #: pretix/base/settings.py:677
@@ -8563,8 +8553,7 @@ msgid ""
 "This text will be shown above the ticket shop once the designated sales "
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
-msgstr ""
-"一旦指定的销售时间结束，该文字就会显示在售票处的上方。您可以使用它来描述获得"
+msgstr "一旦指定的销售时间结束，该文字就会显示在售票处的上方。您可以使用它来描述获得"
 "门票的其他方式，例如票房位置。"
 
 #: pretix/base/settings.py:778
@@ -11816,8 +11805,7 @@ msgstr "允许的头衔"
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
-msgstr ""
-"如果上面定义的命名方案允许用户输入头衔，则可以使用它来限制可选头衔的集合。"
+msgstr "如果上面定义的命名方案允许用户输入头衔，则可以使用它来限制可选头衔的集合。"
 
 #: pretix/control/forms/event.py:627 pretix/control/forms/organizer.py:444
 #, python-brace-format
@@ -11869,8 +11857,7 @@ msgstr "生成销售渠道的发票"
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
-msgstr ""
-"如果您在上一个设置中启用了发票生成，则可以在此处将其限制为特定的销售渠道。"
+msgstr "如果您在上一个设置中启用了发票生成，则可以在此处将其限制为特定的销售渠道。"
 
 #: pretix/control/forms/event.py:871
 msgid "Invoice style"
@@ -11956,8 +11943,7 @@ msgid ""
 "If the order contains attendees with email addresses different from the "
 "person who orders the tickets, the following email will be sent out to the "
 "attendees."
-msgstr ""
-"如果订单包含的参加者的电子邮件地址与订购门票的人的电子邮件地址不同，则会将以"
+msgstr "如果订单包含的参加者的电子邮件地址与订购门票的人的电子邮件地址不同，则会将以"
 "下电子邮件发送给参加者。"
 
 #: pretix/control/forms/event.py:979 pretix/control/forms/event.py:1006
