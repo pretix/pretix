@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-03-09 14:00+0000\n"
+"PO-Revision-Date: 2019-03-11 01:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -1058,17 +1058,17 @@ msgstr ""
 #: pretix/base/forms/widgets.py:126 pretix/base/forms/widgets.py:131
 #: pretix/base/models/orders.py:1793
 msgid "Business customer"
-msgstr ""
+msgstr "商业客户"
 
 #: pretix/base/forms/widgets.py:130
 msgid "Individual customer"
-msgstr ""
+msgstr "独立用户"
 
 #: pretix/base/invoice.py:56
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "第 %d / %d 页"
 
 #: pretix/base/invoice.py:236
 msgctxt "invoice"
@@ -1079,7 +1079,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
-msgstr ""
+msgstr "发票 {num}"
 
 #: pretix/base/invoice.py:274
 #: pretix/control/templates/pretixcontrol/base.html:242
@@ -1090,7 +1090,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/search/orders.html:65
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "TEST MODE"
-msgstr ""
+msgstr "测试模式"
 
 #: pretix/base/invoice.py:282
 msgctxt "invoice"
