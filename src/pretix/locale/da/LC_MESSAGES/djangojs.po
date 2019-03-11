@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 16:52+0000\n"
+"POT-Creation-Date: 2019-03-11 15:02+0000\n"
 "PO-Revision-Date: 2018-04-24 14:22+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -212,6 +212,10 @@ msgstr "Ingen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:639
+msgid "Click to close"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41

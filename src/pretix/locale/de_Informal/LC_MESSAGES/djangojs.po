@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 16:52+0000\n"
+"POT-Creation-Date: 2019-03-11 15:02+0000\n"
 "PO-Revision-Date: 2018-12-02 13:41+0000\n"
 "Last-Translator: Alexander Schwartz <alexander.schwartz@gmx.net>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -215,6 +215,10 @@ msgstr "Keine"
 #: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:639
+msgid "Click to close"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"

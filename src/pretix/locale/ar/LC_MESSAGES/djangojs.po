@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 16:52+0000\n"
+"POT-Creation-Date: 2019-03-11 15:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -196,6 +196,10 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:588
 msgid "Use a different name internally"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:639
+msgid "Click to close"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
