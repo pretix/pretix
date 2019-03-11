@@ -229,6 +229,8 @@ class Order(LockModel, LoggedModel):
 
     @cached_property
     def meta_info_data(self):
+        if not self.meta_info:
+            return {}
         try:
             return json.loads(self.meta_info)
         except TypeError:
