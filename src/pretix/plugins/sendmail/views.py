@@ -43,8 +43,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     'message': LazyI18nString(logentry.parsed_data['message']),
                     'subject': LazyI18nString(logentry.parsed_data['subject']),
                     'sendto': logentry.parsed_data['sendto'],
-                    'items': self.request.event.items.filter(id__in=[a['id'] for a in logentry.parsed_data['items']]),
                 }
+                if 'items' in logentry.parsed_data:
+                    kwargs['initial']['items'] = self.request.event.items.filter(
+                        id__in=[a['id'] for a in logentry.parsed_data['items']]
+                    )
+                elif logentry.parsed_data.get('item'):
+                    kwargs['initial']['items'] = self.request.event.items.filter(
+                        id=logentry.parsed_data['item']['id']
+                    )
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
