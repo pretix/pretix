@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-20 16:52+0000\n"
-"PO-Revision-Date: 2019-02-20 19:53+0000\n"
+"PO-Revision-Date: 2019-03-06 06:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -658,7 +658,7 @@ msgstr "Zahlungs-ID"
 
 #: pretix/base/exporters/orderlist.py:403
 msgid "Creation date"
-msgstr "Erstellungszeitpunkt"
+msgstr "Erstellungsdatum"
 
 #: pretix/base/exporters/orderlist.py:403
 #: pretix/control/templates/pretixcontrol/order/index.html:516
@@ -3435,8 +3435,8 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
-"Wir konnten deine Bestellung nicht durchführen, da der Server zu beschäftigt "
-"war. Bitte versuche es erneut."
+"Wir waren nicht in der Lage, deine Anfrage zu verarbeiten, da der Server zu "
+"beschäftigt war. Bitte versuche es erneut."
 
 #: pretix/base/services/cart.py:48 pretix/presale/views/cart.py:156
 msgid "You did not select any products."
@@ -6582,7 +6582,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:230 pretix/control/forms/orders.py:331
 msgid "inactive"
-msgstr "deaktiviert"
+msgstr "inaktiv"
 
 #: pretix/control/forms/orders.py:271
 msgctxt "subevent"
@@ -12750,7 +12750,7 @@ msgstr "Ungültiger Token, bitte erneut versuchen."
 
 #: pretix/control/views/checkin.py:83
 msgid "You do not have permission to perform this action."
-msgstr "Du hast keine Berechtigung, um diese Aktion durchzuführen."
+msgstr "Du hast nicht die nötige Berechtigung, um diese Aktion durchzuführen."
 
 #: pretix/control/views/checkin.py:104
 msgid "The selected check-ins have been reverted."
