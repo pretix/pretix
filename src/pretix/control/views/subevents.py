@@ -117,6 +117,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
+            self.object.cartposition_set.all().delete()
             self.object.delete()
             messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
         return HttpResponseRedirect(success_url)
