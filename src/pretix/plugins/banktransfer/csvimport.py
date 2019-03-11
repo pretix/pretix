@@ -46,6 +46,10 @@ def get_rows_from_file(file):
     except ImportError:
         charset = file.charset
     data = data.decode(charset or 'utf-8')
+    # If the file was modified on a Mac, it only contains \r as line breaks
+    if '\r' in data and '\n' not in data:
+        data = data.replace('\r', '\n')
+
     # Sniffing line by line is necessary as some banks like to include
     # one-column garbage at the beginning of the file which breaks the sniffer.
     # See also: http://bugs.python.org/issue2078
