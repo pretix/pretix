@@ -159,10 +159,16 @@ class QuestionSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin', 'identifier')
+                  'ask_during_checkin', 'identifier', 'dependency_question', 'dependency_value')
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
+        return value
+
+    def validate_dependency_question(self, value):
+        if value:
+            if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
+                raise ValidationError(_('Question dependencies can only be set to boolean or choice questions.'))
         return value
 
     def validate(self, data):
@@ -175,6 +181,9 @@ class QuestionSerializer(I18nAwareModelSerializer):
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
+
+        if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
+            raise ValidationError(_('Dependencies are not supported during check-in.'))
 
         Question.clean_items(event, full_data.get('items'))
         return data
