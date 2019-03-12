@@ -13,7 +13,7 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def _positions_for_questions(self):
-        qqs = Question.objects.all()
+        qqs = self.request.event.questions.all()
         if self.only_user_visible:
             qqs = qqs.filter(ask_during_checkin=False)
         cart = get_cart(self.request).select_related(
@@ -33,7 +33,7 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
                              Question.objects.none(),
                              to_attr='dummy'
                          )))
-                     ),
+                     ).select_related('dependency_question'),
                      to_attr='questions_to_ask')
         )
         return sorted(list(cart), key=self._keyfunc)

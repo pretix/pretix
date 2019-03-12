@@ -154,7 +154,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = Question.objects.all()
+        qqs = self.request.event.questions.all()
         if self.only_user_visible:
             qqs = qqs.filter(ask_during_checkin=False)
         return list(self.order.positions.select_related(
@@ -173,7 +173,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
                              Question.objects.none(),
                              to_attr='dummy'
                          )))
-                     ),
+                     ).select_related('dependency_question'),
                      to_attr='questions_to_ask')
         ))
 

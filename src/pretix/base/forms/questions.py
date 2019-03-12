@@ -217,6 +217,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=q.required,
                     help_text=help_text,
                     widget=forms.Select,
+                    to_field_name='identifier',
                     empty_label='',
                     initial=initial.options.first() if initial else None,
                 )
@@ -225,6 +226,7 @@ class BaseQuestionsForm(forms.Form):
                     queryset=q.options,
                     label=label, required=q.required,
                     help_text=help_text,
+                    to_field_name='identifier',
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
@@ -260,6 +262,11 @@ class BaseQuestionsForm(forms.Form):
             if answers:
                 # Cache the answer object for later use
                 field.answer = answers[0]
+
+            if q.dependency_question_id:
+                field.widget.attrs['data-question-dependency'] = q.dependency_question_id
+                field.widget.attrs['data-question-dependency-value'] = q.dependency_value
+
             self.fields['question_%s' % q.id] = field
 
         responses = question_form_fields.send(sender=event, position=pos)
