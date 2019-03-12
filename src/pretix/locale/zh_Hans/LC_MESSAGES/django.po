@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 15:02+0000\n"
-"PO-Revision-Date: 2019-03-12 08:53+0000\n"
+"PO-Revision-Date: 2019-03-12 13:20+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -3828,8 +3828,7 @@ msgstr ""
 "\n"
 "您收到此消息是因为您要求我们向您发送链接为{event}下订单。\n"
 "\n"
-"您可以在以下位置更改订单详细信息并查看订单状态\n"
-"{url}\n"
+"您可以在{url}更改订单详细信息并查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -3876,8 +3875,7 @@ msgstr ""
 "您的{event}订单成功。因为你只订购免费产品，\n"
 "不需要付款。\n"
 "\n"
-"您可以在以下位置更改订单详细信息并查看订单状态\n"
-"{url}\n"
+"您可以在{url}更改订单详细信息并查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -3901,8 +3899,7 @@ msgstr ""
 "\n"
 "我们已成功收到您的{event}订单。由于您订购了需要活动组织者批准的产品，我们会要求您耐心等待下一封电子邮件。\n"
 "\n"
-"您可以在以下位置更改订单详细信息并查看订单状态\n"
-"{url}\n"
+"您可以在{url}更改订单详细信息并查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -3929,8 +3926,7 @@ msgstr ""
 "\n"
 "{payment_info}\n"
 "\n"
-"您可以在以下位置更改订单详细信息并查看订单状态\n"
-"{url}\n"
+"您可以在{url}更改订单详细信息并查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -3952,8 +3948,7 @@ msgstr ""
 "\n"
 "您的{event}订单已更改。\n"
 "\n"
-"您可以在以下位置查看订单状态\n"
-"{url}\n"
+"您可以在{url}查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -3979,8 +3974,7 @@ msgstr ""
 "\n"
 "{payment_info}\n"
 "\n"
-"您可以在以下位置更改订单详细信息并查看订单状态\n"
-"{url}\n"
+"您可以在{url}更改订单详细信息并查看订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -4005,8 +3999,7 @@ msgstr ""
 "我们尚未收到{event}的订单付款。\n"
 "请注意，如果我们在{expire_date}之前收到您的付款，我们才能保障您的订单。\n"
 "\n"
-"您可以在以下位置查看付款信息和订单状态\n"
-"{url}\n"
+"您可以在{url}查看付款信息和订单状态\n"
 "\n"
 "致敬，\n"
 "您的{event}团队"
@@ -4146,6 +4139,12 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您可以在{url}更改订单的详细信息并查看订单状态\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:481
 #, python-brace-format
@@ -4160,19 +4159,28 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您买了一张{event}的票。\n"
+"\n"
+"如果您还没有这样做，您可以在这里下载您的票：\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:619 pretix/base/settings.py:632
 #: pretix/base/settings.py:682 pretix/base/settings.py:695
 #: pretix/base/settings.py:709
 msgid "Given name"
-msgstr ""
+msgstr "给定名称"
 
 #: pretix/base/settings.py:620 pretix/base/settings.py:633
 #: pretix/base/settings.py:649 pretix/base/settings.py:666
 #: pretix/base/settings.py:681 pretix/base/settings.py:696
 #: pretix/base/settings.py:710
 msgid "Family name"
-msgstr ""
+msgstr "姓氏"
 
 #: pretix/base/settings.py:624 pretix/base/settings.py:640
 #: pretix/base/settings.py:655 pretix/base/settings.py:673
@@ -4187,25 +4195,25 @@ msgstr ""
 #: pretix/base/settings.py:689 pretix/base/settings.py:719
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "无名氏"
 
 #: pretix/base/settings.py:631 pretix/base/settings.py:663
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "标题"
 
 #: pretix/base/settings.py:639 pretix/base/settings.py:672
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "博士"
 
 #: pretix/base/settings.py:647 pretix/base/settings.py:664
 msgid "First name"
-msgstr ""
+msgstr "名字"
 
 #: pretix/base/settings.py:648 pretix/base/settings.py:665
 msgid "Middle name"
-msgstr ""
+msgstr "中名"
 
 #: pretix/base/settings.py:729 pretix/base/settings.py:740
 msgctxt "person_name_sample"
@@ -4214,19 +4222,19 @@ msgstr ""
 
 #: pretix/base/settings.py:735
 msgid "Calling name"
-msgstr ""
+msgstr "叫名字"
 
 #: pretix/base/settings.py:748
 msgid "Latin transcription"
-msgstr ""
+msgstr "拉丁语转录"
 
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
 msgid "Your event needs to be over for at least 60 days to use this feature."
-msgstr ""
+msgstr "您的活动需要至少结束60天才能使用此功能。"
 
 #: pretix/base/shredder.py:43
 msgid "Your ticket shop needs to be offline to use this feature."
-msgstr ""
+msgstr "您的售票处需要离线才能使用此功能。"
 
 #: pretix/base/shredder.py:125
 msgid "E-mails"
