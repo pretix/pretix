@@ -35,19 +35,23 @@ class PdfTicketOutput(BaseTicketOutput):
 
     @cached_property
     def layout_map(self):
-        return {
-            (bi.item_id, bi.sales_channel): bi.layout
-            for bi in TicketLayoutItem.objects.select_related('layout').filter(item__event=self.event)
-        }
+        if not hasattr(self.event, '_ticketoutputpdf_cache_layoutmap'):
+            self.event._ticketoutputpdf_cache_layoutmap = {
+                (bi.item_id, bi.sales_channel): bi.layout
+                for bi in TicketLayoutItem.objects.select_related('layout').filter(item__event=self.event)
+            }
+        return self.event._ticketoutputpdf_cache_layoutmap
 
     @cached_property
     def default_layout(self):
-        try:
-            return self.event.ticket_layouts.get(default=True)
-        except TicketLayout.DoesNotExist:
-            return TicketLayout(
-                layout=json.dumps(self._default_layout())
-            )
+        if not hasattr(self.event, '_ticketoutputpdf_cache_default_layout'):
+            try:
+                self.event._ticketoutputpdf_cache_default_layout = self.event.ticket_layouts.get(default=True)
+            except TicketLayout.DoesNotExist:
+                self.event._ticketoutputpdf_cache_default_layout = TicketLayout(
+                    layout=json.dumps(self._default_layout())
+                )
+        return self.event._ticketoutputpdf_cache_default_layout
 
     def _register_fonts(self):
         Renderer._register_fonts()
