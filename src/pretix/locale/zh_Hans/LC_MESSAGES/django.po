@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 15:02+0000\n"
-"PO-Revision-Date: 2019-03-11 13:31+0000\n"
+"PO-Revision-Date: 2019-03-12 08:22+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -3335,47 +3335,47 @@ msgstr "您不能选择超过产品%(product)s的%(max)s项。"
 #: pretix/base/services/cart.py:58
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr ""
+msgstr "您不能选择超过产品%(product)s的%(min)s项。"
 
 #: pretix/base/services/cart.py:59
 #, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
-msgstr ""
+msgstr "我们从您的购物车中删除了%(product)s，因为您购买的物品不能少于%(min)s。"
 
 #: pretix/base/services/cart.py:61 pretix/base/services/orders.py:63
 msgid "The presale period for this event has not yet started."
-msgstr ""
+msgstr "此活动的预售期尚未开始。"
 
 #: pretix/base/services/cart.py:62
 msgid "The presale period for this event has ended."
-msgstr ""
+msgstr "此活动的预售期已结束。"
 
 #: pretix/base/services/cart.py:63
 msgid ""
 "The presale period for this event has not yet started. The affected "
 "positions have been removed from your cart."
-msgstr ""
+msgstr "此活动的预售期尚未开始。受影响的位置已从您的购物车中删除。"
 
 #: pretix/base/services/cart.py:65 pretix/base/services/orders.py:76
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
-msgstr ""
+msgstr "您购物车中其中一个活动的预售期已结束。受影响的位置已从您的购物车中删除。"
 
 #: pretix/base/services/cart.py:67
 msgid "The entered price is to high."
-msgstr ""
+msgstr "输入的价格太高。"
 
 #: pretix/base/services/cart.py:68
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "此优惠券号码在我们的数据库中未知。"
 
 #: pretix/base/services/cart.py:69
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "此优惠券号码已使用最大允许次数。"
 
 #: pretix/base/services/cart.py:70
 #, python-format
@@ -3385,91 +3385,93 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"此优惠券号码目前已锁定，因为它已包含在购物车中。这可能意味着其他人现在正在兑换此优惠券，或者您之前尝试兑换此优惠券但未完成结帐流程。您可以尝试在 %d "
+"分钟内再次使用它。"
 
 #: pretix/base/services/cart.py:74
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "此优惠券号码只能兑换 %d 次。"
 
 #: pretix/base/services/cart.py:75
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
-msgstr ""
+msgstr "您已使用此优惠券代码。如果要将其用于其他产品，请从购物车中删除相关行。"
 
 #: pretix/base/services/cart.py:77
 msgid "This voucher is expired."
-msgstr ""
+msgstr "此优惠券已过期。"
 
 #: pretix/base/services/cart.py:78
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "此优惠券不适用于此产品。"
 
 #: pretix/base/services/cart.py:80
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "您的优惠券适用于当前未出售的产品。"
 
 #: pretix/base/services/cart.py:81
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "此优惠券对此活动日期无效。"
 
 #: pretix/base/services/cart.py:82
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "您需要有效的优惠券号码才能订购此产品。"
 
 #: pretix/base/services/cart.py:83
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "所选的活动日期无效。"
 
 #: pretix/base/services/cart.py:84
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "您无法为所选产品选择附加组件。"
 
 #: pretix/base/services/cart.py:85
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "您无法选择相同附加产品的两种变化。"
 
 #: pretix/base/services/cart.py:86
 #, python-format
 msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
-msgstr ""
+msgstr "您可以从产品 %(base)s 的类别 %(cat)s 中选择最多 %(max)s 个附加组件。"
 
 #: pretix/base/services/cart.py:87
 #, python-format
 msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
-msgstr ""
+msgstr "您需要从产品 %(base)s 的类别 %(cat)s 中选择至少 %(min)s 加载项。"
 
 #: pretix/base/services/cart.py:89
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
-msgstr ""
+msgstr "您选择的其中一个产品只能作为另一个项目的附加产品购买。"
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
-msgstr ""
+msgstr "此订单位置已被取消。"
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
-msgstr ""
+msgstr "此订单位置有一个签入列表无效的产品。"
 
 #: pretix/base/services/checkin.py:116
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "此订单未标记为已付款。"
 
 #: pretix/base/services/checkin.py:121
 msgid "You need to answer questions to complete this check-in."
-msgstr ""
+msgstr "您需要回答问题才能完成此签入。"
 
 #: pretix/base/services/checkin.py:147
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "此票已经兑换。"
 
 #: pretix/base/services/invoices.py:68
 #, python-brace-format
@@ -3481,53 +3483,58 @@ msgid ""
 "{i.zipcode} {i.city}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:139
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "观众：{name}"
 
 #: pretix/base/services/invoices.py:141 pretix/plugins/reports/exporters.py:193
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "日期：{}"
 
 #: pretix/base/services/invoices.py:157
 msgctxt "invoice"
 msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
-msgstr ""
+msgstr "反向收费：根据理事会指令2006/112 / EEC第194,196条，增值税应该由服务对象承担。"
 
 #: pretix/base/services/invoices.py:300
 msgid "A payment provider specific text might appear here."
-msgstr ""
+msgstr "此处可能会显示付款提供商特定的文本。"
 
 #: pretix/base/services/invoices.py:307
 msgid "214th Example Street"
-msgstr ""
+msgstr "214号示例街道"
 
 #: pretix/base/services/invoices.py:308
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:309
 msgid "Sample city"
-msgstr ""
+msgstr "代表城市"
 
 #: pretix/base/services/invoices.py:324
 msgid "Sample product {}"
-msgstr ""
+msgstr "样本产品{}"
 
 #: pretix/base/services/invoices.py:330
 msgid "Sample product A"
-msgstr ""
+msgstr "样本产品 A"
 
 #: pretix/base/services/mail.py:136
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "您收到此电子邮件是因为您订购了{event}。"
 
 #: pretix/base/services/mail.py:140
 #, python-brace-format
@@ -3535,231 +3542,233 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"您可以通过以下网址查看订单详细信息：\n"
+"{orderurl} 。"
 
 #: pretix/base/services/orders.py:51
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
-msgstr ""
+msgstr "您选择的部分产品已不再可用。请参阅下面的详细信息。"
 
 #: pretix/base/services/orders.py:53
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
-msgstr ""
+msgstr "您选择的部分产品已不再以您选择的数量提供。请参阅下面的详细信息。"
 
 #: pretix/base/services/orders.py:55
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
-msgstr ""
+msgstr "在此期间，您购物车中某些商品的价格发生了变化。请参阅下面的详细信息。"
 
 #: pretix/base/services/orders.py:57
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "出现内部错误，请重试。"
 
 #: pretix/base/services/orders.py:58
 msgid "Your cart is empty."
-msgstr ""
+msgstr "您的购物车是空的。"
 
 #: pretix/base/services/orders.py:59
 #, python-format
 msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
-msgstr ""
+msgstr "您不能选择超过产品%(product)s的%(max)s项。我们从您的购物车中删除了剩余物品。"
 
 #: pretix/base/services/orders.py:64
 msgid "The presale period has ended."
-msgstr ""
+msgstr "预售期已结束。"
 
 #: pretix/base/services/orders.py:65
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
-msgstr ""
+msgstr "用于购物车中某件商品的优惠券号码在我们的数据库中未知。"
 
 #: pretix/base/services/orders.py:66
 msgid ""
 "The voucher code used for one of the items in your cart has already been "
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
-msgstr ""
+msgstr "用于购物车中某件商品的优惠券号码已达到允许的最大次数。我们从您的购物车中删除了该商品。"
 
 #: pretix/base/services/orders.py:68
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
-msgstr ""
+msgstr "用于购物车中某件商品的优惠券号码已过期。我们从您的购物车中删除了该商品。"
 
 #: pretix/base/services/orders.py:70
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
-msgstr ""
+msgstr "用于购物车中某件商品的优惠券号码对此商品无效。我们从您的购物车中删除了该商品。"
 
 #: pretix/base/services/orders.py:72
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
-msgstr ""
+msgstr "您需要有效的优惠券号码才能订购购物车中的其中某个产品。我们从您的购物车中删除了该商品。"
 
 #: pretix/base/services/orders.py:74
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
-msgstr ""
+msgstr "您购物车中其中某个活动的预售期尚未开始。受影响的位置已从您的购物车中移除。"
 
 #: pretix/base/services/orders.py:94 pretix/control/forms/orders.py:50
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "新的有效期需要在将来。"
 
 #: pretix/base/services/orders.py:167 pretix/base/services/orders.py:244
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "此订单未待批准。"
 
 #: pretix/base/services/orders.py:206
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr ""
+msgstr "订单已批准并确认：%(code)s"
 
 #: pretix/base/services/orders.py:209
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr ""
+msgstr "订单已批准并等待付款：%(code)s"
 
 #: pretix/base/services/orders.py:284
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr ""
+msgstr "订单被拒绝：%(code)s"
 
 #: pretix/base/services/orders.py:318 pretix/presale/views/order.py:569
 #: pretix/presale/views/order.py:601
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "您无法取消此订单。"
 
 #: pretix/base/services/orders.py:344 pretix/control/forms/orders.py:110
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
-msgstr ""
+msgstr "取消费用不能高于此订单的付款额度。"
 
 #: pretix/base/services/orders.py:374
 #, python-format
 msgid "Order canceled: %(code)s"
-msgstr ""
+msgstr "订单已取消：%(code)s"
 
 #: pretix/base/services/orders.py:657 pretix/control/views/event.py:697
 #: pretix/control/views/orders.py:1074
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "您的订单：%(code)s"
 
 #: pretix/base/services/orders.py:727
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr ""
+msgstr "您的订单即将到期：%(code)s"
 
 #: pretix/base/services/orders.py:729
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr ""
+msgstr "您的订单待付款：%(code)s"
 
 #: pretix/base/services/orders.py:774
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr ""
+msgstr "您的票已准备好下载：%(code)s"
 
 #: pretix/base/services/orders.py:787
 msgid "You need to select a variation of the product."
-msgstr ""
+msgstr "您需要选择产品的变化。"
 
 #: pretix/base/services/orders.py:788
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr ""
+msgstr "配额{name}没有足够的容量来执行操作。"
 
 #: pretix/base/services/orders.py:789
 msgid "There is no quota defined that allows this operation."
-msgstr ""
+msgstr "没有定义允许此操作的配额。"
 
 #: pretix/base/services/orders.py:790
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "所选产品未激活或未设置价格。"
 
 #: pretix/base/services/orders.py:791
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
-msgstr ""
+msgstr "此操作会使订单为空。请取消订单本身。"
 
 #: pretix/base/services/orders.py:792
 msgid "Only pending or paid orders can be changed."
-msgstr ""
+msgstr "只能更改待处理或付款订单。"
 
 #: pretix/base/services/orders.py:793
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
-msgstr ""
+msgstr "此操作将使订单免费，因此立即支付，但没有配额可用。"
 
 #: pretix/base/services/orders.py:795
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
-msgstr ""
+msgstr "这是一个附加产品，请选择应添加的基本位置。"
 
 #: pretix/base/services/orders.py:796
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
-msgstr ""
+msgstr "所选的基本位置不允许您将此产品添加为附加组件。"
 
 #: pretix/base/services/orders.py:797
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "您需要为新位置选择子活动。"
 
 #: pretix/base/services/orders.py:1302
 #, python-format
 msgid "Your order has been changed: %(code)s"
-msgstr ""
+msgstr "您的订单已更改：%(code)s"
 
 #: pretix/base/services/orders.py:1428
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
-msgstr ""
+msgstr "尝试将钱汇回给您时出错。请联系活动组织者以获取更多信息。"
 
 #: pretix/base/services/shredder.py:73
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
+msgstr "无法再在服务器上找到下载文件，请尝试重新启动。"
 
 #: pretix/base/services/shredder.py:77
 msgid "This file is from a different event."
-msgstr ""
+msgstr "此文件来自其他活动。"
 
 #: pretix/base/services/shredder.py:79
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "您输入的确认号码不正确。"
 
 #: pretix/base/services/shredder.py:81
 msgid "Something happened in your event after the export, please try again."
-msgstr ""
+msgstr "导出后您的活动中发生了一些事情，请重试。"
 
 #: pretix/base/services/stats.py:130
 msgid "Uncategorized"
-msgstr ""
+msgstr "未分类"
 
 #: pretix/base/services/tickets.py:76 pretix/control/views/pdf.py:61
 msgid "Sample workshop"
-msgstr ""
+msgstr "样品车间"
 
 #: pretix/base/services/update_check.py:90
 msgid "pretix update available"
-msgstr ""
+msgstr "pretix更新可用"
 
 #: pretix/base/services/update_check.py:93
 #, python-brace-format
@@ -3781,12 +3790,25 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"您好！\n"
+"\n"
+"可以对pretix或安装在pretix中的某个插件进行更新。请单击以下链接以获取更多信息：\n"
+"\n"
+"·{url}· \n"
+"\n"
+"您可以随时在pretix.eu博客上找到有关最新更新的信息：\n"
+"\n"
+"https://pretix.eu/about/en/blog/↵\n"
+"\n"
+"最好，\n"
+"\n"
+"你的pretix开发者"
 
 #: pretix/base/services/update_check.py:122
 #: pretix/base/services/update_check.py:124
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "插件：%s"
 
 #: pretix/base/settings.py:290
 #, python-brace-format
@@ -3802,6 +3824,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您收到此消息是因为您要求我们向您发送链接为{event}下订单。\n"
+"\n"
+"您可以在以下位置更改订单详细信息并查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:303
 #, python-brace-format
@@ -3816,6 +3847,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"有人请求{event}的订单列表。\n"
+"清单如下：\n"
+"\n"
+"{orders}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:315
 #, python-brace-format
@@ -3831,6 +3871,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您的{event}订单成功。因为你只订购免费产品，\n"
+"不需要付款。\n"
+"\n"
+"您可以在以下位置更改订单详细信息并查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:328
 #, python-brace-format
@@ -3847,6 +3897,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"我们已成功收到您的{event}订单。由于您订购了需要活动组织者批准的产品，我们会要求您耐心等待下一封电子邮件。\n"
+"\n"
+"您可以在以下位置更改订单详细信息并查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:342
 #, python-brace-format
@@ -3864,6 +3923,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"我们成功收到您的订单{event}，总价值为{total_with_currency}。请在{date}之前完成付款。\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"您可以在以下位置更改订单详细信息并查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:357
 #, python-brace-format
@@ -3878,6 +3948,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您的{event}订单已更改。\n"
+"\n"
+"您可以在以下位置查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:369
 #, python-brace-format
@@ -3894,6 +3973,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"我们已成功收到{event}的付款。谢谢您！\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"您可以在以下位置更改订单详细信息并查看订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:387
 #, python-brace-format
@@ -3910,6 +4000,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"我们尚未收到{event}的订单付款。\n"
+"请注意，如果我们在{expire_date}之前收到您的付款，我们才能保障您的订单。\n"
+"\n"
+"您可以在以下位置查看付款信息和订单状态\n"
+"{url}\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:401
 #, python-brace-format
@@ -3935,6 +4035,24 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"您好，\n"
+"\n"
+"您提交了{event}的等待名单，\n"
+"对于{product}产品。\n"
+"\n"
+"我们现在有一张为您准备好的票！您可以在接下来{hours}内通过输入以下优惠券号码在我们的售票处兑换：\n"
+"\n"
+"{code}\n"
+"\n"
+"或者，您只需要点击以下链接：、\n"
+"\n"
+"{url}\n"
+"\n"
+"请注意，此链接在接下来{hours}内有效！\n"
+"如果您未在该时间范围内兑换优惠券，我们会将票证重新分配给列表中的下一个人。\n"
+"\n"
+"致敬，\n"
+"您的{event}团队"
 
 #: pretix/base/settings.py:424
 #, python-brace-format
