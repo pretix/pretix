@@ -36,7 +36,7 @@ class CategoryForm(I18nModelForm):
 class QuestionForm(I18nModelForm):
     question = I18nFormField(
         label=_("Question"),
-        widget_kwargs={'attrs': {'rows': 5}},
+        widget_kwargs={'attrs': {'rows': 2}},
         widget=I18nTextarea
     )
 
@@ -44,6 +44,7 @@ class QuestionForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         self.fields['items'].queryset = self.instance.event.items.all()
         self.fields['identifier'].required = False
+        self.fields['help_text'].widget.attrs['rows'] = 3
 
     class Meta:
         model = Question

@@ -21,15 +21,9 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.question layout="control" %}
-            {% bootstrap_field form.help_text layout="control" %}
             {% bootstrap_field form.type layout="control" %}
-            {% bootstrap_field form.identifier layout="control" %}
-            {% bootstrap_field form.ask_during_checkin layout="control" %}
-            {% bootstrap_field form.required layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Apply to products" %}</legend>
             {% bootstrap_field form.items layout="control" %}
+            {% bootstrap_field form.required layout="control" %}
         </fieldset>
         <div class="alert alert-info alert-required-boolean">
             {% blocktrans trimmed %}
@@ -109,6 +103,12 @@
                         <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
                 </p>
             </div>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced settings" %}</legend>
+            {% bootstrap_field form.help_text layout="control" %}
+            {% bootstrap_field form.identifier layout="control" %}
+            {% bootstrap_field form.ask_during_checkin layout="control" %}
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
