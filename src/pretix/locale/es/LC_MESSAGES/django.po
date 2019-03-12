@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 15:02+0000\n"
-"PO-Revision-Date: 2019-02-28 16:00+0000\n"
+"PO-Revision-Date: 2019-03-13 10:18+0000\n"
 "Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -2949,16 +2949,13 @@ msgid "Order {order.code} has been changed."
 msgstr "El orden {order.code} ha sido cambiado."
 
 #: pretix/base/notifications.py:242
-#, fuzzy
-#| msgid "The order has been approved."
 msgid "Order has been overpaid"
-msgstr "La orden ha sido aprobada."
+msgstr "La orden ha sido pagada de más."
 
 #: pretix/base/notifications.py:243
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been marked as paid."
+#, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr "La orden {order.code} ha sido marcada como pagada."
+msgstr "La orden {order.code} ha sido pagada de más."
 
 #: pretix/base/notifications.py:249
 #, python-brace-format
@@ -3269,10 +3266,8 @@ msgid "2017-05-31 20:00"
 msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:119
-#, fuzzy
-#| msgid "Event begin time"
 msgid "Event begin date"
-msgstr "Hora de inicio de evento"
+msgstr "Fecha de inicio del evento"
 
 #: pretix/base/pdf.py:120 pretix/base/pdf.py:141 pretix/base/pdf.py:209
 msgid "2017-05-31"
@@ -7212,10 +7207,8 @@ msgid "The order could not be marked as paid: {message}"
 msgstr "La orden no pudo ser marcada como pagada: {message}"
 
 #: pretix/control/logdisplay.py:214
-#, fuzzy
-#| msgid "The order has been approved."
 msgid "The order has been overpaid."
-msgstr "La orden ha sido aprobada."
+msgstr "La orden ha sido pagada de más."
 
 #: pretix/control/logdisplay.py:215
 #, python-brace-format
@@ -8202,10 +8195,8 @@ msgid "No attendee record was found."
 msgstr "No se encontró ningún registro de asistentes."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:73
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket code"
-msgstr "Diseño del ticket"
+msgstr "Código de ticket"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:76
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
@@ -9239,10 +9230,8 @@ msgstr "Cronología"
 #: pretix/control/templates/pretixcontrol/event/settings.html:96
 #: pretix/control/templates/pretixcontrol/events/index.html:140
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:37
-#, fuzzy
-#| msgid "Choose event"
 msgid "Clone event"
-msgstr "Seleccione evento"
+msgstr "Clonar evento"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:15
 msgid ""
@@ -9533,10 +9522,8 @@ msgstr "Más cuotas"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:135
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:31
-#, fuzzy
-#| msgid "Event dashboard"
 msgid "Open event dashboard"
-msgstr "Tablero de eventos"
+msgstr "Abrir tablero del evento"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
@@ -10617,10 +10604,8 @@ msgid "Voucher code used:"
 msgstr "Código de vale utilizado:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:285
-#, fuzzy
-#| msgid "Show start date"
 msgid "Show ticket code"
-msgstr "Mostrar fecha de inicio"
+msgstr "Mostrar código del ticket"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:295
 #: pretix/control/templates/pretixcontrol/order/index.html:300
@@ -11073,15 +11058,14 @@ msgstr "PAGADO COMPLETAMENTE"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:153
 msgid "Sum over all pages"
-msgstr ""
+msgstr "Sumar a través de todas las páginas"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:156
-#, fuzzy, python-format
-#| msgid "Pay order"
+#, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] "Pagar orden"
-msgstr[1] "Pagar orden"
+msgstr[0] "1 orden"
+msgstr[1] "%(s)s órdenes"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 #: pretix/control/templates/pretixcontrol/orders/overview.html:14
@@ -13255,10 +13239,8 @@ msgid "The selected product has been deactivated."
 msgstr "El producto seleccionado ha sido desactivado."
 
 #: pretix/control/views/main.py:157
-#, fuzzy
-#| msgid "You do not have permission to view this content."
 msgid "You do not have permission to clone this event."
-msgstr "Usted no tiene permiso para ver este contenido."
+msgstr "Usted no tiene permiso para clonar este evento."
 
 #: pretix/control/views/main.py:214
 #, python-brace-format
