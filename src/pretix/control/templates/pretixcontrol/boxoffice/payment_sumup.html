@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% if payment_info %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>SumUp</dd>
+        <dt>{% trans "Transaction Code" %}</dt>
+        <dd>{{ payment_info.payment_data.tx_code}}</dd>
+        <dt>{% trans "Merchant Code" %}</dt>
+        <dd>{{ payment_info.payment_data.merchant_code }}</dd>
+        <dt>{% trans "Currency" %}</dt>
+        <dd>{{ payment_info.payment_data.currency }}</dd>
+        <dt>{% trans "Status" %}</dt>
+        <dd>{{ payment_info.payment_data.status }}</dd>
+        <dt>{% trans "Type" %}</dt>
+        <dd>{{ payment_info.payment_data.type }}</dd>
+        <dt>{% trans "Card Entry Mode" %}</dt>
+        <dd>{{ payment_info.payment_data.entry_mode }}</dd>
+        <dt>{% trans "Card number" %}</dt>
+        <dd><i class="fa fa-cc-{{ payment_info.payment_data.card_type|lower }}"></i> **** **** **** {{ payment_info.payment_data.last4 }}</dd>
+    </dl>
+{% endif %}

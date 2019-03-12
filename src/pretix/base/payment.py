@@ -720,6 +720,29 @@ class BoxOfficeProvider(BasePaymentProvider):
     def order_change_allowed(self, order: Order) -> bool:
         return False
 
+    def payment_control_render(self, request, payment) -> str:
+        template = None
+        payment_info = None
+
+        if payment.info:
+            payment_info = json.loads(payment.info)
+            if payment_info['payment_type'] == "sumup":
+                template = get_template('pretixcontrol/boxoffice/payment_sumup.html')
+
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'payment_info': payment_info,
+            'payment': payment,
+            'provider': self,
+        }
+
+        if template:
+            return template.render(ctx)
+        else:
+            return
+
 
 class ManualPayment(BasePaymentProvider):
     identifier = 'manual'
