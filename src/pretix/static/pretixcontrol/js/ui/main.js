@@ -1,13 +1,5 @@
 /*global $,gettext*/
 
-function question_page_toggle_view() {
-    var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
-    $("#answer-options").toggle(show);
-
-    show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
-    $(".alert-required-boolean").toggle(show);
-}
-
 var waitingDialog = {
     show: function (message) {
         "use strict";
@@ -31,6 +23,26 @@ var ajaxErrDialog = {
     hide: function () {
         "use strict";
         $("body").removeClass("ajaxerr");
+    }
+};
+
+var apiGET = function (url, callback) {
+    $.getJSON(url, function (data) {
+        callback(data);
+    });
+};
+
+var i18nToString = function (i18nstring) {
+    var locale = $("body").attr("data-pretixlocale");
+    if (i18nstring[locale]) {
+        return i18nstring[locale];
+    } else if (i18nstring["en"]) {
+        return i18nstring["en"];
+    }
+    for (key in i18nstring) {
+        if (i18nstring[key]) {
+            return i18nstring[key];
+        }
     }
 };
 
@@ -490,14 +502,6 @@ $(function () {
     $('a[data-toggle="tab"]').on('click', function (e) {
         window.location.hash = e.target.hash;
     });
-
-    // Question editor
-    if ($("#answer-options").length) {
-
-        $("#id_type").change(question_page_toggle_view);
-        $("#id_required").change(question_page_toggle_view);
-        question_page_toggle_view();
-    }
 
     // Event wizard
     $("#event-slug-random-generate").click(function () {

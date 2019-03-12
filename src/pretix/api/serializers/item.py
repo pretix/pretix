@@ -168,7 +168,9 @@ class QuestionSerializer(I18nAwareModelSerializer):
     def validate_dependency_question(self, value):
         if value:
             if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
-                raise ValidationError(_('Question dependencies can only be set to boolean or choice questions.'))
+                raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
+        if value == self.instance:
+            raise ValidationError('A question cannot depend on itself.')
         return value
 
     def validate(self, data):
@@ -183,7 +185,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
         full_data.update(data)
 
         if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-            raise ValidationError(_('Dependencies are not supported during check-in.'))
+            raise ValidationError('Dependencies are not supported during check-in.')
 
         Question.clean_items(event, full_data.get('items'))
         return data

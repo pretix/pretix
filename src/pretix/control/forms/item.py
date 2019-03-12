@@ -43,6 +43,13 @@ class QuestionForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['items'].queryset = self.instance.event.items.all()
+        self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
+            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE)
+        )
+        if self.instance.pk:
+            self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
+                pk=self.instance.pk
+            )
         self.fields['identifier'].required = False
         self.fields['help_text'].widget.attrs['rows'] = 3
 
@@ -56,12 +63,15 @@ class QuestionForm(I18nModelForm):
             'required',
             'ask_during_checkin',
             'identifier',
-            'items'
+            'items',
+            'dependency_question',
+            'dependency_value'
         ]
         widgets = {
             'items': forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
+            'dependency_value': forms.Select,
         }
 
 

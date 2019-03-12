@@ -109,6 +109,20 @@
             {% bootstrap_field form.help_text layout="control" %}
             {% bootstrap_field form.identifier layout="control" %}
             {% bootstrap_field form.ask_during_checkin layout="control" %}
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="id_dependency_question">
+                    {% trans "Question dependency" %}
+                    <br><span class="optional">{% trans "Optional" context "form" %}</span>
+                </label>
+                <div class="col-md-4">
+                    {% bootstrap_field form.dependency_question layout="inline" form_group_class="inner" %}
+                </div>
+                <div class="col-md-5">
+                    <script type="text/plain" id="dependency_value_val">{{ form.instance.dependency_value }}</script>
+                    {% bootstrap_field form.dependency_value layout="inline" form_group_class="inner" %}
+                </div>
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
