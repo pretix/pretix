@@ -512,6 +512,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
         elif request.POST.get('action') == 'delete_confirm':
             for obj in self.objects:
                 if obj.allow_delete():
+                    obj.cartposition_set.all().delete()
                     obj.log_action('pretix.subevent.deleted', user=self.request.user)
                     obj.delete()
                 else:
