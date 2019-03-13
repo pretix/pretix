@@ -64,6 +64,12 @@ class QuestionForm(I18nModelForm):
                 dep = dep.dependency_question
         return val
 
+    def clean(self):
+        d = super().clean()
+        if d.get('dependency_question') and not d.get('dependency_value'):
+            raise ValidationError({'dependency_value': [_('This field is required')]})
+        return d
+
     class Meta:
         model = Question
         localized_fields = '__all__'
