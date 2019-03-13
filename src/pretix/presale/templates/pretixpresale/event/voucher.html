@@ -125,13 +125,24 @@
                                             {% if var.cached_availability.0 == 100 %}
                                                 <div class="col-md-2 col-xs-6 availability-box available radio-box">
                                                     {% if max_times > 1 %}
-                                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                pattern="\d*"
-                                                                max="{{ item.order_max }}"
-                                                                id="variation_{{ item.id }}_{{ var.id }}"
-                                                                name="variation_{{ item.id }}_{{ var.id }}"
-                                                                {% if options == 1 %}value="1"{% endif %}
-                                                                title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
+                                                        {% if item.order_max == 1 %}
+                                                            <label class="item-checkbox-label">
+                                                                <input type="checkbox"
+                                                                        value="1"
+                                                                        id="variation_{{ item.id }}_{{ var.id }}"
+                                                                        name="variation_{{ item.id }}_{{ var.id }}"
+                                                                        {% if options == 1 %}checked{% endif %}
+                                                                        title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
+                                                            </label>
+                                                        {% else %}
+                                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                    pattern="\d*"
+                                                                    max="{{ item.order_max }}"
+                                                                    id="variation_{{ item.id }}_{{ var.id }}"
+                                                                    name="variation_{{ item.id }}_{{ var.id }}"
+                                                                    {% if options == 1 %}value="1"{% endif %}
+                                                                    title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
+                                                        {% endif %}
                                                     {% else %}
                                                         <label>
                                                             <input type="radio" name="_voucher_item"
@@ -203,13 +214,24 @@
                                 {% if item.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available radio-box">
                                         {% if max_times > 1 %}
-                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                    pattern="\d*"
-                                                    max="{{ item.order_max }}"
-                                                    id="item_{{ item.id }}"
-                                                    name="item_{{ item.id }}"
-                                                    {% if options == 1 %}value="1"{% endif %}
-                                                    title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
+                                            {% if item.order_max == 1 %}
+                                                <label class="item-checkbox-label">
+                                                    <input type="checkbox"
+                                                            value="1"
+                                                            id="item_{{ item.id }}"
+                                                            name="item_{{ item.id }}"
+                                                            {% if options == 1 %}checked{% endif %}
+                                                            title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
+                                                </label>
+                                            {% else %}
+                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        pattern="\d*"
+                                                        max="{{ item.order_max }}"
+                                                        id="item_{{ item.id }}"
+                                                        name="item_{{ item.id }}"
+                                                        {% if options == 1 %}value="1"{% endif %}
+                                                        title="{% blocktrans with item=item.name %}Amount of {{ item }} to order{% endblocktrans %}">
+                                            {% endif %}
                                         {% else %}
                                             <label>
                                                 <input type="radio" name="_voucher_item"
