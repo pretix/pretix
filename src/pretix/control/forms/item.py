@@ -68,6 +68,8 @@ class QuestionForm(I18nModelForm):
         d = super().clean()
         if d.get('dependency_question') and not d.get('dependency_value'):
             raise ValidationError({'dependency_value': [_('This field is required')]})
+        if d.get('dependency_question') and d.get('ask_during_checkin'):
+            raise ValidationError(_('Dependencies between questions are not supported during check-in.'))
         return d
 
     class Meta:
