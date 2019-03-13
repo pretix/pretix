@@ -34,13 +34,11 @@
             </div>
             {% bootstrap_field form.codes layout="control" %}
 
-            {% bootstrap_field form.max_usages layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Voucher details" %}</legend>
+            {% bootstrap_field form.max_usages layout="control" %}
             {% bootstrap_field form.valid_until layout="control" %}
-            {% bootstrap_field form.block_quota layout="control" %}
-            {% bootstrap_field form.allow_ignore_quota layout="control" %}
             <div class="form-group">
                 <label class="col-md-3 control-label" for="id_tag">{% trans "Price effect" %}</label>
                 <div class="col-md-5">
@@ -67,6 +65,11 @@
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout="control" %}
             {% endif %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced settings" %}</legend>
+            {% bootstrap_field form.block_quota layout="control" %}
+            {% bootstrap_field form.allow_ignore_quota layout="control" %}
             {% bootstrap_field form.tag layout="control" %}
             {% bootstrap_field form.comment layout="control" %}
         </fieldset>
