@@ -266,8 +266,9 @@ class BaseQuestionsForm(forms.Form):
             if q.dependency_question_id:
                 field.widget.attrs['data-question-dependency'] = q.dependency_question_id
                 field.widget.attrs['data-question-dependency-value'] = q.dependency_value
-                field.widget.attrs['required'] = q.required
-                field._required = q.required
+                if q.type != 'M':
+                    field.widget.attrs['required'] = q.required
+                    field._required = q.required
                 field.required = False
 
             self.fields['question_%s' % q.id] = field
@@ -283,22 +284,34 @@ class BaseQuestionsForm(forms.Form):
     def clean(self):
         d = super().clean()
 
-        for k, f in self.fields.items():
-            if f.question.required and f.question.dependency_question_id:
-                # TODO: we somehow need to do this recursively
-                is_active = False
-                dependency_data = d.get('question_%s' % f.question.dependency_question_id)
-                if f.question.dependency_value == 'True':
-                    is_active = dependency_data
-                elif f.question.dependency_value == 'False':
-                    is_active = not dependency_data
-                elif isinstance(dependency_data, QuestionOption):
-                    is_active = dependency_data.identifier == f.question.dependency_value
-                elif hasattr(dependency_data, '__in__'):
-                    is_active = f.question.dependency_value in [o.identifier for o in dependency_data]
+        question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
 
-            if not d.get(k) and is_active:
-                raise ValidationError
+        def question_is_visible(parentid, qval):
+            parentq = question_cache[parentid]
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+                return False
+            if 'question_%d' % parentid not in d:
+                return False
+            dval = d.get('question_%d' % parentid)
+            if qval == 'True':
+                return dval
+            elif qval == 'False':
+                return not dval
+            elif isinstance(dval, QuestionOption):
+                return dval.identifier == qval
+            else:
+                return qval in [o.identifier for o in dval]
+
+        def question_is_required(q):
+            return (
+                q.required and
+                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value))
+            )
+
+        for q in question_cache.values():
+            print(q, question_is_required(q), d.get('question_%d' % q.pk))
+            if question_is_required(q) and not d.get('question_%d' % q.pk):
+                raise ValidationError({'question_%d' % q.pk: [_('This field is required')]})
 
         return d
 

@@ -414,10 +414,33 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for cp in self._positions_for_questions:
             answ = {
-                aw.question_id: aw.answer for aw in cp.answerlist
+                aw.question_id: aw for aw in cp.answerlist
             }
+            question_cache = {
+                q.pk: q for q in cp.item.questions_to_ask
+            }
+
+            def question_is_visible(parentid, qval):
+                parentq = question_cache[parentid]
+                if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+                    return False
+                if parentid not in answ:
+                    return False
+                if qval == 'True':
+                    return answ[parentid].answer == 'True'
+                elif qval == 'False':
+                    return answ[parentid].answer == 'False'
+                else:
+                    return qval in [o.identifier for o in answ[parentid].options.all()]
+
+            def question_is_required(q):
+                return (
+                    q.required and
+                    (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value))
+                )
+
             for q in cp.item.questions_to_ask:
-                if q.required and q.id not in answ:
+                if question_is_required(q) and q.id not in answ:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
