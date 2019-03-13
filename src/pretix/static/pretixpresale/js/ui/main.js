@@ -309,6 +309,9 @@ function questions_toggle_dependent(ev) {
             } else {
                 $dependent.slideDown();
             }
+            $dependent.find("input.required-hidden, select.required-hidden, textarea.required-hidden").each(function () {
+                $(this).prop("required", true).removeClass("required-hidden");
+            });
         } else if (!should_be_shown && is_shown) {
             $dependent.stop().addClass("dependency-hidden");
             if (!ev) {
@@ -316,6 +319,9 @@ function questions_toggle_dependent(ev) {
             } else {
                 $dependent.slideUp();
             }
+            $dependent.find("input[required], select[required], textarea[required]").each(function () {
+                $(this).prop("required", false).addClass("required-hidden");
+            });
         }
 
     });

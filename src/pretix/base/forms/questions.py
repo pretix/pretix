@@ -17,7 +17,7 @@ from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
-from pretix.base.models import InvoiceAddress, Question
+from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.rich_text import rich_text
@@ -266,6 +266,9 @@ class BaseQuestionsForm(forms.Form):
             if q.dependency_question_id:
                 field.widget.attrs['data-question-dependency'] = q.dependency_question_id
                 field.widget.attrs['data-question-dependency-value'] = q.dependency_value
+                field.widget.attrs['required'] = q.required
+                field._required = q.required
+                field.required = False
 
             self.fields['question_%s' % q.id] = field
 
@@ -276,6 +279,28 @@ class BaseQuestionsForm(forms.Form):
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value
                 value.initial = data.get('question_form_data', {}).get(key)
+
+    def clean(self):
+        d = super().clean()
+
+        for k, f in self.fields.items():
+            if f.question.required and f.question.dependency_question_id:
+                # TODO: we somehow need to do this recursively
+                is_active = False
+                dependency_data = d.get('question_%s' % f.question.dependency_question_id)
+                if f.question.dependency_value == 'True':
+                    is_active = dependency_data
+                elif f.question.dependency_value == 'False':
+                    is_active = not dependency_data
+                elif isinstance(dependency_data, QuestionOption):
+                    is_active = dependency_data.identifier == f.question.dependency_value
+                elif hasattr(dependency_data, '__in__'):
+                    is_active = f.question.dependency_value in [o.identifier for o in dependency_data]
+
+            if not d.get(k) and is_active:
+                raise ValidationError
+
+        return d
 
 
 class BaseInvoiceAddressForm(forms.ModelForm):
