@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 15:02+0000\n"
-"PO-Revision-Date: 2019-03-13 10:09+0000\n"
+"PO-Revision-Date: 2019-03-13 10:18+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -1717,7 +1717,7 @@ msgstr "此产品不会在指定日期之前出售。"
 
 #: pretix/base/models/items.py:308 pretix/base/payment.py:204
 msgid "Available until"
-msgstr "直到"
+msgstr "可用直到"
 
 #: pretix/base/models/items.py:310
 msgid "This product will not be sold after the given date."
@@ -2810,16 +2810,13 @@ msgid "Order {order.code} has been changed."
 msgstr "订单{order.code}已更改。"
 
 #: pretix/base/notifications.py:242
-#, fuzzy
-#| msgid "Order changed"
 msgid "Order has been overpaid"
-msgstr "订单已更改"
+msgstr "订单已超付"
 
 #: pretix/base/notifications.py:243
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been marked as paid."
+#, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr "订单{order.code}已被标记为已付款。"
+msgstr "订单{order.code}已超付。"
 
 #: pretix/base/notifications.py:249
 #, python-brace-format
@@ -3074,8 +3071,9 @@ msgstr "123.45 欧元"
 #: pretix/base/pdf.py:92 pretix/base/pdf.py:178
 #: pretix/base/services/invoices.py:306 pretix/control/views/event.py:627
 #: pretix/control/views/event.py:692 pretix/plugins/sendmail/views.py:102
+#, fuzzy
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/pdf.py:97
 msgid "Sample event name"
@@ -4170,9 +4168,10 @@ msgstr "姓氏"
 #: pretix/base/settings.py:655 pretix/base/settings.py:673
 #: pretix/base/settings.py:688 pretix/base/settings.py:718
 #: pretix/base/settings.py:741
+#, fuzzy
 msgctxt "person_name_sample"
 msgid "John"
-msgstr ""
+msgstr "John"
 
 #: pretix/base/settings.py:625 pretix/base/settings.py:641
 #: pretix/base/settings.py:657 pretix/base/settings.py:675
@@ -4200,9 +4199,10 @@ msgid "Middle name"
 msgstr "中名"
 
 #: pretix/base/settings.py:729 pretix/base/settings.py:740
+#, fuzzy
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/settings.py:735
 msgid "Calling name"
