@@ -53,6 +53,16 @@ class QuestionForm(I18nModelForm):
         self.fields['identifier'].required = False
         self.fields['help_text'].widget.attrs['rows'] = 3
 
+    def clean_dependency_question(self):
+        dep = val = self.cleaned_data.get('dependency_question')
+        seen_ids = {self.instance.pk}
+        while dep.dependency_question:
+            if dep.pk in seen_ids:
+                raise ValidationError(_('Circular dependency between questions detected.'))
+            seen_ids.add(dep.pk)
+            dep = dep.dependency_question
+        return val
+
     class Meta:
         model = Question
         localized_fields = '__all__'
