@@ -326,6 +326,7 @@ class ItemUpdateForm(I18nModelForm):
             'over 65. This ticket includes access to all parts of the event, except the VIP '
             'area.'
         )
+        self.fields['description'].widget.attrs['rows'] = '4'
         self.fields['sales_channels'] = forms.MultipleChoiceField(
             label=_('Sales channels'),
             choices=(
