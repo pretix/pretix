@@ -6,6 +6,7 @@ function gettext(msgid) {
     }
     return msgid;
 }
+
 function ngettext(singular, plural, count) {
     if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
         return django.ngettext(singular, plural, count);
@@ -14,7 +15,7 @@ function ngettext(singular, plural, count) {
 }
 
 var form_handlers = function (el) {
-    el.find(".datetimepicker").each(function() {
+    el.find(".datetimepicker").each(function () {
         $(this).datetimepicker({
             format: $("body").attr("data-datetimeformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -37,7 +38,7 @@ var form_handlers = function (el) {
         }
     });
 
-    el.find(".datepickerfield").each(function() {
+    el.find(".datepickerfield").each(function () {
         var opts = {
             format: $("body").attr("data-dateformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -71,7 +72,7 @@ var form_handlers = function (el) {
         }
     });
 
-    el.find(".timepickerfield").each(function() {
+    el.find(".timepickerfield").each(function () {
         var opts = {
             format: $("body").attr("data-timeformat"),
             locale: $("body").attr("data-datetimelocale"),
@@ -90,7 +91,7 @@ var form_handlers = function (el) {
             }
         };
         $(this).datetimepicker(opts);
-	});
+    });
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
@@ -104,7 +105,10 @@ var form_handlers = function (el) {
             }
         );
     });
-}
+
+    el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
+    questions_toggle_dependent();
+};
 
 
 $(function () {
@@ -130,7 +134,7 @@ $(function () {
         $("#voucher-box").slideDown();
         $("#voucher-toggle").slideUp();
     });
-    
+
     $('[data-toggle="tooltip"]').tooltip();
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
@@ -140,7 +144,7 @@ $(function () {
     $('.toggle-variation-description').click(function () {
         $(this).parent().find('.addon-variation-description').slideToggle();
     });
-    
+
     // Copy answers
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
@@ -153,7 +157,7 @@ $(function () {
     // Subevent choice
     if ($(".subevent-toggle").length) {
         $(".subevent-list").hide();
-        $(".subevent-toggle").css("display", "block").click(function() {
+        $(".subevent-toggle").css("display", "block").click(function () {
             $(".subevent-list").slideToggle(300);
         });
     }
@@ -165,7 +169,7 @@ $(function () {
     var update_cart_form = function () {
         var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
         if (!is_enabled) {
-            $(".input-item-count").each(function() {
+            $(".input-item-count").each(function () {
                 if ($(this).val() && $(this).val() !== "0") {
                     is_enabled = true;
                 }
@@ -185,18 +189,18 @@ $(function () {
 
     // Invoice address form
     $("input[data-required-if]").each(function () {
-      var dependent = $(this),
-        dependency = $($(this).attr("data-required-if")),
-        update = function (ev) {
-          var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-          if (!dependent.is("[data-no-required-attr]")) {
-              dependent.prop('required', enabled);
-          }
-          dependent.closest('.form-group').toggleClass('required', enabled);
-        };
-      update();
-      dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-      dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        var dependent = $(this),
+            dependency = $($(this).attr("data-required-if")),
+            update = function (ev) {
+                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                if (!dependent.is("[data-no-required-attr]")) {
+                    dependent.prop('required', enabled);
+                }
+                dependent.closest('.form-group').toggleClass('required', enabled);
+            };
+        update();
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
     $("input[data-display-dependency]").each(function () {
@@ -219,16 +223,16 @@ $(function () {
         dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 
-	form_handlers($("body"));
+    form_handlers($("body"));
 
     // Lightbox
     lightbox.init();
 });
 
-function copy_answers(idx) {    
-    var elements = $('*[data-idx="'+idx+'"] input, *[data-idx="'+idx+'"] select, *[data-idx="'+idx+'"] textarea');
+function copy_answers(idx) {
+    var elements = $('*[data-idx="' + idx + '"] input, *[data-idx="' + idx + '"] select, *[data-idx="' + idx + '"] textarea');
     var firstAnswers = $('*[data-idx="0"] input, *[data-idx="0"] select, *[data-idx="0"] textarea');
-    elements.each(function(index){
+    elements.each(function (index) {
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
             attributeType = input.attr('type'),
@@ -250,14 +254,20 @@ function copy_answers(idx) {
                         break;
                     case "checkbox":
                     case "radio":
-                        input.prop("checked", firstAnswers.filter("[name$=" + suffix + "]").prop("checked"));
+                        if (input.attr('value')) {
+                            input.prop("checked", firstAnswers.filter("[name$=" + suffix + "][value=" + input.attr('value') + "]").prop("checked"));
+                        } else {
+                            input.prop("checked", firstAnswers.filter("[name$=" + suffix + "]").prop("checked"));
+                        }
                         break;
                     default:
                         input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
-                } 
+                }
                 break;
             default:
                 input.val(firstAnswers.filter("[name$=" + suffix + "]").val());
-        } 
+        }
     });
+    questions_toggle_dependent(true);
 }
+

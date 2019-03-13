@@ -33,6 +33,7 @@
             <script type="text/javascript" src="{% static "charts/morris.js" %}"></script>
             <script type="text/javascript" src="{% static "clipboard/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "rrule/rrule.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixpresale/js/ui/questions.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/menu.js" %}"></script>
@@ -70,7 +71,10 @@
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}"
             data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}"
+            data-pretixlocale="{{ request.LANGUAGE_CODE }}"
             data-payment-weekdays-disabled="{{ js_payment_weekdays_disabled }}"
+            {% if request.organizer %}data-organizer="{{ request.organizer.slug }}"{% endif %}
+            {% if request.event %}data-event="{{ request.event.slug }}"{% endif %}
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">

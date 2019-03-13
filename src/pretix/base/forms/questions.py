@@ -17,7 +17,7 @@ from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
     TimePickerWidget, UploadedFileWidget,
 )
-from pretix.base.models import InvoiceAddress, Question
+from pretix.base.models import InvoiceAddress, Question, QuestionOption
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.rich_text import rich_text
@@ -145,6 +145,7 @@ class BaseQuestionsForm(forms.Form):
         item = pos.item
         questions = pos.item.questions_to_ask
         event = kwargs.pop('event')
+        self.all_optional = kwargs.pop('all_optional', False)
 
         super().__init__(*args, **kwargs)
 
@@ -173,6 +174,7 @@ class BaseQuestionsForm(forms.Form):
             tz = pytz.timezone(event.settings.timezone)
             help_text = rich_text(q.help_text)
             label = escape(q.question)  # django-bootstrap3 calls mark_safe
+            required = q.required and not self.all_optional
             if q.type == Question.TYPE_BOOLEAN:
                 if q.required:
                     # For some reason, django-bootstrap3 does not set the required attribute
@@ -187,26 +189,26 @@ class BaseQuestionsForm(forms.Form):
                     initialbool = False
 
                 field = forms.BooleanField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=initialbool, widget=widget,
                 )
             elif q.type == Question.TYPE_NUMBER:
                 field = forms.DecimalField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=q.help_text,
                     initial=initial.answer if initial else None,
                     min_value=Decimal('0.00'),
                 )
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_TEXT:
                 field = forms.CharField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     widget=forms.Textarea,
                     initial=initial.answer if initial else None,
@@ -214,44 +216,46 @@ class BaseQuestionsForm(forms.Form):
             elif q.type == Question.TYPE_CHOICE:
                 field = forms.ModelChoiceField(
                     queryset=q.options,
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     widget=forms.Select,
+                    to_field_name='identifier',
                     empty_label='',
                     initial=initial.options.first() if initial else None,
                 )
             elif q.type == Question.TYPE_CHOICE_MULTIPLE:
                 field = forms.ModelMultipleChoiceField(
                     queryset=q.options,
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
+                    to_field_name='identifier',
                     widget=forms.CheckboxSelectMultiple,
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
                 field = forms.FileField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
                     widget=UploadedFileWidget(position=pos, event=event, answer=initial),
                 )
             elif q.type == Question.TYPE_DATE:
                 field = forms.DateField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).date() if initial and initial.answer else None,
                     widget=DatePickerWidget(),
                 )
             elif q.type == Question.TYPE_TIME:
                 field = forms.TimeField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).time() if initial and initial.answer else None,
                     widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 field = SplitDateTimeField(
-                    label=label, required=q.required,
+                    label=label, required=required,
                     help_text=help_text,
                     initial=dateutil.parser.parse(initial.answer).astimezone(tz) if initial and initial.answer else None,
                     widget=SplitDateTimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
@@ -260,6 +264,15 @@ class BaseQuestionsForm(forms.Form):
             if answers:
                 # Cache the answer object for later use
                 field.answer = answers[0]
+
+            if q.dependency_question_id:
+                field.widget.attrs['data-question-dependency'] = q.dependency_question_id
+                field.widget.attrs['data-question-dependency-value'] = q.dependency_value
+                if q.type != 'M':
+                    field.widget.attrs['required'] = q.required and not self.all_optional
+                    field._required = q.required and not self.all_optional
+                field.required = False
+
             self.fields['question_%s' % q.id] = field
 
         responses = question_form_fields.send(sender=event, position=pos)
@@ -269,6 +282,40 @@ class BaseQuestionsForm(forms.Form):
                 # We need to be this explicit, since OrderedDict.update does not retain ordering
                 self.fields[key] = value
                 value.initial = data.get('question_form_data', {}).get(key)
+
+    def clean(self):
+        d = super().clean()
+
+        question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
+
+        def question_is_visible(parentid, qval):
+            parentq = question_cache[parentid]
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+                return False
+            if 'question_%d' % parentid not in d:
+                return False
+            dval = d.get('question_%d' % parentid)
+            if qval == 'True':
+                return dval
+            elif qval == 'False':
+                return not dval
+            elif isinstance(dval, QuestionOption):
+                return dval.identifier == qval
+            else:
+                return qval in [o.identifier for o in dval]
+
+        def question_is_required(q):
+            return (
+                q.required and
+                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value))
+            )
+
+        if not self.all_optional:
+            for q in question_cache.values():
+                if question_is_required(q) and not d.get('question_%d' % q.pk):
+                    raise ValidationError({'question_%d' % q.pk: [_('This field is required')]})
+
+        return d
 
 
 class BaseInvoiceAddressForm(forms.ModelForm):

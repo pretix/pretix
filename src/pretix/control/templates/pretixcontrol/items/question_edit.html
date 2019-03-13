@@ -21,15 +21,9 @@
         <fieldset>
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.question layout="control" %}
-            {% bootstrap_field form.help_text layout="control" %}
             {% bootstrap_field form.type layout="control" %}
-            {% bootstrap_field form.identifier layout="control" %}
-            {% bootstrap_field form.ask_during_checkin layout="control" %}
-            {% bootstrap_field form.required layout="control" %}
-        </fieldset>
-        <fieldset>
-            <legend>{% trans "Apply to products" %}</legend>
             {% bootstrap_field form.items layout="control" %}
+            {% bootstrap_field form.required layout="control" %}
         </fieldset>
         <div class="alert alert-info alert-required-boolean">
             {% blocktrans trimmed %}
@@ -108,6 +102,26 @@
                     <button type="button" class="btn btn-default" data-formset-add>
                         <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
                 </p>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced settings" %}</legend>
+            {% bootstrap_field form.help_text layout="control" %}
+            {% bootstrap_field form.identifier layout="control" %}
+            {% bootstrap_field form.ask_during_checkin layout="control" %}
+
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="id_dependency_question">
+                    {% trans "Question dependency" %}
+                    <br><span class="optional">{% trans "Optional" context "form" %}</span>
+                </label>
+                <div class="col-md-4">
+                    {% bootstrap_field form.dependency_question layout="inline" form_group_class="inner" %}
+                </div>
+                <div class="col-md-5">
+                    <script type="text/plain" id="dependency_value_val">{{ form.instance.dependency_value }}</script>
+                    {% bootstrap_field form.dependency_value layout="inline" form_group_class="inner" %}
+                </div>
             </div>
         </fieldset>
         <div class="form-group submit-group">

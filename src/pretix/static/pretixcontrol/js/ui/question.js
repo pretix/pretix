@@ -1,5 +1,6 @@
 /*global $, Morris, gettext*/
 $(function () {
+    // Question view
     if (!$("#question-stats").length) {
         return;
     }
@@ -72,4 +73,67 @@ $(function () {
     }
 
     // N, S, T
+});
+
+$(function () {
+    // Question editor
+
+    if (!$("#answer-options").length) {
+        return;
+    }
+
+    // Question editor
+    $("#id_type").change(question_page_toggle_view);
+    $("#id_required").change(question_page_toggle_view);
+    question_page_toggle_view();
+
+    function question_page_toggle_view() {
+        var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
+        $("#answer-options").toggle(show);
+
+        show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
+        $(".alert-required-boolean").toggle(show);
+    }
+
+    var $val = $("#id_dependency_value");
+    var $dq = $("#id_dependency_question");
+    var oldval = $("#dependency_value_val").text();
+    function update_dependency_options() {
+        $val.parent().find(".loading-indicator").remove();
+        $("#id_dependency_value option").remove();
+        $("#id_dependency_value").prop("required", false);
+
+        var val = $dq.children("option:selected").val();
+        if (!val) {
+            $("#id_dependency_value").show();
+            $val.show();
+            return;
+        }
+
+        $("#id_dependency_value").prop("required", true);
+        $val.hide();
+        $val.parent().append("<div class=\"help-block loading-indicator\"><span class=\"fa" +
+            " fa-cog fa-spin\"></span></div>");
+
+        apiGET('/api/v1/organizers/' + $("body").attr("data-organizer") + '/events/' + $("body").attr("data-event") + '/questions/' + val + '/', function (data) {
+            if (data.type === "B") {
+                $val.append($("<option>").attr("value", "True").text(gettext("Ja")));
+                $val.append($("<option>").attr("value", "False").text(gettext("Nein")));
+            } else {
+                for (var i = 0; i < data.options.length; i++) {
+                    var opt = data.options[i];
+                    var $opt = $("<option>").attr("value", opt.identifier).text(i18nToString(opt.answer));
+                    $val.append($opt);
+                }
+            }
+            if (oldval) {
+                $val.val(oldval);
+            }
+            $val.parent().find(".loading-indicator").remove();
+            $val.show();
+        });
+    }
+
+    update_dependency_options();
+    $dq.change(update_dependency_options);
 });

@@ -46,6 +46,16 @@ options                               list of objects            In case of ques
 ├ identifier                          string                     An arbitrary string that can be used for matching with
                                                                  other sources.
 └ answer                              multi-lingual string       The displayed value of this option
+dependency_question                   integer                    Internal ID of a different question. The current
+                                                                 question will only be shown if the question given in
+                                                                 this attribute is set to the value given in
+                                                                 ``dependency_value``. This cannot be combined with
+                                                                 ``ask_during_checkin``.
+dependency_value                      string                     The value ``dependency_question`` needs to be set to.
+                                                                 If ``dependency_question`` is set to a boolean
+                                                                 question, this should be ``"True"`` or ``"False"``.
+                                                                 Otherwise, it should be the ``identifier`` of a
+                                                                 question option.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.12
@@ -100,6 +110,8 @@ Endpoints
             "position": 1,
             "identifier": "WY3TP9SL",
             "ask_during_checkin": false,
+            "dependency_question": null,
+            "dependency_value": null,
             "options": [
               {
                 "id": 1,
@@ -165,6 +177,8 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "dependency_question": null,
+        "dependency_value": null,
         "options": [
           {
             "id": 1,
@@ -214,6 +228,8 @@ Endpoints
         "items": [1, 2],
         "position": 1,
         "ask_during_checkin": false,
+        "dependency_question": null,
+        "dependency_value": null,
         "options": [
           {
             "answer": {"en": "S"}
@@ -245,6 +261,8 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "dependency_question": null,
+        "dependency_value": null,
         "options": [
           {
             "id": 1,
@@ -314,6 +332,8 @@ Endpoints
         "position": 2,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "dependency_question": null,
+        "dependency_value": null,
         "options": [
           {
             "id": 1,

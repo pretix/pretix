@@ -212,6 +212,45 @@ class QuestionsTest(ItemFormTest):
         tbl = doc.select('.container-fluid table.table-bordered tbody')[0]
         assert tbl.select('tr')[0].select('td')[0].text.strip() == '42'
 
+    def test_set_dependency(self):
+        q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
+        q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="T", required=True)
+        o1 = q1.options.create(answer='Germany')
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['dependency_question'] = q1.pk
+        form_data['dependency_value'] = o1.identifier
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        q2.refresh_from_db()
+        assert q2.dependency_question == q1
+        assert q2.dependency_value == o1.identifier
+
+    def test_set_dependency_circular(self):
+        q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
+        o1 = q1.options.create(answer='Germany')
+        q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="C", required=True,
+                                     dependency_question=q1, dependency_value=o1.identifier)
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q1.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['dependency_question'] = q2.pk
+        form_data['dependency_value'] = '1'
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q1.id),
+                            form_data)
+        assert not doc.select(".alert-success")
+
+    def test_set_dependency_to_non_choice(self):
+        q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="N", required=True)
+        q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="T", required=True)
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['dependency_question'] = q1.pk
+        form_data['dependency_value'] = '1'
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id),
+                            form_data)
+        assert not doc.select(".alert-success")
+
 
 class QuotaTest(ItemFormTest):
 

@@ -17,6 +17,7 @@ from pretix.base.models import (
 
 class BaseQuestionsViewMixin:
     form_class = BaseQuestionsForm
+    all_optional = False
 
     @staticmethod
     def _keyfunc(pos):
@@ -47,6 +48,7 @@ class BaseQuestionsViewMixin:
                                    prefix=cr.id,
                                    cartpos=cartpos,
                                    orderpos=orderpos,
+                                   all_optional=self.all_optional,
                                    data=(self.request.POST if self.request.method == 'POST' else None),
                                    files=(self.request.FILES if self.request.method == 'POST' else None))
             form.pos = cartpos or orderpos
@@ -154,7 +156,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = Question.objects.all()
+        qqs = self.request.event.questions.all()
         if self.only_user_visible:
             qqs = qqs.filter(ask_during_checkin=False)
         return list(self.order.positions.select_related(
@@ -173,7 +175,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
                              Question.objects.none(),
                              to_attr='dummy'
                          )))
-                     ),
+                     ).select_related('dependency_question'),
                      to_attr='questions_to_ask')
         ))
 

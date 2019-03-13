@@ -1302,6 +1302,8 @@ TEST_QUESTION_RES = {
     "ask_during_checkin": False,
     "identifier": "ABC",
     "position": 0,
+    "dependency_question": None,
+    "dependency_value": None,
     "options": [
         {
             "id": 0,
@@ -1418,6 +1420,65 @@ def test_question_create(token_client, organizer, event, event2, item):
     assert resp.status_code == 400
     assert resp.content.decode() == '{"identifier":["This identifier is already used for a different question."]}'
 
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "dependency_question": question.pk,
+            "dependency_value": "1",
+            "identifier": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"dependency_question":["Question dependencies can only be set to boolean or choice questions."]}'
+
+    question.type = Question.TYPE_BOOLEAN
+    question.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": True,
+            "dependency_question": question.pk,
+            "dependency_value": "1",
+            "identifier": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Dependencies are not supported during check-in."]}'
+
+    question.type = Question.TYPE_BOOLEAN
+    question.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        {
+            "question": "What's your name?",
+            "type": "S",
+            "required": True,
+            "items": [item.pk],
+            "position": 0,
+            "ask_during_checkin": False,
+            "dependency_question": question.pk,
+            "dependency_value": "1",
+            "identifier": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    q2 = Question.objects.get(pk=resp.data['id'])
+    assert q2.dependency_question == question
+
 
 @pytest.mark.django_db
 def test_question_update(token_client, organizer, event, question):
@@ -1429,11 +1490,24 @@ def test_question_update(token_client, organizer, event, question):
         },
         format='json'
     )
-    print(resp.content)
     assert resp.status_code == 200
     question = Question.objects.get(pk=resp.data['id'])
     assert question.question == "What's your shoe size?"
     assert question.type == "N"
+
+
+@pytest.mark.django_db
+def test_question_update_circular_dependency(token_client, organizer, event, question):
+    q2 = event.questions.create(question="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_question": q2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Circular dependency between questions detected."]}'
 
 
 @pytest.mark.django_db

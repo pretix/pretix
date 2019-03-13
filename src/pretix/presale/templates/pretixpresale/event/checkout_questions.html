@@ -65,7 +65,7 @@
                         </h4>
                     </summary>
                     <div>
-                        <div class="panel-body" data-idx="{{ forloop.counter0 }}">
+                        <div class="panel-body questions-form" data-idx="{{ forloop.counter0 }}">
                             {% if pos.addons.all %}
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">
@@ -97,7 +97,7 @@
                                     {# Add-Ons #}
                                     <legend>+ {{ form.pos.item }}</legend>
                                 {% endif %}
-                                {% bootstrap_form form layout="horizontal" %}
+                                {% bootstrap_form form layout="checkout" %}
                             {% endfor %}
                         </div>
                     </div>

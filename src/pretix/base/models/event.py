@@ -515,6 +515,10 @@ class Event(EventMixin, LoggedModel):
                 o.question = q
                 o.save()
 
+        for q in self.questions.filter(dependency_question__isnull=False):
+            q.dependency_question = question_map[q.dependency_question_id]
+            q.save(update_fields=['dependency_question'])
+
         for cl in other.checkin_lists.filter(subevent__isnull=True).prefetch_related('limit_products'):
             items = list(cl.limit_products.all())
             cl.pk = None

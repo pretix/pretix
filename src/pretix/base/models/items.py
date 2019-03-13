@@ -702,6 +702,10 @@ class Question(LoggedModel):
     :type ask_during_checkin: bool
     :param identifier: An arbitrary, internal identifier
     :type identifier: str
+    :param dependency_question: This question will only show up if the referenced question is set to `dependency_value`.
+    :type dependency_question: Question
+    :param dependency_value: The value that `dependency_question` needs to be set to for this question to be applicable.
+    :type dependency_value: str
     """
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
@@ -771,6 +775,10 @@ class Question(LoggedModel):
                     'pretixdesk 0.2 or newer.'),
         default=False
     )
+    dependency_question = models.ForeignKey(
+        'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
+    )
+    dependency_value = models.TextField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Question")

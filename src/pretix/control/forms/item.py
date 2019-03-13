@@ -36,14 +36,39 @@ class CategoryForm(I18nModelForm):
 class QuestionForm(I18nModelForm):
     question = I18nFormField(
         label=_("Question"),
-        widget_kwargs={'attrs': {'rows': 5}},
+        widget_kwargs={'attrs': {'rows': 2}},
         widget=I18nTextarea
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['items'].queryset = self.instance.event.items.all()
+        self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
+            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE)
+        )
+        if self.instance.pk:
+            self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
+                pk=self.instance.pk
+            )
         self.fields['identifier'].required = False
+        self.fields['help_text'].widget.attrs['rows'] = 3
+
+    def clean_dependency_question(self):
+        dep = val = self.cleaned_data.get('dependency_question')
+        if dep:
+            seen_ids = {self.instance.pk} if self.instance else set()
+            while dep:
+                if dep.pk in seen_ids:
+                    raise ValidationError(_('Circular dependency between questions detected.'))
+                seen_ids.add(dep.pk)
+                dep = dep.dependency_question
+        return val
+
+    def clean(self):
+        d = super().clean()
+        if d.get('dependency_question') and not d.get('dependency_value'):
+            raise ValidationError({'dependency_value': [_('This field is required')]})
+        return d
 
     class Meta:
         model = Question
@@ -55,12 +80,15 @@ class QuestionForm(I18nModelForm):
             'required',
             'ask_during_checkin',
             'identifier',
-            'items'
+            'items',
+            'dependency_question',
+            'dependency_value'
         ]
         widgets = {
             'items': forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
+            'dependency_value': forms.Select,
         }
 
 
