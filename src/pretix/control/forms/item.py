@@ -55,12 +55,13 @@ class QuestionForm(I18nModelForm):
 
     def clean_dependency_question(self):
         dep = val = self.cleaned_data.get('dependency_question')
-        seen_ids = {self.instance.pk}
-        while dep.dependency_question:
-            if dep.pk in seen_ids:
-                raise ValidationError(_('Circular dependency between questions detected.'))
-            seen_ids.add(dep.pk)
-            dep = dep.dependency_question
+        if dep:
+            seen_ids = {self.instance.pk} if self.instance else set()
+            while dep:
+                if dep.pk in seen_ids:
+                    raise ValidationError(_('Circular dependency between questions detected.'))
+                seen_ids.add(dep.pk)
+                dep = dep.dependency_question
         return val
 
     class Meta:

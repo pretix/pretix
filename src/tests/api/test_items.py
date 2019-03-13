@@ -1490,11 +1490,24 @@ def test_question_update(token_client, organizer, event, question):
         },
         format='json'
     )
-    print(resp.content)
     assert resp.status_code == 200
     question = Question.objects.get(pk=resp.data['id'])
     assert question.question == "What's your shoe size?"
     assert question.type == "N"
+
+
+@pytest.mark.django_db
+def test_question_update_circular_dependency(token_client, organizer, event, question):
+    q2 = event.questions.create(question="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        {
+            "dependency_question": q2.pk
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Circular dependency between questions detected."]}'
 
 
 @pytest.mark.django_db

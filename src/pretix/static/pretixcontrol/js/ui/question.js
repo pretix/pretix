@@ -101,6 +101,7 @@ $(function () {
     function update_dependency_options() {
         $val.parent().find(".loading-indicator").remove();
         $("#id_dependency_value option").remove();
+        $("#id_dependency_value").prop("required", false);
 
         var val = $dq.children("option:selected").val();
         if (!val) {
@@ -109,6 +110,7 @@ $(function () {
             return;
         }
 
+        $("#id_dependency_value").prop("required", true);
         $val.hide();
         $val.parent().append("<div class=\"help-block loading-indicator\"><span class=\"fa" +
             " fa-cog fa-spin\"></span></div>");

@@ -187,6 +187,15 @@ class QuestionSerializer(I18nAwareModelSerializer):
         if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
             raise ValidationError('Dependencies are not supported during check-in.')
 
+        dep = full_data.get('dependency_question')
+        if dep:
+            seen_ids = {self.instance.pk} if self.instance else set()
+            while dep:
+                if dep.pk in seen_ids:
+                    raise ValidationError(_('Circular dependency between questions detected.'))
+                seen_ids.add(dep.pk)
+                dep = dep.dependency_question
+
         Question.clean_items(event, full_data.get('items'))
         return data
 
