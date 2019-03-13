@@ -946,16 +946,38 @@ class AbstractPosition(models.Model):
         # selected via prefetch_related
         if not all:
             if hasattr(self.item, 'questions_to_ask'):
-                self.questions = list(copy.copy(q) for q in self.item.questions_to_ask)
+                questions = list(copy.copy(q) for q in self.item.questions_to_ask)
             else:
-                self.questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False))
+                questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False))
         else:
-            self.questions = list(copy.copy(q) for q in self.item.questions.all())
-        for q in self.questions:
+            questions = list(copy.copy(q) for q in self.item.questions.all())
+
+        question_cache = {
+            q.pk: q for q in questions
+        }
+
+        def question_is_visible(parentid, qval):
+            parentq = question_cache[parentid]
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_value):
+                return False
+            if parentid not in self.answ:
+                return False
+            if qval == 'True':
+                return self.answ[parentid].answer == 'True'
+            elif qval == 'False':
+                return self.answ[parentid].answer == 'False'
+            else:
+                return qval in [o.identifier for o in self.answ[parentid].options.all()]
+
+        self.questions = []
+        for q in questions:
             if q.id in self.answ:
                 q.answer = self.answ[q.id]
+                q.answer.question = q  # cache object
             else:
                 q.answer = ""
+            if not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_value):
+                self.questions.append(q)
 
     @property
     def net_price(self):

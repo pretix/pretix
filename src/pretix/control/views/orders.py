@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, IntegerField, OuterRef, ProtectedError, Q, Subquery, Sum,
+    Count, IntegerField, OuterRef, Prefetch, ProtectedError, Q, Subquery, Sum,
 )
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, JsonResponse,
@@ -234,7 +234,9 @@ class OrderDetail(OrderView):
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule'
         ).prefetch_related(
-            'item__questions', 'answers', 'answers__question', 'checkins', 'checkins__list'
+            'item__questions',
+            Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
+            'checkins', 'checkins__list'
         ).order_by('positionid')
 
         positions = []

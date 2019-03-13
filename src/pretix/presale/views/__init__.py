@@ -5,13 +5,15 @@ from functools import wraps
 from itertools import groupby
 
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Prefetch, Sum
 from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from pretix.base.i18n import language
-from pretix.base.models import CartPosition, InvoiceAddress, OrderPosition
+from pretix.base.models import (
+    CartPosition, InvoiceAddress, OrderPosition, QuestionAnswer,
+)
 from pretix.base.services.cart import get_fees
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
@@ -48,7 +50,7 @@ class CartMixin:
             prefetch = []
             if answers:
                 prefetch.append('item__questions')
-                prefetch.append('answers')
+                prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
                 'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
