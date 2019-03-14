@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 15:02+0000\n"
+"POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-13 15:49+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -112,7 +112,7 @@ msgstr ""
 "en probeer het opnieuw als dit langer dan een minuut duurt."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
-#: pretix/static/pretixcontrol/js/ui/main.js:28
+#: pretix/static/pretixcontrol/js/ui/main.js:20
 msgid "Close message"
 msgstr "Sluit bericht"
 
@@ -181,20 +181,20 @@ msgstr "Er is iets misgegaan."
 msgid "Generating messages …"
 msgstr "Bezig met het genereren van berichten …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:43
+#: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
 msgstr "Onbekende fout."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:205
+#: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Je kleur heeft een goed contrast, en is gemakkelijk te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:209
+#: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Je kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:213
+#: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -202,29 +202,37 @@ msgstr ""
 "Je kleur heeft een slecht contrast voor tekst op een witte achtergrond, kies "
 "een donkerdere kleur."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:294
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:295
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:588
+#: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:639
+#: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr "Andere"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
 msgstr "Aantal"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:120
+msgid "Ja"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/question.js:121
+msgid "Nein"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"

@@ -386,7 +386,7 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
 
-we did not yet receive a payment for your order for {event}.
+we did not yet receive a full payment for your order for {event}.
 Please keep in mind that we only guarantee your order if we receive
 your payment before {expire_date}.
 

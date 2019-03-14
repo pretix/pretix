@@ -192,6 +192,7 @@ DEFAULT_VARIABLES = OrderedDict((
                 op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
                 else op.addons.select_related('item', 'variation')
             )
+            if not p.canceled
         ])
     }),
     ("organizer", {

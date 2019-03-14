@@ -24,6 +24,14 @@ class BankTransfer(BasePaymentProvider):
     @staticmethod
     def form_fields():
         return OrderedDict([
+            ('ack',
+             forms.BooleanField(
+                 label=_('I have understood that people will pay the ticket price directly to my bank account and '
+                         'pretix cannot automatically know what payments arrived. Therefore, I will either mark '
+                         'payments as complete manually, or regularly import a digital bank statement in order to '
+                         'give pretix the required information.'),
+                 required=True,
+             )),
             ('bank_details_type', forms.ChoiceField(
                 label=_('Bank account type'),
                 widget=forms.RadioSelect,
