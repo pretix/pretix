@@ -311,7 +311,7 @@ class BasePaymentProvider:
     @property
     def payment_form_fields(self) -> dict:
         """
-        This is used by the default implementation of :py:meth:`checkout_form`.
+        This is used by the default implementation of :py:meth:`payment_form`.
         It should return an object similar to :py:attr:`settings_form_fields`.
 
         The default implementation returns an empty dictionary.
@@ -320,10 +320,10 @@ class BasePaymentProvider:
 
     def payment_form(self, request: HttpRequest) -> Form:
         """
-        This is called by the default implementation of :py:meth:`checkout_form_render`
+        This is called by the default implementation of :py:meth:`payment_form_render`
         to obtain the form that is displayed to the user during the checkout
         process. The default implementation constructs the form using
-        :py:attr:`checkout_form_fields` and sets appropriate prefixes for the form
+        :py:attr:`payment_form_fields` and sets appropriate prefixes for the form
         and all fields and fills the form with data form the user's session.
 
         If you overwrite this, we strongly suggest that you inherit from
@@ -437,7 +437,7 @@ class BasePaymentProvider:
         When the user selects this provider as their preferred payment method,
         they will be shown the HTML you return from this method.
 
-        The default implementation will call :py:meth:`checkout_form`
+        The default implementation will call :py:meth:`payment_form`
         and render the returned form. If your payment method doesn't require
         the user to fill out form fields, you should just return a paragraph
         of explanatory text.
