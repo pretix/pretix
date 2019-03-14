@@ -27,15 +27,17 @@
                     <legend>{% trans "Voucher details" %}</legend>
                     {% bootstrap_field form.code layout="control" %}
                     {% if voucher.pk %}
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="id_url">{% trans "Voucher link" %}</label>
-                            <div class="col-md-9">
-                                <input type="text" name="url"
-                                        value="{% abseventurl request.event "presale:event.redeem" %}?voucher={{ voucher.code }}"
-                                        class="form-control"
-                                        id="id_url" readonly>
+                        {% if not request.event.has_subevents or voucher.subevent %}
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="id_url">{% trans "Voucher link" %}</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="url"
+                                            value="{% abseventurl request.event "presale:event.redeem" %}?voucher={{ voucher.code }}&subevent={{ voucher.subevent_id }}"
+                                            class="form-control"
+                                            id="id_url" readonly>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
                     {% bootstrap_field form.max_usages layout="control" %}
                     {% bootstrap_field form.valid_until layout="control" %}
