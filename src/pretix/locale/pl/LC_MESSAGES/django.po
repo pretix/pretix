@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:23+0000\n"
-"Last-Translator: Maciej Szymczak <maciej+github@szymczak.at>\n"
+"Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -5752,8 +5752,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:357
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
-"Niemożliwe jest obecnie stworzenie voucherów dla dodatków do produktów."
+msgstr "Niemożliwe jest obecnie stworzenie voucherów dla dodatków do produktów."
 
 #: pretix/base/models/vouchers.py:359 pretix/base/models/vouchers.py:456
 #, fuzzy
@@ -5769,8 +5768,8 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Ten voucher został już użyty %(redeemed)s raz(y). Nie można "
-"zredukować maksymalnej ilości użyć poniżej tej liczby."
+"Ten voucher został już użyty %(redeemed)s raz(y). Nie można zredukować "
+"maksymalnej ilości użyć poniżej tej liczby."
 
 #: pretix/base/models/vouchers.py:377
 #, fuzzy
