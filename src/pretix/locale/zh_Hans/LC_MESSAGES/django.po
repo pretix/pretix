@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-11 15:02+0000\n"
-"PO-Revision-Date: 2019-03-14 08:43+0000\n"
+"PO-Revision-Date: 2019-03-14 14:34+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -4805,7 +4805,7 @@ msgstr "如果想使它成为必需的，您必须向观众索要电子邮件。
 msgid ""
 "e.g. I hereby confirm that I have read and agree with the event organizer's "
 "terms of service and agree with them."
-msgstr "例如，我在此确认我已阅读并同意项目组织者的服务条款并同意这些条款。"
+msgstr "例如，我在此确认我已阅读并同意活动组织者的服务条款并同意这些条款。"
 
 #: pretix/control/forms/event.py:436
 #, python-brace-format
@@ -4865,7 +4865,7 @@ msgid ""
 "The last date any payments are accepted. This has precedence over the number "
 "of days configured above. If you use the event series feature and an order "
 "contains tickets for multiple dates, the earliest date will be used."
-msgstr "接受任何付款的最后日期。这优先于上面配置的天数。如果您使用项目序列功能并且订单包含多个日期的票证，则将使用最早的日期。"
+msgstr "接受任何付款的最后日期。这优先于上面配置的天数。如果您使用活动序列功能并且订单包含多个日期的票证，则将使用最早的日期。"
 
 #: pretix/control/forms/event.py:493
 msgid "Only end payment terms on weekdays"
@@ -4989,8 +4989,8 @@ msgid ""
 "will share their number range, i.e. every full number will be used at most "
 "once over all of your events. This setting only affects future invoices."
 msgstr ""
-"这将附在发票号码上。如果您将此字段留空，您的项目slug将使用破折号。注意：如果同一组织内的多个项目在此字段中使用相同的值，则它们将共享其号码范围，即每个"
-"完整号码将在您的所有项目中最多使用一次。此设置仅影响将来的发票。"
+"这将附在发票号码上。如果您将此字段留空，您的活动slug将使用破折号。注意：如果同一组织内的多个活动在此字段中使用相同的值，则它们将共享其号码范围，即每个"
+"完整号码将在您的所有活动中最多使用一次。此设置仅影响将来的发票。"
 
 #: pretix/control/forms/event.py:644
 msgid "Generate invoices"
@@ -5074,7 +5074,7 @@ msgstr "将打印在发票行以上的每张发票上。"
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
-msgstr "例如，感谢您的购买！有关项目的更多信息，请访问…"
+msgstr "例如，感谢您的购买！有关活动的更多信息，请访问…"
 
 #: pretix/control/forms/event.py:735
 msgid "Additional text"
@@ -5125,7 +5125,7 @@ msgstr "主题前缀"
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
-msgstr "这将作为所有外发邮件的主题，格式为[前缀]。例如，选择您的项目名称的简短形式。"
+msgstr "这将作为所有外发邮件的主题，格式为[前缀]。例如，选择您的活动名称的简短形式。"
 
 #: pretix/control/forms/event.py:781
 msgid "Sender address"
@@ -5302,7 +5302,7 @@ msgstr "使用自定义SMTP服务器"
 msgid ""
 "All mail related to your event will be sent over the smtp server specified "
 "by you."
-msgstr "所有与您的项目相关的邮件都将通过您指定的smtp服务器发送。"
+msgstr "所有与您的活动相关的邮件都将通过您指定的smtp服务器发送。"
 
 #: pretix/control/forms/event.py:938
 msgid "Hostname"
@@ -5428,7 +5428,7 @@ msgid ""
 "Ticket download will be offered after this date. If you use the event series "
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
-msgstr "在此日期之后将提供门票下载。如果您使用项目序列功能并且订单包含多个活动日期的门票，则如果至少有一个活动日期允许，则可以下载所有门票。"
+msgstr "在此日期之后将提供门票下载。如果您使用活动序列功能并且订单包含多个活动日期的门票，则如果至少有一个活动日期允许，则可以下载所有门票。"
 
 #: pretix/control/forms/event.py:1095
 msgid "Offer to download tickets separately for add-on products"
@@ -5515,7 +5515,7 @@ msgstr "您的密码"
 
 #: pretix/control/forms/event.py:1244 pretix/control/forms/organizer.py:45
 msgid "Event slug"
-msgstr "项目slug"
+msgstr "活动slug"
 
 #: pretix/control/forms/event.py:1286
 msgid "Ticket downloads"
@@ -5592,7 +5592,7 @@ msgstr "已付（或已付费用取消）"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:41
 #: pretix/plugins/reports/exporters.py:201
 msgid "Pending"
-msgstr "待定"
+msgstr "待处理"
 
 #: pretix/control/forms/filter.py:105 pretix/control/forms/filter.py:205
 #: pretix/control/templates/pretixcontrol/items/question.html:23
@@ -5735,7 +5735,7 @@ msgstr "星期天"
 
 #: pretix/control/forms/filter.py:503
 msgid "All events"
-msgstr "所有项目"
+msgstr "所有活动"
 
 #: pretix/control/forms/filter.py:504
 msgid "Shop live"
@@ -5747,11 +5747,11 @@ msgstr "无购物直播"
 
 #: pretix/control/forms/filter.py:509
 msgid "Single event running or in the future"
-msgstr "单个项目正在运行或在将来运行"
+msgstr "单个活动正在运行或在将来运行"
 
 #: pretix/control/forms/filter.py:510
 msgid "Single event in the past"
-msgstr "过去的单一项目"
+msgstr "过去的单一活动"
 
 #: pretix/control/forms/filter.py:619 pretix/control/forms/filter.py:621
 msgid "Search attendee…"
@@ -5888,8 +5888,8 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
-"在更新检查期间，pretix将向pretix开发人员操作的服务器报告一个匿名的、唯一的安装ID，当前版本的pretix和已安装的插件以及安装过程中的活动和"
-"非活动项目数。我们只存储匿名数据，从不存储任何IP地址，我们将不知道您是谁或在哪里找到您的情况。您可以随时禁用此行为。"
+"在更新检查期间，pretix将向pretix开发人员操作的服务器报告一个匿名的、唯一的安装ID，当前版本的pretix和已安装的插件以及安装过程中的活性和"
+"待用活动数。我们只存储匿名数据，从不存储任何IP地址，我们将不知道您是谁或在哪里找到您的情况。您可以随时禁用此行为。"
 
 #: pretix/control/forms/global_settings.py:63
 msgid "E-mail notifications"
@@ -5962,7 +5962,7 @@ msgstr "请选择配额。"
 
 #: pretix/control/forms/item.py:312
 msgid "Choose automatically depending on event settings"
-msgstr "根据项目设置自动选择"
+msgstr "根据活动设置自动选择"
 
 #: pretix/control/forms/item.py:313
 msgid "Yes, if ticket generation is enabled in general"
@@ -6085,7 +6085,7 @@ msgstr "包括税收，如果有的话。产品默认价格为空"
 
 #: pretix/control/forms/orders.py:230 pretix/control/forms/orders.py:331
 msgid "inactive"
-msgstr "不活动的"
+msgstr "待用"
 
 #: pretix/control/forms/orders.py:271
 msgctxt "subevent"
@@ -6221,144 +6221,144 @@ msgstr "日程表"
 
 #: pretix/control/forms/organizer.py:242
 msgid "Show availability in event overviews"
-msgstr "在项目概述中显示可用性"
+msgstr "在活动概述中显示可用性"
 
 #: pretix/control/forms/organizer.py:243
 msgid ""
 "If checked, the list of events will show if events are sold out. This might "
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
-msgstr "如果选中，项目列表将显示项目是否已售罄。 如果您有大量项目并且显示的状态可能已过期最多两分钟，这可能会延长页面加载时间。"
+msgstr "如果选中，活动列表将显示活动是否已售罄。 如果您有大量活动并且显示的状态可能已过期最多两分钟，这可能会延长页面加载时间。"
 
 #: pretix/control/forms/organizer.py:249
 msgid "Link back to organizer overview on all event pages"
-msgstr ""
+msgstr "链接回所有活动页面上的组织者概述"
 
 #: pretix/control/forms/organizer.py:256
 msgid ""
 "Choose all languages that your organizer homepage should be available in."
-msgstr ""
+msgstr "选择您的组织者主页应该可用的所有语言。"
 
 #: pretix/control/forms/organizer.py:266
 msgid "Favicon"
-msgstr ""
+msgstr "网站图标"
 
 #: pretix/control/forms/organizer.py:269
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accomodate most devices."
-msgstr ""
+msgstr "如果您提供favicon，我们将显示它而不是默认的pretix图标。 我们建议尺寸至少为200x200px，以适应大多数设备。"
 
 #: pretix/control/forms/organizer.py:283
 msgctxt "webhooks"
 msgid "Event types"
-msgstr ""
+msgstr "活动类型"
 
 #: pretix/control/forms/renderers.py:27
 msgctxt "form"
 msgid "Optional"
-msgstr ""
+msgstr "可选的"
 
 #: pretix/control/forms/subevents.py:211
 msgid "Exclude these dates instead of adding them."
-msgstr ""
+msgstr "排除这些日期而不是添加它们。"
 
 #: pretix/control/forms/subevents.py:216
 msgid "year(s)"
-msgstr ""
+msgstr "年（s）"
 
 #: pretix/control/forms/subevents.py:217
 msgid "month(s)"
-msgstr ""
+msgstr "月份（s）"
 
 #: pretix/control/forms/subevents.py:218
 msgid "week(s)"
-msgstr ""
+msgstr "周（s）"
 
 #: pretix/control/forms/subevents.py:219
 msgid "day(s)"
-msgstr ""
+msgstr "天(s)"
 
 #: pretix/control/forms/subevents.py:223
 msgid "Interval"
-msgstr ""
+msgstr "间隔"
 
 #: pretix/control/forms/subevents.py:246
 msgid "Number of repititions"
-msgstr ""
+msgstr "重复次数"
 
 #: pretix/control/forms/subevents.py:256
 msgid "Last date"
-msgstr ""
+msgstr "最后日期"
 
 #: pretix/control/forms/subevents.py:263 pretix/control/forms/subevents.py:310
 msgctxt "rrule"
 msgid "first"
-msgstr ""
+msgstr "第一"
 
 #: pretix/control/forms/subevents.py:264 pretix/control/forms/subevents.py:311
 msgctxt "rrule"
 msgid "second"
-msgstr ""
+msgstr "第二"
 
 #: pretix/control/forms/subevents.py:265 pretix/control/forms/subevents.py:312
 msgctxt "rrule"
 msgid "third"
-msgstr ""
+msgstr "第三"
 
 #: pretix/control/forms/subevents.py:266 pretix/control/forms/subevents.py:313
 msgctxt "rrule"
 msgid "last"
-msgstr ""
+msgstr "最后"
 
 #: pretix/control/forms/subevents.py:287 pretix/control/forms/subevents.py:326
 msgid "Day"
-msgstr ""
+msgstr "天"
 
 #: pretix/control/forms/subevents.py:289 pretix/control/forms/subevents.py:328
 msgid "Weekend day"
-msgstr ""
+msgstr "周末日"
 
 #: pretix/control/forms/users.py:94 pretix/control/views/user.py:115
 msgid "Your changes could not be saved. See below for details."
-msgstr ""
+msgstr "您的更改无法保存。 请参阅下文了解详情。"
 
 #: pretix/control/forms/vouchers.py:137
 msgid "Invalid product selected."
-msgstr ""
+msgstr "选择的产品无效。"
 
 #: pretix/control/forms/vouchers.py:178
 msgid "Codes"
-msgstr ""
+msgstr "准则"
 
 #: pretix/control/forms/vouchers.py:180
 msgid ""
 "Add one voucher code per line. We suggest that you copy this list and save "
 "it into a file."
-msgstr ""
+msgstr "每行添加一个优惠券码。 我们建议您复制此列表并将其保存到文件中。"
 
 #: pretix/control/forms/vouchers.py:199
 msgid "Maximum usages per voucher"
-msgstr ""
+msgstr "每张优惠券的最大使用次数"
 
 #: pretix/control/forms/vouchers.py:202
 msgid "Number of times times EACH of these vouchers can be redeemed."
-msgstr ""
+msgstr "每张优惠券可以兑换的次数。"
 
 #: pretix/control/forms/vouchers.py:212
 msgid "A voucher with one of these codes already exists."
-msgstr ""
+msgstr "具有这些准则之一的优惠券已存在。"
 
 #: pretix/control/logdisplay.py:30
 msgid "The order has been changed:"
-msgstr ""
+msgstr "订单已更改："
 
 #: pretix/control/logdisplay.py:38
 #, python-brace-format
 msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
-msgstr ""
+msgstr "位置 #{posid}：{old_item}（{old_price}）更改为{new_item}{new_price}。"
 
 #: pretix/control/logdisplay.py:48
 #, python-brace-format
@@ -6366,61 +6366,62 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
+"位置 #{posid}：活动日期“{old_event}”（{old_price}）更改为“{new_event}”（{new_price}）。"
 
 #: pretix/control/logdisplay.py:56
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "位置 #{posid}的价格从{old_price}更改为{new_price}。"
 
 #: pretix/control/logdisplay.py:66
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr ""
+msgstr "位置 #{posid}（{old_item}，{old_price}）取消。"
 
 #: pretix/control/logdisplay.py:77
 #, python-brace-format
 msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
-msgstr ""
+msgstr "位置 #{posid}创建：{item}（{price}）作为位置附加到{addon_to}。"
 
 #: pretix/control/logdisplay.py:84
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr ""
+msgstr "位置 #{posid}创建：{item}（{price}）。"
 
 #: pretix/control/logdisplay.py:90
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "为状态 #{posid}生成了一个新秘密。"
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
-msgstr ""
+msgstr "状态 #{posid}（{old_item}，{old_price}）拆分为新订单：{order}"
 
 #: pretix/control/logdisplay.py:109
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr ""
+msgstr "此订单是通过拆分订单{order}创建的"
 
 #: pretix/control/logdisplay.py:128 pretix/control/logdisplay.py:130
 #: pretix/control/logdisplay.py:348 pretix/control/logdisplay.py:350
 #: pretix/control/logdisplay.py:369 pretix/control/logdisplay.py:371
 msgid "(unknown)"
-msgstr ""
+msgstr "（未知）"
 
 #: pretix/control/logdisplay.py:134
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr ""
+msgstr "状态 #{posid}已在{datetime}处签入列表“{list}”。"
 
 #: pretix/control/logdisplay.py:140
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr ""
+msgstr "状态 #{posid}已签入列表“{list}”。"
 
 #: pretix/control/logdisplay.py:147
 #, python-brace-format
