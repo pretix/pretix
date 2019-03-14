@@ -2,18 +2,23 @@ import logging
 import re
 from decimal import Decimal
 
+import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
-from django.utils.translation import ugettext_noop
+from django.utils.formats import date_format
+from django.utils.translation import ugettext, ugettext_noop
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
+from pretix.base.models import (
+    Event, InvoiceAddress, Order, OrderPayment, Organizer, Quota,
+)
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 from .models import BankImportJob, BankTransaction
 
@@ -88,6 +93,40 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
                 provider='banktransfer',
                 state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
             ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+
+            o = trans.order
+            o.refresh_from_db()
+            if o.pending_sum > Decimal('0.00') and o.status == Order.STATUS_PENDING:
+                print("send mail")
+                with language(o.locale):
+                    tz = pytz.timezone(o.event.settings.get('timezone', settings.TIME_ZONE))
+                    try:
+                        invoice_name = o.invoice_address.name
+                        invoice_company = o.invoice_address.company
+                    except InvoiceAddress.DoesNotExist:
+                        invoice_name = ""
+                        invoice_company = ""
+                    email_template = o.event.settings.mail_text_order_expire_warning
+                    email_context = {
+                        'event': o.event.name,
+                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                            'order': o.code,
+                            'secret': o.secret
+                        }),
+                        'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+                        'invoice_name': invoice_name,
+                        'invoice_company': invoice_company,
+                    }
+                    email_subject = ugettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
+
+                    try:
+                        o.send_mail(
+                            email_subject, email_template, email_context,
+                            'pretix.event.order.email.expire_warning_sent'
+                        )
+                    except SendMailException:
+                        logger.exception('Reminder email could not be sent')
+
     trans.save()
 
 

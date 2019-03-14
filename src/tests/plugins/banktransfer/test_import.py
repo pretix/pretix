@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 from bs4 import BeautifulSoup
+from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now
 
@@ -26,7 +27,7 @@ def env():
     t.members.add(user)
     t.limit_events.add(event)
     o1 = Order.objects.create(
-        code='1Z3AS', event=event,
+        code='1Z3AS', event=event, email='admin@localhost',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23
@@ -100,6 +101,7 @@ def orga_job(env):
 
 @pytest.mark.django_db
 def test_mark_paid(env, job):
+    djmail.outbox = []
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1234S',
@@ -108,10 +110,13 @@ def test_mark_paid(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].subject == 'Payment received for your order: 1Z3AS'
 
 
 @pytest.mark.django_db
 def test_underpaid(env, job):
+    djmail.outbox = []
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1Z3AS',
@@ -124,6 +129,9 @@ def test_underpaid(env, job):
     assert p.amount == Decimal('22.50')
     assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
     assert env[2].pending_sum == Decimal('0.50')
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].subject == 'Your order received an incomplete payment: 1Z3AS'
 
 
 @pytest.mark.django_db
