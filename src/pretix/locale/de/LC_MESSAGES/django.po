@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-11 15:41+0000\n"
+"PO-Revision-Date: 2019-03-14 16:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -145,7 +145,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:195 pretix/control/forms/item.py:62
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Es wurde eine gegenseitige Abhängigkeit zwischen Fragen erkannt."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:233
 #, python-brace-format
@@ -980,10 +980,8 @@ msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
 #: pretix/base/forms/questions.py:316 pretix/control/forms/item.py:70
-#, fuzzy
-#| msgid "This field is required."
 msgid "This field is required"
-msgstr "Dieses Feld ist erforderlich."
+msgstr "Dieses Feld ist erforderlich"
 
 #: pretix/base/forms/questions.py:330
 msgid "Street and Number"
@@ -4245,19 +4243,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:387
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4273,7 +4259,8 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben für Ihre Bestellung für {event} noch keine Zahlung erhalten.\n"
+"wir haben für Ihre Bestellung für {event} noch keine vollständige Zahlung "
+"erhalten.\n"
 "Bitte beachten Sie, dass wir Ihre Bestellung nur garantieren können, wenn "
 "wir das\n"
 "Geld bis zum {expire_date} erhalten.\n"
@@ -6418,10 +6405,8 @@ msgstr ""
 "von diesem Server lokal verschickt."
 
 #: pretix/control/forms/item.py:72
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Dependencies between questions are not supported during check-in."
-msgstr "Diese Frage wird beim Check-In gestellt."
+msgstr "Abhängigkeiten zwischen Fragen sind beim Check-In nicht möglich."
 
 #: pretix/control/forms/item.py:186
 msgid "The product should exist in multiple variations"
@@ -8180,16 +8165,12 @@ msgstr ""
 "Wenn dies länger als ein paar Minuten dauert, kontaktieren Sie uns bitte."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:7
-#, fuzzy
-#| msgid "Creation date"
 msgid "Transaction Code"
-msgstr "Erstellungszeitpunkt"
+msgstr "Transaktions-Code"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:9
-#, fuzzy
-#| msgid "Merchant country"
 msgid "Merchant Code"
-msgstr "Land des Händlers"
+msgstr "Händlercode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:11
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
@@ -8203,10 +8184,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:17
-#, fuzzy
-#| msgid "Card type"
 msgid "Card Entry Mode"
-msgstr "Kartentyp"
+msgstr "Art der Karteneingabe"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
@@ -10007,10 +9986,8 @@ msgid "Add a new option"
 msgstr "Neue Option hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:115
-#, fuzzy
-#| msgid "Question type"
 msgid "Question dependency"
-msgstr "Art der Antwort"
+msgstr "Abhängig von anderer Frage"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:7
 msgid ""
@@ -12565,10 +12542,8 @@ msgid "Order %(code)s"
 msgstr "Bestellung %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher link"
-msgstr "Gutschein"
+msgstr "Voucher-Link"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:84
 msgid "Voucher history"
@@ -14179,6 +14154,11 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Ich habe verstanden, dass die Teilnehmer ihre Zahlung direkt auf mein "
+"Bankkonto überweisen werden und pretix nicht automatisch wissen kann, welche "
+"Zahlungen angekommen sind. Daher werde ich die Zahlungen entweder manuell "
+"als erfolgreich markieren, oder regelmäßig einen digitalen Kontoauszug "
+"importieren, damit pretix die Tickets ausliefern kann."
 
 #: pretix/plugins/banktransfer/payment.py:36
 msgid "Bank account type"
@@ -14287,10 +14267,9 @@ msgid "The order has already been canceled."
 msgstr "Die Rechnung wurde bereits storniert."
 
 #: pretix/plugins/banktransfer/tasks.py:120
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr "Ihre Bestellung wurde noch nicht bezahlt: %(code)s"
+msgstr "Ihre Bestellung wurde unvollständig bezahlt: %(code)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
