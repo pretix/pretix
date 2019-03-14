@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 15:02+0000\n"
+"POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-09 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -107,7 +107,7 @@ msgstr ""
 "新此页面，并重试。"
 
 #: pretix/static/pretixbase/js/asynctask.js:193
-#: pretix/static/pretixcontrol/js/ui/main.js:28
+#: pretix/static/pretixcontrol/js/ui/main.js:20
 msgid "Close message"
 msgstr "关闭消息"
 
@@ -175,47 +175,55 @@ msgstr "发生一个错误。"
 msgid "Generating messages …"
 msgstr "生成消息…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:43
+#: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
 msgstr "未知错误。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:205
+#: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "你的配色有很高的对比度，非常易读!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:209
+#: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "你的配色有很好的对比度，可能足够易读!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:213
+#: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "你的配色在白色背景下的文本对比度很差，请选择较深的颜色。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:294
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:295
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
 msgstr "无"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:588
+#: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:639
+#: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr "其他"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
 msgstr "数量"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:120
+msgid "Ja"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/question.js:121
+msgid "Nein"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"

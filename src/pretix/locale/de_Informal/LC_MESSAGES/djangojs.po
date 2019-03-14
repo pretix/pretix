@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 15:02+0000\n"
+"POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2018-12-02 13:41+0000\n"
 "Last-Translator: Alexander Schwartz <alexander.schwartz@gmx.net>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -113,7 +113,7 @@ msgstr ""
 "neu laden und es erneut versuchen."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
-#: pretix/static/pretixcontrol/js/ui/main.js:28
+#: pretix/static/pretixcontrol/js/ui/main.js:20
 msgid "Close message"
 msgstr "Schließen"
 
@@ -183,20 +183,20 @@ msgstr "Ein Fehler ist aufgetreten."
 msgid "Generating messages …"
 msgstr "Generiere Nachrichten…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:43
+#: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:205
+#: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Diese Farbe hat einen sehr guten Kontrast und ist sehr gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:209
+#: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Diese Farbe hat einen ausreichenden Kontrast und wahrscheinlich gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:213
+#: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -204,29 +204,37 @@ msgstr ""
 "Diese Farbe hat einen schlechten Kontrast für Text auf einem weißen "
 "Hintergrund. Bitte wähle eine dunklere Farbe."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:294
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:295
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:588
+#: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:639
+#: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
 msgstr "Sonstige"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
 msgstr "Anzahl"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:120
+msgid "Ja"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/question.js:121
+msgid "Nein"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
