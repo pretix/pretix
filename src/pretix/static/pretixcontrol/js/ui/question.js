@@ -117,8 +117,8 @@ $(function () {
 
         apiGET('/api/v1/organizers/' + $("body").attr("data-organizer") + '/events/' + $("body").attr("data-event") + '/questions/' + val + '/', function (data) {
             if (data.type === "B") {
-                $val.append($("<option>").attr("value", "True").text(gettext("Ja")));
-                $val.append($("<option>").attr("value", "False").text(gettext("Nein")));
+                $val.append($("<option>").attr("value", "True").text(gettext("Yes")));
+                $val.append($("<option>").attr("value", "False").text(gettext("No")));
             } else {
                 for (var i = 0; i < data.options.length; i++) {
                     var opt = data.options[i];
