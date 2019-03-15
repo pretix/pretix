@@ -342,6 +342,7 @@ class EventsTest(SoupTest):
         self.get_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug))
         self.post_doc('/control/event/%s/%s/settings/payment/banktransfer' % (self.orga1.slug, self.event1.slug), {
             'payment_banktransfer__enabled': 'true',
+            'payment_banktransfer_ack': 'true',
             'payment_banktransfer__fee_abs': '12.23',
             'payment_banktransfer_bank_details_type': 'other',
             'payment_banktransfer_bank_details_0': 'Test',
