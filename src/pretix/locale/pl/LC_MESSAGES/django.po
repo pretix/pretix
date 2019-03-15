@@ -1289,7 +1289,7 @@ msgid ""
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
 "Używając kursu wymiany 1:{rate} opublikowanego przez Europejski Bank "
-"Centrylny w dniu {date}, suma faktury wynosi: {toal}.."
+"Centrylny w dniu {date}, suma faktury wynosi: {total}.."
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
