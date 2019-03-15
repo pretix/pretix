@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-15 10:40+0000\n"
+"PO-Revision-Date: 2019-03-15 11:03+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
@@ -205,129 +205,129 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
-msgstr "Całość"
+msgstr "Zaznacz wszystko"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
-msgstr ""
+msgstr "Odznacz wszystko"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Użyj innej nazwy wewnętrznie"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
-msgstr ""
+msgstr "Zamknij"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Inne"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
-msgstr ""
+msgstr "Ilość"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Ja"
-msgstr ""
+msgstr "Tak"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "Nein"
-msgstr ""
+msgstr "Nie"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(jedna data więcej)"
+msgstr[1] "({num} daty więcej)"
+msgstr[2] "({num} dat więcej)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Przedmioty w koszyku nie są już zarezerwowane."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Koszyk wygasł."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Przedmioty w koszyku są zarezerwowane na jedną minutę."
+msgstr[1] "Przedmioty w koszyku są zarezerwowane na {num} minuty."
+msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:14
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Wyprzedane"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Kup"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Zarezerwowane"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "DARMOWE"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "od %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "w tym %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "obecnie dostępne: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Dostępne tylko z voucherem"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "minimalna ilość zamówienia: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Zamknięcie sklepu biletowego"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Błąd łądowania sklepu biletowego."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Błąd tworzenia koszyka. Proszę spróbować ponownie później."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Lista oczekiwania"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
@@ -335,11 +335,13 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Istnieje aktywny wózek dla tego wydarzenia. Wybór kolejnych produktów "
+"spowoduje dodanie ich do istniejącego wózka."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Powrót do kasy"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
@@ -347,6 +349,8 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
+"< href=\"https://pertix.eu\" target=\"_blank\" rel=\"noopener\">system "
+"biletowy </a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
