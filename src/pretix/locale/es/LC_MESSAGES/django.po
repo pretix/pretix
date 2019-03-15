@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-16 18:00+0000\n"
-"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -637,7 +637,7 @@ msgstr "Correo electrónico del participante"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr "Vale"
+msgstr "Recibo"
 
 #: pretix/base/exporters/orderlist.py:285
 msgid "Pseudonymization ID"
@@ -1795,14 +1795,14 @@ msgstr "Este producto no será vendido después de la fecha dada."
 
 #: pretix/base/models/items.py:313
 msgid "This product can only be bought using a voucher."
-msgstr "Este producto solo se puede comprar usando un vale."
+msgstr "Este producto solo se puede comprar usando un recibo."
 
 #: pretix/base/models/items.py:315
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"Para comprar este producto, el usuario necesita un vale aplicable a este "
+"Para comprar este producto, el usuario necesita un recibo aplicable a este "
 "producto, ya sea directamente o por una cuota."
 
 #: pretix/base/models/items.py:319
@@ -1826,7 +1826,7 @@ msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Este producto sólo se mostrará si se canjea un vale que coincida con el "
+"Este producto sólo se mostrará si se canjea un recibo que coincida con el "
 "producto."
 
 #: pretix/base/models/items.py:328
@@ -1835,7 +1835,7 @@ msgid ""
 "voucher code that is specifically tied to this product (and not via a quota)."
 msgstr ""
 "Este producto se ocultará de la página del evento hasta que el usuario "
-"introduzca un código de vale que esté específicamente vinculado a este "
+"introduzca un código del recibo que esté específicamente vinculado a este "
 "producto (y no a través de una cuota)."
 
 #: pretix/base/models/items.py:332
@@ -2206,7 +2206,7 @@ msgstr "Orden {val}"
 #: pretix/base/models/log.py:101
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "Vale {val}…"
+msgstr "Recibo {val}…"
 
 #: pretix/base/models/log.py:111
 #, python-brace-format
@@ -2658,7 +2658,7 @@ msgstr "Reducir el precio del producto en (%)"
 #: pretix/plugins/checkinlists/exporters.py:322
 #: pretix/presale/templates/pretixpresale/event/index.html:472
 msgid "Voucher code"
-msgstr "Código del vale"
+msgstr "Código del recibo"
 
 #: pretix/base/models/vouchers.py:101 pretix/control/views/vouchers.py:62
 msgid "Maximum usages"
@@ -2666,7 +2666,7 @@ msgstr "Usos máximos"
 
 #: pretix/base/models/vouchers.py:102
 msgid "Number of times this voucher can be redeemed."
-msgstr "Número de veces que se puede canjear este vale."
+msgstr "Número de veces que se puede canjear este recibo."
 
 #: pretix/base/models/vouchers.py:106 pretix/control/views/vouchers.py:62
 msgid "Redeemed"
@@ -2686,8 +2686,8 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"Si se activa, este vale se restará de las cuotas del producto afectado, de "
-"forma que se garantiza que cualquier persona con este código de vale "
+"Si se activa, este recibo se restará de las cuotas del producto afectado, de "
+"forma que se garantiza que cualquier persona con este código de recibo "
 "recibirá un ticket."
 
 #: pretix/base/models/vouchers.py:123
@@ -2699,7 +2699,7 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"Si se activa, un titular de este código de vale puede comprar entradas, "
+"Si se activa, un titular de este código de recibo puede comprar entradas, "
 "incluso si no queda ninguna."
 
 #: pretix/base/models/vouchers.py:129
@@ -2708,11 +2708,11 @@ msgstr "Modo precio"
 
 #: pretix/base/models/vouchers.py:135
 msgid "Voucher value"
-msgstr "Valor del vale"
+msgstr "Valor del recibo"
 
 #: pretix/base/models/vouchers.py:143 pretix/control/forms/vouchers.py:24
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr "Este producto se añade al carrito del usuario si el vale es canjeado."
+msgstr "Este producto se añade al carrito del usuario si el recibo es canjeado."
 
 #: pretix/base/models/vouchers.py:151
 msgid "This variation of the product select above is being used."
@@ -2722,7 +2722,7 @@ msgstr "Esta variación del producto seleccionado arriba está siendo utilizada.
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
-"Si está habilitado, el vale es válido para cualquier producto afectado por "
+"Si está habilitado, el recibo es válido para cualquier producto afectado por "
 "esta cuota."
 
 #: pretix/base/models/vouchers.py:164
@@ -2796,14 +2796,14 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Este vale ya ha sido redimido %(redeemed)s veces. No se puede reducir el "
+"Este recibo ya ha sido redimido %(redeemed)s veces. No se puede reducir el "
 "número máximo de usos por debajo de este número."
 
 #: pretix/base/models/vouchers.py:236 pretix/base/models/vouchers.py:294
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
-"Si desea que este vale bloquee la cuota, debe seleccionar una fecha "
+"Si desea que este recibo bloquee la cuota, debe seleccionar una fecha "
 "específica."
 
 #: pretix/base/models/vouchers.py:238
@@ -2816,12 +2816,12 @@ msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"No se puede crear un vale que bloquee la cuota ya que el producto "
+"No se puede crear un recibo que bloquee la cuota ya que el producto "
 "seleccionado o la cuota está agotada o completamente reservada."
 
 #: pretix/base/models/vouchers.py:318
 msgid "A voucher with this code already exists."
-msgstr "Ya existe un vale con este código."
+msgstr "Ya existe un recibo con este código."
 
 #: pretix/base/models/waitinglist.py:36
 msgid "On waiting list since"
@@ -2829,7 +2829,7 @@ msgstr "En lista de espera desde"
 
 #: pretix/base/models/waitinglist.py:44
 msgid "Assigned voucher"
-msgstr "Vale asignado"
+msgstr "Recibo asignado"
 
 #: pretix/base/models/waitinglist.py:53
 msgid "The product the user waits for."
@@ -2853,7 +2853,7 @@ msgstr "El producto no se encuentra actualmente disponible."
 
 #: pretix/base/models/waitinglist.py:92
 msgid "A voucher has already been sent to this person."
-msgstr "Ya se ha enviado un vale a esta persona."
+msgstr "Ya se ha enviado un recibo a esta persona."
 
 #: pretix/base/models/waitinglist.py:94
 msgid "This entry is anonymized and can no longer be used."
@@ -3537,13 +3537,14 @@ msgstr "El precio introducido es demasiado alto."
 
 #: pretix/base/services/cart.py:68
 msgid "This voucher code is not known in our database."
-msgstr "Este código de vale no se conoce en nuestra base de datos."
+msgstr "Este código de recibo no se conoce en nuestra base de datos."
 
 #: pretix/base/services/cart.py:69
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
-"Este código de vale ya ha sido utilizado el máximo número de veces permitido."
+"Este código de recibo ya ha sido utilizado el máximo número de veces "
+"permitido."
 
 #: pretix/base/services/cart.py:70
 #, python-format
@@ -3553,44 +3554,46 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Este código de vale está actualmente bloqueado ya que está contenido en un "
+"Este código de recibo está actualmente bloqueado ya que está contenido en un "
 "carrito de la compra. Esto puede significar que otra persona está canjeando "
-"este vale ahora mismo, o que usted intentó canjearlo antes pero no completó "
-"el proceso de pago. Puede intentar utilizarlo de nuevo en %d minutos."
+"este recibo ahora mismo, o que usted intentó canjearlo antes pero no "
+"completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
+"minutos."
 
 #: pretix/base/services/cart.py:74
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Este código de vale sólo puede ser canjeado %d más veces."
+msgstr "Este código de recibo sólo puede ser canjeado %d más veces."
 
 #: pretix/base/services/cart.py:75
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"Ya ha utilizado este código de vale. Elimine la línea asociada de su carrito "
-"si desea utilizarlo para un producto diferente."
+"Ya ha utilizado este código de recibo. Elimine la línea asociada de su "
+"carrito si desea utilizarlo para un producto diferente."
 
 #: pretix/base/services/cart.py:77
 msgid "This voucher is expired."
-msgstr "El vale ha expirado."
+msgstr "El recibo ha expirado."
 
 #: pretix/base/services/cart.py:78
 msgid "This voucher is not valid for this product."
-msgstr "El vale no es válido para este producto."
+msgstr "El recibo no es válido para este producto."
 
 #: pretix/base/services/cart.py:80
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "Su vale es válido para un producto que actualmente no está a la venta."
+msgstr ""
+"Su recibo es válido para un producto que actualmente no está a la venta."
 
 #: pretix/base/services/cart.py:81
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr "Este vale no es válido para esta fecha de evento."
+msgstr "Este recibo no es válido para esta fecha de evento."
 
 #: pretix/base/services/cart.py:82
 msgid "You need a valid voucher code to order this product."
-msgstr "Necesita un código de vale válido para pedir este producto."
+msgstr "Necesita un código de recibo válido para pedir este producto."
 
 #: pretix/base/services/cart.py:83
 msgctxt "subevent"
@@ -3780,7 +3783,7 @@ msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"El código del vale utilizado para uno de los artículos de su carrito no es "
+"El código del recibo utilizado para uno de los artículos de su carrito no es "
 "conocido en nuestra base de datos."
 
 #: pretix/base/services/orders.py:66
@@ -3789,7 +3792,7 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"El código de vale utilizado para uno de los artículos de su carrito ya ha "
+"El código de recibo utilizado para uno de los artículos de su carrito ya ha "
 "sido utilizado el máximo número de veces permitido. Hemos quitado este "
 "artículo de su carrito."
 
@@ -3798,7 +3801,7 @@ msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"El código del vale utilizado para uno de los artículos de su carrito ha "
+"El código del recibo utilizado para uno de los artículos de su carrito ha "
 "caducado. Hemos quitado este artículo de su carrito."
 
 #: pretix/base/services/orders.py:70
@@ -4269,12 +4272,13 @@ msgid ""
 msgstr ""
 "Hola, \n"
 "\n"
-"usted se sometió a la lista de espera para {event} ,\n"
-"para el producto {product}. \n"
+"usted se sometió a la lista de espera para {event},\n"
+"para el producto {product}.\n"
 "\n"
 "Ahora tenemos un ticket listo para usted! Puede canjearlo en nuestra "
 "taquilla\n"
-"en las próximas {hours} horas introduciendo el siguiente código del vale: \n"
+"en las próximas {hours} horas introduciendo el siguiente código del recibo: "
+"\n"
 "\n"
 "{code} \n"
 "\n"
@@ -4995,7 +4999,7 @@ msgstr ""
 "Una vez que se agoten los tickets, la gente puede agregarse a una lista de "
 "espera. Tan pronto como un ticket vuelva a estar disponible, se reservará "
 "para la primera persona en la lista de espera y esta persona recibirá una "
-"notificación por correo electrónico con un vale que se puede utilizar para "
+"notificación por correo electrónico con un recibo que se puede utilizar para "
 "comprar un ticket."
 
 #: pretix/control/forms/event.py:326
@@ -5008,7 +5012,7 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"Si un vale de ticket es enviado a una persona en la lista de espera, tiene "
+"Si un recibo de ticket es enviado a una persona en la lista de espera, tiene "
 "que ser redimido dentro de este número de horas hasta que expire y puede ser "
 "reasignado a la siguiente persona en la lista."
 
@@ -5024,8 +5028,8 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
-"Si se libera la capacidad de entradas, cree automáticamente un vale y "
-"envíelo a la primera persona en la lista de espera para ese producto. Si "
+"Si la capacidad de entradas se libera, automáticamente se crea un recibo y "
+"es enviado a la primera persona en la lista de espera para ese producto. Si "
 "esto no está activo, los correos no se enviarán automáticamente, pero puede "
 "enviarlos manualmente a través del panel de control. Si deshabilitas la "
 "lista de espera pero mantienes esta opción activa, los tickets se enviarán "
@@ -5844,7 +5848,7 @@ msgstr "Sólo respetado por los navegadores modernos."
 
 #: pretix/control/forms/event.py:1046
 msgid "Voucher explanation"
-msgstr "Explicación del vale"
+msgstr "Explicación del recibo"
 
 #: pretix/control/forms/event.py:1050
 msgid ""
@@ -5957,7 +5961,7 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
-"Si está configurado, el widget mostrará los productos como si este vale "
+"Si está configurado, el widget mostrará los productos como si este recibo "
 "hubiera sido introducido y cuando se compra un producto a través del widget, "
 "este vale será utilizado. Esto se puede utilizar, por ejemplo, para "
 "proporcionar widgets que ofrecen descuentos o desbloquear productos secretos."
@@ -5976,7 +5980,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1227
 msgid "The given voucher code does not exist."
-msgstr "El código del vale no existe."
+msgstr "El código del recibo no existe."
 
 #: pretix/control/forms/event.py:1234
 msgid "The password you entered was not correct."
@@ -6310,7 +6314,7 @@ msgstr "Filtrar por etiqueta"
 
 #: pretix/control/forms/filter.py:781 pretix/control/forms/filter.py:783
 msgid "Search voucher"
-msgstr "Buscar vale"
+msgstr "Buscar recibo"
 
 #: pretix/control/forms/filter.py:823 pretix/control/forms/vouchers.py:92
 #: pretix/control/views/typeahead.py:295
@@ -6890,12 +6894,12 @@ msgid ""
 "Add one voucher code per line. We suggest that you copy this list and save "
 "it into a file."
 msgstr ""
-"Agregue un código de vale por línea. Le sugerimos que copie esta lista y la "
-"guarde en un archivo."
+"Agregue un código de recibo por línea. Le sugerimos que copie esta lista y "
+"la guarde en un archivo."
 
 #: pretix/control/forms/vouchers.py:199
 msgid "Maximum usages per voucher"
-msgstr "Usos máximos por vale"
+msgstr "Usos máximos por recibo"
 
 #: pretix/control/forms/vouchers.py:202
 msgid "Number of times times EACH of these vouchers can be redeemed."
@@ -6903,7 +6907,7 @@ msgstr "Número de veces que CADA uno de estos vales puede ser canjeado."
 
 #: pretix/control/forms/vouchers.py:212
 msgid "A voucher with one of these codes already exists."
-msgstr "Ya existe un vale con uno de estos códigos."
+msgstr "Ya existe un recibo con uno de estos códigos."
 
 #: pretix/control/logdisplay.py:30
 msgid "The order has been changed:"
@@ -7326,7 +7330,7 @@ msgstr "El recibo ha sido creado."
 #: pretix/control/logdisplay.py:239
 msgid "The voucher has been created and sent to a person on the waiting list."
 msgstr ""
-"El vale se ha creado y se ha enviado a una persona de la lista de espera."
+"El recibo se ha creado y se ha enviado a una persona de la lista de espera."
 
 #: pretix/control/logdisplay.py:240
 msgid "The voucher has been changed."
@@ -7339,7 +7343,7 @@ msgstr "El recibo fue eliminado."
 #: pretix/control/logdisplay.py:242
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr "El vale ha sido canjeado en orden {order_code}."
+msgstr "El recibo ha sido canjeado en orden {order_code}."
 
 #: pretix/control/logdisplay.py:243
 msgid "The product has been created."
@@ -7506,7 +7510,7 @@ msgstr "Un usuario ha sido eliminado del equipo de eventos."
 
 #: pretix/control/logdisplay.py:284
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr "Se ha enviado un vale a una persona en lista de espera."
+msgstr "Se ha enviado un recibo a una persona en lista de espera."
 
 #: pretix/control/logdisplay.py:285
 msgid "An entry has been removed from the waiting list."
@@ -9898,11 +9902,11 @@ msgstr "Solo disponible como un producto agregado"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:85
 msgid "Only visible with a voucher"
-msgstr "Sólo visible con un vale"
+msgstr "Sólo visible con un recibo"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:88
 msgid "Can only be bought using a voucher"
-msgstr "Sólo se puede comprar utilizando un vale"
+msgstr "Sólo se puede comprar utilizando un recibo"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -10646,7 +10650,7 @@ msgstr "Primer escaneado: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:259
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:17
 msgid "Voucher code used:"
-msgstr "Código de vale utilizado:"
+msgstr "Código de recibo utilizado:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:285
 msgid "Show ticket code"
@@ -12481,7 +12485,7 @@ msgstr "Copiar códigos"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
 msgid "Voucher details"
-msgstr "Detalles del vale"
+msgstr "Detalles del recibo"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:45
@@ -12510,7 +12514,8 @@ msgstr "Borrar documento"
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr "¿Está seguro de que desea borrar el vale <strong>%(voucher)s</strong>?"
+msgstr ""
+"¿Está seguro de que desea borrar el recibo <strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
@@ -12531,7 +12536,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr "Este vale ya ha sido utilizado. No se recomienda modificarla."
+msgstr "Este recibo ya ha sido utilizado. No se recomienda modificarlo."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
@@ -12557,7 +12562,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:63
 msgid "Your search did not match any vouchers."
-msgstr "Su búsqueda no ha encontrado ningún vale."
+msgstr "Su búsqueda no ha encontrado ningún recibo."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:65
 msgid "You haven't created any vouchers yet."
@@ -12566,7 +12571,7 @@ msgstr "Todavía no ha creado ningún documento."
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:72
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:79
 msgid "Create a new voucher"
-msgstr "Crear un nuevo vale"
+msgstr "Crear un nuevo recibo"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:74
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:82
@@ -12594,14 +12599,14 @@ msgstr "Cualquier producto incluido en la cuota \"%(quota)s\""
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:3
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
 msgid "Voucher tags"
-msgstr "Etiquetas del vale"
+msgstr "Etiquetas del recibo"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:7
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
 msgstr ""
-"Si añade una \"etiqueta\" a un vale, aquí puede ver estadísticas sobre su "
+"Si añade una \"etiqueta\" a un recibo, aquí puede ver estadísticas sobre su "
 "uso."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:14
@@ -12698,7 +12703,7 @@ msgstr "Todas las entradas"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
 msgid "Waiting for a voucher"
-msgstr "Esperando un vale"
+msgstr "Esperando un recibo"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
@@ -12730,7 +12735,7 @@ msgid ""
 "this person will be assigned a voucher."
 msgstr ""
 "Esta entrada tiene una prioridad modificada. Cuanto más alto sea este "
-"número, antes se le asignará un vale a esta persona."
+"número, antes se le asignará un recibo a esta persona."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:214
@@ -12754,7 +12759,7 @@ msgstr "Esperando, producto no disponible"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
-msgstr "Enviar un vale"
+msgstr "Enviar un recibo"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
 msgid "Move to the top of the list"
@@ -13901,7 +13906,7 @@ msgstr "El bono solicitado no existe."
 
 #: pretix/control/views/vouchers.py:133 pretix/control/views/vouchers.py:143
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr "Un vale no se puede borrar si ya se ha canjeado."
+msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
 
 #: pretix/control/views/vouchers.py:148
 msgid "The selected voucher has been deleted."
@@ -13914,7 +13919,7 @@ msgstr "Se ha creado el nuevo documento: {code}"
 
 #: pretix/control/views/vouchers.py:249
 msgid "There is no voucher with the given voucher code."
-msgstr "No hay ningún vale con el código de vale dado."
+msgstr "No hay ningún recibo con el código brindado."
 
 #: pretix/control/views/vouchers.py:281
 msgid "The new vouchers have been created."
@@ -13937,7 +13942,7 @@ msgstr "Usted no tiene permiso para hacer esto"
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
-"Se ha enviado un correo electrónico con un código de vale a la dirección "
+"Se ha enviado un correo electrónico con un código de recibo a la dirección "
 "especificada."
 
 #: pretix/control/views/waitinglist.py:74
@@ -16476,7 +16481,7 @@ msgstr "incl. %(rate)s%% %(name)s"
 #: pretix/presale/templates/pretixpresale/event/index.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:413
 msgid "Enter a voucher code below to buy this ticket."
-msgstr "Ingrese un código de vale a continuación para comprar este ticket."
+msgstr "Ingrese un código de recibo a continuación para comprar este ticket."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:320
 #: pretix/presale/templates/pretixpresale/event/voucher.html:135
@@ -16499,11 +16504,11 @@ msgstr "Añadir al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:460
 msgid "Redeem a voucher"
-msgstr "Canjee un vale"
+msgstr "Canjee un recibo"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:478
 msgid "Redeem voucher"
-msgstr "Canjear vale"
+msgstr "Canjear recibo"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:489
 msgid "If you already ordered a ticket"
@@ -16794,7 +16799,7 @@ msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
-"Ha introducido un código de vale que le permite comprar uno de los "
+"Ha introducido un código de recibo que le permite comprar uno de los "
 "siguientes productos al precio especificado:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
