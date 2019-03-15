@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-15 07:55+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-03-16 18:00+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -336,7 +336,7 @@ msgstr "Datos de la orden"
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr "Ordenes"
+msgstr "Órdenes"
 
 #: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1647
 #: pretix/base/notifications.py:183
@@ -6398,10 +6398,8 @@ msgstr ""
 "los correos electrónicos serán enviados por este servidor localmente."
 
 #: pretix/control/forms/item.py:72
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Dependencies between questions are not supported during check-in."
-msgstr "Esta pregunta se hará durante el registro."
+msgstr "Dependencias entre preguntas no están soportadas durante el registro."
 
 #: pretix/control/forms/item.py:186
 msgid "The product should exist in multiple variations"
