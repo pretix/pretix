@@ -9,7 +9,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import F, Max, Q, Sum
+from django.db.models import Exists, F, Max, OuterRef, Q, Sum
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -1432,3 +1432,49 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
             self.retry()
     except (MaxRetriesExceededError, LockTimeoutException):
         raise OrderError(error_messages['busy'])
+
+
+def change_payment_provider(order: Order, payment_provider, amount=None):
+    e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                                                   OrderPayment.PAYMENT_STATE_REFUNDED))
+    open_fees = list(
+        order.fees.annotate(has_p=Exists(e)).filter(
+            Q(fee_type=OrderFee.FEE_TYPE_PAYMENT) & ~Q(has_p=True)
+        )
+    )
+    if open_fees:
+        fee = open_fees[0]
+        if len(open_fees) > 1:
+            for f in open_fees[1:]:
+                f.delete()
+    else:
+        fee = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.00'), order=order)
+    old_fee = fee.value
+
+    new_fee = payment_provider.calculate_fee(
+        order.pending_sum - old_fee if amount is None else amount
+    )
+    with transaction.atomic():
+        if new_fee:
+            fee.value = new_fee
+            fee.internal_type = payment_provider.identifier
+            fee._calculate_tax()
+            fee.save()
+        else:
+            if fee.pk:
+                fee.delete()
+            fee = None
+
+    open_payment = None
+    lp = order.payments.exclude(provider=payment_provider.identifier).last()
+    if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+        open_payment = lp
+
+    if open_payment and open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
+                                               OrderPayment.PAYMENT_STATE_CREATED):
+        open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+        open_payment.save(update_fields=['state'])
+
+    order.total = (order.positions.aggregate(sum=Sum('price'))['sum'] or 0) + (order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
+    order.save(update_fields=['total'])
+    return old_fee, new_fee, fee

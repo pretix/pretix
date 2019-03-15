@@ -440,7 +440,6 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 )
 
             for q in cp.item.questions_to_ask:
-                print("question", q, "is required", question_is_required(q), "has answer", q.id in answ)
                 if question_is_required(q) and not answ.get(q.id):
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))

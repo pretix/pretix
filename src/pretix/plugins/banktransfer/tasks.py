@@ -16,6 +16,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
+from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -25,6 +26,38 @@ from .models import BankImportJob, BankTransaction
 logger = logging.getLogger(__name__)
 
 
+def notify_incomplete_payment(o: Order):
+    with language(o.locale):
+        tz = pytz.timezone(o.event.settings.get('timezone', settings.TIME_ZONE))
+        try:
+            invoice_name = o.invoice_address.name
+            invoice_company = o.invoice_address.company
+        except InvoiceAddress.DoesNotExist:
+            invoice_name = ""
+            invoice_company = ""
+        email_template = o.event.settings.mail_text_order_expire_warning
+        email_context = {
+            'event': o.event.name,
+            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                'order': o.code,
+                'secret': o.secret
+            }),
+            'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
+            'invoice_name': invoice_name,
+            'invoice_company': invoice_company,
+        }
+        email_subject = ugettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
+
+        try:
+            o.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.expire_warning_sent'
+            )
+        except SendMailException:
+            logger.exception('Reminder email could not be sent')
+
+
+@transaction.atomic
 def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, organizer: Organizer=None,
                         slug: str=None):
     if event:
@@ -59,20 +92,28 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
         trans.state = BankTransaction.STATE_ERROR
         trans.message = ugettext_noop('The order has already been canceled.')
     else:
-        p = trans.order.payments.get_or_create(
+        p, created = trans.order.payments.get_or_create(
             amount=trans.amount,
             provider='banktransfer',
             state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
             defaults={
                 'state': OrderPayment.PAYMENT_STATE_CREATED,
             }
-        )[0]
+        )
         p.info_data = {
             'reference': trans.reference,
             'date': trans.date,
             'payer': trans.payer,
             'trans_id': trans.pk
         }
+
+        if created:
+            # We're perform a payment method switchign on-demand here
+            old_fee, new_fee, fee = change_payment_provider(trans.order, p.payment_provider, p.amount)  # noqa
+            if fee:
+                p.fee = fee
+                p.save(update_fields=['fee'])
+
         try:
             p.confirm()
         except Quota.QuotaExceededException:
@@ -97,35 +138,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
             o = trans.order
             o.refresh_from_db()
             if o.pending_sum > Decimal('0.00') and o.status == Order.STATUS_PENDING:
-                print("send mail")
-                with language(o.locale):
-                    tz = pytz.timezone(o.event.settings.get('timezone', settings.TIME_ZONE))
-                    try:
-                        invoice_name = o.invoice_address.name
-                        invoice_company = o.invoice_address.company
-                    except InvoiceAddress.DoesNotExist:
-                        invoice_name = ""
-                        invoice_company = ""
-                    email_template = o.event.settings.mail_text_order_expire_warning
-                    email_context = {
-                        'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
-                            'order': o.code,
-                            'secret': o.secret
-                        }),
-                        'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
-                        'invoice_name': invoice_name,
-                        'invoice_company': invoice_company,
-                    }
-                    email_subject = ugettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
-
-                    try:
-                        o.send_mail(
-                            email_subject, email_template, email_context,
-                            'pretix.event.order.email.expire_warning_sent'
-                        )
-                    except SendMailException:
-                        logger.exception('Reminder email could not be sent')
+                notify_incomplete_payment(o)
 
     trans.save()
 
@@ -197,13 +210,11 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 if match:
                     if job.event:
                         code = match.group(1)
-                        with transaction.atomic():
-                            _handle_transaction(trans, code, event=job.event)
+                        _handle_transaction(trans, code, event=job.event)
                     else:
                         slug = match.group(1)
                         code = match.group(2)
-                        with transaction.atomic():
-                            _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
+                        _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
                 else:
                     trans.state = BankTransaction.STATE_NOMATCH
                     trans.save()

@@ -25,7 +25,7 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified,
 )
-from pretix.base.services.orders import cancel_order
+from pretix.base.services.orders import cancel_order, change_payment_provider
 from pretix.base.services.tickets import generate
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.base.views.mixins import OrderQuestionsViewMixin
@@ -359,7 +359,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
     def open_fees(self):
         e = OrderPayment.objects.filter(
             fee=OuterRef('pk'),
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
         )
         return self.order.fees.annotate(has_p=Exists(e)).filter(
             Q(fee_type=OrderFee.FEE_TYPE_PAYMENT) & ~Q(has_p=True)
@@ -374,7 +374,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @cached_property
     def _position_sum(self):
-        return self.order.positions.aggregate(sum=Sum('price'))['sum']
+        return self.order.positions.aggregate(sum=Sum('price'))['sum'] or Decimal('0.00')
 
     @cached_property
     def provider_forms(self):
@@ -407,35 +407,8 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment'] = p['provider'].identifier
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
-                fees = list(self.open_fees)
-                if fees:
-                    fee = fees[0]
-                    if len(fees) > 1:
-                        for f in fees[1:]:
-                            f.delete()
-                else:
-                    fee = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.00'), order=self.order)
-                old_fee = fee.value
-
-                new_fee = p['provider'].calculate_fee(self.order.pending_sum - old_fee)
                 with transaction.atomic():
-                    if new_fee:
-                        fee.value = new_fee
-                        fee.internal_type = p['provider'].identifier
-                        fee._calculate_tax()
-                        fee.save()
-                    else:
-                        if fee.pk:
-                            fee.delete()
-                        fee = None
-
-                    if self.open_payment and self.open_payment.state in (OrderPayment.PAYMENT_STATE_PENDING,
-                                                                         OrderPayment.PAYMENT_STATE_CREATED):
-                        self.open_payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-                        self.open_payment.save(update_fields=['state'])
-
-                    self.order.total = self._position_sum + (self.order.fees.aggregate(sum=Sum('value'))['sum'] or 0)
-                    self.order.save(update_fields=['total'])
+                    old_fee, new_fee, fee = change_payment_provider(self.order, p['provider'], None)
                     newpayment = self.order.payments.create(
                         state=OrderPayment.PAYMENT_STATE_CREATED,
                         provider=p['provider'].identifier,
