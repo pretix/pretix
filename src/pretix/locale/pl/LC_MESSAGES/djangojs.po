@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-15 10:30+0000\n"
+"PO-Revision-Date: 2019-03-15 10:40+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
@@ -90,17 +90,18 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:115
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
-msgstr ""
+msgstr "Zapytanie trwało zbyt długo. Prosimy spróbować ponownie."
 
 #: pretix/static/pretixbase/js/asynctask.js:127
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Błąd komunikacji z serwerem. Prosimy spróbować ponownie. Kod błędu: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Zapytanie jest przetwarzane…"
 
 #: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
@@ -108,19 +109,22 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Zapytanie jest przesyłane do serwera. W przypadku czasu oczekiwania "
+"dłuższego niż minuta prosimy o sprawdzenie łączności z Internetem a "
+"następnie o przeładowanie strony i ponowienie próby."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:20
 msgid "Close message"
-msgstr ""
+msgstr "Zamknięcie wiadomości"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Skopiowano!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Prosimy o wciśnięcie Ctrl-C w celu skopiowania."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
@@ -128,77 +132,80 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr ""
+msgstr "QR zameldowania"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "Błąd ładowania pliku PDF tła:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
-msgstr ""
+msgstr "Grupa obiektów"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
-msgstr ""
+msgstr "Obiekt tekstowy"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
-msgstr ""
+msgstr "Miejsce na kod kreskowy"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Wygenerowane przez pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "Obiekt"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
-msgstr ""
+msgstr "Projekt biletu"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "Błąd zapisu."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:735
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "Czy na pewno opuścić edytor bez zapisania zmian?"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:749
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Błąd uploadu pliku PDF, prosimy spróbować ponownie."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
-msgstr ""
+msgstr "Wystąpił błąd."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "Generowanie wiadomości…"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
-msgstr ""
+msgstr "Nieznany błąd."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Wybrany kolor ma wysoki kontrast i zapewnia doskonałą czytelność!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Wybrany kolor ma odpowiedni kontrast i zapewnia wystarczającą czytelność!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Wybrany kolor ma za słaby kontrast dla tekstu na białym tle, prosimy wybrać "
+"ciemniejszy odcień."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
-msgstr ""
+msgstr "Całość"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
