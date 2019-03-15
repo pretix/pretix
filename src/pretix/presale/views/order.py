@@ -16,7 +16,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
-from pretix.base.models import CachedTicket, Invoice, Order, OrderPosition
+from pretix.base.models import (
+    CachedTicket, Invoice, Order, OrderPosition, Quota,
+)
 from pretix.base.models.orders import (
     CachedCombinedTicket, OrderFee, OrderPayment, OrderRefund, QuestionAnswer,
 )
@@ -25,6 +27,7 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified,
 )
+from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import cancel_order, change_payment_provider
 from pretix.base.services.tickets import generate
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
@@ -375,6 +378,33 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
     @cached_property
     def _position_sum(self):
         return self.order.positions.aggregate(sum=Sum('price'))['sum'] or Decimal('0.00')
+
+    @transaction.atomic()
+    def mark_paid_free(self):
+        p = self.order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            provider='manual',
+            amount=Decimal('0.00'),
+            fee=None
+        )
+        try:
+            p.confirm()
+        except SendMailException:
+            pass
+
+    def get(self, request, *args, **kwargs):
+        if self.order.pending_sum <= Decimal('0.00'):
+            try:
+                self.mark_paid_free()
+            except Quota.QuotaExceededException as e:
+                messages.error(self.request, str(e))
+                return redirect(self.get_order_url())
+            except PaymentException as e:
+                messages.error(self.request, str(e))
+                return redirect(self.get_order_url())
+            else:
+                return redirect(self.get_order_url() + '?paid=1')
+        return super().get(request, *args, **kwargs)
 
     @cached_property
     def provider_forms(self):
