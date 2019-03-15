@@ -8300,7 +8300,7 @@ msgstr "您的商店当前处于测试模式。所有订单都不是持久的，
 
 #: pretix/control/templates/pretixcontrol/event/live.html:76
 msgid "Permanently delete all orders created in test mode"
-msgstr ""
+msgstr "永久删除在测试模式下创建的所有订单"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:81
 msgid "Disable test mode"
