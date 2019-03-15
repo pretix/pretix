@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-15 07:55+0000\n"
+"PO-Revision-Date: 2019-03-15 10:30+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -8304,189 +8304,189 @@ msgstr "永久删除在测试模式下创建的所有订单"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:81
 msgid "Disable test mode"
-msgstr ""
+msgstr "禁用测试模式"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:87
 msgid "Your shop is currently in production mode."
-msgstr ""
+msgstr "您的商店目前处于生产模式。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:90
 msgid ""
 "If you want to do some test orders, you can enable test mode for your shop. "
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
-msgstr ""
+msgstr "如果您想要执行一些测试订单，可以为您的商店启用测试模式。 只要商店处于测试模式，所有创建的订单都会标记为测试订单，并且可以再次删除。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:92
 msgid ""
 "Please note that test orders still count into your quotas, actually use "
 "vouchers and might perform actual payments. The only difference is that you "
 "can delete test orders. Use at your own risk!"
-msgstr ""
+msgstr "请注意，测试订单仍会计入您的配额，实际使用优惠券并可能会执行实际付款。 唯一的区别是您可以删除测试订单。 使用风险自负！"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:96
 msgid ""
 "Also, test mode only covers the main web shop. Orders created through other "
 "sales channels such as the box office or resellers module are still created "
 "as production orders."
-msgstr ""
+msgstr "此外，测试模式仅涵盖主要的网上商店。通过其他销售渠道（如票房或经销商模块）创建的订单仍然创建为生产订单。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:100
 msgid ""
 "It looks like you already have some real orders in your shop. We do not "
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
-msgstr ""
+msgstr "看来你的店里已经有了一些真正的订单了。如果您的客户已经知道您的商店，我们不建议启用测试模式，因为这样会混淆他们。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:107
 msgid "Enable test mode"
-msgstr ""
+msgstr "启用测试模式"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:10
 msgid "All actions"
-msgstr ""
+msgstr "所有行为"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:12
 msgid "Team actions"
-msgstr ""
+msgstr "团队行为"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:15
 msgid "Customer actions"
-msgstr ""
+msgstr "客户的行为"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:84
 msgid "No results"
-msgstr ""
+msgstr "没有结果"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:6
 msgid "E-mail settings"
-msgstr ""
+msgstr "电子邮件设置"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:19
 msgid "E-mail design"
-msgstr ""
+msgstr "电子邮件设计"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:32
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:30
 #: pretix/control/templates/pretixcontrol/event/tickets.html:29
 #: pretix/control/templates/pretixcontrol/pdf/index.html:355
 msgid "Preview"
-msgstr ""
+msgstr "预览"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:40
 msgid "E-mail content"
-msgstr ""
+msgstr "电子邮件内容"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:42
 msgid "Placed order"
-msgstr ""
+msgstr "下订单"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:45
 msgid "Paid order"
-msgstr ""
+msgstr "付费订单"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:48
 msgid "Free order"
-msgstr ""
+msgstr "免费订单"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:51
 #: pretix/control/templates/pretixcontrol/order/index.html:152
 msgid "Resend link"
-msgstr ""
+msgstr "重新发送连接"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:57
 msgid "Payment reminder"
-msgstr ""
+msgstr "催款单"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:60
 msgid "Waiting list notification"
-msgstr ""
+msgstr "等待列表通知"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:66
 msgid "Order custom mail"
-msgstr ""
+msgstr "订购自定义邮件"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:69
 msgid "Reminder to download tickets"
-msgstr ""
+msgstr "提醒下载门票"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
 msgid "Order approval process"
-msgstr ""
+msgstr "订单审批流程"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:77
 msgid "SMTP settings"
-msgstr ""
+msgstr "SMTP设置"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:91
 msgid "Save and test custom SMTP connection"
-msgstr ""
+msgstr "保存并测试自定义SMTP连接"
 
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:27
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:10
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:66
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:5
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
 msgid "Payment settings"
-msgstr ""
+msgstr "支付设置"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:9
 msgid "Payment providers"
-msgstr ""
+msgstr "付款服务提供商"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:21
 #: pretix/control/templates/pretixcontrol/user/settings.html:44
 msgid "Enabled"
-msgstr ""
+msgstr "启用"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:26
 #: pretix/control/templates/pretixcontrol/subevents/index.html:113
 #: pretix/control/templates/pretixcontrol/user/settings.html:49
 msgid "Disabled"
-msgstr ""
+msgstr "禁用"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:41
 msgid ""
 "There are no payment providers available. Please go to the plugin settings "
 "and activate one or more payment plugins."
-msgstr ""
+msgstr "没有可用的支付提供商。请转到插件设置并激活一个或多个付款插件。"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:49
 msgid "General payment settings"
-msgstr ""
+msgstr "一般付款设置"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:13
 #: pretix/control/templates/pretixcontrol/events/create_base.html:24
 msgid "Back"
-msgstr ""
+msgstr "后退"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
-msgstr ""
+msgstr "付款服务提供商："
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
-msgstr ""
+msgstr "警告："
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:22
 msgid ""
 "Please note that EU Directive 2015/2366 bans surcharging payment fees for "
 "most common payment methods within the European Union. If in doubt, consult "
 "a lawyer or refrain from charging payment fees."
-msgstr ""
+msgstr "请注意，欧盟指令2015/2366禁止对欧盟内最常见的支付方式收取附加费。如有疑问，请咨询律师或避免收取支付费用。"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:28
 msgid ""
 "In simple terms, this means you need to pay any fees imposed by the payment "
 "providers and cannot pass it on to your customers."
-msgstr ""
+msgstr "简单来说，这意味着您需要支付付款服务提供商收取的任何费用，而不能将其传递给您的客户。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:5
 msgid "Installed plugins"
-msgstr ""
+msgstr "已安装的插件"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:11
 #: pretix/control/views/checkin.py:210 pretix/control/views/event.py:142
@@ -8509,11 +8509,11 @@ msgstr "您的更改已保存。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 msgid "Incompatible"
-msgstr ""
+msgstr "不相容"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:27
 msgid "Not available"
-msgstr ""
+msgstr "无法使用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:29
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -8521,7 +8521,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
 #: pretix/control/templates/pretixcontrol/user/notifications.html:14
 msgid "Disable"
-msgstr ""
+msgstr "禁用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:31
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:21
@@ -8529,73 +8529,73 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/notifications.html:23
 #: pretix/control/templates/pretixcontrol/user/settings.html:51
 msgid "Enable"
-msgstr ""
+msgstr "启用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:38
 #, python-format
 msgid "Version %(v)s by <em>%(a)s</em>"
-msgstr ""
+msgstr "版本%(v)s由<em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:42
 #, python-format
 msgid "Version %(v)s"
-msgstr ""
+msgstr "版本%(v)s"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:49
 msgid ""
 "This plugin needs to be enabled by a system administrator for your event."
-msgstr ""
+msgstr "系统管理员需要为您的活动启用此插件。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:54
 msgid "This plugin cannot be enabled for the following reasons:"
-msgstr ""
+msgstr "无法启用此插件，原因如下："
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:64
 msgid "This plugin reports the following problems:"
-msgstr ""
+msgstr "此插件报告以下问题："
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:14
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:10
 msgid "Congratulations!"
-msgstr ""
+msgstr "祝贺你！"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:16
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:12
 msgid "You just created an event!"
-msgstr ""
+msgstr "你刚刚创建了一个活动！"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:19
 msgid ""
 "You can scroll down and create your first ticket products quickly, or you "
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
-msgstr ""
+msgstr "您可以向下滚动并快速创建您的第一个票证产品，也可以使用左侧的导航更详细地修改活动的设置。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:36
 msgid "Create ticket types"
-msgstr ""
+msgstr "创建票证类型"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:42
 msgid "Ticket name"
-msgstr ""
+msgstr "票证名称"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:48
 msgid "Capacity (optional)"
-msgstr ""
+msgstr "容量（可选）"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:101
 msgid "Add a new ticket type"
-msgstr ""
+msgstr "添加新的票据类型"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:106
 msgid "Total capacity:"
-msgstr ""
+msgstr "总容量："
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:109
 msgid ""
 "You can set a limit on the total number of tickets sold for your event, "
 "regardless of the ticket type."
-msgstr ""
+msgstr "无论票据类型如何，您都可以对为活动售出的门票总数设置限制。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:118
 msgid ""
@@ -8604,17 +8604,19 @@ msgid ""
 "ticket types in more detail, you can later do so in the \"Products\" section "
 "in the navigation. Don't worry, you can change everything you input here."
 msgstr ""
+"如果您想使用更高级的功能，如不允许使用的产品、产品变化、自定义配额、附加产品，或者想更详细地修改您的票类型，您可以稍后在导航的“产品”部分中这样做。别担心"
+"，您可以更改这里输入的所有内容。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid "Features"
-msgstr ""
+msgstr "特征"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:134
 msgid ""
 "We recommend that you take some time to go through the \"Settings\" part of "
 "your event, but if you're in a hurry and want to get started quickly, here's "
 "a short version:"
-msgstr ""
+msgstr "我们建议您花一些时间来完成活动的“设置”部分，但如果您赶时间并希望快速入门，这里有一个简短的版本："
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:153
 msgid ""
@@ -8623,77 +8625,77 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
+"pretix 支持<a href=\"https://pretix.eu/about/en/features/payment\" target=\""
+"_blank\">广泛的支付提供商</a>，允许您选择最适合您的工作流程的支付方法。以下仅举两个例子，您可以在活动的“设置”部分添加更多内容。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
 msgid ""
 "After you saved this page, we will redirect you to Stripe to create or "
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
-msgstr ""
+msgstr "保存此页面后，我们会将您重定向到Stripe以在其中创建或连接帐户。 完成此操作后，您将被带回pretix。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:188
 msgid "Getting in touch with you"
-msgstr ""
+msgstr "与您取得联系"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:190
 msgid ""
 "In case something goes wrong or is unclear, we strongly suggest that you "
 "provide ways for your attendees to contact you:"
-msgstr ""
+msgstr "如果出现问题或不清楚，我们强烈建议为观众提供与您联系的方式："
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:32
 msgid "Meta data"
-msgstr ""
+msgstr "元数据"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:54
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:50
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:293
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:51
 msgid "Timeline"
-msgstr ""
+msgstr "时间线"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:96
 #: pretix/control/templates/pretixcontrol/events/index.html:140
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:37
-#, fuzzy
-#| msgid "Can create events"
 msgid "Clone event"
-msgstr "可以创建活动"
+msgstr "复制活动"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:15
 msgid ""
 "You can now scroll down and modify the settings in more detail, if you want, "
 "or you can create your first product to start selling tickets right away!"
-msgstr ""
+msgstr "如果您愿意，现在可以向下滚动并更详细地修改设置，或者您可以创建第一个产品立即开始销售门票！"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:23
 msgid "Create a first product"
-msgstr ""
+msgstr "创建第一个产品"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
 msgid "Delete tax rule"
-msgstr ""
+msgstr "删除税收规则"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:10
 #, python-format
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
-msgstr ""
+msgstr "您确定要删除税收规则<strong>%(taxrule)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 msgid ""
 "You cannot delete a tax rule that is in use for a product or has been in use "
 "for any existing orders."
-msgstr ""
+msgstr "您无法删除正在为产品使用或已用于任何现有订单的税收规则。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:7
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
 #, python-format
 msgid "Tax rule: %(name)s"
-msgstr ""
+msgstr "税收规则：%(name)s"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:28
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
@@ -8701,7 +8703,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:70
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:72
 msgid "Advanced settings"
-msgstr ""
+msgstr "高级设置"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:36
 #, python-format
@@ -8711,10 +8713,12 @@ msgid ""
 "for the correct handling of taxes in your ticket shop. If in doubt, please "
 "contact a lawyer or tax consultant."
 msgstr ""
+"这些设置适用于高级用户。有关详细信息，请参阅<a href=\"%(docs)s\">文档</a>。请注意，我们不对您的售票处正确处理税款负责。 "
+"如有疑问，请联系律师或税务顾问。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:46
 msgid "Custom taxation rules"
-msgstr ""
+msgstr "自定义税收规则"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:48
 msgid ""
@@ -8724,63 +8728,65 @@ msgid ""
 "the first rule matches the order, it will be used and all further rules will "
 "be ignored. If no rule matches, tax will be charged."
 msgstr ""
+"这些设置适用于具有特定税收情况的专业用户。如果您在此处创建任何规则，则将忽略上面的反向计费设置。将按顺序检查规则，一旦第一个规则与订单匹配，将使用它，并且"
+"将忽略所有其他规则。 如果没有规则匹配，将收取税费。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:54
 msgid "All of these rules will only apply if an invoice address is set."
-msgstr ""
+msgstr "所有这些规则仅适用于设置了发票地址的情况。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:109
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:250
 msgid "Add a new rule"
-msgstr ""
+msgstr "添加新规则"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
-msgstr ""
+msgstr "您尚未创建任何税收规则。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:15
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:19
 msgid "Create a new tax rule"
-msgstr ""
+msgstr "创建一个新的税收规则"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:27
 msgid "Rate"
-msgstr ""
+msgstr "比率"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:7
 msgid "Ticket download"
-msgstr ""
+msgstr "票证下载"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:11
 msgid ""
 "You activated ticket downloads but no output provider is enabled. Be sure to "
 "enable a plugin and activate an output provider."
-msgstr ""
+msgstr "您激活了票证下载但未启用输出提供程序。 确保启用插件并激活输出提供程序。"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:43
 msgid ""
 "There are no ticket outputs available. Please go to the plugin settings and "
 "activate one or more ticket output plugins."
-msgstr ""
+msgstr "没有可用的票证输出。 请转到插件设置并激活一个或多个票证输出插件。"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
 "The pretix widget is a way to embed your ticket shop into your event "
 "website. This way, your visitors can buy their ticket right away without "
 "leaving your website."
-msgstr ""
+msgstr "pretix小部件是一种将票务商店嵌入您的活动网站的方法。 这样，您的访问者可以在不离开您的网站的情况下立即买票。"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:17
 msgid ""
 "To embed the widget onto your website, simply copy the following code to the "
 "<code>&lt;head&gt;</code> section of your website:"
-msgstr ""
+msgstr "要将小部件嵌入您的网站，只需将以下代码复制到您网站的<code>&lt;顶端&gt;</code>部分："
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:25
 msgid ""
 "Then, copy the following code to the place of your website where you want "
 "the widget to show up:"
-msgstr ""
+msgstr "然后，将以下代码复制到您希望小部件出现的网站位置："
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:39
 #: pretix/control/templates/pretixcontrol/event/widget.html:52
@@ -8789,42 +8795,44 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
+"JavaScript在您的浏览器禁用了。 要在没有JavaScript的情况下访问我们的售票处，请&lt; "
+"%(a_attr)s&gt;点击此处&lt;/a&gt;。"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 msgid "Read our documentation for more information"
-msgstr ""
+msgstr "阅读我们的文档了解更多信息"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:69
 msgid ""
 "Using this form, you can generate a code to copy and paste to your website "
 "source."
-msgstr ""
+msgstr "使用此表单，可以生成代码以复制并粘贴到网站源。"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:79
 msgid "Generate widget code"
-msgstr ""
+msgstr "生成小部件代码"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
 #, python-format
 msgid "Step %(step)s"
-msgstr ""
+msgstr "步骤%(step)s"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:31
 msgid ""
 "Every event needs to be created as part of an organizer account. Currently, "
 "you do not have access to any organizer accounts."
-msgstr ""
+msgstr "每个活动都需要作为组织者帐户的一部分创建。目前，您无法访问任何组织者帐户。"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html:35
 #: pretix/control/templates/pretixcontrol/organizers/create.html:4
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:27
 msgid "Create a new organizer"
-msgstr ""
+msgstr "创建一个新的组织者"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:13
 msgid "Set to random"
-msgstr ""
+msgstr "设置为随机"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:17
 msgid ""
@@ -8834,12 +8842,14 @@ msgid ""
 "characters that can be easily remembered, but you can also choose to use a "
 "random value."
 msgstr ""
+"这是用户可以购买门票的地址。 应该简短，只包含小写字母和数字，并且在您的活动中必须是唯一的。 "
+"我们建议使用某种缩写或少于10个字符的日期，这些字符可以很容易记住，但您也可以选择使用随机值。"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:25
 msgid ""
 "We will also use this in some places like order codes, invoice numbers or "
 "bank transfer references as an abbreviation to reference this event."
-msgstr ""
+msgstr "我们还会在某些地方使用此功能，例如订单代码，发票编号或银行转帐参考作为引用此活动的缩写。"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:31
 msgid ""
