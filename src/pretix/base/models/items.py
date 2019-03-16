@@ -797,14 +797,12 @@ class ItemBundle(models.Model):
                 return "{}x {}".format(self.count, self.bundled_item.name)
 
     @staticmethod
-    def clean_itemvar(event, base_item, bundle, bundled_item, bundled_variation):
+    def clean_itemvar(event, bundled_item, bundled_variation):
         if event != bundled_item.event:
-            raise ValidationError(_('The bundled item\'s category must belong to the same event as the item.'))
-        if event != base_item.event:
-            raise ValidationError(_('The base item\'s category must belong to the same event as the item.'))
+            raise ValidationError(_('The bundled item must belong to the same event as the item.'))
         if bundled_item.has_variations and not bundled_variation:
             raise ValidationError(_('A variation needs to be set for this item.'))
-        if bundled_item.has_variations and bundled_variation.item != bundled_item:
+        if bundled_variation and bundled_variation.item != bundled_item:
             raise ValidationError(_('The chosen variation does not belong to this item.'))
 
     @staticmethod

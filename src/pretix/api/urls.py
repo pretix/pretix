@@ -44,6 +44,7 @@ question_router.register(r'options', item.QuestionOptionViewSet)
 item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
 item_router.register(r'addons', item.ItemAddOnViewSet)
+item_router.register(r'bundles', item.ItemBundleViewSet)
 
 order_router = routers.DefaultRouter()
 order_router.register(r'payments', order.PaymentViewSet)

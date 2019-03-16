@@ -1,6 +1,7 @@
 import django_filters
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
@@ -9,14 +10,14 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemCategorySerializer, ItemSerializer,
-    ItemVariationSerializer, QuestionOptionSerializer, QuestionSerializer,
-    QuotaSerializer,
+    ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
+    ItemSerializer, ItemVariationSerializer, QuestionOptionSerializer,
+    QuestionSerializer, QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
-    Quota,
+    Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
+    QuestionOption, Quota,
 )
 from pretix.helpers.dicts import merge_dicts
 
@@ -46,7 +47,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons').all()
+        return self.request.event.items.select_related('tax_rule').prefetch_related('variations', 'addons', 'bundles').all()
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
@@ -96,17 +97,20 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     permission = None
     write_permission = 'can_change_items'
 
+    @cached_property
+    def item(self):
+        return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+
     def get_queryset(self):
-        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
-        return item.variations.all()
+        return self.item.variations.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        ctx['item'] = self.item
         return ctx
 
     def perform_create(self, serializer):
-        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        item = self.item
         if not item.has_variations:
             raise PermissionDenied('This variation cannot be created because the item does not have variations. '
                                    'Changing a product without variations to a product with variations is not allowed.')
@@ -149,6 +153,58 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         )
 
 
+class ItemBundleViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemBundleSerializer
+    queryset = ItemBundle.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    ordering_fields = ('id',)
+    ordering = ('id',)
+    permission = None
+    write_permission = 'can_change_items'
+
+    @cached_property
+    def item(self):
+        return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+
+    def get_queryset(self):
+        return self.item.bundles.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['item'] = self.item
+        return ctx
+
+    def perform_create(self, serializer):
+        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        serializer.save(base_item=item)
+        item.log_action(
+            'pretix.event.item.bundles.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
+        )
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.base_item.log_action(
+            'pretix.event.item.bundles.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
+        )
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        instance.base_item.log_action(
+            'pretix.event.item.bundles.removed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'bundled_item': instance.bundled_item.pk, 'bundled_variation': instance.bundled_variation.pk if instance.bundled_variation else None,
+                  'count': instance.count, 'designated_price': instance.designated_price}
+        )
+
+
 class ItemAddOnViewSet(viewsets.ModelViewSet):
     serializer_class = ItemAddOnSerializer
     queryset = ItemAddOn.objects.none()
@@ -158,18 +214,21 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
     permission = None
     write_permission = 'can_change_items'
 
+    @cached_property
+    def item(self):
+        return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+
     def get_queryset(self):
-        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
-        return item.addons.all()
+        return self.item.addons.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['item'] = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        ctx['item'] = self.item
         return ctx
 
     def perform_create(self, serializer):
-        item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
+        item = self.item
         category = get_object_or_404(ItemCategory, pk=self.request.data['addon_category'])
         serializer.save(base_item=item, addon_category=category)
         item.log_action(

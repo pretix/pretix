@@ -8,8 +8,8 @@ from django_countries.fields import Country
 from pytz import UTC
 
 from pretix.base.models import (
-    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemCategory, ItemVariation,
-    Order, OrderPosition, Question, QuestionOption, Quota,
+    CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
+    ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
 )
 from pretix.base.models.orders import OrderFee
 
@@ -235,6 +235,7 @@ TEST_ITEM_RES = {
     "require_approval": False,
     "variations": [],
     "addons": [],
+    "bundles": [],
     "original_price": None
 }
 
@@ -337,6 +338,25 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
         "max_count": 1,
         "position": 0,
         "price_included": False
+    }]
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
+                                                                               item.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_item_detail_bundles(token_client, organizer, event, team, item, category):
+    i = event.items.create(name="Included thing", default_price=2)
+    item.bundles.create(bundled_item=i, count=1, designated_price=2)
+    res = dict(TEST_ITEM_RES)
+
+    res["id"] = item.pk
+    res["bundles"] = [{
+        "bundled_item": i.pk,
+        "bundled_variation": None,
+        "count": 1,
+        "designated_price": '2.00',
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -601,7 +621,134 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
 
 
 @pytest.mark.django_db
-def test_item_update(token_client, organizer, event, item, category, category2, taxrule2):
+def test_item_create_with_bundle(token_client, organizer, event, item, category, item2, taxrule):
+    i = event.items.create(name="Included thing", default_price=2)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "bundles": [
+                {
+                    "bundled_item": i.pk,
+                    "bundled_variation": None,
+                    "count": 2,
+                    "designated_price": "3.00",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    item = Item.objects.get(pk=resp.data['id'])
+    b = item.bundles.first()
+    assert b.bundled_item == i
+    assert b.bundled_variation is None
+    assert b.count == 2
+    assert b.designated_price == 3
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "bundles": [
+                {
+                    "bundled_item": item2.pk,
+                    "bundled_variation": None,
+                    "count": 2,
+                    "designated_price": "3.00",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"bundles":["The bundled item must belong to the same event as the item."]}'
+
+    v = item2.variations.create(value="foo")
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "bundles": [
+                {
+                    "bundled_item": item.pk,
+                    "bundled_variation": v.pk,
+                    "count": 2,
+                    "designated_price": "3.00",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"bundles":["The chosen variation does not belong to this item."]}'
+
+
+@pytest.mark.django_db
+def test_item_update(token_client, organizer, event, item, category, item2, category2, taxrule2):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
@@ -673,7 +820,25 @@ def test_item_update(token_client, organizer, event, item, category, category2, 
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
+                                    'the dedicated nested endpoint."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "bundles": [
+                {
+                    "bundled_item": item2.pk,
+                    "bundled_variation": None,
+                    "count": 2,
+                    "designated_price": "3.00",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
@@ -699,7 +864,7 @@ def test_item_update_with_variation(token_client, organizer, event, item):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
@@ -721,7 +886,7 @@ def test_item_update_with_addon(token_client, organizer, event, item, category):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons or variations via PATCH/PUT is not supported. Please use ' \
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
 
@@ -920,6 +1085,96 @@ def test_only_variation_not_delete(token_client, organizer, event, item, variati
                                     'Changing a product with variations to a product without variations is not ' \
                                     'allowed."}'
     assert item.variations.filter(pk=variation.id).exists()
+
+
+@pytest.fixture
+def bundle(item, item3, category):
+    return item.bundles.create(bundled_item=item3, count=1, designated_price=2)
+
+
+TEST_BUNDLE_RES = {
+    "bundled_item": 0,
+    "bundled_variation": None,
+    "count": 1,
+    "designated_price": "2.00"
+}
+
+
+@pytest.mark.django_db
+def test_bundles_list(token_client, organizer, event, item, bundle, item3):
+    res = dict(TEST_BUNDLE_RES)
+    res["id"] = bundle.pk
+    res["bundled_item"] = item3.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug,
+                                                                                       item.pk))
+    assert resp.status_code == 200
+    assert res == resp.data['results'][0]
+
+
+@pytest.mark.django_db
+def test_bundles_detail(token_client, organizer, event, item, bundle, item3):
+    res = dict(TEST_BUNDLE_RES)
+    res["id"] = bundle.pk
+    res["bundled_item"] = item3.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/bundles/{}/'.format(organizer.slug, event.slug,
+                                                                                          item.pk, bundle.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_bundles_create(token_client, organizer, event, item, item2):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "bundled_item": item.pk,
+            "bundled_variation": None,
+            "count": 1,
+            "designated_price": "1.50",
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    b = ItemBundle.objects.get(pk=resp.data['id'])
+    assert b.bundled_item == item
+    assert b.bundled_variation is None
+    assert b.designated_price == 1.5
+    assert b.count == 1
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "bundled_item": item2.pk,
+            "bundled_variation": None,
+            "count": 1,
+            "designated_price": "1.50",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The bundled item must belong to the same event as the item."]}'
+
+
+@pytest.mark.django_db
+def test_bundles_update(token_client, organizer, event, item, bundle):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/bundles/{}/'.format(organizer.slug, event.slug, item.pk, bundle.pk),
+        {
+            "count": 3,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    a = ItemBundle.objects.get(pk=bundle.pk)
+    assert a.count == 3
+
+
+@pytest.mark.django_db
+def test_bundles_delete(token_client, organizer, event, item, bundle):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/items/{}/bundles/{}/'.format(organizer.slug, event.slug,
+                                                                                             item.pk, bundle.pk))
+    assert resp.status_code == 204
+    assert not item.bundles.filter(pk=bundle.id).exists()
 
 
 @pytest.fixture
