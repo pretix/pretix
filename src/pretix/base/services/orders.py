@@ -32,7 +32,7 @@ from pretix.base.models.orders import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TaxedPrice
+from pretix.base.models.tax import TAXED_ZERO, TaxedPrice
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -401,10 +401,27 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     _check_date(event, now_dt)
 
     products_seen = Counter()
-    for i, cp in enumerate(positions):
+    changed_prices = {}
+    deleted_positions = set()
+
+    def delete(cp):
+        # Delete a cart position, including parents and children, if applicable
+        if cp.is_bundled:
+            delete(cp.addon_to)
+        else:
+            for p in cp.addons.all():
+                deleted_positions.add(p.pk)
+                p.delete()
+            deleted_positions.add(cp.pk)
+            cp.delete()
+
+    for i, cp in enumerate(sorted(positions, key=lambda s: -int(s.is_bundled))):
+        if cp.pk in deleted_positions:
+            continue
+
         if not cp.item.is_available() or (cp.variation and not cp.variation.active):
             err = err or error_messages['unavailable']
-            cp.delete()
+            delete(cp)
             continue
         quotas = list(cp.quotas)
 
@@ -413,7 +430,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = error_messages['max_items_per_product']
             errargs = {'max': cp.item.max_per_order,
                        'product': cp.item.name}
-            cp.delete()  # Sorry!
+            delete(cp)
             break
 
         if cp.voucher:
@@ -423,27 +440,27 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
             if v_avail < 1:
                 err = err or error_messages['voucher_redeemed']
-                cp.delete()  # Sorry!
+                delete(cp)
                 continue
 
         if cp.subevent and cp.subevent.presale_start and now_dt < cp.subevent.presale_start:
             err = err or error_messages['some_subevent_not_started']
-            cp.delete()
+            delete(cp)
             break
 
         if cp.subevent and cp.subevent.presale_has_ended:
             err = err or error_messages['some_subevent_ended']
-            cp.delete()
+            delete(cp)
             break
 
         if cp.item.require_voucher and cp.voucher is None:
-            cp.delete()
+            delete(cp)
             err = err or error_messages['voucher_required']
             break
 
         if cp.item.hide_without_voucher and (cp.voucher is None or cp.voucher.item is None
                                              or cp.voucher.item.pk != cp.item.pk):
-            cp.delete()
+            delete(cp)
             err = error_messages['voucher_required']
             break
 
@@ -466,19 +483,24 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if not cp.addon_to_id:
             for bundledp in cp.addons.all():
                 if bundledp.is_bundled:
-                    price = price - TaxedPrice(net=bundledp.price, gross=bundledp.price, rate=0, tax=0, name='')
+                    bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
+                    price = price - TaxedPrice(net=bundledprice, gross=bundledprice, rate=0, tax=0, name='')
+
+            if price.gross < Decimal('0.00'):
+                price = TAXED_ZERO
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
-            cp.delete()
+            delete(cp)
             continue
 
         if cp.voucher:
             if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
                 err = err or error_messages['voucher_expired']
-                cp.delete()
+                delete(cp)
                 continue
 
+        changed_prices[cp.pk] = price.gross
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             positions[i] = cp
             cp.price = price.gross
@@ -509,7 +531,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 minutes=event.settings.get('reservation_time', as_type=int))
             cp.save()
         else:
-            cp.delete()  # Sorry!
+            # Sorry, can't let you keep that!
+            delete(cp)
     if err:
         raise OrderError(err, errargs)
 

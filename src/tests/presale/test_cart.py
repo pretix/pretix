@@ -2330,6 +2330,23 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert cp.price == 21
         assert b.price == 2
 
+    def test_extend_designated_price_changed_beyond_base_price(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.bundle1.designated_price = Decimal('40.00')
+        self.bundle1.save()
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == 0
+        assert b.price == 40
+
     def test_extend_base_price_changed(self):
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,

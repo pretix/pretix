@@ -1,5 +1,6 @@
 import sys
 import uuid
+from collections import Counter
 from datetime import date, datetime, time
 from decimal import Decimal, DecimalException
 from typing import Tuple
@@ -411,6 +412,16 @@ class Item(LoggedModel):
             return False
         return True
 
+    def _get_quotas(self, ignored_quotas=None, subevent=None):
+        check_quotas = set(getattr(
+            self, '_subevent_quotas',  # Utilize cache in product list
+            self.quotas.filter(subevent=subevent).select_related('subevent')
+            if subevent else self.quotas.all()
+        ))
+        if ignored_quotas:
+            check_quotas -= set(ignored_quotas)
+        return check_quotas
+
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
                      include_bundled=False, trust_parameters=False):
         """
@@ -429,36 +440,38 @@ class Item(LoggedModel):
         :raises ValueError: if you call this on an item which has variations associated with it.
                             Please use the method on the ItemVariation object you are interested in.
         """
-        check_quotas = set(getattr(
-            self, '_subevent_quotas',  # Utilize cache in product list
-            self.quotas.select_related('subevent').filter(subevent=subevent)
-            if subevent else self.quotas.all()
-        ))
         if not trust_parameters and not subevent and self.event.has_subevents:
             raise TypeError('You need to supply a subevent.')
-        if ignored_quotas:
-            check_quotas -= set(ignored_quotas)
+        check_quotas = self._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
+        quotacounter = Counter()
+        res = Quota.AVAILABILITY_OK, None
+        for q in check_quotas:
+            quotacounter[q] += 1
 
-        if not check_quotas:
-            res = (Quota.AVAILABILITY_OK, sys.maxsize)
-        elif not trust_parameters and self.has_variations:  # NOQA
-            raise ValueError('Do not call this directly on items which have variations '
-                             'but call this on their ItemVariation objects')
-        else:
-            res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
-                      key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
-
-        if (res[1] is None or res[1] >= 1) and include_bundled:
+        if include_bundled:
             for b in self.bundles.all():
-                bcq = (b.bundled_variation or b.bundled_item).check_quotas(
-                    count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
-                )
-                bcqa = bcq[1] // b.count
-                if bcqa <= 0:
-                    res = Quota.AVAILABILITY_RESERVED, 0
-                else:
-                    res = Quota.AVAILABILITY_OK, (min(bcqa, res[1]) if res[1] is not None else bcqa)
+                bundled_check_quotas = (b.bundled_variation or b.bundled_item)._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
+                if not bundled_check_quotas:
+                    return Quota.AVAILABILITY_GONE, 0
+                for q in bundled_check_quotas:
+                    quotacounter[q] += b.count
 
+        for q, n in quotacounter.items():
+            a = q.availability(count_waitinglist=count_waitinglist, _cache=_cache)
+            if a[1] is None:
+                continue
+
+            num_avail = a[1] // n
+            code_avail = Quota.AVAILABILITY_GONE if a[1] >= 1 and num_avail < 1 else a[0]
+            # this is not entirely accurate, as it shows "sold out" even if it is actually just "reserved",
+            # since we do not know that distinction here if at least one item is available. However, this
+            # is only relevant in connection with bundles.
+
+            if code_avail < res[0] or res[1] is None or num_avail < res[1]:
+                res = (code_avail, num_avail)
+
+        if len(quotacounter) == 0:
+            return Quota.AVAILABILITY_OK, sys.maxsize  # backwards compatibility
         return res
 
     def allow_delete(self):
@@ -566,6 +579,16 @@ class ItemVariation(models.Model):
         if self.item:
             self.item.event.cache.clear()
 
+    def _get_quotas(self, ignored_quotas=None, subevent=None):
+        check_quotas = set(getattr(
+            self, '_subevent_quotas',  # Utilize cache in product list
+            self.quotas.filter(subevent=subevent).select_related('subevent')
+            if subevent else self.quotas.all()
+        ))
+        if ignored_quotas:
+            check_quotas -= set(ignored_quotas)
+        return check_quotas
+
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
                      include_bundled=False, trust_parameters=False) -> Tuple[int, int]:
         """
@@ -579,32 +602,37 @@ class ItemVariation(models.Model):
         :param count_waitinglist: If ``False``, waiting list entries will be ignored for quota calculation.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
-        check_quotas = set(getattr(
-            self, '_subevent_quotas',  # Utilize cache in product list
-            self.quotas.filter(subevent=subevent).select_related('subevent')
-            if subevent else self.quotas.all()
-        ))
-        if ignored_quotas:
-            check_quotas -= set(ignored_quotas)
         if not trust_parameters and not subevent and self.item.event.has_subevents:  # NOQA
             raise TypeError('You need to supply a subevent.')
-        if not check_quotas:
-            res = Quota.AVAILABILITY_OK, sys.maxsize
-        else:
-            res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
-                      key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
+        check_quotas = self._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
+        quotacounter = Counter()
+        res = Quota.AVAILABILITY_OK, None
+        for q in check_quotas:
+            quotacounter[q] += 1
 
-        if (res[1] is None or res[1] >= 1) and include_bundled:
+        if include_bundled:
             for b in self.item.bundles.all():
-                bcq = (b.bundled_variation or b.bundled_item).check_quotas(
-                    count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
-                )
-                bcqa = bcq[1] // b.count
-                if bcqa <= 0:
-                    res = Quota.AVAILABILITY_RESERVED, 0
-                else:
-                    res = Quota.AVAILABILITY_OK, (min(bcqa, res[1]) if res[1] is not None else bcqa)
+                bundled_check_quotas = (b.bundled_variation or b.bundled_item)._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
+                if not bundled_check_quotas:
+                    return Quota.AVAILABILITY_GONE, 0
+                for q in bundled_check_quotas:
+                    quotacounter[q] += b.count
 
+        for q, n in quotacounter.items():
+            a = q.availability(count_waitinglist=count_waitinglist, _cache=_cache)
+            if a[1] is None:
+                continue
+
+            num_avail = a[1] // n
+            code_avail = Quota.AVAILABILITY_GONE if a[1] >= 1 and num_avail < 1 else a[0]
+            # this is not entirely accurate, as it shows "sold out" even if it is actually just "reserved",
+            # since we do not know that distinction here if at least one item is available. However, this
+            # is only relevant in connection with bundles.
+
+            if code_avail < res[0] or res[1] is None or num_avail < res[1]:
+                res = (code_avail, num_avail)
+        if len(quotacounter) == 0:
+            return Quota.AVAILABILITY_OK, sys.maxsize  # backwards compatibility
         return res
 
     def __lt__(self, other):

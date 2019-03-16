@@ -20,7 +20,9 @@ from pretix.base.models import (
     Organizer, Question, Quota, User, Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.models.items import (
+    ItemBundle, SubEventItem, SubEventItemVariation,
+)
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import OrderError, cancel_order, perform_order
 
@@ -451,6 +453,111 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(q2.availability(), (Quota.AVAILABILITY_OK, 50 - 2 - 4 - 5 - 13))
         self.event.has_subevents = False
         self.event.save()
+
+
+class BundleQuotaTestCase(BaseQuotaTestCase):
+    def setUp(self):
+        super().setUp()
+        self.quota.size = 5
+        self.quota.save()
+        self.trans = Item.objects.create(event=self.event, name='Public Transport Ticket',
+                                         default_price=2.50)
+        self.transquota = Quota.objects.create(event=self.event, name='Transport', size=10)
+        self.transquota.items.add(self.trans)
+        self.quota.items.add(self.item1)
+        self.quota.items.add(self.item2)
+        self.quota.variations.add(self.var1)
+        self.bundle1 = ItemBundle.objects.create(
+            base_item=self.item1,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+        self.bundle2 = ItemBundle.objects.create(
+            base_item=self.item2,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+
+    def test_only_respect_with_flag(self):
+        assert self.item1.check_quotas() == (Quota.AVAILABILITY_OK, 5)
+
+    def test_do_not_exceed(self):
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 5)
+
+    def test_limited_by_bundled_quita(self):
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 3)
+
+    def test_multiple_bundles(self):
+        ItemBundle.objects.create(
+            base_item=self.item1,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 1)
+
+    def test_bundle_count(self):
+        self.bundle1.count = 2
+        self.bundle1.save()
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 1)
+
+    def test_bundled_unlimited(self):
+        self.transquota.size = None
+        self.transquota.save()
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 5)
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 5)
+
+    def test_item_unlimited(self):
+        self.quota.size = None
+        self.quota.save()
+        assert self.item1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 10)
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 10)
+
+    def test_var_only_respect_with_flag(self):
+        assert self.var1.check_quotas() == (Quota.AVAILABILITY_OK, 5)
+
+    def test_var_do_not_exceed(self):
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 5)
+
+    def test_var_limited_by_bundled_quita(self):
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 3)
+
+    def test_var_multiple_bundles(self):
+        ItemBundle.objects.create(
+            base_item=self.item2,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 1)
+
+    def test_var_bundle_count(self):
+        self.bundle2.count = 2
+        self.bundle2.save()
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 1)
+
+    def test_bundled_variation(self):
+        v = self.trans.variations.create(value="foo", default_price=4)
+        self.transquota.variations.add(v)
+        self.bundle2.bundled_variation = v
+        self.bundle2.save()
+        self.transquota.size = 3
+        self.transquota.save()
+        assert self.var1.check_quotas(include_bundled=True) == (Quota.AVAILABILITY_OK, 3)
 
 
 class WaitingListTestCase(BaseQuotaTestCase):

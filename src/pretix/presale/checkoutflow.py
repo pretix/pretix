@@ -196,7 +196,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         ):
             a = cartpos.addons.all()
             for iao in cartpos.item.addons.all():
-                found = len([1 for p in a if p.item.category_id == iao.addon_category_id])
+                found = len([1 for p in a if p.item.category_id == iao.addon_category_id and not p.is_bundled])
                 if found < iao.min_count or found > iao.max_count:
                     self._completed = False
                     return False
