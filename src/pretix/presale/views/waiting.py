@@ -12,9 +12,9 @@ from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 
+from . import allow_frame_if_namespaced
 from ...base.models import Item, ItemVariation, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
-from . import allow_frame_if_namespaced
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')

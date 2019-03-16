@@ -9,8 +9,9 @@ from .event import (
 )
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
-    Item, ItemAddOn, ItemCategory, ItemVariation, Question, QuestionOption,
-    Quota, SubEventItem, SubEventItemVariation, itempicture_upload_to,
+    Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
+    QuestionOption, Quota, SubEventItem, SubEventItemVariation,
+    itempicture_upload_to,
 )
 from .log import LogEntry
 from .notifications import NotificationSetting
