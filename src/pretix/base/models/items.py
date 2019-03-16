@@ -479,6 +479,13 @@ class Item(LoggedModel):
 
         return not OrderPosition.all.filter(item=self).exists()
 
+    @property
+    def includes_mixed_tax_rate(self):
+        for b in self.bundles.all():
+            if b.bundled_item.tax_rule_id != self.tax_rule_id:
+                return True
+        return False
+
     @cached_property
     def has_variations(self):
         return self.variations.exists()
