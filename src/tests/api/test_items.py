@@ -1123,11 +1123,11 @@ def test_bundles_detail(token_client, organizer, event, item, bundle, item3):
 
 
 @pytest.mark.django_db
-def test_bundles_create(token_client, organizer, event, item, item2):
+def test_bundles_create(token_client, organizer, event, item, item2, item3):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug, item.pk),
         {
-            "bundled_item": item.pk,
+            "bundled_item": item3.pk,
             "bundled_variation": None,
             "count": 1,
             "designated_price": "1.50",
@@ -1136,7 +1136,7 @@ def test_bundles_create(token_client, organizer, event, item, item2):
     )
     assert resp.status_code == 201
     b = ItemBundle.objects.get(pk=resp.data['id'])
-    assert b.bundled_item == item
+    assert b.bundled_item == item3
     assert b.bundled_variation is None
     assert b.designated_price == 1.5
     assert b.count == 1
@@ -1153,6 +1153,33 @@ def test_bundles_create(token_client, organizer, event, item, item2):
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"non_field_errors":["The bundled item must belong to the same event as the item."]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "bundled_item": item.pk,
+            "bundled_variation": None,
+            "count": 1,
+            "designated_price": "1.50",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The bundled item must not be the same item as the bundling one."]}'
+
+    item3.bundles.create(bundled_item=item, count=1, designated_price=3)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/bundles/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "bundled_item": item3.pk,
+            "bundled_variation": None,
+            "count": 1,
+            "designated_price": "1.50",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The bundled item must not have bundles on its own."]}'
 
 
 @pytest.mark.django_db

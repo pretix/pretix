@@ -533,10 +533,12 @@ class ItemAddOnForm(I18nModelForm):
 class ItemBundleFormSet(I18nFormSet):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.get('event')
+        self.item = kwargs.pop('item')
         super().__init__(*args, **kwargs)
 
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
+        kwargs['item'] = self.item
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -548,6 +550,7 @@ class ItemBundleFormSet(I18nFormSet):
             empty_permitted=True,
             use_required_attribute=False,
             locales=self.locales,
+            item=self.item,
             event=self.event
         )
         self.add_fields(form, None)
@@ -558,8 +561,8 @@ class ItemBundleForm(I18nModelForm):
     itemvar = forms.ChoiceField(label=_('Bundled product'))
 
     def __init__(self, *args, **kwargs):
+        self.item = kwargs.pop('item')
         super().__init__(*args, **kwargs)
-
         instance = kwargs.get('instance', None)
         initial = kwargs.get('initial', {})
 
@@ -592,19 +595,28 @@ class ItemBundleForm(I18nModelForm):
         change_decimal_field(self.fields['designated_price'], self.event.currency)
 
     def clean(self):
-        if '-' in self.cleaned_data['itemvar']:
-            itemid, varid = self.cleaned_data['itemvar'].split('-')
-        else:
-            itemid, varid = self.cleaned_data['itemvar'], None
+        d = super().clean()
+        if 'itemvar' in self.cleaned_data:
+            if '-' in self.cleaned_data['itemvar']:
+                itemid, varid = self.cleaned_data['itemvar'].split('-')
+            else:
+                itemid, varid = self.cleaned_data['itemvar'], None
 
-        item = Item.objects.get(pk=itemid, event=self.event)
-        if varid:
-            variation = ItemVariation.objects.get(pk=varid, item=item)
-        else:
-            variation = None
+            item = Item.objects.get(pk=itemid, event=self.event)
+            if varid:
+                variation = ItemVariation.objects.get(pk=varid, item=item)
+            else:
+                variation = None
 
-        self.instance.bundled_item = item
-        self.instance.bundled_variation = variation
+            if item == self.item:
+                raise ValidationError(_("The bundled item must not be the same item as the bundling one."))
+            if item.bundles.exists():
+                raise ValidationError(_("The bundled item must not have bundles on its own."))
+
+            self.instance.bundled_item = item
+            self.instance.bundled_variation = variation
+
+        return d
 
     class Meta:
         model = ItemBundle

@@ -53,7 +53,15 @@ class ItemBundleSerializer(serializers.ModelSerializer):
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        ItemBundle.clean_itemvar(event, full_data.get('bundled_item'), full_data.get('bundled_Variation'))
+        ItemBundle.clean_itemvar(event, full_data.get('bundled_item'), full_data.get('bundled_variation'))
+
+        item = self.context['item']
+        if item == full_data.get('bundled_item'):
+            raise ValidationError(_("The bundled item must not be the same item as the bundling one."))
+        if full_data.get('bundled_item'):
+            if full_data['bundled_item'].bundles.exists():
+                raise ValidationError(_("The bundled item must not have bundles on its own."))
+
         return data
 
 

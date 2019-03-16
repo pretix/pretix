@@ -1061,7 +1061,7 @@ class ItemBundles(ItemDetailMixin, EventPermissionRequiredMixin, TemplateView):
         )
         return formsetclass(self.request.POST if self.request.method == "POST" else None,
                             queryset=ItemBundle.objects.filter(base_item=self.get_object()),
-                            event=self.request.event)
+                            event=self.request.event, item=self.item)
 
     def post(self, request, *args, **kwargs):
         with transaction.atomic():
