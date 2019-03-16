@@ -269,6 +269,7 @@ class CartManager:
             'addons'
         ).order_by('-is_bundled')
         err = None
+        changed_prices = {}
         for cp in expired:
             if cp.is_bundled:
                 try:
@@ -293,8 +294,8 @@ class CartManager:
             quotas = list(cp.quotas)
             if not quotas:
                 self._operations.append(self.RemoveOperation(position=cp))
-                continue
                 err = error_messages['unavailable']
+                continue
 
             if not cp.voucher or (not cp.voucher.allow_ignore_quota and not cp.voucher.block_quota):
                 for quota in quotas:
@@ -305,12 +306,16 @@ class CartManager:
             if not cp.addon_to_id:
                 for bundledp in cp.addons.all():
                     if bundledp.is_bundled:
-                        price = price - TaxedPrice(net=bundledp.price, gross=bundledp.price, rate=0, tax=0, name='')
+                        bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
+                        price = price - TaxedPrice(net=bundledprice, gross=bundledprice, rate=0, tax=0, name='')
 
+                if price.gross < Decimal('0.00'):
+                    price = TAXED_ZERO
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
                 price=price, quotas=quotas, subevent=cp.subevent
             )
+            changed_prices[cp.pk] = price.gross
             self._check_item_constraints(op)
 
             if cp.voucher:
@@ -389,7 +394,10 @@ class CartManager:
 
                 if bundle.designated_price:
                     bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True)
-                    price = price - bprice
+                    if bprice.gross * bundle.count <= price.gross:
+                        price = price - bprice * bundle.count
+                    else:
+                        price = TAXED_ZERO
                 else:
                     bprice = TAXED_ZERO
                 bop = self.AddOperation(
@@ -747,11 +755,11 @@ class CartManager:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
 
         for p in new_cart_positions:
-            if p._answers:
+            if getattr(p, '_answers', None):
                 if not p.pk:  # We stored some to the database already before
                     p.save()
                 _save_answers(p, {}, p._answers)
-        CartPosition.objects.bulk_create([p for p in new_cart_positions if not p._answers and not p.pk])
+        CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
         return err
 
     def commit(self):
@@ -836,7 +844,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
-    :param items: A list of dicts with the keys item, variation, number, custom_price, voucher
+    :param items: A list of dicts with the keys item, variation, count, custom_price, voucher
     :param cart_id: Session ID of a guest
     :raises CartError: On any error that occured
     """

@@ -448,7 +448,7 @@ class Item(LoggedModel):
             res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                       key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
-        if (res[1] is None or res[1] > 1) and include_bundled:
+        if (res[1] is None or res[1] >= 1) and include_bundled:
             for b in self.bundles.all():
                 bcq = (b.bundled_variation or b.bundled_item).check_quotas(
                     count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
@@ -594,7 +594,7 @@ class ItemVariation(models.Model):
             res = min([q.availability(count_waitinglist=count_waitinglist, _cache=_cache) for q in check_quotas],
                       key=lambda s: (s[0], s[1] if s[1] is not None else sys.maxsize))
 
-        if (res[1] is None or res[1] > 1) and include_bundled:
+        if (res[1] is None or res[1] >= 1) and include_bundled:
             for b in self.item.bundles.all():
                 bcq = (b.bundled_variation or b.bundled_item).check_quotas(
                     count_waitinglist=count_waitinglist, subevent=subevent, _cache=_cache, trust_parameters=True
@@ -708,7 +708,7 @@ class ItemAddOn(models.Model):
 
 class ItemBundle(models.Model):
     """
-    An instance of this model indicates that buying a ticket of the time ``base_item``
+    An instance of this model indicates that buying a ticket of the type ``base_item``
     automatically also buys ``count`` items of type ``bundled_item``.
 
     :param base_item: The base item the bundle is attached to

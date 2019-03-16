@@ -46,6 +46,19 @@ class TaxedPrice:
             name=self.name,
         )
 
+    def __mul__(self, other):
+        newgross = self.gross * other
+        newnet = round_decimal(newgross - (newgross * (1 - 100 / (100 + self.rate)))).quantize(
+            Decimal('10') ** self.gross.as_tuple().exponent
+        )
+        return TaxedPrice(
+            gross=newgross,
+            net=newnet,
+            tax=newgross - newnet,
+            rate=self.rate,
+            name=self.name,
+        )
+
 
 TAXED_ZERO = TaxedPrice(
     gross=Decimal('0.00'),
@@ -143,7 +156,11 @@ class TaxRule(LoggedModel):
         return self.custom_rules and self.custom_rules != '[]'
 
     def tax(self, base_price, base_price_is='auto', currency=None):
-        currency = currency or (self.event.currency if self.event else None)
+        from .event import Event
+        try:
+            currency = currency or self.event.currency
+        except Event.DoesNotExist:
+            pass
         if self.rate == Decimal('0.00'):
             return TaxedPrice(
                 net=base_price, gross=base_price, tax=Decimal('0.00'),

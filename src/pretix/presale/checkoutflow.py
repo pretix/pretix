@@ -216,7 +216,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ).order_by('pk'):
             current_addon_products = {
-                a.item_id: a.variation_id for a in cartpos.addons.all()
+                a.item_id: a.variation_id for a in cartpos.addons.all() if not a.is_bundled
             }
             formsetentry = {
                 'cartpos': cartpos,
