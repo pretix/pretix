@@ -2002,6 +2002,27 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert a.item == self.trans
         assert a.price == 1.5
 
+    def test_voucher_on_base_product(self):
+        v = self.event.vouchers.create(code="foo", item=self.ticket)
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'voucher': v.code,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        assert cp.voucher == v
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        assert not a.voucher
+
     def test_simple_bundle_with_variation(self):
         v = self.trans.variations.create(value="foo", default_price=4)
         self.transquota.variations.add(v)

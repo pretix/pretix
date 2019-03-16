@@ -738,7 +738,7 @@ class CartManager:
                                     new_cart_positions.append(CartPosition(
                                         event=self.event, item=b.item, variation=b.variation,
                                         price=b.price.gross, expires=self._expiry, cart_id=self.cart_id,
-                                        voucher=op.voucher, addon_to=cp,
+                                        voucher=None, addon_to=cp,
                                         subevent=b.subevent, includes_tax=b.includes_tax, is_bundled=True
                                     ))
 
