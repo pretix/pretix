@@ -312,6 +312,52 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("Black", doc.select("section:nth-of-type(1) div.variation")[1].text)
         self.assertIn("12.00", doc.select("section:nth-of-type(1) div.variation")[1].text)
 
+    def test_bundle_sold_out(self):
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+        q.items.add(item)
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, position=10)
+        q2.items.add(item2)
+        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+
+    def test_bundle_mixed_tax_rate(self):
+        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
+        q.items.add(item)
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
+        q2.items.add(item2)
+        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("12.00", doc.select("section:nth-of-type(1) div.price")[0].text)
+        self.assertIn("incl. taxes", doc.select("section:nth-of-type(1) div.price")[0].text)
+
+    def test_bundle_mixed_tax_rate_show_net(self):
+        self.event.settings.display_net_prices = True
+        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        q = Quota.objects.create(event=self.event, name='Quota', size=2)
+        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
+        q.items.add(item)
+        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
+        q2.items.add(item2)
+        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
+        self.assertIn("10.27", doc.select("section:nth-of-type(1) div.price")[0].text)
+        self.assertIn("plus taxes", doc.select("section:nth-of-type(1) div.price")[0].text)
+
 
 class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
     def setUp(self):
