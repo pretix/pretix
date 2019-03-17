@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-16 18:00+0000\n"
+"PO-Revision-Date: 2019-03-17 19:31+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -9090,7 +9090,7 @@ msgstr "其他设置"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:56
 msgid "Product history"
-msgstr "产品历史"
+msgstr "产品历史记录"
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:39
 msgid ""
@@ -9119,7 +9119,7 @@ msgstr "创建一个新类别"
 
 #: pretix/control/templates/pretixcontrol/items/category.html:27
 msgid "Category history"
-msgstr "类别历史"
+msgstr "类别历史记录"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:6
@@ -9236,7 +9236,7 @@ msgstr "数量"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
-msgstr "问题历史"
+msgstr "问题历史记录"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:6
@@ -9336,7 +9336,7 @@ msgstr "您的活动包含影响此配额所涵盖产品的凭证，允许用户
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:74
 msgid "Quota history"
-msgstr "配额历史"
+msgstr "配额历史记录"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:6
@@ -9750,138 +9750,138 @@ msgstr "拒绝订单"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:23
 msgid "Comment (will be sent to the user)"
-msgstr ""
+msgstr "评论（将发送给用户）"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:35
 msgid "Yes, deny order"
-msgstr ""
+msgstr "是的，拒绝订单"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html:5
 #: pretix/control/templates/pretixcontrol/order/extend.html:9
 #: pretix/control/templates/pretixcontrol/order/index.html:55
 msgid "Extend payment term"
-msgstr ""
+msgstr "延长付款期限"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:9
 #: pretix/control/templates/pretixcontrol/order/index.html:16
 #, python-format
 msgid "Order details: %(code)s"
-msgstr ""
+msgstr "订单详细信息：%(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:14
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:5
 msgid "taxes"
-msgstr ""
+msgstr "税"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:41
 msgid "Approve"
-msgstr ""
+msgstr "批准"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:46
 msgid "Deny"
-msgstr ""
+msgstr "拒绝"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:52
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:31
 msgid "Mark as paid"
-msgstr ""
+msgstr "标记为已付款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:67
 msgid "View order as user"
-msgstr ""
+msgstr "以用户身份查看订单"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:70
 msgid "View email history"
-msgstr ""
+msgstr "查看电子邮件历史记录"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:81
 msgid "Expire order"
-msgstr ""
+msgstr "过期订单"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:82
 msgid ""
 "The payment for this order is overdue, but you have configured not to expire "
 "orders automatically. To free quota capacity, you can mark it as expired "
 "manually."
-msgstr ""
+msgstr "此订单的付款已过期，但您已配置为不自动过期订单。要释放配额容量，可以手动将其标记为过期。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:96
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr ""
+msgstr "此订单目前超额支付了%(amount)s。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:100
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr ""
+msgstr "开始退款%(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:113
 #: pretix/presale/templates/pretixpresale/event/order.html:7
 msgid "Order details"
-msgstr ""
+msgstr "订单详细信息"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:123
 msgid "Sales channel"
-msgstr ""
+msgstr "销售渠道"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:134
 msgid "Expiry date"
-msgstr ""
+msgstr "到期日"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:170
 msgid "Rebuild the invoice with updated data but the same invoice number."
-msgstr ""
+msgstr "使用更新的数据重新生成发票，但使用相同的发票号。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:171
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:20
 msgid "Regenerate"
-msgstr ""
+msgstr "再生"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:181
 msgid ""
 "Generate a cancellation document for this invoice and create a new invoice "
 "with a new invoice number."
-msgstr ""
+msgstr "为此发票生成取消凭证，并使用新发票号创建新发票。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:184
 msgid "Generate cancellation"
-msgstr ""
+msgstr "生成取消"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:186
 msgid "Cancel and reissue"
-msgstr ""
+msgstr "取消并重新发行"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 #: pretix/control/templates/pretixcontrol/order/index.html:214
 msgid "Generate invoice"
-msgstr ""
+msgstr "生成发票"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:228
 msgid "Change answers"
-msgstr ""
+msgstr "改变答案"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:232
 msgid "Change products"
-msgstr ""
+msgstr "改变产品"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:237
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 msgid "Ordered items"
-msgstr ""
+msgstr "有序项目"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:255
 #, python-format
 msgid "First scanned: %(date)s"
-msgstr ""
+msgstr "首次扫描：%(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:259
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:17
 msgid "Voucher code used:"
-msgstr ""
+msgstr "使用的优惠券码："
 
 #: pretix/control/templates/pretixcontrol/order/index.html:285
 msgid "Show ticket code"
-msgstr ""
+msgstr "显示票证代码"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:295
 #: pretix/control/templates/pretixcontrol/order/index.html:300
@@ -9892,21 +9892,21 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:47
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:53
 msgid "not answered"
-msgstr ""
+msgstr "没有回答"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:308
 msgid "This question will be asked during check-in."
-msgstr ""
+msgstr "这个问题将在签入时提出。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:320
 msgid ""
 "This file has been uploaded by a user and could contain viruses or other "
 "malicious content."
-msgstr ""
+msgstr "此文件已由用户上载，可能包含病毒或其他恶意内容。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:321
 msgid "UNSAFE"
-msgstr ""
+msgstr "不安全的"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:345
 #: pretix/control/templates/pretixcontrol/order/index.html:379
@@ -9914,7 +9914,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:178
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "<strong>加</strong>%(rate)s%%%(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:355
 #: pretix/control/templates/pretixcontrol/order/index.html:389
@@ -9922,17 +9922,17 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:188
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "包括%(rate)s%%%(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:402
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:201
 msgid "Net total"
-msgstr ""
+msgstr "净额总计"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:411
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:210
 msgid "Taxes"
-msgstr ""
+msgstr "税"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:421
 #: pretix/control/templates/pretixcontrol/orders/overview.html:43
@@ -9946,216 +9946,216 @@ msgstr "总计"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:436
 msgid "Payments"
-msgstr ""
+msgstr "付款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:446
 msgid "Confirmation date"
-msgstr ""
+msgstr "确认日期"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:459
 msgid ""
 "This payment was created with an older version of pretix, therefore accurate "
 "data might not be available."
-msgstr ""
+msgstr "此付款是使用旧版本的Pretix创建的，因此可能无法获得准确的数据。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:460
 msgid "MIGRATED"
-msgstr ""
+msgstr "迁移"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:472
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:8
 msgid "Cancel payment"
-msgstr ""
+msgstr "取消付款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:477
 msgid "Confirm as paid"
-msgstr ""
+msgstr "确认已付款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:500
 msgid "Create a refund"
-msgstr ""
+msgstr "创建退款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:521
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:44
 msgid "Source"
-msgstr ""
+msgstr "来源"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:554
 msgid "Cancel transfer"
-msgstr ""
+msgstr "取消转移"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:559
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:85
 msgid "Confirm as done"
-msgstr ""
+msgstr "确认已完成"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:566
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:91
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:572
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:50
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:96
 msgid "Process refund"
-msgstr ""
+msgstr "处理退款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:595
 msgid "Change"
-msgstr ""
+msgstr "更改"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:611
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:233
 msgid "ZIP code and city"
-msgstr ""
+msgstr "邮政编码及城市"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:620
 msgid "Valid EU VAT ID"
-msgstr ""
+msgstr "有效的欧盟增值税ID"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:626
 msgid "Check"
-msgstr ""
+msgstr "检查"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:668
 msgid "Order history"
-msgstr ""
+msgstr "订单历史纪录"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:4
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:7
 #: pretix/plugins/sendmail/signals.py:33
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr ""
+msgstr "电子邮件历史纪录"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:33
 msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
-msgstr ""
+msgstr "此电子邮件已与旧版本的pretix一起发送。因此，我们无法在此处准确显示。"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:39
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:33
 msgid "Subject:"
-msgstr ""
+msgstr "主题："
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
 msgid "Mark order as paid"
-msgstr ""
+msgstr "将订单标记为已付款"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
-msgstr ""
+msgstr "您真的想为此订单创建手动付款吗？"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:35
 msgid "Create payment"
-msgstr ""
+msgstr "创建付款"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
-msgstr ""
+msgstr "您真的想取消这笔付款吗？ 您无法还原此操作。"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "是的，取消付款"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
 msgid "Mark payment as complete"
-msgstr ""
+msgstr "将付款标记为已完成"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
+msgstr "您真的想把这笔付款标记为已完成吗？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr ""
+msgstr "取消退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
-msgstr ""
+msgstr "您真的想取消退款吗？ 您无法还原此操作。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
 "If the money is already on the way back, this will not stop the money, it "
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
-msgstr ""
+msgstr "如果这笔钱已经在退回的过程中，这不会阻止这笔钱，它只会标志着这个转移在pretix中止。这也不会重新激活订单，只允许您选择新的退款方式。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "是的，取消退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr ""
+msgstr "退款订单"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:21
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "如何退款？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:28
 msgid "Payment confirmation date"
-msgstr ""
+msgstr "付款确认日期"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
 msgid "Amount not refunded"
-msgstr ""
+msgstr "未退还金额"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:31
 msgid "Refund"
-msgstr ""
+msgstr "退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr ""
+msgstr "自动退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:59
 msgid "Automatically refund full amount"
-msgstr ""
+msgstr "自动全额退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:62
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "此付款方式不支持自动退款。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:70
 msgid "Transfer to other order"
-msgstr ""
+msgstr "转移到其他订单"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:73
 msgctxt "amount_label"
 msgid "Transfer"
-msgstr ""
+msgstr "转移"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:81
 msgctxt "order_label"
 msgid "to"
-msgstr ""
+msgstr "至"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:90
 msgid "Manual refund"
-msgstr ""
+msgstr "手动退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:93
 msgctxt "amount_label"
 msgid "Manually refund"
-msgstr ""
+msgstr "手动退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:104
 msgid "Keep transfer as to do"
-msgstr ""
+msgstr "保持转移不变"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:108
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:5
@@ -10163,7 +10163,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr ""
+msgstr "将退款标记为已完成"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:118
 msgid ""
@@ -10172,18 +10172,19 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
+"您选择自动退款的任何付款都将立即将退款请求传达给相应的付款提供商。手动退款将被创建为待处理退款，然后您可以在实际将资金转移回客户后将其标记为已完成。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
 msgid "Perform refund"
-msgstr ""
+msgstr "执行退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
+msgstr "您真的想将此退款标记为已完成吗？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
-msgstr ""
+msgstr "标为已完成"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -10193,150 +10194,151 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
 "%(total)s</strong>."
 msgstr ""
+"我们收到<strong>%(amount)s</strong>已通过<strong>%(method)s</strong>退款的通知。如果处理此退款，订单"
+"金额将低于<strong>%(pending)s</strong>。订单总数为<strong>%(total)s</strong>。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "票务订单应该怎么办？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
-msgstr ""
+msgstr "将订单标记为未付款，并允许客户使用其他付款方式再次付款。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:41
 msgid "Cancel the order irrevocably."
-msgstr ""
+msgstr "不可撤销地取消订单。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr ""
+msgstr "您想退多少钱 ？"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr ""
+msgstr "全额退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr ""
+msgstr "仅退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
-msgstr ""
+msgstr "订单应该怎么办？"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:4
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
 #: pretix/plugins/sendmail/signals.py:25
 msgid "Send email"
-msgstr ""
+msgstr "发送电子邮件"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:23
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:19
 msgid "E-mail preview"
-msgstr ""
+msgstr "电子邮件预览"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:34
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:32
 msgid "Preview email"
-msgstr ""
+msgstr "预览电子邮件"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:37
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:35
 msgid "Send"
-msgstr ""
+msgstr "发送"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
 msgid "Data export"
-msgstr ""
+msgstr "数据导出"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:10
 msgid "Show all"
-msgstr ""
+msgstr "显示全部"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:30
 msgid "Start export"
-msgstr ""
+msgstr "开始导出"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
 msgid "Canceled (paid fee)"
-msgstr ""
+msgstr "已取消（已支付费用）"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "还没有人订票。"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Take your shop live"
-msgstr ""
+msgstr "现场购物"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:25
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "去售票处"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr ""
+msgstr "走！"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "列表按问题\"%(question)s\"的答案筛选。"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
 msgid "Remove filter"
-msgstr ""
+msgstr "停止筛选"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
-msgstr ""
+msgstr "位置"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/orders/index.html:134
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "待处理退款"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
 msgid "OVERPAID"
-msgstr ""
+msgstr "超额支付"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:139
 msgid "UNDERPAID"
-msgstr ""
+msgstr "未足额支付"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:141
 msgid "FULLY PAID"
-msgstr ""
+msgstr "全额支付"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:153
 msgid "Sum over all pages"
-msgstr ""
+msgstr "所有页面的总和"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:156
-#, fuzzy, python-format
-#| msgid "Paid orders"
+#, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] "已付款订单"
+msgstr[0] "%(s)s订单"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:4
 #: pretix/control/templates/pretixcontrol/orders/overview.html:14
 msgid "Order overview"
-msgstr ""
+msgstr "订单概述"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:9
 msgid "Sales"
-msgstr ""
+msgstr "销售"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Revenue (gross)"
-msgstr ""
+msgstr "收入（总额）"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (net)"
-msgstr ""
+msgstr "收入（净额）"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:22
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:38
@@ -10344,37 +10346,37 @@ msgctxt "subevent"
 msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
-msgstr ""
+msgstr "如果您选择单个日期，付款方式费用将不会在此列出，因为可能不清楚它们属于哪个日期。"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:35
 #: pretix/plugins/reports/exporters.py:202
 msgid "Purchased"
-msgstr ""
+msgstr "购买"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:113
 msgid ""
 "If you click links in this column, you will only find orders that are "
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
-msgstr ""
+msgstr "如果单击此列中的链接，您将只能找到完全取消的订单，而这些数字还包括有效订单中的单个取消位置。"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:31
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "目前尚未退款。"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:47
 msgid "Actions"
-msgstr ""
+msgstr "操作"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
-msgstr ""
+msgstr "删除组织者"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:9
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
-msgstr ""
+msgstr "此操作将销毁此组织者，包括所有活动、配置、产品、配额、问题、凭证、列表等。"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
 #, python-format
