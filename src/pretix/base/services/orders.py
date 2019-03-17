@@ -32,7 +32,7 @@ from pretix.base.models.orders import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TAXED_ZERO, TaxedPrice
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -471,23 +471,21 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.is_bundled:
             try:
                 bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
-                price = bundle.designated_price or 0
+                bprice = bundle.designated_price or 0
             except ItemBundle.DoesNotExist:
-                price = cp.price
-            price = get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent, custom_price_is_net=False,
-                              addon_to=cp.addon_to, invoice_address=address, force_custom_price=True)
+                bprice = cp.price
+            price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
+                              invoice_address=address, force_custom_price=True)
+            changed_prices[cp.pk] = bprice
         else:
+            bundled_sum = 0
+            if not cp.addon_to_id:
+                for bundledp in cp.addons.all():
+                    if bundledp.is_bundled:
+                        bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
+
             price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
-                              addon_to=cp.addon_to, invoice_address=address)
-
-        if not cp.addon_to_id:
-            for bundledp in cp.addons.all():
-                if bundledp.is_bundled:
-                    bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
-                    price = price - TaxedPrice(net=bundledprice, gross=bundledprice, rate=0, tax=0, name='')
-
-            if price.gross < Decimal('0.00'):
-                price = TAXED_ZERO
+                              addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum)
 
         if price is False or len(quotas) == 0:
             err = err or error_messages['unavailable']
@@ -500,7 +498,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 delete(cp)
                 continue
 
-        changed_prices[cp.pk] = price.gross
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
             positions[i] = cp
             cp.price = price.gross

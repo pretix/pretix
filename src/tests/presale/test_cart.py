@@ -16,7 +16,9 @@ from pretix.base.models import (
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.cart import CartError, CartManager, error_messages
+from pretix.base.services.cart import (
+    CartError, CartManager, error_messages, update_tax_rates,
+)
 from pretix.testutils.sessions import get_cart_session_key
 
 
@@ -2407,6 +2409,150 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert b.price == 1.5
         assert a.price == 2.5
 
-    # reverse charge
-    # reverse charge bundle only
+    def test_expired_reverse_charge_only_bundled(self):
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        update_tax_rates(self.event, self.session_key, ia)
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+        self.cm.invoice_address = ia
+        self.cm.commit()
+
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == 0
+        assert not a.includes_tax
+
+    def test_expired_reverse_charge_all(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        update_tax_rates(self.event, self.session_key, ia)
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+        self.cm.invoice_address = ia
+        self.cm.commit()
+
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+    def test_reverse_charge_all_add(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        self.cm.invoice_address = ia
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).get()
+        a = CartPosition.objects.filter(addon_to__isnull=False).get()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+    def test_reverse_charge_bundled_add(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        self.cm.invoice_address = ia
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).get()
+        a = CartPosition.objects.filter(addon_to__isnull=False).get()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
     # extend after reverse charge

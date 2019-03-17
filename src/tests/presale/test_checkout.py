@@ -2180,8 +2180,10 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             price=2.5, expires=now() - timedelta(minutes=10), is_bundled=False
         )
         self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.includes_tax = False
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
@@ -2232,6 +2234,72 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         with self.assertRaises(OrderError):
             _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
+
+    def test_expired_reverse_charge_only_bundled(self):
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.price = Decimal('1.40')
+        self.bundled1.includes_tax = False
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.tax_value == Decimal('3.43')
+        assert cp.addons.count() == 1
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert a.tax_value == Decimal('0.00')
+
+    def test_expired_reverse_charge_all(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.price = Decimal('18.07')
+        self.cp1.includes_tax = False
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.price = Decimal('1.40')
+        self.bundled1.includes_tax = False
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert cp.tax_value == Decimal('0.00')
+        assert cp.addons.count() == 1
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert a.tax_value == Decimal('0.00')
 
     def test_addon_and_bundle_through_frontend_stack(self):
         cat = self.event.categories.create(name="addons")

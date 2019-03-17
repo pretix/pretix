@@ -247,12 +247,13 @@ class CartManager:
 
     def _get_price(self, item: Item, variation: Optional[ItemVariation],
                    voucher: Optional[Voucher], custom_price: Optional[Decimal],
-                   subevent: Optional[SubEvent], cp_is_net: bool=None, force_custom_price=False):
+                   subevent: Optional[SubEvent], cp_is_net: bool=None, force_custom_price=False,
+                   bundled_sum=Decimal('0.00')):
         try:
             return get_price(
                 item, variation, voucher, custom_price, subevent,
                 custom_price_is_net=cp_is_net if cp_is_net is not None else self.event.settings.display_net_prices,
-                invoice_address=self.invoice_address, force_custom_price=force_custom_price
+                invoice_address=self.invoice_address, force_custom_price=force_custom_price, bundled_sum=bundled_sum
             )
         except ValueError as e:
             if str(e) == 'price_too_high':
@@ -277,19 +278,31 @@ class CartManager:
                     price = bundle.designated_price or 0
                 except ItemBundle.DoesNotExist:
                     price = cp.price
+
+                changed_prices[cp.pk] = price
+
                 if not cp.includes_tax:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
-                                            force_custom_price=True, cp_is_net=True)
+                                            force_custom_price=True, cp_is_net=False)
                     price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
                 else:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
                                             force_custom_price=True)
-            elif not cp.includes_tax:
-                price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
-                                        cp_is_net=True)
-                price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
             else:
-                price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent)
+                bundled_sum = Decimal('0.00')
+                if not cp.addon_to_id:
+                    for bundledp in cp.addons.all():
+                        if bundledp.is_bundled:
+                            bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
+                            bundled_sum += bundledprice
+
+                if not cp.includes_tax:
+                    price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
+                                            cp_is_net=True, bundled_sum=bundled_sum)
+                    price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
+                else:
+                    price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
+                                            bundled_sum=bundled_sum)
 
             quotas = list(cp.quotas)
             if not quotas:
@@ -303,19 +316,10 @@ class CartManager:
             else:
                 quotas = []
 
-            if not cp.addon_to_id:
-                for bundledp in cp.addons.all():
-                    if bundledp.is_bundled:
-                        bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
-                        price = price - TaxedPrice(net=bundledprice, gross=bundledprice, rate=0, tax=0, name='')
-
-                if price.gross < Decimal('0.00'):
-                    price = TAXED_ZERO
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
                 price=price, quotas=quotas, subevent=cp.subevent
             )
-            changed_prices[cp.pk] = price.gross
             self._check_item_constraints(op)
 
             if cp.voucher:
@@ -369,10 +373,9 @@ class CartManager:
             else:
                 quotas = []
 
-            price = self._get_price(item, variation, voucher, i.get('price'), subevent)
-
             # Fetch bundled items
             bundled = []
+            bundled_sum = Decimal('0.00')
             db_bundles = list(item.bundles.all())
             self._update_items_cache([b.bundled_item_id for b in db_bundles], [b.bundled_variation_id for b in db_bundles])
             for bundle in db_bundles:
@@ -395,19 +398,19 @@ class CartManager:
                 if bundle.designated_price:
                     bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True,
                                              cp_is_net=False)
-                    if bprice.gross * bundle.count <= price.gross:
-                        price = price - bprice * bundle.count
-                    else:
-                        price = TAXED_ZERO
                 else:
                     bprice = TAXED_ZERO
+                bundled_sum += bundle.designated_price * bundle.count
+
                 bop = self.AddOperation(
                     count=bundle.count, item=bitem, variation=bvar, price=bprice,
                     voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
-                    includes_tax=bool(price.rate), bundled=[]
+                    includes_tax=bool(bprice.rate), bundled=[]
                 )
                 self._check_item_constraints(bop)
                 bundled.append(bop)
+
+            price = self._get_price(item, variation, voucher, i.get('price'), subevent, bundled_sum=bundled_sum)
 
             op = self.AddOperation(
                 count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,

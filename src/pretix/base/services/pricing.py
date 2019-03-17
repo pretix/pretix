@@ -12,7 +12,7 @@ def get_price(item: Item, variation: ItemVariation = None,
               voucher: Voucher = None, custom_price: Decimal = None,
               subevent: SubEvent = None, custom_price_is_net: bool = False,
               addon_to: AbstractPosition = None, invoice_address: InvoiceAddress = None,
-              force_custom_price: bool = False) -> TaxedPrice:
+              force_custom_price: bool = False, bundled_sum: Decimal = Decimal('0.00')) -> TaxedPrice:
     if addon_to:
         try:
             iao = addon_to.item.addons.get(addon_category_id=item.category_id)
@@ -59,6 +59,11 @@ def get_price(item: Item, variation: ItemVariation = None,
             price = tax_rule.tax(max(custom_price, price.net), base_price_is='net')
         else:
             price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross')
+
+    if bundled_sum:
+        price = price - TaxedPrice(net=bundled_sum, gross=bundled_sum, rate=0, tax=0, name='')
+        if price.gross < Decimal('0.00'):
+            return TAXED_ZERO
 
     if invoice_address and not tax_rule.tax_applicable(invoice_address):
         price.tax = Decimal('0.00')
