@@ -28,6 +28,7 @@ from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, LogEntry, Order, RequiredAction,
@@ -1349,6 +1350,7 @@ class QuickSetupView(FormView):
                 tax_rule=tax_rule,
                 admission=True,
                 position=i,
+                sales_channels=[k for k in get_all_sales_channels().keys()]
             )
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
