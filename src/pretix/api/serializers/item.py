@@ -110,7 +110,7 @@ class ItemSerializer(I18nAwareModelSerializer):
         fields = ('id', 'category', 'name', 'internal_name', 'active', 'sales_channels', 'description',
                   'default_price', 'free_price', 'tax_rate', 'tax_rule', 'admission',
                   'position', 'picture', 'available_from', 'available_until',
-                  'require_voucher', 'hide_without_voucher', 'allow_cancel',
+                  'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets')
         read_only_fields = ('has_variations', 'picture')

@@ -64,6 +64,7 @@ original_price                        money (string)             An original pri
 require_approval                      boolean                    If ``True``, orders with this product will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
+require_bundling                      boolean                    If ``True``, this item is only available as part of bundles.
 generate_tickets                      boolean                    If ``False``, tickets are never generated for this
                                                                  product, regardless of other settings. If ``True``,
                                                                  tickets are generated even if this is a
@@ -132,7 +133,7 @@ bundles                               list of objects            Definition of b
 
 .. versionchanged:: 2.6
 
-   The ``bundles`` attribute has been added.
+   The ``bundles`` and ``require_bundling`` attributes have been added.
 
 Notes
 -----
@@ -200,6 +201,7 @@ Endpoints
             "has_variations": false,
             "generate_tickets": null,
             "require_approval": false,
+            "require_bundling": false,
             "variations": [
               {
                  "value": {"en": "Student"},
@@ -288,6 +290,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": false,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -356,6 +359,7 @@ Endpoints
         "max_per_order": null,
         "checkin_attention": false,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -413,6 +417,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": true,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -501,6 +506,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": true,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},

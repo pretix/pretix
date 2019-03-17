@@ -162,7 +162,7 @@ class ItemQuerySet(models.QuerySet):
             Q(active=True)
             & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(sales_channels__contains=channel)
+            & Q(sales_channels__contains=channel) & Q(require_bundling=False)
         )
         if not allow_addons:
             q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
@@ -328,6 +328,11 @@ class Item(LoggedModel):
         default=False,
         help_text=_('This product will be hidden from the event page until the user enters a voucher '
                     'code that is specifically tied to this product (and not via a quota).')
+    )
+    require_bundling = models.BooleanField(
+        verbose_name=_('Only sell this product as part of a bundle'),
+        default=False,
+        help_text=_('If this option is set, the product will only be sold as part of bundle products.')
     )
     allow_cancel = models.BooleanField(
         verbose_name=_('Allow product to be canceled'),

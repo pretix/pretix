@@ -225,6 +225,7 @@ TEST_ITEM_RES = {
     "picture": None,
     "available_from": None,
     "available_until": None,
+    "require_bundling": False,
     "require_voucher": False,
     "hide_without_voucher": False,
     "allow_cancel": True,

@@ -52,4 +52,9 @@ class Migration(migrations.Migration):
             name='bundled_variation',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bundled_with', to='pretixbase.ItemVariation', verbose_name='Bundled variation'),
         ),
+        migrations.AddField(
+            model_name='item',
+            name='require_bundling',
+            field=models.BooleanField(default=False, help_text='If this option is set, the product will only be sold as part of bundle products.', verbose_name='Only sell this product as part of a bundle'),
+        ),
     ]

@@ -397,7 +397,8 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order',
             'checkin_attention',
             'generate_tickets',
-            'original_price'
+            'original_price',
+            'require_bundling',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,

@@ -1976,7 +1976,7 @@ class CartBundleTest(CartTestMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.trans = Item.objects.create(event=self.event, name='Public Transport Ticket',
-                                         default_price=2.50)
+                                         default_price=2.50, require_bundling=True)
         self.transquota = Quota.objects.create(event=self.event, name='Transport', size=5)
         self.transquota.items.add(self.trans)
         self.bundle1 = ItemBundle.objects.create(
@@ -2235,6 +2235,19 @@ class CartBundleTest(CartTestMixin, TestCase):
             self.cm.commit()
         assert not CartPosition.objects.exists()
 
+    def test_require_bundling(self):
+        self.ticket.require_bundling = True
+        self.ticket.save()
+        with self.assertRaises(CartError):
+            self.cm.add_new_items([
+                {
+                    'item': self.ticket.pk,
+                    'variation': None,
+                    'count': 1
+                }
+            ])
+        assert not CartPosition.objects.exists()
+
     def test_bundle_item_disabled(self):
         self.ticket.active = False
         self.ticket.save()
@@ -2289,6 +2302,7 @@ class CartBundleTest(CartTestMixin, TestCase):
 
     def test_one_bundled_one_addon(self):
         cat = self.event.categories.create(name="addons")
+        self.trans.require_bundling = False
         self.trans.category = cat
         self.trans.save()
         ItemAddOn.objects.create(base_item=self.ticket, addon_category=cat)
@@ -2554,5 +2568,3 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
         assert not a.includes_tax
-
-    # extend after reverse charge

@@ -303,12 +303,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
     def test_product_list_view_with_bundle_mixed_tax_rate(self):
         self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
         self.shirt.tax_rule = self.tr7
+        self.shirt.require_bundling = True
         self.shirt.save()
         self.ticket.bundles.create(bundled_item=self.shirt, bundled_variation=self.shirt_blue,
                                    designated_price=2, count=1)
         response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
+        assert len(data["items_by_category"][0]["items"]) == 1
         assert data["items_by_category"][0]["items"][0]["price"] == {
             "gross": "23.00",
             "net": "19.52",

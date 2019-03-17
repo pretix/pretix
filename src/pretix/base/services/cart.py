@@ -88,6 +88,7 @@ error_messages = {
     'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
                          'product %(base)s.'),
     'addon_only': _('One of the products you selected can only be bought as an add-on to another project.'),
+    'bundled_only': _('One of the products you selected can only be bought part of a bundle.'),
 }
 
 
@@ -216,8 +217,11 @@ class CartManager:
                 raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):
-            if op.item.category and op.item.category.is_addon and not op.addon_to:
+            if op.item.category and op.item.category.is_addon and not (op.addon_to and op.addon_to != 'FAKE'):
                 raise CartError(error_messages['addon_only'])
+
+            if op.item.require_bundling and not op.addon_to == 'FAKE':
+                raise CartError(error_messages['bundled_only'])
 
             if op.item.max_per_order or op.item.min_per_order:
                 new_total = (
