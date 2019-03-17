@@ -25,6 +25,10 @@ Generate tickets for non-admission products
   By default, tickets will only be generated for products that are marked as admission products. Enable this option to
   generate tickets for all products instead.
 
+Offer to download tickets even before an order is paid
+  By default, ticket download is only possible for paid orders. If you run an event where people usually pay only after
+  the event, you can check this box to enable ticket download even before.
+
 Below these settings, the detail settings for the various ticket file formats are offered. They differ from format to
 format and only share the common "Enable" setting that can be used to turn them on. By default, pretix ships with
 a PDF output plugin that you can configure through a visual design editor.

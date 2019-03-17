@@ -8,8 +8,8 @@ event.
    :align: center
    :class: screenshot
 
-The page is separated into three parts: "E-mail settings", "E-mail content" and "SMTP settings". We will explain all
-of them in detail on this page.
+The page is separated into four parts: "E-mail settings", "E-mail design", "E-mail content" and "SMTP settings".
+We will explain all of them in detail on this page.
 
 E-mail settings
 ---------------
@@ -30,10 +30,18 @@ Signature
     This text will be appended to all e-mails in form of a signature. This might be useful e.g. to add your contact
     details or any legal information that needs to be included with the e-mails.
 
+Bcc address
+    This email address will receive a copy of every event-related email.
+
+E-mail design
+-------------
+
+In this part, you can choose and preview the layout of your emails. More layouts can be added by pretix plugins.
+
 E-mail content
 --------------
 
-The middle part of the page allows you to customize the exact texts of all e-mails sent by the system automatically.
+The next part of the page allows you to customize the exact texts of all e-mails sent by the system automatically.
 You can click on the different boxes to expand them and see the texts.
 
 Within the texts, you can use placeholders that will later by replaced by values depending on the event or order. Below
@@ -45,6 +53,7 @@ Placeholder                    Description
 ============================== ===============================================================================
 event                          The event name
 total                          The order's total value
+total_with_currency            The order's total value with a localized currency sign
 currency                       The currency used for the event (three-letter code)
 payment_info                   Information text specific to the payment method (e.g. banking details)
 url                            An URL pointing to the download/status page of the order
@@ -111,6 +120,22 @@ Reminder to download tickets
     If you want, you can configure an email that will be send out a number of days before your event to remind
     attendees to download their tickets. The e-mail should include a link to the ticket download. This e-mail will only
     ever be sent if you specify a number of days.
+
+Order approval process
+    If you configure one of your products to "require approval", orders of that product will not immediately be confirmed
+    but only after you approved them manually. In this case, the following e-mail templates will be sent out.
+
+    Received order
+        After an order has been received, this e-mail will be sent automatically instead of the "order placed" e-mail from
+        above.
+
+    Approved order
+        This e-mail will be sent after you manually approved an order. This should include instructions to pay for the order,
+        which is why this will only be used for a paid order. For a free order, the "free order" e-mail from above will
+        be sent.
+
+    Denied order
+        This e-mail will be sent out to customers when their order has been denied.
 
 SMTP settings
 -------------
