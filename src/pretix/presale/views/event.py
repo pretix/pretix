@@ -64,7 +64,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                                            queryset=event.quotas.filter(subevent=subevent)),
                               )),
                      Prefetch('bundled_variation',
-                              queryset=event.items.prefetch_related(
+                              queryset=ItemVariation.objects.filter(item__event=event).prefetch_related(
                                   Prefetch('quotas',
                                            to_attr='_subevent_quotas',
                                            queryset=event.quotas.filter(subevent=subevent)),

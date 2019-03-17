@@ -482,7 +482,7 @@ class Item(LoggedModel):
     @property
     def includes_mixed_tax_rate(self):
         for b in self.bundles.all():
-            if b.bundled_item.tax_rule_id != self.tax_rule_id:
+            if b.designated_price and b.bundled_item.tax_rule_id != self.tax_rule_id:
                 return True
         return False
 

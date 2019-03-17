@@ -18,6 +18,8 @@ var strings = {
     'price_from': django.pgettext('widget', 'from %(currency)s %(price)s'),
     'tax_incl': django.pgettext('widget', 'incl. %(rate)s% %(taxname)s'),
     'tax_plus': django.pgettext('widget', 'plus %(rate)s% %(taxname)s'),
+    'tax_incl_mixed': django.pgettext('widget', 'incl. taxes'),
+    'tax_plus_mixed': django.pgettext('widget', 'plus taxes'),
     'quota_left': django.pgettext('widget', 'currently available: %s'),
     'voucher_required': django.pgettext('widget', 'Only available with a voucher'),
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
@@ -230,15 +232,23 @@ Vue.component('pricebox', {
         },
         taxline: function () {
             if (this.$root.display_net_prices) {
-                return django.interpolate(strings.tax_plus, {
-                    'rate': autofloatformat(this.price.rate, 2),
-                    'taxname': this.price.name
-                }, true);
+                if (this.price.includes_mixed_tax_rate) {
+                    return strings.tax_plus_mixed;
+                } else {
+                    return django.interpolate(strings.tax_plus, {
+                        'rate': autofloatformat(this.price.rate, 2),
+                        'taxname': this.price.name
+                    }, true);
+                }
             } else {
-                return django.interpolate(strings.tax_incl, {
-                    'rate': autofloatformat(this.price.rate, 2),
-                    'taxname': this.price.name
-                }, true);
+                if (this.price.includes_mixed_tax_rate) {
+                    return strings.tax_incl_mixed;
+                } else {
+                    return django.interpolate(strings.tax_incl, {
+                        'rate': autofloatformat(this.price.rate, 2),
+                        'taxname': this.price.name
+                    }, true);
+                }
             }
         }
     }

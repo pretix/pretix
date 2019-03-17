@@ -137,13 +137,14 @@ def widget_js(request, lang, **kwargs):
     return resp
 
 
-def price_dict(price):
+def price_dict(item, price):
     return {
         'gross': price.gross,
         'net': price.net,
         'tax': price.tax,
         'rate': price.rate,
-        'name': str(price.name)
+        'name': str(price.name),
+        'includes_mixed_tax_rate': item.includes_mixed_tax_rate,
     }
 
 
@@ -173,7 +174,7 @@ class WidgetAPIProductList(View):
                         'require_voucher': item.require_voucher,
                         'order_min': item.min_per_order,
                         'order_max': item.order_max if not item.has_variations else None,
-                        'price': price_dict(item.display_price) if not item.has_variations else None,
+                        'price': price_dict(item, item.display_price) if not item.has_variations else None,
                         'min_price': item.min_price if item.has_variations else None,
                         'max_price': item.max_price if item.has_variations else None,
                         'free_price': item.free_price,
@@ -188,7 +189,7 @@ class WidgetAPIProductList(View):
                                 'value': str(var.value),
                                 'order_max': var.order_max,
                                 'description': str(rich_text(var.description, safelinks=False)) if var.description else None,
-                                'price': price_dict(var.display_price),
+                                'price': price_dict(item, var.display_price),
                                 'avail': [
                                     var.cached_availability[0],
                                     var.cached_availability[1] if self.request.event.settings.show_quota_left else None
