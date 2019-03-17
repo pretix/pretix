@@ -387,12 +387,28 @@ class Item(LoggedModel):
         if self.event:
             self.event.cache.clear()
 
-    def tax(self, price=None, base_price_is='auto', currency=None):
+    def tax(self, price=None, base_price_is='auto', currency=None, include_bundled=False):
         price = price if price is not None else self.default_price
+
         if not self.tax_rule:
-            return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
-                              rate=Decimal('0.00'), name='')
-        return self.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
+            t = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
+                           rate=Decimal('0.00'), name='')
+        else:
+            t = self.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
+
+        if include_bundled:
+            for b in self.bundles.all():
+                if b.designated_price and b.bundled_item.tax_rule_id != self.tax_rule_id:
+                    if b.bundled_variation:
+                        bprice = b.bundled_variation.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    else:
+                        bprice = b.bundled_item.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    compare_price = self.tax_rule.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    t.net += bprice.net - compare_price.net
+                    t.tax += bprice.tax - compare_price.tax
+                    t.name = "MIXED!"
+
+        return t
 
     def is_available_by_time(self, now_dt: datetime=None) -> bool:
         now_dt = now_dt or now()
@@ -570,11 +586,28 @@ class ItemVariation(models.Model):
     def price(self):
         return self.default_price if self.default_price is not None else self.item.default_price
 
-    def tax(self, price=None, currency=None):
+    def tax(self, price=None, base_price_is='auto', currency=None, include_bundled=False):
         price = price if price is not None else self.price
+
         if not self.item.tax_rule:
-            return TaxedPrice(gross=price, net=price, tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
-        return self.item.tax_rule.tax(price, currency=None)
+            t = TaxedPrice(gross=price, net=price, tax=Decimal('0.00'),
+                           rate=Decimal('0.00'), name='')
+        else:
+            t = self.item.tax_rule.tax(price, base_price_is=base_price_is, currency=currency)
+
+        if include_bundled:
+            for b in self.item.bundles.all():
+                if b.designated_price and b.bundled_item.tax_rule_id != self.item.tax_rule_id:
+                    if b.bundled_variation:
+                        bprice = b.bundled_variation.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    else:
+                        bprice = b.bundled_item.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    compare_price = self.item.tax_rule.tax(b.designated_price * b.count, base_price_is='gross', currency=currency)
+                    t.net += bprice.net - compare_price.net
+                    t.tax += bprice.tax - compare_price.tax
+                    t.name = "MIXED!"
+
+        return t
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -784,7 +817,7 @@ class ItemBundle(models.Model):
         decimal_places=2, max_digits=10,
         verbose_name=_('Designated price part'),
         help_text=_('If set, it will be shown that this bundled item is responsible for the given value of the total '
-                    'price. This might be important in cases of mixed taxation, but can be kept blank otherwise. This '
+                    'gross price. This might be important in cases of mixed taxation, but can be kept blank otherwise. This '
                     'value will NOT be added to the base item\'s price.')
     )
 

@@ -2256,6 +2256,7 @@ class CartBundleTest(CartTestMixin, TestCase):
             rate=Decimal('7.00'),
             price_includes_tax=True,  # will be ignored
         )
+        self.event.settings.display_net_prices = True  # will be ignored
         self.ticket.tax_rule = tr19
         self.ticket.save()
         self.trans.tax_rule = tr7

@@ -311,9 +311,9 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert data["items_by_category"][0]["items"][0]["price"] == {
             "gross": "23.00",
-            "net": "19.33",
-            "tax": "3.67",
-            "name": "",
+            "net": "19.52",
+            "tax": "3.48",
+            "name": "MIXED!",
             "rate": "19.00",
             "includes_mixed_tax_rate": True
         }

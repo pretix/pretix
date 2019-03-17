@@ -393,7 +393,8 @@ class CartManager:
                     bundle_quotas = []
 
                 if bundle.designated_price:
-                    bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True)
+                    bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True,
+                                             cp_is_net=False)
                     if bprice.gross * bundle.count <= price.gross:
                         price = price - bprice * bundle.count
                     else:

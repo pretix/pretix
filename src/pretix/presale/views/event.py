@@ -58,13 +58,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
         Prefetch('bundles',
                  queryset=ItemBundle.objects.prefetch_related(
                      Prefetch('bundled_item',
-                              queryset=event.items.prefetch_related(
+                              queryset=event.items.select_related('tax_rule').prefetch_related(
                                   Prefetch('quotas',
                                            to_attr='_subevent_quotas',
                                            queryset=event.quotas.filter(subevent=subevent)),
                               )),
                      Prefetch('bundled_variation',
-                              queryset=ItemVariation.objects.filter(item__event=event).prefetch_related(
+                              queryset=ItemVariation.objects.select_related('item', 'item__tax_rule').filter(item__event=event).prefetch_related(
                                   Prefetch('quotas',
                                            to_attr='_subevent_quotas',
                                            queryset=event.quotas.filter(subevent=subevent)),
@@ -122,7 +122,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
             price = item_price_override.get(item.pk, item.default_price)
             if voucher:
                 price = voucher.calculate_price(price)
-            item.display_price = item.tax(price, currency=event.currency)
+            item.display_price = item.tax(price, currency=event.currency, include_bundled=True)
 
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
@@ -145,7 +145,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                 price = var_price_override.get(var.pk, var.price)
                 if voucher:
                     price = voucher.calculate_price(price)
-                var.display_price = var.tax(price, currency=event.currency)
+                var.display_price = var.tax(price, currency=event.currency, include_bundled=True)
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 
