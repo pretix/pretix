@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-16 18:00+0000\n"
+"PO-Revision-Date: 2019-03-17 19:31+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -545,7 +545,7 @@ msgstr "Números de factura"
 
 #: pretix/base/exporters/orderlist.py:195
 msgid "Fee type"
-msgstr "Tipo de impuesto"
+msgstr "Tipo de tarifa"
 
 #: pretix/base/exporters/orderlist.py:196
 #: pretix/base/exporters/orderlist.py:556 pretix/base/models/items.py:257
@@ -3043,7 +3043,7 @@ msgstr ""
 
 #: pretix/base/payment.py:242 pretix/base/payment.py:251
 msgid "Additional fee"
-msgstr "Impuesto adicional"
+msgstr "Tarifa adicional"
 
 #: pretix/base/payment.py:243
 msgid "Absolute value"
@@ -3061,7 +3061,7 @@ msgstr ""
 
 #: pretix/base/payment.py:260
 msgid "Calculate the fee from the total value including the fee."
-msgstr "Calcule el honorario del valor total incluyendo el honorario."
+msgstr "Calcule la tarifa del valor total incluyendo la tarifa."
 
 #: pretix/base/payment.py:261
 #, python-brace-format
