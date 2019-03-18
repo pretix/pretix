@@ -902,6 +902,8 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
                                                    'created by plug-ins) do not allow it.'))
                 else:
                     request.event.cache.set('complain_testmode_orders', False, 30)
+            request.event.cartposition_set.filter(addon_to__isnull=False).delete()
+            request.event.cartposition_set.all().delete()
             messages.success(self.request, _('We\'ve disabled test mode for you. Let\'s sell some real tickets!'))
         return redirect(self.get_success_url())
 
