@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-18 10:34+0000\n"
+"PO-Revision-Date: 2019-03-18 15:52+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -2115,7 +2115,7 @@ msgstr "订单{val}"
 #: pretix/base/models/log.py:101
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "凭证{val}…"
+msgstr "优惠券{val}…"
 
 #: pretix/base/models/log.py:111
 #, python-brace-format
@@ -2578,9 +2578,7 @@ msgid ""
 "If activated, this voucher will be substracted from the affected product's "
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
-msgstr ""
-"如果激活，将从受影响的产品配额中减去此凭证，以确保拥有此优惠券号的任何人都能"
-"收到凭单。"
+msgstr "如果激活，将从受影响的产品配额中减去此优惠券，以确保拥有此优惠券号的任何人都能收到凭单。"
 
 #: pretix/base/models/vouchers.py:123
 msgid "Allow to bypass quota"
@@ -2681,7 +2679,7 @@ msgstr "此优惠券已兑换%(redeemed)s次。您无法将最大使用次数减
 #: pretix/base/models/vouchers.py:236 pretix/base/models/vouchers.py:294
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
-msgstr "如果您希望此票证阻止配额，则需要选择特定日期。"
+msgstr "如果您希望此优惠券阻止配额，则需要选择特定日期。"
 
 #: pretix/base/models/vouchers.py:238
 msgid "You can not select a subevent if your event is not an event series."
@@ -2691,7 +2689,7 @@ msgstr "如果不是活动系列，则无法选择子活动。"
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
-msgstr "您无法创建阻止配额的票证，因为所选产品或配额当前已售罄或完全保留。"
+msgstr "您无法创建阻止配额的优惠券，因为所选产品或配额当前已售罄或完全保留。"
 
 #: pretix/base/models/vouchers.py:318
 msgid "A voucher with this code already exists."
@@ -2703,7 +2701,7 @@ msgstr "在等待名单上"
 
 #: pretix/base/models/waitinglist.py:44
 msgid "Assigned voucher"
-msgstr "分配票证"
+msgstr "分配优惠券"
 
 #: pretix/base/models/waitinglist.py:53
 msgid "The product the user waits for."
@@ -12825,41 +12823,41 @@ msgstr "现在为您的帐户启用了双因素身份验证。"
 
 #: pretix/control/views/user.py:395
 msgid "Two-factor authentication is now disabled for your account."
-msgstr ""
+msgstr "现在为您的账户禁用了双因素身份验证。"
 
 #: pretix/control/views/user.py:414
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
-msgstr ""
+msgstr "您的紧急代码是新生成的。 请记住将它们存放在安全的地方，以防您无法访问自己的设备。"
 
 #: pretix/control/views/user.py:424
 msgid "Your notifications have been disabled."
-msgstr ""
+msgstr "您的通知已被禁用。"
 
 #: pretix/control/views/user.py:473 pretix/control/views/user.py:513
 msgid "Your notification settings have been saved."
-msgstr ""
+msgstr "您的通知设置已保存。"
 
 #: pretix/control/views/user.py:591
 msgid "Your comment has been saved."
-msgstr ""
+msgstr "您的评论已保存。"
 
 #: pretix/control/views/users.py:97
 msgid "We sent out an e-mail containing further instructions."
-msgstr ""
+msgstr "我们发了一封包含进一步说明的电子邮件。"
 
 #: pretix/control/views/users.py:194
 msgid "The new user has been created."
-msgstr ""
+msgstr "已创建新用户。"
 
 #: pretix/control/views/vouchers.py:61
 msgid "Reserve quota"
-msgstr ""
+msgstr "保存配额"
 
 #: pretix/control/views/vouchers.py:61
 msgid "Bypass quota"
-msgstr ""
+msgstr "绕过配额"
 
 #: pretix/control/views/vouchers.py:129 pretix/control/views/vouchers.py:178
 msgid "The requested voucher does not exist."
