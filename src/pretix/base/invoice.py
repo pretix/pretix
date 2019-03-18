@@ -9,7 +9,7 @@ import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
-from django.utils.translation import pgettext, ugettext
+from django.utils.translation import get_language, pgettext, ugettext
 from PIL.Image import BICUBIC
 from reportlab.lib import pagesizes
 from reportlab.lib.enums import TA_LEFT
@@ -137,6 +137,12 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         pdfmetrics.registerFont(TTFont('OpenSansBI', finders.find('fonts/OpenSans-BoldItalic.ttf')))
         pdfmetrics.registerFontFamily('OpenSans', normal='OpenSans', bold='OpenSansBd',
                                       italic='OpenSansIt', boldItalic='OpenSansBI')
+
+    def _upper(self, val):
+        # We uppercase labels, but not in every language
+        if get_language() == 'el':
+            return val
+        return val.upper()
 
     def _on_other_page(self, canvas: Canvas, doc):
         """
@@ -279,21 +285,21 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(pgettext('invoice', 'Invoice from').upper())
+        textobject.textLine(self._upper(pgettext('invoice', 'Invoice from')))
         canvas.drawText(textobject)
 
         self._draw_invoice_from(canvas)
 
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(pgettext('invoice', 'Invoice to').upper())
+        textobject.textLine(self._upper(pgettext('invoice', 'Invoice to')))
         canvas.drawText(textobject)
 
         self._draw_invoice_to(canvas)
 
         textobject = canvas.beginText(125 * mm, (297 - 38) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(pgettext('invoice', 'Order code').upper())
+        textobject.textLine(self._upper(pgettext('invoice', 'Order code')))
         textobject.moveCursor(0, 5)
         textobject.setFont(self.font_regular, 10)
         textobject.textLine(self.invoice.order.full_code)
@@ -302,18 +308,18 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
         textobject.setFont(self.font_bold, 8)
         if self.invoice.is_cancellation:
-            textobject.textLine(pgettext('invoice', 'Cancellation number').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Cancellation number')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.number)
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(pgettext('invoice', 'Original invoice').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Original invoice')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.refers.number)
         else:
-            textobject.textLine(pgettext('invoice', 'Invoice number').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Invoice number')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(self.invoice.number)
@@ -321,20 +327,20 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.is_cancellation:
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(pgettext('invoice', 'Cancellation date').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Cancellation date')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(pgettext('invoice', 'Original invoice date').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Original invoice date')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.refers.date, "DATE_FORMAT"))
             textobject.moveCursor(0, 5)
         else:
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(pgettext('invoice', 'Invoice date').upper())
+            textobject.textLine(self._upper(pgettext('invoice', 'Invoice date')))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
             textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
@@ -388,7 +394,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(pgettext('invoice', 'Event').upper())
+        textobject.textLine(self._upper(pgettext('invoice', 'Event')))
         canvas.drawText(textobject)
 
         canvas.restoreState()
