@@ -14,7 +14,7 @@ class EventMiddleware(MiddlewareMixin):
             return
 
         if 'organizer' in url.kwargs or 'event' in url.kwargs:
-            redirect = _detect_event(request)
+            redirect = _detect_event(request, require_live=url.url_name != 'event.widget.productlist')
             if redirect:
                 return redirect
 

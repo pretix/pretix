@@ -13,7 +13,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import gettext
+from django.utils.translation import ugettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -202,6 +202,13 @@ class WidgetAPIProductList(View):
         return grps, display_add_to_cart, len(items)
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.event.live:
+            resp = JsonResponse({
+                'error': ugettext('This ticket shop is currently disabled.')
+            })
+            resp['Access-Control-Allow-Origin'] = '*'
+            return resp
+
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in kwargs:
@@ -238,14 +245,14 @@ class WidgetAPIProductList(View):
 
         if not ev.presale_is_running:
             if ev.presale_has_ended:
-                data['error'] = gettext('The presale period for this event is over.')
+                data['error'] = ugettext('The presale period for this event is over.')
             elif request.event.settings.presale_start_show_date:
-                data['error'] = gettext('The presale for this event will start on %(date)s at %(time)s.') % {
+                data['error'] = ugettext('The presale for this event will start on %(date)s at %(time)s.') % {
                     'date': date_format(ev.presale_start.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),
                     'time': date_format(ev.presale_start.astimezone(request.event.timezone), "TIME_FORMAT"),
                 }
             else:
-                data['error'] = gettext('The presale for this event has not yet started.')
+                data['error'] = ugettext('The presale for this event has not yet started.')
 
         self.voucher = None
         if 'voucher' in request.GET:
