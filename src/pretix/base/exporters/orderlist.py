@@ -108,6 +108,7 @@ class OrderListExporter(MultiSheetListExporter):
             ]
 
         headers.append(_('Invoice numbers'))
+        headers.append(_('Sales channel'))
 
         yield headers
 
@@ -176,6 +177,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
 
             row.append(', '.join([i.number for i in order.invoices.all()]))
+            row.append(order.sales_channel)
             yield row
 
     def iterate_fees(self, form_data: dict):
@@ -297,6 +299,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers += [
             _('Address'), _('ZIP code'), _('City'), _('Country'), _('VAT ID'),
         ]
+        headers.append(_('Sales channel'))
 
         yield headers
 
@@ -351,6 +354,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
             except InvoiceAddress.DoesNotExist:
                 row += [''] * (7 + (len(name_scheme['fields']) if len(name_scheme['fields']) > 1 else 0))
+            row.append(order.sales_channel)
             yield row
 
     def get_filename(self):
