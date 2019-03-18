@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-01-16 23:00+0000\n"
-"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
+"PO-Revision-Date: 2019-03-19 09:00+0000\n"
+"Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:124
@@ -147,7 +147,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:195 pretix/control/forms/item.py:62
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Dependência circular entre perguntas detectado."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:233
 #, python-brace-format
@@ -578,7 +578,7 @@ msgstr "Taxa de imposto"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:9
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 msgid "Tax rule"
-msgstr ""
+msgstr "Regra fiscal"
 
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/base/exporters/orderlist.py:275
@@ -648,7 +648,7 @@ msgstr "E-mail do participante"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:137
 msgid "Voucher"
-msgstr ""
+msgstr "Cupom"
 
 #: pretix/base/exporters/orderlist.py:285
 msgid "Pseudonymization ID"
@@ -765,11 +765,8 @@ msgid "Infinite"
 msgstr "Infinito"
 
 #: pretix/base/exporters/orderlist.py:462
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice data"
-msgstr "Data da fatura"
+msgstr "Dados da fatura"
 
 #: pretix/base/exporters/orderlist.py:467 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:159
@@ -777,7 +774,7 @@ msgstr "Data da fatura"
 #: pretix/presale/templates/pretixpresale/event/order.html:166
 #: pretix/presale/templates/pretixpresale/event/order.html:187
 msgid "Invoices"
-msgstr ""
+msgstr "Faturas"
 
 #: pretix/base/exporters/orderlist.py:468
 #, fuzzy
@@ -808,15 +805,12 @@ msgstr "Data"
 #: pretix/control/templates/pretixcontrol/users/index.html:37
 #: pretix/control/views/waitinglist.py:199
 msgid "E-mail address"
-msgstr ""
+msgstr "Endereço de e-email"
 
 #: pretix/base/exporters/orderlist.py:478
 #: pretix/base/exporters/orderlist.py:567
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice type"
-msgstr "Data da fatura"
+msgstr "Tipo de fatura"
 
 #: pretix/base/exporters/orderlist.py:479
 #: pretix/base/exporters/orderlist.py:568
@@ -884,10 +878,8 @@ msgstr "Fatura para"
 
 #: pretix/base/exporters/orderlist.py:490
 #: pretix/base/exporters/orderlist.py:578
-#, fuzzy
-#| msgid "Street and Number"
 msgid "Street address"
-msgstr "Nome da rua e número do imóvel"
+msgstr "Endereço"
 
 #: pretix/base/exporters/orderlist.py:495
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/orders.py:1838
@@ -906,10 +898,8 @@ msgid "Reverse charge"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:498
-#, fuzzy
-#| msgid "Event currency"
 msgid "Shown foreign currency"
-msgstr "Moeda do evento"
+msgstr "Mostrar moeda estrangeira"
 
 #: pretix/base/exporters/orderlist.py:499
 #, fuzzy
@@ -919,11 +909,11 @@ msgstr "Moeda do evento"
 
 #: pretix/base/exporters/orderlist.py:500
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Valor total (com impostos)"
 
 #: pretix/base/exporters/orderlist.py:501
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Valor total (com impostos)"
 
 #: pretix/base/exporters/orderlist.py:527
 #: pretix/base/exporters/orderlist.py:606
@@ -937,8 +927,9 @@ msgstr "Cancelamento"
 #: pretix/base/exporters/orderlist.py:606
 #: pretix/control/templates/pretixcontrol/order/index.html:163
 #: pretix/presale/templates/pretixpresale/event/order.html:174
+#, fuzzy
 msgid "Invoice"
-msgstr ""
+msgstr "Fatura"
 
 #: pretix/base/exporters/orderlist.py:546 pretix/base/models/orders.py:809
 #: pretix/control/views/item.py:442 pretix/control/views/vouchers.py:78
@@ -1036,7 +1027,7 @@ msgstr "Repita a senha"
 
 #: pretix/base/forms/questions.py:316 pretix/control/forms/item.py:70
 msgid "This field is required"
-msgstr ""
+msgstr "Esse campo é obrigatório"
 
 #: pretix/base/forms/questions.py:330
 msgid "Street and Number"
@@ -1189,7 +1180,7 @@ msgstr "Fatura {num}"
 #: pretix/control/templates/pretixcontrol/search/orders.html:65
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "TEST MODE"
-msgstr ""
+msgstr "MODO DE TESTE"
 
 #: pretix/base/invoice.py:282
 msgctxt "invoice"
@@ -2686,7 +2677,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:78
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Subtrair do preço do produto"
 
 #: pretix/base/models/vouchers.py:79
 msgid "Reduce product price by (%)"
@@ -2699,7 +2690,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:322
 #: pretix/presale/templates/pretixpresale/event/index.html:472
 msgid "Voucher code"
-msgstr ""
+msgstr "Código do voucher"
 
 #: pretix/base/models/vouchers.py:101 pretix/control/views/vouchers.py:62
 msgid "Maximum usages"
@@ -2715,7 +2706,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:111 pretix/control/views/vouchers.py:61
 msgid "Valid until"
-msgstr ""
+msgstr "Válido até"
 
 #: pretix/base/models/vouchers.py:115 pretix/control/forms/filter.py:768
 msgid "Reserve ticket from quota"
@@ -2744,11 +2735,13 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:135
 msgid "Voucher value"
-msgstr ""
+msgstr "Valor do voucher"
 
 #: pretix/base/models/vouchers.py:143 pretix/control/forms/vouchers.py:24
 msgid "This product is added to the user's cart if the voucher is redeemed."
 msgstr ""
+"Esse produto é adicionado ao carrinho de compras do usuário se esse voucher "
+"é utilizado."
 
 #: pretix/base/models/vouchers.py:151
 msgid "This variation of the product select above is being used."
@@ -2764,7 +2757,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:24
 #: pretix/control/views/vouchers.py:62
 msgid "Tag"
-msgstr ""
+msgstr "Tag"
 
 #: pretix/base/models/vouchers.py:167
 msgid ""
@@ -2777,7 +2770,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:7
 msgid "Vouchers"
-msgstr ""
+msgstr "Vouchers"
 
 #: pretix/base/models/vouchers.py:203
 msgid "You cannot select a quota that belongs to a different event."
@@ -2799,7 +2792,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:213
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Essa variação não pertence a este produto."
 
 #: pretix/base/models/vouchers.py:215 pretix/base/models/vouchers.py:302
 msgid ""
@@ -2839,7 +2832,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:318
 msgid "A voucher with this code already exists."
-msgstr ""
+msgstr "Um voucher com esse código já existe."
 
 #: pretix/base/models/waitinglist.py:36
 msgid "On waiting list since"
@@ -7537,7 +7530,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:35
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:35
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -7804,7 +7797,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:52
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
@@ -7826,7 +7819,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:16
 msgid "Delete"
-msgstr ""
+msgstr "Deletar"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:8
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:15
@@ -7854,7 +7847,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:264
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:22
 msgid "General information"
-msgstr ""
+msgstr "Informações gerais"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:29
 msgid "Please select the products that should be part of this check-in list."
@@ -9953,7 +9946,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:431
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:220
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:436
 #, fuzzy
@@ -15968,7 +15961,7 @@ msgstr ""
 
 #: pretix/settings.py:670
 msgid "Read access"
-msgstr ""
+msgstr "Acesso de leitura"
 
 #: pretix/settings.py:671
 msgid "Write access"
