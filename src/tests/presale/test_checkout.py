@@ -2309,7 +2309,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
                                  price_included=True)
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
-            price=0, expires=now() - timedelta(minutes=10), is_bundled=False
+            price=0, expires=now() + timedelta(minutes=10), is_bundled=False
         )
 
         self._set_session('payment', 'banktransfer')
