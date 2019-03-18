@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load rich_text %}
 {% block inner %}
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
     <p class="required-legend">
@@ -40,6 +41,11 @@
                     </summary>
                     <div id="invoice">
                         <div class="panel-body">
+                            {% if event.settings.invoice_address_explanation_text %}
+                                <div>
+                                    {{ event.settings.invoice_address_explanation_text|rich_text }}
+                                </div>
+                            {% endif %}
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         </div>
                     </div>

@@ -627,6 +627,13 @@ class InvoiceSettingsForm(SettingsForm):
                     "products."),
         required=False
     )
+    invoice_address_explanation_text = I18nFormField(
+        label=_("Invoice address explanation"),
+        required=False,
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        help_text=_("This text will be shown above the invoice address form during checkout.")
+    )
     invoice_numbers_consecutive = forms.BooleanField(
         label=_("Generate invoices with consecutive numbers"),
         help_text=_("If deactivated, the order code will be used in the invoice number."),
