@@ -217,9 +217,10 @@ class SubEventFilter(FilterSet):
             return queryset.exclude(expr)
 
 
-class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
+class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
     queryset = ItemCategory.objects.none()
+    permission_classes = (EventCRUDPermission,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = SubEventFilter
 
@@ -239,6 +240,42 @@ class SubEventViewSet(ConditionalListView, viewsets.ReadOnlyModelViewSet):
         return qs.prefetch_related(
             'subeventitem_set', 'subeventitemvariation_set'
         )
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+
+        serializer.instance.log_action(
+            'pretix.subevent.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.subevent.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'live\''
+                                   ' to false to hide the event and take the shop offline instead.')
+        try:
+            with transaction.atomic():
+                instance.log_action(
+                    'pretix.subevent.deleted',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data=self.request.data
+                )
+                super().perform_destroy(instance)
+        except ProtectedError:
+            raise PermissionDenied('The subevent could not be deleted as some constraints (e.g. data created by '
+                                   'plug-ins) do not allow it.')
 
 
 class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):

@@ -191,8 +191,8 @@ class SubEventItemVariationSerializer(I18nAwareModelSerializer):
 
 
 class SubEventSerializer(I18nAwareModelSerializer):
-    item_price_overrides = SubEventItemSerializer(source='subeventitem_set', many=True)
-    variation_price_overrides = SubEventItemVariationSerializer(source='subeventitemvariation_set', many=True)
+    item_price_overrides = SubEventItemSerializer(source='subeventitem_set', many=True, required=False)
+    variation_price_overrides = SubEventItemVariationSerializer(source='subeventitemvariation_set', many=True, required=False)
     event = SlugRelatedField(slug_field='slug', read_only=True)
     meta_data = MetaDataField(source='*')
 
@@ -201,6 +201,87 @@ class SubEventSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location', 'event',
                   'item_price_overrides', 'variation_price_overrides', 'meta_data')
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        Event.clean_dates(data.get('date_from'), data.get('date_to'))
+        Event.clean_presale(data.get('presale_start'), data.get('presale_end'))
+
+        return data
+
+    @cached_property
+    def meta_properties(self):
+        return {
+            p.name: p for p in self.context['request'].organizer.meta_properties.all()
+        }
+
+    def validate_meta_data(self, value):
+        for key in value['meta_data'].keys():
+            if key not in self.meta_properties:
+                raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        item_price_overrides_data = validated_data.pop('subeventitem_set') if 'subeventitem_set' in validated_data else {}
+        variation_price_overrides_data = validated_data.pop('subeventitemvariation_set') if 'subeventitemvariation_set' in validated_data else {}
+        meta_data = validated_data.pop('meta_data', None)
+        subevent = super().create(validated_data)
+
+        for item_price_override_data in item_price_overrides_data:
+            SubEventItem.objects.create(subevent=subevent, **item_price_override_data)
+        for variation_price_override_data in variation_price_overrides_data:
+            SubEventItemVariation.objects.create(subevent=subevent, **variation_price_override_data)
+
+        # Meta data
+        if meta_data is not None:
+            for key, value in meta_data.items():
+                subevent.meta_values.create(
+                    property=self.meta_properties.get(key),
+                    value=value
+                )
+
+        return subevent
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        item_price_overrides_data = validated_data.pop('subeventitem_set') if 'subeventitem_set' in validated_data else {}
+        variation_price_overrides_data = validated_data.pop('subeventitemvariation_set') if 'subeventitemvariation_set' in validated_data else {}
+        meta_data = validated_data.pop('meta_data', None)
+        subevent = super().update(instance, validated_data)
+
+        for item_price_override_data in item_price_overrides_data:
+            item, created = SubEventItem.objects.get_or_create(subevent=subevent, item=item_price_override_data['item'])
+            item = SubEventItem(id=item.id, subevent=subevent, **item_price_override_data)
+            item.save()
+        for variation_price_override_data in variation_price_overrides_data:
+            variation, created = SubEventItemVariation.objects.get_or_create(subevent=subevent, variation=variation_price_override_data['variation'])
+            variation = SubEventItemVariation(id=variation.id, subevent=subevent, **variation_price_override_data)
+            variation.save()
+
+        # Meta data
+        if meta_data is not None:
+            current = {mv.property: mv for mv in subevent.meta_values.select_related('property')}
+            for key, value in meta_data.items():
+                prop = self.meta_properties.get(key)
+                if prop in current:
+                    current[prop].value = value
+                    current[prop].save()
+                else:
+                    subevent.meta_values.create(
+                        property=self.meta_properties.get(key),
+                        value=value
+                    )
+
+            for prop, current_object in current.items():
+                if prop.name not in meta_data:
+                    current_object.delete()
+
+        return subevent
 
 
 class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
