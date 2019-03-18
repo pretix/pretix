@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-15 07:55+0000\n"
+"PO-Revision-Date: 2019-03-15 11:19+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -5576,7 +5576,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:74
 msgid "All"
-msgstr ""
+msgstr "Zaznacz wszystko"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
@@ -7404,7 +7404,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:385
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Zapytanie jest przetwarzane…"
 
 #: pretix/control/templates/pretixcontrol/base.html:387
 #: pretix/presale/templates/pretixpresale/base.html:91
@@ -8942,7 +8942,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr ""
+msgstr "Ilość"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
@@ -9645,7 +9645,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:431
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:220
 msgid "Total"
-msgstr ""
+msgstr "Razem"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:436
 msgid "Payments"
@@ -13106,7 +13106,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Komentarz:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -14310,7 +14310,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Projekt biletu"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -14582,7 +14582,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/index.html:31
 msgid "Cart expired"
-msgstr ""
+msgstr "Koszyk wygasł"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:41
@@ -14595,7 +14595,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:47
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Przedmioty w koszyku nie są już zarezerwowane."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
