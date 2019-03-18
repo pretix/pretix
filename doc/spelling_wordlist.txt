@@ -95,6 +95,7 @@ renderers
 reportlab
 SaaS
 screenshot
+searchable
 selectable
 serializers
 serializers
