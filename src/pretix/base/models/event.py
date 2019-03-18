@@ -936,6 +936,18 @@ class SubEvent(EventMixin, LoggedModel):
         if self.event:
             self.event.cache.clear()
 
+    @staticmethod
+    def clean_items(event, items):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items do not belong to this event.'))
+
+    @staticmethod
+    def clean_variations(event, variations):
+        for variation in variations:
+            if event != variation.item.event:
+                raise ValidationError(_('One or more variations do not belong to this event.'))
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)

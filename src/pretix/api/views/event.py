@@ -220,7 +220,7 @@ class SubEventFilter(FilterSet):
 class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
     queryset = ItemCategory.objects.none()
-    permission_classes = (EventCRUDPermission,)
+    write_permission = 'can_change_event_settings'
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filterset_class = SubEventFilter
 
@@ -262,7 +262,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         if not instance.allow_delete():
-            raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'live\''
+            raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'active\''
                                    ' to false to hide the event and take the shop offline instead.')
         try:
             with transaction.atomic():
