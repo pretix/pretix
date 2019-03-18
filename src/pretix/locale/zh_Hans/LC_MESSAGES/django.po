@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-18 09:01+0000\n"
+"PO-Revision-Date: 2019-03-18 10:34+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -12443,258 +12443,258 @@ msgstr "{}的退款已保存，但尚未完全执行。 您可以在下面将其
 
 #: pretix/control/views/orders.py:797
 msgid "The refunds you selected do not match the selected total refund amount."
-msgstr ""
+msgstr "您选择的退款与所选的退款总额不符。"
 
 #: pretix/control/views/orders.py:885
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
-msgstr ""
+msgstr "订单已标记为已付款，但我们无法发送确认邮件。"
 
 #: pretix/control/views/orders.py:888
 msgid "The payment has been created successfully."
-msgstr ""
+msgstr "已成功创建付款。"
 
 #: pretix/control/views/orders.py:896
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
-msgstr ""
+msgstr "订单已被取消。 您现在可以选择将资金转回给用户的方式。"
 
 #: pretix/control/views/orders.py:937 pretix/presale/views/order.py:502
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "您无法为此订单生成发票。"
 
 #: pretix/control/views/orders.py:939 pretix/presale/views/order.py:504
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "此订单的发票已存在。"
 
 #: pretix/control/views/orders.py:959 pretix/control/views/orders.py:963
 msgid "No VAT ID specified."
-msgstr ""
+msgstr "未指定增值税ID。"
 
 #: pretix/control/views/orders.py:967
 msgid "No country specified."
-msgstr ""
+msgstr "未指定国家。"
 
 #: pretix/control/views/orders.py:971
 msgid "VAT ID could not be checked since a non-EU country has been specified."
-msgstr ""
+msgstr "由于指定了非欧盟国家/地区，因此无法检查增值税ID。"
 
 #: pretix/control/views/orders.py:987
 msgid "This VAT ID is not valid."
-msgstr ""
+msgstr "此增值税ID无效。"
 
 #: pretix/control/views/orders.py:990
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
-msgstr ""
+msgstr "无法检查增值税ID，因为该国家的增值税检查服务目前无法使用。"
 
 #: pretix/control/views/orders.py:993
 msgid "This VAT ID is valid."
-msgstr ""
+msgstr "此增值税ID有效。"
 
 #: pretix/control/views/orders.py:1007 pretix/control/views/orders.py:1032
 msgid "Unknown invoice."
-msgstr ""
+msgstr "未知发票。"
 
 #: pretix/control/views/orders.py:1010 pretix/control/views/orders.py:1035
 msgid "The invoice has already been canceled."
-msgstr ""
+msgstr "发票已被取消。"
 
 #: pretix/control/views/orders.py:1012 pretix/control/views/orders.py:1037
 msgid "The invoice has been cleaned of personal data."
-msgstr ""
+msgstr "发票已清除个人数据。"
 
 #: pretix/control/views/orders.py:1083 pretix/control/views/users.py:92
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "发送邮件时出错。请稍后再试。"
 
 #: pretix/control/views/orders.py:1086
 msgid "The email has been queued to be sent."
-msgstr ""
+msgstr "电子邮件已排队等待发送。"
 
 #: pretix/control/views/orders.py:1110 pretix/presale/views/order.py:752
 msgid "This invoice has not been found"
-msgstr ""
+msgstr "尚未找到此发票"
 
 #: pretix/control/views/orders.py:1117 pretix/presale/views/order.py:759
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "发票文件不再存储在服务器上。"
 
 #: pretix/control/views/orders.py:1122 pretix/presale/views/order.py:764
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
-msgstr ""
+msgstr "尚未生成发票文件，我们现在将为您生成。 请在几秒钟后再试一次。"
 
 #: pretix/control/views/orders.py:1148
 msgid "The payment term has been changed."
-msgstr ""
+msgstr "付款条件已更改。"
 
 #: pretix/control/views/orders.py:1153
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
-msgstr ""
+msgstr "由于服务器太忙，我们无法完全处理请求。"
 
 #: pretix/control/views/orders.py:1161
 msgid "This action is only allowed for pending orders."
-msgstr ""
+msgstr "此操作仅适于用待处理订单。"
 
 #: pretix/control/views/orders.py:1189
 msgid "This action is only allowed for pending or paid orders."
-msgstr ""
+msgstr "此操作仅适用于待处理或付款订单。"
 
 #: pretix/control/views/orders.py:1302
 msgid "An error occurred. Please see the details below."
-msgstr ""
+msgstr "发生错误。 请参阅下面的详细信息。"
 
 #: pretix/control/views/orders.py:1310
 msgid "The order has been changed and the user has been notified."
-msgstr ""
+msgstr "订单已更改并已通知用户。"
 
 #: pretix/control/views/orders.py:1312 pretix/control/views/orders.py:1391
 #: pretix/control/views/orders.py:1427
 msgid "The order has been changed."
-msgstr ""
+msgstr "订单已更改。"
 
 #: pretix/control/views/orders.py:1328 pretix/presale/checkoutflow.py:375
 #: pretix/presale/views/order.py:524
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
-msgstr ""
+msgstr "我们在处理您的输入时遇到困难。请检查下面的错误。"
 
 #: pretix/control/views/orders.py:1393
 msgid "Nothing about the order had to be changed."
-msgstr ""
+msgstr "订单的任何内容都不得改变。"
 
 #: pretix/control/views/orders.py:1466 pretix/plugins/sendmail/views.py:67
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "我们无法发送电子邮件。 请参阅下文了解详情。"
 
 #: pretix/control/views/orders.py:1499 pretix/plugins/sendmail/views.py:112
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr ""
+msgstr "主题：{subject}"
 
 #: pretix/control/views/orders.py:1511
 msgid "Your message has been queued and will be sent to {}."
-msgstr ""
+msgstr "您的邮件已排队，并将发送至{}。"
 
 #: pretix/control/views/orders.py:1515
 msgid "Failed to send mail to the following user: {}"
-msgstr ""
+msgstr "无法向以下用户发送邮件：{}"
 
 #: pretix/control/views/orders.py:1562 pretix/presale/views/order.py:627
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
-msgstr ""
+msgstr "此链接不再有效。 请返回，刷新页面，然后重试。"
 
 #: pretix/control/views/orders.py:1623
 msgid "There is no order with the given order code."
-msgstr ""
+msgstr "没有指定订单代码的订单。"
 
 #: pretix/control/views/orders.py:1678
 msgid "The selected exporter was not found."
-msgstr ""
+msgstr "找不到选定的导出程序。"
 
 #: pretix/control/views/orders.py:1685
 msgid "There was a problem processing your input. See below for error details."
-msgstr ""
+msgstr "处理您的输入时出现问题。请参阅下面的错误详细信息。"
 
 #: pretix/control/views/organizer.py:70
 msgid "Token name"
-msgstr ""
+msgstr "令牌名称"
 
 #: pretix/control/views/organizer.py:184
 msgid "This organizer can not be deleted."
-msgstr ""
+msgstr "无法删除此组织者。"
 
 #: pretix/control/views/organizer.py:206
 msgid "The organizer has been deleted."
-msgstr ""
+msgstr "此组织者已被删除。"
 
 #: pretix/control/views/organizer.py:209
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
+msgstr "无法删除组织者，因为某些约束（例如插件创建的数据）不允许删除。"
 
 #: pretix/control/views/organizer.py:331
 msgid "The new organizer has been created."
-msgstr ""
+msgstr "已创建新的组织者。"
 
 #: pretix/control/views/organizer.py:334
 msgid "Administrators"
-msgstr ""
+msgstr "管理员"
 
 #: pretix/control/views/organizer.py:381
 msgid "The team has been created. You can now add members to the team."
-msgstr ""
+msgstr "团队已经创建。 您现在可以向团队添加成员。"
 
 #: pretix/control/views/organizer.py:392 pretix/control/views/organizer.py:427
 #: pretix/control/views/organizer.py:622 pretix/control/views/organizer.py:669
 #: pretix/control/views/organizer.py:703 pretix/control/views/organizer.py:807
 #: pretix/control/views/organizer.py:849
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "您的更改无法保存。"
 
 #: pretix/control/views/organizer.py:462
 msgid "The selected team has been deleted."
-msgstr ""
+msgstr "所选团队已被删除。"
 
 #: pretix/control/views/organizer.py:465
 msgid "The selected team cannot be deleted."
-msgstr ""
+msgstr "无法删除所选团队。"
 
 #: pretix/control/views/organizer.py:498
 msgid "pretix account invitation"
-msgstr ""
+msgstr "Pretix帐户邀请"
 
 #: pretix/control/views/organizer.py:528
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
-msgstr ""
+msgstr "您无法从此团队中删除最后一名成员，因为没有人会获得更改团队的权限。"
 
 #: pretix/control/views/organizer.py:539
 msgid "The member has been removed from the team."
-msgstr ""
+msgstr "该成员已从团队中删除。"
 
 #: pretix/control/views/organizer.py:546
 msgid "Invalid invite selected."
-msgstr ""
+msgstr "选择的邀请无效。"
 
 #: pretix/control/views/organizer.py:555
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "邀请已被撤销。"
 
 #: pretix/control/views/organizer.py:562
 msgid "Invalid token selected."
-msgstr ""
+msgstr "选择的令牌无效。"
 
 #: pretix/control/views/organizer.py:572
 msgid "The token has been revoked."
-msgstr ""
+msgstr "令牌已被撤销。"
 
 #: pretix/control/views/organizer.py:581
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "此用户已被邀请加入此团队。"
 
 #: pretix/control/views/organizer.py:591
 msgid "The new member has been invited to the team."
-msgstr ""
+msgstr "新成员已被邀请加入该团队。"
 
 #: pretix/control/views/organizer.py:595
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "此用户已拥有此团队的权限。"
 
 #: pretix/control/views/organizer.py:606
 msgid "The new member has been added to the team."
-msgstr ""
+msgstr "新成员已添加到团队中。"
 
 #: pretix/control/views/organizer.py:617
 msgid ""
@@ -12702,124 +12702,126 @@ msgid ""
 "Please copy this secret to a safe place. You will not be able to view it "
 "again here."
 msgstr ""
+"已使用以下密钥创建了新的API令牌：{}\n"
+"请将此密钥复制到安全的地方。 您将无法在此处再次查看。"
 
 #: pretix/control/views/organizer.py:723
 msgid "This device has been set up successfully."
-msgstr ""
+msgstr "此设备已成功设置。"
 
 #: pretix/control/views/organizer.py:751
 msgid "This device currently does not have access."
-msgstr ""
+msgstr "此设备目前没有访问权限。"
 
 #: pretix/control/views/organizer.py:762
 msgid "Access for this device has been revoked."
-msgstr ""
+msgstr "此设备的访问权限已被撤销。"
 
 #: pretix/control/views/pdf.py:48
 msgid "The uploaded PDF file is to large."
-msgstr ""
+msgstr "上传的PDF文件太大。"
 
 #: pretix/control/views/pdf.py:50
 msgid "The uploaded PDF file is to small."
-msgstr ""
+msgstr "上传的PDF文件太小。"
 
 #: pretix/control/views/pdf.py:52
 msgid "Please only upload PDF files."
-msgstr ""
+msgstr "请仅上传PDF文件。"
 
 #: pretix/control/views/shredder.py:92
 msgid "The selected data was deleted successfully."
-msgstr ""
+msgstr "已成功删除所选数据。"
 
 #: pretix/control/views/subevents.py:100 pretix/control/views/subevents.py:372
 msgctxt "subevent"
 msgid "The requested date does not exist."
-msgstr ""
+msgstr "请求的日期不存在。"
 
 #: pretix/control/views/subevents.py:104 pretix/control/views/subevents.py:115
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
-msgstr ""
+msgstr "如果已下订单，则无法删除日期。"
 
 #: pretix/control/views/subevents.py:122
 msgctxt "subevent"
 msgid "The selected date has been deleted."
-msgstr ""
+msgstr "所选日期已被删除。"
 
 #: pretix/control/views/subevents.py:440
 msgctxt "subevent"
 msgid "The new date has been created."
-msgstr ""
+msgstr "新日期已创建。"
 
 #: pretix/control/views/subevents.py:496 pretix/control/views/subevents.py:506
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr ""
+msgstr "所选日期已被禁用。"
 
 #: pretix/control/views/subevents.py:526
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr ""
+msgstr "所选日期已被删除或禁用。"
 
 #: pretix/control/views/subevents.py:733
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr ""
+msgstr "{}新日期已创建。"
 
 #: pretix/control/views/typeahead.py:50
 msgid "Series:"
-msgstr ""
+msgstr "系列："
 
 #: pretix/control/views/user.py:80
 msgid "The password you entered was invalid, please try again."
-msgstr ""
+msgstr "您输入的密码无效，请重试。"
 
 #: pretix/control/views/user.py:197
 msgid "U2F devices are only available if pretix is served via HTTPS."
-msgstr ""
+msgstr "U2F设备仅在通过HTTPS提供pretix时可用。"
 
 #: pretix/control/views/user.py:232
 msgid "A two-factor authentication device has been removed from your account."
-msgstr ""
+msgstr "已从您的帐户中删除双因素身份验证设备。"
 
 #: pretix/control/views/user.py:241
 msgid "The device has been removed."
-msgstr ""
+msgstr "设备已被删除。"
 
 #: pretix/control/views/user.py:282 pretix/control/views/user.py:341
 msgid "A new two-factor authentication device has been added to your account."
-msgstr ""
+msgstr "已将新的双因素身份验证设备添加到您的帐户。"
 
 #: pretix/control/views/user.py:296 pretix/control/views/user.py:354
 msgid ""
 "Please note that you still need to enable two-factor authentication for your "
 "account using the buttons below to make a second factor required for logging "
 "into your account."
-msgstr ""
+msgstr "请注意，您仍然需要使用以下按钮为您的帐户启用双因素身份验证，以便为登录您的帐户创建第二个因素。"
 
 #: pretix/control/views/user.py:299 pretix/control/views/user.py:357
 msgid "The device has been verified and can now be used."
-msgstr ""
+msgstr "该设备已经过验证，现在可以使用。"
 
 #: pretix/control/views/user.py:302
 msgid "The registration could not be completed. Please try again."
-msgstr ""
+msgstr "无法完成注册。请再试一次。"
 
 #: pretix/control/views/user.py:360
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
-msgstr ""
+msgstr "您输入的代码无效。 如果此问题仍然存在，请检查手机的日期和时间是否正确配置。"
 
 #: pretix/control/views/user.py:372
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
-msgstr ""
+msgstr "在启用双因素身份验证之前，请至少配置一个设备。"
 
 #: pretix/control/views/user.py:381
 msgid "Two-factor authentication is now enabled for your account."
-msgstr ""
+msgstr "现在为您的帐户启用了双因素身份验证。"
 
 #: pretix/control/views/user.py:395
 msgid "Two-factor authentication is now disabled for your account."
