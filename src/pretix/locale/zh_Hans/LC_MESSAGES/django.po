@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-17 19:31+0000\n"
+"PO-Revision-Date: 2019-03-18 09:01+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -1281,7 +1281,7 @@ msgstr "全名"
 
 #: pretix/base/models/auth.py:82
 msgid "Is active"
-msgstr "活跃"
+msgstr "有效的"
 
 #: pretix/base/models/auth.py:84
 msgid "Is site admin"
@@ -1559,7 +1559,7 @@ msgstr "活动的预售不能在它开始之前结束。"
 #: pretix/control/forms/filter.py:700
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
-msgstr "活跃"
+msgstr "有效的"
 
 #: pretix/base/models/event.py:851
 msgid ""
@@ -1693,9 +1693,8 @@ msgid ""
 "event. This is currently not supported for products that are bought as an "
 "add-on to other products."
 msgstr ""
-"如果此选项处于活动状态，您的用户可以自行选择价格。然后将上面配置的价格理解为"
-"用户必须输入的最低价格。你可以用这个来为你的活动募集额外的捐款。目前购买其他"
-"产品的附加产品不支持此功能。"
+"如果此选项是有效的，您的用户可以自行选择价格。然后将上面配置的价格理解为用户必须输入的最低价格。你可以用这个来为你的活动募集额外的捐款。目前购买其他产品的"
+"附加产品不支持此功能。"
 
 #: pretix/base/models/items.py:278
 msgid "Sales tax"
@@ -3710,7 +3709,7 @@ msgstr "没有定义允许此操作的配额。"
 
 #: pretix/base/services/orders.py:790
 msgid "The selected product is not active or has no price set."
-msgstr "所选产品未激活或未设置价格。"
+msgstr "所选产品无效或未设置价格。"
 
 #: pretix/base/services/orders.py:791
 msgid ""
@@ -4735,9 +4734,8 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
-"如果门票量空闲，则自动创建票证并将其发送给该产品等待列表中的第一个人。如果未"
-"激活，邮件将不会自动发送，但您可以通过控制面板手动发送。如果禁用等待列表但启"
-"用此选项，则仍会发送票证。"
+"如果门票量空闲，则自动创建票证并将其发送给该产品等待列表中的第一个人。如果无效，邮件将不会自动发送，但您可以通过控制面板手动发送。如果禁用等待列表但启用此"
+"选项，则仍会发送票证。"
 
 #: pretix/control/forms/event.py:343
 msgid "Ask for attendee names"
@@ -5978,10 +5976,8 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
-"在更新检查期间，pretix将向pretix开发人员操作的服务器报告一个匿名的、唯一的安"
-"装ID，当前版本的pretix和已安装的插件以及安装过程中的活动和非活动项目数。我们"
-"只存储匿名数据，从不存储任何IP地址，我们将不知道您是谁或在哪里找到您的情况。"
-"您可以随时禁用此行为。"
+"在更新检查期间，pretix将向pretix开发人员操作的服务器报告一个匿名的、唯一的安装ID，当前版本的pretix和已安装的插件以及安装过程中的有效和"
+"闲置项目数。我们只存储匿名数据，从不存储任何IP地址，我们将不知道您是谁或在哪里找到您的情况。您可以随时禁用此行为。"
 
 #: pretix/control/forms/global_settings.py:63
 msgid "E-mail notifications"
@@ -10383,46 +10379,46 @@ msgstr "此操作将销毁此组织者，包括所有活动、配置、产品、
 msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
-msgstr ""
+msgstr "要确认您真的想要这个，请在此输入组织者的简称（\"%(slug)s\"）:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
-msgstr ""
+msgstr "无法删除此组织者帐户，因为它已包含订单、发票或设备。"
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr ""
+msgstr "组织者：%(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
-msgstr ""
+msgstr "连接到设备："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:10
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
-msgstr ""
+msgstr "打开要连接的应用程序，并可以选择将其重置为原始状态。"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "扫描以下配置代码："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:13
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
-msgstr ""
+msgstr "如果您的应用程序/设备不支持扫描二维码，您还可以输入以下信息："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:15
 msgid "System URL:"
-msgstr ""
+msgstr "系统网址："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:16
 msgid "Token:"
-msgstr ""
+msgstr "令牌："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:14
@@ -10432,109 +10428,111 @@ msgid ""
 "not supported by this feature. Future versions of pretixdroid and pretixdesk "
 "will be supported through this menu."
 msgstr ""
+"请注意，这是一项新功能，目前仅适用于beta-stage软件，例如pretixPOS。 此功能不支持pretixdroid 1.x和pretixdesk "
+"0.x. 通过此菜单将支持pretixdroid和pretixdesk的未来版本。"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:29
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:21
 msgid ""
 "To set up pretixdroid or pretixdesk, please go to the <strong>Check-in "
 "devices</strong> section of an event."
-msgstr ""
+msgstr "要设置pretixdroid或pretixdesk，请转到活动的<strong>签入设备</strong>部分。"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:35
 msgid "Device overview"
-msgstr ""
+msgstr "设备概述"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
 msgid "Device:"
-msgstr ""
+msgstr "设备："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 msgid "Connect a new device"
-msgstr ""
+msgstr "连接新设备"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:32
 msgid "Device history"
-msgstr ""
+msgstr "设备历史纪录"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
-msgstr ""
+msgstr "撤销设备访问权限："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
-msgstr ""
+msgstr "您确定要撤销此设备的访问权限吗？"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
-msgstr ""
+msgstr "此设备的所有数据都将保持可用，但您无法再使用该设备。"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
 msgid "Connected devices"
-msgstr ""
+msgstr "连接设备"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:9
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
-msgstr ""
+msgstr "此菜单允许您将诸如票房终端或扫描终端等硬件设备连接到您的帐户。"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:28
 msgid "You haven't connected any hardware devices yet."
-msgstr ""
+msgstr "您尚未连接任何硬件设备。"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:34
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:39
 msgid "Connect a device"
-msgstr ""
+msgstr "连接设备"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:45
 msgid "Device ID"
-msgstr ""
+msgstr "设备号"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:47
 msgid "Hardware model"
-msgstr ""
+msgstr "硬件模型"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:48
 msgid "Software"
-msgstr ""
+msgstr "软件"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:75
 msgid "Not yet initialized"
-msgstr ""
+msgstr "尚未初始化"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:78
 msgid "Revoked"
-msgstr ""
+msgstr "撤销"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:100
 msgid "Connect"
-msgstr ""
+msgstr "连接"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:9
 msgid "Organizer page"
-msgstr ""
+msgstr "组织者页面"
 
 #: pretix/control/templates/pretixcontrol/organizers/display.html:21
 msgid ""
 "These settings will be used for the organizer page as well as for the "
 "default settings for all events in this account that do not have their own "
 "design settings."
-msgstr ""
+msgstr "这些设置将用于组织者页面以及此帐户中没有自己设计设置的所有活动的默认设置。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:8
 msgid "Organizer settings"
-msgstr ""
+msgstr "组织者设置"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:29
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:34
 msgid "Event metadata (advanced)"
-msgstr ""
+msgstr "活动元数据（高级）"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:36
 msgid ""
@@ -10542,74 +10540,75 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
+"您可以在这里定义一组元数据属性（即变量），稍后您可以为活动设置这些属性，并在票据布局等位置重复使用这些属性。如果您创建了大量活动，它能很有用的节省时间。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:88
 msgid "Add property"
-msgstr ""
+msgstr "添加属性"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
-msgstr ""
+msgstr "下面列表显示您具有所有组织者账户的管理权限。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
-msgstr ""
+msgstr "删除团队："
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
-msgstr ""
+msgstr "您无法删除该团队，因为之后没有人可以更改团队权限。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:17
 msgid "Are you sure you want to delete the team?"
-msgstr ""
+msgstr "您确定要删除团队？"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr ""
+msgstr "团队："
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:11
 msgid "Create a new team"
-msgstr ""
+msgstr "创建一个新团队"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
-msgstr ""
+msgstr "您将能够在下一步中添加团队成员。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:23
 msgid "Organizer permissions"
-msgstr ""
+msgstr "组织者权限"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:29
 msgid "Event permissions"
-msgstr ""
+msgstr "活动权限"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
-msgstr ""
+msgstr "成员"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:32
 msgid "Two-factor authentication enabled"
-msgstr ""
+msgstr "已启用双因素身份验证"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication disabled"
-msgstr ""
+msgstr "已禁用双因素身份验证"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:43
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:58
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:104
 msgid "Remove"
-msgstr ""
+msgstr "撤销"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:53
 msgid "invited, pending response"
-msgstr ""
+msgstr "已邀请，等待回复"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:68
 msgid ""
@@ -10617,167 +10616,168 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
+"若要添加新用户，可以在此处输入他们的电子邮件地址。如果他们已经有了一个pretix帐户，他们将立即被添加到活动中。否则，他们将收到一封带有邀请的电子邮件。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:76
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:117
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:83
 msgid "API tokens"
-msgstr ""
+msgstr "API令牌"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:127
 msgid "Team history"
-msgstr ""
+msgstr "团队历史纪录"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:7
 msgid "The list below shows all teams that exist within this organizer."
-msgstr ""
+msgstr "下面的列表显示了此组织者中存在的所有团队。"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:17
 msgid "Members"
-msgstr ""
+msgstr "成员"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:33
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+%(count)s邀请"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
-msgstr ""
+msgstr "修改webhook"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:8
 msgid "Create a new webhook"
-msgstr ""
+msgstr "创建一个新webhook"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:5
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr ""
+msgstr "webhook日志%(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
-msgstr ""
+msgstr "此页面显示过去30天内对您的webhook的所有调用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:15
 msgid "This webhook was retried since it previously failed."
-msgstr ""
+msgstr "由于此Webhook以前失败，已重试。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "Failed"
-msgstr ""
+msgstr "失败"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:54
 msgid "Request URL"
-msgstr ""
+msgstr "请求网址"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:56
 msgid "Request POST body"
-msgstr ""
+msgstr "请求POST body"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:58
 msgid "Response body"
-msgstr ""
+msgstr "反应body"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:64
 msgid "This webhook did not receive any events in the last 30 days."
-msgstr ""
+msgstr "此webhook在过去30天内未收到任何活动。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:9
 msgid ""
 "This menu allows you to create webhooks to connect pretix to other online "
 "services."
-msgstr ""
+msgstr "此菜单允许您创建Webhook以将Pretix连接到其他在线服务。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:13
 msgid "Read documentation"
-msgstr ""
+msgstr "阅读文档"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:19
 msgid "You haven't created any webhooks yet."
-msgstr ""
+msgstr "您尚未创建任何webhooks。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:25
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:30
 msgid "Create webhook"
-msgstr ""
+msgstr "创建webhook"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
 msgid "Logs"
-msgstr ""
+msgstr "日志"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s (%(count)s elements)"
-msgstr ""
+msgstr "第%(page)s页的%(of)s（%(count)s成分）"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:28
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
-msgstr ""
+msgstr "%(count)s成分"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:38
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
 msgid "Show per page:"
-msgstr ""
+msgstr "显示每一页："
 
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
 msgid "Page %(page)s"
-msgstr ""
+msgstr "第%(page)s页"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:5
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
 msgid "PDF Editor"
-msgstr ""
+msgstr "PDF编辑器"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 msgid "Code"
-msgstr ""
+msgstr "代码"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:35
 msgid "Paste"
-msgstr ""
+msgstr "粘贴"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:39
 msgid "Undo"
-msgstr ""
+msgstr "复原"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:43
 msgid "Redo"
-msgstr ""
+msgstr "重做"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:48
 msgid "Editor"
-msgstr ""
+msgstr "编辑"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:64
 msgid ""
 "This feature is only intended for advanced users. We recommend to only use "
 "it to copy and share ticket designs, not to modify the design source code."
-msgstr ""
+msgstr "此功能仅适用于高级用户。我们建议只使用它来复制和共享票据设计，而不修改设计源代码。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:78
 msgid "Apply"
-msgstr ""
+msgstr "应用"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:86
 msgid "Uploading new PDF background…"
-msgstr ""
+msgstr "正在上传新的PDF背景…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:94
 msgid "Welcome to the PDF ticket editor!"
-msgstr ""
+msgstr "欢迎使用PDF票据编辑器！"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:96
 msgid ""
 "This editor allows you to create a design for the PDF tickets of your event. "
 "You can upload a background PDF and then use this tool to place texts and a "
 "QR code on the ticket."
-msgstr ""
+msgstr "此编辑器允许您为活动的PDF票据创建设计。您可以上传PDF背景，然后使用此工具在票据上放置文本和二维码。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:107
 msgid ""
@@ -10785,7 +10785,7 @@ msgid ""
 "for example in text rendering, might look slightly different in the final "
 "tickets. You can use the \"Preview\" button on the right for a more precise "
 "preview."
-msgstr ""
+msgstr "请注意，编辑器只能提供粗略预览。某些细节，例如在文本渲染中，可能在最终票证中看起来略有不同。您可以使用右侧的“预览”按钮进行更精确的预览。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:121
 msgid ""
@@ -10794,148 +10794,150 @@ msgid ""
 "might have problems displaying your background PDF or loading the correct "
 "fonts."
 msgstr ""
+"该编辑器通过最新版本的Google Chrome、Mozilla Firefox和Opera进行测试。其他浏览器，特别是Internet "
+"Explorer或Microsoft Edge，可能在显示PDF背景或加载正确的字体时出现问题。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:129
 msgid ""
 "The editor requires JavaScript to work. Please enable JavaScript in your "
 "browser to continue."
-msgstr ""
+msgstr "编辑器需要使用javascript。请在浏览器中启用javascript以继续。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:139
 #: pretix/control/templates/pretixcontrol/pdf/index.html:171
 msgid "Loading…"
-msgstr ""
+msgstr "载入中…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:142
 msgid "Start editing"
-msgstr ""
+msgstr "开始编辑"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:157
 msgid "Cut"
-msgstr ""
+msgstr "删剪"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:161
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:177
 #: pretix/control/templates/pretixcontrol/pdf/index.html:286
 msgid "Width (mm)"
-msgstr ""
+msgstr "宽度（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:181
 msgid "Height (mm)"
-msgstr ""
+msgstr "高度（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:187
 msgid "Background PDF"
-msgstr ""
+msgstr "PDF背景"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:190
 msgid "Upload new background"
-msgstr ""
+msgstr "上传新背景"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:197
 msgid "x (mm)"
-msgstr ""
+msgstr "x（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:202
 msgid "y (mm)"
-msgstr ""
+msgstr "y（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:209
 msgid "Size (mm)"
-msgstr ""
+msgstr "尺寸（mm）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:217
 msgid ""
 "The final QR code will be slightly smaller because some whitespace is "
 "required for proper scanning."
-msgstr ""
+msgstr "最终的二维码会稍微小一些，因为正确扫描需要一些空白。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:226
 msgid "Font size (pt)"
-msgstr ""
+msgstr "字体大小（pt）"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:248
 msgid "Text color"
-msgstr ""
+msgstr "文本颜色"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:293
 msgid "Style"
-msgstr ""
+msgstr "样式"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:295
 msgid "Dark"
-msgstr ""
+msgstr "黑暗"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:296
 msgid "Light"
-msgstr ""
+msgstr "光"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:302
 msgid "Text content"
-msgstr ""
+msgstr "文本内容"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:309
 msgid "Event attribute:"
-msgstr ""
+msgstr "活动属性："
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:312
 msgid "Other…"
-msgstr ""
+msgstr "其他…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:322
 msgid "Add a new object"
-msgstr ""
+msgstr "添加一个新对象"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:331
 msgid "QR code for Check-In"
-msgstr ""
+msgstr "签入二维码"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:337
 msgid "QR code for Lead Scanning"
-msgstr ""
+msgstr "扫描二维码"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:343
 msgid "pretix Logo"
-msgstr ""
+msgstr "pretix标识"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:82
 msgid ""
 "We couldn't find any orders that you have access to and that match your "
 "search query."
-msgstr ""
+msgstr "我们找不到您有权访问且与您的搜索查询匹配的订单。"
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
 msgid "Please enable JavaScript in your browser."
-msgstr ""
+msgstr "请在浏览器中启用javascript。"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:5
 #: pretix/control/templates/pretixcontrol/shredder/download.html:8
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "数据粉碎机"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:14
 msgid "Step 1: Download data"
-msgstr ""
+msgstr "第1步：下载数据"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:16
 msgid ""
 "You are about to permamanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You should therefore "
 "download the following file and store it in a safe place:"
-msgstr ""
+msgstr "您将要永久删除服务器中的数据，即使可能需要将其中的一些数据保存在文件中。因此，您应该下载以下文件并将其存储在安全的地方："
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:25
 msgid "Download data"
-msgstr ""
+msgstr "下载数据"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:30
 msgid "Step 2: Confirm download"
-msgstr ""
+msgstr "第2步：确认下载"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:32
 msgid ""
@@ -10943,14 +10945,15 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
+"在下载的文件中，有一个名为“CONFIRM_CODE.txt”的文本文件，其中包含六个字符的代码。 请在此处输入此代码以确认您已成功下载该文件。"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:37
 msgid "Confirmation code"
-msgstr ""
+msgstr "验证码"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Step 3: Confirm deletion"
-msgstr ""
+msgstr "第3步：确认删除"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:43
 #, python-format
@@ -10959,6 +10962,7 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"请重新检查您是否完全确定要从活动<strong>%(event)s</strong>中删除所选数据类别。在这种情况下，请在此处输入您的用户密码："
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -10968,186 +10972,188 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"此功能允许您从此活动中删除个人数据。您将首先选择要粉碎的数据类型，然后可以下载受影响的数据，在确认下载后，数据将从服务器数据库中删除。数据可能在有限的时间"
+"内仍存在于备份中。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
-msgstr ""
+msgstr "使用此功能不会删除您的活动订单，只会清除可以链接到个人的数据。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:26
 msgid ""
 "It is within your own responsibility to check if you are allowed to delete "
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
-msgstr ""
+msgstr "您有责任检查是否允许您删除法律中受影响的数据，例如出于税收原因。在许多国家/地区，您需要在实时系统中保留一些数据以防审计。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
 "For most categories of data, you will be able to partially download the data "
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
-msgstr ""
+msgstr "对于大多数数据类别，您将能够部分下载数据以将其脱机存储。目前无法下载某些数据（如某些支付信息）以及历史日志数据。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 msgid "Data selection"
-msgstr ""
+msgstr "数据选择"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:63
 msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
-msgstr ""
+msgstr "我们建议不要删除此数据，因为在进行税务审计时可能需要它。"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:9
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr ""
+msgstr "创建多个日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:34
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:145
 msgid "Repetition rule"
-msgstr ""
+msgstr "重复规则"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:80
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:191
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "每隔%(interval)s%(freq)s重复一次，从%(start)s开始。"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:88
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:199
 msgid "At the same date every year"
-msgstr ""
+msgstr "每年的同一天"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:92
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:203
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "在%(month)s的%(setpos)s%(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:102
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:213
 msgid "At the same date every month"
-msgstr ""
+msgstr "每个月的同一天"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:106
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:217
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "在%(setpos)s%(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:119
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:230
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "重复%(count)s次"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:125
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:236
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "重复直到%(until)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:257
 msgctxt "subevent"
 msgid "Preview"
-msgstr ""
+msgstr "预览"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:359
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:117
 msgid "Add a new quota"
-msgstr ""
+msgstr "添加一个新配额"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:363
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:121
 msgid "Item prices"
-msgstr ""
+msgstr "项目价格"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:432
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:190
 msgid "Add a new check-in list"
-msgstr ""
+msgstr "添加一个新的签入列表"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:6
 msgctxt "subevent"
 msgid "Delete date"
-msgstr ""
+msgstr "删除日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
-msgstr ""
+msgstr "您确定要删除日期<strong>%(subevent)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
 msgctxt "subevent"
 msgid "Delete dates"
-msgstr ""
+msgstr "删除日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:10
 msgid "Are you sure you want to delete the following dates?"
-msgstr ""
+msgstr "您确定要删除以下日期？"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
-msgstr ""
+msgstr "以下日期无法删除，因为它们已有订单，但将被禁用。"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 msgctxt "subevent"
 msgid "Create date"
-msgstr ""
+msgstr "创建日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:200
 msgctxt "subevent"
 msgid "Date history"
-msgstr ""
+msgstr "日期历史纪录"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:11
 msgid "You haven't created any dates for this event series yet."
-msgstr ""
+msgstr "您尚未为此活动系列创建任何日期。"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:18
 #: pretix/control/templates/pretixcontrol/subevents/index.html:49
 msgctxt "subevent"
 msgid "Create a new date"
-msgstr ""
+msgstr "创建一个新日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:21
 #: pretix/control/templates/pretixcontrol/subevents/index.html:52
 msgctxt "subevent"
 msgid "Create many new dates"
-msgstr ""
+msgstr "创建许多新日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:69
 msgid "Begin"
-msgstr ""
+msgstr "开始"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:132
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr ""
+msgstr "用作新日期的模板"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:137
 msgctxt "subevent"
 msgid "Use as a template for many new dates"
-msgstr ""
+msgstr "用作许多新日期的模板"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:151
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:150
 msgid "Delete selected"
-msgstr ""
+msgstr "删除所选"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Enable selected"
-msgstr ""
+msgstr "启用所选"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:157
 msgid "Disable selected"
-msgstr ""
+msgstr "禁用所选"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -11156,140 +11162,140 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:6
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:8
 msgid "Add a two-factor authentication device"
-msgstr ""
+msgstr "添加双因素身份验证设备"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
-msgstr ""
+msgstr "要设置此设备，请按以下步骤操作："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
 msgid "Download the Google Authenticator application to your phone:"
-msgstr ""
+msgstr "将Google身份验证器应用程序下载到手机："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 msgid "Android (Google Play)"
-msgstr ""
+msgstr "安卓（Google Play）"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:23
 msgid "Android (F-Droid)"
-msgstr ""
+msgstr "安卓（F-Droid）"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:28
 msgid "iOS (iTunes)"
-msgstr ""
+msgstr "iOS（iTunes）"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:33
 msgid "Blackberry (Link via Google)"
-msgstr ""
+msgstr "黑莓（通过Google链接）"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
-msgstr ""
+msgstr "通过扫描以下条码向应用程序添加新帐户："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 msgid "Can't scan the barcode?"
-msgstr ""
+msgstr "无法扫描条形码？"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:49
 msgid "Use the \"provide a key\" option of your authenticator app."
-msgstr ""
+msgstr "使用验证器应用程序的“提供密钥”选项。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:52
 msgid "In \"Account name\", type your login name for pretix."
-msgstr ""
+msgstr "在\"帐户名\"中，键入Pretix的登录名。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:55
 msgid "In \"Secret\"/\"Account Key\", enter the following code:"
-msgstr ""
+msgstr "在\"密钥\"/\"账户钥匙\"中，输入以下代码："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:60
 msgid "copy"
-msgstr ""
+msgstr "复制"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:68
 msgid ""
 "If present, make sure \"Time-based\"/\"TOTP\" and 6 digit codes are selected."
-msgstr ""
+msgstr "如果存在，请确保选择了\"Time-based\"/\"TOTP\"和6位代码。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:74
 msgid "Enter the displayed code here:"
-msgstr ""
+msgstr "在此处输入显示的代码："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr ""
+msgstr "以后登录需要第二个因素"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
 "Please connect your U2F device. If it has a button, touch it now. You might "
 "have to unplug the device and plug it back in again."
-msgstr ""
+msgstr "请连接您的U2F设备。 如果有按钮，请立即触摸。 您可能必须拔下设备并重新插入。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:26
 msgid "Device registration failed."
-msgstr ""
+msgstr "设备注册失败。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:6
 msgid "Delete a two-factor authentication device"
-msgstr ""
+msgstr "删除双因素身份验证设备"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
-msgstr ""
+msgstr "您确定要删除身份验证设备\"%(device)s\"?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
-msgstr ""
+msgstr "您将无法再使用此设备登录pretix。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:14
 msgid ""
 "If this is the only device connected to your account, we will disable two-"
 "factor authentication."
-msgstr ""
+msgstr "如果这是唯一连接到您帐户的设备，我们将禁用双因素身份验证。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:6
 msgid "Disable two-factor authentication"
-msgstr ""
+msgstr "禁用双因素身份验证"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:10
 msgid "Do you really want to disable two-factor authentication?"
-msgstr ""
+msgstr "你真的想禁用双因素身份验证？"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:13
 msgid "You will no longer require a second device to log in to your account."
-msgstr ""
+msgstr "您将不再需要第二台设备登录您的帐户。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:6
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "启用双因素身份验证"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:10
 msgid "Do you really want to enable two-factor authentication?"
-msgstr ""
+msgstr "你真的想要启用双因素身份验证？"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:13
 msgid ""
 "You will no longer be able to log in to pretix without one of your "
 "configured devices."
-msgstr ""
+msgstr "如果没有配置的设备，您将无法再登录到Pretix。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:14
 msgid ""
 "Please make sure to print out or copy the emergency tokens and store them in "
 "a safe place."
-msgstr ""
+msgstr "请务必打印或复印紧急代币并将其存放在安全的地方。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:41
 msgid "Two-factor authentication"
-msgstr ""
+msgstr "双因素身份验证"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
 msgid ""
@@ -11298,35 +11304,37 @@ msgid ""
 "but also an additional token that is generated e.g. by an app on your "
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
+"双因素身份验证是一种为帐户添加额外安全性的方法。 如果您启用它，不仅需要密码才能登录，还需要生成额外的令牌，例如： "
+"通过智能手机或硬件令牌生成器上的应用程序，并定期更改。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:31
 msgid "Two-factor status"
-msgstr ""
+msgstr "双因素状态"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
 msgid "Two-factor authentication is currently enabled."
-msgstr ""
+msgstr "目前已启用双因素身份验证。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:40
 msgid "Two-factor authentication is currently disabled."
-msgstr ""
+msgstr "目前已禁用双因素身份验证。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:43
 msgid "To enable it, you need to configure at least one device below."
-msgstr ""
+msgstr "要启用它，您需要在下面配置至少一个设备。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:50
 msgid "Registered devices"
-msgstr ""
+msgstr "已注册设备"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:71
 msgid "Add a new device"
-msgstr ""
+msgstr "添加一个新设备"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:78
 msgid "Emergency tokens"
-msgstr ""
+msgstr "紧急令牌"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:82
 msgid ""
@@ -11334,242 +11342,243 @@ msgid ""
 "log in. We recommend to store them in a safe place, e.g. printed out or in a "
 "password manager. Every token can be used at most once."
 msgstr ""
+"如果您无法访问自己的设备，可以使用以下某个键登录。我们建议将它们存放在安全的地方，例如： 打印出来或在密码管理器中。 每个令牌最多可以使用一次。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:84
 msgid "Unused tokens:"
-msgstr ""
+msgstr "未使用的令牌："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:92
 msgid "Generate new emergency tokens"
-msgstr ""
+msgstr "生成新的紧急令牌"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:6
 msgid "Regenerate emergency codes"
-msgstr ""
+msgstr "重新生成紧急代码"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
-msgstr ""
+msgstr "您真的想要重新生成紧急代码？"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
-msgstr ""
+msgstr "旧代码将不再有效。"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
 msgid "Notification settings"
-msgstr ""
+msgstr "通知设置"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:16
 msgid "Notifications are turned on according to the settings below."
-msgstr ""
+msgstr "根据以下设置打开通知。"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:25
 msgid "All notifications are turned off globally."
-msgstr ""
+msgstr "全局关闭所有通知。"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:33
 msgid "Choose event"
-msgstr ""
+msgstr "选择活动"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:37
 msgid "All my events"
-msgstr ""
+msgstr "我所有的活动"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:45
 msgid "Save your modifications before switching events."
-msgstr ""
+msgstr "在切换活动之前保存您的修改。"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:52
 msgid "Choose notifications to get"
-msgstr ""
+msgstr "选择要获取的通知"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:56
 msgid "Notification type"
-msgstr ""
+msgstr "通知类型"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:57
 msgid "E-Mail notification"
-msgstr ""
+msgstr "电子邮件通知"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
-msgstr ""
+msgstr "全局"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
 #: pretix/control/templates/pretixcontrol/user/settings.html:20
 msgid "On"
-msgstr ""
+msgstr "在"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
 #: pretix/control/templates/pretixcontrol/user/settings.html:24
 msgid "Off"
-msgstr ""
+msgstr "离开"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
-msgstr ""
+msgstr "您无权接收此通知"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:11
 msgid ""
 "We just want to make sure it's really you. Please re-enter your password to "
 "continue."
-msgstr ""
+msgstr "我们只想确定是你。请重新输入密码以继续。"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "或者，您可以使用U2F设备。"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
-msgstr ""
+msgstr "以其他人身份登录"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
-msgstr ""
+msgstr "帐户设置"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:35
 msgid "Login settings"
-msgstr ""
+msgstr "登录设置"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:46
 msgid "Change two-factor settings"
-msgstr ""
+msgstr "更改双因素设置"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
 msgid "Show applications"
-msgstr ""
+msgstr "显示应用程序"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Show account history"
-msgstr ""
+msgstr "显示帐户历史记录"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
-msgstr ""
+msgstr "员工会议"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
 msgid "Session notes"
-msgstr ""
+msgstr "会议记录"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:17
 msgid "Audit log"
-msgstr ""
+msgstr "审计日志"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:30
 msgid "Method"
-msgstr ""
+msgstr "方式"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
 msgid "URL"
-msgstr ""
+msgstr "网址"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "代表"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
 "To perform this action, you need to start an administrative session. "
 "Everything you do in that session will be logged and you will later be asked "
 "to fill in a comment on what you did in your session for later reference."
-msgstr ""
+msgstr "要执行此操作，需要启动管理会话。您在该会话中所做的所有操作都将被记录下来，稍后会要求您填写一条关于您在会话中所做操作的注释，供以后参考。"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:18
 msgid "Start session"
-msgstr ""
+msgstr "启动会话"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:4
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:6
 msgid "Anonymize user"
-msgstr ""
+msgstr "匿名用户"
 
 #: pretix/control/templates/pretixcontrol/users/anonymize.html:11
 msgid "Disable and anonymize user"
-msgstr ""
+msgstr "禁用和匿名用户"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "创建用户"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:24
 msgid "Base settings"
-msgstr ""
+msgstr "基本设置"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:32
 msgid "Log-in settings"
-msgstr ""
+msgstr "登录设置"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:10
 msgid "Send password reset email"
-msgstr ""
+msgstr "发送密码重置电子邮件"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:14
 msgid "Impersonate user"
-msgstr ""
+msgstr "模拟用户"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Anonymize"
-msgstr ""
+msgstr "匿名"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:39
 msgid "Team memberships"
-msgstr ""
+msgstr "团队成员资格"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:44
 #, python-format
 msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
-msgstr ""
+msgstr "组织者\"%(team)s\"的团队\"%(organizer)s\""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:63
 msgid "User history"
-msgstr ""
+msgstr "用户历史纪录"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:72
 msgid "User created."
-msgstr ""
+msgstr "用户创建。"
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "创建一个新用户"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple vouchers"
-msgstr ""
+msgstr "创建多个优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr ""
+msgstr "优惠券代码"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr ""
+msgstr "前缀（可选）"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "生成随机码"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
-msgstr ""
+msgstr "复制代码"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
 msgid "Voucher details"
-msgstr ""
+msgstr "优惠券详情"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:45
 #: pretix/control/views/vouchers.py:62
 msgid "Price effect"
-msgstr ""
+msgstr "价格效应"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:56
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:58
@@ -11577,139 +11586,137 @@ msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
-msgstr ""
+msgstr "如果您为特定配额选择“任何产品”并选择为上面的此优惠券保留配额，则如果与该产品相关的另一个配额已售完，优惠券持有人仍然无法使用该产品！"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr ""
+msgstr "删除优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr ""
+msgstr "您确定要删除优惠券<strong>%(voucher)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
 msgid "Delete vouchers"
-msgstr ""
+msgstr "删除优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr ""
+msgstr "您确定要删除以下优惠券？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
 msgid ""
 "The following vouchers can't be deleted as they already have been redeemed, "
 "but they will be set to fully redeemed instead."
-msgstr ""
+msgstr "以下凭证无法删除，因为它们已被兑换，但它们将被设置为完全兑换。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "此优惠券已被使用。 不建议对其进行修改。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "订单%(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher link"
-msgstr "优惠券"
+msgstr "优惠券链接"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:84
 msgid "Voucher history"
-msgstr ""
+msgstr "优惠券历史纪录"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:9
 msgid ""
 "Vouchers allow you to assign tickets to specific persons for a lower price. "
 "They also enable you to reserve some quota for your very special guests."
-msgstr ""
+msgstr "优惠券允许您以较低的价格为特定人员分配门票。 它们还可以为您的特殊客人预留一些配额。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:63
 msgid "Your search did not match any vouchers."
-msgstr ""
+msgstr "您的搜索与任何优惠券都不匹配。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:65
 msgid "You haven't created any vouchers yet."
-msgstr ""
+msgstr "您尚未创建任何优惠券。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:72
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:79
 msgid "Create a new voucher"
-msgstr ""
+msgstr "创建一个新优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:74
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:82
 msgid "Create multiple new vouchers"
-msgstr ""
+msgstr "创建多个新优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:85
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
 msgid "Download list"
-msgstr ""
+msgstr "下载列表"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:99
 msgid "Redemptions"
-msgstr ""
+msgstr "兑现"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:100
 msgid "Expiry"
-msgstr ""
+msgstr "到期"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:132
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr ""
+msgstr "配额\"%(quota)s\"中的所有产品"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:3
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
 msgid "Voucher tags"
-msgstr ""
+msgstr "优惠券标签"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:7
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
-msgstr ""
+msgstr "如果您在优惠券中添加一个\"标签\"，您可以在这里查看有关它们使用情况的统计数据。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:14
 msgid "You haven't added any tags to vouchers yet."
-msgstr ""
+msgstr "您尚未向优惠券添加任何标签。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:25
 msgid "Redeemed vouchers"
-msgstr ""
+msgstr "已兑现优惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:39
 msgid "Empty tag"
-msgstr ""
+msgstr "空标签"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
 msgid "Delete entry"
-msgstr ""
+msgstr "删除条目"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the following waiting list entry <strong>"
 "%(entry)s</strong>?"
-msgstr ""
+msgstr "您确定要删除以下等待列表条目<strong>%(entry)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
 "The waiting list is disabled, so if the event is sold out, people cannot add "
 "themselves to this list. If you want to enable it, go to the event settings."
-msgstr ""
+msgstr "等待列表已禁用，因此如果活动已售完，则人们无法将自己添加到此列表中。如果要启用它，请转到活动设置。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr ""
+msgstr "发送优惠券"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -11719,6 +11726,8 @@ msgid ""
 "capacity is available, so don't worry if entries do not disappear here "
 "immediately. If you want, you can also send them out manually right now."
 msgstr ""
+"您已配置优惠券将自动发送给此列表中等待时间最长的人员（一旦容量可用）。在容量可用后，发送优惠券可能需要半个小时，因此不要担心条目是否会立即消失在这里。 "
+"如果需要，您也可以立即手动发送。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid ""
@@ -11728,14 +11737,16 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
+"您已配置优惠券将<strong>不</strong>自动发送。您可以通过单击此表中某行旁边的按钮（如果有足够的配额）按您选择的顺序逐个发送，也可以按此文本"
+"下面的大按钮，向等待时间最长的人发送尽可能多的优惠券。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
-msgstr ""
+msgstr "发送尽可能多的优惠券"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
-msgstr ""
+msgstr "销售估算"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:69
 #, python-format
@@ -11744,49 +11755,50 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional <strong>"
 "%(amount)s</strong>."
 msgstr ""
+"如果您可以在活动中腾出足够的空间来容纳在等待名单中的所有人，那么您可以额外售出价值<strong>%(amount)s</strong>的门票。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
-msgstr ""
+msgstr "所有条目"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "等待优惠券"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
 #: pretix/control/views/waitinglist.py:218
 msgid "Voucher assigned"
-msgstr ""
+msgstr "优惠券已分配"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for redemption"
-msgstr ""
+msgstr "等待赎回"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
 msgid "Successfully redeemed"
-msgstr ""
+msgstr "已成功兑换"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
 #: pretix/control/views/waitinglist.py:216
 msgid "Voucher expired"
-msgstr ""
+msgstr "优惠券已过期"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
-msgstr ""
+msgstr "自从在名单上"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:158
 msgid ""
 "This entry has a modified priority. The higher this number is, the earlier "
 "this person will be assigned a voucher."
-msgstr ""
+msgstr "此条目的优先级已修改。此号码越高，此人被分配优惠券的时间越早。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:214
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "优惠券已兑换"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:174
 #, python-format
@@ -11795,26 +11807,29 @@ msgid ""
 "                                    Waiting, product %(num)sx available\n"
 "                                "
 msgstr ""
+"\n"
+"                                    等待，产品%(num)sx 可用\n"
+"                                "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
 msgid "Waiting, product unavailable"
-msgstr ""
+msgstr "等待，产品不可用"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
-msgstr ""
+msgstr "发送一个优惠券"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
 msgid "Move to the top of the list"
-msgstr ""
+msgstr "移到列表顶部"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:200
 msgid "Move to the end of the list"
-msgstr ""
+msgstr "移到列表末尾"
 
 #: pretix/control/templatetags/hierarkey_form.py:42
 msgid "Organizer-level settings"
-msgstr ""
+msgstr "组织者级别设置"
 
 #: pretix/control/templatetags/hierarkey_form.py:45
 msgid ""
@@ -11823,95 +11838,97 @@ msgid ""
 "go to the organizer settings to change them or decouple them from the "
 "organizer account to change them for this event individually."
 msgstr ""
+"这些设置目前设置在组织者级别。这样，您可以轻松地同时为所有活动更改它们。您可以转到组织者设置来更改它们，也可以将它们与组织者帐户断开连接来单独更改此活动的"
+"设置。"
 
 #: pretix/control/templatetags/hierarkey_form.py:49
 msgid "Change only for this event"
-msgstr ""
+msgstr "仅为此活动更改"
 
 #: pretix/control/templatetags/hierarkey_form.py:50
 msgid "Change for all events"
-msgstr ""
+msgstr "更改所有活动"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
-msgstr ""
+msgstr "该页码不是整数"
 
 #: pretix/control/views/__init__.py:147
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "该页码小于1"
 
 #: pretix/control/views/auth.py:120
 msgid ""
 "You used an invalid link. Please copy the link from your email to the "
 "address bar and make sure it is correct and that the link has not been used "
 "before."
-msgstr ""
+msgstr "您使用了无效的链接。请将该链接从您的电子邮件复制到地址栏，确保其正确无误，并且该链接以前没有被使用过。"
 
 #: pretix/control/views/auth.py:126
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
-msgstr ""
+msgstr "您已无法接受\"{}\"邀请，因为您已加入此团队。"
 
 #: pretix/control/views/auth.py:140
 msgid "You are now part of the team \"{}\"."
-msgstr ""
+msgstr "您现在是\"{}\"团队的一员。"
 
 #: pretix/control/views/auth.py:170
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
-msgstr ""
+msgstr "欢迎来到pretix！您现在是\"{}\"团队的一员。"
 
 #: pretix/control/views/auth.py:228
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
-msgstr ""
+msgstr "如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮件。请注意，我们最多每24小时发送一封电子邮件。"
 
 #: pretix/control/views/auth.py:231
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions."
-msgstr ""
+msgstr "如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮件。"
 
 #: pretix/control/views/auth.py:251
 msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
-msgstr ""
+msgstr "您单击了一个无效链接。请检查是否已将完整的网址复制到地址栏中。请注意，该链接有效期为三天，并且该链接只能使用一次。"
 
 #: pretix/control/views/auth.py:254
 msgid "We were unable to find the user you requested a new password for."
-msgstr ""
+msgstr "我们无法找到您为其请求新密码的用户。"
 
 #: pretix/control/views/auth.py:287
 msgid "You can now login using your new password."
-msgstr ""
+msgstr "您现在可以使用新密码登录。"
 
 #: pretix/control/views/auth.py:328
 msgid "Please try again."
-msgstr ""
+msgstr "请重试。"
 
 #: pretix/control/views/auth.py:357
 msgid "Invalid code, please try again."
-msgstr ""
+msgstr "无效代码，请重试。"
 
 #: pretix/control/views/checkin.py:83
 msgid "You do not have permission to perform this action."
-msgstr ""
+msgstr "您没有执行此操作的权限。"
 
 #: pretix/control/views/checkin.py:104
 msgid "The selected check-ins have been reverted."
-msgstr ""
+msgstr "选定的签入已恢复。"
 
 #: pretix/control/views/checkin.py:122
 msgid "The selected tickets have been marked as checked in."
-msgstr ""
+msgstr "所选票证已标记为已签入。"
 
 #: pretix/control/views/checkin.py:182
 msgid "The new check-in list has been created."
-msgstr ""
+msgstr "已创建新的签入列表。"
 
 #: pretix/control/views/checkin.py:189 pretix/control/views/checkin.py:227
 #: pretix/control/views/event.py:169 pretix/control/views/event.py:311
@@ -11931,376 +11948,374 @@ msgstr "我们无法保存您的更改。详见下文。"
 
 #: pretix/control/views/checkin.py:206 pretix/control/views/checkin.py:243
 msgid "The requested list does not exist."
-msgstr ""
+msgstr "请求的列表不存在。"
 
 #: pretix/control/views/checkin.py:252
 msgid "The selected list has been deleted."
-msgstr ""
+msgstr "所选列表已被删除。"
 
 #: pretix/control/views/dashboards.py:74
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "观众（已订购）"
 
 #: pretix/control/views/dashboards.py:83
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "观众（付费）"
 
 #: pretix/control/views/dashboards.py:93
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr ""
+msgstr "总收入（{currency}）"
 
 #: pretix/control/views/dashboards.py:102
 msgid "Active products"
-msgstr ""
+msgstr "有效的产品"
 
 #: pretix/control/views/dashboards.py:139
 msgid "available to give to people on waiting list"
-msgstr ""
+msgstr "可提供给等待名单上的人"
 
 #: pretix/control/views/dashboards.py:147
 msgid "total waiting list length"
-msgstr ""
+msgstr "等待列表总长度"
 
 #: pretix/control/views/dashboards.py:167
 #, python-brace-format
 msgid "{quota} left"
-msgstr ""
+msgstr "{quota}剩余"
 
 #: pretix/control/views/dashboards.py:185
 msgid "Your ticket shop is"
-msgstr ""
+msgstr "你的售票处是"
 
 #: pretix/control/views/dashboards.py:185
 msgid "Click here to change"
-msgstr ""
+msgstr "单击此处更改"
 
 #: pretix/control/views/dashboards.py:186
 msgid "live"
-msgstr ""
+msgstr "在现场"
 
 #: pretix/control/views/dashboards.py:187
 msgid "live and in test mode"
-msgstr ""
+msgstr "现场和测试模式"
 
 #: pretix/control/views/dashboards.py:188
 msgid "not yet public"
-msgstr ""
+msgstr "尚未公开"
 
 #: pretix/control/views/dashboards.py:189
 msgid "in private test mode"
-msgstr ""
+msgstr "在私有测试模式下"
 
 #: pretix/control/views/dashboards.py:217
 #, python-brace-format
 msgid "Checked in – {list}"
-msgstr ""
+msgstr "已签入-{list}"
 
 #: pretix/control/views/dashboards.py:233
 msgid "Welcome to pretix!"
-msgstr ""
+msgstr "欢迎来到pretix！"
 
 #: pretix/control/views/dashboards.py:239
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "开始使用我们的设置工具"
 
 #: pretix/control/views/dashboards.py:240
 msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
-msgstr ""
+msgstr "要开始销售门票，您需要创建产品或配额。创建这个的最快方法是使用我们的设置工具。"
 
 #: pretix/control/views/dashboards.py:242
 msgid "Set up event"
-msgstr ""
+msgstr "设置活动"
 
 #: pretix/control/views/dashboards.py:366 pretix/control/views/typeahead.py:47
 msgctxt "subevent"
 msgid "No dates"
-msgstr ""
+msgstr "没有日期"
 
 #: pretix/control/views/dashboards.py:379
 msgid "Action required"
-msgstr ""
+msgstr "需要采取的行动"
 
 #: pretix/control/views/dashboards.py:383
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:32
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:54
 #: pretix/presale/templates/pretixpresale/organizers/index.html:77
 msgid "Sale over"
-msgstr ""
+msgstr "售完"
 
 #: pretix/control/views/dashboards.py:385
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 msgid "Soon"
-msgstr ""
+msgstr "立刻"
 
 #: pretix/control/views/dashboards.py:407
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
+msgstr[0] "{num}订单"
 
 #: pretix/control/views/event.py:282
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
-msgstr ""
+msgstr "此付款提供程序不存在或相应的插件被禁用。"
 
 #: pretix/control/views/event.py:484 pretix/control/views/organizer.py:167
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
-msgstr ""
+msgstr "你的修改已被保存。 请注意，您的更改可能需要很短的时间才能生效。"
 
 #: pretix/control/views/event.py:527
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr ""
+msgstr "联系SMTP服务器时出错：%s"
 
 #: pretix/control/views/event.py:530
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
-msgstr ""
+msgstr "您的更改已保存，与SMTP服务器的连接尝试成功。"
 
 #: pretix/control/views/event.py:533
 msgid ""
 "We've been able to contact the SMTP server you configured. Remember to check "
 "the \"use custom SMTP server\" checkbox, otherwise your SMTP server will not "
 "be used."
-msgstr ""
+msgstr "我们已经能够联系您配置的SMTP服务器。 请记住选中“使用自定义SMTP服务器”复选框，否则将不使用您的SMTP服务器。"
 
 #: pretix/control/views/event.py:561
 msgid "{} has been transferred to account <9999-9999-9999-9999> at {}"
-msgstr ""
+msgstr "{}已转至{}的账户<9999-9999-9999-9999>"
 
 #: pretix/control/views/event.py:625
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "样本入场券"
 
 #: pretix/control/views/event.py:628
 msgid "Sample Corporation"
-msgstr ""
+msgstr "样本公司"
 
 #: pretix/control/views/event.py:629
 msgid "An individial text with a reason can be inserted here."
-msgstr ""
+msgstr "可以在此处插入具有原因的单个文本。"
 
 #: pretix/control/views/event.py:630
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "请转账到这个银行账户：9999-9999-9999-9999"
 
 #: pretix/control/views/event.py:655
 msgid "invalid item"
-msgstr ""
+msgstr "无效项目"
 
 #: pretix/control/views/event.py:704
 msgid "Unknown e-mail renderer."
-msgstr ""
+msgstr "未知的电子邮件渲染器。"
 
 #: pretix/control/views/event.py:720 pretix/control/views/orders.py:315
 #: pretix/presale/views/order.py:682
 msgid "You requested an invalid ticket output type."
-msgstr ""
+msgstr "您请求的票证输出类型无效。"
 
 #: pretix/control/views/event.py:867
 msgid "Your shop is live now!"
-msgstr ""
+msgstr "您的商店现在开始营业了！"
 
 #: pretix/control/views/event.py:875
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
-msgstr ""
+msgstr "我们把您的商店拆掉了。您可以随时重新启用它！"
 
 #: pretix/control/views/event.py:883
 msgid "Your shop is now in test mode!"
-msgstr ""
+msgstr "您的商店现在处于测试模式！"
 
 #: pretix/control/views/event.py:900
 msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
-msgstr ""
+msgstr "无法删除订单，因为某些约束（例如插件创建的数据）不允许删除。"
 
 #: pretix/control/views/event.py:904
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
-msgstr ""
+msgstr "我们已经为您禁用了测试模式。我们去卖一些真正的票吧！"
 
 #: pretix/control/views/event.py:921
 msgid "This event can not be deleted."
-msgstr ""
+msgstr "无法删除此活动。"
 
 #: pretix/control/views/event.py:944
 msgid "The event has been deleted."
-msgstr ""
+msgstr "此活动已被删除。"
 
 #: pretix/control/views/event.py:947
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
+msgstr "无法删除活动，因为某些约束（例如插件创建的数据）不允许删除。"
 
 #: pretix/control/views/event.py:1014
 msgid "The issue has been marked as resolved!"
-msgstr ""
+msgstr "该问题已被标记为已解决！"
 
 #: pretix/control/views/event.py:1035 pretix/control/views/orders.py:387
 msgid "The comment has been updated."
-msgstr ""
+msgstr "评论已更新。"
 
 #: pretix/control/views/event.py:1037 pretix/control/views/orders.py:389
 msgid "Could not update the comment."
-msgstr ""
+msgstr "无法更新评论。"
 
 #: pretix/control/views/event.py:1075 pretix/control/views/main.py:260
 msgid "VAT"
-msgstr ""
+msgstr "增值税"
 
 #: pretix/control/views/event.py:1102
 msgid "The new tax rule has been created."
-msgstr ""
+msgstr "已创建新的税务规则。"
 
 #: pretix/control/views/event.py:1125 pretix/control/views/event.py:1184
 msgid "The requested tax rule does not exist."
-msgstr ""
+msgstr "请求的税收规则不存在。"
 
 #: pretix/control/views/event.py:1193
 msgid "The selected tax rule has been deleted."
-msgstr ""
+msgstr "所选的税务规则已被删除。"
 
 #: pretix/control/views/event.py:1195
 msgid "The selected tax rule can not be deleted."
-msgstr ""
+msgstr "无法删除所选的税务规则。"
 
 #: pretix/control/views/event.py:1245
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "您的活动不是空的，您需要手动设置。"
 
 #: pretix/control/views/event.py:1378
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
-msgstr ""
+msgstr "您的更改已保存。现在，您可以继续查看详细信息，或将活动现场直播，开始销售！"
 
 #: pretix/control/views/event.py:1397
 msgid "Regular ticket"
-msgstr ""
+msgstr "定期门票"
 
 #: pretix/control/views/event.py:1402
 msgid "Reduced ticket"
-msgstr ""
+msgstr "减少门票"
 
 #: pretix/control/views/global_settings.py:29
 #: pretix/control/views/global_settings.py:52
 msgid "Your changes have not been saved, see below for errors."
-msgstr ""
+msgstr "您的更改尚未保存，请参阅下面的错误。"
 
 #: pretix/control/views/item.py:66 pretix/control/views/item.py:1067
 msgid "The requested product does not exist."
-msgstr ""
+msgstr "请求的产品不存在。"
 
 #: pretix/control/views/item.py:79
 msgid "The order of items has been updated."
-msgstr ""
+msgstr "项目顺序已更新。"
 
 #: pretix/control/views/item.py:111 pretix/control/views/item.py:146
 #: pretix/control/views/item.py:216
 msgid "The requested product category does not exist."
-msgstr ""
+msgstr "请求的产品类别不存在。"
 
 #: pretix/control/views/item.py:122
 msgid "The selected category has been deleted."
-msgstr ""
+msgstr "所选类别已被删除。"
 
 #: pretix/control/views/item.py:186
 msgid "The new category has been created."
-msgstr ""
+msgstr "已创建新类别。"
 
 #: pretix/control/views/item.py:229
 msgid "The order of categories has been updated."
-msgstr ""
+msgstr "类别顺序已更新。"
 
 #: pretix/control/views/item.py:268
 msgid "The selected question does not exist."
-msgstr ""
+msgstr "所选问题不存在。"
 
 #: pretix/control/views/item.py:281
 msgid "The order of questions has been updated."
-msgstr ""
+msgstr "问题顺序已更新。"
 
 #: pretix/control/views/item.py:312 pretix/control/views/item.py:461
 #: pretix/control/views/item.py:483
 msgid "The requested question does not exist."
-msgstr ""
+msgstr "请求的问题不存在。"
 
 #: pretix/control/views/item.py:325
 msgid "The selected question has been deleted."
-msgstr ""
+msgstr "所选问题已被删除。"
 
 #: pretix/control/views/item.py:418
 msgid "File uploaded"
-msgstr ""
+msgstr "文件已上传"
 
 #: pretix/control/views/item.py:542
 msgid "The new question has been created."
-msgstr ""
+msgstr "已创建新问题。"
 
 #: pretix/control/views/item.py:583
 msgid "The new quota has been created."
-msgstr ""
+msgstr "已创建新配额。"
 
 #: pretix/control/views/item.py:616
 msgid "Vouchers and waiting list reservations"
-msgstr ""
+msgstr "优惠券和预订等待名单"
 
 #: pretix/control/views/item.py:631
 msgid "Available quota"
-msgstr ""
+msgstr "可用配额"
 
 #: pretix/control/views/item.py:637
 msgid "Waiting list (pending)"
-msgstr ""
+msgstr "等待列表（待处理）"
 
 #: pretix/control/views/item.py:644
 msgid "Currently for sale"
-msgstr ""
+msgstr "目前正在出售"
 
 #: pretix/control/views/item.py:669 pretix/control/views/item.py:689
 #: pretix/control/views/item.py:743
 msgid "The requested quota does not exist."
-msgstr ""
+msgstr "请求的配额不存在。"
 
 #: pretix/control/views/item.py:756
 msgid "The selected quota has been deleted."
-msgstr ""
+msgstr "所选配额已被删除。"
 
 #: pretix/control/views/item.py:779
 msgid "The requested item does not exist."
-msgstr ""
+msgstr "请求的项目不存在。"
 
 #: pretix/control/views/item.py:1020
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
-msgstr ""
+msgstr "您不能将附加组件添加到只能作为附加组件本身使用的产品中。"
 
 #: pretix/control/views/item.py:1078
 msgid "The selected product has been deleted."
-msgstr ""
+msgstr "所选产品已被删除。"
 
 #: pretix/control/views/item.py:1087
 msgid "The selected product has been deactivated."
-msgstr ""
+msgstr "所选产品已停用。"
 
 #: pretix/control/views/main.py:157
-#, fuzzy
-#| msgid "One or more items do not belong to this event."
 msgid "You do not have permission to clone this event."
-msgstr "一个或多个项目不属于此活动。"
+msgstr "您无权复制此活动。"
 
 #: pretix/control/views/main.py:214
 #, python-brace-format
 msgid "Team {event}"
-msgstr ""
+msgstr "团队{event}"
 
 #: pretix/control/views/main.py:253 pretix/plugins/badges/__init__.py:23
 #: pretix/plugins/badges/models.py:27
@@ -12314,11 +12329,11 @@ msgstr "缺席"
 
 #: pretix/control/views/oauth.py:85
 msgid "A new client secret has been generated and is now effective."
-msgstr ""
+msgstr "已生成新的客户机密钥，现在已生效。"
 
 #: pretix/control/views/oauth.py:143
 msgid "Access for the selected application has been revoked."
-msgstr ""
+msgstr "已撤销对所选应用程序的访问权限。"
 
 #: pretix/control/views/orders.py:317 pretix/presale/views/order.py:70
 #: pretix/presale/views/order.py:166 pretix/presale/views/order.py:233
@@ -12327,104 +12342,104 @@ msgstr ""
 #: pretix/presale/views/order.py:567 pretix/presale/views/order.py:599
 #: pretix/presale/views/order.py:684 pretix/presale/views/order.py:743
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
+msgstr "未知订单代码或未授权访问此订单。"
 
 #: pretix/control/views/orders.py:319 pretix/presale/views/order.py:688
 msgid "Ticket download is not enabled for this product."
-msgstr ""
+msgstr "此产品未启用票证下载。"
 
 #: pretix/control/views/orders.py:423
 msgid "The order has been deleted."
-msgstr ""
+msgstr "订单已被删除。"
 
 #: pretix/control/views/orders.py:429
 msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
+msgstr "无法删除订单，因为某些约束（例如插件创建的数据）不允许删除。"
 
 #: pretix/control/views/orders.py:437
 msgid "Only orders created in test mode can be deleted."
-msgstr ""
+msgstr "只能删除在测试模式下创建的订单。"
 
 #: pretix/control/views/orders.py:456
 msgid "The order has been denied and is therefore now canceled."
-msgstr ""
+msgstr "该订单已被拒绝，因此现已取消。"
 
 #: pretix/control/views/orders.py:481
 msgid "This payment has been canceled."
-msgstr ""
+msgstr "此付款已被取消。"
 
 #: pretix/control/views/orders.py:483
 msgid "This payment can not be canceled at the moment."
-msgstr ""
+msgstr "目前不能取消这笔付款。"
 
 #: pretix/control/views/orders.py:509
 msgid "The refund has been canceled."
-msgstr ""
+msgstr "退款已被取消。"
 
 #: pretix/control/views/orders.py:511
 msgid "This refund can not be canceled at the moment."
-msgstr ""
+msgstr "此退款目前无法取消。"
 
 #: pretix/control/views/orders.py:544
 msgid "The refund has been processed."
-msgstr ""
+msgstr "退款已处理完毕。"
 
 #: pretix/control/views/orders.py:546 pretix/control/views/orders.py:572
 msgid "This refund can not be processed at the moment."
-msgstr ""
+msgstr "此退款目前无法处理。"
 
 #: pretix/control/views/orders.py:570
 msgid "The refund has been marked as done."
-msgstr ""
+msgstr "退款已标记为已完成。"
 
 #: pretix/control/views/orders.py:614
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
-msgstr ""
+msgstr "付款已标记为已完成，但我们无法发送确认邮件。"
 
 #: pretix/control/views/orders.py:617
 msgid "The payment has been marked as complete."
-msgstr ""
+msgstr "付款已标记为已完成。"
 
 #: pretix/control/views/orders.py:619
 msgid "This payment can not be confirmed at the moment."
-msgstr ""
+msgstr "目前无法确认这笔付款。"
 
 #: pretix/control/views/orders.py:670 pretix/control/views/orders.py:693
 #: pretix/control/views/orders.py:724
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "您输入的号码无效。"
 
 #: pretix/control/views/orders.py:730
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
-msgstr ""
+msgstr "您的退款金额不能超过尚未退款的付款金额。"
 
 #: pretix/control/views/orders.py:735
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
-msgstr ""
+msgstr "您为仅支持全额退款的付款方式选择了部分退款。"
 
 #: pretix/control/views/orders.py:764
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
-msgstr ""
+msgstr "其中一个退款处理失败。您应该以不同的方式重新尝试退款。错误消息为：{}"
 
 #: pretix/control/views/orders.py:770
 msgid "A refund of {} has been processed."
-msgstr ""
+msgstr "已处理的退款{}。"
 
 #: pretix/control/views/orders.py:774
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
-msgstr ""
+msgstr "{}的退款已保存，但尚未完全执行。 您可以在下面将其标记为完成。"
 
 #: pretix/control/views/orders.py:797
 msgid "The refunds you selected do not match the selected total refund amount."
