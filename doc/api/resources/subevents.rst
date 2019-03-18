@@ -45,6 +45,8 @@ meta_data                             dict                       Values set for 
 
    The ``event`` field has been added, together with filters on the list of dates and an organizer-level list.
 
+.. versionchanged:: 2.6
+   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
 
 Endpoints
 ---------
@@ -103,10 +105,60 @@ Endpoints
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :param organizer: The ``slug`` field of a valid organizer
-   :param event: The ``slug`` field of the event to fetch
+   :param event: The ``slug`` field of the main event
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/subevents/
+
+   Creates a new subevent.
+
+   Permission required: "Can create events"
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/subevents/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "name": {"en": "First Sample Conference"},
+        "active": false,
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "item_price_overrides": [
+          {
+            "item": 2,
+            "price": "12.00"
+          }
+        ],
+        "variation_price_overrides": [],
+        "meta_data": {}
+      }
+
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the main event
+   :statuscode 201: no error
+   :statuscode 400: The sub-event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
 
@@ -149,12 +201,92 @@ Endpoints
         "meta_data": {}
       }
 
-   :param organizer: The ``slug`` field of the organizer to fetch
-   :param event: The ``slug`` field of the event to fetch
-   :param id: The ``slug`` field of the sub-event to fetch
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the main event
+   :param id: The ``id`` field of the sub-event to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view it.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
+
+   Updates a sub-event, identified by its ID.
+
+   Permission required: "Can change event settings"
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": {"en": "First Sample Conference"},
+        "event": "sampleconf",
+        "active": false,
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "item_price_overrides": [
+          {
+            "item": 2,
+            "price": "12.00"
+          }
+        ],
+        "variation_price_overrides": [],
+        "meta_data": {}
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the main event
+   :param id: The ``id`` field of the sub-event to update
+   :statuscode 201: no error
+   :statuscode 400: The sub-event could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/sub-event does not exist **or** you have no permission to update this resource.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
+
+   Delete a sub-event. Note that events with orders cannot be deleted to ensure data integrity.
+
+   Permission required: "Can change event settings"
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the main event
+   :param id: The ``id`` field of the sub-event to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/sub-event does not exist **or** you have no permission to delete this resource.
+
 
 .. http:get:: /api/v1/organizers/(organizer)/subevents/
 
