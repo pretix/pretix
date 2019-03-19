@@ -83,22 +83,9 @@ def filter_qs_by_attr(qs, request):
     return qs
 
 
-class OrganizerIndex(OrganizerViewMixin, ListView):
-    model = Event
-    context_object_name = 'events'
-    template_name = 'pretixpresale/organizers/index.html'
-    paginate_by = 30
+class EventListMixin:
 
-    def get(self, request, *args, **kwargs):
-        style = request.GET.get("style", request.organizer.settings.event_list_type)
-        if style == "calendar":
-            cv = CalendarView()
-            cv.request = request
-            return cv.get(request, *args, **kwargs)
-        else:
-            return super().get(request, *args, **kwargs)
-
-    def get_queryset(self):
+    def _get_event_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.filter(query)
         qs = qs.annotate(
@@ -130,6 +117,89 @@ class OrganizerIndex(OrganizerViewMixin, ListView):
             ).order_by('order_from')
         qs = Event.annotated(filter_qs_by_attr(qs, self.request))
         return qs
+
+    def _set_month_to_next_subevent(self):
+        tz = pytz.timezone(self.request.event.settings.timezone)
+        next_sev = self.request.event.subevents.filter(
+            active=True,
+            date_from__gte=now()
+        ).select_related('event').order_by('date_from').first()
+
+        if next_sev:
+            datetime_from = next_sev.date_from
+            self.year = datetime_from.astimezone(tz).year
+            self.month = datetime_from.astimezone(tz).month
+        else:
+            self.year = now().year
+            self.month = now().month
+
+    def _set_month_to_next_event(self):
+        next_ev = filter_qs_by_attr(Event.objects.filter(
+            organizer=self.request.organizer,
+            live=True,
+            is_public=True,
+            date_from__gte=now(),
+            has_subevents=False
+        ), self.request).order_by('date_from').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            active=True,
+            date_from__gte=now()
+        ), self.request).select_related('event').order_by('date_from').first()
+
+        datetime_from = None
+        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
+            datetime_from = next_sev.date_from
+            next_ev = next_sev.event
+        elif next_ev:
+            datetime_from = next_ev.date_from
+
+        if datetime_from:
+            tz = pytz.timezone(next_ev.settings.timezone)
+            self.year = datetime_from.astimezone(tz).year
+            self.month = datetime_from.astimezone(tz).month
+        else:
+            self.year = now().year
+            self.month = now().month
+
+    def _set_month_year(self):
+        if hasattr(self.request, 'event') and self.subevent:
+            tz = pytz.timezone(self.request.event.settings.timezone)
+            self.year = self.subevent.date_from.astimezone(tz).year
+            self.month = self.subevent.date_from.astimezone(tz).month
+        if 'year' in self.request.GET and 'month' in self.request.GET:
+            try:
+                self.year = int(self.request.GET.get('year'))
+                self.month = int(self.request.GET.get('month'))
+            except ValueError:
+                self.year = now().year
+                self.month = now().month
+        else:
+            if hasattr(self.request, 'event'):
+                self._set_month_to_next_subevent()
+            else:
+                self._set_month_to_next_event()
+
+
+class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
+    model = Event
+    context_object_name = 'events'
+    template_name = 'pretixpresale/organizers/index.html'
+    paginate_by = 30
+
+    def get(self, request, *args, **kwargs):
+        style = request.GET.get("style", request.organizer.settings.event_list_type)
+        if style == "calendar":
+            cv = CalendarView()
+            cv.request = request
+            return cv.get(request, *args, **kwargs)
+        else:
+            return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self._get_event_queryset()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -243,50 +313,11 @@ def weeks_for_template(ebd, year, month):
     ]
 
 
-class CalendarView(OrganizerViewMixin, TemplateView):
+class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar.html'
 
     def get(self, request, *args, **kwargs):
-        if 'year' in kwargs and 'month' in kwargs:
-            self.year = int(kwargs.get('year'))
-            self.month = int(kwargs.get('month'))
-        elif 'year' in request.GET and 'month' in request.GET:
-            try:
-                self.year = int(request.GET.get('year'))
-                self.month = int(request.GET.get('month'))
-            except ValueError:
-                self.year = now().year
-                self.month = now().month
-        else:
-            next_ev = filter_qs_by_attr(Event.objects.filter(
-                organizer=self.request.organizer,
-                live=True,
-                is_public=True,
-                date_from__gte=now(),
-                has_subevents=False
-            ), self.request).order_by('date_from').first()
-            next_sev = filter_qs_by_attr(SubEvent.objects.filter(
-                event__organizer=self.request.organizer,
-                event__is_public=True,
-                event__live=True,
-                active=True,
-                date_from__gte=now()
-            ), self.request).select_related('event').order_by('date_from').first()
-
-            datetime_from = None
-            if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
-                datetime_from = next_sev.date_from
-                next_ev = next_sev.event
-            elif next_ev:
-                datetime_from = next_ev.date_from
-
-            if datetime_from:
-                tz = pytz.timezone(next_ev.settings.timezone)
-                self.year = datetime_from.astimezone(tz).year
-                self.month = datetime_from.astimezone(tz).month
-            else:
-                self.year = now().year
-                self.month = now().month
+        self._set_month_year()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

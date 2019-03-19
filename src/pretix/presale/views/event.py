@@ -22,7 +22,7 @@ from pretix.base.models.event import SubEvent
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views.organizer import (
-    add_subevents_for_days, weeks_for_template,
+    EventListMixin, add_subevents_for_days, weeks_for_template,
 )
 
 from . import (
@@ -157,7 +157,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
-class EventIndex(EventViewMixin, CartMixin, TemplateView):
+class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get(self, request, *args, **kwargs):
@@ -203,32 +203,6 @@ class EventIndex(EventViewMixin, CartMixin, TemplateView):
                 return redirect(self.get_index_url())
             else:
                 return super().get(request, *args, **kwargs)
-
-    def _set_month_year(self):
-        tz = pytz.timezone(self.request.event.settings.timezone)
-        if self.subevent:
-            self.year = self.subevent.date_from.astimezone(tz).year
-            self.month = self.subevent.date_from.astimezone(tz).month
-        elif 'year' in self.request.GET and 'month' in self.request.GET:
-            try:
-                self.year = int(self.request.GET.get('year'))
-                self.month = int(self.request.GET.get('month'))
-            except ValueError:
-                self.year = now().year
-                self.month = now().month
-        else:
-            next_sev = self.request.event.subevents.filter(
-                active=True,
-                date_from__gte=now()
-            ).select_related('event').order_by('date_from').first()
-
-            if next_sev:
-                datetime_from = next_sev.date_from
-                self.year = datetime_from.astimezone(tz).year
-                self.month = datetime_from.astimezone(tz).month
-            else:
-                self.year = now().year
-                self.month = now().month
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
