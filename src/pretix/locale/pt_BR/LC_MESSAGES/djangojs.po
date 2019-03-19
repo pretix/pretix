@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
-"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
+"Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -87,7 +87,7 @@ msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Atualmente, não podemos acessar o servidor, mas continuamos tentando. Último "
+"Atualmente não podemos acessar o servidor, mas continuamos tentando. Último "
 "código de erro: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:115
@@ -222,7 +222,7 @@ msgstr "Use um nome diferente internamente"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
-msgstr ""
+msgstr "Clique para fechar"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -234,11 +234,11 @@ msgstr "Contagem"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Ja"
-msgstr ""
+msgstr "Sim"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "Nein"
-msgstr ""
+msgstr "Não"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
