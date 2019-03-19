@@ -1,7 +1,7 @@
 import string
 import uuid
 from collections import OrderedDict
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from operator import attrgetter
 
 import pytz
@@ -668,8 +668,8 @@ class Event(EventMixin, LoggedModel):
         }[ordering]
         subevs = queryset.filter(
             Q(active=True) & (
-                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
-                | Q(date_to__gte=now())
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
+                | Q(date_to__gte=now() - timedelta(hours=24))
             )
         )  # order_by doesn't make sense with I18nField
         for f in reversed(orderfields):

@@ -1192,7 +1192,7 @@ class TaxRuleForm(I18nModelForm):
 class WidgetCodeForm(forms.Form):
     subevent = forms.ModelChoiceField(
         label=pgettext_lazy('subevent', "Date"),
-        required=True,
+        required=False,
         queryset=SubEvent.objects.none()
     )
     language = forms.ChoiceField(

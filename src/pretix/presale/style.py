@@ -105,7 +105,7 @@ def regenerate_organizer_css(organizer_id: int):
         organizer.settings.set('presale_css_checksum', checksum)
 
     # widget.scss
-    css, checksum = compile_scss(organizer)
+    css, checksum = compile_scss(organizer, file='widget.scss', fonts=False)
     fname = 'pub/{}/widget.{}.css'.format(organizer.slug, checksum[:16])
     if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
