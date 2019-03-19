@@ -123,16 +123,38 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/subevents/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "name": {"en": "First Sample Conference"},
+        "active": false,
+        "date_from": "2017-12-27T10:00:00Z",
+        "date_to": null,
+        "date_admission": null,
+        "presale_start": null,
+        "presale_end": null,
+        "location": null,
+        "item_price_overrides": [
+          {
+            "item": 2,
+            "price": "12.00"
+          }
+        ],
+        "variation_price_overrides": [],
+        "meta_data": {}
+      }
+
 
    **Example response**:
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
       {
+        "id": 1,
         "name": {"en": "First Sample Conference"},
         "active": false,
         "date_from": "2017-12-27T10:00:00Z",
@@ -210,7 +232,9 @@ Endpoints
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/subevents/(id)/
 
-   Updates a sub-event, identified by its ID.
+   Updates a sub-event, identified by its ID. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to
+   provide all fields of the resource, other fields will be reset to default. With ``PATCH``, you only need to provide
+   the fields that you want to change.
 
    Permission required: "Can change event settings"
 
@@ -218,9 +242,20 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "name": {"en": "New Subevent Name"},
+        "item_price_overrides": [
+          {
+            "item": 2,
+            "price": "23.42"
+          }
+        ],
+      }
 
    **Example response**:
 
@@ -254,7 +289,7 @@ Endpoints
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the main event
    :param id: The ``id`` field of the sub-event to update
-   :statuscode 201: no error
+   :statuscode 200: no error
    :statuscode 400: The sub-event could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/sub-event does not exist **or** you have no permission to update this resource.

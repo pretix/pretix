@@ -262,8 +262,8 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         if not instance.allow_delete():
-            raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'active\''
-                                   ' to false to hide the event and take the shop offline instead.')
+            raise PermissionDenied('The sub-event can not be deleted as it has already been used in orders. Please set'
+                                   ' \'active\' to false instead to hide it from users.')
         try:
             with transaction.atomic():
                 instance.log_action(
@@ -274,7 +274,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
                 )
                 super().perform_destroy(instance)
         except ProtectedError:
-            raise PermissionDenied('The subevent could not be deleted as some constraints (e.g. data created by '
+            raise PermissionDenied('The sub-event could not be deleted as some constraints (e.g. data created by '
                                    'plug-ins) do not allow it.')
 
 

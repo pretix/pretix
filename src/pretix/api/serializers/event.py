@@ -216,6 +216,12 @@ class SubEventSerializer(I18nAwareModelSerializer):
         SubEvent.clean_variations(event, [item['variation'] for item in full_data.get('subeventitemvariation_set')])
         return data
 
+    def validate_item_price_overrides(self, data):
+        return list(filter(lambda i: 'item' in i, data))
+
+    def validate_variation_price_overrides(self, data):
+        return list(filter(lambda i: 'variation' in i, data))
+
     @cached_property
     def meta_properties(self):
         return {
@@ -260,26 +266,18 @@ class SubEventSerializer(I18nAwareModelSerializer):
         existing_item_overrides = {item.item: item.id for item in SubEventItem.objects.filter(subevent=subevent)}
 
         for item_price_override_data in item_price_overrides_data:
-            if item_price_override_data['item'] in existing_item_overrides:
-                id = existing_item_overrides.pop(item_price_override_data['item'])
-                SubEventItem(id=id, subevent=subevent, **item_price_override_data).save()
-            else:
-                SubEventItem(subevent=subevent, **item_price_override_data).save()
+            id = existing_item_overrides.pop(item_price_override_data['item'], None)
+            SubEventItem(id=id, subevent=subevent, **item_price_override_data).save()
 
-        for id in existing_item_overrides.values():
-            SubEventItem.objects.get(id=id).delete()
+        SubEventItem.objects.filter(id__in=existing_item_overrides.values()).delete()
 
         existing_variation_overrides = {item.variation: item.id for item in SubEventItemVariation.objects.filter(subevent=subevent)}
 
         for variation_price_override_data in variation_price_overrides_data:
-            if variation_price_override_data['variation'] in existing_variation_overrides:
-                id = existing_variation_overrides.pop(variation_price_override_data['variation'])
-                SubEventItemVariation(id=id, subevent=subevent, **variation_price_override_data).save()
-            else:
-                SubEventItemVariation(subevent=subevent, **variation_price_override_data).save()
+            id = existing_variation_overrides.pop(variation_price_override_data['variation'], None)
+            SubEventItemVariation(id=id, subevent=subevent, **variation_price_override_data).save()
 
-        for id in existing_variation_overrides.values():
-            SubEventItemVariation.objects.get(id=id).delete()
+        SubEventItemVariation.objects.filter(id__in=existing_variation_overrides.values()).delete()
 
         # Meta data
         if meta_data is not None:
