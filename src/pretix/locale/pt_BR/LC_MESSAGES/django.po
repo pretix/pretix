@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
-"Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
+"Last-Translator: Lorhan Sohaky <lorhansohaky@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -2606,7 +2606,7 @@ msgstr "Convidar para o time '{team}' para '{email}'"
 
 #: pretix/base/models/tax.py:66
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Deve ser curto, por ex. \"VAT\""
 
 #: pretix/base/models/tax.py:75
 msgid "The configured product prices include the tax amount"
