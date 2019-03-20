@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
 "PO-Revision-Date: 2019-03-20 11:00+0000\n"
-"Last-Translator: 徐志能 <770707469@qq.com>\n"
+"Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -14197,7 +14197,7 @@ msgstr "需要先在您的Stripe帐户中启用。"
 
 #: pretix/plugins/stripe/payment.py:177 pretix/plugins/stripe/payment.py:757
 msgid "iDEAL"
-msgstr "理想"
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:184 pretix/plugins/stripe/payment.py:806
 msgid "Alipay"
@@ -14901,7 +14901,7 @@ msgstr "此产品没有可用的附加组件。"
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:64
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:111
 msgid "Go back"
-msgstr "回去"
+msgstr "返回"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
@@ -15104,7 +15104,7 @@ msgstr "待付款"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
 msgid "Go"
-msgstr "走"
+msgstr "前进"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
@@ -15113,7 +15113,7 @@ msgstr "走"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:66
 #: pretix/presale/templates/pretixpresale/organizers/index.html:75
 msgid "Tickets on sale"
-msgstr "售票"
+msgstr "可售票"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:80
