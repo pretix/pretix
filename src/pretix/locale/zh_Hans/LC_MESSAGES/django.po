@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-19 18:00+0000\n"
+"PO-Revision-Date: 2019-03-20 11:00+0000\n"
 "Last-Translator: 徐志能 <770707469@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -5996,7 +5996,7 @@ msgstr "在签入期间不支持问题之间的依赖关系。"
 
 #: pretix/control/forms/item.py:186
 msgid "The product should exist in multiple variations"
-msgstr "产品应存在多种变化。"
+msgstr "产品应存在多种变化"
 
 #: pretix/control/forms/item.py:187
 msgid ""
@@ -15137,7 +15137,7 @@ msgstr "清空购物车"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "进行结账"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
@@ -15813,4 +15813,4 @@ msgstr "读取权限"
 
 #: pretix/settings.py:671
 msgid "Write access"
-msgstr "书写权限"
+msgstr "录入权限"
