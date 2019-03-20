@@ -688,7 +688,8 @@ def send_expiry_warnings(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0)
 
     for o in Order.objects.filter(
-        expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING, datetime__lte=now() - timedelta(hours=2)
+        expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
+        datetime__lte=now() - timedelta(hours=2), require_approval=False
     ).only('pk'):
         with transaction.atomic():
             o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
