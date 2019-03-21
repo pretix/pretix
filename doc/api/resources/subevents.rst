@@ -267,7 +267,7 @@ Endpoints
 
       {
         "id": 1,
-        "name": {"en": "First Sample Conference"},
+        "name": {"en": "New Subevent Name"},
         "event": "sampleconf",
         "active": false,
         "date_from": "2017-12-27T10:00:00Z",
@@ -279,7 +279,7 @@ Endpoints
         "item_price_overrides": [
           {
             "item": 2,
-            "price": "12.00"
+            "price": "23.42"
           }
         ],
         "variation_price_overrides": [],
