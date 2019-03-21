@@ -376,6 +376,31 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         {
             "item_price_overrides": [
                 {
+                    "item": item.pk,
+                    "price": "12.34"
+                }
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert event.subevents.get(id=subevent.id).item_price_overrides[item.pk] == Decimal('12.34')
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "item_price_overrides": [],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert item.pk not in event.subevents.get(id=subevent.id).item_price_overrides
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "item_price_overrides": [
+                {
                     "item": 123,
                     "price": "99.99"
                 }
@@ -441,6 +466,31 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
                     "price": None
                 }
             ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert variations[0].pk not in event.subevents.get(id=subevent.id).var_price_overrides
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "variation_price_overrides": [
+                {
+                    "variation": variations[0].pk,
+                    "price": "12.34"
+                }
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert event.subevents.get(id=subevent.id).var_price_overrides[variations[0].pk] == Decimal('12.34')
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "variation_price_overrides": [],
         },
         format='json'
     )
