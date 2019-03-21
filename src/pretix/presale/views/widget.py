@@ -9,6 +9,7 @@ from urllib.parse import urljoin
 import pytz
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.cache import cache
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Q
@@ -17,7 +18,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import ugettext
+from django.utils.translation import get_language, ugettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -306,6 +307,21 @@ class WidgetAPIProductList(EventListMixin, View):
         list_type = self.request.GET.get("style", o.settings.event_list_type)
         data['list_type'] = list_type
 
+        cache_key = ':'.join([
+            'widget.py',
+            'eventlist',
+            request.organizer.slug,
+            request.event.slug if hasattr(request, 'event') else '-',
+            list_type,
+            request.GET.get("year") or "-",
+            request.GET.get("month") or "-",
+            request.GET.get("old") or "-",
+            get_language(),
+        ])
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return self.response(cached_data)
+
         if list_type == "calendar":
             self._set_month_year()
             _, ndays = calendar.monthrange(self.year, self.month)
@@ -382,9 +398,26 @@ class WidgetAPIProductList(EventListMixin, View):
                         'event_url': build_absolute_uri(event, 'presale:event.index'),
                     })
 
+        cache.set(cache_key, data, 30)
+        # These pages are cached for a really short duration – this should make them pretty accurate, while still
+        # providing some protection against burst traffic.
         return self.response(data)
 
     def _get_event_view(self, request, **kwargs):
+        cache_key = ':'.join([
+            'widget.py',
+            'event',
+            request.organizer.slug,
+            request.event.slug,
+            str(self.subevent.pk) if self.subevent else "",
+            request.GET.get("voucher") or "-",
+            get_language(),
+        ])
+        if "cart_id" not in request.GET:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return self.response(cached_data)
+
         data = {
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,
@@ -456,4 +489,8 @@ class WidgetAPIProductList(EventListMixin, View):
             self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
         data['vouchers_exist'] = vouchers_exist
 
+        if "cart_id" not in request.GET:
+            cache.set(cache_key, data, 10)
+            # These pages are cached for a really short duration – this should make them pretty accurate with
+            # regards to availability display, while still providing some protection against burst traffic.
         return self.response(data)
