@@ -315,7 +315,7 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "id": var.pk,
         "value": {"en": "Children"},
         "default_price": None,
-        "price": Decimal("23.00"),
+        "price": "23.00",
         "active": True,
         "description": None,
         "position": 0,
@@ -437,7 +437,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
                     "description": None,
                     "position": 0,
                     "default_price": None,
-                    "price": 23.0
+                    "price": "23.00"
                 }
             ]
         },
@@ -858,7 +858,7 @@ def test_item_update_with_variation(token_client, organizer, event, item):
                     "description": None,
                     "position": 0,
                     "default_price": None,
-                    "price": 23.0
+                    "price": "23.00"
                 }
             ]
         },
@@ -941,7 +941,7 @@ TEST_VARIATIONS_RES = {
     "description": None,
     "position": 0,
     "default_price": None,
-    "price": 23.0
+    "price": "23.00"
 }
 
 TEST_VARIATIONS_UPDATE = {
@@ -951,8 +951,7 @@ TEST_VARIATIONS_UPDATE = {
     "active": True,
     "description": None,
     "position": 1,
-    "default_price": None,
-    "price": 23.0
+    "default_price": "20.0",
 }
 
 
@@ -1024,13 +1023,16 @@ def test_variations_create_not_allowed(token_client, organizer, event, item):
 def test_variations_update(token_client, organizer, event, item, item3, variation):
     res = dict(TEST_VARIATIONS_UPDATE)
     res["id"] = variation.pk
+    res["price"] = "20.00"
+    res["default_price"] = "20.00"
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk),
         {
             "value": {
                 "en": "ChildC2"
             },
-            "position": 1
+            "position": 1,
+            "default_price": "20.00"
         },
         format='json'
     )
