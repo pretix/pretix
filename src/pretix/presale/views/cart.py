@@ -369,6 +369,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         if "widget_data" in request.POST:
             try:
                 widget_data = json.loads(request.POST.get("widget_data", "{}"))
+                if not isinstance(widget_data, dict):
+                    widget_data = {}
             except ValueError:
                 widget_data = {}
             else:
