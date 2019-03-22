@@ -220,25 +220,48 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 
 class OrderSerializer(I18nAwareModelSerializer):
-    invoice_address = InvoiceAddressSerializer()
-    positions = OrderPositionSerializer(many=True)
-    fees = OrderFeeSerializer(many=True)
-    downloads = OrderDownloadsField(source='*')
-    payments = OrderPaymentSerializer(many=True)
-    refunds = OrderRefundSerializer(many=True)
-    payment_date = OrderPaymentDateField(source='*')
-    payment_provider = OrderPaymentTypeField(source='*')
+    invoice_address = InvoiceAddressSerializer(read_only=True)
+    positions = OrderPositionSerializer(many=True, read_only=True)
+    fees = OrderFeeSerializer(many=True, read_only=True)
+    downloads = OrderDownloadsField(source='*', read_only=True)
+    payments = OrderPaymentSerializer(many=True, read_only=True)
+    refunds = OrderRefundSerializer(many=True, read_only=True)
+    payment_date = OrderPaymentDateField(source='*', read_only=True)
+    payment_provider = OrderPaymentTypeField(source='*', read_only=True)
 
     class Meta:
         model = Order
-        fields = ('code', 'status', 'testmode', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
-                  'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
-                  'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel')
+        fields = (
+            'code', 'status', 'testmode', 'secret', 'email', 'locale', 'datetime', 'expires', 'payment_date',
+            'payment_provider', 'fees', 'total', 'comment', 'invoice_address', 'positions', 'downloads',
+            'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
+        )
+        read_only_fields = (
+            'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
+            'payment_provider', 'fees', 'total', 'invoice_address', 'positions', 'downloads',
+            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
             self.fields['positions'].child.fields.pop('pdf_data')
+
+    def validate_locale(self, l):
+        if l not in set(k for k in self.instance.event.settings.locales):
+            raise ValidationError('"{}" is not a supported locale for this event.'.format(l))
+        return l
+
+    def update(self, instance, validated_data):
+        # Even though all fields that shouldn't be edited are marked as read_only in the serializer
+        # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
+        update_fields = ['comment', 'checkin_attention', 'email', 'locale']
+
+        for attr, value in validated_data.items():
+            if attr in update_fields:
+                setattr(instance, attr, value)
+        instance.save(update_fields=update_fields)
+        return instance
 
 
 class AnswerCreateSerializer(I18nAwareModelSerializer):

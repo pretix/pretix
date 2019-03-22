@@ -16,7 +16,7 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
@@ -54,7 +54,7 @@ class OrderFilter(FilterSet):
         fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
 
 
-class OrderViewSet(DestroyModelMixin, CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -374,6 +374,61 @@ class OrderViewSet(DestroyModelMixin, CreateModelMixin, viewsets.ReadOnlyModelVi
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.get('partial', False)
+        if not partial:
+            return Response(
+                {"detail": "Method \"PUT\" not allowed."},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED,
+            )
+        return super().update(request, *args, **kwargs)
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        if 'comment' in self.request.data and serializer.instance.comment != self.request.data.get('comment'):
+            serializer.instance.log_action(
+                'pretix.event.order.comment',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'new_comment': self.request.data.get('comment')
+                }
+            )
+
+        if 'checkin_attention' in self.request.data and serializer.instance.checkin_attention != self.request.data.get('checkin_attention'):
+            serializer.instance.log_action(
+                'pretix.event.order.checkin_attention',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'new_value': self.request.data.get('checkin_attention')
+                }
+            )
+
+        if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
+            serializer.instance.log_action(
+                'pretix.event.order.contact.changed',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'old_email': serializer.instance.email,
+                    'new_email': self.request.data.get('email'),
+                }
+            )
+
+        if 'locale' in self.request.data and serializer.instance.locale != self.request.data.get('locale'):
+            serializer.instance.log_action(
+                'pretix.event.order.locale.changed',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'old_locale': serializer.instance.locale,
+                    'new_locale': self.request.data.get('locale'),
+                }
+            )
+
+        serializer.save()
 
     def perform_create(self, serializer):
         serializer.save()

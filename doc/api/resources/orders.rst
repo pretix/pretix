@@ -563,6 +563,57 @@ Order ticket download
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                           seconds.
 
+Updating order fields
+---------------------
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
+
+   Updates specific fields on an order. Currently, only the following fields are supported:
+
+   * ``email``
+
+   * ``checkin_attention``
+
+   * ``locale``
+
+   * ``comment``
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content: application/json
+
+      {
+        "email": "other@example.org",
+        "locale": "de",
+        "comment": "Foo",
+        "checkin_attention": True
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``code`` field of the order to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
+         order.
+
 Deleting orders
 ---------------
 
@@ -774,10 +825,10 @@ Creating orders
 
       (Full order resource, see above.)
 
-   :param organizer: The ``slug`` field of the organizer of the event to create an item for
-   :param event: The ``slug`` field of the event to create an item for
+   :param organizer: The ``slug`` field of the organizer of the event to create an order for
+   :param event: The ``slug`` field of the event to create an order for
    :statuscode 201: no error
-   :statuscode 400: The item could not be created due to invalid submitted data or lack of quota.
+   :statuscode 400: The order could not be created due to invalid submitted data or lack of quota.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
          order.

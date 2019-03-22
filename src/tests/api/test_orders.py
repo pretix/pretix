@@ -2548,3 +2548,81 @@ def test_order_delete_test_mode(token_client, organizer, event, order):
     )
     assert resp.status_code == 204
     assert not Order.objects.filter(code=order.code).exists()
+
+
+@pytest.mark.django_db
+def test_order_update_ignore_fields(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'status': 'c'
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.status == 'n'
+
+
+@pytest.mark.django_db
+def test_order_update_only_partial(token_client, organizer, event, order):
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'status': 'c'
+        }
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_order_update_allowed_fields(token_client, organizer, event, order):
+    event.settings.locales = ['de', 'en']
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'comment': 'Here is a comment',
+            'checkin_attention': True,
+            'email': 'foo@bar.com',
+            'locale': 'de'
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.comment == 'Here is a comment'
+    assert order.checkin_attention
+    assert order.email == 'foo@bar.com'
+    assert order.locale == 'de'
+    assert order.all_logentries().get(action_type='pretix.event.order.comment')
+    assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
+    assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
+    assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
+
+
+@pytest.mark.django_db
+def test_order_update_email_to_none(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'email': None,
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.email is None
+
+
+@pytest.mark.django_db
+def test_order_update_locale_to_invalid(token_client, organizer, event, order):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'locale': 'de',
+        }
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'locale': ['"de" is not a supported locale for this event.']}
