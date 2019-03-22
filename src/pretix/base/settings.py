@@ -73,6 +73,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool,
     },
+    'invoice_address_explanation_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'invoice_include_free': {
         'default': 'True',
         'type': bool,

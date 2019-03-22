@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
+from freezegun import freeze_time
 
 from pretix.base.models import Order, OrderPosition
 from pretix.presale.style import regenerate_css, regenerate_organizer_css
@@ -123,6 +124,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "name": "30C3",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -202,6 +204,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "name": "30C3",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -245,6 +248,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "name": "30C3",
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
@@ -319,3 +323,221 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "rate": "19.00",
             "includes_mixed_tax_rate": True
         }
+
+    def test_subevent_list(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+
+            response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+            data = json.loads(response.content.decode())
+            settings.SITE_URL = 'http://example.com'
+            assert data == {
+                'list_type': 'list',
+                'events': [
+                    {'name': 'Present', 'date_range': 'Jan. 1, 2019 10:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk},
+                    {'name': 'Future', 'date_range': 'Jan. 4, 2019 10:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                     'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}
+                ]
+            }
+
+    def test_subevent_calendar(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+
+            response = self.client.get('/%s/%s/widget/product_list?style=calendar' % (self.orga.slug, self.event.slug))
+            settings.SITE_URL = 'http://example.com'
+            data = json.loads(response.content.decode())
+            assert data == {
+                'list_type': 'calendar',
+                'date': '2019-01-01',
+                'weeks': [
+                    [
+                        None,
+                        {'day': 1, 'date': '2019-01-01', 'events': [
+                            {'name': 'Present', 'time': '10:00', 'continued': False, 'date_range': 'Jan. 1, 2019 10:00',
+                             'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                             'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
+                        {'day': 2, 'date': '2019-01-02', 'events': []},
+                        {'day': 3, 'date': '2019-01-03', 'events': []},
+                        {'day': 4, 'date': '2019-01-04', 'events': [
+                            {'name': 'Future', 'time': '10:00', 'continued': False, 'date_range': 'Jan. 4, 2019 10:00',
+                             'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                             'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
+                        {'day': 5, 'date': '2019-01-05', 'events': []},
+                        {'day': 6, 'date': '2019-01-06', 'events': []}
+                    ],
+                    [
+                        {'day': 7, 'date': '2019-01-07', 'events': []},
+                        {'day': 8, 'date': '2019-01-08', 'events': []},
+                        {'day': 9, 'date': '2019-01-09', 'events': []},
+                        {'day': 10, 'date': '2019-01-10', 'events': []},
+                        {'day': 11, 'date': '2019-01-11', 'events': []},
+                        {'day': 12, 'date': '2019-01-12', 'events': []},
+                        {'day': 13, 'date': '2019-01-13', 'events': []}
+                    ],
+                    [
+                        {'day': 14, 'date': '2019-01-14', 'events': []},
+                        {'day': 15, 'date': '2019-01-15', 'events': []},
+                        {'day': 16, 'date': '2019-01-16', 'events': []},
+                        {'day': 17, 'date': '2019-01-17', 'events': []},
+                        {'day': 18, 'date': '2019-01-18', 'events': []},
+                        {'day': 19, 'date': '2019-01-19', 'events': []},
+                        {'day': 20, 'date': '2019-01-20', 'events': []}
+                    ],
+                    [
+                        {'day': 21, 'date': '2019-01-21', 'events': []},
+                        {'day': 22, 'date': '2019-01-22', 'events': []},
+                        {'day': 23, 'date': '2019-01-23', 'events': []},
+                        {'day': 24, 'date': '2019-01-24', 'events': []},
+                        {'day': 25, 'date': '2019-01-25', 'events': []},
+                        {'day': 26, 'date': '2019-01-26', 'events': []},
+                        {'day': 27, 'date': '2019-01-27', 'events': []}
+                    ],
+                    [
+                        {'day': 28, 'date': '2019-01-28', 'events': []},
+                        {'day': 29, 'date': '2019-01-29', 'events': []},
+                        {'day': 30, 'date': '2019-01-30', 'events': []},
+                        {'day': 31, 'date': '2019-01-31', 'events': []},
+                        None, None, None
+                    ]
+                ]
+            }
+
+    def test_event_list(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
+            self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
+            self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+            self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
+            self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+            self.event.subevents.create(name="Present", active=True, date_from=now())
+            self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+
+            settings.SITE_URL = 'http://example.com'
+            response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
+            data = json.loads(response.content.decode())
+            assert data == {
+                'events': [
+                    {'availability': {'color': 'none', 'text': 'Event series'},
+                     'date_range': 'Dec. 29, 2018 – Jan. 4, 2019',
+                     'event_url': 'http://example.com/ccc/30c3/',
+                     'name': '30C3'},
+                    {'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                     'date_range': 'Jan. 1, 2019 10:00',
+                     'event_url': 'http://example.com/ccc/present/',
+                     'name': 'Present'},
+                    {'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                     'date_range': 'Jan. 4, 2019 10:00',
+                     'event_url': 'http://example.com/ccc/future/',
+                     'name': 'Future'}
+                ],
+                'list_type': 'list'
+            }
+
+    def test_event_calendar(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
+            self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
+            self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+            self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
+            self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+
+            response = self.client.get('/%s/widget/product_list?style=calendar' % (self.orga.slug,))
+            settings.SITE_URL = 'http://example.com'
+            data = json.loads(response.content.decode())
+            assert data == {
+                'date': '2019-01-01',
+                'list_type': 'calendar',
+                'weeks': [
+                    [None,
+                     {'date': '2019-01-01',
+                      'day': 1,
+                      'events': [{'availability': {'color': 'green',
+                                                   'text': 'Tickets on sale'},
+                                  'continued': False,
+                                  'date_range': 'Jan. 1, 2019 10:00',
+                                  'event_url': 'http://example.com/ccc/present/',
+                                  'name': 'Present',
+                                  'subevent': None,
+                                  'time': '10:00'},
+                                 {'availability': {'color': 'green',
+                                                   'text': 'Tickets on sale'},
+                                  'continued': False,
+                                  'date_range': 'Jan. 1, 2019 10:00',
+                                  'event_url': 'http://example.com/ccc/30c3/',
+                                  'name': 'Present',
+                                  'subevent': se1.pk,
+                                  'time': '10:00'}]},
+                     {'date': '2019-01-02', 'day': 2, 'events': []},
+                     {'date': '2019-01-03', 'day': 3, 'events': []},
+                     {'date': '2019-01-04',
+                      'day': 4,
+                      'events': [{'availability': {'color': 'green',
+                                                   'text': 'Tickets on sale'},
+                                  'continued': False,
+                                  'date_range': 'Jan. 4, 2019 10:00',
+                                  'event_url': 'http://example.com/ccc/future/',
+                                  'name': 'Future',
+                                  'subevent': None,
+                                  'time': '10:00'},
+                                 {'availability': {'color': 'green',
+                                                   'text': 'Tickets on sale'},
+                                  'continued': False,
+                                  'date_range': 'Jan. 4, 2019 10:00',
+                                  'event_url': 'http://example.com/ccc/30c3/',
+                                  'name': 'Future',
+                                  'subevent': se2.pk,
+                                  'time': '10:00'}]},
+                     {'date': '2019-01-05', 'day': 5, 'events': []},
+                     {'date': '2019-01-06', 'day': 6, 'events': []}],
+                    [{'date': '2019-01-07', 'day': 7, 'events': []},
+                     {'date': '2019-01-08', 'day': 8, 'events': []},
+                     {'date': '2019-01-09', 'day': 9, 'events': []},
+                     {'date': '2019-01-10', 'day': 10, 'events': []},
+                     {'date': '2019-01-11', 'day': 11, 'events': []},
+                     {'date': '2019-01-12', 'day': 12, 'events': []},
+                     {'date': '2019-01-13', 'day': 13, 'events': []}],
+                    [{'date': '2019-01-14', 'day': 14, 'events': []},
+                     {'date': '2019-01-15', 'day': 15, 'events': []},
+                     {'date': '2019-01-16', 'day': 16, 'events': []},
+                     {'date': '2019-01-17', 'day': 17, 'events': []},
+                     {'date': '2019-01-18', 'day': 18, 'events': []},
+                     {'date': '2019-01-19', 'day': 19, 'events': []},
+                     {'date': '2019-01-20', 'day': 20, 'events': []}],
+                    [{'date': '2019-01-21', 'day': 21, 'events': []},
+                     {'date': '2019-01-22', 'day': 22, 'events': []},
+                     {'date': '2019-01-23', 'day': 23, 'events': []},
+                     {'date': '2019-01-24', 'day': 24, 'events': []},
+                     {'date': '2019-01-25', 'day': 25, 'events': []},
+                     {'date': '2019-01-26', 'day': 26, 'events': []},
+                     {'date': '2019-01-27', 'day': 27, 'events': []}],
+                    [{'date': '2019-01-28', 'day': 28, 'events': []},
+                     {'date': '2019-01-29', 'day': 29, 'events': []},
+                     {'date': '2019-01-30', 'day': 30, 'events': []},
+                     {'date': '2019-01-31', 'day': 31, 'events': []},
+                     None,
+                     None,
+                     None]
+                ]
+            }

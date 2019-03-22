@@ -114,6 +114,35 @@ If you want to disable voucher input in the widget, you can pass the ``disable-v
 
    <pretix-widget event="https://pretix.eu/demo/democon/" disable-vouchers></pretix-widget>
 
+Multi-event selection
+---------------------
+
+If you want to embed multiple events in a single widget, you can do so. If it's multiple dates of an event series, just leave off the ``series`` attribute::
+
+   <pretix-widget event="https://pretix.eu/demo/series/"></pretix-widget>
+
+If you want to include all your public events, you can just reference your organizer::
+
+   <pretix-widget event="https://pretix.eu/demo/"></pretix-widget>
+
+There is an optional ``style`` parameter that let's you choose between a calendar view and a list view. If you do not set it, the choice will be taken from your organizer settings::
+
+   <pretix-widget event="https://pretix.eu/demo/series/" style="list"></pretix-widget>
+   <pretix-widget event="https://pretix.eu/demo/series/" style="calendar"></pretix-widget>
+
+You can see an example here:
+
+.. raw:: html
+
+    <pretix-widget event="https://pretix.eu/demo/series/" style="calendar"></pretix-widget>
+    <noscript>
+       <div class="pretix-widget">
+            <div class="pretix-widget-info-message">
+                JavaScript is disabled in your browser. To access our ticket shop without javascript, please <a target="_blank" href="https://pretix.eu/demo/series/">click here</a>.
+            </div>
+        </div>
+    </noscript>
+
 pretix Button
 -------------
 

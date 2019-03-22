@@ -116,9 +116,9 @@
     padding: 10px;
     text-align: center;
     margin: 10px 0;
-    background-color: $alert-danger-bg;
-    border-color: $alert-danger-border;
-    color: $alert-danger-text;
+    background-color: white;
+    border: 2px solid $brand-danger;
+    color: $brand-danger;
     border-radius: $alert-border-radius;
   }
 
@@ -345,6 +345,136 @@
     max-height: 1000px;
     overflow: hidden;
   }
+  .pretix-widget-event-header {
+    padding-top: 10px;
+    text-align: center;
+  }
+  .pretix-widget-event-list-back {
+    padding-top: 10px;
+    text-align: center;
+    display: block;
+    a {
+      display: block;
+    }
+  }
+  .pretix-widget-back {
+    padding-bottom: 10px;
+    text-align: center;
+    display: block;
+    a {
+      display: block;
+    }
+  }
+
+  .pretix-widget-event-list {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  .pretix-widget-event-list-entry {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 0;
+    flex-wrap: wrap;
+    color: $text-color;
+
+    &:hover, &:active, &:focus {
+      background: $gray-lighter;
+      text-decoration: none;
+    }
+
+    .pretix-widget-event-list-entry-name {
+      width: 50%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .pretix-widget-event-list-entry-date {
+      width: 25%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .pretix-widget-event-list-entry-availability {
+      width: 25%;
+      text-align: right;
+      padding: 7px 5px 3px;
+      box-sizing: border-box;
+      span {
+        display: inline;
+        padding: 2px 6px 3px;
+        font-size: 75%;
+        font-weight: bold;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
+    background-color: $brand-warning;
+  }
+  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span {
+    background-color: $brand-primary;
+  }
+  .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
+    background-color: $brand-success;
+  }
+  .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
+  .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
+    background-color: $brand-danger;
+  }
+
+  .pretix-widget-event-calendar {
+    padding-top: 10px;
+
+    .pretix-widget-event-calendar-head {
+      display: flex;
+      flex-direction: row;
+
+      strong {
+        width: 50%;
+        text-align: center;
+        display: block;
+      }
+      .pretix-widget-event-calendar-next-month, .pretix-widget-event-calendar-previous-month {
+        display: block;
+        width: 25%;
+      }
+      .pretix-widget-event-calendar-next-month {
+        text-align: right;
+      }
+    }
+    .pretix-widget-event-calendar-event {
+      display: block;
+      border-radius: 4px;
+      padding: 5px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 5px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .pretix-widget-event-calendar-table {
+      width: 100%;
+      th, td {
+        width: 14.285714285714286%;
+        vertical-align: top;
+        padding: 10px 5px;
+      }
+    }
+    .pretix-widget-event-calendar-day {
+      font-weight: bold;
+    }
+  }
 }
 
 @keyframes pretix-widget-bounce-in {
@@ -504,28 +634,71 @@
   fill: $brand-primary;
 }
 
-@media (max-width: $screen-sm-max) {
-  .pretix-widget {
-    .pretix-widget-item-info-col {
+.pretix-widget.pretix-widget-mobile {
+  .pretix-widget-item-info-col {
+    width: 100%;
+    float: none;
+    margin-bottom: 5px;
+  }
+  .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+    width: 50%;
+  }
+  .pretix-widget-action {
+    width: 100%;
+    margin-left: 0;
+  }
+  .pretix-widget-voucher-input-wrap {
+    width: 100%;
+    float: none;
+  }
+  .pretix-widget-voucher-button-wrap {
+    width: 100%;
+    float: none;
+    margin-top: 10px;
+  }
+
+  .pretix-widget-event-list-entry {
+    .pretix-widget-event-list-entry-name {
       width: 100%;
-      float: none;
-      margin-bottom: 5px;
     }
-    .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+    .pretix-widget-event-list-entry-date {
       width: 50%;
     }
-    .pretix-widget-action {
-      width: 100%;
-      margin-left: 0;
+    .pretix-widget-event-list-entry-availability {
+      width: 50%;
     }
-    .pretix-widget-voucher-input-wrap {
-      width: 100%;
-      float: none;
+  }
+
+  .pretix-widget-event-calendar {
+    .pretix-widget-event-calendar-events {
+      display: none;
     }
-    .pretix-widget-voucher-button-wrap {
-      width: 100%;
-      float: none;
-      margin-top: 10px;
+    td.pretix-widget-has-events {
+      background: $brand-primary;
+      color: white;
+      cursor: pointer;
+      &.pretix-widget-day-availability-red {
+        background: $brand-danger;
+      }
+      &.pretix-widget-day-availability-green {
+        background: $brand-success;
+      }
+      &.pretix-widget-day-availability-orange {
+        background: $brand-warning;
+      }
+    }
+
+    .pretix-widget-event-calendar-head {
+      display: block;
+      strong {
+        width: 100%;
+        display: block;
+      }
+      .pretix-widget-event-calendar-next-month, .pretix-widget-event-calendar-previous-month {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 }

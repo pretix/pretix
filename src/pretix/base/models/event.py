@@ -1,7 +1,7 @@
 import string
 import uuid
 from collections import OrderedDict
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from operator import attrgetter
 
 import pytz
@@ -668,8 +668,8 @@ class Event(EventMixin, LoggedModel):
         }[ordering]
         subevs = queryset.filter(
             Q(active=True) & (
-                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
-                | Q(date_to__gte=now())
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
+                | Q(date_to__gte=now() - timedelta(hours=24))
             )
         )  # order_by doesn't make sense with I18nField
         for f in reversed(orderfields):
@@ -935,6 +935,18 @@ class SubEvent(EventMixin, LoggedModel):
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
+
+    @staticmethod
+    def clean_items(event, items):
+        for item in items:
+            if event != item.event:
+                raise ValidationError(_('One or more items do not belong to this event.'))
+
+    @staticmethod
+    def clean_variations(event, variations):
+        for variation in variations:
+            if event != variation.item.event:
+                raise ValidationError(_('One or more variations do not belong to this event.'))
 
 
 def generate_invite_token():

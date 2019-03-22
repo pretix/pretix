@@ -158,7 +158,8 @@ setup(
             'isort',
             'pytest-mock==1.6.*',
             'pytest-rerunfailures',
-            'responses'
+            'responses',
+            'freezegun',
         ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],

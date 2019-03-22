@@ -17,3 +17,5 @@ pytest-cache
 pytest-sugar
 responses
 potypo
+freezegun
+
