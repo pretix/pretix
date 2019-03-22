@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 09:22+0000\n"
-"PO-Revision-Date: 2019-03-15 07:55+0000\n"
+"PO-Revision-Date: 2019-03-22 09:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -231,13 +231,11 @@ msgstr "Anzahl"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
-#, fuzzy
-#| msgid "None"
 msgid "No"
-msgstr "Keine"
+msgstr "Nein"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -387,102 +385,100 @@ msgid "See variations"
 msgstr "Varianten zeigen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "Intern einen anderen Namen verwenden"
+msgstr "Andere Veranstaltung auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Nächster Monat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Vorheriger Monat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgid "Mo"
-msgstr ""
+msgstr "Mo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgid "Tu"
-msgstr ""
+msgstr "Di"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgid "We"
-msgstr ""
+msgstr "Mi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgid "Th"
-msgstr ""
+msgstr "Do"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgid "Fr"
-msgstr ""
+msgstr "Fr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Sa"
-msgstr ""
+msgstr "Sa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Su"
-msgstr ""
+msgstr "So"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "March"
-msgstr ""
+msgstr "März"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "December"
-msgstr ""
+msgstr "Dezember"
 
 #~ msgid "Ja"
 #~ msgstr "Ja"

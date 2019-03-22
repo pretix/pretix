@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 09:22+0000\n"
-"PO-Revision-Date: 2019-03-14 16:51+0000\n"
+"PO-Revision-Date: 2019-03-22 09:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:124
@@ -1632,10 +1632,8 @@ msgid "Dates in event series"
 msgstr "Termine in Veranstaltungsreihe"
 
 #: pretix/base/models/event.py:949
-#, fuzzy
-#| msgid "One or more items do not belong to this event."
 msgid "One or more variations do not belong to this event."
-msgstr "Eines oder mehrere der Produkte gehören nicht zu dieser Veranstaltung."
+msgstr "Eine oder mehrere der Varianten gehören nicht zu dieser Veranstaltung."
 
 #: pretix/base/models/event.py:1032
 msgid "Can not contain spaces or special characters except underscores"
@@ -5410,20 +5408,12 @@ msgstr ""
 "kostenlose Produkte enthalten, keine Rechnungen erzeugt."
 
 #: pretix/control/forms/event.py:631
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address explanation"
-msgstr "Rechnungsadresse: Name"
+msgstr "Erläuterung zur Rechnungsadresse"
 
 #: pretix/control/forms/event.py:635
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid "This text will be shown above the invoice address form during checkout."
-msgstr ""
-"Dieser Text wird über den Zahlungsoptionen angezeigt. Du kannst hier "
-"beispielsweise die verschiedenen Optionen erklären."
+msgstr "Dieser Text wird über der Eingabe der Rechnungsadresse angezeigt."
 
 #: pretix/control/forms/event.py:638
 msgid "Generate invoices with consecutive numbers"
@@ -17080,34 +17070,25 @@ msgstr ""
 "wieder Tickets verfügbar sind."
 
 #: pretix/presale/views/widget.py:227
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "This ticket shop is currently disabled."
-msgstr "Der ausgewählte Ticket-Shop ist im Moment nicht verfügbar."
+msgstr "Dieser Ticket-Shop ist im Moment nicht verfügbar."
 
 #: pretix/presale/views/widget.py:236
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected date does not exist in this event series."
-msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
+msgstr "Der ausgewählte Termin gehört nicht zu dieser Veranstaltungsreihe."
 
 #: pretix/presale/views/widget.py:243
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is not an event series."
-msgstr "Dies ist eine Veranstaltungsreihe"
+msgstr "Dies ist keine Veranstaltungsreihe."
 
 #: pretix/presale/views/widget.py:277
-#, fuzzy, python-format
-#| msgid "Show start date"
+#, python-format
 msgid "from %(start_date)s"
-msgstr "Beginn des Vorverkaufszeitraums anzeigen"
+msgstr "von %(start_date)s"
 
 #: pretix/presale/views/widget.py:280
-#, fuzzy
-#| msgid "Sale over"
 msgid "Sale Soon"
-msgstr "Verkauf vorüber"
+msgstr "Verkauf demnächst"
 
 #: pretix/settings.py:388
 msgid "English"
