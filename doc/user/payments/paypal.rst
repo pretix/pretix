@@ -3,6 +3,13 @@
 PayPal
 ======
 
+.. note::
+
+   If you use pretix Hosted, you do not longer need to go through this tedious process! You can
+   just open the PayPal settings in the payment section of your event, click "Connect to PayPal"
+   and log in to your PayPal account. The following guide is only required for self-hosted
+   versions of pretix.
+
 To integrate PayPal with pretix, you first need to have an active PayPal merchant account. If you do not already have a
 PayPal account, you can create one on `paypal.com`_.
 If you look into pretix' settings, you are required to fill in two keys:
