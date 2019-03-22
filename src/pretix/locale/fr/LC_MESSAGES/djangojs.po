@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-14 14:35+0000\n"
+"POT-Creation-Date: 2019-03-22 09:22+0000\n"
 "PO-Revision-Date: 2018-10-28 10:23+0000\n"
 "Last-Translator: Arnaud Vergnet <keplyx@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -232,12 +232,14 @@ msgid "Count"
 msgstr "Compter"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
-msgid "Ja"
+msgid "Yes"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
-msgid "Nein"
-msgstr ""
+#, fuzzy
+#| msgid "None"
+msgid "No"
+msgstr "Aucun"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -383,6 +385,104 @@ msgstr "Continuer"
 msgctxt "widget"
 msgid "See variations"
 msgstr "Voir les variations"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:39
+#, fuzzy
+#| msgid "Use a different name internally"
+msgctxt "widget"
+msgid "Choose a different event"
+msgstr "Utiliser un nom différent en interne"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:40
+msgctxt "widget"
+msgid "Back"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:41
+msgctxt "widget"
+msgid "Next month"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:42
+msgctxt "widget"
+msgid "Previous month"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:44
+msgid "Mo"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:45
+msgid "Tu"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:46
+msgid "We"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:47
+msgid "Th"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:48
+msgid "Fr"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:49
+msgid "Sa"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:50
+msgid "Su"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:53
+msgid "January"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:54
+msgid "February"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:55
+msgid "March"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:56
+msgid "April"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:57
+msgid "May"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:58
+msgid "June"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:59
+msgid "July"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:60
+msgid "August"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:61
+msgid "September"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:62
+msgid "October"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:63
+msgid "November"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:64
+msgid "December"
+msgstr ""
 
 #~ msgid ""
 #~ "Your request has been queued on the server and will now be processed. If "
