@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-09 14:00+0000\n"
+"PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/zh_Hans/>\n"
@@ -207,7 +207,7 @@ msgstr "在内部使用一个不同的名称"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
-msgstr ""
+msgstr "点此关闭"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -219,11 +219,11 @@ msgstr "数量"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Ja"
-msgstr ""
+msgstr "是"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "Nein"
-msgstr ""
+msgstr "否"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"

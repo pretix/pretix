@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2019-03-18 15:52+0000\n"
-"Last-Translator: 徐志能 <770707469@qq.com>\n"
+"PO-Revision-Date: 2019-03-20 11:00+0000\n"
+"Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1220,7 +1220,7 @@ msgstr "净"
 #: pretix/base/invoice.py:459
 msgctxt "invoice"
 msgid "Gross"
-msgstr "总数"
+msgstr "总价"
 
 #: pretix/base/invoice.py:465
 msgctxt "invoice"
@@ -1427,7 +1427,7 @@ msgstr "简易格式"
 
 #: pretix/base/models/event.py:297
 msgid "Shop is live"
-msgstr "商店现场直播"
+msgstr "现场购物"
 
 #: pretix/base/models/event.py:299
 msgid "Event currency"
@@ -5776,7 +5776,7 @@ msgstr "所有"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
-msgstr "现场购物直播和预售运行"
+msgstr "实时购物和预售运行"
 
 #: pretix/control/forms/filter.py:371 pretix/control/forms/filter.py:701
 msgid "Inactive"
@@ -5825,7 +5825,7 @@ msgstr "所有活动"
 
 #: pretix/control/forms/filter.py:504
 msgid "Shop live"
-msgstr "现场购物直播"
+msgstr "实时购物"
 
 #: pretix/control/forms/filter.py:506
 msgid "Shop not live"
@@ -5996,7 +5996,7 @@ msgstr "在签入期间不支持问题之间的依赖关系。"
 
 #: pretix/control/forms/item.py:186
 msgid "The product should exist in multiple variations"
-msgstr "产品应存在多种变化。"
+msgstr "产品应存在多种变化"
 
 #: pretix/control/forms/item.py:187
 msgid ""
@@ -12861,88 +12861,88 @@ msgstr "绕过配额"
 
 #: pretix/control/views/vouchers.py:129 pretix/control/views/vouchers.py:178
 msgid "The requested voucher does not exist."
-msgstr ""
+msgstr "请求的优惠券不存在。"
 
 #: pretix/control/views/vouchers.py:133 pretix/control/views/vouchers.py:143
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr ""
+msgstr "如果优惠券已兑换，则无法删除。"
 
 #: pretix/control/views/vouchers.py:148
 msgid "The selected voucher has been deleted."
-msgstr ""
+msgstr "选定的优惠券已被删除。"
 
 #: pretix/control/views/vouchers.py:225
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr ""
+msgstr "新优惠券已创建：{code}"
 
 #: pretix/control/views/vouchers.py:249
 msgid "There is no voucher with the given voucher code."
-msgstr ""
+msgstr "没有给定优惠券代码的优惠券。"
 
 #: pretix/control/views/vouchers.py:281
 msgid "The new vouchers have been created."
-msgstr ""
+msgstr "新的优惠券已经创建。"
 
 #: pretix/control/views/vouchers.py:360
 msgid "The selected vouchers have been deleted or disabled."
-msgstr ""
+msgstr "所选优惠券已被删除或禁用。"
 
 #: pretix/control/views/waitinglist.py:32
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr ""
+msgstr "{num}优惠券已创建并通过电子邮件发送出去。"
 
 #: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
-msgstr ""
+msgstr "您没有权限执行此操作"
 
 #: pretix/control/views/waitinglist.py:70
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
-msgstr ""
+msgstr "包含优惠券代码的电子邮件已发送到指定地址。"
 
 #: pretix/control/views/waitinglist.py:74
 #: pretix/control/views/waitinglist.py:87
 #: pretix/control/views/waitinglist.py:100
 msgid "Waiting list entry not found."
-msgstr ""
+msgstr "未找到等待列表。"
 
 #: pretix/control/views/waitinglist.py:84
 msgid "The waiting list entry has been moved to the top."
-msgstr ""
+msgstr "等待列表条目已移至顶部。"
 
 #: pretix/control/views/waitinglist.py:97
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "等待列表条目已移至末尾。"
 
 #: pretix/control/views/waitinglist.py:199
 msgid "On list since"
-msgstr ""
+msgstr "自从在列表上"
 
 #: pretix/control/views/waitinglist.py:200
 msgid "Priority"
-msgstr ""
+msgstr "优先"
 
 #: pretix/control/views/waitinglist.py:220
 msgid "Waiting"
-msgstr ""
+msgstr "等待"
 
 #: pretix/control/views/waitinglist.py:253
 msgid "The requested entry does not exist."
-msgstr ""
+msgstr "请求的条目不存在。"
 
 #: pretix/control/views/waitinglist.py:261
 msgid "The selected entry has been deleted."
-msgstr ""
+msgstr "所选条目已被删除。"
 
 #: pretix/multidomain/models.py:13
 msgid "Known domain"
-msgstr ""
+msgstr "已知域名"
 
 #: pretix/multidomain/models.py:14
 msgid "Known domains"
-msgstr ""
+msgstr "已知域名"
 
 #: pretix/plugins/badges/__init__.py:9 pretix/plugins/badges/__init__.py:12
 #: pretix/plugins/badges/signals.py:34
@@ -12952,7 +12952,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
 msgid "Badges"
-msgstr ""
+msgstr "徽章"
 
 #: pretix/plugins/badges/__init__.py:13
 #: pretix/plugins/banktransfer/__init__.py:14
@@ -12965,25 +12965,25 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:14
 #: pretix/plugins/ticketoutputpdf/__init__.py:14
 msgid "the pretix team"
-msgstr ""
+msgstr "pretix团队"
 
 #: pretix/plugins/badges/__init__.py:15
 msgid ""
 "This plugin allows you to generate badges or name tags for your attendees."
-msgstr ""
+msgstr "此插件允许您为观众生成徽章或名称标签。"
 
 #: pretix/plugins/badges/exporters.py:72
 msgid "None of the selected products is configured to print badges."
-msgstr ""
+msgstr "所选产品均未配置为打印徽章。"
 
 #: pretix/plugins/badges/exporters.py:78
 msgid "Attendee badges"
-msgstr ""
+msgstr "观众徽章"
 
 #: pretix/plugins/badges/exporters.py:98
 #: pretix/plugins/ticketoutputpdf/exporters.py:32
 msgid "Include pending orders"
-msgstr ""
+msgstr "包括待处理订单"
 
 #: pretix/plugins/badges/exporters.py:103
 #: pretix/plugins/checkinlists/exporters.py:49
@@ -12994,13 +12994,13 @@ msgstr "排序方式"
 
 #: pretix/plugins/badges/forms.py:21
 msgid "(Do not print badges)"
-msgstr ""
+msgstr "（请勿打印徽章）"
 
 #: pretix/plugins/badges/forms.py:53
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "徽章布局"
 
 #: pretix/plugins/badges/forms.py:54 pretix/plugins/ticketoutputpdf/forms.py:31
 msgid "(Event default)"
@@ -13008,45 +13008,45 @@ msgstr "（缺席结果）"
 
 #: pretix/plugins/badges/signals.py:153
 msgid "Badge layout created."
-msgstr ""
+msgstr "徽章布局已创建。"
 
 #: pretix/plugins/badges/signals.py:154
 msgid "Badge layout deleted."
-msgstr ""
+msgstr "徽章布局已删除。"
 
 #: pretix/plugins/badges/signals.py:155
 msgid "Badge layout changed."
-msgstr ""
+msgstr "徽章布局已更改。"
 
 #: pretix/plugins/badges/signals.py:168
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr ""
+msgstr "徽章布局{val}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "打印徽章"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
-msgstr ""
+msgstr "徽章"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
-msgstr ""
+msgstr "您确定要删除徽章布局<strong>%(layout)s</strong>？"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "徽章布局：%(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
-msgstr ""
+msgstr "徽章设计"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
@@ -13055,12 +13055,12 @@ msgstr "保存此页面后，您可以更改设计。"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "您尚未创建任何徽章布局。"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "创建一个新的徽章布局"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
@@ -13069,35 +13069,35 @@ msgstr "缺席"
 
 #: pretix/plugins/badges/views.py:56
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "已创建新的徽章布局。"
 
 #: pretix/plugins/badges/views.py:84 pretix/plugins/badges/views.py:114
 #: pretix/plugins/badges/views.py:144
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "请求的徽章布局不存在。"
 
 #: pretix/plugins/badges/views.py:126
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "选定的徽章布局已被删除。"
 
 #: pretix/plugins/badges/views.py:148
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "徽章布局：{}"
 
 #: pretix/plugins/banktransfer/__init__.py:10
 #: pretix/plugins/banktransfer/__init__.py:13
 #: pretix/plugins/banktransfer/payment.py:21
 msgid "Bank transfer"
-msgstr ""
+msgstr "银行转帐"
 
 #: pretix/plugins/banktransfer/__init__.py:16
 msgid "This plugin allows you to receive payments via bank transfer "
-msgstr ""
+msgstr "此插件允许您通过银行转帐接收付款 "
 
 #: pretix/plugins/banktransfer/__init__.py:30
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
-msgstr ""
+msgstr "安装python包\"chardet\"以获得更好的csv导入功能。"
 
 #: pretix/plugins/banktransfer/payment.py:29
 msgid ""
@@ -13107,74 +13107,76 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"我知道人们会直接向我的银行账户支付门票价格，而且pretix无法自动之别支付的款项。因此，我会手动将付款标记为完成，或者定期导入银行账单数据，以便为pre"
+"tix提供所需信息。"
 
 #: pretix/plugins/banktransfer/payment.py:36
 msgid "Bank account type"
-msgstr ""
+msgstr "银行账户类型"
 
 #: pretix/plugins/banktransfer/payment.py:39
 msgid "SEPA bank account"
-msgstr ""
+msgstr "SEPA银行账户"
 
 #: pretix/plugins/banktransfer/payment.py:40
 msgid "Other bank account"
-msgstr ""
+msgstr "其他银行账户"
 
 #: pretix/plugins/banktransfer/payment.py:45
 msgid "Name of account holder"
-msgstr ""
+msgstr "账户持有人姓名"
 
 #: pretix/plugins/banktransfer/payment.py:55
 #: pretix/plugins/banktransfer/payment.py:180
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:12
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:16
 msgid "IBAN"
-msgstr ""
+msgstr "国际银行账号"
 
 #: pretix/plugins/banktransfer/payment.py:65
 #: pretix/plugins/banktransfer/payment.py:181
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:13
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:17
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid "Name of bank"
-msgstr ""
+msgstr "银行名称"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "Bank account details"
-msgstr ""
+msgstr "银行帐户详细信息"
 
 #: pretix/plugins/banktransfer/payment.py:88
 msgid ""
 "Include everything else that your customers might need to send you a bank "
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
-msgstr ""
+msgstr "包括客户可能需要向您发送银行转帐付款的所有其他内容。 如果您有很多国际客户，他们可能需要您的完整地址和银行的完整地址。"
 
 #: pretix/plugins/banktransfer/payment.py:94
 msgid ""
 "For SEPA accounts, you can leave this empty. Otherwise, please add "
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
-msgstr ""
+msgstr "对于SEPA帐户，您可以将其留空。 否则，请添加客户转账所需的所有信息，例如： 帐号，路由号码，地址等。"
 
 #: pretix/plugins/banktransfer/payment.py:122
 msgid "Do not include a hypen in the payment reference."
-msgstr ""
+msgstr "请勿在付款参考中包含连字符。"
 
 #: pretix/plugins/banktransfer/payment.py:123
 msgid "This is required in some countries."
-msgstr ""
+msgstr "这在某些国家是必需的。"
 
 #: pretix/plugins/banktransfer/payment.py:145
 msgid "Please fill out your bank account details."
-msgstr ""
+msgstr "请填写您的银行帐户详细信息。"
 
 #: pretix/plugins/banktransfer/payment.py:149
 msgid "Please enter your bank account details."
-msgstr ""
+msgstr "请输入您的银行帐户详细信息。"
 
 #: pretix/plugins/banktransfer/payment.py:179
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
@@ -13183,7 +13185,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
 msgid "Account holder"
-msgstr ""
+msgstr "账户持有人"
 
 #: pretix/plugins/banktransfer/payment.py:182
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
@@ -13192,7 +13194,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:27
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:33
 msgid "Bank"
-msgstr ""
+msgstr "银行"
 
 #: pretix/plugins/banktransfer/signals.py:24
 #: pretix/plugins/banktransfer/signals.py:44
@@ -13201,51 +13203,50 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:6
 msgid "Import bank data"
-msgstr ""
+msgstr "导入银行数据"
 
 #: pretix/plugins/banktransfer/tasks.py:60
 #: pretix/plugins/banktransfer/views.py:55
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "订单已被取消。"
 
 #: pretix/plugins/banktransfer/tasks.py:120
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr "您的订单待付款：%(code)s"
+msgstr "您的订单收到未完成的付款：%(code)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
-msgstr ""
+msgstr "完成购买后，我们会要求您使用个人参考代码将款项转入以下银行帐户："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:20
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
-msgstr ""
+msgstr "完成订单后，我们将为您分配个人参考代码。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 msgid "Payer"
-msgstr ""
+msgstr "付款人"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:7
 #: pretix/plugins/reports/exporters.py:301
 #: pretix/plugins/reports/exporters.py:363
 msgid "Payment date"
-msgstr ""
+msgstr "付款日期"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr ""
+msgstr "参考"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Reference code"
-msgstr ""
+msgstr "参考代码"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/email/order_pending.txt:1
 #, python-format
@@ -13257,69 +13258,73 @@ msgid ""
 "    Amount: %(total)s\n"
 "%(bank)s\n"
 msgstr ""
+"\n"
+"请将全额转账到以下银行账户。\n"
+"    参考：%(code)s    数量： %(total)s\n"
+"%(bank)s\n"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
 "We've been unable to automatically determine how the columns in your file "
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
-msgstr ""
+msgstr "我们无法自动确定文件中列的对齐方式。 请帮助我们选择哪个列包含哪种数据。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:63
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
-msgstr ""
+msgstr "上传了更多数据，但此处未显示。 它仍将被处理"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
 msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
-msgstr ""
+msgstr "在活动的付款设置中，您将%(date)s设置为任何付款的最后日期。因此，您将无法在此处标记任何已付款的订单。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
-msgstr ""
+msgstr "上传新文件"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
-msgstr ""
+msgstr "此页面允许您上传银行的帐单文件以处理收款。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
-msgstr ""
+msgstr "目前，此功能支持<code>.csv</code>文件和MT940格式的文件。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
 #: pretix/plugins/banktransfer/views.py:419
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
-msgstr ""
+msgstr "目前正在处理导入，请在几分钟后重试。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:34
 msgid "Import file"
-msgstr ""
+msgstr "导入文件"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:38
 msgid "Start upload"
-msgstr ""
+msgstr "开始上传"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:48
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "未解决的交易"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:53
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
-msgstr ""
+msgstr "在此页面上，你可以按照活动级别带入银行数据。您也只能看到为此活动直接导入的不匹配交易。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:58
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "转到组织者级别导入"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:63
 msgid "Search"
@@ -13327,98 +13332,98 @@ msgstr "搜索"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:72
 msgid "Discard all"
-msgstr ""
+msgstr "丢弃所有"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:83
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "您的搜索未匹配任何交易。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "导入结果"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
-msgstr ""
+msgstr "导入的结果正在进行中。请耐心等待我们处理数据…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "处理数据时发生内部错误。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:22
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "您的导入不包含之前未导入的任何交易。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:29
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "订单标记为已付款"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:33
 msgid "Invalid payments"
-msgstr ""
+msgstr "无效付款"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:37
 msgid "Ignored payments"
-msgstr ""
+msgstr "忽略的付款"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:43
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "审核无效和忽略的付款"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:7
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "请将全额转账到以下银行账户："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 msgid "Amount:"
-msgstr ""
+msgstr "数量："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "Reference code (important):"
-msgstr ""
+msgstr "参考代码（重要）："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:27
 msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
-msgstr ""
+msgstr "发送银行转帐后，您可以关闭此窗口。 我们会在收到您的付款后立即向您发送电子邮件。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:57
 msgid "Open banking app"
-msgstr ""
+msgstr "开放银行应用程序"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:59
 msgid "Requires that the app supports BezahlCode"
-msgstr ""
+msgstr "要求应用程序支持Bezahlcode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "付款人和参考"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr ""
+msgstr "结果"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "无论如何接受"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:41
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:52
 msgid "Discard"
-msgstr ""
+msgstr "丢弃"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 msgid "Assign to order"
-msgstr ""
+msgstr "按订单分配"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:48
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
@@ -13426,147 +13431,147 @@ msgstr "注释:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
-msgstr ""
+msgstr "未检测到订单代码"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:77
 msgid "Invalid for this order"
-msgstr ""
+msgstr "此订单无效"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:79
 msgid "Error while processing"
-msgstr ""
+msgstr "处理时出错"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:81
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "订单已标记为已付款"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:83
 msgid "Order already paid"
-msgstr ""
+msgstr "订单已付款"
 
 #: pretix/plugins/banktransfer/views.py:50
 msgid "The order is already marked as paid."
-msgstr ""
+msgstr "订单已标记为已付款。"
 
 #: pretix/plugins/banktransfer/views.py:82
 msgid "Problem sending email."
-msgstr ""
+msgstr "发送电子邮件时出现问题。"
 
 #: pretix/plugins/banktransfer/views.py:104
 msgid "Unknown order code"
-msgstr ""
+msgstr "未知的订单代码"
 
 #: pretix/plugins/banktransfer/views.py:282
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "已丢弃所有未解决的交易。"
 
 #: pretix/plugins/banktransfer/views.py:301
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "您必须选择要导入的文件。"
 
 #: pretix/plugins/banktransfer/views.py:305
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
-msgstr ""
+msgstr "我们无法检测此导入的文件类型。请联系支持人员寻求帮助。"
 
 #: pretix/plugins/banktransfer/views.py:318
 #: pretix/plugins/banktransfer/views.py:362
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "我们无法处理您的输入。"
 
 #: pretix/plugins/banktransfer/views.py:327
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
-msgstr ""
+msgstr "很抱歉，我们无法导入此csv文件。请联系支持人员寻求帮助。"
 
 #: pretix/plugins/banktransfer/views.py:332
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
-msgstr ""
+msgstr "对不起，我们检测到这个文件是空的。请联系支持人员寻求帮助。"
 
 #: pretix/plugins/banktransfer/views.py:352
 msgid "Invalid input data."
-msgstr ""
+msgstr "输入数据无效。"
 
 #: pretix/plugins/banktransfer/views.py:356
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "您需要选择包含付款参考的列。"
 
 #: pretix/plugins/banktransfer/views.py:456
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
-msgstr ""
+msgstr "请执行每个活动的银行数据导入，因为此活动者具有多种货币的活动。"
 
 #: pretix/plugins/checkinlists/__init__.py:13
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "签入列表导出器"
 
 #: pretix/plugins/checkinlists/__init__.py:17
 msgid "This plugin allows you to generate check-in lists for your conference."
-msgstr ""
+msgstr "此插件允许您为会议生成签入列表。"
 
 #: pretix/plugins/checkinlists/exporters.py:44
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "包括二维码密钥"
 
 #: pretix/plugins/checkinlists/exporters.py:64
 msgid "Include questions"
-msgstr ""
+msgstr "包括问题"
 
 #: pretix/plugins/checkinlists/exporters.py:159
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "签入列表（PDF）"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:210
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "付款"
 
 #: pretix/plugins/checkinlists/exporters.py:311
 #: pretix/plugins/paypal/payment.py:79
 msgid "Secret"
-msgstr ""
+msgstr "密钥"
 
 #: pretix/plugins/manualpayment/__init__.py:15
 msgid "This plugin adds a customizable payment method for manual processing."
-msgstr ""
+msgstr "此插件添加了可自定义的手动处理付款方式。"
 
 #: pretix/plugins/paypal/__init__.py:10 pretix/plugins/paypal/__init__.py:13
 #: pretix/plugins/paypal/payment.py:31
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/__init__.py:16
 msgid "This plugin allows you to receive payments via PayPal"
-msgstr ""
+msgstr "此插件允许您通过PayPal接收付款"
 
 #: pretix/plugins/paypal/payment.py:47
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
-msgstr ""
+msgstr "正在使用PayPal沙盒，您可以在不实际汇款的情况下进行测试，但需要PayPal沙盒用户才能登录。"
 
 #: pretix/plugins/paypal/payment.py:59
 msgid "PayPal account"
-msgstr ""
+msgstr "PayPal帐户"
 
 #: pretix/plugins/paypal/payment.py:72 pretix/plugins/stripe/payment.py:129
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:73 pretix/plugins/stripe/payment.py:130
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "单击此处获取有关如何获取所需密钥的教程"
 
 #: pretix/plugins/paypal/payment.py:85 pretix/plugins/stripe/payment.py:109
 msgid "Endpoint"
-msgstr ""
+msgstr "端点"
 
 #: pretix/plugins/paypal/payment.py:115
 msgid ""
@@ -13574,83 +13579,84 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "connect pretix to an existing one."
 msgstr ""
+"要通过PayPal接受付款，您需要在PayPal使用一个帐户。 通过单击以下按钮，您可以创建一个新的PayPal帐户，将pretix连接到现有帐户。"
 
 #: pretix/plugins/paypal/payment.py:119
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "与{icon}PayPal连接"
 
 #: pretix/plugins/paypal/payment.py:129
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "断开与PayPal的连接"
 
 #: pretix/plugins/paypal/payment.py:133
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
-msgstr ""
+msgstr "请将PayPal Webhook配置到以下端点，以便在外部退款时自动取消订单。"
 
 #: pretix/plugins/paypal/payment.py:249 pretix/plugins/paypal/payment.py:264
 #: pretix/plugins/paypal/payment.py:267 pretix/plugins/paypal/payment.py:325
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "我们无法与PayPal连接"
 
 #: pretix/plugins/paypal/payment.py:281 pretix/plugins/paypal/payment.py:290
 #: pretix/plugins/paypal/payment.py:356
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
-msgstr ""
+msgstr "我们无法处理您的付款。 有关如何继续的详细信息，请参见下文。"
 
 #: pretix/plugins/paypal/payment.py:332 pretix/plugins/paypal/payment.py:341
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
-msgstr ""
+msgstr "PayPal尚未批准付款。 我们会在付款完成后立即通知您。"
 
 #: pretix/plugins/paypal/payment.py:371 pretix/plugins/stripe/payment.py:387
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "发送确认邮件时出错。"
 
 #: pretix/plugins/paypal/payment.py:415
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "通过PayPal退款失败：{}"
 
 #: pretix/plugins/paypal/signals.py:30
 msgid "Payment completed."
-msgstr ""
+msgstr "付款已完成。"
 
 #: pretix/plugins/paypal/signals.py:31
 msgid "Payment denied."
-msgstr ""
+msgstr "付款被拒绝。"
 
 #: pretix/plugins/paypal/signals.py:32
 msgid "Payment refunded."
-msgstr ""
+msgstr "退款。"
 
 #: pretix/plugins/paypal/signals.py:33
 msgid "Payment reversed."
-msgstr ""
+msgstr "付款被撤销。"
 
 #: pretix/plugins/paypal/signals.py:34
 msgid "Payment pending."
-msgstr ""
+msgstr "等待付款。"
 
 #: pretix/plugins/paypal/signals.py:43
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPal报告了一个活动：{}"
 
 #: pretix/plugins/paypal/signals.py:68
 msgid "PayPal Connect: Client ID"
-msgstr ""
+msgstr "PayPal连接:客户端ID"
 
 #: pretix/plugins/paypal/signals.py:72
 msgid "PayPal Connect: Secret key"
-msgstr ""
+msgstr "PayPal连接：密钥"
 
 #: pretix/plugins/paypal/signals.py:76
 msgid "PayPal Connect Endpoint"
-msgstr ""
+msgstr "PayPal连接端点"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -13658,7 +13664,7 @@ msgid ""
 "The PayPal transaction %(payment)s has succeeded, but the order %(order)s "
 "has already been paid by other means. Please double check and refund the "
 "money via PayPal's interface."
-msgstr ""
+msgstr "PayPal交易%(payment)s已成功，但订单%(order)s已通过其他方式支付。请仔细检查并通过PayPal的界面退款。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_overpaid.html:5
 #, python-format
@@ -13668,293 +13674,295 @@ msgid ""
 "could not be accepted. Please contact the user and refund the money via "
 "PayPal's interface."
 msgstr ""
+"PayPal交易%(payment)s已成功，但订单%(order)s已过期，同时产品已售完。 因此，付款无法接受。 "
+"请联系用户并通过PayPal的界面退款。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:5
 #, python-format
 msgid ""
 "PayPal reported that the payment %(payment)s has been refunded or reversed. "
 "Do you want to mark the matching order (%(order)s) as refunded?"
-msgstr ""
+msgstr "PayPal报告付款%(payment)s已退款或已撤销。您想将匹配的订单（%(order)s）标记为已退款吗？"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
-msgstr ""
+msgstr "以上列出的总金额将在您确认购买后从您的PayPal账户收取。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
 "After you clicked continue, we will redirect you to PayPal to fill in your "
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
-msgstr ""
+msgstr "点击继续后，我们会将您重定向到PayPal以填写您的付款详细信息。 然后，您将被重定向到此处以查看并确认您的订单。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
 msgid "Last update"
-msgstr ""
+msgstr "最后更新"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:40
 msgid "Total value"
-msgstr ""
+msgstr "总价值"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
-msgstr ""
+msgstr "我们尝试通过PayPal执行您的付款失败。 请再试一次或联系我们。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
-msgstr ""
+msgstr "我们正在等待PayPal对您付款的回复。 如果这需要几个小时，请与我们联系。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "付款流程已在新窗口中启动。"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
+msgstr "输入付款数据的窗口未打开或已关闭？"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "单击此处打开窗口。"
 
 #: pretix/plugins/paypal/views.py:45 pretix/plugins/paypal/views.py:58
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "连接PayPal时出错，请重试。"
 
 #: pretix/plugins/paypal/views.py:61
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
-msgstr ""
+msgstr "您的PayPal帐户现已连接到pretix。 您可以在下面详细更改设置。"
 
 #: pretix/plugins/paypal/views.py:102
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "收到PayPal的响应无效。"
 
 #: pretix/plugins/paypal/views.py:118
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "您好像取消了PayPal付款"
 
 #: pretix/plugins/paypal/views.py:247
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "您的PayPal帐户已断开。"
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
 msgid "Check-in device API"
-msgstr ""
+msgstr "签入设备API"
 
 #: pretix/plugins/pretixdroid/__init__.py:16
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
-msgstr ""
+msgstr "这个插件允许你为你的活动使用pretixdroid和pretixDesk应用程序。"
 
 #: pretix/plugins/pretixdroid/models.py:11
 msgid "Can scan all products"
-msgstr ""
+msgstr "可以扫描所有产品"
 
 #: pretix/plugins/pretixdroid/models.py:12
 msgid "Can scan these products"
-msgstr ""
+msgstr "可以扫描这些产品"
 
 #: pretix/plugins/pretixdroid/models.py:13
 msgid "Show information"
-msgstr ""
+msgstr "显示信息"
 
 #: pretix/plugins/pretixdroid/models.py:14
 msgid ""
 "If disabled, the device can not see how many tickets exist and how many are "
 "already scanned. pretixdroid 1.6 or pretixdesk only."
-msgstr ""
+msgstr "如果禁用，则设备无法查看已存在的票数以及已扫描的票数。仅限PretixDroid 1.6或PretixDesk。"
 
 #: pretix/plugins/pretixdroid/models.py:16
 msgid "Search allowed"
-msgstr ""
+msgstr "允许搜索"
 
 #: pretix/plugins/pretixdroid/models.py:17
 msgid ""
 "If disabled, the device can not search for attendees by name. pretixdroid "
 "1.6 or pretixdesk only."
-msgstr ""
+msgstr "如果禁用，则设备无法按名称搜索观众。仅限pretixdroid 1.6或pretixdesk only。"
 
 #: pretix/plugins/pretixdroid/models.py:19
 msgid "Scan software"
-msgstr ""
+msgstr "扫描软件"
 
 #: pretix/plugins/pretixdroid/models.py:20
 msgid "pretixdroid – for Android smartphones"
-msgstr ""
+msgstr "pretixdroid – 适用于Android智能手机"
 
 #: pretix/plugins/pretixdroid/models.py:21
 msgid "pretixdesk – for desktop computers"
-msgstr ""
+msgstr "pretixdesk – 适用于台式电脑"
 
 #: pretix/plugins/pretixdroid/signals.py:18
 msgid "Check-in devices"
-msgstr ""
+msgstr "签入设备"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:5
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:7
 msgid "Check-in device configuration"
-msgstr ""
+msgstr "签入设备配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:8
 msgid ""
 "pretixdroid is an Android app that you can use to control tickets at the "
 "entrance of your event. pretixdesk is the corresponding app for desktop "
 "computers."
-msgstr ""
+msgstr "pretixdroid是一款Android应用程序，可用于控制活动入口处的门票。 pretixdesk是台式计算机的相应应用程序。"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:14
 msgid "Create app configuration"
-msgstr ""
+msgstr "创建应用程序配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:16
 msgid ""
 "To start scanning tickets with our apps, first create a configuration code "
 "here:"
-msgstr ""
+msgstr "要使用我们的应用程序开始扫描门票，请先在此处创建配置代码："
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
 msgid "Create configuration"
-msgstr ""
+msgstr "创建配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:41
 msgid "Existing app configurations"
-msgstr ""
+msgstr "现有应用程序配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:43
 msgid "Create a new configuration"
-msgstr ""
+msgstr "创建一个新配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:53
 msgid "Show info"
-msgstr ""
+msgstr "显示信息"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:54
 msgid "Allow search"
-msgstr ""
+msgstr "允许搜索"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:86
 msgid "Configure device"
-msgstr ""
+msgstr "配置设备"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:5
 msgid "Device configuration"
-msgstr ""
+msgstr "设备配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:9
 msgid "pretixdroid configuration"
-msgstr ""
+msgstr "pretixdroid配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:11
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:40
 msgid "Back to overview"
-msgstr ""
+msgstr "回到概述"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:14
 msgid "1. Download app"
-msgstr ""
+msgstr "1.下载应用程序"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:18
 msgid "Download the app from the Google Play Store"
-msgstr ""
+msgstr "从Google Play商店下载应用程序"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:23
 msgid ""
 "Android, Google Play and the Google Play logo are trademarks of Google Inc."
-msgstr ""
+msgstr "Android，Google Play和Google Play标识都是Google公司的商标。"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:28
 msgid "2. Scan code"
-msgstr ""
+msgstr "2.扫描代码"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:34
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:64
 msgid "3. Start scanning tickets"
-msgstr ""
+msgstr "3.开始扫描门票"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:38
 msgid "pretixdesk configuration"
-msgstr ""
+msgstr "pretixdesk配置"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:43
 msgid "1. Download pretixdesk"
-msgstr ""
+msgstr "1.下载pretixdesk"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:46
 msgid "Open download page"
-msgstr ""
+msgstr "打开下载页面"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:49
 msgid "2. Connect device"
-msgstr ""
+msgstr "2.连接设备"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:52
 msgid "Connect with pretixdesk"
-msgstr ""
+msgstr "与pretixdesk连接"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:56
 msgid ""
 "If this link does not open the pretixdesk application or if you want to set "
 "the application up on a separate device, copy the following code and paste "
 "it into the application:"
-msgstr ""
+msgstr "如果此链接未打开pretixdesk应用程序，或者要在单独的设备上设置应用程序，请复制以下代码并将其粘贴到应用程序中："
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:68
 msgid ""
 "Test mode orders will only be scanned if you scan online. If you scan in "
 "asynchronous mode, test mode orders won't be there."
-msgstr ""
+msgstr "只有在线扫描时才会扫描测试模式订单。如果在异步模式下扫描，测试模式命令将不存在。"
 
 #: pretix/plugins/pretixdroid/views.py:46
 #: pretix/plugins/pretixdroid/views.py:109
 msgid "The selected configuration does not exist."
-msgstr ""
+msgstr "所选配置不存在。"
 
 #: pretix/plugins/pretixdroid/views.py:107
 msgid "The selected configuration has been deleted."
-msgstr ""
+msgstr "所选配置已被删除。"
 
 #: pretix/plugins/reports/__init__.py:10 pretix/plugins/reports/__init__.py:13
 msgid "Report exporter"
-msgstr ""
+msgstr "报表出口商"
 
 #: pretix/plugins/reports/__init__.py:16
 msgid "This plugin allows you to generate printable reports about your sales."
-msgstr ""
+msgstr "此插件允许您生成有关销售的可打印报告。"
 
 #: pretix/plugins/reports/exporters.py:112
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "页面%d"
 
 #: pretix/plugins/reports/exporters.py:114
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "已创建：%s"
 
 #: pretix/plugins/reports/exporters.py:151
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "订单概述（PDF）"
 
 #: pretix/plugins/reports/exporters.py:190
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
 msgid "Orders by product"
-msgstr ""
+msgstr "按产品订购"
 
 #: pretix/plugins/reports/exporters.py:210
 #: pretix/plugins/reports/exporters.py:211
@@ -13962,24 +13970,24 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:213
 #: pretix/plugins/reports/exporters.py:214
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:281
 msgid "List of orders with taxes (PDF)"
-msgstr ""
+msgstr "含税订单列表（PDF）"
 
 #: pretix/plugins/reports/exporters.py:358
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr ""
+msgstr "按税率订购（{currency}）"
 
 #: pretix/plugins/reports/exporters.py:367
 msgid "Gross"
-msgstr ""
+msgstr "总价"
 
 #: pretix/plugins/reports/exporters.py:367
 msgid "Tax"
-msgstr ""
+msgstr "税收"
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
@@ -13987,62 +13995,62 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:6
 msgid "Send out emails"
-msgstr ""
+msgstr "发送电子邮件"
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."
-msgstr ""
+msgstr "此插件允许您向所有客户发送电子邮件。"
 
 #: pretix/plugins/sendmail/forms.py:19
 msgid "Only send to people who bought"
-msgstr ""
+msgstr "只发送给已购买的人"
 
 #: pretix/plugins/sendmail/forms.py:25
 msgid "Only send to customers of"
-msgstr ""
+msgstr "仅发送给客户"
 
 #: pretix/plugins/sendmail/forms.py:54 pretix/plugins/sendmail/views.py:165
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "逾期未付款"
 
 #: pretix/plugins/sendmail/forms.py:57
 msgid "Send to customers with order status"
-msgstr ""
+msgstr "将订单状态发送给客户"
 
 #: pretix/plugins/sendmail/signals.py:48
 msgid "Email was sent"
-msgstr ""
+msgstr "电子邮件已发送"
 
 #: pretix/plugins/sendmail/signals.py:49
 msgid "The order received a mass email."
-msgstr ""
+msgstr "订单收到了大量电子邮件。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:19
 msgid "Sent to orders:"
-msgstr ""
+msgstr "发送到订单："
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:38
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "基于此发送新电子邮件"
 
 #: pretix/plugins/sendmail/views.py:63
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "您提供的日志条目ID无效"
 
 #: pretix/plugins/sendmail/views.py:85
 msgid "There are no orders matching this selection."
-msgstr ""
+msgstr "没有与此选择匹配的订单。"
 
 #: pretix/plugins/sendmail/views.py:103
 msgid "Sample Company LLC"
-msgstr ""
+msgstr "样本有限责任公司"
 
 #: pretix/plugins/sendmail/views.py:130
 #, python-format
 msgid ""
 "Your message has been queued and will be sent to %d users in the next "
 "minutes."
-msgstr ""
+msgstr "您的消息已排队，将在接下来的几分钟内发送给%d用户。"
 
 #: pretix/plugins/statistics/__init__.py:9
 #: pretix/plugins/statistics/__init__.py:12
@@ -14050,11 +14058,11 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:6
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 msgid "Statistics"
-msgstr ""
+msgstr "统计"
 
 #: pretix/plugins/statistics/__init__.py:15
 msgid "This plugin shows you various statistics."
-msgstr ""
+msgstr "此插件显示各种统计信息。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:17
 msgid "Orders by day"
@@ -14064,54 +14072,54 @@ msgstr "每日订单"
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
-msgstr ""
+msgstr "以多次付款方式支付的订单显示其最后一次付款的日期。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:32
 msgid "Revenue over time"
-msgstr ""
+msgstr "收入随着时间的推移"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:46
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
-msgstr ""
+msgstr "只计算全额支付的订单。以多次付款方式支付的订单显示其最后一次付款的日期。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
-msgstr ""
+msgstr "我们会在第一批订单提交后立即向您展示有关销售的各种统计数据！"
 
 #: pretix/plugins/stripe/__init__.py:10 pretix/plugins/stripe/__init__.py:13
 #: pretix/plugins/stripe/payment.py:43
 msgid "Stripe"
-msgstr ""
+msgstr "条纹"
 
 #: pretix/plugins/stripe/__init__.py:16
 msgid "This plugin allows you to receive credit card payments via Stripe"
-msgstr ""
+msgstr "此插件允许您通过Stripe接收信用卡付款"
 
 #: pretix/plugins/stripe/forms.py:17
 #, python-format
 msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
-msgstr ""
+msgstr "提供的密钥\"%(value)s\"看起来无效。它应该以\"%(prefix)s\"开头。"
 
 #: pretix/plugins/stripe/payment.py:72
 msgid ""
 "To accept payments via Stripe, you will need an account at Stripe. By "
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
-msgstr ""
+msgstr "要通过Stripe接受付款，您需要在Stripe拥有一个帐户。通过单击以下按钮，您可以创建新的Stripe帐户连接pretix到现有帐户。"
 
 #: pretix/plugins/stripe/payment.py:76
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "与Stripe连接"
 
 #: pretix/plugins/stripe/payment.py:86
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "断开与Stripe链接"
 
 #: pretix/plugins/stripe/payment.py:90
 msgid ""
@@ -14120,86 +14128,88 @@ msgid ""
 "cancel orders when charges are refunded externally and to process "
 "asynchronous payment methods like SOFORT."
 msgstr ""
+"请将<a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
+"Webhook</a>配置到以下端点，以便在外部退款时自动取消订单，并处理类似sofort的异步付款方法。"
 
 #: pretix/plugins/stripe/payment.py:104
 msgid "Stripe account"
-msgstr ""
+msgstr "Stripe账户"
 
 #: pretix/plugins/stripe/payment.py:112
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "现场直播"
 
 #: pretix/plugins/stripe/payment.py:113
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "测试"
 
 #: pretix/plugins/stripe/payment.py:115
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
-msgstr ""
+msgstr "如果您的活动处于测试模式，无论此设置如何，我们都将始终使用Stripe的测试API。"
 
 #: pretix/plugins/stripe/payment.py:128
 msgid "Publishable key"
-msgstr ""
+msgstr "可发布的密钥"
 
 #: pretix/plugins/stripe/payment.py:139
 msgid "Secret key"
-msgstr ""
+msgstr "密钥"
 
 #: pretix/plugins/stripe/payment.py:148
 msgid ""
 "The country in which your Stripe-account is registred in. Usually, this is "
 "your country of residence."
-msgstr ""
+msgstr "您的Stripe帐户注册所在的国家/地区。通常，这是您的居住国家/地区。"
 
 #: pretix/plugins/stripe/payment.py:156
 msgid "User interface"
-msgstr ""
+msgstr "用户界面"
 
 #: pretix/plugins/stripe/payment.py:158
 msgid "Simple (pretix design)"
-msgstr ""
+msgstr "简单（Pretix设计）"
 
 #: pretix/plugins/stripe/payment.py:159
 msgid "Stripe Checkout"
-msgstr ""
+msgstr "Stripe结账"
 
 #: pretix/plugins/stripe/payment.py:161
 msgid "Only relevant for credit card payments."
-msgstr ""
+msgstr "仅适用于信用卡付款。"
 
 #: pretix/plugins/stripe/payment.py:165
 msgid "Credit card payments"
-msgstr ""
+msgstr "信用卡付款"
 
 #: pretix/plugins/stripe/payment.py:170 pretix/plugins/stripe/payment.py:688
 msgid "giropay"
-msgstr ""
+msgstr "Giropay"
 
 #: pretix/plugins/stripe/payment.py:172 pretix/plugins/stripe/payment.py:179
 #: pretix/plugins/stripe/payment.py:186 pretix/plugins/stripe/payment.py:193
 #: pretix/plugins/stripe/payment.py:201
 msgid "Needs to be enabled in your Stripe account first."
-msgstr ""
+msgstr "需要先在您的Stripe帐户中启用。"
 
 #: pretix/plugins/stripe/payment.py:177 pretix/plugins/stripe/payment.py:757
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:184 pretix/plugins/stripe/payment.py:806
 msgid "Alipay"
-msgstr ""
+msgstr "支付宝"
 
 #: pretix/plugins/stripe/payment.py:191 pretix/plugins/stripe/payment.py:849
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:198 pretix/plugins/stripe/payment.py:918
 msgid "SOFORT"
-msgstr ""
+msgstr "Sofort"
 
 #: pretix/plugins/stripe/payment.py:203
 msgid ""
@@ -14208,10 +14218,12 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"尽管名称如此，通过Stripe的Sofort付款<strong>不</strong>立刻处理，但在某些情况下可能需要<strong>14天</strong"
+">才能确认。如果您的付款条件允许此延迟，请仅激活此付款方式。"
 
 #: pretix/plugins/stripe/payment.py:212
 msgid "3D Secure mode"
-msgstr ""
+msgstr "3D Secure模式"
 
 #: pretix/plugins/stripe/payment.py:213
 msgid ""
@@ -14220,21 +14232,23 @@ msgid ""
 "SecureCode) reduces the risk of fraud but makes the payment process a bit "
 "longer."
 msgstr ""
+"这决定了我们何时将3D Secure方法用于信用卡付款。 使用3D Secure（也称为VISA或MasterCard "
+"SecureCode验证）可降低欺诈风险，但会使支付流程更长一些。"
 
 #: pretix/plugins/stripe/payment.py:217
 msgctxt "stripe 3dsecure"
 msgid "Only when required by the card"
-msgstr ""
+msgstr "仅在卡需要时"
 
 #: pretix/plugins/stripe/payment.py:218
 msgctxt "stripe 3dsecure"
 msgid "Always when recommended by Stripe"
-msgstr ""
+msgstr "总是在Stripe推荐时"
 
 #: pretix/plugins/stripe/payment.py:219
 msgctxt "stripe 3dsecure"
 msgid "Always when supported by the card"
-msgstr ""
+msgstr "卡支持时始终如此"
 
 #: pretix/plugins/stripe/payment.py:244
 #, python-brace-format
@@ -14242,179 +14256,179 @@ msgid ""
 "The Stripe plugin is operating in test mode. You can use one of <a {args}"
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
-msgstr ""
+msgstr "Stripe插件在测试模式下运行。您可以使用<a {args}>许多测试卡</a>之一来执行交易。实际上不会转移任何资金。"
 
 #: pretix/plugins/stripe/payment.py:315 pretix/plugins/stripe/payment.py:631
 #: pretix/plugins/stripe/payment.py:722 pretix/plugins/stripe/payment.py:780
 #: pretix/plugins/stripe/payment.py:883 pretix/plugins/stripe/payment.py:955
 #, python-brace-format
 msgid "{event}-{code}"
-msgstr ""
+msgstr "{event}-{code}"
 
 #: pretix/plugins/stripe/payment.py:352
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe报告您的卡错误：%s"
 
 #: pretix/plugins/stripe/payment.py:372 pretix/plugins/stripe/payment.py:502
 #: pretix/plugins/stripe/payment.py:676
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
-msgstr ""
+msgstr "我们无法与Stripe通信。 如果此问题仍然存在，请再试一次并与我们联系。"
 
 #: pretix/plugins/stripe/payment.py:390
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
-msgstr ""
+msgstr "您的付款尚未完成。 我们会在付款完成后立即通知您。"
 
 #: pretix/plugins/stripe/payment.py:406
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripe报告错误：%s"
 
 #: pretix/plugins/stripe/payment.py:450
 msgid "No payment information found."
-msgstr ""
+msgstr "未找到任何付款信息。"
 
 #: pretix/plugins/stripe/payment.py:466
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
-msgstr ""
+msgstr "我们无法与Stripe通信。如果问题仍然存在，请重试并与支持人员联系。"
 
 #: pretix/plugins/stripe/payment.py:470
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripe返回错误"
 
 #: pretix/plugins/stripe/payment.py:573
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Stripe信用卡"
 
 #: pretix/plugins/stripe/payment.py:574
 msgid "Credit card"
-msgstr ""
+msgstr "信用卡"
 
 #: pretix/plugins/stripe/payment.py:604
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "您可能需要为Stripe付款启用JavaScript。"
 
 #: pretix/plugins/stripe/payment.py:687
 msgid "giropay via Stripe"
-msgstr ""
+msgstr "通过Stripe的Giropay"
 
 #: pretix/plugins/stripe/payment.py:719 pretix/plugins/stripe/payment.py:880
 msgid "unknown name"
-msgstr ""
+msgstr "未知名称"
 
 #: pretix/plugins/stripe/payment.py:756
 msgid "iDEAL via Stripe"
-msgstr ""
+msgstr "通过Stripe的iDEAL"
 
 #: pretix/plugins/stripe/payment.py:805
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "通过Stripe的支付宝"
 
 #: pretix/plugins/stripe/payment.py:848
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "通过Stripe的Bancontact"
 
 #: pretix/plugins/stripe/payment.py:917
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "通过Stripe的Sofort"
 
 #: pretix/plugins/stripe/payment.py:934
 msgid "Country of your bank"
-msgstr ""
+msgstr "银行所在的国家"
 
 #: pretix/plugins/stripe/payment.py:935
 msgid "Germany"
-msgstr ""
+msgstr "德国"
 
 #: pretix/plugins/stripe/payment.py:936
 msgid "Austria"
-msgstr ""
+msgstr "奥地利"
 
 #: pretix/plugins/stripe/payment.py:937
 msgid "Belgium"
-msgstr ""
+msgstr "比利时"
 
 #: pretix/plugins/stripe/payment.py:938
 msgid "Netherlands"
-msgstr ""
+msgstr "荷兰"
 
 #: pretix/plugins/stripe/payment.py:939
 msgid "Spain"
-msgstr ""
+msgstr "西班牙"
 
 #: pretix/plugins/stripe/signals.py:59
 msgid "Charge succeeded."
-msgstr ""
+msgstr "收费成功。"
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge refunded."
-msgstr ""
+msgstr "退款。"
 
 #: pretix/plugins/stripe/signals.py:61
 msgid "Charge updated."
-msgstr ""
+msgstr "收费更新。"
 
 #: pretix/plugins/stripe/signals.py:62
 msgid "Charge pending"
-msgstr ""
+msgstr "收费待处理"
 
 #: pretix/plugins/stripe/signals.py:63
 msgid "Payment authorized."
-msgstr ""
+msgstr "授权付款。"
 
 #: pretix/plugins/stripe/signals.py:64
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "付款授权已取消。"
 
 #: pretix/plugins/stripe/signals.py:65
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "付款授权失败。"
 
 #: pretix/plugins/stripe/signals.py:71
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "收费失败。原因：{}"
 
 #: pretix/plugins/stripe/signals.py:73
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "引起争议。原因：{}"
 
 #: pretix/plugins/stripe/signals.py:75
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "争议更新。原因:{}"
 
 #: pretix/plugins/stripe/signals.py:77
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "争议关闭。原因：{}"
 
 #: pretix/plugins/stripe/signals.py:80
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe报告了一个活动：{}"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe连接：客户端ID"
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe连接：密钥"
 
 #: pretix/plugins/stripe/signals.py:105
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Stripe链接：可发布密钥"
 
 #: pretix/plugins/stripe/signals.py:112
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe连接：密钥（测试）"
 
 #: pretix/plugins/stripe/signals.py:119
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe连接：可发布密钥（测试）"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -14423,6 +14437,8 @@ msgid ""
 "the order %(order)s has already been paid by other means. Please double-"
 "check and refund the money via Stripe's interface."
 msgstr ""
+"Stripe交易<a "
+"%(stripe_href)s>%(charge)s</a>已成功，但订单%(order)s已通过其他方式支付。请仔细检查并通过Stripe的界面退款。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_overpaid.html:5
 #, python-format
@@ -14432,6 +14448,9 @@ msgid ""
 "Therefore, the payment could not be accepted. Please contact the user and "
 "refund the money via Stripe's interface."
 msgstr ""
+"Stripe交易<a "
+"%(stripe_href)s>%(charge)s</a>已成功，但订单%(order)s已过期，同时产品已售完。因此，付款无法接受。 "
+"请联系用户并通过Stripe的界面退款。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_refund.html:5
 #, python-format
@@ -14440,17 +14459,18 @@ msgid ""
 "been refunded. Do you want to refund mark the matching order (%(order)s) as "
 "refunded?"
 msgstr ""
+"Stripe报告交易<a %(stripe_href)s>%(charge)s</a>已退款。您是否要将匹配的订单（%(order)s）标记为已退款？"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "总金额将从您的信用卡中收取。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:11
 msgid "Card type"
-msgstr ""
+msgstr "卡片类型"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
@@ -14461,167 +14481,167 @@ msgid ""
 "After you submitted your order, we will redirect you to the payment service "
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
-msgstr ""
+msgstr "在您提交订单后，我们会将您重定向到付款服务提供商以完成付款。 然后，您将被重定向回到此处以获取您的门票。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "如需信用卡付款，请打开JavaScript。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:10
 msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
-msgstr ""
+msgstr "您已输入我们将用于收取付款金额的卡号。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:20
 msgid "Use a different card"
-msgstr ""
+msgstr "使用其他卡"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
 msgid "OR"
-msgstr ""
+msgstr "OR"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:56
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:34
 msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
-msgstr ""
+msgstr "您的付款将由Stripe，Inc.处理。您的信用卡数据将直接传输到Stripe，而不会接触我们的服务器。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:28
 msgid "Please continue below to start the credit card payment."
-msgstr ""
+msgstr "请继续以下操作开始信用卡支付。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
-msgstr ""
+msgstr "收取ID"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:16
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:23
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:35
 msgid "Payer name"
-msgstr ""
+msgstr "付款人姓名"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:52
 msgid "Error message"
-msgstr ""
+msgstr "错误信息"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
-msgstr ""
+msgstr "我们正在等待付款提供商对您的付款作出答复。如果时间超过几天，请联系我们。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "无法完成付款交易，原因如下："
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:16
 msgid "Unknown reason"
-msgstr ""
+msgstr "未知原因"
 
 #: pretix/plugins/stripe/views.py:53 pretix/plugins/stripe/views.py:59
 #: pretix/plugins/stripe/views.py:86 pretix/plugins/stripe/views.py:98
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "连接Stripe时出错，请重试。"
 
 #: pretix/plugins/stripe/views.py:106 pretix/plugins/stripe/views.py:108
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe返回错误：{}"
 
 #: pretix/plugins/stripe/views.py:111
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
-msgstr ""
+msgstr "您的Stripe帐户现已连接到pretix。 您可以在下面详细更改设置。"
 
 #: pretix/plugins/stripe/views.py:365
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "您的Stripe帐户已断开连接。"
 
 #: pretix/plugins/stripe/views.py:413 pretix/plugins/stripe/views.py:458
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
-msgstr ""
+msgstr "抱歉，付款过程中出错。请检查电子邮件中的链接以继续。"
 
 #: pretix/plugins/stripe/views.py:452
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
-msgstr ""
+msgstr "我们无法授权您的信用卡付款。 如果此问题仍然存在，请再试一次并与我们联系。"
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:10
 #: pretix/plugins/ticketoutputpdf/__init__.py:13
 msgid "PDF ticket output"
-msgstr ""
+msgstr "PDF门票输出"
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:16
 msgid "This plugin allows you to print out tickets as PDF files"
-msgstr ""
+msgstr "此插件允许您将票证打印为PDF文件"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:22
 msgid "All PDF tickets in one file"
-msgstr ""
+msgstr "所有PDF票证都在一个文件中"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr ""
+msgstr "PDF票证布局{channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
-msgstr ""
+msgstr "（同上）"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
-msgstr ""
+msgstr "PDF票证布局"
 
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:185
 msgid "Default layout"
-msgstr ""
+msgstr "默认布局"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:99
 msgid "Ticket layout created."
-msgstr ""
+msgstr "已创建票证布局。"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:100
 msgid "Ticket layout deleted."
-msgstr ""
+msgstr "已删除票证布局。"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:101
 msgid "Ticket layout changed."
-msgstr ""
+msgstr "已更改票证布局。"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:114
 #, python-brace-format
 msgid "Ticket layout {val}"
-msgstr ""
+msgstr "票证布局{val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "票证布局"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
-msgstr ""
+msgstr "您确定要删除票证布局<strong>%(layout)s</strong>？"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
 #, python-format
 msgid "Ticket layout: %(name)s"
-msgstr ""
+msgstr "票证布局：%(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
@@ -14636,261 +14656,263 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
+"您可以使用我们的PDF票证编辑器自定义票证设计。在那里，您可以上传一个PDF文件作为门票的背景，然后在选择的位置在背景上放置各种文本和二维码。由于其拖放式"
+"用户界面，编辑器易于使用，但它需要一个现代化的浏览器和一个相当好的互联网连接。"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:18
 msgid "Change default layout in a new tab"
-msgstr ""
+msgstr "更改新选项卡中的默认布局"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:22
 msgid "Advanced mode (multiple layouts)"
-msgstr ""
+msgstr "高级模式（多种布局）"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:6
 msgid "Ticket layouts"
-msgstr ""
+msgstr "票证布局"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:10
 msgid "You haven't created any layouts yet."
-msgstr ""
+msgstr "您尚未创建任何布局。"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
 msgid "Create a new layout"
-msgstr ""
+msgstr "创建一个新布局"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:28
 msgid "PDF output"
-msgstr ""
+msgstr "PDF输出"
 
 #: pretix/plugins/ticketoutputpdf/views.py:36
 msgid "Default ticket layout"
-msgstr ""
+msgstr "默认票证布局"
 
 #: pretix/plugins/ticketoutputpdf/views.py:98
 msgid "The new ticket layout has been created."
-msgstr ""
+msgstr "已创建新的票证布局。"
 
 #: pretix/plugins/ticketoutputpdf/views.py:126
 #: pretix/plugins/ticketoutputpdf/views.py:156
 #: pretix/plugins/ticketoutputpdf/views.py:204
 msgid "The requested layout does not exist."
-msgstr ""
+msgstr "请求的布局不存在。"
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 msgid "The selected ticket layout been deleted."
-msgstr ""
+msgstr "所选票证布局已被删除。"
 
 #: pretix/plugins/ticketoutputpdf/views.py:208
 msgid "Ticket PDF layout: {}"
-msgstr ""
+msgstr "票证PDF布局：{}"
 
 #: pretix/presale/checkoutflow.py:52
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "步骤"
 
 #: pretix/presale/checkoutflow.py:183
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "附加产品"
 
 #: pretix/presale/checkoutflow.py:308
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "您的信息"
 
 #: pretix/presale/checkoutflow.py:397 pretix/presale/checkoutflow.py:403
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "请输入有效的电子邮件地址。"
 
 #: pretix/presale/checkoutflow.py:408
 msgid "Please enter your invoicing address."
-msgstr ""
+msgstr "请输入您的发票地址。"
 
 #: pretix/presale/checkoutflow.py:412
 msgid "Please enter your name."
-msgstr ""
+msgstr "请输入您的姓名。"
 
 #: pretix/presale/checkoutflow.py:446 pretix/presale/checkoutflow.py:451
 #: pretix/presale/checkoutflow.py:456
 msgid "Please fill in answers to all required questions."
-msgstr ""
+msgstr "请填写所有必填问题的答案。"
 
 #: pretix/presale/checkoutflow.py:482
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "付款"
 
 #: pretix/presale/checkoutflow.py:525 pretix/presale/views/order.py:467
 msgid "Please select a payment method."
-msgstr ""
+msgstr "请选择付款方式。"
 
 #: pretix/presale/checkoutflow.py:549 pretix/presale/checkoutflow.py:555
 #: pretix/presale/views/order.py:239 pretix/presale/views/order.py:296
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "您输入的付款信息不完整。"
 
 #: pretix/presale/checkoutflow.py:586
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "查看订单"
 
 #: pretix/presale/checkoutflow.py:661
 msgid "You need to check all checkboxes on the bottom of the page."
-msgstr ""
+msgstr "您需要选中页面底部的所有复选框。"
 
 #: pretix/presale/checkoutflow.py:695
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
-msgstr ""
+msgstr "发送确认邮件时出错。 请稍后再试。"
 
 #: pretix/presale/forms/checkout.py:27
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
-msgstr ""
+msgstr "请务必输入有效的电子邮件地址。 我们将向您发送订单确认，其中包含您稍后访问订单所需的链接。"
 
 #: pretix/presale/forms/checkout.py:40
 msgid "E-mail address (repeated)"
-msgstr ""
+msgstr "电子邮件地址（重复）"
 
 #: pretix/presale/forms/checkout.py:41
 msgid ""
 "Please enter the same email address again to make sure you typed it "
 "correctly."
-msgstr ""
+msgstr "请再次输入相同的电子邮件地址，以确保您输入正确的地址。"
 
 #: pretix/presale/forms/checkout.py:63
 msgid "Please enter the same email address twice."
-msgstr ""
+msgstr "请输入两次相同的电子邮件地址。"
 
 #: pretix/presale/forms/checkout.py:158
 #, python-brace-format
 msgid "{name} (+ {price})"
-msgstr ""
+msgstr "{name}（+{price}）"
 
 #: pretix/presale/forms/checkout.py:162
 #, python-brace-format
 msgid "{name} (+ {price} plus {taxes}% {taxname})"
-msgstr ""
+msgstr "{name}（+{price}加{taxes}%{taxname}）"
 
 #: pretix/presale/forms/checkout.py:167
 #, python-brace-format
 msgid "{name} (+ {price} incl. {taxes}% {taxname})"
-msgstr ""
+msgstr "{name}（+{price}包括{taxes}%{taxname}）"
 
 #: pretix/presale/forms/checkout.py:173
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:5
 msgid "SOLD OUT"
-msgstr ""
+msgstr "售完"
 
 #: pretix/presale/forms/checkout.py:175
 msgid "Currently unavailable"
-msgstr ""
+msgstr "当前不可用"
 
 #: pretix/presale/forms/checkout.py:178
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s当前不可用"
 
 #: pretix/presale/forms/checkout.py:251
 msgid "no selection"
-msgstr ""
+msgstr "没有选择"
 
 #: pretix/presale/ical.py:52
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr ""
+msgstr "门票：{url}"
 
 #: pretix/presale/ical.py:55
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr ""
+msgstr "入场：{datetime}"
 
 #: pretix/presale/ical.py:59
 #, python-brace-format
 msgid "Organizer: {organizer}"
-msgstr ""
+msgstr "组织者：{organizer}"
 
 #: pretix/presale/templates/pretixpresale/base_footer.html:36
 #, python-format
 msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>由Pretix提供的活动票务</a>"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:21
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "此商店目前仅对您和您的团队可见。"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:23
 msgid "Take it live now"
-msgstr ""
+msgstr "现在就开始吧"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:34
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr ""
+msgstr "显示的所有事件%(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:70
 #: pretix/presale/templates/pretixpresale/event/base.html:86
 msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
-msgstr ""
+msgstr "这家售票店目前处于测试模式。请不要进行任何真正的购买，因为您的订单可能会被删除而不通知。"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:93
 msgid "Contact event organizer"
-msgstr ""
+msgstr "联系活动组织者"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:96
 msgid "Imprint"
-msgstr ""
+msgstr "版本说明"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:6
 msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
-msgstr ""
+msgstr "对于购物车中的某些产品，您可以在继续之前选择其他选项。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:9
 msgid "We're now trying to book these add-ons for you!"
-msgstr ""
+msgstr "我们现在正在尝试为您预订这些附加组件！"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:35
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
+msgstr[0] "您需要从此类别中选择%(min_count)s选项。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:42
 #, python-format
 msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
-msgstr ""
+msgstr "您可以在此类别中选择%(min_count)s和%(max_count)s选项。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:52
 msgid "There are no add-ons available for this product."
-msgstr ""
+msgstr "此产品没有可用的附加组件。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:64
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:178
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:64
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:111
 msgid "Go back"
-msgstr ""
+msgstr "返回"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:4
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
 msgid "Checkout"
-msgstr ""
+msgstr "结帐"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:11
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
 #: pretix/presale/templates/pretixpresale/event/index.html:24
 msgid "Your cart"
-msgstr ""
+msgstr "您的购物车"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:18
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
@@ -14903,7 +14925,7 @@ msgstr "购物车已过期"
 #: pretix/presale/templates/pretixpresale/event/index.html:43
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr ""
+msgstr "购物车中的商品为您保留%(minutes)s分钟。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
@@ -14914,96 +14936,96 @@ msgstr "你购物车里的物品将不再为你保留。"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 msgid "Review order"
-msgstr ""
+msgstr "查看订单"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:10
 msgid "Please review the details below and confirm your order."
-msgstr ""
+msgstr "请查看以下详细信息并确认您的订单。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:12
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "请稍等，我们正在完成您的订单！"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:19
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:120
 msgid "Modify"
-msgstr ""
+msgstr "修改"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:124
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:17
 #: pretix/presale/templates/pretixpresale/event/order.html:218
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:32
 msgid "Contact information"
-msgstr ""
+msgstr "联系方式"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:148
 msgid "Confirmations"
-msgstr ""
+msgstr "确认"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:166
 msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
-msgstr ""
+msgstr "您的订单需要得到活动组织者的批准才能确认并形成有效合同。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:168
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
 "rejected your order. If your order was approved, we will send you a link "
 "that you can use to pay."
-msgstr ""
+msgstr "我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得批准，我们会向您发送一个可用于支付的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
 msgid "Place binding order"
-msgstr ""
+msgstr "绑定订货"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:186
 msgid "Submit registration"
-msgstr ""
+msgstr "提交注册"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "请选择付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 msgid "This payment provider does not provide support for testmode."
-msgstr ""
+msgstr "此付款提供程序不支持测试模式。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:43
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "如果继续，可能会转移实际资金。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "没有启用付款服务提供商。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:56
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
-msgstr ""
+msgstr "请转到付款设置并激活一个或多个付款提供商。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:5
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "在我们继续之前，我们需要您回答一些问题。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:7
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr ""
+msgstr "您需要填写所有标记为<span>*</span>的字段才能继续。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:59
 msgid "Copy answers from above"
-msgstr ""
+msgstr "从上面复制答案"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:72
 msgid "Selected add-ons"
-msgstr ""
+msgstr "所选的附加组件"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "请继续使用新标签页"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:9
 msgid ""
@@ -15012,48 +15034,50 @@ msgid ""
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
+"您的浏览器配置为阻止来自第三方网站元素的cookie。不幸的是，这意味着我们无法向您展示嵌入网站的这个售票处。 "
+"请尝试在新标签页中打开售票处或更改浏览器设置。"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:16
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "给您带来不便，我们深表歉意！"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:23
 msgid "Continue in new tab"
-msgstr ""
+msgstr "在新选项卡中继续"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
 msgid "Cookies not supported"
-msgstr ""
+msgstr "Cookies不支持"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
 "Your browser does not accept cookies from us. However, we need to set a "
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
-msgstr ""
+msgstr "您的浏览器不接受我们提供的cookies。 但是，我们需要设置一个cookie来记住你是谁以及购物车中的内容。 请相应更改您的浏览器设置。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:16
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:47
 #: pretix/presale/templates/pretixpresale/organizers/index.html:70
 msgid "Reserved"
-msgstr ""
+msgstr "保留的"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "All remaining products are reserved but might become available again."
-msgstr ""
+msgstr "保留所有剩余产品，但可能会再次提供。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:85
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "好的，我们正在删除…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:89
 msgid "Remove one"
-msgstr ""
+msgstr "删除一个"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:97
 msgid "We're trying to reserve another one for you!"
-msgstr ""
+msgstr "我们正试图为你预留另一个！"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:98
 #: pretix/presale/templates/pretixpresale/event/index.html:184
@@ -15062,25 +15086,25 @@ msgstr ""
 msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
-msgstr ""
+msgstr "物品放入购物车后，您将有%(time)s分钟完成购买。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:113
 msgid "Add one more"
-msgstr ""
+msgstr "再添加一个"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "订单已确认"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr ""
+msgstr "待付款"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
 msgid "Go"
-msgstr ""
+msgstr "前进"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
@@ -15089,90 +15113,90 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:66
 #: pretix/presale/templates/pretixpresale/organizers/index.html:75
 msgid "Tickets on sale"
-msgstr ""
+msgstr "可售票"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:35
 #: pretix/presale/templates/pretixpresale/organizers/index.html:80
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "销售开始%(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:40
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 msgid "Not yet on sale"
-msgstr ""
+msgstr "尚未发售"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
-msgstr ""
+msgstr "预售"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:55
 #: pretix/presale/templates/pretixpresale/event/index.html:73
 msgid "Empty cart"
-msgstr ""
+msgstr "清空购物车"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "进行结账"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:86
 msgid "View other date"
-msgstr ""
+msgstr "查看其他日期"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:89
 msgid "Choose date to buy a ticket"
-msgstr ""
+msgstr "选择购票日期"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:113
 #: pretix/presale/views/widget.py:241
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "此活动的预售期已结束。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:117
 #: pretix/presale/views/widget.py:243
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "此活动的预售将从%(date)s的%(time)s开始。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:121
 #: pretix/presale/views/widget.py:248
 msgid "The presale for this event has not yet started."
-msgstr ""
+msgstr "此活动的预售尚未开始。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:143
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "开始：%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:148
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "结束：%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:156
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "入场：%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:160
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "入场：%(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:171
 msgid "Add to Calendar"
-msgstr ""
+msgstr "添加到日历"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:183
 #: pretix/presale/templates/pretixpresale/event/voucher.html:26
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "我们现在正试图为您保留这个！"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:224
 #: pretix/presale/templates/pretixpresale/event/index.html:366
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "最低订购金额：%(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/index.html:287
@@ -15182,11 +15206,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:198
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "FREE"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:244
 msgid "Show variants"
-msgstr ""
+msgstr "显示变量"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:281
 #: pretix/presale/templates/pretixpresale/event/index.html:386
@@ -15194,7 +15218,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:193
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "修改%(item)s的价格"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:301
 #: pretix/presale/templates/pretixpresale/event/index.html:405
@@ -15202,43 +15226,43 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:209
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr ""
+msgstr "包括%(rate)s%%%(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:309
 #: pretix/presale/templates/pretixpresale/event/index.html:413
 msgid "Enter a voucher code below to buy this ticket."
-msgstr ""
+msgstr "在下面输入优惠券代码即可购买此门票。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:320
 #: pretix/presale/templates/pretixpresale/event/voucher.html:135
 #: pretix/presale/templates/pretixpresale/event/voucher.html:144
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
-msgstr ""
+msgstr "订单的数量%(item)s-%(var)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:431
 #: pretix/presale/templates/pretixpresale/event/voucher.html:224
 #: pretix/presale/templates/pretixpresale/event/voucher.html:233
 #, python-format
 msgid "Amount of %(item)s to order"
-msgstr ""
+msgstr "订单数量%(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:448
 #: pretix/presale/templates/pretixpresale/event/voucher.html:258
 msgid "Add to cart"
-msgstr ""
+msgstr "添加到购物车"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:460
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "兑换优惠券"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:478
 msgid "Redeem voucher"
-msgstr ""
+msgstr "兑换优惠券"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:489
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "如果您已经订了票"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:493
 msgid ""
@@ -15247,110 +15271,112 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"如果您想查看或更改订单的状态和详细信息，请单击我们在订购过程中发送给您的其中一封电子邮件中的链接。 "
+"如果您找不到该链接，请单击以下按钮以请求再次发送给您的订单链接。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:502
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
-msgstr ""
+msgstr "重新发送订单链接"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
-msgstr ""
+msgstr "谢谢您！"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "您的订单已成功下单。 请参阅下文了解详情。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
-msgstr ""
+msgstr "请注意，在您付款并完成此订单之前，我们仍需等待活动组织者的批准。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
+msgstr "请注意，我们仍在等待您的付款以完成此过程。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "您的订单已成功处理！ 请参阅下文了解详情。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "我们已成功收到您的付款。 请参阅下文了解详情。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
-msgstr ""
+msgstr "如果您想稍后访问订单，请将该链接添加为书签或保存到此页面。 我们还向您发送了一封电子邮件，其中包含指定地址的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
-msgstr ""
+msgstr "如果您想稍后访问订单，请保存以下链接。 我们还向您发送了一封电子邮件，其中包含指定地址的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:61
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "此订单仍有%(total)s的货款尚未支付。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:64
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "请在%(date)s之前完成付款"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "重新尝试付款或选择其他付款方式"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:81
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
 msgid "Pay now"
-msgstr ""
+msgstr "现在付款"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:95
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
-msgstr ""
+msgstr "您很快就会收到%(amount)s的退款，请耐心等待。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:99
 #, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
-msgstr ""
+msgstr "退款%(amount)s已经发送给您。根据付款方式，请在最多14天内提供，直至其显示在您的帐单上。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:111
 msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
-msgstr ""
+msgstr "您可以使用下面的按钮下载门票。 请在参加活动时准备好您的门票。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:117
 msgid "Download all tickets at once:"
-msgstr ""
+msgstr "立即下载所有门票："
 
 #: pretix/presale/templates/pretixpresale/event/order.html:135
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "您可以从%(date)s开始下载门票。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:147
 #: pretix/presale/templates/pretixpresale/event/order.html:210
 msgid "Change details"
-msgstr ""
+msgstr "更改细节"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:195
 msgid "Request invoice"
-msgstr ""
+msgstr "请求发票"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:241
 msgid "Internal Reference"
-msgstr ""
+msgstr "内部参考"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:263
 #, python-format
@@ -15358,35 +15384,35 @@ msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder "
 "to your original payment method."
-msgstr ""
+msgstr "您可以取消此订单。 在这种情况下，将保留<strong>%(fee)s</strong>的取消费用，您将收到剩余的退款到您的原始付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order.html:287
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
 msgid "This will invalidate all of your tickets."
-msgstr ""
+msgstr "这将使您的所有门票无效。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:271
 msgid ""
 "You can cancel this order and receive a full refund to your original payment "
 "method."
-msgstr ""
+msgstr "您可以取消此订单并获得原始付款方式的全额退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:284
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "您可以使用以下按钮取消此订单。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:297
 msgid ""
 "You can not cancel this order yourself. Please contact the event organizer "
 "for more information."
-msgstr ""
+msgstr "您无法自行取消此订单。 请联系活动组织者了解更多信息。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "取消订单：%(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:21
 #, python-format
@@ -15394,7 +15420,7 @@ msgid ""
 "The refund amount of %(amount)s will automatically be sent back to your "
 "original payment method. Depending on the payment method, please allow for "
 "up to two weeks before this appears on your statement."
-msgstr ""
+msgstr "退款金额%(amount)s将自动退回原始付款方式。 根据付款方式，请在您的帐单上显示最多两周的时间。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:29
 #, python-format
@@ -15404,95 +15430,97 @@ msgid ""
 "event organizer will need to initiate the transfer manually. Please be "
 "patient as this might take a bit longer."
 msgstr ""
+"根据您使用的付款方式，退款金额%(amount)s<strong>不能自动发回给您</strong>。相反，活动组织者需要手动启动传输。请耐心等待，因为这"
+"可能需要很长时间。"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:4
 msgid "Modify order"
-msgstr ""
+msgstr "修改订单"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:7
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "修改订单：%(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:17
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
-msgstr ""
+msgstr "修改发票地址不会自动生成新发票。 如果您需要新发票，请与我们联系。"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:78
 msgid "Save changes"
-msgstr ""
+msgstr "保存更改"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:4
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr ""
+msgstr "支付订单"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:7
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "支付订单：%(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "更改付款方式"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
 #, python-format
 msgid "Change payment method: %(code)s"
-msgstr ""
+msgstr "更改付款方式：%(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
-msgstr ""
+msgstr "请注意：如果您更改付款方式，您的订单总额将根据每个付款方式右侧显示的金额进行更改。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:44
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
+msgstr "此订单没有其他可用的付款服务提供商。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "请确认以下付款详情。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "总价：%(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid ""
 "If you lost the link to your order or orders, please enter the email address "
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
-msgstr ""
+msgstr "如果您丢失了订单或订单的链接，请输入您用于订单的电子邮件地址。 我们会向您发送一封电子邮件，其中包含您使用此电子邮件地址下的所有订单的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
-msgstr ""
+msgstr "发送链接"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
 msgid "Voucher redemption"
-msgstr ""
+msgstr "优惠券兑换"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
-msgstr ""
+msgstr "您输入的优惠券代码允许您以指定价格购买以下产品之一："
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "来自%(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "把我加到等待列表上"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:29
 #, python-format
@@ -15501,10 +15529,11 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"如果门票再次可用，我们将通知等候名单上的第一批人员。 如果我们通知您，您将有%(hours)s小时的时间来购买们票，直到我们将其分配给列表中的下一个人。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
-msgstr ""
+msgstr "把我添加到列表上"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:57
 #, python-format
@@ -15513,272 +15542,275 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        来自%(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "您好！"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
 msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
-msgstr ""
+msgstr "这是一个自托管的安装<a %(a_attr)s>pretix，您的免费和开源门票销售软件</a>。"
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
-msgstr ""
+msgstr "如果你想买一张票，你需要直接链接到一个活动或组织者的个人资料。"
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
 msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
-msgstr ""
+msgstr "如果你想配置此安装，请<a %(a_attr)s>转到此处</a>。"
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "享受吧!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "活动概述"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:37
 #: pretix/presale/templates/pretixpresale/organizers/index.html:34
 msgid "iCal"
-msgstr ""
+msgstr "同步"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
 msgid "Note that the events in this view are in different timezones."
-msgstr ""
+msgstr "请注意，此视图中的事件位于不同的时区。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:6
 msgid "Event list"
-msgstr ""
+msgstr "活动列表"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:14
 msgid "Past events"
-msgstr ""
+msgstr "过去的事件"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:16
 msgid "Upcoming events"
-msgstr ""
+msgstr "活动预告"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:37
 msgid "Show upcoming"
-msgstr ""
+msgstr "显示即将到来"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
 msgid "Show past events"
-msgstr ""
+msgstr "显示过去的事件"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:90
 #: pretix/presale/templates/pretixpresale/organizers/index.html:91
 msgid "Buy tickets"
-msgstr ""
+msgstr "买票"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:92
 msgid "More info"
-msgstr ""
+msgstr "更多信息"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
 msgid "No archived events found."
-msgstr ""
+msgstr "未找到存档事件。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "未找到公开即将发生的事件。"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "第%(page)s页，共%(of)s页"
 
 #: pretix/presale/utils.py:30 pretix/presale/utils.py:125
 #: pretix/presale/utils.py:126
 msgid "The selected event was not found."
-msgstr ""
+msgstr "找不到所选的活动。"
 
 #: pretix/presale/utils.py:90
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "所选的售票处目前无法使用。"
 
 #: pretix/presale/utils.py:95
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "此功能未启用。"
 
 #: pretix/presale/utils.py:134 pretix/presale/utils.py:138
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "找不到所选的组织者。"
 
 #: pretix/presale/views/cart.py:98 pretix/presale/views/cart.py:116
 #: pretix/presale/views/cart.py:128
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "请只输入数字。"
 
 #: pretix/presale/views/cart.py:100
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "请只输入正数。"
 
 #: pretix/presale/views/cart.py:320
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "您的购物车已更新。"
 
 #: pretix/presale/views/cart.py:323 pretix/presale/views/cart.py:344
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "你的购物车现在是空的。"
 
 #: pretix/presale/views/cart.py:358
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "产品已成功添加到您的购物车中。"
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
-msgstr ""
+msgstr "你的购物车是空的"
 
 #: pretix/presale/views/checkout.py:38
 msgid "The presale for this event is over or has not yet started."
-msgstr ""
+msgstr "此活动的预售已结束或尚未开始。"
 
 #: pretix/presale/views/event.py:310
 msgid "Unknown event code or not authorized to access this event."
-msgstr ""
+msgstr "未知活动代码或未授权访问此事件。"
 
 #: pretix/presale/views/event.py:317
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "未选择日期。"
 
 #: pretix/presale/views/event.py:320
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "选择了未知日期。"
 
 #: pretix/presale/views/event.py:343 pretix/presale/views/event.py:351
 #: pretix/presale/views/event.py:354
 msgid "Please go back and try again."
-msgstr ""
+msgstr "请返回重试。"
 
 #: pretix/presale/views/order.py:171 pretix/presale/views/order.py:235
 #: pretix/presale/views/order.py:292
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "此订单的付款无法继续。"
 
 #: pretix/presale/views/order.py:176 pretix/presale/views/order.py:244
 #: pretix/presale/views/order.py:301 pretix/presale/views/order.py:340
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "付款太晚了，无法接受。"
 
 #: pretix/presale/views/order.py:335
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "此订单的付款方式无法更改。"
 
 #: pretix/presale/views/order.py:346
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "此订单目前正在等待付款。"
 
 #: pretix/presale/views/order.py:554
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "您无法修改此订单"
 
 #: pretix/presale/views/order.py:686
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "尚未为此订单启用门票下载。"
 
 #: pretix/presale/views/user.py:25
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "我们在处理您的输入时遇到困难。"
 
 #: pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
-msgstr ""
+msgstr "在过去的24小时里我们已经给你发了一封电子邮件。"
 
 #: pretix/presale/views/user.py:53
 msgid "Your orders for {}"
-msgstr ""
+msgstr "您的订单{}"
 
 #: pretix/presale/views/user.py:64
 msgid "We have trouble sending emails right now, please check back later."
-msgstr ""
+msgstr "我们现在无法发送电子邮件，请稍后再回来查看。"
 
 #: pretix/presale/views/user.py:67
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
-msgstr ""
+msgstr "如果此用户有任何订单，他们将收到一封包含订单代码的电子邮件。"
 
 #: pretix/presale/views/waiting.py:77
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "已禁用此活动的等待列表。"
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
-msgstr ""
+msgstr "我们无法识别您选择的产品。"
 
 #: pretix/presale/views/waiting.py:90
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "您需要选择一个日期。"
 
 #: pretix/presale/views/waiting.py:102
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
-msgstr ""
+msgstr "由于此产品目前可用，您无法将自己添加到等待列表中。"
 
 #: pretix/presale/views/waiting.py:107
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
-msgstr ""
+msgstr "我们已将您添加到等待列表中。一旦再次获得门票，您将收到一封电子邮件。"
 
 #: pretix/settings.py:388
 msgid "English"
-msgstr ""
+msgstr "英语"
 
 #: pretix/settings.py:389
 msgid "German"
-msgstr ""
+msgstr "德语"
 
 #: pretix/settings.py:390
 msgid "German (informal)"
-msgstr ""
+msgstr "德语（非正式的）"
 
 #: pretix/settings.py:391
 msgid "Dutch"
-msgstr ""
+msgstr "荷兰语"
 
 #: pretix/settings.py:392
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "荷兰语（非正式的）"
 
 #: pretix/settings.py:393
 msgid "Danish"
-msgstr ""
+msgstr "丹麦语"
 
 #: pretix/settings.py:394
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 #: pretix/settings.py:395
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "葡萄牙语（巴西）"
 
 #: pretix/settings.py:396
 msgid "Spanish"
-msgstr ""
+msgstr "西班牙语"
 
 #: pretix/settings.py:397
 msgid "Turkish"
-msgstr ""
+msgstr "土耳其语"
 
 #: pretix/settings.py:670
 msgid "Read access"
-msgstr ""
+msgstr "读取权限"
 
 #: pretix/settings.py:671
 msgid "Write access"
-msgstr ""
+msgstr "录入权限"

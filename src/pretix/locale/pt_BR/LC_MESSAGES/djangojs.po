@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-14 14:35+0000\n"
-"PO-Revision-Date: 2018-10-22 04:23+0000\n"
-"Last-Translator: Samir C. Costa <samirfor@gmail.com>\n"
+"PO-Revision-Date: 2019-03-19 09:00+0000\n"
+"Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -87,7 +87,7 @@ msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
-"Atualmente, não podemos acessar o servidor, mas continuamos tentando. Último "
+"Atualmente não podemos acessar o servidor, mas continuamos tentando. Último "
 "código de erro: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:115
@@ -192,17 +192,21 @@ msgstr "Erro desconhecido."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Sua cor tem grande contraste e é muito fácil de ler!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Sua cor tem um contraste aceitável e provavelmente é boa o suficiente para "
+"ler!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Sua cor tem um contraste ruim para o texto sobre fundo branco, por favor, "
+"escolha um tom mais escuro."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
@@ -218,7 +222,7 @@ msgstr "Use um nome diferente internamente"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:646
 msgid "Click to close"
-msgstr ""
+msgstr "Clique para fechar"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -230,11 +234,11 @@ msgstr "Contagem"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Ja"
-msgstr ""
+msgstr "Sim"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "Nein"
-msgstr ""
+msgstr "Não"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
