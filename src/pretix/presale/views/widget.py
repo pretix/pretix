@@ -274,7 +274,7 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['text'] = ugettext('Sale over')
         elif event.settings.presale_start_show_date and ev.presale_start:
             availability['color'] = 'orange'
-            availability['text'] = ugettext('from %(start_date)s') % date_format(ev.presale_start, "SHORT_DATE_FORMAT")
+            availability['text'] = ugettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
         else:
             availability['color'] = 'orange'
             availability['text'] = ugettext('Sale Soon')
