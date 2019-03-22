@@ -13,6 +13,9 @@ from pretix.base.models import (
 
 
 class InlineItemVariationSerializer(I18nAwareModelSerializer):
+    price = serializers.DecimalField(read_only=True, decimal_places=2, max_digits=10,
+                                     coerce_to_string=True)
+
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
@@ -20,6 +23,9 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
 
 
 class ItemVariationSerializer(I18nAwareModelSerializer):
+    price = serializers.DecimalField(read_only=True, decimal_places=2, max_digits=10,
+                                     coerce_to_string=True)
+
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
