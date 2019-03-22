@@ -36,7 +36,7 @@ admission                             boolean                    ``True`` for it
                                                                  (such as add-ons or merchandise).
 position                              integer                    An integer, used for sorting
 picture                               string                     A product picture to be displayed in the shop
-                                                                 (read-only).
+                                                                 (read-only, can be ``null``).
 sales_channels                        list of strings            Sales channels this product is available on, such as
                                                                  ``"web"`` or ``"resellers"``. Defaults to ``["web"]``.
 available_from                        datetime                   The first date time at which this item can be bought
@@ -60,7 +60,7 @@ checkin_attention                     boolean                    If ``True``, th
                                                                  that this ticket requires special attention if such
                                                                  a product is being scanned.
 original_price                        money (string)             An original price, shown for comparison, not used
-                                                                 for price calculations.
+                                                                 for price calculations (or ``null``).
 require_approval                      boolean                    If ``True``, orders with this product will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
