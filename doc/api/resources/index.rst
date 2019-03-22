@@ -11,6 +11,7 @@ Resources and endpoints
    categories
    items
    item_variations
+   item_bundles
    item_add-ons
    questions
    question_options

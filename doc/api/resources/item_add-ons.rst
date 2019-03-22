@@ -189,7 +189,7 @@ Endpoints
 
       {
         "min_count": 0,
-        "max_count": 10,
+        "max_count": 10
       }
 
    **Example response**:

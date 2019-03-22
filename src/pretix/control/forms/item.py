@@ -13,7 +13,7 @@ from pretix.base.forms import I18nFormSet, I18nModelForm
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn
+from pretix.base.models.items import ItemAddOn, ItemBundle
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2
@@ -300,6 +300,12 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('copy_from'):
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
+            for a in self.cleaned_data['copy_from'].addons.all():
+                instance.addons.create(addon_category=a.addon_category, min_count=a.min_count, max_count=a.max_count,
+                                       price_included=a.price_included, position=a.position)
+            for b in self.cleaned_data['copy_from'].bundles.all():
+                instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
+                                        count=b.count, designated_price=b.designated_price)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 
@@ -391,7 +397,8 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order',
             'checkin_attention',
             'generate_tickets',
-            'original_price'
+            'original_price',
+            'require_bundling',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
@@ -522,3 +529,100 @@ class ItemAddOnForm(I18nModelForm):
             'min_count': _('Be aware that setting a minimal number makes it impossible to buy this product if all '
                            'available add-ons are sold out.')
         }
+
+
+class ItemBundleFormSet(I18nFormSet):
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.get('event')
+        self.item = kwargs.pop('item')
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        kwargs['item'] = self.item
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        self.is_valid()
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            locales=self.locales,
+            item=self.item,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
+
+class ItemBundleForm(I18nModelForm):
+    itemvar = forms.ChoiceField(label=_('Bundled product'))
+
+    def __init__(self, *args, **kwargs):
+        self.item = kwargs.pop('item')
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+
+        if instance:
+            try:
+                if instance.bundled_variation:
+                    initial['itemvar'] = '%d-%d' % (instance.bundled_item.pk, instance.bundled_variation.pk)
+                elif instance.bundled_item:
+                    initial['itemvar'] = str(instance.bundled_item.pk)
+            except Item.DoesNotExist:
+                pass
+
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+
+        choices = []
+        for i in self.event.items.prefetch_related('variations').all():
+            pname = str(i)
+            if not i.is_available():
+                pname += ' ({})'.format(_('inactive'))
+            variations = list(i.variations.all())
+
+            if variations:
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk),
+                                    '%s – %s' % (pname, v.value)))
+            else:
+                choices.append((str(i.pk), '%s' % pname))
+        self.fields['itemvar'].choices = choices
+        change_decimal_field(self.fields['designated_price'], self.event.currency)
+
+    def clean(self):
+        d = super().clean()
+        if 'itemvar' in self.cleaned_data:
+            if '-' in self.cleaned_data['itemvar']:
+                itemid, varid = self.cleaned_data['itemvar'].split('-')
+            else:
+                itemid, varid = self.cleaned_data['itemvar'], None
+
+            item = Item.objects.get(pk=itemid, event=self.event)
+            if varid:
+                variation = ItemVariation.objects.get(pk=varid, item=item)
+            else:
+                variation = None
+
+            if item == self.item:
+                raise ValidationError(_("The bundled item must not be the same item as the bundling one."))
+            if item.bundles.exists():
+                raise ValidationError(_("The bundled item must not have bundles on its own."))
+
+            self.instance.bundled_item = item
+            self.instance.bundled_variation = variation
+
+        return d
+
+    class Meta:
+        model = ItemBundle
+        localized_fields = '__all__'
+        fields = [
+            'count',
+            'designated_price',
+        ]

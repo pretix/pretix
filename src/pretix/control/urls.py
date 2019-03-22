@@ -150,6 +150,8 @@ urlpatterns = [
             name='event.item.variations'),
         url(r'^items/(?P<item>\d+)/addons', item.ItemAddOns.as_view(),
             name='event.item.addons'),
+        url(r'^items/(?P<item>\d+)/bundles', item.ItemBundles.as_view(),
+            name='event.item.bundles'),
         url(r'^items/(?P<item>\d+)/up$', item.item_move_up, name='event.items.up'),
         url(r'^items/(?P<item>\d+)/down$', item.item_move_down, name='event.items.down'),
         url(r'^items/(?P<item>\d+)/delete$', item.ItemDelete.as_view(), name='event.items.delete'),

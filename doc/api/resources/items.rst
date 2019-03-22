@@ -64,6 +64,7 @@ original_price                        money (string)             An original pri
 require_approval                      boolean                    If ``True``, orders with this product will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
+require_bundling                      boolean                    If ``True``, this item is only available as part of bundles.
 generate_tickets                      boolean                    If ``False``, tickets are never generated for this
                                                                  product, regardless of other settings. If ``True``,
                                                                  tickets are generated even if this is a
@@ -91,8 +92,17 @@ addons                                list of objects            Definition of a
                                                                  chosen from.
 ├ min_count                           integer                    The minimal number of add-ons that need to be chosen.
 ├ max_count                           integer                    The maximal number of add-ons that can be chosen.
-└ position                            integer                    An integer, used for sorting
+├ position                            integer                    An integer, used for sorting
 └ price_included                      boolean                    Adding this add-on to the item is free
+bundles                               list of objects            Definition of bundles that are included in this item.
+                                                                 Only writable during creation,
+                                                                 use separate endpoint to modify this later.
+├ bundled_item                        integer                    Internal ID of the item that is included.
+├ bundled_variation                   integer                    Internal ID of the variation of the item (or ``null``).
+├ count                               integer                    Number of items included
+└ designated_price                    money (string)             Designated price of the bundled product. This will be
+                                                                 used to split the price of the base item e.g. for mixed
+                                                                 taxation. This is not added to the price.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -121,15 +131,20 @@ addons                                list of objects            Definition of a
 
    The ``generate_tickets`` attribute has been added.
 
+.. versionchanged:: 2.6
+
+   The ``bundles`` and ``require_bundling`` attributes have been added.
+
 Notes
 -----
+
 Please note that an item either always has variations or never has. Once created with variations the item can never
 change to an item without and vice versa. To create an item with variations ensure that you POST an item with at least
 one variation.
 
-Also note that ``variations`` and ``addons`` are only supported on ``POST``. To update/delete variations and add-ons please
-use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT`` with nested
-``variations`` and/or ``addons``.
+Also note that ``variations``, ``bundles``, and  ``addons`` are only supported on ``POST``. To update/delete variations,
+bundles, and add-ons please use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT``
+with nested ``variations``, ``bundles`` and/or ``addons``.
 
 Endpoints
 ---------
@@ -186,6 +201,7 @@ Endpoints
             "has_variations": false,
             "generate_tickets": null,
             "require_approval": false,
+            "require_bundling": false,
             "variations": [
               {
                  "value": {"en": "Student"},
@@ -204,7 +220,8 @@ Endpoints
                  "position": 1
               }
             ],
-            "addons": []
+            "addons": [],
+            "bundles": []
           }
         ]
       }
@@ -273,6 +290,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": false,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -291,7 +309,8 @@ Endpoints
              "position": 1
           }
         ],
-        "addons": []
+        "addons": [],
+        "bundles": []
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -340,6 +359,7 @@ Endpoints
         "max_per_order": null,
         "checkin_attention": false,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -358,7 +378,8 @@ Endpoints
              "position": 1
           }
         ],
-        "addons": []
+        "addons": [],
+        "bundles": []
       }
 
    **Example response**:
@@ -396,6 +417,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": true,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -414,7 +436,8 @@ Endpoints
              "position": 1
           }
         ],
-        "addons": []
+        "addons": [],
+        "bundles": []
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create an item for
@@ -483,6 +506,7 @@ Endpoints
         "checkin_attention": false,
         "has_variations": true,
         "require_approval": false,
+        "require_bundling": false,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -501,7 +525,8 @@ Endpoints
              "position": 1
           }
         ],
-        "addons": []
+        "addons": [],
+        "bundles": []
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

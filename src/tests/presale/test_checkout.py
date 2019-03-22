@@ -18,7 +18,10 @@ from pretix.base.models import (
     OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer, Quota,
     Voucher,
 )
-from pretix.base.models.items import ItemAddOn, ItemVariation, SubEventItem
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemVariation, SubEventItem,
+)
+from pretix.base.services.orders import OrderError, _perform_order
 from pretix.testutils.sessions import get_cart_session_key
 
 
@@ -1981,3 +1984,335 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.q2a: 'DEV',
             self.q3: 'False',
         }, should_fail=True)
+
+
+class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.trans = Item.objects.create(event=self.event, name='Public Transport Ticket',
+                                         default_price=2.50)
+        self.transquota = Quota.objects.create(event=self.event, name='Transport', size=5)
+        self.transquota.items.add(self.trans)
+        self.bundle1 = ItemBundle.objects.create(
+            base_item=self.ticket,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+        self.cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10)
+        )
+        self.bundled1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+        )
+
+    def test_simple_bundle(self):
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_simple_bundle_with_variation(self):
+        v = self.trans.variations.create(value="foo", default_price=4)
+        self.transquota.variations.add(v)
+        self.bundle1.bundled_variation = v
+        self.bundle1.save()
+        self.bundled1.variation = v
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.variation == v
+        assert a.price == 1.5
+
+    def test_bundle_with_count(self):
+        self.cp1.price -= 1.5
+        self.cp1.save()
+        bundled2 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+        )
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, bundled2.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5 - 1.5
+        assert cp.addons.count() == 2
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        a = cp.addons.last()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_position_free_price(self):
+        self.ticket.free_price = True
+        self.ticket.default_price = 1
+        self.ticket.save()
+        self.cp1.price = 20 - 1.5
+        self.cp1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 20 - 1.5
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_position_free_price_lower_than_designated_price(self):
+        self.ticket.free_price = True
+        self.ticket.default_price = 1
+        self.ticket.save()
+        self.cp1.price = 0
+        self.cp1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('0.00')
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.50')
+
+    def test_bundle_different_tax_rates(self):
+        tr19 = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('19.00')
+        )
+        tr7 = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('7.00'),
+            price_includes_tax=True,  # will be ignored
+        )
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.tax_value == Decimal('3.43')
+        assert cp.addons.count() == 1
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        assert a.tax_rate == Decimal('7.00')
+        assert a.tax_value == Decimal('0.10')
+
+    def test_expired_keep_price(self):
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        b = cp.addons.first()
+        assert cp.price == 21.5
+        assert b.price == 1.5
+
+    def test_expired_designated_price_changed(self):
+        self.bundle1.designated_price = Decimal('2.00')
+        self.bundle1.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        self.cp1.refresh_from_db()
+        self.bundled1.refresh_from_db()
+        assert self.cp1.price == 21
+        assert self.bundled1.price == 2
+
+    def test_expired_designated_price_changed_beyond_base_price(self):
+        self.bundle1.designated_price = Decimal('40.00')
+        self.bundle1.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        self.cp1.refresh_from_db()
+        self.bundled1.refresh_from_db()
+        assert self.cp1.price == 0
+        assert self.bundled1.price == 40
+
+    def test_expired_base_price_changed(self):
+        self.ticket.default_price = Decimal('25.00')
+        self.ticket.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        self.cp1.refresh_from_db()
+        self.bundled1.refresh_from_db()
+        assert self.cp1.price == 23.5
+        assert self.bundled1.price == 1.5
+
+    def test_expired_bundled_and_addon(self):
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
+            price=2.5, expires=now() - timedelta(minutes=10), is_bundled=False
+        )
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.includes_tax = False
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.includes_tax = False
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        b = cp.addons.first()
+        a = cp.addons.last()
+        assert cp.price == 21.5
+        assert b.price == 1.5
+        assert cp.price == 21.5
+        assert b.price == 1.5
+        assert a.price == 2.5
+
+    def test_expired_base_product_sold_out(self):
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.exists()
+
+    def test_expired_bundled_product_sold_out(self):
+        self.transquota.size = 0
+        self.transquota.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.exists()
+
+    def test_expired_bundled_products_sold_out_partially(self):
+        self.transquota.size = 1
+        self.transquota.save()
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.cp1.price -= 1.5
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.exists()
+
+    def test_expired_reverse_charge_only_bundled(self):
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.price = Decimal('1.40')
+        self.bundled1.includes_tax = False
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.tax_value == Decimal('3.43')
+        assert cp.addons.count() == 1
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert a.tax_value == Decimal('0.00')
+
+    def test_expired_reverse_charge_all(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.price = Decimal('18.07')
+        self.cp1.includes_tax = False
+        self.cp1.save()
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.price = Decimal('1.40')
+        self.bundled1.includes_tax = False
+        self.bundled1.save()
+
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert cp.tax_value == Decimal('0.00')
+        assert cp.addons.count() == 1
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert a.tax_value == Decimal('0.00')
+
+    def test_addon_and_bundle_through_frontend_stack(self):
+        cat = self.event.categories.create(name="addons")
+        self.trans.category = cat
+        self.trans.save()
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=cat, min_count=1,
+                                 price_included=True)
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
+            price=0, expires=now() + timedelta(minutes=10), is_bundled=False
+        )
+
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)

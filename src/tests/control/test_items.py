@@ -392,6 +392,59 @@ class ItemsTest(ItemFormTest):
         })
         assert not self.item2.addons.exists()
 
+    def test_manipulate_bundles(self):
+        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': '',
+            'form-0-itemvar': str(self.item1.pk),
+            'form-0-count': '2',
+            'form-0-designated_price': '2.00',
+        })
+        assert self.item2.bundles.exists()
+        assert self.item2.bundles.first().bundled_item == self.item1
+        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '1',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': str(self.item2.bundles.first().pk),
+            'form-0-itemvar': str(self.item1.pk),
+            'form-0-count': '2',
+            'form-0-designated_price': '2.00',
+            'form-0-DELETE': 'on',
+        })
+        assert not self.item2.bundles.exists()
+
+        # Do not allow self-reference
+        self.client.post('/control/event/%s/%s/items/%d/addons' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': '',
+            'form-0-itemvar': str(self.item2.pk),
+            'form-0-count': '2',
+            'form-0-designated_price': '2.00',
+        })
+        assert not self.item2.bundles.exists()
+
+        # Do not allow multi-level bundles
+        self.item1.bundles.create(bundled_item=self.item1, count=1, designated_price=0)
+        self.client.post('/control/event/%s/%s/items/%d/bundles' % (self.orga1.slug, self.event1.slug, self.item2.id), {
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-MIN_NUM_FORMS': '0',
+            'form-MAX_NUM_FORMS': '1000',
+            'form-0-id': '',
+            'form-0-itemvar': str(self.item1.pk),
+            'form-0-count': '2',
+            'form-0-designated_price': '2.00',
+        })
+        assert not self.item2.bundles.exists()
+
     def test_update_variations(self):
         self.client.post('/control/event/%s/%s/items/%d/variations' % (self.orga1.slug, self.event1.slug, self.item2.id), {
             'form-TOTAL_FORMS': '2',

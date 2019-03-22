@@ -138,7 +138,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "require_voucher": False,
                             "order_min": None,
                             "max_price": None,
-                            "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00"},
+                            "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00", "includes_mixed_tax_rate": False},
                             "picture": None,
                             "has_variations": 0,
                             "description": None,
@@ -166,7 +166,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                     "value": "Red",
                                     "id": self.shirt_red.pk,
                                     "price": {"gross": "14.00", "net": "11.76", "tax": "2.24", "name": "",
-                                              "rate": "19.00"},
+                                              "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
                                     "avail": [100, None],
                                     "order_max": 2
@@ -175,7 +175,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                     "value": "Blue",
                                     "id": self.shirt_blue.pk,
                                     "price": {"gross": "12.00", "net": "10.08", "tax": "1.92", "name": "",
-                                              "rate": "19.00"},
+                                              "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
                                     "avail": [100, None],
                                     "order_max": 2
@@ -218,7 +218,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "require_voucher": False,
                             "order_min": None,
                             "max_price": None,
-                            "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00"},
+                            "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00", "includes_mixed_tax_rate": False},
                             "picture": None,
                             "has_variations": 0,
                             "description": None,
@@ -293,6 +293,36 @@ class WidgetCartTest(CartTestMixin, TestCase):
         c = response.content.decode()
         assert '%m/%d/%Y' not in c
         assert '%d.%m.%Y' in c
+
+    def test_product_list_view_with_bundle_sold_out(self):
+        self.quota_shirts.size = 0
+        self.quota_shirts.save()
+        self.ticket.bundles.create(bundled_item=self.shirt, bundled_variation=self.shirt_blue,
+                                   designated_price=2, count=1)
+        response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert data["items_by_category"][0]["items"][0]["avail"] == [0, None]
+
+    def test_product_list_view_with_bundle_mixed_tax_rate(self):
+        self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+        self.shirt.tax_rule = self.tr7
+        self.shirt.require_bundling = True
+        self.shirt.save()
+        self.ticket.bundles.create(bundled_item=self.shirt, bundled_variation=self.shirt_blue,
+                                   designated_price=2, count=1)
+        response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert len(data["items_by_category"][0]["items"]) == 1
+        assert data["items_by_category"][0]["items"][0]["price"] == {
+            "gross": "23.00",
+            "net": "19.52",
+            "tax": "3.48",
+            "name": "MIXED!",
+            "rate": "19.00",
+            "includes_mixed_tax_rate": True
+        }
 
     def test_subevent_list(self):
         self.event.has_subevents = True

@@ -14,9 +14,11 @@ from pretix.base.models import (
     Organizer, Question, QuestionAnswer, Quota, Voucher,
 )
 from pretix.base.models.items import (
-    ItemAddOn, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.cart import CartError, CartManager, error_messages
+from pretix.base.services.cart import (
+    CartError, CartManager, error_messages, update_tax_rates,
+)
 from pretix.testutils.sessions import get_cart_session_key
 
 
@@ -1968,3 +1970,601 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp1.expires > now()
         assert cp2.expires > now()
         assert cp2.addon_to_id == cp1.pk
+
+
+class CartBundleTest(CartTestMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.trans = Item.objects.create(event=self.event, name='Public Transport Ticket',
+                                         default_price=2.50, require_bundling=True)
+        self.transquota = Quota.objects.create(event=self.event, name='Transport', size=5)
+        self.transquota.items.add(self.trans)
+        self.bundle1 = ItemBundle.objects.create(
+            base_item=self.ticket,
+            bundled_item=self.trans,
+            designated_price=1.5,
+            count=1
+        )
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+
+    def test_simple_bundle(self):
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_voucher_on_base_product(self):
+        v = self.event.vouchers.create(code="foo", item=self.ticket)
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'voucher': v.code,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        assert cp.voucher == v
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        assert not a.voucher
+
+    def test_simple_bundle_with_variation(self):
+        v = self.trans.variations.create(value="foo", default_price=4)
+        self.transquota.variations.add(v)
+        self.bundle1.bundled_variation = v
+        self.bundle1.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.variation == v
+        assert a.price == 1.5
+
+    def test_multiple_bundles(self):
+        ItemBundle.objects.create(
+            base_item=self.ticket, bundled_item=self.trans, designated_price=1.5, count=1
+        )
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5 - 1.5
+        assert cp.addons.count() == 2
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        a = cp.addons.last()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_with_count(self):
+        self.bundle1.count = 2
+        self.bundle1.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5 - 1.5
+        assert cp.addons.count() == 2
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        a = cp.addons.last()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_position_multiple(self):
+        self.bundle1.count = 2
+        self.bundle1.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 2
+            }
+        ])
+        self.cm.commit()
+        assert CartPosition.objects.filter(addon_to__isnull=True).count() == 2
+        assert CartPosition.objects.count() == 6
+        cp = CartPosition.objects.filter(addon_to__isnull=True).first()
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5 - 1.5
+        assert cp.addons.count() == 2
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_position_free_price(self):
+        self.ticket.free_price = True
+        self.ticket.default_price = 1
+        self.ticket.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1,
+                'price': 20
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 20 - 1.5
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
+    def test_bundle_position_free_price_lower_than_designated_price(self):
+        self.ticket.free_price = True
+        self.ticket.default_price = 1
+        self.ticket.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1,
+                'price': 1.2
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('0.00')
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == Decimal('1.50')
+
+    def test_bundle_position_without_designated_price(self):
+        self.bundle1.designated_price = 0
+        self.bundle1.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1,
+            }
+        ])
+        self.cm.commit()
+        cp = CartPosition.objects.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 0
+
+    def test_bundle_sold_out(self):
+        self.transquota.size = 0
+        self.transquota.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1,
+            }
+        ])
+        with self.assertRaises(CartError):
+            self.cm.commit()
+        assert not CartPosition.objects.exists()
+
+    def test_bundle_sold_partial_in_bundle(self):
+        self.bundle1.count = 2
+        self.bundle1.save()
+        self.transquota.size = 1
+        self.transquota.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1,
+            }
+        ])
+        with self.assertRaises(CartError):
+            self.cm.commit()
+        assert not CartPosition.objects.exists()
+
+    def test_bundle_sold_partial_in_bundle_multiple_positions(self):
+        self.bundle1.count = 2
+        self.bundle1.save()
+        self.transquota.size = 3
+        self.transquota.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 2,
+            }
+        ])
+        with self.assertRaises(CartError):
+            self.cm.commit()
+        assert CartPosition.objects.filter(addon_to__isnull=True).count() == 1
+        assert CartPosition.objects.filter(addon_to__isnull=False).count() == 2
+
+    def test_multiple_bundles_sold_out_partially(self):
+        ItemBundle.objects.create(
+            base_item=self.ticket, bundled_item=self.trans, designated_price=1.5, count=1
+        )
+        self.transquota.size = 1
+        self.transquota.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        with self.assertRaises(CartError):
+            self.cm.commit()
+        assert not CartPosition.objects.exists()
+
+    def test_require_bundling(self):
+        self.ticket.require_bundling = True
+        self.ticket.save()
+        with self.assertRaises(CartError):
+            self.cm.add_new_items([
+                {
+                    'item': self.ticket.pk,
+                    'variation': None,
+                    'count': 1
+                }
+            ])
+        assert not CartPosition.objects.exists()
+
+    def test_bundle_item_disabled(self):
+        self.ticket.active = False
+        self.ticket.save()
+        with self.assertRaises(CartError):
+            self.cm.add_new_items([
+                {
+                    'item': self.ticket.pk,
+                    'variation': None,
+                    'count': 1
+                }
+            ])
+        assert not CartPosition.objects.exists()
+
+    def test_bundle_different_tax_rates(self):
+        tr19 = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('19.00')
+        )
+        tr7 = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('7.00'),
+            price_includes_tax=True,  # will be ignored
+        )
+        self.event.settings.display_net_prices = True  # will be ignored
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+        assert CartPosition.objects.filter(addon_to__isnull=True).count() == 1
+        assert CartPosition.objects.count() == 2
+        cp = CartPosition.objects.filter(addon_to__isnull=True).first()
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.tax_value == Decimal('3.43')
+        assert cp.addons.count() == 1
+        assert cp.includes_tax
+        a = cp.addons.first()
+        assert a.item == self.trans
+        assert a.price == 1.5
+        assert a.tax_rate == Decimal('7.00')
+        assert a.tax_value == Decimal('0.10')
+        assert a.includes_tax
+
+    def test_one_bundled_one_addon(self):
+        cat = self.event.categories.create(name="addons")
+        self.trans.require_bundling = False
+        self.trans.category = cat
+        self.trans.save()
+        ItemAddOn.objects.create(base_item=self.ticket, addon_category=cat)
+
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).first()
+        assert cp.item == self.ticket
+        assert cp.price == Decimal('21.50')
+        b = cp.addons.first()
+        assert b.item == self.trans
+
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm.set_addons([
+            {
+                'addon_to': cp.pk,
+                'item': self.trans.pk,
+                'variation': None
+            }
+        ])
+        self.cm.commit()
+        assert cp.addons.count() == 2
+        a = cp.addons.exclude(pk=b.pk).get()
+        assert a.item == self.trans
+        assert a.price == 2.5
+
+    def test_extend_keep_price(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == 21.5
+        assert b.price == 1.5
+
+    def test_extend_designated_price_changed(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.bundle1.designated_price = Decimal('2.00')
+        self.bundle1.save()
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == 21
+        assert b.price == 2
+
+    def test_extend_designated_price_changed_beyond_base_price(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.bundle1.designated_price = Decimal('40.00')
+        self.bundle1.save()
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == 0
+        assert b.price == 40
+
+    def test_extend_base_price_changed(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.ticket.default_price = Decimal('25.00')
+        self.ticket.save()
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        assert cp.price == 23.5
+        assert b.price == 1.5
+
+    def test_extend_bundled_and_addon(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=False
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == 21.5
+        assert b.price == 1.5
+        assert a.price == 2.5
+
+    def test_expired_reverse_charge_only_bundled(self):
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        update_tax_rates(self.event, self.session_key, ia)
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+        self.cm.invoice_address = ia
+        self.cm.commit()
+
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == 0
+        assert not a.includes_tax
+
+    def test_expired_reverse_charge_all(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
+        )
+        update_tax_rates(self.event, self.session_key, ia)
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+        self.cm.invoice_address = ia
+        self.cm.commit()
+
+        cp.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+    def test_reverse_charge_all_add(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        self.cm.invoice_address = ia
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).get()
+        a = CartPosition.objects.filter(addon_to__isnull=False).get()
+        assert cp.price == Decimal('18.07')
+        assert cp.tax_rate == Decimal('0.00')
+        assert not cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+    def test_reverse_charge_bundled_add(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'))
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        self.cm.invoice_address = ia
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).get()
+        a = CartPosition.objects.filter(addon_to__isnull=False).get()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.40')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
