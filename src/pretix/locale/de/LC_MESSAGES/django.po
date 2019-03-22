@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-22 09:43+0000\n"
+"PO-Revision-Date: 2019-03-22 15:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -128,28 +128,21 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Unbekannte Erweiterung: '{name}'."
 
 #: pretix/api/serializers/item.py:60 pretix/control/forms/item.py:613
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
-"Die Kategorie für Zusatzprodukte muss zur selben Veranstaltung gehören wie "
-"das Produkt."
+msgstr "Ein Produkt darf sich nicht selbst enthalten."
 
 #: pretix/api/serializers/item.py:63 pretix/control/forms/item.py:615
 msgid "The bundled item must not have bundles on its own."
 msgstr ""
+"Ein Produkt darf keine Produkte enthalten, die weitere Produkte enthalten."
 
 #: pretix/api/serializers/item.py:124
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
-#| "the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"Varianten können nicht per PATCH/PUT geändert werden, bitte nutzen Sie die "
-"separate Ressource."
+"Varianten, Zusatzprodukte und Bundles können nicht per PATCH/PUT geändert "
+"werden, bitte nutzen Sie die separate Ressource."
 
 #: pretix/api/serializers/item.py:221
 msgid ""
@@ -1868,12 +1861,15 @@ msgstr ""
 #: pretix/base/models/items.py:333
 msgid "Only sell this product as part of a bundle"
 msgstr ""
+"Dieses Produkt nicht einzeln verkaufen, sondern nur als Teil anderer Produkte"
 
 #: pretix/base/models/items.py:335
 msgid ""
 "If this option is set, the product will only be sold as part of bundle "
 "products."
 msgstr ""
+"Wenn diese Option gesetzt ist, wird dieses Produkt nicht einzeln verkauft, "
+"sondern kann nur in anderen Produkten enthalten sein."
 
 #: pretix/base/models/items.py:338
 msgid "Allow product to be canceled"
@@ -2053,16 +2049,12 @@ msgid "The maximum count needs to be greater than the minimum count."
 msgstr "Die minimale Anzahl muss unter der maximalen Anzahl liegen."
 
 #: pretix/base/models/items.py:806
-#, fuzzy
-#| msgid "invalid item"
 msgid "Bundled item"
-msgstr "Ungültiges Produkt"
+msgstr "Enthaltenes Produkt"
 
 #: pretix/base/models/items.py:812
-#, fuzzy
-#| msgid "Sample variation"
 msgid "Bundled variation"
-msgstr "Beispielvariante"
+msgstr "Enthaltene Variante"
 
 #: pretix/base/models/items.py:818 pretix/base/models/items.py:905
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
@@ -2071,7 +2063,7 @@ msgstr "Zahl"
 
 #: pretix/base/models/items.py:823
 msgid "Designated price part"
-msgstr ""
+msgstr "Ausgewiesener Preisanteil"
 
 #: pretix/base/models/items.py:824
 msgid ""
@@ -2080,32 +2072,27 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Wenn diese Angabe gesetzt ist, wird angezeigt, dass das enthaltene Produkt "
+"für den entsprechenden Anteil des Gesamt-Bruttopreises verantwortlich ist. "
+"Dies kann in Fällen gemischter Besteuerung wichtig sein, ansonsten können "
+"Sie dieses Feld leer lassen. Dieser Preis wird nicht auf den Basispreis "
+"aufgeschlagen."
 
 #: pretix/base/models/items.py:847
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
-"Die Kategorie für Zusatzprodukte muss zur selben Veranstaltung gehören wie "
-"das Produkt."
+msgstr "Die enthaltenen Produkte müssen zur selben Veranstaltung gehören."
 
 #: pretix/base/models/items.py:849
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "A variation needs to be set for this item."
-msgstr "Diese Variante gehört nicht zu diesem Produkt."
+msgstr "Zu diesem Produkt muss eine Variante ausgewählt werden."
 
 #: pretix/base/models/items.py:851
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "The chosen variation does not belong to this item."
 msgstr "Diese Variante gehört nicht zu diesem Produkt."
 
 #: pretix/base/models/items.py:856
-#, fuzzy
-#| msgid "The minimum count needs to be equal to or greater than zero."
 msgid "The count needs to be equal to or greater than zero."
-msgstr "Die minimale Anzahl muss mindestens null sein."
+msgstr "Die Anzahl muss mindestens null sein."
 
 #: pretix/base/models/items.py:906
 msgid "Text (one line)"
@@ -3742,14 +3729,10 @@ msgstr ""
 "erworben werden."
 
 #: pretix/base/services/cart.py:91
-#, fuzzy
-#| msgid ""
-#| "One of the products you selected can only be bought as an add-on to "
-#| "another project."
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
-"Eins der ausgewählten Produkte kann nur als Zusatz zu einem anderen Produkt "
-"erworben werden."
+"Eins der ausgewählten Produkte wird nicht einzeln verkauft, sondern nur als "
+"Teil anderer Produkte."
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
@@ -6623,10 +6606,8 @@ msgstr ""
 #: pretix/control/forms/item.py:562
 #: pretix/control/templates/pretixcontrol/item/bundles.html:26
 #: pretix/control/templates/pretixcontrol/item/bundles.html:53
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled product"
-msgstr "Produkt hinzufügen"
+msgstr "Enthaltenes Produkt"
 
 #: pretix/control/forms/item.py:586 pretix/control/forms/orders.py:230
 #: pretix/control/forms/orders.py:331
@@ -9813,10 +9794,8 @@ msgid "Add-Ons"
 msgstr "Zusatz-Produkte"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled products"
-msgstr "Produkt hinzufügen"
+msgstr "Enthaltene Produkte"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:32
 msgid "Create product"
@@ -9847,12 +9826,12 @@ msgid ""
 "With bundles, you can specify products that are always automatically added "
 "as add-ons in the cart for this product."
 msgstr ""
+"Mit enthaltenen Produkten können Sie Produkte spezifizieren, die immer als "
+"Teil dieses Produktes im Warenkorb landen."
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
-#, fuzzy
-#| msgid "Add a new object"
 msgid "Add a new bundled product"
-msgstr "Neues Objekt hinzufügen"
+msgstr "Neues enthaltenes Produkt hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -13417,16 +13396,12 @@ msgstr ""
 "als Zusatzprodukt verkauft wird."
 
 #: pretix/control/views/item.py:1106
-#, fuzzy
-#| msgid ""
-#| "You cannot add add-ons to a product that is only available as an add-on "
-#| "itself."
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr ""
-"Sie können keine Zusatzprodukte zu einem Produkt hinzufügen, das selbst nur "
-"als Zusatzprodukt verkauft wird."
+"Sie können keine enthaltenen Produkte zu einem Produkt hinzufügen, das "
+"selbst nur als Zusatzprodukt verkauft wird."
 
 #: pretix/control/views/item.py:1164
 msgid "The selected product has been deleted."
@@ -16626,20 +16601,15 @@ msgstr "Preis von %(item)s verändern"
 #: pretix/presale/templates/pretixpresale/event/index.html:408
 #: pretix/presale/templates/pretixpresale/event/voucher.html:117
 #: pretix/presale/templates/pretixpresale/event/voucher.html:212
-#, fuzzy
-#| msgid "taxes"
 msgid "plus taxes"
-msgstr "Steuern"
+msgstr "zzgl. Steuern"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:300
 #: pretix/presale/templates/pretixpresale/event/index.html:410
 #: pretix/presale/templates/pretixpresale/event/voucher.html:119
 #: pretix/presale/templates/pretixpresale/event/voucher.html:214
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Included taxes"
 msgid "incl. taxes"
-msgstr "Enthaltene Umsatzsteuer"
+msgstr "inkl. Steuern"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:307
 #: pretix/presale/templates/pretixpresale/event/index.html:417
