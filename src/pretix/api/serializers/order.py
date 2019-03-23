@@ -220,7 +220,7 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 
 class OrderSerializer(I18nAwareModelSerializer):
-    invoice_address = InvoiceAddressSerializer(read_only=True)
+    invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
     fees = OrderFeeSerializer(many=True, read_only=True)
     downloads = OrderDownloadsField(source='*', read_only=True)
@@ -238,7 +238,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'invoice_address', 'positions', 'downloads',
+            'payment_provider', 'fees', 'total', 'positions', 'downloads',
             'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel'
         )
 
@@ -256,10 +256,34 @@ class OrderSerializer(I18nAwareModelSerializer):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
         update_fields = ['comment', 'checkin_attention', 'email', 'locale']
+        print(validated_data)
+
+        if 'invoice_address' in validated_data:
+            iadata = validated_data.pop('invoice_address')
+
+            if not iadata:
+                try:
+                    instance.invoice_address.delete()
+                except InvoiceAddress.DoesNotExist:
+                    pass
+            else:
+                name = iadata.pop('name', '')
+                if name and not iadata.get('name_parts'):
+                    iadata['name_parts'] = {
+                        '_legacy': name
+                    }
+                try:
+                    ia = instance.invoice_address
+                    if iadata.get('vat_id') != ia.vat_id:
+                        ia.vat_id_validated = False
+                    self.fields['invoice_address'].update(ia, iadata)
+                except InvoiceAddress.DoesNotExist:
+                    InvoiceAddress.objects.create(order=instance, **iadata)
 
         for attr, value in validated_data.items():
             if attr in update_fields:
                 setattr(instance, attr, value)
+
         instance.save(update_fields=update_fields)
         return instance
 

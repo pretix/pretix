@@ -578,6 +578,8 @@ Updating order fields
 
    * ``comment``
 
+   * ``invoice_address`` (you always need to supply the full object, or ``null`` to delete the current address)
+
    **Example request**:
 
    .. sourcecode:: http

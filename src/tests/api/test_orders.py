@@ -94,7 +94,8 @@ def order(event, item, taxrule, question):
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule)
-        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
+        InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
+                                      vat_id="DE123", vat_id_validated=True)
         op = OrderPosition.objects.create(
             order=o,
             item=item,
@@ -214,8 +215,8 @@ TEST_ORDER_RES = {
         "city": "",
         "country": "NZ",
         "internal_reference": "",
-        "vat_id": "",
-        "vat_id_validated": False
+        "vat_id": "DE123",
+        "vat_id_validated": True
     },
     "require_approval": False,
     "positions": [TEST_ORDERPOSITION_RES],
@@ -2586,7 +2587,19 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             'comment': 'Here is a comment',
             'checkin_attention': True,
             'email': 'foo@bar.com',
-            'locale': 'de'
+            'locale': 'de',
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "John Doe",
+                "name_parts": {},
+                "street": "",
+                "zipcode": "",
+                "city": "Paris",
+                "country": "Fr",
+                "internal_reference": "",
+                "vat_id": "",
+            }
         }
     )
     assert resp.status_code == 200
@@ -2595,10 +2608,57 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert order.checkin_attention
     assert order.email == 'foo@bar.com'
     assert order.locale == 'de'
+    assert order.invoice_address.company == "This is my company name"
+    assert order.invoice_address.name_cached == "John Doe"
+    assert order.invoice_address.name_parts == {'_legacy': 'John Doe'}
+    assert str(order.invoice_address.country) == "FR"
+    assert not order.invoice_address.vat_id_validated
+    assert order.invoice_address.city == "Paris"
     assert order.all_logentries().get(action_type='pretix.event.order.comment')
     assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
     assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
     assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
+    assert order.all_logentries().get(action_type='pretix.event.order.modified')
+
+
+@pytest.mark.django_db
+def test_order_update_invoiceaddress_delete_create(token_client, organizer, event, order):
+    event.settings.locales = ['de', 'en']
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': None,
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    with pytest.raises(InvoiceAddress.DoesNotExist):
+        order.invoice_address
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'invoice_address': {
+                "is_business": False,
+                "company": "This is my company name",
+                "name": "",
+                "name_parts": {},
+                "street": "",
+                "zipcode": "",
+                "city": "Paris",
+                "country": "Fr",
+                "internal_reference": "",
+                "vat_id": "",
+            }
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert order.invoice_address.company == "This is my company name"
+    assert str(order.invoice_address.country) == "FR"
+    assert order.invoice_address.city == "Paris"
 
 
 @pytest.mark.django_db

@@ -494,6 +494,16 @@ class OrderViewSet(viewsets.ModelViewSet):
                 }
             )
 
+        if 'invoice_address' in self.request.data:
+            serializer.instance.log_action(
+                'pretix.event.order.modified',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'invoice_data': self.request.data.get('invoice_address'),
+                }
+            )
+
         serializer.save()
 
     def perform_create(self, serializer):
