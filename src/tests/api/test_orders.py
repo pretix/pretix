@@ -2626,3 +2626,65 @@ def test_order_update_locale_to_invalid(token_client, organizer, event, order):
     )
     assert resp.status_code == 400
     assert resp.data == {'locale': ['"de" is not a supported locale for this event.']}
+
+
+@pytest.mark.django_db
+def test_order_create_invoice(token_client, organizer, event, order):
+    event.settings.invoice_generate = 'True'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/create_invoice/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 201
+    assert resp.data == {
+        'order': 'FOO',
+        'number': 'DUMMY-00001',
+        'is_cancellation': False,
+        'invoice_from': '',
+        'invoice_to': 'Sample company\n\n\n \nNew Zealand',
+        'date': '2019-03-23',
+        'refers': None,
+        'locale': 'en',
+        'introductory_text': '',
+        'additional_text': '',
+        'payment_provider_text': '',
+        'footer_text': '',
+        'lines': [
+            {
+                'description': 'Budget Ticket<br />Attendee: Peter',
+                'gross_value': '23.00',
+                'tax_value': '0.00',
+                'tax_rate': '0.00',
+                'tax_name': ''
+            },
+            {
+                'description': 'Payment fee',
+                'gross_value': '0.25',
+                'tax_value': '0.05',
+                'tax_rate': '19.00',
+                'tax_name': ''
+            }
+        ],
+        'foreign_currency_display': None,
+        'foreign_currency_rate': None,
+        'foreign_currency_rate_date': None,
+        'internal_reference': ''
+    }
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/create_invoice/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.data == {'detail': 'An invoice for this order already exists.'}
+    assert resp.status_code == 400
+
+    event.settings.invoice_generate = 'False'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/create_invoice/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'detail': 'You cannot generate an invoice for this order.'}

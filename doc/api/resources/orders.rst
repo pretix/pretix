@@ -953,7 +953,7 @@ Order state operations
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_expired/
 
-   Marks a unpaid order as expired.
+   Marks an unpaid order as expired.
 
    **Example request**:
 
@@ -1111,6 +1111,47 @@ Order state operations
    :param code: The ``code`` field of the order to modify
    :statuscode 200: no error
    :statuscode 400: The order cannot be marked as denied since the current order status does not allow it.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+
+Invoice generation
+------------------
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/create_invoice/
+
+   Creates an invoice for an order which currently does not have an invoice. Returns the
+   invoice object.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/create_invoice/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "order": "FOO",
+        "number": "DUMMY-00001",
+        "is_cancellation": false,
+        ...
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to create an invoice for
+   :statuscode 200: no error
+   :statuscode 400: The invoice can not be created (invoicing disabled, the order already has an invoice, …)
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.

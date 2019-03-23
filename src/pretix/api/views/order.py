@@ -9,6 +9,7 @@ from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware, now
+from django.utils.translation import ugettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import detail_route
@@ -307,6 +308,38 @@ class OrderViewSet(viewsets.ModelViewSet):
             auth=(request.auth if isinstance(request.auth, (TeamAPIToken, OAuthAccessToken, Device)) else None),
         )
         return self.retrieve(request, [], **kwargs)
+
+    @detail_route(methods=['POST'])
+    def create_invoice(self, request, **kwargs):
+        order = self.get_object()
+        has_inv = order.invoices.exists() and not (
+            order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+            and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
+        )
+        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+            return Response(
+                {'detail': _('You cannot generate an invoice for this order.')},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        elif has_inv:
+            return Response(
+                {'detail': _('An invoice for this order already exists.')},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        inv = generate_invoice(order)
+        order.log_action(
+            'pretix.event.order.invoice.generated',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={
+                'invoice': inv.pk
+            }
+        )
+        return Response(
+            InvoiceSerializer(inv).data,
+            status=status.HTTP_201_CREATED
+        )
 
     @detail_route(methods=['POST'])
     def extend(self, request, **kwargs):
