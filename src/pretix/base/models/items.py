@@ -818,7 +818,7 @@ class ItemBundle(models.Model):
         verbose_name=_('Number')
     )
     designated_price = models.DecimalField(
-        null=True, blank=True,
+        default=Decimal('0.00'), blank=True,
         decimal_places=2, max_digits=10,
         verbose_name=_('Designated price part'),
         help_text=_('If set, it will be shown that this bundled item is responsible for the given value of the total '
