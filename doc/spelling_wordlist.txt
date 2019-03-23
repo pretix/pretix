@@ -110,6 +110,7 @@ subdomains
 subevent
 subevents
 submodule
+subnet
 subpath
 Symfony
 systemd
