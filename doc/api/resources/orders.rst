@@ -585,7 +585,7 @@ Updating order fields
       PATCH /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "email": "other@example.org",
@@ -611,8 +611,41 @@ Updating order fields
    :statuscode 200: no error
    :statuscode 400: The order could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
-         order.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
+
+Generating new secrets
+----------------------
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/regenerate_secrets/
+
+   Triggers generation of new ``secret`` attributes for both the order and all order positions.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/regenerate_secrets/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``code`` field of the order to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
 
 Deleting orders
 ---------------
@@ -765,7 +798,7 @@ Creating orders
       POST /api/v1/organizers/bigevents/events/sampleconf/orders/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "email": "dummy@example.org",
@@ -1115,8 +1148,8 @@ Order state operations
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.
 
-Invoice generation
-------------------
+Generating invoices
+-------------------
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/create_invoice/
 

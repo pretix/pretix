@@ -2688,3 +2688,18 @@ def test_order_create_invoice(token_client, organizer, event, order):
     )
     assert resp.status_code == 400
     assert resp.data == {'detail': 'You cannot generate an invoice for this order.'}
+
+
+@pytest.mark.django_db
+def test_order_regenerate_secrets(token_client, organizer, event, order):
+    s = order.secret
+    ps = order.positions.first().secret
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/regenerate_secrets/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    assert s != order.secret
+    assert ps != order.positions.first().secret

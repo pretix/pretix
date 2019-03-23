@@ -29,6 +29,7 @@ from pretix.api.serializers.order import (
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, Order,
     OrderPayment, OrderPosition, OrderRefund, Quota, TeamAPIToken,
+    generate_position_secret, generate_secret,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
@@ -340,6 +341,24 @@ class OrderViewSet(viewsets.ModelViewSet):
             InvoiceSerializer(inv).data,
             status=status.HTTP_201_CREATED
         )
+
+    @detail_route(methods=['POST'])
+    @transaction.atomic
+    def regenerate_secrets(self, request, **kwargs):
+        order = self.get_object()
+        order.secret = generate_secret()
+        for op in order.all_positions.all():
+            op.secret = generate_position_secret()
+            op.save()
+        order.save(update_fields=['secret'])
+        CachedTicket.objects.filter(order_position__order=order).delete()
+        CachedCombinedTicket.objects.filter(order=order).delete()
+        order.log_action(
+            'pretix.event.order.secret.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        return self.retrieve(request, [], **kwargs)
 
     @detail_route(methods=['POST'])
     def extend(self, request, **kwargs):
