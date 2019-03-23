@@ -343,6 +343,20 @@ class OrderViewSet(viewsets.ModelViewSet):
         )
 
     @detail_route(methods=['POST'])
+    def resend_link(self, request, **kwargs):
+        order = self.get_object()
+        if not order.email:
+            return Response({'detail': 'There is no email address associated with this order.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            order.resend_link(user=self.request.user, auth=self.request.auth)
+        except SendMailException:
+            return Response({'detail': _('There was an error sending the mail. Please try again later.')}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+    @detail_route(methods=['POST'])
     @transaction.atomic
     def regenerate_secrets(self, request, **kwargs):
         order = self.get_object()

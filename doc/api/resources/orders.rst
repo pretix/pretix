@@ -1145,7 +1145,7 @@ Order state operations
    :statuscode 200: no error
    :statuscode 400: The order cannot be marked as denied since the current order status does not allow it.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this resource.
    :statuscode 404: The requested order does not exist.
 
 Generating invoices
@@ -1189,6 +1189,38 @@ Generating invoices
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order does not exist.
 
+Sending e-mails
+---------------
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/resend_link/
+
+   Sends an email to the buyer with the link to the order page.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/resend_link/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to send an email for
+   :statuscode 200: no error
+   :statuscode 400: The order does not have an email address associated
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+   :statuscode 503: The email could not be sent.
 
 List of all order positions
 ---------------------------

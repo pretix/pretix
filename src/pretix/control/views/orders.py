@@ -1055,33 +1055,11 @@ class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        with language(self.order.locale):
-            try:
-                try:
-                    invoice_name = self.order.invoice_address.name
-                    invoice_company = self.order.invoice_address.company
-                except InvoiceAddress.DoesNotExist:
-                    invoice_name = ""
-                    invoice_company = ""
-                email_template = self.order.event.settings.mail_text_resend_link
-                email_context = {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                }
-                email_subject = _('Your order: %(code)s') % {'code': self.order.code}
-                self.order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.resend', user=self.request.user,
-                    attach_tickets=True
-                )
-            except SendMailException:
-                messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
-                return redirect(self.get_order_url())
+        try:
+            self.order.resend_link(user=self.request.user)
+        except SendMailException:
+            messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
+            return redirect(self.get_order_url())
 
         messages.success(self.request, _('The email has been queued to be sent.'))
         return redirect(self.get_order_url())

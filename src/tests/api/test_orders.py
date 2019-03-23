@@ -2703,3 +2703,24 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     order.refresh_from_db()
     assert s != order.secret
     assert ps != order.positions.first().secret
+
+
+@pytest.mark.django_db
+def test_order_resend_link(token_client, organizer, event, order):
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/resend_link/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 204
+    assert len(djmail.outbox) == 1
+
+    order.email = None
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/resend_link/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 400

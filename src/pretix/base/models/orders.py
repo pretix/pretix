@@ -715,6 +715,33 @@ class Order(LockModel, LoggedModel):
                     }
                 )
 
+    def resend_link(self, user=None, auth=None):
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        with language(self.locale):
+            try:
+                invoice_name = self.invoice_address.name
+                invoice_company = self.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+            email_template = self.event.settings.mail_text_resend_link
+            email_context = {
+                'event': self.event.name,
+                'url': build_absolute_uri(self.event, 'presale:event.order', kwargs={
+                    'order': self.code,
+                    'secret': self.secret
+                }),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+            }
+            email_subject = _('Your order: %(code)s') % {'code': self.code}
+            self.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.resend', user=user, auth=auth,
+                attach_tickets=True
+            )
+
     @property
     def positions_with_tickets(self):
         for op in self.positions.all():
