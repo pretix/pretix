@@ -20,7 +20,7 @@ Product variations
     During creation of a product, you can decide that your product should have multiple variations. Variations of a product can differ in price, description, and availability, but are otherwise the same. You could use this e.g. for differentiating between a regular ticket and a discounted ticket for students, or when selling merchandise to differentiate the different sizes of a t-shirt.
 
 Product add-ons
-    Add-ons are products that are sold together with another product, which we will call the base product in this case. For example, you could have a base product "Conference ticket" and then define multiple workshops that can be chosen as an add-on.
+    Add-ons are products that are sold together with another product (which we will call the base product in this case). For example, you could have a base product "Conference ticket" and then define multiple workshops that can be chosen as an add-on.
 
 Product bundles
     Bundles work very similarly to add-ons, but are different in the way that they are always automatically included with the base product and cannot be optional. In contrast to add-on products, the same product can be included multiple times in a bundle.
@@ -39,7 +39,7 @@ Imagine you're running a concert with general admission that sells a total of 20
 * Regular: € 25.00
 * Students: € 19.00
 
-You can either set up two different products called e.g. "Regular ticket" and "Student ticket" with the respective prices, or to variations within the same product. In this simple case, it really doesn't matter.
+You can either set up two different products called e.g. "Regular ticket" and "Student ticket" with the respective prices, or two variations within the same product. In this simple case, it really doesn't matter.
 
 In addition, you will need quotas. If you do not care how many of your tickets are sold to students, you should set up just **one quota** of 200 called e.g. "General admission" that you link to **both products**.
 
