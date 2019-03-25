@@ -180,7 +180,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         headlinestyle.fontName = 'OpenSansBd'
         colwidths = [3 * mm, 8 * mm, 8 * mm] + [
             a * (doc.width - 8 * mm)
-            for a in [.1, .25, (.25 if questions else .60)] + (
+            for a in [.1, .25, .25, (.25 if questions else .40)] + (
                 [.35 / len(questions)] * len(questions) if questions else []
             )
         ]
@@ -210,6 +210,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 TableTextRotate(pgettext('tablehead', 'paid')),
                 _('Order'),
                 _('Name'),
+                _('Email'),
                 _('Product') + '\n' + _('Price'),
             ],
         ]
@@ -244,6 +245,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 Paragraph(name, self.get_style()),
+                Paragraph(op.order.email, self.get_style()),
                 Paragraph(str(op.item) + (" – " + str(op.variation.value) if op.variation else "") + "<br/>" +
                           money_filter(op.price, self.event.currency), self.get_style()),
             ]
