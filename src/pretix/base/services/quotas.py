@@ -31,6 +31,6 @@ def refresh_quota_caches():
         Q(cached_availability_time__isnull=True) |
         Q(cached_availability_time__lt=F('last_activity')) |
         Q(cached_availability_time__lt=now() - timedelta(hours=2), last_activity__gt=now() - timedelta(days=7))
-    )
+    ).select_related('subevent')
     for q in quotas:
         q.availability()
