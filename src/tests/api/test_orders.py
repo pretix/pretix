@@ -2703,7 +2703,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'is_cancellation': False,
         'invoice_from': '',
         'invoice_to': 'Sample company\n\n\n \nNew Zealand\nVAT-ID: DE123',
-        'date': '2019-03-23',
+        'date': now().date().isoformat(),
         'refers': None,
         'locale': 'en',
         'introductory_text': '',
