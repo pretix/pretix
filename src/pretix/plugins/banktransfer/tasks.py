@@ -92,14 +92,23 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
         trans.state = BankTransaction.STATE_ERROR
         trans.message = ugettext_noop('The order has already been canceled.')
     else:
-        p, created = trans.order.payments.get_or_create(
-            amount=trans.amount,
-            provider='banktransfer',
-            state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
-            defaults={
-                'state': OrderPayment.PAYMENT_STATE_CREATED,
-            }
-        )
+        try:
+            p, created = trans.order.payments.get_or_create(
+                amount=trans.amount,
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+                defaults={
+                    'state': OrderPayment.PAYMENT_STATE_CREATED,
+                }
+            )
+        except OrderPayment.MultipleObjectsReturned:
+            created = False
+            p = trans.order.payments.filter(
+                amount=trans.amount,
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
+            ).last()
+
         p.info_data = {
             'reference': trans.reference,
             'date': trans.date,
