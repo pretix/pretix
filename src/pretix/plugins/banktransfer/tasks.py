@@ -109,7 +109,7 @@ def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, or
 
         if created:
             # We're perform a payment method switchign on-demand here
-            old_fee, new_fee, fee = change_payment_provider(trans.order, p.payment_provider, p.amount)  # noqa
+            old_fee, new_fee, fee = change_payment_provider(trans.order, p.payment_provider, p.amount, new_payment=p)  # noqa
             if fee:
                 p.fee = fee
                 p.save(update_fields=['fee'])

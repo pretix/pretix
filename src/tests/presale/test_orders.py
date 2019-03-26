@@ -681,6 +681,47 @@ class OrdersTest(TestCase):
         p.refresh_from_db()
         assert p.state == OrderPayment.PAYMENT_STATE_CREATED
 
+    def test_change_paymentmethod_to_same(self):
+        p_old = self.order.payments.create(
+            provider='banktransfer',
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            amount=Decimal('10.00'),
+        )
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'banktransfer'
+            }
+        )
+        self.order.refresh_from_db()
+        p_new = self.order.payments.last()
+        assert p_new.provider == 'banktransfer'
+        assert p_new.id != p_old.id
+        assert p_new.state == OrderPayment.PAYMENT_STATE_CREATED
+        p_old.refresh_from_db()
+        assert p_old.state == OrderPayment.PAYMENT_STATE_CANCELED
+
+    def test_change_paymentmethod_cancel_old(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        p_old = self.order.payments.create(
+            provider='testdummy',
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            amount=Decimal('10.00'),
+        )
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'banktransfer'
+            }
+        )
+        self.order.refresh_from_db()
+        p_new = self.order.payments.last()
+        assert p_new.provider == 'banktransfer'
+        assert p_new.id != p_old.id
+        assert p_new.state == OrderPayment.PAYMENT_STATE_CREATED
+        p_old.refresh_from_db()
+        assert p_old.state == OrderPayment.PAYMENT_STATE_CANCELED
+
     def test_change_paymentmethod_delete_fee(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)

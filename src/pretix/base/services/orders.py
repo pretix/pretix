@@ -1470,7 +1470,7 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
         raise OrderError(error_messages['busy'])
 
 
-def change_payment_provider(order: Order, payment_provider, amount=None):
+def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None):
     e = OrderPayment.objects.filter(fee=OuterRef('pk'), state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,
                                                                    OrderPayment.PAYMENT_STATE_REFUNDED))
     open_fees = list(
@@ -1502,7 +1502,10 @@ def change_payment_provider(order: Order, payment_provider, amount=None):
             fee = None
 
     open_payment = None
-    lp = order.payments.exclude(provider=payment_provider.identifier).last()
+    if new_payment:
+        lp = order.payments.exclude(pk=new_payment.pk).last()
+    else:
+        lp = order.payments.last()
     if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
         open_payment = lp
 
