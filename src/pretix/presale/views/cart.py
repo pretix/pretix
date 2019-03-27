@@ -429,6 +429,8 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
             context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start')
         else:
             context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.index')
+        if context['cart_redirect'].startswith('https:'):
+            context['cart_redirect'] = context['cart_redirect'].split('/', 3)[3]
 
         return context
 
