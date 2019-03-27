@@ -18,8 +18,8 @@ max_usages                            integer                    The maximum num
 redeemed                              integer                    The number of times this voucher already has been
                                                                  redeemed.
 valid_until                           datetime                   The voucher expiration date (or ``null``).
-block_quota                           boolean                    If ``True``, quota is blocked for this voucher.
-allow_ignore_quota                    boolean                    If ``True``, this voucher can be redeemed even if a
+block_quota                           boolean                    If ``true``, quota is blocked for this voucher.
+allow_ignore_quota                    boolean                    If ``true``, this voucher can be redeemed even if a
                                                                  product is sold out and even if quota is not blocked
                                                                  for this voucher.
 price_mode                            string                     Determines how this voucher affects product prices.

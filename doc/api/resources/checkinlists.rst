@@ -156,14 +156,14 @@ Endpoints
         "checkin_count": 17,
         "position_count": 42,
         "event": {
-          "name": "Demo Converence",
+          "name": "Demo Conference"
         },
         "items": [
           {
             "name": "T-Shirt",
             "id": 1,
             "checkin_count": 1,
-            "admission": False,
+            "admission": false,
             "position_count": 1,
             "variations": [
               {
@@ -184,7 +184,7 @@ Endpoints
             "name": "Ticket",
             "id": 2,
             "checkin_count": 15,
-            "admission": True,
+            "admission": true,
             "position_count": 22,
             "variations": []
           }

@@ -316,7 +316,7 @@ uses to communicate with the pretix server.
         "total": 42,
         "version": 3,
         "event": {
-          "name": "Demo Converence",
+          "name": "Demo Conference",
           "slug": "democon",
           "date_from": "2016-12-27T17:00:00Z",
           "date_to": "2016-12-30T18:00:00Z",

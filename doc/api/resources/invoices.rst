@@ -13,7 +13,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 number                                string                     Invoice number (with prefix)
 order                                 string                     Order code of the order this invoice belongs to
-is_cancellation                       boolean                    ``True``, if this invoice is the cancellation of a
+is_cancellation                       boolean                    ``true``, if this invoice is the cancellation of a
                                                                  different invoice.
 invoice_from                          string                     Sender address
 invoice_to                            string                     Receiver address

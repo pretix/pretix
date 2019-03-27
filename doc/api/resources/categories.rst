@@ -20,7 +20,7 @@ internal_name                         string                     An optional nam
 description                           multi-lingual string       A public description (might include markdown, can
                                                                  be ``null``)
 position                              integer                    An integer, used for sorting the categories
-is_addon                              boolean                    If ``True``, items within this category are not on sale
+is_addon                              boolean                    If ``true``, items within this category are not on sale
                                                                  on their own but the category provides a source for
                                                                  defining add-ons for other products.
 ===================================== ========================== =======================================================

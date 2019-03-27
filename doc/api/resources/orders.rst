@@ -26,7 +26,7 @@ status                                string                     Order status, o
                                                                  * ``p`` – paid
                                                                  * ``e`` – expired
                                                                  * ``c`` – canceled
-testmode                              boolean                    If ``True``, this order was created when the event was in
+testmode                              boolean                    If ``true``, this order was created when the event was in
                                                                  test mode. Only orders in test mode can be deleted.
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
@@ -39,13 +39,13 @@ payment_date                          date                       **DEPRECATED AN
 payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
-checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                  that this ticket requires special attention if a ticket
                                                                  of this order is scanned.
 invoice_address                       object                     Invoice address information (can be ``null``)
 ├ last_modified                       datetime                   Last modification date of the address
 ├ company                             string                     Customer company name
-├ is_business                         boolean                    Business or individual customers (always ``False``
+├ is_business                         boolean                    Business or individual customers (always ``false``
                                                                  for orders created before pretix 1.7, do not rely on
                                                                  it).
 ├ name                                string                     Customer name
@@ -56,7 +56,7 @@ invoice_address                       object                     Invoice address
 ├ country                             string                     Customer country
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
 ├ vat_id                              string                     Customer VAT ID
-└ vat_id_validated                    string                     ``True``, if the VAT ID has been validated against the
+└ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
 positions                             list of objects            List of non-canceled order positions (see below)
@@ -78,9 +78,9 @@ downloads                             list of objects            List of ticket 
                                                                  download options.
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
-require_approval                      boolean                    If ``True`` and the order is pending, this order
+require_approval                      boolean                    If ``true`` and the order is pending, this order
                                                                  needs approval by an organizer before it can
-                                                                 continue. If ``True`` and the order is canceled,
+                                                                 continue. If ``true`` and the order is canceled,
                                                                  this order has been denied by the event organizer.
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
@@ -295,7 +295,7 @@ List of all orders
             "require_approval": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
-                "is_business": True,
+                "is_business": true,
                 "company": "Sample company",
                 "name": "John Doe",
                 "name_parts": {"full_name": "John Doe"},
@@ -305,7 +305,7 @@ List of all orders
                 "country": "Testikistan",
                 "internal_reference": "",
                 "vat_id": "EU123456789",
-                "vat_id_validated": False
+                "vat_id_validated": false
             },
             "positions": [
               {
@@ -437,7 +437,7 @@ Fetching individual orders
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
-            "is_business": True,
+            "is_business": true,
             "name": "John Doe",
             "name_parts": {"full_name": "John Doe"},
             "street": "Test street 12",
@@ -446,7 +446,7 @@ Fetching individual orders
             "country": "Testikistan",
             "internal_reference": "",
             "vat_id": "EU123456789",
-            "vat_id_validated": False
+            "vat_id_validated": false
         },
         "positions": [
           {
@@ -593,7 +593,7 @@ Updating order fields
         "email": "other@example.org",
         "locale": "de",
         "comment": "Foo",
-        "checkin_attention": True
+        "checkin_attention": true
       }
 
    **Example response**:
@@ -817,7 +817,7 @@ Creating orders
         ],
         "payment_provider": "banktransfer",
         "invoice_address": {
-          "is_business": False,
+          "is_business": false,
           "company": "Sample company",
           "name_parts": {"full_name": "John Doe"},
           "street": "Sesam Street 12",

@@ -18,7 +18,7 @@ default_price                         money (string)             The price set d
 price                                 money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
                                                                  to the item's ``default_price`` (read-only).
-active                                boolean                    If ``False``, this variation will not be sold or shown.
+active                                boolean                    If ``false``, this variation will not be sold or shown.
 description                           multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 position                              integer                    An integer, used for sorting

@@ -21,18 +21,18 @@ default_price                         money (string)             The item price 
                                                                  overwritten by variations or other options.
 category                              integer                    The ID of the category this item belongs to
                                                                  (or ``null``).
-active                                boolean                    If ``False``, the item is hidden from all public lists
+active                                boolean                    If ``false``, the item is hidden from all public lists
                                                                  and will not be sold.
 description                           multi-lingual string       A public description of the item. May contain Markdown
                                                                  syntax or can be ``null``.
-free_price                            boolean                    If ``True``, customers can change the price at which
+free_price                            boolean                    If ``true``, customers can change the price at which
                                                                  they buy the product (however, the price can't be set
                                                                  lower than the price defined by ``default_price`` or
                                                                  otherwise).
 tax_rate                              decimal (string)           The VAT rate to be applied for this item.
 tax_rule                              integer                    The internal ID of the applied tax rule (or ``null``).
-admission                             boolean                    ``True`` for items that grant admission to the event
-                                                                 (such as primary tickets) and ``False`` for others
+admission                             boolean                    ``true`` for items that grant admission to the event
+                                                                 (such as primary tickets) and ``false`` for others
                                                                  (such as add-ons or merchandise).
 position                              integer                    An integer, used for sorting
 picture                               string                     A product picture to be displayed in the shop
@@ -43,12 +43,12 @@ available_from                        datetime                   The first date 
                                                                  (or ``null``).
 available_until                       datetime                   The last date time at which this item can be bought
                                                                  (or ``null``).
-require_voucher                       boolean                    If ``True``, this item can only be bought using a
+require_voucher                       boolean                    If ``true``, this item can only be bought using a
                                                                  voucher that is specifically assigned to this item.
-hide_without_voucher                  boolean                    If ``True``, this item is only shown during the voucher
+hide_without_voucher                  boolean                    If ``true``, this item is only shown during the voucher
                                                                  redemption process, but not in the normal shop
                                                                  frontend.
-allow_cancel                          boolean                    If ``False``, customers cannot cancel orders containing
+allow_cancel                          boolean                    If ``false``, customers cannot cancel orders containing
                                                                  this item.
 min_per_order                         integer                    This product can only be bought if it is included at
                                                                  least this many times in the order (or ``null`` for no
@@ -56,17 +56,17 @@ min_per_order                         integer                    This product ca
 max_per_order                         integer                    This product can only be bought if it is included at
                                                                  most this many times in the order (or ``null`` for no
                                                                  limitation).
-checkin_attention                     boolean                    If ``True``, the check-in app should show a warning
+checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                  that this ticket requires special attention if such
                                                                  a product is being scanned.
 original_price                        money (string)             An original price, shown for comparison, not used
                                                                  for price calculations (or ``null``).
-require_approval                      boolean                    If ``True``, orders with this product will need to be
+require_approval                      boolean                    If ``true``, orders with this product will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
-require_bundling                      boolean                    If ``True``, this item is only available as part of bundles.
-generate_tickets                      boolean                    If ``False``, tickets are never generated for this
-                                                                 product, regardless of other settings. If ``True``,
+require_bundling                      boolean                    If ``true``, this item is only available as part of bundles.
+generate_tickets                      boolean                    If ``false``, tickets are never generated for this
+                                                                 product, regardless of other settings. If ``true``,
                                                                  tickets are generated even if this is a
                                                                  non-admission or add-on product, regardless of event
                                                                  settings. If this is ``null``, regular ticketing
@@ -81,7 +81,7 @@ variations                            list of objects            A list with one
 ├ price                               money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
                                                                  to the item's ``default_price``.
-├ active                              boolean                    If ``False``, this variation will not be sold or shown.
+├ active                              boolean                    If ``false``, this variation will not be sold or shown.
 ├ description                         multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 └ position                            integer                    An integer, used for sorting

@@ -30,12 +30,12 @@ type                                  string                     The expected ty
                                                                  * ``D`` – date
                                                                  * ``H`` – time
                                                                  * ``W`` – date and time
-required                              boolean                    If ``True``, the question needs to be filled out.
+required                              boolean                    If ``true``, the question needs to be filled out.
 position                              integer                    An integer, used for sorting
 items                                 list of integers           List of item IDs this question is assigned to.
 identifier                            string                     An arbitrary string that can be used for matching with
                                                                  other sources.
-ask_during_checkin                    boolean                    If ``True``, this question will not be asked while
+ask_during_checkin                    boolean                    If ``true``, this question will not be asked while
                                                                  buying the ticket, but will show up when redeeming
                                                                  the ticket instead.
 options                               list of objects            In case of question type ``C`` or ``M``, this lists the
@@ -53,7 +53,7 @@ dependency_question                   integer                    Internal ID of 
                                                                  ``ask_during_checkin``.
 dependency_value                      string                     The value ``dependency_question`` needs to be set to.
                                                                  If ``dependency_question`` is set to a boolean
-                                                                 question, this should be ``"True"`` or ``"False"``.
+                                                                 question, this should be ``"true"`` or ``"false"``.
                                                                  Otherwise, it should be the ``identifier`` of a
                                                                  question option.
 ===================================== ========================== =======================================================
