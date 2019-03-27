@@ -291,6 +291,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 or not self.subevent
             )
         )
+        if self.request.event.settings.redirect_to_checkout_directly:
+            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start')
+        else:
+            context['cart_redirect'] = self.request.path
 
         return context
 

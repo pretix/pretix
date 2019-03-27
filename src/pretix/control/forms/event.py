@@ -1074,6 +1074,10 @@ class DisplaySettingsForm(SettingsForm):
         label=_('Ask search engines not to index the ticket shop'),
         required=False
     )
+    redirect_to_checkout_directly = forms.BooleanField(
+        label=_('Directly redirect to check-out after a product has been added to the cart.'),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         event = kwargs['obj']

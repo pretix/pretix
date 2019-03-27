@@ -425,6 +425,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
             # Cookies are not supported! Lets just make the form open in a new tab
         )
 
+        if self.request.event.settings.redirect_to_checkout_directly:
+            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start')
+        else:
+            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.index')
+
         return context
 
     def dispatch(self, request, *args, **kwargs):

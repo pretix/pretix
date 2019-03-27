@@ -97,6 +97,10 @@ DEFAULTS = {
         'default': '30',
         'type': int
     },
+    'redirect_to_checkout_directly': {
+        'default': 'False',
+        'type': bool
+    },
     'payment_explanation': {
         'default': '',
         'type': LazyI18nString

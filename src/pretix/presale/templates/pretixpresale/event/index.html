@@ -182,7 +182,7 @@
             <form method="post" data-asynctask
                     data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
                     data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
-                    action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ request.path|urlencode }}">
+                    action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}">
                 {% csrf_token %}
                 <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
                 {% for tup in items_by_category %}
