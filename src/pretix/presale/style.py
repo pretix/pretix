@@ -16,6 +16,7 @@ from pretix.base.models import Event, Event_SettingsStore, Organizer
 from pretix.base.services.tasks import ProfiledTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_domain
+from pretix.presale.signals import sass_postamble, sass_preamble
 
 logger = logging.getLogger('pretix.presale.style')
 affected_keys = ['primary_font', 'primary_color']
@@ -54,7 +55,15 @@ def compile_scss(object, file="main.scss", fonts=True):
                 font
             ))
 
+    if isinstance(object, Event):
+        for recv, resp in sass_preamble.send(object, filename=file):
+            sassrules.append(resp)
+
     sassrules.append('@import "{}";'.format(file))
+
+    if isinstance(object, Event):
+        for recv, resp in sass_postamble.send(object, filename=file):
+            sassrules.append(resp)
 
     cf = dict(django_libsass.CUSTOM_FUNCTIONS)
     cf['static'] = static

@@ -59,6 +59,7 @@
     <meta name="theme-color" content="{{ settings.primary_color|default:"#3b1c4a" }}">
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}">
+{{ html_page_header|safe }}
 {% block above %}
 {% endblock %}
 <div class="container">

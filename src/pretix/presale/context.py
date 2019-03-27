@@ -8,7 +8,7 @@ from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
 
-from .signals import footer_link, html_footer, html_head
+from .signals import footer_link, html_footer, html_head, html_page_header
 
 
 def contextprocessor(request):
@@ -23,6 +23,7 @@ def contextprocessor(request):
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
+    _html_page_header = []
     _html_foot = []
     _footer = []
 
@@ -45,6 +46,8 @@ def contextprocessor(request):
     if hasattr(request, 'event'):
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
+        for receiver, response in html_page_header.send(request.event, request=request):
+            _html_page_header.append(response)
         for receiver, response in html_footer.send(request.event, request=request):
             _html_foot.append(response)
         for receiver, response in footer_link.send(request.event, request=request):
@@ -71,6 +74,7 @@ def contextprocessor(request):
 
     ctx['html_head'] = "".join(_html_head)
     ctx['html_foot'] = "".join(_html_foot)
+    ctx['html_page_header'] = "".join(_html_page_header)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
 

@@ -14,8 +14,8 @@ $gray-lighter: lighten(#000, 93.5%);
 $gray-lightest: lighten(#000, 97.25%);
 
 $font-family-sans-serif:  "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$text-color: #222222;
-$text-muted: #999999;
+$text-color: #222222 !default;
+$text-muted: #999999 !default;
 
 $brand-primary: #7f5a91 !default;
 $brand-success: #50a167 !default;
@@ -40,13 +40,13 @@ $navbar-inverse-link-hover-color: $gray-lighter;
 $navbar-inverse-brand-hover-color: $gray-lighter;
 $navbar-inverse-color: white;
 
-$state-success-bg:               white;
+$state-success-bg:               white !default;
 $state-success-border:           $brand-success;
-$state-info-bg:                  white;
+$state-info-bg:                  white !default;
 $state-info-border:              $brand-info;
-$state-warning-bg:               white;
+$state-warning-bg:               white !default;
 $state-warning-border:           $brand-warning;
-$state-danger-bg:                white;
+$state-danger-bg:                white !default;
 $state-danger-border:            $brand-danger;
 $panel-success-border:               tint($brand-success, 50%);
 $panel-success-heading-bg:               tint($brand-success, 50%);
@@ -54,5 +54,5 @@ $panel-danger-border:               tint($brand-danger, 50%);
 $panel-danger-heading-bg:               tint($brand-danger, 50%);
 $panel-warning-border:               tint($brand-warning, 50%);
 $panel-warning-heading-bg:               tint($brand-warning, 50%);
-$panel-default-border: #e5e5e5;
-$panel-default-heading-bg: #e5e5e5;
+$panel-default-border: #e5e5e5 !default;
+$panel-default-heading-bg: #e5e5e5 !default;
