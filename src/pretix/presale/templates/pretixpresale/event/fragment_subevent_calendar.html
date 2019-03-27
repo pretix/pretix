@@ -32,8 +32,8 @@
         </div>
         <div class="col-sm-4 hidden-xs text-right">
             <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
-                <span class="fa fa-arrow-right"></span>
                 {{ after|date:"F Y" }}
+                <span class="fa fa-arrow-right"></span>
             </a>
         </div>
     </div>
