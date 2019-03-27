@@ -251,6 +251,41 @@ class QuestionsTest(ItemFormTest):
                             form_data)
         assert not doc.select(".alert-success")
 
+    def test_set_default_value(self):
+        q = Question.objects.create(event=self.event1, question="What city are you from?", type=Question.TYPE_TEXT,
+                                    required=True)
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['default_value'] = 'Heidelberg'
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        q.refresh_from_db()
+        assert q.default_value == 'Heidelberg'
+
+    def test_set_default_value_datetime(self):
+        q = Question.objects.create(event=self.event1, question="What city are you from?", type=Question.TYPE_DATETIME,
+                                    required=True)
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['default_value_date'] = '2019-01-01'
+        form_data['default_value_time'] = '10:00'
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        q.refresh_from_db()
+        assert q.default_value == '2019-01-01T10:00:00+00:00'
+
+    def test_set_default_value_invalid(self):
+        q = Question.objects.create(event=self.event1, question="What city are you from?", type=Question.TYPE_DATE,
+                                    required=True)
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['default_value'] = 'foobar'
+        doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q.id),
+                            form_data)
+        assert not doc.select(".alert-success")
+
 
 class QuotaTest(ItemFormTest):
 
