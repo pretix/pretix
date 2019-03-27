@@ -23,7 +23,8 @@ from pretix.base.models.items import ItemBundle
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views.organizer import (
-    EventListMixin, add_subevents_for_days, weeks_for_template,
+    EventListMixin, add_subevents_for_days, filter_qs_by_attr,
+    weeks_for_template,
 )
 
 from . import (
@@ -266,7 +267,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                self.request.event.subevents_annotated(self.request.sales_channel),
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request),
                 before, after, ebd, set(), self.request.event,
                 kwargs.get('cart_namespace')
             )
