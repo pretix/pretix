@@ -82,7 +82,10 @@ class OrderSearch(PaginationMixin, ListView):
 
                 page = self.kwargs.get(self.page_kwarg) or self.request.GET.get(self.page_kwarg) or 1
                 limit = self.get_paginate_by(None)
-                offset = (page - 1) * limit
+                try:
+                    offset = (int(page) - 1) * limit
+                except ValueError:
+                    offset = 0
                 resultids = list(qs.order_by().values_list('id', flat=True)[:201])
                 if len(resultids) <= 200 and len(resultids) <= offset + limit:
                     qs = Order.objects.using(settings.DATABASE_REPLICA).filter(
