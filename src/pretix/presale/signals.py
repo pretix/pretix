@@ -15,7 +15,7 @@ html_page_header = EventPluginSignal(
     providing_args=["request"]
 )
 """
-This signal allows you to put code right in the beginnong of the HTML ``<body>`` tag
+This signal allows you to put code right in the beginning of the HTML ``<body>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
 
