@@ -1985,6 +1985,59 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.q3: 'False',
         }, should_fail=True)
 
+    def test_datetime_defaultvalues(self):
+        """ Test timezone and format handling for default values """
+        q1 = Question.objects.create(
+            event=self.event, question='When did you wake up today?', type=Question.TYPE_TIME,
+            required=True, default_value='10:00'
+        )
+        q2 = Question.objects.create(
+            event=self.event, question='When was your last haircut?', type=Question.TYPE_DATE,
+            required=True, default_value='2019-01-01'
+        )
+        q3 = Question.objects.create(
+            event=self.event, question='When are you going to arrive?', type=Question.TYPE_DATETIME,
+            required=True, default_value='2019-01-01T10:00:00+00:00'
+        )
+
+        self.ticket.questions.add(q1)
+        self.ticket.questions.add(q2)
+        self.ticket.questions.add(q3)
+        cr = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q1.id))[0]['value'] == '10:00'
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q2.id))[0]['value'] == '2019-01-01'
+        assert doc.select('input[name="%s-question_%s_0"]' % (cr.id, q3.id))[0]['value'] == '2019-01-01'
+        assert doc.select('input[name="%s-question_%s_1"]' % (cr.id, q3.id))[0]['value'] == '10:00'
+
+        # set to different timezone, this should affect the datetime question's default value displayed
+        self.event.settings.set('timezone', 'US/Central')
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q1.id))[0]['value'] == '10:00'
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q2.id))[0]['value'] == '2019-01-01'
+        assert doc.select('input[name="%s-question_%s_0"]' % (cr.id, q3.id))[0]['value'] == '2019-01-01'
+        assert doc.select('input[name="%s-question_%s_1"]' % (cr.id, q3.id))[0]['value'] == '04:00'
+
+        # set locale, this should affect the date format
+        self.event.settings.set('locales', ['de'])
+        self.event.save()
+
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q1.id))[0]['value'] == '10:00'
+        assert doc.select('input[name="%s-question_%s"]' % (cr.id, q2.id))[0]['value'] == '01.01.2019'
+        assert doc.select('input[name="%s-question_%s_0"]' % (cr.id, q3.id))[0]['value'] == '01.01.2019'
+        assert doc.select('input[name="%s-question_%s_1"]' % (cr.id, q3.id))[0]['value'] == '04:00'
+
 
 class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
     def setUp(self):
