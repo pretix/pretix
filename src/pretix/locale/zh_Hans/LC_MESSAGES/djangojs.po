@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-19 09:00+0000\n"
+"PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/zh_Hans/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -219,13 +219,11 @@ msgstr "数量"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
-#, fuzzy
-#| msgid "None"
 msgid "No"
-msgstr "无"
+msgstr "否"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -283,12 +281,12 @@ msgstr "另加 %(rate)s% %(taxname)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "包含税"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "税"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
@@ -381,102 +379,100 @@ msgid "See variations"
 msgstr "查看变化"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
-#, fuzzy
-#| msgid "Use a different name internally"
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "在内部使用一个不同的名称"
+msgstr "选择一个不同的活动"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "后退"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "下个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "上个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgid "Mo"
-msgstr ""
+msgstr "周一"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgid "Tu"
-msgstr ""
+msgstr "周二"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgid "We"
-msgstr ""
+msgstr "周三"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Th"
-msgstr ""
+msgstr "周四"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "Fr"
-msgstr ""
+msgstr "周五"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Sa"
-msgstr ""
+msgstr "周六"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Su"
-msgstr ""
+msgstr "周天"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgid "January"
-msgstr ""
+msgstr "一月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgid "February"
-msgstr ""
+msgstr "二月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "March"
-msgstr ""
+msgstr "三月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "April"
-msgstr ""
+msgstr "四月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "May"
-msgstr ""
+msgstr "五月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "June"
-msgstr ""
+msgstr "六月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "July"
-msgstr ""
+msgstr "七月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "August"
-msgstr ""
+msgstr "八月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "September"
-msgstr ""
+msgstr "九月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "October"
-msgstr ""
+msgstr "十月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "November"
-msgstr ""
+msgstr "十一月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "December"
-msgstr ""
+msgstr "十二月"
 
 #~ msgid "Ja"
 #~ msgstr "是"

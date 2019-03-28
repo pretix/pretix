@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-17 19:31+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-03-28 14:00+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:124
@@ -10073,7 +10073,7 @@ msgstr "Editar pregunta"
 #: pretix/plugins/reports/exporters.py:206
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:13
 msgid "Paid"
-msgstr "pagado"
+msgstr "Pagado"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
