@@ -395,12 +395,15 @@ ALL_LANGUAGES = [
     ('pt-br', _('Portuguese (Brazil)')),
     ('es', _('Spanish')),
     ('tr', _('Turkish')),
+    ('pl', _('Polish')),
+    ('it', _('Italian')),
+    ('zh-hans', _('Chinese (simplified)')),
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pt-br', 'da'
+    'pt-br', 'da', 'pl', 'it'
 }
 
 if DEBUG:
