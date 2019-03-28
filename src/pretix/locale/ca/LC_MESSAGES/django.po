@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:23+0000\n"
-"Last-Translator: albert <albert.serra.monner@gmail.com>\n"
+"Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
 "Language: ca\n"
@@ -3276,8 +3276,7 @@ msgstr "Zona horària"
 
 #: pretix/base/models/auth.py:266
 msgid "Two-factor authentication is required to log in"
-msgstr ""
-"Es necessita un factor d'autenticació de dues passes per iniciar sessió"
+msgstr "Es necessita un factor d'autenticació de dues passes per iniciar sessió"
 
 #: pretix/base/models/auth.py:270
 msgid "Receive notifications according to my settings below"
@@ -3708,8 +3707,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:85
 msgid "The end of the presale period has to be later than its start."
-msgstr ""
-"La data del període de prevenda ha de ser posterior al seu començament."
+msgstr "La data del període de prevenda ha de ser posterior al seu començament."
 
 #: pretix/base/models/event.py:87
 msgid "The end of the event has to be later than its start."
@@ -4774,8 +4772,7 @@ msgstr "Pregunta obligatòria"
 
 #: pretix/base/models/items.py:1503
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
-"Aquesta pregunta es demanarà als compradors dels productes seleccionats"
+msgstr "Aquesta pregunta es demanarà als compradors dels productes seleccionats"
 
 #: pretix/base/models/items.py:1510
 msgid "Ask during check-in instead of in the ticket buying process"
@@ -5793,8 +5790,7 @@ msgstr "No podeu seleccionar una quota que pertany a un esdeveniment diferent."
 
 #: pretix/base/models/vouchers.py:340
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
-"No podeu seleccionar una quota i un producte específic al mateix temps."
+msgstr "No podeu seleccionar una quota i un producte específic al mateix temps."
 
 #: pretix/base/models/vouchers.py:343
 msgid ""
@@ -6321,10 +6317,9 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Recomanem activar això si voleu que els vostres usuaris paguin les tarifes "
-"de pagament del vostre proveïdor de pagament. <a href=\"{docs_url}\" "
-"target=\"_blank\" rel=\"noopener\">Feu clic aquí per una informació "
-"detallada sobre el que fa això.</a> No oblideu especificar correctament les "
-"tarifes!"
+"de pagament del vostre proveïdor de pagament. <a href=\"{docs_url}\" target="
+"\"_blank\" rel=\"noopener\">Feu clic aquí per una informació detallada sobre "
+"el que fa això.</a> No oblideu especificar correctament les tarifes!"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -11080,8 +11075,8 @@ msgstr ""
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
-"Ha d'estar activada també la vostra configuració regional predeterminada "
-"(mireu el quadre de més amunt)."
+"Ha d'estar activada també la vostra configuració regional predeterminada ("
+"mireu el quadre de més amunt)."
 
 #: pretix/base/settings.py:3603
 msgid ""
