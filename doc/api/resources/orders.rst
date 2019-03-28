@@ -788,6 +788,8 @@ Creating orders
       * ``internal_type``
       * ``tax_rule``
 
+   * ``force`` (optional). If set to ``true``, quotas will be ignored.
+
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
    IDs in the ``addon_to`` field of another position. Note that all add_ons for a specific position need to come

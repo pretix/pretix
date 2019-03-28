@@ -2295,6 +2295,14 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
         ]
     }
 
+    res['force'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
 
 @pytest.mark.django_db
 def test_order_create_quota_consume_cart(token_client, organizer, event, item, quota, question):

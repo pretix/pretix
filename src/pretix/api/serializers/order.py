@@ -457,11 +457,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     payment_provider = serializers.CharField(required=True)
     payment_info = CompatibleJSONField(required=False)
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
+    force = serializers.BooleanField(default=False, required=False)
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
-                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts')
+                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts', 'force')
 
     def validate_payment_provider(self, pp):
         if pp not in self.context['event'].get_payment_providers():
@@ -532,6 +533,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
         payment_provider = validated_data.pop('payment_provider')
         payment_info = validated_data.pop('payment_info', '{}')
+        force = validated_data.pop('force', False)
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -565,29 +567,30 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             errs = [{} for p in positions_data]
 
-            for i, pos_data in enumerate(positions_data):
-                new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
-                              if pos_data.get('variation')
-                              else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
-                if len(new_quotas) == 0:
-                    errs[i]['item'] = [ugettext_lazy('The product "{}" is not assigned to a quota.').format(
-                        str(pos_data.get('item'))
-                    )]
-                else:
-                    for quota in new_quotas:
-                        if quota not in quota_avail_cache:
-                            quota_avail_cache[quota] = list(quota.availability())
+            if not force:
+                for i, pos_data in enumerate(positions_data):
+                    new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
+                                  if pos_data.get('variation')
+                                  else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
+                    if len(new_quotas) == 0:
+                        errs[i]['item'] = [ugettext_lazy('The product "{}" is not assigned to a quota.').format(
+                            str(pos_data.get('item'))
+                        )]
+                    else:
+                        for quota in new_quotas:
+                            if quota not in quota_avail_cache:
+                                quota_avail_cache[quota] = list(quota.availability())
 
-                        if quota_avail_cache[quota][1] is not None:
-                            quota_avail_cache[quota][1] -= 1
-                            if quota_avail_cache[quota][1] < 0:
-                                errs[i]['item'] = [
-                                    ugettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
-                                        quota.name
-                                    )
-                                ]
+                            if quota_avail_cache[quota][1] is not None:
+                                quota_avail_cache[quota][1] -= 1
+                                if quota_avail_cache[quota][1] < 0:
+                                    errs[i]['item'] = [
+                                        ugettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
+                                            quota.name
+                                        )
+                                    ]
 
-                quotadiff.update(new_quotas)
+                    quotadiff.update(new_quotas)
 
             if any(errs):
                 raise ValidationError({'positions': errs})
