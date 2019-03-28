@@ -35,6 +35,12 @@ def filter_qs_by_attr(qs, request):
         if k.startswith("attr[") and k.endswith("]"):
             attrs[k[5:-1]] = v
 
+    skey = 'filter_qs_by_attr_{}_{}'.format(request.organizer.pk, request.event.pk if hasattr(request, 'event') else '')
+    if request.GET.get('attr_persist'):
+        request.session[skey] = attrs
+    elif skey in request.session:
+        attrs = request.session[skey]
+
     props = {
         p.name: p for p in request.organizer.meta_properties.filter(
             name__in=attrs.keys()
