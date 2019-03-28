@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-20 11:00+0000\n"
+"PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:124
@@ -128,20 +128,14 @@ msgid "Unknown plugin: '{name}'."
 msgstr "未知插件: '{name}'."
 
 #: pretix/api/serializers/item.py:60 pretix/control/forms/item.py:613
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "附加组件的类别必须与活动属于同一项目。"
+msgstr "捆绑的商品不得与捆绑商品相同。"
 
 #: pretix/api/serializers/item.py:63 pretix/control/forms/item.py:615
 msgid "The bundled item must not have bundles on its own."
 msgstr ""
 
 #: pretix/api/serializers/item.py:124
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
-#| "the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
@@ -1602,10 +1596,8 @@ msgid "Dates in event series"
 msgstr "按活动序列排列的日期"
 
 #: pretix/base/models/event.py:949
-#, fuzzy
-#| msgid "One or more items do not belong to this event."
 msgid "One or more variations do not belong to this event."
-msgstr "一个或多个项目不属于此活动。"
+msgstr "一个或多个变量不属于此活动。"
 
 #: pretix/base/models/event.py:1032
 msgid "Can not contain spaces or special characters except underscores"
@@ -1972,16 +1964,12 @@ msgid "The maximum count needs to be greater than the minimum count."
 msgstr "最大计数需要大于最小计数。"
 
 #: pretix/base/models/items.py:806
-#, fuzzy
-#| msgid "invalid item"
 msgid "Bundled item"
-msgstr "无效项目"
+msgstr "绑定的项目"
 
 #: pretix/base/models/items.py:812
-#, fuzzy
-#| msgid "Sample variation"
 msgid "Bundled variation"
-msgstr "样本变量"
+msgstr "绑定的变量"
 
 #: pretix/base/models/items.py:818 pretix/base/models/items.py:905
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
@@ -2001,28 +1989,20 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:847
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must belong to the same event as the item."
-msgstr "附加组件的类别必须与活动属于同一项目。"
+msgstr "绑定项目的类别必须与活动属于同一项目。"
 
 #: pretix/base/models/items.py:849
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "A variation needs to be set for this item."
-msgstr "此变量不属于此产品。"
+msgstr "需要为此项目设置变量。"
 
 #: pretix/base/models/items.py:851
-#, fuzzy
-#| msgid "This variation does not belong to this product."
 msgid "The chosen variation does not belong to this item."
-msgstr "此变量不属于此产品。"
+msgstr "此变量不属于此项目。"
 
 #: pretix/base/models/items.py:856
-#, fuzzy
-#| msgid "The minimum count needs to be equal to or greater than zero."
 msgid "The count needs to be equal to or greater than zero."
-msgstr "最小计数需要等于或大于零。"
+msgstr "计数需要等于或大于零。"
 
 #: pretix/base/models/items.py:906
 msgid "Text (one line)"
@@ -3547,12 +3527,8 @@ msgid ""
 msgstr "您选择的其中一个产品只能作为另一个项目的附加产品购买。"
 
 #: pretix/base/services/cart.py:91
-#, fuzzy
-#| msgid ""
-#| "One of the products you selected can only be bought as an add-on to "
-#| "another project."
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr "您选择的其中一个产品只能作为另一个项目的附加产品购买。"
+msgstr "您所选择的产品中，有一种只能从捆绑包中购买。"
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
@@ -5145,18 +5121,12 @@ msgid ""
 msgstr "请注意，对于仅包含免费产品的订单，不会生成发票。"
 
 #: pretix/control/forms/event.py:631
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address explanation"
-msgstr "发票地址名称"
+msgstr "发票地址说明"
 
 #: pretix/control/forms/event.py:635
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid "This text will be shown above the invoice address form during checkout."
-msgstr "此文本将显示在付款选项上方。如果需要，可以在这里向用户解释这些选择。"
+msgstr "此文本将付款流程中显示在发票地址上方。"
 
 #: pretix/control/forms/event.py:638
 msgid "Generate invoices with consecutive numbers"
@@ -6219,10 +6189,8 @@ msgstr ""
 #: pretix/control/forms/item.py:562
 #: pretix/control/templates/pretixcontrol/item/bundles.html:26
 #: pretix/control/templates/pretixcontrol/item/bundles.html:53
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled product"
-msgstr "附加产品"
+msgstr "捆绑的产品"
 
 #: pretix/control/forms/item.py:586 pretix/control/forms/orders.py:230
 #: pretix/control/forms/orders.py:331
@@ -9215,10 +9183,8 @@ msgid "Add-Ons"
 msgstr "附加组件"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled products"
-msgstr "附加产品"
+msgstr "捆绑的产品"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:32
 msgid "Create product"
@@ -9249,10 +9215,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
-#, fuzzy
-#| msgid "Add a new object"
 msgid "Add a new bundled product"
-msgstr "添加一个新对象"
+msgstr "添加一个新捆绑产品"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
@@ -12606,14 +12570,10 @@ msgid ""
 msgstr "您不能将附加组件添加到只能作为附加组件本身使用的产品中。"
 
 #: pretix/control/views/item.py:1106
-#, fuzzy
-#| msgid ""
-#| "You cannot add add-ons to a product that is only available as an add-on "
-#| "itself."
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
-msgstr "您不能将附加组件添加到只能作为附加组件本身使用的产品中。"
+msgstr "您不能将捆绑产品添加到只能作为附加组件本身使用的产品中。"
 
 #: pretix/control/views/item.py:1164
 msgid "The selected product has been deleted."
@@ -15601,8 +15561,6 @@ msgstr "修改%(item)s的价格"
 #: pretix/presale/templates/pretixpresale/event/index.html:408
 #: pretix/presale/templates/pretixpresale/event/voucher.html:117
 #: pretix/presale/templates/pretixpresale/event/voucher.html:212
-#, fuzzy
-#| msgid "taxes"
 msgid "plus taxes"
 msgstr "税"
 
@@ -15610,9 +15568,6 @@ msgstr "税"
 #: pretix/presale/templates/pretixpresale/event/index.html:410
 #: pretix/presale/templates/pretixpresale/event/voucher.html:119
 #: pretix/presale/templates/pretixpresale/event/voucher.html:214
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Included taxes"
 msgid "incl. taxes"
 msgstr "包含税"
 
@@ -16181,34 +16136,25 @@ msgid ""
 msgstr "我们已将您添加到等待列表中。一旦再次获得门票，您将收到一封电子邮件。"
 
 #: pretix/presale/views/widget.py:228
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "This ticket shop is currently disabled."
 msgstr "所选的售票处目前无法使用。"
 
 #: pretix/presale/views/widget.py:237
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected date does not exist in this event series."
-msgstr "所选项目不属于此活动。"
+msgstr "所选日期不属于此活动。"
 
 #: pretix/presale/views/widget.py:244
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is not an event series."
-msgstr "这是一个活动系列"
+msgstr "这不是一个系列活动。"
 
 #: pretix/presale/views/widget.py:278
-#, fuzzy, python-format
-#| msgid "Show start date"
+#, python-format
 msgid "from %(start_date)s"
-msgstr "显示开始日期"
+msgstr "从 %(start_date)s"
 
 #: pretix/presale/views/widget.py:281
-#, fuzzy
-#| msgid "Sale over"
 msgid "Sale Soon"
-msgstr "售完"
+msgstr "即将开售"
 
 #: pretix/settings.py:388
 msgid "English"
