@@ -277,7 +277,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['years'] = range(now().year - 2, now().year + 3)
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
-                self.request.event.subevents_annotated(self.request.sales_channel)
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request)
             )
 
         context['show_cart'] = (
