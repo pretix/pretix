@@ -110,9 +110,13 @@
         {% if not ev.presale_is_running %}
             <div class="alert alert-info">
                 {% if ev.presale_has_ended %}
-                    {% blocktrans trimmed %}
-                        The presale period for this event is over.
-                    {% endblocktrans %}
+                    {% if event.settings.presale_has_ended_text %}
+                        {{ event.settings.presale_has_ended_text|rich_text }}
+                    {% else %}
+                        {% blocktrans trimmed %}
+                            The presale period for this event is over.
+                        {% endblocktrans %}
+                    {% endif %}
                 {% elif event.settings.presale_start_show_date %}
                     {% blocktrans trimmed with date=ev.presale_start|date:"SHORT_DATE_FORMAT" time=ev.presale_start|time:"TIME_FORMAT" %}
                         The presale for this event will start on {{ date }} at {{ time }}.

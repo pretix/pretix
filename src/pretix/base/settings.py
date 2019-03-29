@@ -101,6 +101,10 @@ DEFAULTS = {
         'default': 'False',
         'type': bool
     },
+    'presale_has_ended_text': {
+        'default': '',
+        'type': LazyI18nString
+    },
     'payment_explanation': {
         'default': '',
         'type': LazyI18nString

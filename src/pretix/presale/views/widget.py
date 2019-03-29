@@ -437,7 +437,10 @@ class WidgetAPIProductList(EventListMixin, View):
 
         if not ev.presale_is_running:
             if ev.presale_has_ended:
-                data['error'] = ugettext('The presale period for this event is over.')
+                if request.event.settings.presale_has_ended_text:
+                    data['error'] = str(request.event.settings.presale_has_ended_text)
+                else:
+                    data['error'] = ugettext('The presale period for this event is over.')
             elif request.event.settings.presale_start_show_date:
                 data['error'] = ugettext('The presale for this event will start on %(date)s at %(time)s.') % {
                     'date': date_format(ev.presale_start.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),

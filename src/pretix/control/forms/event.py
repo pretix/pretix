@@ -1049,6 +1049,14 @@ class DisplaySettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea
     )
+    presale_has_ended_text = I18nFormField(
+        label=_("End of presale text"),
+        required=False,
+        widget=I18nTextarea,
+        widget_kwargs={'attrs': {'rows': '2'}},
+        help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
+                    "is over. You can use it to describe other options to get a ticket, such as a box office.")
+    )
     voucher_explanation_text = I18nFormField(
         label=_("Voucher explanation"),
         required=False,
