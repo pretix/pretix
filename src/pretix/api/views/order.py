@@ -50,6 +50,7 @@ class OrderFilter(FilterSet):
     code = django_filters.CharFilter(field_name='code', lookup_expr='iexact')
     status = django_filters.CharFilter(field_name='status', lookup_expr='iexact')
     modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
+    created_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
 
     class Meta:
         model = Order
