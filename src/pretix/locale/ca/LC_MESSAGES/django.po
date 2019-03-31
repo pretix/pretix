@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-29 15:39+0000\n"
+"PO-Revision-Date: 2019-04-01 00:00+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -879,7 +879,7 @@ msgstr "Referència interna"
 
 #: pretix/base/exporters/orderlist.py:501 pretix/control/forms/event.py:1174
 msgid "Reverse charge"
-msgstr "Càrrecs inversos"
+msgstr "Auto-liquidació"
 
 #: pretix/base/exporters/orderlist.py:502
 msgid "Shown foreign currency"
@@ -2651,7 +2651,7 @@ msgstr "Els preus de producte configurats inclouen la quantitat de l'impost"
 
 #: pretix/base/models/tax.py:105
 msgid "Use EU reverse charge taxation rules"
-msgstr "Useu les regles fiscals de càrrega inversa de la UE"
+msgstr "Useu les regles fiscals d'auto-liquidació de la UE"
 
 #: pretix/base/models/tax.py:107
 msgid ""
@@ -2662,7 +2662,7 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
-"No es recomana. La majoria d'esdeveniment no aplicaran per càrrega inversa "
+"No es recomana. La majoria d'esdeveniments no aplicaran per auto-liquidació "
 "ja que el lloc de fiscalització és la ubicació de l'esdeveniment. Aquesta "
 "opció desactiva la càrrega de l'impost per a tots els clients de fora de la "
 "UE i per a clients empresarials a diferents països de la UE que han "
@@ -2679,14 +2679,14 @@ msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
-"El vostre país de residència. Aquest és el país on la regla de càrrega "
-"inversa de la UE no s'aplica, si s'ha configurat més amunt."
+"El vostre país de residència. Aquest és el país on la regla d'auto-"
+"liquidació de la UE no s'aplica, si s'ha configurat més amunt."
 
 #: pretix/base/models/tax.py:143
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
-"Heu d'establir el vostre país d'origen per a utilitzar la funció de càrrega "
-"inversa."
+"Heu d'establir el vostre país d'origen per a utilitzar la funció d'auto-"
+"liquidació."
 
 #: pretix/base/models/tax.py:147
 #, python-brace-format
@@ -2700,7 +2700,7 @@ msgstr "més {rate}% {name}"
 
 #: pretix/base/models/tax.py:151
 msgid "reverse charge enabled"
-msgstr "s'ha activat la càrrega inversa"
+msgstr "s'ha activat l'auto-liquidació"
 
 #: pretix/base/models/vouchers.py:76
 msgid "No effect"
@@ -3617,51 +3617,59 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Aquest codi de val es troba actualment blocat perquè ja es troba dins una "
+"cistella. Això pot significar que algú altre està bescanviant el val en "
+"aquest moment, o que heu intentat bescanviar-ho abans però no heu completat "
+"el procés de compra. Podeu intentar-ho de nou en %d minuts."
 
 #: pretix/base/services/cart.py:75
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Aquest codi de val només es pot bescanviar %d vegada més."
 
 #: pretix/base/services/cart.py:76
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"Ja heu utilitzat aquest codi de val. Suprimiu la línia associada de la "
+"vostra cistella si el voleu utilitzar per a un altre producte."
 
 #: pretix/base/services/cart.py:78
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Aquest val ha expirat."
 
 #: pretix/base/services/cart.py:79
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Aquest val no és vàlid per a aquest producte."
 
 #: pretix/base/services/cart.py:81
 msgid "Your voucher is valid for a product that is currently not for sale."
 msgstr ""
+"El vostre val és vàlid per a un producte que no està actualment en venda."
 
 #: pretix/base/services/cart.py:82
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Aquest val no és vàlid per a aquesta data de l'esdeveniment."
 
 #: pretix/base/services/cart.py:83
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "Per comanar aquest producte necessiteu un val vàlid."
 
 #: pretix/base/services/cart.py:84
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "La data de l'esdeveniment seleccionada no es troba activa."
 
 #: pretix/base/services/cart.py:85
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "No podeu seleccionar un complement per a aquest producte."
 
 #: pretix/base/services/cart.py:86
 msgid "You can not select two variations of the same add-on product."
 msgstr ""
+"No podeu seleccionar dues variacions del mateix complement del producte."
 
 #: pretix/base/services/cart.py:87
 #, python-format
@@ -3669,6 +3677,8 @@ msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
+"Podeu seleccionar %(max)s complements com a màxim per a la categoria %(cat)s "
+"pel producte %(base)s."
 
 #: pretix/base/services/cart.py:88
 #, python-format
@@ -3676,36 +3686,45 @@ msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
+"Necessiteu seleccionar al menys %(min)s complements de la categoria %(cat)s "
+"per al producte %(base)s."
 
 #: pretix/base/services/cart.py:90
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
 msgstr ""
+"Un dels productes que heu seleccionat només es pot comprar com un complement "
+"d'un altre projecte."
 
 #: pretix/base/services/cart.py:91
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
+"Un dels productes que heu seleccionat només es pot comprar com a part d'un "
+"paquet."
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
-msgstr ""
+msgstr "Aquesta posició de la comanda s'ha cancel·lat."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
 msgstr ""
+"Aquesta posició de la comanda té un  producte invàlid per a aquesta llista "
+"de validació."
 
 #: pretix/base/services/checkin.py:116
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "Aquesta comanda no està marcada com pagada."
 
 #: pretix/base/services/checkin.py:121
 msgid "You need to answer questions to complete this check-in."
 msgstr ""
+"Necessitau respondre aquestes preguntes per completar aquesta validació."
 
 #: pretix/base/services/checkin.py:147
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "Ja s'ha validat aquest tiquet."
 
 #: pretix/base/services/invoices.py:68
 #, python-brace-format
@@ -3717,17 +3736,22 @@ msgid ""
 "{i.zipcode} {i.city}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:139
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "Assistent: {name}"
 
 #: pretix/base/services/invoices.py:141 pretix/plugins/reports/exporters.py:198
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "Data: {}"
 
 #: pretix/base/services/invoices.py:157
 msgctxt "invoice"
@@ -3735,6 +3759,8 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Auto-liquidació: D'acord amb l'article 194, 196 de la Directiva del Consell  "
+"2006/112/EEC la responsabilitat de l'IVA recau en el receptor del servei."
 
 #: pretix/base/services/invoices.py:300
 msgid "A payment provider specific text might appear here."
@@ -4993,6 +5019,9 @@ msgid ""
 "payment methods. This will set the tax rate and reverse charge rules, other "
 "settings of the tax rule are ignored."
 msgstr ""
+"La regla fiscal que aplica a tarifes addicionals que heu configurat per a "
+"mètodes de pagament senzills. Això establirà les regles del tipus d'impost i "
+"de l'auto-liquidació, s'ignores altres configuracions de les regles fiscals."
 
 #: pretix/control/forms/event.py:526
 msgid "Guidance text"
@@ -6141,6 +6170,12 @@ msgid ""
 "care and only if you need to. Note that rounding differences might occur in "
 "this procedure."
 msgstr ""
+"Aquesta operació re-avalua i els impostes s'haurien de pagar pels elements "
+"degut a, per exemple, regles configurades d'auto-liquidació i canvia en "
+"conseqüència els preus i valors fiscals. Això és útil per exemple després "
+"d'un canvi d'adreça de la factura. Utilitzeu amb cura i només si ho "
+"necessiteu. Teniu en compte que amb aquest procediment es poden donar "
+"diferències d'arrodoniments."
 
 #: pretix/control/forms/orders.py:173
 msgid "Notify user"
