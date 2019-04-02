@@ -756,7 +756,7 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.api_token = None
+        self.object.revoked = True
         self.object.save()
         self.object.log_action('pretix.device.revoked', user=self.request.user)
         messages.success(request, _('Access for this device has been revoked.'))

@@ -105,7 +105,7 @@ class RevokeKeyView(APIView):
 
     def post(self, request, format=None):
         device = request.auth
-        device.api_token = None
+        device.revoked = True
         device.save()
         device.log_action('pretix.device.revoked', auth=device)
 

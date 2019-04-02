@@ -145,4 +145,4 @@ def test_revoke_valid(device_client, device: Device):
     resp = device_client.post('/api/v1/device/revoke')
     assert resp.status_code == 200
     device.refresh_from_db()
-    assert not device.api_token
+    assert device.revoked
