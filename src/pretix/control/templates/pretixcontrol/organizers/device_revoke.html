@@ -9,6 +9,13 @@
             <strong>{% blocktrans %}Are you sure you want remove access for this device?{% endblocktrans %}</strong>
             {% trans "All data of this device will stay available, but you can't use the device any more." %}
         </p>
+        <div class="alert alert-warning">
+            <ul>
+                <li>{% trans "All data uploaded by this device will stay available online." %}</li>
+                <li>{% trans "If data (e.g. POS transactions or check-ins) has been created on this device and has not been uploaded, you will no longer be able to upload it." %}</li>
+                <li>{% trans "If the device software supports it, personal data such as orders will be deleted from the device on the next synchronization attempt. Non-personal data such as event metadata and POS transactions will persist until you uninstall or reset the software manually." %}</li>
+            </ul>
+        </div>
         <div class="form-group submit-group">
             <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}

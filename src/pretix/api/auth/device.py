@@ -19,7 +19,7 @@ class DeviceTokenAuthentication(TokenAuthentication):
         if not device.initialized:
             raise exceptions.AuthenticationFailed('Device has not been initialized.')
 
-        if not device.api_token:
+        if device.revoked:
             raise exceptions.AuthenticationFailed('Device access has been revoked.')
 
         return AnonymousUser(), device
