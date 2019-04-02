@@ -80,4 +80,4 @@ def test_revoke_device(event, admin_user, admin_team, device, client):
     client.get('/control/organizer/dummy/device/{}/revoke'.format(device.pk))
     client.post('/control/organizer/dummy/device/{}/revoke'.format(device.pk), {}, follow=True)
     device.refresh_from_db()
-    assert device.api_token is None
+    assert device.revoked
