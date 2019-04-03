@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-03-22 15:00+0000\n"
+"PO-Revision-Date: 2019-04-03 13:26+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5947,10 +5947,8 @@ msgid "Only respected by modern browsers."
 msgstr "Nur von modernen Browsern respektiert."
 
 #: pretix/control/forms/event.py:1053
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of presale text"
-msgstr "Ende des Vorverkaufs"
+msgstr "Test für Ende des Vorverkaufs"
 
 #: pretix/control/forms/event.py:1057
 msgid ""
@@ -5958,6 +5956,9 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"Dieser Text wird über dem Ticketshop angezeigt, sobald der konfigurierte "
+"Verkaufszeitraum vorüber ist. Du kannst hier andere Wege ein Ticket zu "
+"bekommen, wie z.B. eine Abendkasse, beschreiben."
 
 #: pretix/control/forms/event.py:1061
 msgid "Voucher explanation"
@@ -5996,6 +5997,7 @@ msgstr "Der Ticket-Shop soll von Suchmaschinen nicht indiziert werden"
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Leite nach Hinzufügen eines Produktes zum Warenkorb direkt zum Checkout um."
 
 #: pretix/control/forms/event.py:1102
 msgid "Use feature"
@@ -11407,20 +11409,16 @@ msgstr ""
 "nicht mehr benutzen."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:14
-#, fuzzy
-#| msgid ""
-#| "All data of this device will stay available, but you can't use the device "
-#| "any more."
 msgid "All data uploaded by this device will stay available online."
-msgstr ""
-"Alle Daten über dieses Gerät bleiben erhalten, aber du kannst das Gerät "
-"nicht mehr benutzen."
+msgstr "Alle von diesem Gerät hochgeladenen Daten bleiben online erhalten."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:15
 msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"Wenn Daten (z.B. Kassentransaktionen oder Check-ins) auf dem Gerät erstellt "
+"und noch nicht hochgeladen wurden, können sie nicht mehr hochgeladen werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -11429,6 +11427,11 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Wenn die Software des Gerätes diese Funktion unterstützt, wird das Gerät "
+"persönliche Daten wie z.B. Bestelldaten beim nächsten "
+"Synchronisierungsversuch vom Gerät löschen. Nicht-personenbezogene Daten wie "
+"z.B. Veranstaltungsdaten oder Kassentransaktionen werden nicht gelöscht, bis "
+"du die Software manuell deinstallierst oder zurücksetzt."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
 msgid "Connected devices"
@@ -14572,6 +14575,8 @@ msgstr "Beim Verarbeiten der Daten ist ein interner Fehler aufgetreten."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try ot re-import the file."
 msgstr ""
+"Einige Transaktionen fehlen möglicherweise, bitte probiere, die Datei erneut "
+"zu importieren."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
@@ -17296,18 +17301,16 @@ msgid "Turkish"
 msgstr "Türkisch"
 
 #: pretix/settings.py:398
-#, fuzzy
-#| msgid "English"
 msgid "Polish"
-msgstr "Englisch"
+msgstr "Polnisch"
 
 #: pretix/settings.py:399
 msgid "Italian"
-msgstr ""
+msgstr "Italienisch"
 
 #: pretix/settings.py:400
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chinesisch (vereinfacht)"
 
 #: pretix/settings.py:673
 msgid "Read access"
