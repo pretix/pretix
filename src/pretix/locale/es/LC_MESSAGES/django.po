@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-22 14:50+0000\n"
-"PO-Revision-Date: 2019-03-28 14:00+0000\n"
-"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"PO-Revision-Date: 2019-03-31 08:00+0000\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -924,7 +924,7 @@ msgstr "Factura"
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:618
 msgid "Yes"
-msgstr "Sí"
+msgstr "Si"
 
 #: pretix/base/exporters/orderlist.py:550 pretix/base/models/orders.py:811
 #: pretix/control/views/item.py:442 pretix/control/views/vouchers.py:78
@@ -1647,10 +1647,8 @@ msgid "Dates in event series"
 msgstr "Fechas en una serie de eventos"
 
 #: pretix/base/models/event.py:949
-#, fuzzy
-#| msgid "One or more items do not belong to this event."
 msgid "One or more variations do not belong to this event."
-msgstr "Uno o mas articulos no pertenecen a este evento."
+msgstr "Uno o mas variaciones no pertenecen a este evento."
 
 #: pretix/base/models/event.py:1032
 msgid "Can not contain spaces or special characters except underscores"
@@ -1869,7 +1867,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:333
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Solo vender este producto como parte de un paquete"
 
 #: pretix/base/models/items.py:335
 msgid ""
@@ -2102,10 +2100,8 @@ msgid "The chosen variation does not belong to this item."
 msgstr "Esta variación no pertenece a este producto."
 
 #: pretix/base/models/items.py:856
-#, fuzzy
-#| msgid "The minimum count needs to be equal to or greater than zero."
 msgid "The count needs to be equal to or greater than zero."
-msgstr "El conteo mínimo debe ser igual o mayor que cero."
+msgstr "El conteo necesita ser igual o mayor que cero."
 
 #: pretix/base/models/items.py:906
 msgid "Text (one line)"
@@ -16630,20 +16626,15 @@ msgstr "Modificar precio para %(item)s"
 #: pretix/presale/templates/pretixpresale/event/index.html:408
 #: pretix/presale/templates/pretixpresale/event/voucher.html:117
 #: pretix/presale/templates/pretixpresale/event/voucher.html:212
-#, fuzzy
-#| msgid "taxes"
 msgid "plus taxes"
-msgstr "gravámenes"
+msgstr "más impuestos"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:300
 #: pretix/presale/templates/pretixpresale/event/index.html:410
 #: pretix/presale/templates/pretixpresale/event/voucher.html:119
 #: pretix/presale/templates/pretixpresale/event/voucher.html:214
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Included taxes"
 msgid "incl. taxes"
-msgstr "Impuestos incluidos"
+msgstr "incl. impuestos"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:307
 #: pretix/presale/templates/pretixpresale/event/index.html:417
@@ -17264,22 +17255,17 @@ msgid "The selected date does not exist in this event series."
 msgstr "El elemento seleccionado no pertenece a este evento."
 
 #: pretix/presale/views/widget.py:244
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is not an event series."
-msgstr "Esta es una serie de eventos"
+msgstr "Esta no es una serie de eventos."
 
 #: pretix/presale/views/widget.py:278
-#, fuzzy, python-format
-#| msgid "Show start date"
+#, python-format
 msgid "from %(start_date)s"
-msgstr "Mostrar fecha de inicio"
+msgstr "de %(start_date)s"
 
 #: pretix/presale/views/widget.py:281
-#, fuzzy
-#| msgid "Sale over"
 msgid "Sale Soon"
-msgstr "Venta finalizada"
+msgstr "Proximo a la venta"
 
 #: pretix/settings.py:388
 msgid "English"
