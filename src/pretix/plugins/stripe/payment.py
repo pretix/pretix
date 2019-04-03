@@ -321,6 +321,10 @@ class StripeMethod(BasePaymentProvider):
                 amount=self._get_amount(payment),
                 currency=self.event.currency.lower(),
                 source=source,
+                description='{event}-{code}'.format(
+                    event=self.event.slug.upper(),
+                    code=payment.order.code
+                ),
                 metadata={
                     'order': str(payment.order.id),
                     'event': self.event.id,
