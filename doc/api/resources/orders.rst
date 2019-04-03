@@ -373,8 +373,8 @@ List of all orders
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
-   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``code`` and
-                           ``status``. Default: ``datetime``
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``code``,
+                           ``last_modified``, and ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
    :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
