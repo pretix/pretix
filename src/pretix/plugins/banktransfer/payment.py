@@ -118,6 +118,16 @@ class BankTransfer(BasePaymentProvider):
     def settings_form_fields(self):
         d = OrderedDict(
             list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + [
+                ('code_prefix', forms.CharField(
+                    label=_('Bank transfer code prefix.'),
+                    help_text=_('This value is prepended to the unique order code.'),
+                    widget=forms.TextInput(
+                        attrs={
+                            'placeholder': self.event.slug.upper(),
+                        },
+                    ),
+                    required=False
+                )),
                 ('omit_hyphen', forms.BooleanField(
                     label=_('Do not include a hypen in the payment reference.'),
                     help_text=_('This is required in some countries.'),
@@ -212,10 +222,13 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def _code(self, order):
+        prefix = self.settings.get('code_prefix', as_type=str)
+        if not prefix:
+            prefix = self.event.slug.upper()
         if self.settings.get('omit_hyphen', as_type=bool):
-            return self.event.slug.upper() + order.code
+            return prefix + order.code
         else:
-            return order.full_code
+            return prefix + '-' + order.code
 
     def shred_payment_info(self, obj):
         if not obj.info_data:
