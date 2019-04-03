@@ -1,4 +1,5 @@
 import json
+import re
 import textwrap
 from collections import OrderedDict
 
@@ -20,6 +21,7 @@ class BankTransfer(BasePaymentProvider):
     identifier = 'banktransfer'
     verbose_name = _('Bank transfer')
     abort_pending_allowed = True
+    code_prefix_patterns = re.compile("^[a-zA-Z0-9-]+$")
 
     @staticmethod
     def form_fields():
@@ -121,7 +123,18 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()))
+        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + [
+            ('code_prefix', forms.CharField(
+                label=_('Reference code prefix'),
+                help_text=_('This value is prepended to the unique order code. If not set, the short form of the event name will be used.'),
+                widget=forms.TextInput(
+                    attrs={
+                        'placeholder': self.event.slug.upper(),
+                    },
+                ),
+                required=False
+            )),
+        ])
         d.move_to_end('bank_details', last=False)
         d.move_to_end('bank_details_sepa_bank', last=False)
         d.move_to_end('bank_details_sepa_bic', last=False)
@@ -144,6 +157,10 @@ class BankTransfer(BasePaymentProvider):
             if not cleaned_data.get('payment_banktransfer_bank_details'):
                 raise ValidationError(
                     {'payment_banktransfer_bank_details': _('Please enter your bank account details.')})
+
+        if (cleaned_data.get('payment_banktransfer_code_prefix') and not self.code_prefix_patterns.match(cleaned_data.get('payment_banktransfer_code_prefix'))):
+            raise ValidationError(
+                {'payment_banktransfer_code_prefix': _('Prefix can only contains alphanumeric characters and hyphens.')})
         return cleaned_data
 
     def payment_form_render(self, request) -> str:
@@ -210,10 +227,13 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def _code(self, order):
+        prefix = self.settings.get('code_prefix', as_type=str)
+        if not prefix:
+            prefix = self.event.slug.upper()
         if self.settings.get('omit_hyphen', as_type=bool):
-            return self.event.slug.upper() + order.code
+            return prefix + order.code
         else:
-            return order.full_code
+            return prefix + '-' + order.code
 
     def shred_payment_info(self, obj):
         if not obj.info_data:

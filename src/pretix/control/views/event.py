@@ -1297,6 +1297,11 @@ class QuickSetupView(FormView):
                     form.cleaned_data['payment_banktransfer_%s' % f]
                 )
 
+            self.request.event.settings.set(
+                'payment_banktransfer_code_prefix',
+                form.cleaned_data['payment_banktransfer_code_prefix']
+            )
+
         if form.cleaned_data.get('payment_stripe__enabled', None):
             if 'pretix.plugins.stripe' not in plugins_active:
                 self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,

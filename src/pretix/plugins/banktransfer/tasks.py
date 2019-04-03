@@ -66,31 +66,16 @@ def cancel_old_payments(order):
 @transaction.atomic
 def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, organizer: Organizer=None,
                         slug: str=None):
-    if event:
+    try:
+        trans.order = event.orders.get(code=code)
+    except Order.DoesNotExist:
+        normalized_code = Order.normalize_code(code)
         try:
-            trans.order = event.orders.get(code=code)
+            trans.order = event.orders.get(code=normalized_code)
         except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
-            try:
-                trans.order = event.orders.get(code=normalized_code)
-            except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
-    else:
-        qs = Order.objects.filter(event__organizer=organizer)
-        if slug:
-            qs = qs.filter(event__slug__iexact=slug)
-        try:
-            trans.order = qs.get(code=code)
-        except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
-            try:
-                trans.order = qs.get(code=normalized_code)
-            except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
+            trans.state = BankTransaction.STATE_NOMATCH
+            trans.save()
+            return
 
     if trans.order.status == Order.STATUS_PAID and trans.order.pending_sum <= Decimal('0.00'):
         trans.state = BankTransaction.STATE_DUPLICATE
@@ -188,6 +173,24 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None,
     return transactions
 
 
+def get_prefix_event_map(organizer=None, event=None):
+    prefix_event_map = {}
+
+    if event:
+        events = [event]
+    elif organizer:
+        events = organizer.events.all()
+    else:
+        return {}
+
+    for event in events:
+        prefix_event_map[event.slug.upper()] = event
+        custom_prefix = event.settings.get('payment_banktransfer_code_prefix', as_type=str)
+        if custom_prefix:
+            prefix_event_map[custom_prefix] = event
+    return prefix_event_map
+
+
 @app.task(base=TransactionAwareTask, bind=True, max_retries=5, default_retry_delay=1)
 def process_banktransfers(self, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
@@ -196,7 +199,6 @@ def process_banktransfers(self, job: int, data: list) -> None:
         with scope(organizer=job.organizer or job.event.organizer):
             job.state = BankImportJob.STATE_RUNNING
             job.save()
-            prefixes = []
 
             try:
                 # Delete left-over transactions from a failed run before so they can reimported
@@ -205,25 +207,24 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
                 code_len = settings.ENTROPY['order_code']
+
                 if job.event:
-                    pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
+                    prefix_event_map = get_prefix_event_map(event=job.event)
                 else:
-                    if not prefixes:
-                        prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
-                                    for e in job.organizer.events.all()]
-                    pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
+                    prefix_event_map = get_prefix_event_map(organizer=job.organizer)
+
+                prefixes = [prefix.replace(".", r"\.").replace("-", r"[\- ]*")
+                            for prefix in prefix_event_map.keys()]
+
+                pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
                 for trans in transactions:
                     match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
 
                     if match:
-                        if job.event:
-                            code = match.group(1)
-                            _handle_transaction(trans, code, event=job.event)
-                        else:
-                            slug = match.group(1)
-                            code = match.group(2)
-                            _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
+                        prefix = match.group(1)
+                        code = match.group(2)
+                        _handle_transaction(trans, code, event=prefix_event_map[prefix])
                     else:
                         trans.state = BankTransaction.STATE_NOMATCH
                         trans.save()
