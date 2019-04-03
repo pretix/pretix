@@ -1023,6 +1023,18 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIn('empty', doc.select('.alert-success')[0].text)
         self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
+    def test_remove_expired_voucher(self):
+        v = Voucher.objects.create(item=self.ticket, event=self.event, valid_until=now() - timedelta(days=1))
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10), voucher=v
+        )
+        self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'id': cp.pk
+        }, follow=True)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_voucher(self):
         v = Voucher.objects.create(item=self.ticket, event=self.event)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

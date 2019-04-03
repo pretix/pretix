@@ -276,6 +276,10 @@ class CartManager:
         err = None
         changed_prices = {}
         for cp in expired:
+            removed_positions = {op.position.pk for op in self._operations if isinstance(op, self.RemoveOperation)}
+            if cp.pk in removed_positions or (cp.addon_to_id and cp.addon_to_id in removed_positions):
+                continue
+
             if cp.is_bundled:
                 try:
                     bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
