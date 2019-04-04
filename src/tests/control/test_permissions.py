@@ -66,6 +66,7 @@ event_urls = [
     "items/add",
     "items/1/",
     "items/1/variations",
+    "items/1/bundles",
     "items/1/up",
     "items/1/down",
     "items/1/delete",
@@ -112,6 +113,7 @@ event_urls = [
     "orders/ABC/refunds/1/cancel",
     "orders/ABC/refunds/1/process",
     "orders/ABC/refunds/1/done",
+    "orders/ABC/delete",
     "orders/ABC/",
     "orders/",
     "checkinlists/",
@@ -238,6 +240,9 @@ event_permission_urls = [
     ("can_change_items", "items/1/up", 404),
     ("can_change_items", "items/1/down", 404),
     ("can_change_items", "items/1/delete", 404),
+    ("can_change_items", "items/1/variations", 404),
+    ("can_change_items", "items/1/addons", 404),
+    ("can_change_items", "items/1/bundles", 404),
     # ("can_change_items", "categories/", 200),
     # We don't have to create categories and similar objects
     # for testing this, it is enough to test that a 404 error
@@ -272,6 +277,7 @@ event_permission_urls = [
     ("can_change_orders", "orders/FOO/change", 200),
     ("can_change_orders", "orders/FOO/approve", 200),
     ("can_change_orders", "orders/FOO/deny", 200),
+    ("can_change_orders", "orders/FOO/delete", 302),
     ("can_change_orders", "orders/FOO/comment", 405),
     ("can_change_orders", "orders/FOO/locale", 200),
     ("can_view_orders", "orders/FOO/answer/5/", 404),
