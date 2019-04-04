@@ -15,22 +15,24 @@
         {% endblocktrans %}
         {% trans "This will invalidate all of your tickets." %}
     </p>
-    {% if can_auto_refund %}
-        <p>
-            <strong>
+    {% if refund_amount %}
+        {% if can_auto_refund %}
+            <p>
+                <strong>
+                    {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
+                        The refund amount of {{ amount }} will automatically be sent back to your original payment method. Depending on the payment method,
+                        please allow for up to two weeks before this appears on your statement.
+                    {% endblocktrans %}
+                </strong>
+            </p>
+        {% else %}
+            <div class="alert alert-warning">
                 {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
-                    The refund amount of {{ amount }} will automatically be sent back to your original payment method. Depending on the payment method,
-                    please allow for up to two weeks before this appears on your statement.
+                    With to the payment method you used, the refund amount of {{ amount }} <strong>can not be sent back to you automatically</strong>. Instead, the
+                    event organizer will need to initiate the transfer manually. Please be patient as this might take a bit longer.
                 {% endblocktrans %}
-            </strong>
-        </p>
-    {% else %}
-        <div class="alert alert-warning">
-            {% blocktrans trimmed with amount=refund_amount|money:request.event.currency %}
-                With to the payment method you used, the refund amount of {{ amount }} <strong>can not be sent back to you automatically</strong>. Instead, the
-                event organizer will need to initiate the transfer manually. Please be patient as this might take a bit longer.
-            {% endblocktrans %}
-        </div>
+            </div>
+        {% endif %}
     {% endif %}
 
     <form method="post" action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}" data-asynctask>

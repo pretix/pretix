@@ -583,7 +583,7 @@ class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
-        refund_amount = self.order.total - self.order.user_cancel_fee
+        refund_amount = self.order.payment_refund_sum - self.order.user_cancel_fee
         proposals = self.order.propose_auto_refunds(refund_amount)
         ctx['refund_amount'] = refund_amount
         ctx['can_auto_refund'] = sum(proposals.values()) == refund_amount
