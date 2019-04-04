@@ -17,7 +17,7 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import LogEntry, Voucher
+from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
 from pretix.base.models.vouchers import _generate_random_code
 from pretix.control.forms.filter import VoucherFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
@@ -143,7 +143,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
         else:
             self.object.log_action('pretix.voucher.deleted', user=self.request.user)
-            self.object.cartposition_set.filter(addon_to__isnull=False).delete()
+            CartPosition.objects.filter(addon_to__voucher=False).delete()
             self.object.cartposition_set.all().delete()
             self.object.delete()
             messages.success(request, _('The selected voucher has been deleted.'))
@@ -349,7 +349,7 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
             for obj in self.objects:
                 if obj.allow_delete():
                     obj.log_action('pretix.voucher.deleted', user=self.request.user)
-                    obj.cartposition_set.filter(addon_to__isnull=False).delete()
+                    OrderPosition.objects.filter(addon_to__voucher=obj).delete()
                     obj.cartposition_set.all().delete()
                     obj.delete()
                 else:

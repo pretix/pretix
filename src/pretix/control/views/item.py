@@ -18,8 +18,8 @@ from django.views.generic.edit import DeleteView
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CachedTicket, Item, ItemCategory, ItemVariation, Order, Question,
-    QuestionAnswer, QuestionOption, Quota, Voucher,
+    CachedTicket, CartPosition, Item, ItemCategory, ItemVariation, Order,
+    Question, QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle
@@ -1158,7 +1158,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         o = self.get_object()
         if o.allow_delete():
-            self.get_object().cartposition_set.filter(addon_to__isnull=False).delete()
+            CartPosition.objects.filter(addon_to__item=self.get_object()).delete()
             self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()

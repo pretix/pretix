@@ -13,7 +13,7 @@ from pretix.api.serializers.event import (
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    Device, Event, ItemCategory, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, ItemCategory, TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
@@ -272,7 +272,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
                     auth=self.request.auth,
                     data=self.request.data
                 )
-                instance.cartposition_set.filter(addon_to__isnull=False).delete()
+                CartPosition.objects.filter(addon_to__subevent=instance).delete()
                 instance.cartposition_set.all().delete()
                 super().perform_destroy(instance)
         except ProtectedError:

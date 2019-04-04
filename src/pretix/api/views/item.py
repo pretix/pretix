@@ -16,8 +16,8 @@ from pretix.api.serializers.item import (
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation, Question,
-    QuestionOption, Quota,
+    CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation,
+    Question, QuestionOption, Quota,
 )
 from pretix.helpers.dicts import merge_dicts
 
@@ -84,8 +84,8 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
         )
-        self.get_object().cartposition_set.filter(addon_to__isnull=False).delete()
-        self.get_object().cartposition_set.all().delete()
+        CartPosition.objects.filter(addon_to__item=instance).delete()
+        instance.cartposition_set.all().delete()
         super().perform_destroy(instance)
 
 

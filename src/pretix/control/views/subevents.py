@@ -16,6 +16,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from pretix.base.models import CartPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
@@ -117,7 +118,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
-            self.object.cartposition_set.filter(addon_to__isnull=False).delete()
+            CartPosition.objects.filter(addon_to__subevent=self.object).delete()
             self.object.cartposition_set.all().delete()
             self.object.delete()
             messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
@@ -513,7 +514,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
         elif request.POST.get('action') == 'delete_confirm':
             for obj in self.objects:
                 if obj.allow_delete():
-                    obj.cartposition_set.filter(addon_to__isnull=False).delete()
+                    CartPosition.objects.filter(addon_to__subevent=obj).delete()
                     obj.cartposition_set.all().delete()
                     obj.log_action('pretix.subevent.deleted', user=self.request.user)
                     obj.delete()
