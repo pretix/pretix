@@ -20,6 +20,7 @@ class ItemFormTest(SoupTest):
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
+        self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
         t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
@@ -83,6 +84,7 @@ class QuestionsTest(ItemFormTest):
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['question_0'] = 'What is your shoe size?'
         form_data['type'] = 'N'
+        form_data['items'] = self.item1.id
         doc = self.post_doc('/control/event/%s/%s/questions/add' % (self.orga1.slug, self.event1.slug), form_data)
         assert doc.select(".alert-success")
         self.assertIn("shoe size", doc.select("#page-wrapper table")[0].text)
@@ -97,6 +99,7 @@ class QuestionsTest(ItemFormTest):
         form_data['form-MIN_NUM_FORMS'] = '0'
         form_data['form-MAX_NUM_FORMS'] = '1'
         form_data['form-0-id'] = o1.pk
+        form_data['items'] = self.item1.id
         form_data['form-0-answer_0'] = 'England'
         self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
                       form_data)
@@ -113,6 +116,7 @@ class QuestionsTest(ItemFormTest):
         form_data['form-INITIAL_FORMS'] = '1'
         form_data['form-MIN_NUM_FORMS'] = '0'
         form_data['form-MAX_NUM_FORMS'] = '1'
+        form_data['items'] = self.item1.id
         form_data['form-0-id'] = o1.pk
         form_data['form-0-answer_0'] = 'England'
         form_data['form-0-DELETE'] = 'yes'
@@ -130,6 +134,7 @@ class QuestionsTest(ItemFormTest):
         form_data['form-INITIAL_FORMS'] = '0'
         form_data['form-MIN_NUM_FORMS'] = '0'
         form_data['form-MAX_NUM_FORMS'] = '1'
+        form_data['items'] = self.item1.id
         form_data['form-0-id'] = ''
         form_data['form-0-answer_0'] = 'Germany'
         self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
@@ -142,6 +147,7 @@ class QuestionsTest(ItemFormTest):
         c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['items'] = self.item1.id
         form_data['question_0'] = 'How old are you?'
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
                             form_data)
@@ -218,6 +224,7 @@ class QuestionsTest(ItemFormTest):
         o1 = q1.options.create(answer='Germany')
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['items'] = self.item1.id
         form_data['dependency_question'] = q1.pk
         form_data['dependency_value'] = o1.identifier
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id),
