@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-04 11:45+0000\n"
+"PO-Revision-Date: 2019-04-04 12:13+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -533,7 +533,7 @@ msgstr "País"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:238
 msgid "VAT ID"
-msgstr "Identificador d'impost"
+msgstr "Identificador d'IVA"
 
 #: pretix/base/exporters/orderlist.py:100
 msgid "Date of last payment"
@@ -1031,11 +1031,11 @@ msgstr "Heu de proporcionar el vostre nom."
 
 #: pretix/base/forms/questions.py:400 pretix/control/views/orders.py:976
 msgid "Your VAT ID does not match the selected country."
-msgstr "L'identificador d'impost no es correspon amb el país seleccionat."
+msgstr "L'identificador d'IVA no es correspon amb el país seleccionat."
 
 #: pretix/base/forms/questions.py:408
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr "Aquest identificador d'impost no és vàlid. Si us plau comproveu-ho."
+msgstr "Aquest identificador d'IVA no és vàlid. Si us plau comproveu-ho."
 
 #: pretix/base/forms/questions.py:413
 msgid ""
@@ -1044,7 +1044,7 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
-"No s'ha pogut comprovar el vostre identificador d'impost degut a que no està "
+"No s'ha pogut comprovar el vostre identificador d'IVA degut a que no està "
 "disponible el servei de comprovació d'imposts del vostre país. Haurem de "
 "carregar-vos l'impost a la vostra factura. Podeu recuperar la quantitat "
 "mitjançant el procés de reemborsament de l'impost."
@@ -1055,10 +1055,10 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
-"No s'ha pogut comprovar el vostre identificador d'impost degut a que el "
-"servei de comprovació d'imposts del vostre país ha retornat un valor "
-"incorrecte. Haurem de carregar-vos l'impost a la vostra factura. Si us plau "
-"contacteu amb suport per a resoldre això manualment."
+"No s'ha pogut comprovar el vostre identificador d'IVA degut a que el servei "
+"de comprovació de l'IVA del vostre país ha retornat un valor incorrecte. "
+"Haurem de carregar-vos l'IVA a la vostra factura. Si us plau contacteu amb "
+"suport per a resoldre això manualment."
 
 #: pretix/base/forms/user.py:16 pretix/control/forms/users.py:22
 msgid ""
@@ -1677,7 +1677,7 @@ msgstr "Cap valor pot tenir el caràcter delimitador."
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "Identificador de l'impost: %s"
+msgstr "Identificador de l'IVA: %s"
 
 #: pretix/base/models/invoices.py:122
 #, python-format
@@ -2691,11 +2691,11 @@ msgid ""
 msgstr ""
 "No es recomana. La majoria d'esdeveniments no aplicaran per auto-liquidació "
 "ja que el lloc de fiscalització és la ubicació de l'esdeveniment. Aquesta "
-"opció desactiva la càrrega de l'impost per a tots els clients de fora de la "
-"UE i per a clients empresarials a diferents països de la UE que han "
-"introduït un identificador d'impost europeu vàlid. Activeu només aquesta "
-"opció després de consultar un assessor fiscal. No es dóna cap garantia d'un "
-"càlcul fiscal correcte. USEU BAIX EL VOSTRE RISC."
+"opció desactiva la càrrega de l'IVA per a tots els clients de fora de la UE "
+"i per a clients empresarials a diferents països de la UE que han introduït "
+"un identificador d'IVA europeu vàlid. Activeu només aquesta opció després de "
+"consultar un assessor fiscal. No es dóna cap garantia d'un càlcul fiscal "
+"correcte. USEU BAIX EL VOSTRE RISC."
 
 #: pretix/base/models/tax.py:114 pretix/plugins/stripe/payment.py:147
 msgid "Merchant country"
@@ -5448,24 +5448,28 @@ msgstr "Demana per l'identificador d'IVA"
 msgid ""
 "Does only work if an invoice address is asked for. VAT ID is not required."
 msgstr ""
+"Només funciona si es demana per una adreça de facturació. No es requereix "
+"l'identificador d'IVA."
 
 #: pretix/control/forms/event.py:620
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Demana pel beneficiari"
 
 #: pretix/control/forms/event.py:625
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "Mostra els productes gratuïts a les factures"
 
 #: pretix/control/forms/event.py:626
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
 msgstr ""
+"Teniu en compte que mai es generaran factures per a comandes que només "
+"contenguin productes gratuïts."
 
 #: pretix/control/forms/event.py:631
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "Explicació de l'adreça de la factura"
 
 #: pretix/control/forms/event.py:635
 msgid "This text will be shown above the invoice address form during checkout."
@@ -5554,7 +5558,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:719
 msgid "EU VAT ID"
-msgstr ""
+msgstr "Identificador d'IVA europeu"
 
 #: pretix/control/forms/event.py:726
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -5587,6 +5591,8 @@ msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
+"per exemple els detalls del vostre banc, detalls legals com el vostre "
+"identificador d'IVA, números de registre, etc."
 
 #: pretix/control/forms/event.py:754
 msgid "Footer"
@@ -5970,15 +5976,15 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1179
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "Empreses amb un identificador d'IVA correcte"
 
 #: pretix/control/forms/event.py:1185
 msgid "Charge VAT"
-msgstr ""
+msgstr "Carrega l'IVA"
 
 #: pretix/control/forms/event.py:1187
 msgid "No VAT"
-msgstr ""
+msgstr "Sense IVA"
 
 #: pretix/control/forms/event.py:1216
 msgid "Pre-selected voucher"
@@ -10357,7 +10363,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:620
 msgid "Valid EU VAT ID"
-msgstr ""
+msgstr "Identificador vàlid d'IVA europeu"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:626
 msgid "Check"
@@ -12513,7 +12519,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:1078 pretix/control/views/main.py:260
 msgid "VAT"
-msgstr ""
+msgstr "IVA"
 
 #: pretix/control/views/event.py:1105
 msgid "The new tax rule has been created."
@@ -12812,7 +12818,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:959 pretix/control/views/orders.py:963
 msgid "No VAT ID specified."
-msgstr ""
+msgstr "No s'ha especificat cap identificador d'IVA."
 
 #: pretix/control/views/orders.py:967
 msgid "No country specified."
@@ -12821,20 +12827,24 @@ msgstr ""
 #: pretix/control/views/orders.py:971
 msgid "VAT ID could not be checked since a non-EU country has been specified."
 msgstr ""
+"L'identificador d'IVA no s'ha pogut comprovar ja que s'ha especificat un "
+"país no europeu."
 
 #: pretix/control/views/orders.py:987
 msgid "This VAT ID is not valid."
-msgstr ""
+msgstr "Aquest identificador d'IVA no és correcte."
 
 #: pretix/control/views/orders.py:990
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
+"No s'ha pogut comprovar l'identificador d'IVA, ja que el servei de "
+"comprovació d'IVA del vostre país no es troba disponible."
 
 #: pretix/control/views/orders.py:993
 msgid "This VAT ID is valid."
-msgstr ""
+msgstr "Aquest identificador d'IVA és vàlid."
 
 #: pretix/control/views/orders.py:1007 pretix/control/views/orders.py:1032
 msgid "Unknown invoice."
