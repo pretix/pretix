@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-02 21:00+0000\n"
+"PO-Revision-Date: 2019-04-04 11:45+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -168,17 +168,18 @@ msgstr ""
 #: pretix/api/views/order.py:323 pretix/control/views/orders.py:937
 #: pretix/presale/views/order.py:505
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "No podeu generar una factura per aquesta comanda."
 
 #: pretix/api/views/order.py:328 pretix/control/views/orders.py:939
 #: pretix/presale/views/order.py:507
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Ja existeix una factura per aquesta comanda."
 
 #: pretix/api/views/order.py:354 pretix/control/views/orders.py:1061
 #: pretix/control/views/users.py:92
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"S'ha produït un error enviant el correu. Si us plau intenteu-ho més tard."
 
 #: pretix/api/webhooks.py:113 pretix/base/notifications.py:194
 msgid "New order placed"
@@ -5081,10 +5082,14 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Quan s'han exhaurit els tiquets la gent se pot afegir a una llista d'espera. "
+"En el moment que torna a estar disponible un tiquet es reserva per la "
+"primera persona de la llista d'espera i aquesta persona rep una notificació "
+"de correu amb un val que se pot usar per comprar el tiquet."
 
 #: pretix/control/forms/event.py:326
 msgid "Waiting list response time"
-msgstr ""
+msgstr "Temps de resposta de la llista d'espera"
 
 #: pretix/control/forms/event.py:328
 msgid ""
@@ -5092,10 +5097,13 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Si un val de tiquet s'envia a una persona de la llista d'espera s'ha de "
+"validar durant aquest número d'hores fins que expira i es pot reassignar a "
+"la següent persona de la llista."
 
 #: pretix/control/forms/event.py:334
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "Assignació automàtica de la llista d'espera"
 
 #: pretix/control/forms/event.py:335
 msgid ""
@@ -5105,26 +5113,33 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Si s'allibera la capacitat dels tiquets, automàticament genera un val i "
+"envia'l a la primera persona de la llista d'espera per aquell producte. Si "
+"això no està actiu, els correus no s'enviaran automàticament però podeu "
+"enviar-los manualment via el panell de control. Si desactiveu la llista "
+"d'espera però manteniu aquesta opció activada, s'enviaran igualment els "
+"tiquets."
 
 #: pretix/control/forms/event.py:343
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Demana els nom dels assistents"
 
 #: pretix/control/forms/event.py:344
 msgid "Ask for a name for all tickets which include admission to the event."
 msgstr ""
+"Demana el nom per tots els tiquets que inclouen l'admissió a l'esdeveniment."
 
 #: pretix/control/forms/event.py:348
 msgid "Require attendee names"
-msgstr ""
+msgstr "Requereix nom dels assistents"
 
 #: pretix/control/forms/event.py:349
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "Requereix als clients emplenar els noms de tots els assistents."
 
 #: pretix/control/forms/event.py:354
 msgid "Name format"
-msgstr ""
+msgstr "Format del nom"
 
 #: pretix/control/forms/event.py:355
 msgid ""
@@ -5132,10 +5147,13 @@ msgid ""
 "already received orders might lead to unexpected behaviour when sorting or "
 "changing names."
 msgstr ""
+"Això defineix com pretix demanarà els noms humans. Canviar això després "
+"d'haver rebut comandes pot conduir a comportaments estranys quan s'ordenin o "
+"canviïn noms."
 
 #: pretix/control/forms/event.py:360
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Demana adreces de correu per tiquet"
 
 #: pretix/control/forms/event.py:361
 msgid ""
@@ -5147,10 +5165,17 @@ msgid ""
 "However, pretix will send the order confirmation only to the one primary "
 "email address, not to the per-attendee addresses."
 msgstr ""
+"Normalment pretix demana una adreça de correu per comanda i la confirmació "
+"de la comanda s'envia només a aquella adreça. Si activeu aquesta opció el "
+"sistema demanarà adreces de correu individuals addicionals per cada tiquet. "
+"Això pot ser útil si voleu obtenir adreces individuals per a cada assistent "
+"fins i tot en el cas de comandes de grup. Tanmateix, pretix només enviarà la "
+"confirmació de la comanda a l'adreça de correu primària, no a les adreces "
+"dels assistents."
 
 #: pretix/control/forms/event.py:370
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Requereix adreces de correu per tiquet"
 
 #: pretix/control/forms/event.py:371
 msgid ""
@@ -5158,46 +5183,56 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Requereix als clients emplenar adreces de correu individuals per a tots els "
+"tiquets d'admissió. Mireu l'opció superior per a més detalls. Sempre es "
+"necessitarà una adreça de correu per la confirmació de comanda "
+"independentment d'aquesta opció."
 
 #: pretix/control/forms/event.py:378
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Demana dues vegades l'adreça de la comanda"
 
 #: pretix/control/forms/event.py:379
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Requereix que els clients emplenin l'adreça de correu primària dues vegades "
+"per evitar errors."
 
 #: pretix/control/forms/event.py:384
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Número màxim d'elements per comanda"
 
 #: pretix/control/forms/event.py:385
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "No es comptabilitzaran els productes de complement."
 
 #: pretix/control/forms/event.py:389
 msgid "Reservation period"
-msgstr ""
+msgstr "Període de reserva"
 
 #: pretix/control/forms/event.py:390
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
+"El número de minuts que es reserven els elements dins la cistella d'un "
+"usuari."
 
 #: pretix/control/forms/event.py:393 pretix/control/forms/event.py:1316
 msgid "Imprint URL"
-msgstr ""
+msgstr "Imprimeix l'URL"
 
 #: pretix/control/forms/event.py:394 pretix/control/forms/event.py:1317
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Això hauria d'apuntar a una part del vostre lloc web amb els vostres detalls "
+"de contacte i informació legal."
 
 #: pretix/control/forms/event.py:399
 msgid "Confirmation text"
-msgstr ""
+msgstr "Text de confirmació"
 
 #: pretix/control/forms/event.py:400
 msgid ""
@@ -5206,68 +5241,81 @@ msgid ""
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
+"Aquest text necessita confirmar-se per l'usuari abans que sigui possible la "
+"compra. Podeu per exemple enllaçar a les vostres condicions del servei. Si "
+"utilitzeu la funció de Pàgines per publicar les vostres condicions de "
+"servei, no necessiteu aquesta configuració ja que ho podeu configurar allà."
 
 #: pretix/control/forms/event.py:407 pretix/control/forms/event.py:1322
 msgid "Contact address"
-msgstr ""
+msgstr "Adreça de contacte"
 
 #: pretix/control/forms/event.py:409 pretix/control/forms/event.py:1324
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
+"Això es mostrarà públicament per permetre que els assistents us contactin."
 
 #: pretix/control/forms/event.py:420
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
+"No podeu requerir que s'especifiquin noms d'assistents si no els demaneu."
 
 #: pretix/control/forms/event.py:424
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
+"Heu de demanar els correus dels assistents si voleu que siguin un "
+"requeriment."
 
 #: pretix/control/forms/event.py:432
 msgid ""
 "e.g. I hereby confirm that I have read and agree with the event organizer's "
 "terms of service and agree with them."
 msgstr ""
+"per exemple, Per la present, confirmo que he llegit i acceptat les "
+"condicions de servei de l'organitzador de l'esdeveniment."
 
 #: pretix/control/forms/event.py:436
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "Demana per {fields}, mostra-ho com {example}"
 
 #: pretix/control/forms/event.py:446
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "Els clients poden cancel·lar les seves comandes no pagades"
 
 #: pretix/control/forms/event.py:450 pretix/control/forms/event.py:472
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "No permetis cancel·lacions després de"
 
 #: pretix/control/forms/event.py:454
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "Els clients poden cancel·lar les seves comandes pagades"
 
 #: pretix/control/forms/event.py:455
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Els diners abonats es reemborsaran automàticament si el mètode de pagament "
+"ho permet. D'altra manera, es crearà una devolució manual perquè la "
+"processeu manualment."
 
 #: pretix/control/forms/event.py:460
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "Manté una tarifa fixa de cancel·lació"
 
 #: pretix/control/forms/event.py:464
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Manté les tarifes de pagament, enviament i servei"
 
 #: pretix/control/forms/event.py:468
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "Manté una tarifa de cancel·lació percentual"
 
 #: pretix/control/forms/event.py:479
 msgid "Payment term in days"
-msgstr ""
+msgstr "Termini de pagament en dies"
 
 #: pretix/control/forms/event.py:480
 msgid ""
@@ -5276,10 +5324,15 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"El número de dies després de fer una comanda que té l'usuari per pagar per "
+"mantenir la seva reserva. Si utilitzeu mètodes de pagament lents com "
+"transferències bancàries, recomanem 14 dies. Si només feu servir mètodes de "
+"pagament en temps real, recomanem igualment configurar dos o tres dies per "
+"permetre a la gent que torni a intentar pagaments erronis."
 
 #: pretix/control/forms/event.py:486
 msgid "Last date of payments"
-msgstr ""
+msgstr "Darrer dia de pagaments"
 
 #: pretix/control/forms/event.py:487
 msgid ""
@@ -5287,10 +5340,14 @@ msgid ""
 "of days configured above. If you use the event series feature and an order "
 "contains tickets for multiple dates, the earliest date will be used."
 msgstr ""
+"El darrer dia que es permet cap pagament. Aquest té precedència per sobre "
+"del número de dies configurat més amunt. Si utilitzeu la funció de sèries "
+"d'esdeveniment i una comanda inclou tiquets per múltiples dates, "
+"s'utilitzarà la data més propera."
 
 #: pretix/control/forms/event.py:493
 msgid "Only end payment terms on weekdays"
-msgstr ""
+msgstr "Finalitza els terminis de pagament només en dies feiners"
 
 #: pretix/control/forms/event.py:494
 msgid ""
@@ -5299,10 +5356,14 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured above."
 msgstr ""
+"Si s'activa això i el termini de pagament de qualsevol comanda acaba en "
+"dissabte o diumenge, es passarà al següent dilluns. Això és requerit a "
+"alguns països per la llei civil. No afectarà al darrer dia de pagament "
+"configurat més amunt."
 
 #: pretix/control/forms/event.py:500
 msgid "Automatically expire unpaid orders"
-msgstr ""
+msgstr "Expira automàticament comandes no pagades"
 
 #: pretix/control/forms/event.py:501
 msgid ""
@@ -5310,10 +5371,14 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
+"Si es selecciona, totes les comandes no pagades aniran automàticament de \""
+"pendents\" a \"expirades\" després que acabi la data límit del seu pagament. "
+"Això significa que aquests tiquets tornaran al fons i es podran comanar per "
+"altra gent."
 
 #: pretix/control/forms/event.py:507
 msgid "Accept late payments"
-msgstr ""
+msgstr "Accepta pagaments tardans"
 
 #: pretix/control/forms/event.py:508
 msgid ""
@@ -5321,10 +5386,13 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
+"Accepta pagaments de comandes fins i tot quan estan en estat \"expirat\" "
+"mentre hi hagi capacitat disponible. Mai s'acceptarà cap pagament després de "
+"la configuració \"Darrer dia de pagaments\" de més amunt."
 
 #: pretix/control/forms/event.py:515
 msgid "Tax rule for payment fees"
-msgstr ""
+msgstr "Regla fiscal per tarifes de pagament"
 
 #: pretix/control/forms/event.py:517
 msgid ""
@@ -5338,41 +5406,43 @@ msgstr ""
 
 #: pretix/control/forms/event.py:526
 msgid "Guidance text"
-msgstr ""
+msgstr "Text de guia"
 
 #: pretix/control/forms/event.py:527
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"Aquest text es mostrarà a sobre de les opcions de pagament. Podeu explicar "
+"aquí si voleu les opcions a l'usuari."
 
 #: pretix/control/forms/event.py:538
 msgid "The last payment date cannot be before the end of presale."
-msgstr ""
+msgstr "El darrer dia de pagament no pot ser abans de la fi de la prevenda."
 
 #: pretix/control/forms/event.py:592
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Demana l'adreça de les factures"
 
 #: pretix/control/forms/event.py:596
 msgid "Require invoice address"
-msgstr ""
+msgstr "Requereix l'adreça de les factures"
 
 #: pretix/control/forms/event.py:601
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Requereix les adreces de les empreses"
 
 #: pretix/control/forms/event.py:602
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Això requerirà que l'usuari introdueixi un nom d'empresa."
 
 #: pretix/control/forms/event.py:607
 msgid "Require customer name"
-msgstr ""
+msgstr "Requereix un nom de client"
 
 #: pretix/control/forms/event.py:614
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "Demana per l'identificador d'IVA"
 
 #: pretix/control/forms/event.py:615
 msgid ""
