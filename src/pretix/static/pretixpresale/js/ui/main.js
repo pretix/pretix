@@ -153,6 +153,28 @@ $(function () {
         copy_answers(idx);
         return false;
     });
+    var copy_to_first_ticket = true;
+    $("input[id*=attendee_name_parts_], input[id*=attendee_email]").each(function () {
+        if ($(this).val()) {
+            copy_to_first_ticket = false;
+        }
+    })
+    $("input[id^=id_name_parts_], #id_email").change(function () {
+        console.log(copy_to_first_ticket);
+        console.log($(".questions-form").first().select("input[id*=attendee_email]"));
+        console.log($("#id_email").val());
+        if (copy_to_first_ticket) {
+            $(".questions-form").first().find("input[id*=attendee_email]").val($("#id_email").val());
+            $(".questions-form").first().find("input[id*=attendee_name_parts]").each(function () {
+                var parts = $(this).attr("id").split("_");
+                var num = parts[parts.length - 1];
+                $(this).val($("#id_name_parts_" + num).val());
+            });
+        }
+    });
+    $("input[id*=attendee_name_parts_], input[id*=attendee_email]").change(function () {
+        copy_to_first_ticket = false;
+    });
 
     // Subevent choice
     if ($(".subevent-toggle").length) {
