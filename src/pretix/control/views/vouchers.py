@@ -143,6 +143,7 @@ class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
             messages.error(request, _('A voucher can not be deleted if it already has been redeemed.'))
         else:
             self.object.log_action('pretix.voucher.deleted', user=self.request.user)
+            self.object.cartposition_set.filter(addon_to__isnull=False).delete()
             self.object.cartposition_set.all().delete()
             self.object.delete()
             messages.success(request, _('The selected voucher has been deleted.'))
@@ -348,6 +349,7 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
             for obj in self.objects:
                 if obj.allow_delete():
                     obj.log_action('pretix.voucher.deleted', user=self.request.user)
+                    obj.cartposition_set.filter(addon_to__isnull=False).delete()
                     obj.cartposition_set.all().delete()
                     obj.delete()
                 else:

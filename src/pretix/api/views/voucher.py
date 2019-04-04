@@ -111,7 +111,10 @@ class VoucherViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
         )
-        super().perform_destroy(instance)
+        with transaction.atomic():
+            instance.cartposition_set.filter(addon_to__isnull=False).delete()
+            instance.cartposition_set.all().delete()
+            super().perform_destroy(instance)
 
     @list_route(methods=['POST'])
     def batch_create(self, request, *args, **kwargs):

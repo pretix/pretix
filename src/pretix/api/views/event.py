@@ -272,6 +272,8 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
                     auth=self.request.auth,
                     data=self.request.data
                 )
+                instance.cartposition_set.filter(addon_to__isnull=False).delete()
+                instance.cartposition_set.all().delete()
                 super().perform_destroy(instance)
         except ProtectedError:
             raise PermissionDenied('The sub-event could not be deleted as some constraints (e.g. data created by '

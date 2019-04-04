@@ -1158,6 +1158,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         o = self.get_object()
         if o.allow_delete():
+            self.get_object().cartposition_set.filter(addon_to__isnull=False).delete()
             self.get_object().cartposition_set.all().delete()
             self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
             self.get_object().delete()

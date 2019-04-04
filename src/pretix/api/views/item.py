@@ -84,6 +84,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
         )
+        self.get_object().cartposition_set.filter(addon_to__isnull=False).delete()
         self.get_object().cartposition_set.all().delete()
         super().perform_destroy(instance)
 

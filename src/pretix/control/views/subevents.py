@@ -117,6 +117,7 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             self.object.log_action('pretix.subevent.deleted', user=self.request.user)
+            self.object.cartposition_set.filter(addon_to__isnull=False).delete()
             self.object.cartposition_set.all().delete()
             self.object.delete()
             messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
@@ -512,6 +513,7 @@ class SubEventBulkAction(EventPermissionRequiredMixin, View):
         elif request.POST.get('action') == 'delete_confirm':
             for obj in self.objects:
                 if obj.allow_delete():
+                    obj.cartposition_set.filter(addon_to__isnull=False).delete()
                     obj.cartposition_set.all().delete()
                     obj.log_action('pretix.subevent.deleted', user=self.request.user)
                     obj.delete()

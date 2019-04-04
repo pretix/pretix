@@ -759,6 +759,7 @@ class Event(EventMixin, LoggedModel):
         return not self.orders.exists() and not self.invoices.exists()
 
     def delete_sub_objects(self):
+        self.cartposition_set.filter(addon_to__isnull=False).delete()
         self.cartposition_set.all().delete()
         self.items.all().delete()
         self.subevents.all().delete()
