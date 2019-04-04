@@ -154,7 +154,7 @@ setup(
             'coverage',
             'pytest==3.6.*',
             'pytest-django',
-            'pytest-xdist',
+            'pytest-xdist==1.27.*',
             'isort',
             'pytest-mock==1.6.*',
             'pytest-rerunfailures',
