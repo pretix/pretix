@@ -159,7 +159,7 @@
     {% eventsignal event "pretix.presale.signals.order_info" order=order %}
     <div class="row">
         {% if invoices %}
-            <div class="col-xs-12 {% if request.event.settings.invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
+            <div class="col-xs-12 {% if invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -180,7 +180,7 @@
                 </div>
             </div>
         {% elif can_generate_invoice %}
-            <div class="col-xs-12 {% if request.event.settings.invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
+            <div class="col-xs-12 {% if invoice_address_asked or request.event.settings.invoice_name_required %}col-md-6{% endif %}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -199,7 +199,7 @@
                 </div>
             </div>
         {% endif %}
-        {% if request.event.settings.invoice_address_asked or request.event.settings.invoice_name_required %}
+        {% if invoice_address_asked or request.event.settings.invoice_name_required %}
             <div class="col-xs-12 {% if invoices or can_generate_invoice %}col-md-6{% endif %}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -221,13 +221,13 @@
                     </div>
                     <div class="panel-body">
                         <dl class="dl-horizontal">
-                            {% if request.event.settings.invoice_address_asked %}
+                            {% if invoice_address_asked %}
                                 <dt>{% trans "Company" %}</dt>
                                 <dd>{{ order.invoice_address.company }}</dd>
                             {% endif %}
                             <dt>{% trans "Name" %}</dt>
                             <dd>{{ order.invoice_address.name }}</dd>
-                            {% if request.event.settings.invoice_address_asked %}
+                            {% if invoice_address_asked %}
                                 <dt>{% trans "Address" %}</dt>
                                 <dd>{{ order.invoice_address.street|linebreaksbr }}</dd>
                                 <dt>{% trans "ZIP code and city" %}</dt>

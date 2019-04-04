@@ -504,6 +504,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
     def test_invoice_address_required(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_address_not_asked_free = True
         self.event.settings.set('name_scheme', 'title_given_middle_family')
 
         CartPosition.objects.create(
@@ -551,6 +552,26 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             "_scheme": "title_given_middle_family"
         }
         assert ia.name_cached == 'Mr John Kennedy'
+
+    def test_invoice_address_hidden_for_free(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_address_not_asked_free = True
+        self.event.settings.set('name_scheme', 'title_given_middle_family')
+
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=0, expires=now() + timedelta(minutes=10)
+        )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select('input[name="city"]')), 0)
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
 
     def test_invoice_address_optional(self):
         self.event.settings.invoice_address_asked = True

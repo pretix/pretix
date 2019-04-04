@@ -122,6 +122,9 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
                 'secret': self.order.secret
             }
         )
+        ctx['invoice_address_asked'] = self.request.event.settings.invoice_address_asked and (
+            self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
+        )
 
         if self.order.status == Order.STATUS_PENDING:
             ctx['pending_sum'] = self.order.pending_sum
@@ -526,7 +529,8 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
-        self.invoice_form.save()
+        if hasattr(self.invoice_form, 'save'):
+            self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {
             'invoice_data': self.invoice_form.cleaned_data,
             'data': [{

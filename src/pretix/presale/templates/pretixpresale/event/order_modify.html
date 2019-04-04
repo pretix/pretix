@@ -12,8 +12,8 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
-            {% if event.settings.invoice_address_asked or event.settings.invoice_name_required %}
-                {% if event.settings.invoice_address_asked %}
+            {% if invoice_address_asked or event.settings.invoice_name_required %}
+                {% if invoice_address_asked %}
                     <div class="alert alert-info">
                         {% blocktrans trimmed %}
                             Modifying your invoice address will not automatically generate a new invoice.
@@ -25,7 +25,7 @@
                     <summary class="panel-heading">
                         <h4 class="panel-title">
                             <strong>
-                                {% if request.event.settings.invoice_address_asked %}
+                                {% if invoice_address_asked %}
                                     {% trans "Invoice information" %}{% if not event.settings.invoice_address_required %}
                                         {% trans "(optional)" %}
                                     {% endif %}

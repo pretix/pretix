@@ -621,6 +621,10 @@ class InvoiceSettingsForm(SettingsForm):
         widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         required=False
     )
+    invoice_address_not_asked_free = forms.BooleanField(
+        label=_('Do not ask for invoice address if an order is free'),
+        required=False
+    )
     invoice_include_free = forms.BooleanField(
         label=_("Show free products on invoices"),
         help_text=_("Note that invoices will never be generated for orders that contain only free "

@@ -22,13 +22,13 @@
                 <div id="contact">
                     <div class="panel-body">
                         {% bootstrap_form contact_form layout="horizontal" %}
-                        {% if not event.settings.invoice_address_asked and event.settings.invoice_name_required %}
+                        {% if not invoice_address_asked and event.settings.invoice_name_required %}
                             {% bootstrap_form invoice_form layout="horizontal" %}
                         {% endif %}
                     </div>
                 </div>
             </details>
-            {% if event.settings.invoice_address_asked %}
+            {% if invoice_address_asked %}
                 <details class="panel panel-default" {% if event.settings.invoice_address_required or event.settings.invoice_name_required %}open{% endif %}>
                     <summary class="panel-heading">
                         <h4 class="panel-title">

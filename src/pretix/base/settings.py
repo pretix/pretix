@@ -49,6 +49,10 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
     },
+    'invoice_address_not_asked_free': {
+        'default': 'False',
+        'type': bool,
+    },
     'invoice_name_required': {
         'default': 'False',
         'type': bool,

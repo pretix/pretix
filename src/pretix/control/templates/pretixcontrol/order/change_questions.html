@@ -18,7 +18,7 @@
     <form method="post" class="form-horizontal" href="" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_accordion">
-            {% if request.event.settings.invoice_address_asked or order.invoice_address or request.event.settings.invoice_name_required %}
+            {% if invoice_address_asked or order.invoice_address or request.event.settings.invoice_name_required %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
                         <h4 class="panel-title">

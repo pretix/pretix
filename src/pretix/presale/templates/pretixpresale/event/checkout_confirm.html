@@ -72,7 +72,7 @@
         {% endif %}
         {% eventsignal event "pretix.presale.signals.checkout_confirm_page_content" request=request %}
         <div class="row">
-            {% if request.event.settings.invoice_address_asked %}
+            {% if invoice_address_asked %}
                 <div class="col-md-6 col-xs-12">
                     <div class="panel panel-primary panel-contact">
                         <div class="panel-heading">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="{% if request.event.settings.invoice_address_asked %}col-md-6{% endif %} col-xs-12">
+            <div class="{% if invoice_address_asked %}col-md-6{% endif %} col-xs-12">
                 <div class="panel panel-primary panel-contact">
                     <div class="panel-heading">
                         <div class="pull-right">
@@ -125,7 +125,7 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        {% if not event.settings.invoice_address_asked and event.settings.invoice_name_required %}
+                        {% if not asked and event.settings.invoice_name_required %}
                             <dl class="dl-horizontal">
                                 <dt>{% trans "Name" %}</dt>
                                 <dd>{{ addr.name }}</dd>

@@ -1,5 +1,6 @@
 import json
 from collections import OrderedDict
+from decimal import Decimal
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
@@ -187,24 +188,34 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
             return InvoiceAddress(order=self.order)
 
     @cached_property
+    def address_asked(self):
+        return self.request.event.settings.invoice_address_asked and (
+            self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
+        )
+
+    @cached_property
     def invoice_form(self):
-        if not self.request.event.settings.invoice_address_asked and self.request.event.settings.invoice_name_required:
+        if not self.address_asked and self.request.event.settings.invoice_name_required:
             return self.invoice_name_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
                 instance=self.invoice_address, validate_vat_id=False,
                 all_optional=self.all_optional
             )
-        return self.invoice_form_class(
-            data=self.request.POST if self.request.method == "POST" else None,
-            event=self.request.event,
-            instance=self.invoice_address, validate_vat_id=False,
-            all_optional=self.all_optional,
-        )
+        if self.address_asked:
+            return self.invoice_form_class(
+                data=self.request.POST if self.request.method == "POST" else None,
+                event=self.request.event,
+                instance=self.invoice_address, validate_vat_id=False,
+                all_optional=self.all_optional,
+            )
+        else:
+            return forms.Form(data=self.request.POST if self.request.method == "POST" else None)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
         ctx['formgroups'] = self.formdict.items()
         ctx['invoice_form'] = self.invoice_form
+        ctx['invoice_address_asked'] = self.address_asked
         return ctx

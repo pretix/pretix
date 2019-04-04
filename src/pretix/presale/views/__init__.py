@@ -205,6 +205,34 @@ def get_cart_total(request):
     return request._cart_total_cache
 
 
+def get_cart_invoice_address(request):
+    from pretix.presale.views.cart import cart_session
+
+    if not hasattr(request, '_checkout_flow_invoice_address'):
+        cs = cart_session(request)
+        iapk = cs.get('invoice_address')
+        if not iapk:
+            request._checkout_flow_invoice_address = InvoiceAddress()
+        else:
+            try:
+                request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+            except InvoiceAddress.DoesNotExist:
+                request._checkout_flow_invoice_address = InvoiceAddress()
+    return request._checkout_flow_invoice_address
+
+
+def get_cart_is_free(request):
+    from pretix.presale.views.cart import cart_session
+
+    if not hasattr(request, '_cart_free_cache'):
+        cs = cart_session(request)
+        ia = get_cart_invoice_address(request)
+        total = get_cart_total(request)
+        fees = get_fees(request.event, request, total, ia, cs.get('payment'))
+        request._cart_free_cache = total + sum(f.value for f in fees) == Decimal('0.00')
+    return request._cart_free_cache
+
+
 class EventViewMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

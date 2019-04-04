@@ -28,7 +28,9 @@ from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, order_meta_from_request, question_form_fields,
 )
-from pretix.presale.views import CartMixin, get_cart, get_cart_total
+from pretix.presale.views import (
+    CartMixin, get_cart, get_cart_is_free, get_cart_total,
+)
 from pretix.presale.views.cart import (
     cart_session, create_empty_cart_id, get_or_create_cart_id,
 )
@@ -351,7 +353,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             'city': self.cart_session.get('widget_data', {}).get('invoice-address-city', ''),
             'country': self.cart_session.get('widget_data', {}).get('invoice-address-country', ''),
         }
-        if not self.request.event.settings.invoice_address_asked and self.request.event.settings.invoice_name_required:
+        if not self.address_asked and self.request.event.settings.invoice_name_required:
             return InvoiceNameForm(data=self.request.POST if self.request.method == "POST" else None,
                                    event=self.request.event,
                                    request=self.request,
@@ -365,10 +367,17 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                   instance=self.invoice_address,
                                   validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
 
+    @cached_property
+    def address_asked(self):
+        return (
+            self.request.event.settings.invoice_address_asked
+            and (not self.request.event.settings.invoice_address_not_asked_free or not get_cart_is_free(self.request))
+        )
+
     def post(self, request):
         self.request = request
         failed = not self.save() or not self.contact_form.is_valid()
-        if request.event.settings.invoice_address_asked or self.request.event.settings.invoice_name_required:
+        if self.address_asked or self.request.event.settings.invoice_name_required:
             failed = failed or not self.invoice_form.is_valid()
         if failed:
             messages.error(request,
@@ -376,7 +385,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             return self.render()
         self.cart_session['email'] = self.contact_form.cleaned_data['email']
         self.cart_session['contact_form_data'] = self.contact_form.cleaned_data
-        if request.event.settings.invoice_address_asked or self.request.event.settings.invoice_name_required:
+        if self.address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
             self.cart_session['invoice_address'] = addr.pk
 
@@ -404,9 +413,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             return False
 
         if not self.all_optional:
-            if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
-                messages.warning(request, _('Please enter your invoicing address.'))
-                return False
+
+            if self.address_asked:
+                if request.event.settings.invoice_address_required and (not self.invoice_address or not self.invoice_address.street):
+                    messages.warning(request, _('Please enter your invoicing address.'))
+                    return False
 
             if request.event.settings.invoice_name_required and (not self.invoice_address or not self.invoice_address.name):
                 messages.warning(request, _('Please enter your name.'))
@@ -471,6 +482,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['reverse_charge_relevant'] = self.eu_reverse_charge_relevant
         ctx['cart'] = self.get_cart()
         ctx['cart_session'] = self.cart_session
+        ctx['invoice_address_asked'] = self.address_asked
         return ctx
 
 
@@ -591,6 +603,13 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     def is_completed(self, request, warn=False):
         pass
 
+    @cached_property
+    def address_asked(self):
+        return (
+            self.request.event.settings.invoice_address_asked
+            and (not self.request.event.settings.invoice_address_not_asked_free or not get_cart_is_free(self.request))
+        )
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
@@ -601,6 +620,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
+        ctx['invoice_address_asked'] = self.address_asked
 
         email = self.cart_session.get('contact_form_data', {}).get('email')
         if email != settings.PRETIX_EMAIL_NONE_VALUE:

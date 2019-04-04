@@ -1305,7 +1305,8 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
             messages.error(self.request,
                            _("We had difficulties processing your input. Please review the errors below."))
             return self.get(request, *args, **kwargs)
-        self.invoice_form.save()
+        if hasattr(self.invoice_form, 'save'):
+            self.invoice_form.save()
         self.order.log_action('pretix.event.order.modified', {
             'invoice_data': self.invoice_form.cleaned_data,
             'data': [{
