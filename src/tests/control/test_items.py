@@ -316,7 +316,6 @@ class ItemsTest(ItemFormTest):
 
     def setUp(self):
         super().setUp()
-        self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
         self.item2 = Item.objects.create(event=self.event1, name="Business", default_price=0, position=2,
                                          description="If your ticket is paid by your employer",
                                          active=True, available_until=now() + datetime.timedelta(days=4),
