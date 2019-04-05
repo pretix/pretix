@@ -89,10 +89,10 @@ TEST_EVENT_RES = {
     "slug": "dummy",
     "has_subevents": False,
     "meta_data": {"type": "Conference"},
-    'plugins': {
+    'plugins': [
         'pretix.plugins.banktransfer',
         'pretix.plugins.ticketoutputpdf'
-    }
+    ]
 }
 
 
@@ -573,7 +573,7 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
         format='json'
     )
     assert resp.status_code == 200
-    assert resp.data.get('plugins') == {
+    assert set(resp.data.get('plugins')) == {
         "pretix.plugins.ticketoutputpdf",
         "pretix.plugins.pretixdroid"
     }
@@ -588,9 +588,9 @@ def test_event_update_plugins(token_client, organizer, event, free_item, free_qu
         format='json'
     )
     assert resp.status_code == 200
-    assert resp.data.get('plugins') == {
+    assert resp.data.get('plugins') == [
         "pretix.plugins.banktransfer"
-    }
+    ]
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
