@@ -79,8 +79,11 @@ class IdempotencyMiddleware:
                 r['Retry-After'] = 5
                 return r
 
+            content = call.response_body
+            if isinstance(content, memoryview):
+                content = content.tobytes()
             r = HttpResponse(
-                content=call.response_body,
+                content=content,
                 status=call.response_code,
             )
             for k, v in json.loads(call.response_headers).values():
