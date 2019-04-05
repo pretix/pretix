@@ -111,20 +111,6 @@ def test_ignore_get(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_ignore_get(token_client, organizer, event):
-    resp = token_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug),
-                            HTTP_X_IDEMPOTENCY_KEY='foo')
-    assert resp.status_code == 200
-    d1 = resp.data
-    event.name = "foo"
-    event.save()
-    resp = token_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug),
-                            HTTP_X_IDEMPOTENCY_KEY='foo')
-    assert resp.status_code == 200
-    assert d1 != json.loads(resp.content)
-
-
-@pytest.mark.django_db
 def test_ignore_outside_api(token_client, organizer):
     resp = token_client.post('/control/login'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
