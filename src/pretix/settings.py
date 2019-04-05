@@ -329,6 +329,7 @@ CORE_MODULES = {
 }
 
 MIDDLEWARE = [
+    'pretix.api.middleware.IdempotencyMiddleware',
     'django.middleware.common.CommonMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',

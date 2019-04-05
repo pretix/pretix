@@ -212,15 +212,21 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 order = None
             else:
                 if attach_tickets:
+                    args = []
+                    attach_size = 0
                     for name, ct in get_tickets_for_order(order):
-                        try:
-                            email.attach(
-                                name,
-                                ct.file.read(),
-                                ct.type
-                            )
-                        except:
-                            pass
+                        content = ct.file.read()
+                        args.append((name, content, ct.type))
+                        attach_size += len(content)
+
+                    if attach_tickets < 4 * 1024 * 1024:
+                        # Do not attach more than 4MB, it will bounce way to often.
+
+                        for a in args:
+                            try:
+                                email.attach(*a)
+                            except:
+                                pass
 
         email = email_filter.send_chained(event, 'message', message=email, order=order)
 

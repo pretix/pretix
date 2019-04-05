@@ -181,4 +181,37 @@ as the string values ``true`` and ``false``.
 If the ``ordering`` parameter is documented for a resource, you can use it to sort the result set by one of the allowed
 fields. Prepend a ``-`` to the field name to reverse the sort order.
 
+
+Idempotency
+-----------
+
+Our API supports an idempotency mechanism to make sure you can safely retry operations without accidentally performing
+them twice. This is useful if an API call experiences interruptions in transit, e.g. due to a network failure, and you
+do not know if it completed successfully.
+
+To perform an idempotent request, add a ``X-Idempotency-Key`` header with a random string value (we recommend a version
+4 UUID) to your request. If we see a second request with the same ``X-Idempotency-Key`` and the same ``Authorization``
+and ``Cookie`` headers, we will not perform the action for a second time but return the exact same response instead.
+
+Please note that this also goes for most error responses. For example, if we returned you a ``403 Permission Denied``
+error and you retry with the same ``X-Idempotency-Key``, you will get the same error again, even if you were granted
+permission in the meantime! This includes internal server errors on our side that might have been fixed in the meantime.
+
+There are only three exceptions to the rule:
+
+* Responses with status code ``409 Conflict`` are not cached. If you send the request again, it will be executed as a
+  new request, since these responses are intended to be retried.
+
+* Rate-limited responses with status code ``429 Too Many Requests`` are not cached and you can safely retry them.
+
+* Responses with status code ``503 Service Unavailable`` are not cached and you can safely retry them.
+
+If you send a request with an ``X-Idempotency-Key`` header that we have seen before but that has not yet received a
+response, you will receive a response with status code ``409 Conflict`` and are asked to retry after five seconds.
+
+We store idempotency keys for 24 hours, so you should never retry a request after a longer time period.
+
+All ``POST``, ``PUT``, ``PATCH``, or ``DELETE`` api calls support idempotency keys. Adding an idempotency key to a
+``GET``, ``HEAD``, or ``OPTIONS`` request has no effect.
+
 .. _CSRF policies: https://docs.djangoproject.com/en/1.11/ref/csrf/#ajax

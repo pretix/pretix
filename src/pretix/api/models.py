@@ -106,3 +106,20 @@ class WebHookCall(models.Model):
 
     class Meta:
         ordering = ("-datetime",)
+
+
+class ApiCall(models.Model):
+    idempotency_key = models.CharField(max_length=190, db_index=True)
+    auth_hash = models.CharField(max_length=190, db_index=True)
+    created = models.DateTimeField(auto_now_add=True)
+    locked = models.DateTimeField(null=True)
+
+    request_method = models.CharField(max_length=20)
+    request_path = models.CharField(max_length=255)
+
+    response_code = models.PositiveIntegerField()
+    response_headers = models.TextField()
+    response_body = models.BinaryField()
+
+    class Meta:
+        unique_together = (('idempotency_key', 'auth_hash'),)

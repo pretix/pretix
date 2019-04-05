@@ -31,10 +31,10 @@ class PluginsField(Field):
     def to_representation(self, obj):
         from pretix.base.plugins import get_all_plugins
 
-        return {
+        return [
             p.module for p in get_all_plugins()
             if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
-        }
+        ]
 
     def to_internal_value(self, data):
         return {
