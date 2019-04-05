@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-04 14:12+0000\n"
+"PO-Revision-Date: 2019-04-05 12:22+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -5474,18 +5474,20 @@ msgstr "Explicació de l'adreça de la factura"
 #: pretix/control/forms/event.py:635
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
+"Es mostrarà aquest text damunt de l'adreça de la factura durant el pagament."
 
 #: pretix/control/forms/event.py:638
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "Genera factures amb números consecutius"
 
 #: pretix/control/forms/event.py:639
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
+"Si es desactiva, el codi de la comanda s'utilitzarà com a número de factura."
 
 #: pretix/control/forms/event.py:643
 msgid "Invoice number prefix"
-msgstr ""
+msgstr "Prefix numèric de la factura"
 
 #: pretix/control/forms/event.py:644
 msgid ""
@@ -5495,42 +5497,48 @@ msgid ""
 "will share their number range, i.e. every full number will be used at most "
 "once over all of your events. This setting only affects future invoices."
 msgstr ""
+"Això s'anteposarà al número de factura. Si deixau aquest camp buit el vostre "
+"mot de l'esdeveniment s'utilitzarà seguit d'un guió. Atenció: Si varis "
+"esdeveniments de la mateixa organització utilitzen aquí el mateix valor "
+"compartiran el seu rang numèric, és a dir, cada número complet s'utilitzarà "
+"al menys una vegada en tots els vostres esdeveniment. Aquesta configuració "
+"només afecta a factures futures."
 
 #: pretix/control/forms/event.py:651
 msgid "Generate invoices"
-msgstr ""
+msgstr "Genera factures"
 
 #: pretix/control/forms/event.py:655
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "No generis factures"
 
 #: pretix/control/forms/event.py:656
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "Només manualment al panell administratiu"
 
 #: pretix/control/forms/event.py:657
 msgid "Automatically on user request"
-msgstr ""
+msgstr "Automàticament a petició de l'usuari"
 
 #: pretix/control/forms/event.py:658
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "Automàticament per a totes les comandes creades"
 
 #: pretix/control/forms/event.py:659
 msgid "Automatically on payment"
-msgstr ""
+msgstr "Automàticament durant el pagament"
 
 #: pretix/control/forms/event.py:661
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
+msgstr "Mai es generaran automàticament factures per a comandes gratuïtes."
 
 #: pretix/control/forms/event.py:664
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Mostres els noms dels assistents a les factures"
 
 #: pretix/control/forms/event.py:668
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "Adjunta les factures als correus"
 
 #: pretix/control/forms/event.py:669
 msgid ""
@@ -5539,22 +5547,26 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"Si es generen les factures automàticament per a totes les comandes, "
+"s'adjuntaran al correu de confirmació. Si es generen automàticament durant "
+"el pagament, s'adjuntaran al correu de confirmació de pagament. Si no es "
+"generen automàticament no s'adjuntaran als correus."
 
 #: pretix/control/forms/event.py:676
 msgid "Invoice style"
-msgstr ""
+msgstr "Estil de la factura"
 
 #: pretix/control/forms/event.py:685
 msgid "Address line"
-msgstr ""
+msgstr "Línia de l'adreça"
 
 #: pretix/control/forms/event.py:689
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "Carrer Mallorca 40"
 
 #: pretix/control/forms/event.py:715
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "Identificació fiscal nacional"
 
 #: pretix/control/forms/event.py:719
 msgid "EU VAT ID"
@@ -5563,28 +5575,32 @@ msgstr "Identificador d'IVA europeu"
 #: pretix/control/forms/event.py:726
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
 msgstr ""
+"és a dir, amb aquest document us enviem la factura per la vostra comanda del "
+"tiquet."
 
 #: pretix/control/forms/event.py:730
 msgid "Introductory text"
-msgstr ""
+msgstr "Text introductori"
 
 #: pretix/control/forms/event.py:731
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr ""
+msgstr "S'imprimirà a cada factura per damunt de les fileres de la factura."
 
 #: pretix/control/forms/event.py:738
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
+"per exemple: Gràcies per la vostra compra! Podeu trobar més informació de "
+"l'esdeveniment a..."
 
 #: pretix/control/forms/event.py:742
 msgid "Additional text"
-msgstr ""
+msgstr "Text addicional"
 
 #: pretix/control/forms/event.py:743
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "S'imprimirà a cada factura sota el total."
 
 #: pretix/control/forms/event.py:750
 msgid ""
@@ -5596,48 +5612,52 @@ msgstr ""
 
 #: pretix/control/forms/event.py:754
 msgid "Footer"
-msgstr ""
+msgstr "Peu"
 
 #: pretix/control/forms/event.py:755
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
 msgstr ""
+"S'imprimirà centrat i en una tipografia menor al final de cada pàgina de la "
+"factura."
 
 #: pretix/control/forms/event.py:759
 msgid "Invoice language"
-msgstr ""
+msgstr "Idioma de la factura"
 
 #: pretix/control/forms/event.py:760 pretix/control/forms/event.py:777
 msgid "The user's language"
-msgstr ""
+msgstr "Idioma de l'usuari"
 
 #: pretix/control/forms/event.py:763 pretix/control/forms/event.py:1034
 #: pretix/control/forms/organizer.py:228
 msgid "Logo image"
-msgstr ""
+msgstr "Imatge del logo"
 
 #: pretix/control/forms/event.py:766
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
+msgstr "Mostrarem el vostre logo amb una alçada i amplada màxima de 2,5 cm."
 
 #: pretix/control/forms/event.py:782
 msgid "Subject prefix"
-msgstr ""
+msgstr "Prefix de l'assumpte"
 
 #: pretix/control/forms/event.py:783
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
+"Això s'anteposarà a l'assumpte de tots els correus sortints, formatat com "
+"[prefix]. Trieu per exemple una forma curta del nom del vostre esdeveniment."
 
 #: pretix/control/forms/event.py:788
 msgid "Sender address"
-msgstr ""
+msgstr "Adreça de l'emisor"
 
 #: pretix/control/forms/event.py:789
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "L'adreça de l'emissor pels correus sortints"
 
 #: pretix/control/forms/event.py:792
 msgid "Bcc address"
