@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-05 12:22+0000\n"
+"PO-Revision-Date: 2019-04-05 12:41+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -5661,28 +5661,28 @@ msgstr "L'adreça de l'emissor pels correus sortints"
 
 #: pretix/control/forms/event.py:792
 msgid "Bcc address"
-msgstr ""
+msgstr "Adreça de la CCO"
 
 #: pretix/control/forms/event.py:793
 msgid "All emails will be sent to this address as a Bcc copy"
-msgstr ""
+msgstr "Tots els correus s'enviaran a aquesta adreça com a còpia CCO"
 
 #: pretix/control/forms/event.py:798
 msgid "Signature"
-msgstr ""
+msgstr "Signatura"
 
 #: pretix/control/forms/event.py:801
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr ""
+msgstr "Això s'adjuntarà a cada correu. Espais disponibles: {event}"
 
 #: pretix/control/forms/event.py:806
 msgid "e.g. your contact details"
-msgstr ""
+msgstr "per exemple, els vostres detalls de contactes"
 
 #: pretix/control/forms/event.py:811
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "Renderitzador de correu HTML"
 
 #: pretix/control/forms/event.py:817 pretix/control/forms/event.py:826
 #: pretix/control/forms/event.py:833 pretix/control/forms/event.py:840
@@ -5691,7 +5691,7 @@ msgstr ""
 #: pretix/control/forms/event.py:898
 #: pretix/control/templates/pretixcontrol/pdf/index.html:327
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: pretix/control/forms/event.py:820
 #, python-brace-format
@@ -5699,6 +5699,8 @@ msgid ""
 "Available placeholders: {event}, {total_with_currency}, {total}, {currency}, "
 "{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
 msgstr ""
+"Camps disponibles: {event}, {total_with_currency}, {total}, {currency}, "
+"{date}, {payment_info}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:829
 #, python-brace-format
@@ -5706,30 +5708,32 @@ msgid ""
 "Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, "
 "{payment_info}"
 msgstr ""
+"Camps disponibles: {event}, {url}, {invoice_name}, {invoice_company}, "
+"{payment_info}"
 
 #: pretix/control/forms/event.py:836 pretix/control/forms/event.py:843
 #: pretix/control/forms/event.py:850
 #, python-brace-format
 msgid ""
 "Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"
-msgstr ""
+msgstr "Camps disponibles: {event}, {url}, {invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:847
 msgid "Text (sent by admin)"
-msgstr ""
+msgstr "Text (enviat per l'administrador)"
 
 #: pretix/control/forms/event.py:854
 msgid "Text (requested by user)"
-msgstr ""
+msgstr "Text (demanat per l'usuari)"
 
 #: pretix/control/forms/event.py:857
 #, python-brace-format
 msgid "Available placeholders: {event}, {orders}"
-msgstr ""
+msgstr "Camps disponibles: {event}, {orders}"
 
 #: pretix/control/forms/event.py:861 pretix/control/forms/event.py:905
 msgid "Number of days"
-msgstr ""
+msgstr "Número de dies"
 
 #: pretix/control/forms/event.py:864
 msgid ""
