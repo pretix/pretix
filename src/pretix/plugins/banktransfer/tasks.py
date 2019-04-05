@@ -60,31 +60,16 @@ def notify_incomplete_payment(o: Order):
 @transaction.atomic
 def _handle_transaction(trans: BankTransaction, code: str, event: Event=None, organizer: Organizer=None,
                         slug: str=None):
-    if event:
+    try:
+        trans.order = event.orders.get(code=code)
+    except Order.DoesNotExist:
+        normalized_code = Order.normalize_code(code)
         try:
-            trans.order = event.orders.get(code=code)
+            trans.order = event.orders.get(code=normalized_code)
         except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
-            try:
-                trans.order = event.orders.get(code=normalized_code)
-            except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
-    else:
-        qs = Order.objects.filter(event__organizer=organizer)
-        if slug:
-            qs = qs.filter(event__slug__iexact=slug)
-        try:
-            trans.order = qs.get(code=code)
-        except Order.DoesNotExist:
-            normalized_code = Order.normalize_code(code)
-            try:
-                trans.order = qs.get(code=normalized_code)
-            except Order.DoesNotExist:
-                trans.state = BankTransaction.STATE_NOMATCH
-                trans.save()
-                return
+            trans.state = BankTransaction.STATE_NOMATCH
+            trans.save()
+            return
 
     if trans.order.status == Order.STATUS_PAID and trans.order.pending_sum <= Decimal('0.00'):
         trans.state = BankTransaction.STATE_DUPLICATE
@@ -196,7 +181,6 @@ def process_banktransfers(self, job: int, data: list) -> None:
         job = BankImportJob.objects.get(pk=job)
         job.state = BankImportJob.STATE_RUNNING
         job.save()
-        prefixes = []
 
         try:
             # Delete left-over transactions from a failed run before so they can reimported
@@ -205,25 +189,33 @@ def process_banktransfers(self, job: int, data: list) -> None:
             transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
             code_len = settings.ENTROPY['order_code']
+
             if job.event:
-                pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
+                events = [job.event]
             else:
-                if not prefixes:
-                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
-                                for e in job.organizer.events.all()]
-                pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
+                events = job.organizer.events.all()
+
+            event_prefix_map = {}
+            for event in events:
+                event_prefix_map[event.slug.upper()] = event
+                if 'banktransfer' in job.event.get_payment_providers():
+                    custom_prefix = job.event.get_payment_providers()['banktransfer']\
+                        .settings.get('code_prefix', as_type=str)
+                    if custom_prefix:
+                        event_prefix_map[custom_prefix] = event
+
+            prefixes = [prefix.replace(".", r"\.").replace("-", r"[\- ]*")
+                        for prefix in event_prefix_map.keys()]
+
+            pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
             for trans in transactions:
                 match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
 
                 if match:
-                    if job.event:
-                        code = match.group(1)
-                        _handle_transaction(trans, code, event=job.event)
-                    else:
-                        slug = match.group(1)
-                        code = match.group(2)
-                        _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
+                    prefix = match.group(1)
+                    code = match.group(2)
+                    _handle_transaction(trans, code, event=event_prefix_map[prefix])
                 else:
                     trans.state = BankTransaction.STATE_NOMATCH
                     trans.save()
