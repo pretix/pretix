@@ -45,7 +45,7 @@ def test_scoped_by_key(token_client, organizer):
     resp = token_client.post('/api/v1/organizers/{}/events/'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
     assert resp.status_code == 201
-    assert d1.data == json.loads(resp.content)
+    assert d1.data == json.loads(resp.content.decode())
     assert d1._headers == resp._headers
     resp = token_client.post('/api/v1/organizers/{}/events/'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='bar')
@@ -107,7 +107,7 @@ def test_ignore_get(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/'.format(organizer.slug),
                             HTTP_X_IDEMPOTENCY_KEY='foo')
     assert resp.status_code == 200
-    assert d1 != json.loads(resp.content)
+    assert d1 != json.loads(resp.content.decode())
 
 
 @pytest.mark.django_db
