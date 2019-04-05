@@ -53,7 +53,18 @@ class IdempotencyMiddleware:
                     call.delete()
                 else:
                     call.response_code = resp.status_code
-                    call.response_body = resp.content.encode() if isinstance(resp.content, str) else resp.content
+                    if isinstance(resp.content, str):
+                        call.response_body = resp.content.encode()
+                    elif isinstance(resp.content, memoryview):
+                        call.response_body = resp.content.tobytes()
+                    elif isinstance(resp.content, bytes):
+                        call.response_body = resp.content
+                    elif hasattr(resp.content, 'read'):
+                        call.response_body = resp.read()
+                    elif hasattr(resp, 'data'):
+                        call.response_body = json.dumps(resp.data)
+                    else:
+                        call.response_body = repr(resp).encode()
                     call.response_headers = json.dumps(resp._headers)
                     call.locked = None
                     call.save(update_fields=['locked', 'response_code', 'response_headers',
