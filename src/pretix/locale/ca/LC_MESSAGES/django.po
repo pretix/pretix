@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-05 12:41+0000\n"
+"PO-Revision-Date: 2019-04-05 12:54+0000\n"
 "Last-Translator: mussol <muzzol@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -5740,6 +5740,8 @@ msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
 msgstr ""
+"Aquest correu s'enviarà aquest número de dies abans de que la comanda "
+"expiri. Si el valor és 0 no s'enviarà mai el correu."
 
 #: pretix/control/forms/event.py:871
 #, python-brace-format
@@ -5747,16 +5749,18 @@ msgid ""
 "Available placeholders: {event}, {url}, {expire_date}, {invoice_name}, "
 "{invoice_company}"
 msgstr ""
+"Camps disponibles: {event}, {url}, {expire_date}, {invoice_name}, "
+"{invoice_company}"
 
 #: pretix/control/forms/event.py:878
 #, python-brace-format
 msgid "Available placeholders: {event}, {url}, {product}, {hours}, {code}"
-msgstr ""
+msgstr "Camps disponibles: {event}, {url}, {product}, {hours}, {code}"
 
 #: pretix/control/forms/event.py:885
 #, python-brace-format
 msgid "Available placeholders: {event}, {code}, {url}"
-msgstr ""
+msgstr "Camps disponibles: {event}, {code}, {url}"
 
 #: pretix/control/forms/event.py:892 pretix/control/forms/orders.py:397
 #: pretix/plugins/sendmail/forms.py:37 pretix/plugins/sendmail/forms.py:46
@@ -5765,11 +5769,13 @@ msgid ""
 "Available placeholders: {expire_date}, {event}, {code}, {date}, {url}, "
 "{invoice_name}, {invoice_company}"
 msgstr ""
+"Camps disponibles: {expire_date}, {event}, {code}, {date}, {url}, "
+"{invoice_name}, {invoice_company}"
 
 #: pretix/control/forms/event.py:901
 #, python-brace-format
 msgid "Available placeholders: {event}, {url}"
-msgstr ""
+msgstr "Camps disponibles: {event}, {url}"
 
 #: pretix/control/forms/event.py:908
 msgid ""
