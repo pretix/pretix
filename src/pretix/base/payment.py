@@ -721,13 +721,10 @@ class BoxOfficeProvider(BasePaymentProvider):
         return False
 
     def payment_control_render(self, request, payment) -> str:
-        template = None
-        payment_info = None
-
-        if payment.info:
-            payment_info = json.loads(payment.info)
-            if payment_info['payment_type'] == "sumup":
-                template = get_template('pretixcontrol/boxoffice/payment_sumup.html')
+        if not payment.info:
+            return
+        payment_info = json.loads(payment.info)
+        template = get_template('pretixcontrol/boxoffice/payment.html')
 
         ctx = {
             'request': request,
@@ -737,11 +734,7 @@ class BoxOfficeProvider(BasePaymentProvider):
             'payment': payment,
             'provider': self,
         }
-
-        if template:
-            return template.render(ctx)
-        else:
-            return
+        return template.render(ctx)
 
 
 class ManualPayment(BasePaymentProvider):
