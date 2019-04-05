@@ -458,11 +458,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     payment_info = CompatibleJSONField(required=False)
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
     force = serializers.BooleanField(default=False, required=False)
+    payment_date = serializers.DateTimeField(required=False, allow_null=True)
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
-                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'consume_carts', 'force')
+                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts', 'force')
 
     def validate_payment_provider(self, pp):
         if pp not in self.context['event'].get_payment_providers():
@@ -533,6 +534,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
         payment_provider = validated_data.pop('payment_provider')
         payment_info = validated_data.pop('payment_info', '{}')
+        payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
 
         if 'invoice_address' in validated_data:
@@ -617,7 +619,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     amount=order.total,
                     provider=payment_provider,
                     info=payment_info,
-                    payment_date=now(),
+                    payment_date=payment_date,
                     state=OrderPayment.PAYMENT_STATE_CONFIRMED
                 )
             elif payment_provider:

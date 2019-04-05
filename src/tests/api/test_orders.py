@@ -2428,6 +2428,7 @@ def test_order_create_paid_generate_invoice(token_client, organizer, event, item
     event.settings.invoice_generate = 'paid'
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['status'] = 'p'
+    res['payment_date'] = '2019-04-01 08:20:00Z'
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
@@ -2443,6 +2444,11 @@ def test_order_create_paid_generate_invoice(token_client, organizer, event, item
     assert p.provider == "banktransfer"
     assert p.amount == o.total
     assert p.state == "confirmed"
+    assert p.payment_date.year == 2019
+    assert p.payment_date.month == 4
+    assert p.payment_date.day == 1
+    assert p.payment_date.hour == 8
+    assert p.payment_date.minute == 20
 
 
 REFUND_CREATE_PAYLOAD = {

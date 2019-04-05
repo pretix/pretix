@@ -750,6 +750,7 @@ Creating orders
      should only use this if you know the specific payment provider in detail. Please keep in mind that the payment
      provider will not be called to do anything about this (i.e. if you pass a bank account to a debit provider, *no*
      charge will be created), this is just informative in case you *handled the payment already*.
+   * ``payment_date`` (optional) – Date and time of the completion of the payment.
    * ``comment`` (optional)
    * ``checkin_attention`` (optional)
    * ``invoice_address`` (optional)
