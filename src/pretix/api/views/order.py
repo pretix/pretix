@@ -42,7 +42,9 @@ from pretix.base.services.orders import (
     extend_order, mark_order_expired, mark_order_refunded,
 )
 from pretix.base.services.tickets import generate
-from pretix.base.signals import order_placed, register_ticket_outputs
+from pretix.base.signals import (
+    order_modified, order_placed, register_ticket_outputs,
+)
 
 
 class OrderFilter(FilterSet):
@@ -451,61 +453,64 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
         return super().update(request, *args, **kwargs)
 
-    @transaction.atomic
     def perform_update(self, serializer):
-        if 'comment' in self.request.data and serializer.instance.comment != self.request.data.get('comment'):
-            serializer.instance.log_action(
-                'pretix.event.order.comment',
-                user=self.request.user,
-                auth=self.request.auth,
-                data={
-                    'new_comment': self.request.data.get('comment')
-                }
-            )
+        with transaction.atomic():
+            if 'comment' in self.request.data and serializer.instance.comment != self.request.data.get('comment'):
+                serializer.instance.log_action(
+                    'pretix.event.order.comment',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_comment': self.request.data.get('comment')
+                    }
+                )
 
-        if 'checkin_attention' in self.request.data and serializer.instance.checkin_attention != self.request.data.get('checkin_attention'):
-            serializer.instance.log_action(
-                'pretix.event.order.checkin_attention',
-                user=self.request.user,
-                auth=self.request.auth,
-                data={
-                    'new_value': self.request.data.get('checkin_attention')
-                }
-            )
+            if 'checkin_attention' in self.request.data and serializer.instance.checkin_attention != self.request.data.get('checkin_attention'):
+                serializer.instance.log_action(
+                    'pretix.event.order.checkin_attention',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_value': self.request.data.get('checkin_attention')
+                    }
+                )
 
-        if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
-            serializer.instance.log_action(
-                'pretix.event.order.contact.changed',
-                user=self.request.user,
-                auth=self.request.auth,
-                data={
-                    'old_email': serializer.instance.email,
-                    'new_email': self.request.data.get('email'),
-                }
-            )
+            if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
+                serializer.instance.log_action(
+                    'pretix.event.order.contact.changed',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'old_email': serializer.instance.email,
+                        'new_email': self.request.data.get('email'),
+                    }
+                )
 
-        if 'locale' in self.request.data and serializer.instance.locale != self.request.data.get('locale'):
-            serializer.instance.log_action(
-                'pretix.event.order.locale.changed',
-                user=self.request.user,
-                auth=self.request.auth,
-                data={
-                    'old_locale': serializer.instance.locale,
-                    'new_locale': self.request.data.get('locale'),
-                }
-            )
+            if 'locale' in self.request.data and serializer.instance.locale != self.request.data.get('locale'):
+                serializer.instance.log_action(
+                    'pretix.event.order.locale.changed',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'old_locale': serializer.instance.locale,
+                        'new_locale': self.request.data.get('locale'),
+                    }
+                )
+
+            if 'invoice_address' in self.request.data:
+                serializer.instance.log_action(
+                    'pretix.event.order.modified',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'invoice_data': self.request.data.get('invoice_address'),
+                    }
+                )
+
+            serializer.save()
 
         if 'invoice_address' in self.request.data:
-            serializer.instance.log_action(
-                'pretix.event.order.modified',
-                user=self.request.user,
-                auth=self.request.auth,
-                data={
-                    'invoice_data': self.request.data.get('invoice_address'),
-                }
-            )
-
-        serializer.save()
+            order_modified.send(sender=serializer.instance.event, order=serializer.instance)
 
     def perform_create(self, serializer):
         serializer.save()

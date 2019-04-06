@@ -30,7 +30,9 @@ from pretix.base.services.invoices import (
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import cancel_order, change_payment_provider
 from pretix.base.services.tickets import generate
-from pretix.base.signals import allow_ticket_download, register_ticket_outputs
+from pretix.base.signals import (
+    allow_ticket_download, order_modified, register_ticket_outputs,
+)
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.safedownload import check_token
@@ -540,6 +542,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                 for k in f.changed_data
             } for f in self.forms]
         })
+        order_modified.send(sender=self.request.event, order=self.order)
         if self.invoice_form.has_changed():
             success_message = ('Your invoice address has been updated. Please contact us if you need us '
                                'to regenerate your invoice.')

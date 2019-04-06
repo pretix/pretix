@@ -57,7 +57,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.stats import order_overview
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
-    register_data_exporters, register_ticket_outputs,
+    order_modified, register_data_exporters, register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -1321,6 +1321,8 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
 
         CachedTicket.objects.filter(order_position__order=self.order).delete()
         CachedCombinedTicket.objects.filter(order=self.order).delete()
+
+        order_modified.send(sender=self.request.event, order=self.order)
         return redirect(self.get_order_url())
 
 

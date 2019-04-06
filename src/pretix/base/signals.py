@@ -275,6 +275,66 @@ because an already-paid order has been split.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+order_canceled = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order is canceled. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_expired = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order is marked as expired. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_modified = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order's information is modified. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_changed = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order's content is changed. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_approved = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order is being approved. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+order_denied = EventPluginSignal(
+    providing_args=["order"]
+)
+"""
+This signal is sent out every time an order is being denied. The order object is given
+as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 logentry_display = EventPluginSignal(
     providing_args=["logentry"]
 )
