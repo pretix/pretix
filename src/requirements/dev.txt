@@ -1,4 +1,4 @@
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.11
 sqlparse==0.2.1  # pinned due to difficulties with django-debug-toolbar
 # Testing requirements
 pycodestyle==2.5.*

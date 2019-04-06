@@ -1,19 +1,19 @@
 # Functional requirements
-Django>=2.1,<2.2
-djangorestframework==3.8.*
-python-dateutil
+Django==2.2.*
+djangorestframework==3.9.*
+python-dateutil==2.8.*
 pytz
-django-bootstrap3==10.0.*
+django-bootstrap3==11.0.*
 django-formset-js-improved==0.5.0.2
 django-compressor==2.2.*
 django-hierarkey==1.0.*,>=1.0.3
-django-filter==2.0.*
+django-filter==2.1.*
 reportlab==3.5.*
 PyPDF2==1.26.*
 Pillow==5.*
 django-libsass
 libsass
-django-otp==0.4.*
+django-otp==0.5.*
 python-u2flib-server==4.*
 django-formtools==2.1
 celery==4.3.*
@@ -39,7 +39,7 @@ oauthlib==2.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 # Stripe
-stripe==2.0.*
+stripe==2.24.*
 # PayPal
 paypalrestsdk==1.13.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
