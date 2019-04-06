@@ -104,7 +104,7 @@ setup(
         'django-otp==0.4.*',
         'python-u2flib-server==4.*',
         'django-formtools==2.1',
-        'celery>=4.3.1,<4.4.0',
+        'celery==4.3.*',
         'kombu==4.5.*',
         'django-statici18n==1.8.*',
         'inlinestyler==0.2.*',
