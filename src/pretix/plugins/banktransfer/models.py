@@ -21,6 +21,9 @@ class BankImportJob(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_PENDING)
 
+    class Meta:
+        ordering = ('id',)
+
     @property
     def owner_kwargs(self):
         if self.event:
@@ -76,3 +79,4 @@ class BankTransaction(models.Model):
 
     class Meta:
         unique_together = ('event', 'organizer', 'checksum')
+        ordering = ('date', 'id')

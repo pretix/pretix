@@ -118,6 +118,9 @@ class TaxRule(LoggedModel):
     )
     custom_rules = models.TextField(blank=True, null=True)
 
+    class Meta:
+        ordering = ('event', 'rate', 'id')
+
     def allow_delete(self):
         from pretix.base.models.orders import OrderFee, OrderPosition
 
