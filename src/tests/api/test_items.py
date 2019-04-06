@@ -76,8 +76,8 @@ def cart_position(event, item, variations):
         c = CartPosition.objects.create(
             event=event,
             item=item,
-            datetime=datetime.now(),
-            expires=datetime.now() + timedelta(days=1),
+            datetime=testtime,
+            expires=testtime + timedelta(days=1),
             variation=variations[0],
             price=Decimal("23"),
             cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"

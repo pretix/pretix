@@ -76,8 +76,8 @@ def test_cp_list(token_client, organizer, event, item, taxrule, question):
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -97,8 +97,8 @@ def test_cp_list_api(token_client, organizer, event, item, taxrule, question):
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -118,8 +118,8 @@ def test_cp_detail(token_client, organizer, event, item, taxrule, question):
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -139,8 +139,8 @@ def test_cp_delete(token_client, organizer, event, item, taxrule, question):
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
