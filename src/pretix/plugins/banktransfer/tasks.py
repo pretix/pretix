@@ -175,6 +175,26 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None,
     return transactions
 
 
+def get_prefix_event_map(organizer=None, event=None):
+    prefix_event_map = {}
+
+    if event:
+        events = [event]
+    elif organizer:
+        events = organizer.events.all()
+    else:
+        return {}
+
+    for event in events:
+        prefix_event_map[event.slug.upper()] = event
+        if 'banktransfer' in event.get_payment_providers():
+            custom_prefix = event.get_payment_providers()['banktransfer'] \
+                .settings.get('code_prefix', as_type=str)
+            if custom_prefix:
+                prefix_event_map[custom_prefix] = event
+    return prefix_event_map
+
+
 @app.task(base=TransactionAwareTask, bind=True, max_retries=5, default_retry_delay=1)
 def process_banktransfers(self, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
@@ -191,21 +211,12 @@ def process_banktransfers(self, job: int, data: list) -> None:
             code_len = settings.ENTROPY['order_code']
 
             if job.event:
-                events = [job.event]
+                prefix_event_map = get_prefix_event_map(event=job.event)
             else:
-                events = job.organizer.events.all()
-
-            event_prefix_map = {}
-            for event in events:
-                event_prefix_map[event.slug.upper()] = event
-                if 'banktransfer' in job.event.get_payment_providers():
-                    custom_prefix = job.event.get_payment_providers()['banktransfer']\
-                        .settings.get('code_prefix', as_type=str)
-                    if custom_prefix:
-                        event_prefix_map[custom_prefix] = event
+                prefix_event_map = get_prefix_event_map(organizer=job.organizer)
 
             prefixes = [prefix.replace(".", r"\.").replace("-", r"[\- ]*")
-                        for prefix in event_prefix_map.keys()]
+                        for prefix in prefix_event_map.keys()]
 
             pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
 
@@ -215,7 +226,7 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 if match:
                     prefix = match.group(1)
                     code = match.group(2)
-                    _handle_transaction(trans, code, event=event_prefix_map[prefix])
+                    _handle_transaction(trans, code, event=prefix_event_map[prefix])
                 else:
                     trans.state = BankTransaction.STATE_NOMATCH
                     trans.save()
