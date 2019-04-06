@@ -68,10 +68,6 @@ To build and run pretix, you will need the following debian packages::
                       python3-dev libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
                       gettext libpq-dev libmariadbclient-dev libjpeg-dev libopenjp2-7-dev
 
-.. note:: Python 3.7 is not yet supported, so if you run a very recent OS, make sure to get
-          Python 3.6 from somewhere. You can check the current state of things in our
-          `Python 3.7 issue`_.
-
 Config file
 -----------
 
@@ -314,4 +310,3 @@ example::
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall
 .. _strong encryption settings: https://mozilla.github.io/server-side-tls/ssl-config-generator/
-.. _Python 3.7 issue: https://github.com/pretix/pretix/issues/1025

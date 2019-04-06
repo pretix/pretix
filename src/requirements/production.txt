@@ -16,8 +16,8 @@ libsass
 django-otp==0.4.*
 python-u2flib-server==4.*
 django-formtools==2.1
-celery>=4.1.1,<4.2.0
-kombu==4.2.*
+celery==4.3.*
+kombu==4.5.*
 django-statici18n==1.8.*
 inlinestyler==0.2.*
 BeautifulSoup4==4.7.*
@@ -54,5 +54,5 @@ defusedcsv>=1.0.1
 vat_moss==0.11.0
 django-localflavor
 idna==2.6 # required by current requests
-django-redis==4.8.*
-redis==2.10.5
+django-redis==4.10.*
+redis==3.2.*
