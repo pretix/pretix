@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-04 02:00+0000\n"
+"PO-Revision-Date: 2019-04-06 13:05+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -9829,7 +9829,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
 msgid "Add a new bundled product"
-msgstr "Nieuw bundelproduct toevoegen"
+msgstr "Nieuw gebundeld product toevoegen"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
