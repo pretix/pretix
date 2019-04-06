@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-06 13:05+0000\n"
+"PO-Revision-Date: 2019-04-06 21:58+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -10097,10 +10097,8 @@ msgid "Add a new option"
 msgstr "Nieuwe optie toevoegen"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:115
-#, fuzzy
-#| msgid "Question type"
 msgid "Question dependency"
-msgstr "Vraagtype"
+msgstr "Afhankelijk van andere vraag"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:7
 msgid ""
@@ -11383,20 +11381,18 @@ msgstr ""
 "apparaat niet meer kunnen gebruiken."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:14
-#, fuzzy
-#| msgid ""
-#| "All data of this device will stay available, but you can't use the device "
-#| "any more."
 msgid "All data uploaded by this device will stay available online."
 msgstr ""
-"Alle gegevens van dit apparaat zullen beschikbaar blijven, maar je zal het "
-"apparaat niet meer kunnen gebruiken."
+"Alle door dit apparaat geüploade gegevens zullen online beschikbaar blijven."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:15
 msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"Als gegevens (bijv. POS-transacties of check-ins) zijn aangemaakt op dit "
+"apparaat en nog niet zijn geüpload zal je niet langer in staat zijn deze "
+"gegevens te uploaden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -11405,6 +11401,11 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Als de software op het apparaat dit ondersteunt zullen persoonlijke "
+"gegevens, zoals bestellingen, bij de volgende synchronisatiepoging van het "
+"apparaat worden verwijderd. Niet-persoonlijke gegevens zoals "
+"evenementsmetadata en POS-transacties zullen bewaard blijven tot je ze "
+"handmatig verwijdert."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
 msgid "Connected devices"
@@ -12663,10 +12664,8 @@ msgid "Order %(code)s"
 msgstr "Bestelling %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher link"
-msgstr "Voucher"
+msgstr "Voucher-link"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:84
 msgid "Voucher history"
@@ -13405,16 +13404,12 @@ msgstr ""
 "als add-on."
 
 #: pretix/control/views/item.py:1106
-#, fuzzy
-#| msgid ""
-#| "You cannot add add-ons to a product that is only available as an add-on "
-#| "itself."
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr ""
-"Je kan geen add-ons toevoegen aan een product dat zelf alleen beschikbaar is "
-"als add-on."
+"Je kan geen bundels toevoegen aan een product dat zelf alleen beschikbaar is "
+"als bundel."
 
 #: pretix/control/views/item.py:1164
 msgid "The selected product has been deleted."
@@ -14270,6 +14265,11 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Ik begrijp dat mijn klanten het te betalen bedrag direct naar mijn rekening "
+"zullen overmaken, en dat pretix niet automatisch kan weten welke betalingen "
+"zijn aangekomen. Hierom zal ik betalingen handmatig als ontvangen markeren, "
+"of regelmatig een digitaal rekeningafschrift importeren om pretix de "
+"benodigde informatie te geven."
 
 #: pretix/plugins/banktransfer/payment.py:36
 msgid "Bank account type"
@@ -14373,10 +14373,9 @@ msgid "Import bank data"
 msgstr "Bankgegevens importeren"
 
 #: pretix/plugins/banktransfer/tasks.py:49
-#, fuzzy, python-format
-#| msgid "Your order is pending payment: %(code)s"
+#, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr "Je bestelling wacht op betaling: %(code)s"
+msgstr "Je bestelling ontving een onvolledige betaling: %(code)s"
 
 #: pretix/plugins/banktransfer/tasks.py:93
 #: pretix/plugins/banktransfer/views.py:55
@@ -14547,6 +14546,8 @@ msgstr "Een interne fout is opgetreden tijdens het verwerken van je gegevens."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try ot re-import the file."
 msgstr ""
+"Sommige transacties zijn mogelijk niet geïmporteerd, probeer het bestand "
+"opnieuw te importeren."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
@@ -16580,20 +16581,15 @@ msgstr "Verander prijs voor %(item)s"
 #: pretix/presale/templates/pretixpresale/event/index.html:412
 #: pretix/presale/templates/pretixpresale/event/voucher.html:116
 #: pretix/presale/templates/pretixpresale/event/voucher.html:211
-#, fuzzy
-#| msgid "taxes"
 msgid "plus taxes"
-msgstr "belasting"
+msgstr "excl. belasting"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:304
 #: pretix/presale/templates/pretixpresale/event/index.html:414
 #: pretix/presale/templates/pretixpresale/event/voucher.html:118
 #: pretix/presale/templates/pretixpresale/event/voucher.html:213
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Included taxes"
 msgid "incl. taxes"
-msgstr "Inbegrepen belastingen"
+msgstr "incl. belasting"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:311
 #: pretix/presale/templates/pretixpresale/event/index.html:421
@@ -17202,34 +17198,25 @@ msgstr ""
 "weer kaartjes beschikbaar zijn."
 
 #: pretix/presale/views/widget.py:228
-#, fuzzy
-#| msgid "The selected ticket shop is currently not available."
 msgid "This ticket shop is currently disabled."
-msgstr "De geselecteerde kaartjeswinkel is op dit moment niet beschikbaar."
+msgstr "Deze kaartjeswinkel is uitgeschakeld."
 
 #: pretix/presale/views/widget.py:237
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected date does not exist in this event series."
-msgstr "Het geselecteerde item hoort niet bij dit evenement."
+msgstr "De geselecteerde datum bestaat niet in deze evenementenreeks."
 
 #: pretix/presale/views/widget.py:244
-#, fuzzy
-#| msgid "This is an event series"
 msgid "This is not an event series."
-msgstr "Dit is een evenementenreeks"
+msgstr "Dit is geen evenementenreeks."
 
 #: pretix/presale/views/widget.py:278
-#, fuzzy, python-format
-#| msgid "Show start date"
+#, python-format
 msgid "from %(start_date)s"
-msgstr "Toon startdatum"
+msgstr "vanaf %(start_date)s"
 
 #: pretix/presale/views/widget.py:281
-#, fuzzy
-#| msgid "Sale over"
 msgid "Sale Soon"
-msgstr "Verkoop afgelopen"
+msgstr "Verkoop binnenkort"
 
 #: pretix/settings.py:388
 msgid "English"
@@ -17272,18 +17259,16 @@ msgid "Turkish"
 msgstr "Turks"
 
 #: pretix/settings.py:398
-#, fuzzy
-#| msgid "English"
 msgid "Polish"
-msgstr "Engels"
+msgstr "Pools"
 
 #: pretix/settings.py:399
 msgid "Italian"
-msgstr ""
+msgstr "Italiaans"
 
 #: pretix/settings.py:400
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chinees (versimpeld)"
 
 #: pretix/settings.py:673
 msgid "Read access"
