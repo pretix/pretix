@@ -7,7 +7,7 @@ from django_filters.rest_framework import (
     BooleanFilter, DjangoFilterBackend, FilterSet,
 )
 from rest_framework import status, viewsets
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -116,7 +116,7 @@ class VoucherViewSet(viewsets.ModelViewSet):
             instance.cartposition_set.all().delete()
             super().perform_destroy(instance)
 
-    @list_route(methods=['POST'])
+    @action(detail=False, methods=['POST'])
     def batch_create(self, request, *args, **kwargs):
         if any(self._predict_quota_check(d, None) for d in request.data):
             lockfn = request.event.lock

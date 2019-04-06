@@ -28,7 +28,7 @@ dj-static
 csscompressor
 django-markup
 markdown<=2.2
-bleach==2.*
+bleach==3.1.*
 sentry-sdk==0.7.*
 babel
 django-i18nfield>=1.4.0
@@ -39,7 +39,7 @@ oauthlib==2.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 # Stripe
-stripe==2.24.*
+stripe==2.0.*
 # PayPal
 paypalrestsdk==1.13.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147

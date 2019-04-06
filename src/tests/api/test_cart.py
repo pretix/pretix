@@ -537,7 +537,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY[-MM[-DD]].']}]}
+        'answers': [{'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY-MM-DD.']}]}
 
     question.type = Question.TYPE_DATETIME
     question.save()

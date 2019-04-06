@@ -1,7 +1,7 @@
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -69,7 +69,7 @@ class WaitingListViewSet(viewsets.ModelViewSet):
         )
         super().perform_destroy(instance)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def send_voucher(self, *args, **kwargs):
         try:
             self.get_object().send_voucher(

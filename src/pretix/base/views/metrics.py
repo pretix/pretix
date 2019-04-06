@@ -20,10 +20,10 @@ def serve_metrics(request):
         return unauthed_response()
 
     # check if the user is properly authorized:
-    if "HTTP_AUTHORIZATION" not in request.META:
+    if "Authorization" not in request.headers:
         return unauthed_response()
 
-    method, credentials = request.META["HTTP_AUTHORIZATION"].split(" ", 1)
+    method, credentials = request.headers["Authorization"].split(" ", 1)
     if method.lower() != "basic":
         return unauthed_response()
 
