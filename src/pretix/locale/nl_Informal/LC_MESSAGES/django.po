@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-04 02:00+0000\n"
+"PO-Revision-Date: 2019-04-06 13:05+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -3729,14 +3729,10 @@ msgstr ""
 "add-on bij een ander product."
 
 #: pretix/base/services/cart.py:91
-#, fuzzy
-#| msgid ""
-#| "One of the products you selected can only be bought as an add-on to "
-#| "another project."
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
-"Een van de producten die je geselecteerd hebt kan alleen gekocht worden als "
-"add-on bij een ander product."
+"Een van de producten die je selecteerde kan alleen gekocht worden als deel "
+"van een bundel."
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
@@ -4316,19 +4312,7 @@ msgstr ""
 "De organisatie van {event}"
 
 #: pretix/base/settings.py:399
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -4344,7 +4328,8 @@ msgid ""
 msgstr ""
 "Hoi,\n"
 "\n"
-"We hebben nog geen betaling ontvangen voor je bestelling voor {event}.\n"
+"We hebben nog geen volledige betaling ontvangen voor je bestelling voor "
+"{event}.\n"
 "We kunnen je bestelling alleen garanderen als we de betaling ontvangen\n"
 "voor {expire_date}.\n"
 "\n"
@@ -5475,20 +5460,14 @@ msgstr ""
 "alleen gratis producten bevatten."
 
 #: pretix/control/forms/event.py:631
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address explanation"
-msgstr "Naam factuuradres"
+msgstr "Uitleg factuuradres"
 
 #: pretix/control/forms/event.py:635
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
-"Deze tekst wordt boven de betalingsopties getoond. Als je wilt kan je hier "
-"de opties aan de gebruiker uitleggen."
+"Deze tekst wordt boven de invulvelden voor het factuuradres getoond tijdens "
+"het afrekenen."
 
 #: pretix/control/forms/event.py:638
 msgid "Generate invoices with consecutive numbers"
@@ -5942,10 +5921,8 @@ msgid "Only respected by modern browsers."
 msgstr "Wordt alleen gebruikt door moderne browsers."
 
 #: pretix/control/forms/event.py:1053
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of presale text"
-msgstr "Einde van de voorverkoop"
+msgstr "Tekst voor einde van de voorverkoop"
 
 #: pretix/control/forms/event.py:1057
 msgid ""
@@ -5953,6 +5930,10 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"Deze tekst wordt boven de kaartjeswinkel weergegeven wanneer de aangewezen "
+"verkoopperiode voor dit evenement is afgelopen. Je kan de tekst gebruiken om "
+"andere opties om kaartjes te kopen te beschrijven, bijvoorbeeld een "
+"kaartjesbureau."
 
 #: pretix/control/forms/event.py:1061
 msgid "Voucher explanation"
@@ -5992,6 +5973,8 @@ msgstr "Vraag zoekmachines om deze kaartjeswinkel niet te indexeren"
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Verwijs gelijk door naar afrekenen nadat een product in de winkelwagen is "
+"geplaatst."
 
 #: pretix/control/forms/event.py:1102
 msgid "Use feature"
@@ -6514,10 +6497,10 @@ msgstr ""
 "pretix.eu, de e-mails zullen door deze server lokaal worden verstuurd."
 
 #: pretix/control/forms/item.py:72
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "Dependencies between questions are not supported during check-in."
-msgstr "Deze vraag zal bij het inchecken worden gesteld."
+msgstr ""
+"Het is niet mogelijk om afhankelijkheden te maken voor vragen die tijdens "
+"het inchecken worden gesteld."
 
 #: pretix/control/forms/item.py:186
 msgid "The product should exist in multiple variations"
@@ -6627,10 +6610,8 @@ msgstr ""
 #: pretix/control/forms/item.py:562
 #: pretix/control/templates/pretixcontrol/item/bundles.html:26
 #: pretix/control/templates/pretixcontrol/item/bundles.html:53
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled product"
-msgstr "Product toevoegen"
+msgstr "Gebundeld product"
 
 #: pretix/control/forms/item.py:586 pretix/control/forms/orders.py:230
 #: pretix/control/forms/orders.py:331
@@ -8281,16 +8262,12 @@ msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Neem contact met ons op als dit langer dan een aantal minuten duurt."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:7
-#, fuzzy
-#| msgid "Creation date"
 msgid "Transaction Code"
-msgstr "Aanmaakdatum"
+msgstr "Transactiecode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:9
-#, fuzzy
-#| msgid "Merchant country"
 msgid "Merchant Code"
-msgstr "Land van handelaar"
+msgstr "Handelaarscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:11
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
@@ -8304,10 +8281,8 @@ msgid "Type"
 msgstr "Type"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:17
-#, fuzzy
-#| msgid "Card type"
 msgid "Card Entry Mode"
-msgstr "Kaarttype"
+msgstr "Soort kaartinvoer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment_sumup.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
@@ -9810,10 +9785,8 @@ msgid "Add-Ons"
 msgstr "Add-ons"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
-#, fuzzy
-#| msgid "Add product"
 msgid "Bundled products"
-msgstr "Product toevoegen"
+msgstr "Gebundelde producten"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:32
 msgid "Create product"
@@ -9845,12 +9818,12 @@ msgid ""
 "With bundles, you can specify products that are always automatically added "
 "as add-ons in the cart for this product."
 msgstr ""
+"Met productbundels kan je producten opgeven die altijd automatisch aan de "
+"winkelwagen zullen worden toegevoegd als add-ons voor dit product."
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
-#, fuzzy
-#| msgid "Add a new object"
 msgid "Add a new bundled product"
-msgstr "Nieuw object toevoegen"
+msgstr "Nieuw gebundeld product toevoegen"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:23
 msgid "Quota settings"
