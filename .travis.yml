@@ -1,4 +1,5 @@
 language: python
+dist: xenial
 sudo: false
 install:
   - pip install -U pip wheel setuptools
