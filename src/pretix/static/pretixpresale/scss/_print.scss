@@ -1,0 +1,62 @@
+@media print {
+  body {
+    font-size: 12px;
+  }
+  a[href]:after {
+    content: none;
+  }
+  .container {
+    width: 100%;
+    padding: 0;
+  }
+  .page-header {
+    margin-top: 0;
+  }
+  .page-header .pull-right,
+  .thank-you,
+  .panel-heading a,
+  .download-desktop,
+  .download-mobile,
+  .info-download,
+  .panel-cancellation,
+  footer {
+    display: none !important;
+  }
+  .cart-row .product {
+    width: 50%;
+  }
+  .cart-row.has-downloads .product {
+    width: percentage((9 / $grid-columns));
+  }
+  .cart-row .count {
+    width: 10%;
+  }
+  .cart-row .singleprice {
+    width: 20%;
+    clear: none;
+  }
+  .cart-row .totalprice {
+    width: 20%;
+  }
+  .panel-body .text-right a.btn {
+    display: none;
+  }
+  @media(max-width: $screen-sm-max) {
+    .cart-row.has-downloads .product {
+      width: 50%;
+    }
+  }
+  @media (min-width: $screen-sm-min) {
+    .dl-horizontal dt {
+      width: 100px;
+    }
+    .dl-horizontal dd {
+      margin-left: 120px;
+    }
+  }
+  @media (min-width: 0px) {
+    @include make-grid(sm);
+    @include make-grid(md);
+    @include make-grid(lg);
+  }
+}
