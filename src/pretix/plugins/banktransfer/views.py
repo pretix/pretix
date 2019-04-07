@@ -24,7 +24,7 @@ from pretix.control.permissions import (
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
-from pretix.plugins.banktransfer.tasks import process_banktransfers
+from pretix.plugins.banktransfer.tasks import process_banktransfers, get_prefix_event_map
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
@@ -92,10 +92,11 @@ class ActionView(View):
                 'status': 'ok',
             })
 
-    def _assign(self, trans, code):
+    def _assign(self, trans, organizer, code):
         try:
             if '-' in code:
-                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[1], event__slug__iexact=code.rsplit('-', 1)[0])
+                event = get_prefix_event_map(organizer=organizer)[code.rsplit('-', 1)[0]]
+                trans.order = self.order_qs().get(code=code.rsplit('-', 1)[1], event=event)
             else:
                 trans.order = self.order_qs().get(code=code.rsplit('-', 1)[-1])
         except Order.DoesNotExist:
@@ -137,7 +138,7 @@ class ActionView(View):
                 return self._comment(trans, v[8:])
 
             elif v.startswith('assign:') and trans.state == BankTransaction.STATE_NOMATCH:
-                return self._assign(trans, v[7:])
+                return self._assign(trans, request.organizer, v[7:])
 
             elif v == 'retry' and trans.state in (BankTransaction.STATE_ERROR, BankTransaction.STATE_DUPLICATE):
                 return self._retry(trans)
