@@ -7,15 +7,16 @@ pep8-naming
 flake8==3.7.*
 codecov
 coverage
-pytest==3.6.*
+pytest==4.4.*
 pytest-django
-pytest-xdist==1.27.*
 isort
-pytest-rerunfailures==4.*
-pytest-mock==1.6.*
-pytest-cache
-pytest-sugar
+pytest-rerunfailures==7.*
+pytest-mock==1.10.*
 responses
 potypo
 freezegun
 
+# Not really required, just nice to have
+pytest-xdist==1.28.*
+pytest-cache
+pytest-sugar

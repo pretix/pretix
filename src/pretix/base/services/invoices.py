@@ -120,7 +120,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         positions = list(
             invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'subevent', 'variation').annotate(
                 addon_c=Count('addons')
-            )
+            ).order_by('positionid', 'id')
         )
 
         reverse_charge = False

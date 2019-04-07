@@ -37,7 +37,7 @@ class MultiStringField(TextField):
     def get_prep_lookup(self, lookup_type, value):  # NOQA
         raise TypeError('Lookups on multi strings are currently not supported.')
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         if value:
             return [v for v in value.split(DELIMITER) if v]
         else:
