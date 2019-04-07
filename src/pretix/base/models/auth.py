@@ -111,6 +111,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+        ordering = ('email',)
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()

@@ -13,7 +13,7 @@ class SessionReauthRequired(Exception):
 
 
 def get_user_agent_hash(request):
-    return hashlib.sha256(request.META['HTTP_USER_AGENT'].encode()).hexdigest()
+    return hashlib.sha256(request.headers['User-Agent'].encode()).hexdigest()
 
 
 def assert_session_valid(request):
@@ -26,7 +26,7 @@ def assert_session_valid(request):
         if time.time() - last_used > settings.PRETIX_SESSION_TIMEOUT_RELATIVE:
             raise SessionReauthRequired()
 
-    if 'HTTP_USER_AGENT' in request.META:
+    if 'User-Agent' in request.headers:
         if 'pinned_user_agent' in request.session:
             if request.session.get('pinned_user_agent') != get_user_agent_hash(request):
                 raise SessionInvalid()

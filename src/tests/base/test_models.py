@@ -1748,10 +1748,11 @@ class CachedFileTestCase(TestCase):
         cf.filename = "testfile.txt"
         cf.save()
         assert default_storage.exists(cf.file.name)
+        n = cf.file.name
         with default_storage.open(cf.file.name, 'r') as f:
             assert f.read().strip() == "file_content"
         cf.delete()
-        assert not default_storage.exists(cf.file.name)
+        assert not default_storage.exists(n)
 
 
 class CheckinListTestCase(TestCase):

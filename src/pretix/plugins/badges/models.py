@@ -52,3 +52,6 @@ class BadgeItem(models.Model):
                                 on_delete=models.CASCADE)
     layout = models.ForeignKey('BadgeLayout', on_delete=models.CASCADE, related_name='item_assignments',
                                null=True, blank=True)
+
+    class Meta:
+        ordering = ('id',)

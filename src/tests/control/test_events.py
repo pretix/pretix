@@ -363,7 +363,7 @@ class EventsTest(SoupTest):
 
     def test_payment_settings_last_date_payment_after_presale_end(self):
         tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
-        self.event1.presale_end = datetime.datetime.now()
+        self.event1.presale_end = now()
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
             'payment_term_days': '2',

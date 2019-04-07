@@ -73,3 +73,4 @@ class TicketLayoutItem(models.Model):
 
     class Meta:
         unique_together = (('item', 'layout', 'sales_channel'),)
+        ordering = ("id",)

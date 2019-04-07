@@ -11,7 +11,7 @@ from .robots import NoSearchIndexViewMixin
 class LocaleSet(NoSearchIndexViewMixin, View):
 
     def get(self, request, *args, **kwargs):
-        url = request.GET.get('next', request.META.get('HTTP_REFERER', '/'))
+        url = request.GET.get('next', request.headers.get('Referer', '/'))
         url = url if is_safe_url(url, allowed_hosts=[request.get_host()]) else '/'
         resp = HttpResponseRedirect(url)
 

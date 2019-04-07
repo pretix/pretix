@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
@@ -499,7 +499,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
             )
         super().perform_destroy(instance)
 
-    @detail_route(methods=['get'])
+    @action(detail=True, methods=['get'])
     def availability(self, request, *args, **kwargs):
         quota = self.get_object()
 

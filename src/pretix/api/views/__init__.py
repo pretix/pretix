@@ -31,10 +31,10 @@ class RichOrderingFilter(OrderingFilter):
 class ConditionalListView:
 
     def list(self, request, **kwargs):
-        if_modified_since = request.META.get('HTTP_IF_MODIFIED_SINCE')
+        if_modified_since = request.headers.get('If-Modified-Since')
         if if_modified_since:
             if_modified_since = parse_http_date_safe(if_modified_since)
-        if_unmodified_since = request.META.get('HTTP_IF_UNMODIFIED_SINCE')
+        if_unmodified_since = request.headers.get('If-Unmodified-Since')
         if if_unmodified_since:
             if_unmodified_since = parse_http_date_safe(if_unmodified_since)
         if not hasattr(request, 'event'):

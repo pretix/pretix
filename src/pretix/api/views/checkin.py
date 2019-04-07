@@ -7,7 +7,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
 from rest_framework.response import Response
 
@@ -77,7 +77,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         )
         super().perform_destroy(instance)
 
-    @detail_route(methods=['GET'])
+    @action(detail=True, methods=['GET'])
     def status(self, *args, **kwargs):
         clist = self.get_object()
         cqs = Checkin.objects.filter(
@@ -242,7 +242,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         return qs
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def redeem(self, *args, **kwargs):
         force = bool(self.request.data.get('force', False))
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))

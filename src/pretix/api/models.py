@@ -77,6 +77,9 @@ class WebHook(models.Model):
     all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
 
+    class Meta:
+        ordering = ('id',)
+
     @property
     def action_types(self):
         return [

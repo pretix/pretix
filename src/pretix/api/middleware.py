@@ -21,15 +21,15 @@ class IdempotencyMiddleware:
         if not request.path.startswith('/api/'):
             return self.get_response(request)
 
-        if not request.META.get('HTTP_X_IDEMPOTENCY_KEY'):
+        if not request.headers.get('X-Idempotency-Key'):
             return self.get_response(request)
 
         auth_hash_parts = '{}:{}'.format(
-            request.META.get('HTTP_AUTHORIZATION', ''),
+            request.headers.get('Authorization', ''),
             request.COOKIES.get(settings.SESSION_COOKIE_NAME, '')
         )
         auth_hash = sha1(auth_hash_parts.encode()).hexdigest()
-        idempotency_key = request.META.get('HTTP_X_IDEMPOTENCY_KEY', '')
+        idempotency_key = request.headers.get('X-Idempotency-Key', '')
 
         with transaction.atomic():
             call, created = ApiCall.objects.select_for_update().get_or_create(

@@ -49,7 +49,9 @@ class ItemList(ListView):
             event=self.request.event
         ).annotate(
             var_count=Count('variations')
-        ).prefetch_related("category")
+        ).prefetch_related("category").order_by(
+            'category__position', 'category', 'position'
+        )
 
 
 def item_move(request, item, up=True):

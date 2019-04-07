@@ -12,7 +12,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import mixins, serializers, status, viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
@@ -127,7 +127,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, headers={'X-Page-Generated': date})
 
-    @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
+    @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):
         provider = self._get_output_provider(output)
         order = self.get_object()
@@ -149,7 +149,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
             return resp
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
         order = self.get_object()
 
@@ -190,7 +190,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def mark_canceled(self, request, **kwargs):
         send_mail = request.data.get('send_email', True)
         cancellation_fee = request.data.get('cancellation_fee', None)
@@ -224,7 +224,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def approve(self, request, **kwargs):
         send_mail = request.data.get('send_email', True)
 
@@ -242,7 +242,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def deny(self, request, **kwargs):
         send_mail = request.data.get('send_email', True)
         comment = request.data.get('comment', '')
@@ -260,7 +260,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def mark_pending(self, request, **kwargs):
         order = self.get_object()
 
@@ -279,7 +279,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         )
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def mark_expired(self, request, **kwargs):
         order = self.get_object()
 
@@ -296,7 +296,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         )
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def mark_refunded(self, request, **kwargs):
         order = self.get_object()
 
@@ -313,7 +313,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         )
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def create_invoice(self, request, **kwargs):
         order = self.get_object()
         has_inv = order.invoices.exists() and not (
@@ -345,7 +345,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def resend_link(self, request, **kwargs):
         order = self.get_object()
         if not order.email:
@@ -359,7 +359,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             status=status.HTTP_204_NO_CONTENT
         )
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @transaction.atomic
     def regenerate_secrets(self, request, **kwargs):
         order = self.get_object()
@@ -377,7 +377,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         )
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def extend(self, request, **kwargs):
         new_date = request.data.get('expires', None)
         force = request.data.get('force', False)
@@ -619,7 +619,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
                 return prov
         raise NotFound('Unknown output provider.')
 
-    @detail_route(url_name='download', url_path='download/(?P<output>[^/]+)')
+    @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):
         provider = self._get_output_provider(output)
         pos = self.get_object()
@@ -670,7 +670,7 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
         order = get_object_or_404(Order, code=self.kwargs['order'], event=self.request.event)
         return order.payments.all()
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def confirm(self, request, **kwargs):
         payment = self.get_object()
         force = request.data.get('force', False)
@@ -691,7 +691,7 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
             pass
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def refund(self, request, **kwargs):
         payment = self.get_object()
         amount = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
@@ -756,7 +756,7 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
                     payment.order.save(update_fields=['status', 'expires'])
             return Response(OrderRefundSerializer(r).data, status=status.HTTP_200_OK)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def cancel(self, request, **kwargs):
         payment = self.get_object()
 
@@ -784,7 +784,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         order = get_object_or_404(Order, code=self.kwargs['order'], event=self.request.event)
         return order.refunds.all()
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def cancel(self, request, **kwargs):
         refund = self.get_object()
 
@@ -801,7 +801,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def process(self, request, **kwargs):
         refund = self.get_object()
 
@@ -826,7 +826,7 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             refund.order.save(update_fields=['status', 'expires'])
         return self.retrieve(request, [], **kwargs)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def done(self, request, **kwargs):
         refund = self.get_object()
 
@@ -916,7 +916,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             nr=Concat('prefix', 'invoice_no')
         )
 
-    @detail_route()
+    @action(detail=True, )
     def download(self, request, **kwargs):
         invoice = self.get_object()
 
@@ -934,7 +934,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
         return resp
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def regenerate(self, request, **kwarts):
         inv = self.get_object()
         if inv.canceled:
@@ -953,7 +953,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             )
             return Response(status=204)
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     def reissue(self, request, **kwarts):
         inv = self.get_object()
         if inv.canceled:
