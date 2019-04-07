@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from bs4 import BeautifulSoup
 from django.conf import settings
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils.timezone import now
 from freezegun import freeze_time
 
@@ -261,6 +261,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "itemnum": 0,
         }
 
+    @override_settings(COMPRESS_PRECOMPILERS=settings.COMPRESS_PRECOMPILERS_ORIGINAL)
     def test_css_customized(self):
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
