@@ -23,4 +23,4 @@ def cleanup_webhook_logs(sender, **kwargs):
 
 @receiver(periodic_task)
 def cleanup_api_logs(sender, **kwargs):
-    ApiCall.objects.filter(datetime__lte=now() - timedelta(hours=24)).delete()
+    ApiCall.objects.filter(created__lte=now() - timedelta(hours=24)).delete()
