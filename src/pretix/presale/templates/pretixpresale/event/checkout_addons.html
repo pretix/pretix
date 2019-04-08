@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load rich_text %}
 {% block inner %}
     <p>
         {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
@@ -30,6 +31,9 @@
                             {% for c in form.categories %}
                                 <fieldset>
                                     <legend>{{ c.category.name }}</legend>
+                                    {% if c.category.description %}
+                                        {{ c.category.description|rich_text }}
+                                    {% endif %}
                                     <p>
                                         {% if c.min_count == c.max_count %}
                                             {% blocktrans trimmed count min_count=c.min_count %}
