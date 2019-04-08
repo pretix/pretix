@@ -11,7 +11,7 @@ from pretix.base.models import (
     Event, Item, Order, OrderFee, OrderPayment, OrderPosition, Organizer,
     Quota, Team, User,
 )
-from pretix.plugins.banktransfer.models import BankImportJob
+from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
 
@@ -298,6 +298,19 @@ def test_wrong_event_organizer(env, orga_job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_keep_unmatched(env, orga_job):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'No useful reference',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    job = BankImportJob.objects.last()
+    t = job.transactions.last()
+    assert t.state == BankTransaction.STATE_NOMATCH
 
 
 @pytest.mark.django_db
