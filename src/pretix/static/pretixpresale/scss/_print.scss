@@ -26,7 +26,7 @@
     width: 50%;
   }
   .cart-row.has-downloads .product {
-    width: percentage((9 / $grid-columns));
+    width: 80%;
   }
   .cart-row .count {
     width: 10%;
@@ -42,8 +42,11 @@
     display: none;
   }
   @media(max-width: $screen-sm-max) {
-    .cart-row.has-downloads .product {
+    .cart-row .product {
       width: 50%;
+    }
+    .cart-row.has-downloads .product {
+      width: 80%;
     }
   }
   @media (min-width: $screen-sm-min) {

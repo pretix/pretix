@@ -113,7 +113,7 @@
             {% endblocktrans %}
         </div>
         {% if cart.positions|length > 1 and can_download_multi %}
-            <p>
+            <p class="info-download">
                 {% trans "Download all tickets at once:" %}
                 {% for b in download_buttons %}
                     {% if b.multi %}
@@ -131,7 +131,7 @@
         {% endif %}
     {% elif not download_buttons and ticket_download_date %}
         {% if order.status == 'p' %}
-            <div class="alert alert-info">
+            <div class="alert alert-info info-download">
                 {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}
                     You will be able to download your tickets here starting on {{ date }}.
                 {% endblocktrans %}
