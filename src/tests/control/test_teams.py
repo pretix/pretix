@@ -241,6 +241,20 @@ def test_remove_last_admin_team(event, admin_user, admin_team, client):
 
 
 @pytest.mark.django_db
+def test_resend_invalid_invite(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    djmail.outbox = []
+
+    inv = admin_team.invites.create(email='foo@example.org')
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'resend-invite': "foo{}bar".format(inv.pk)
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'Invalid invite selected.' in resp.content
+    assert len(outbox) == 0
+
+
+@pytest.mark.django_db
 def test_invite_invalid_token(event, admin_team, client):
     i = admin_team.invites.create(email='foo@bar.com')
     resp = client.get('/control/invite/foo{}bar'.format(i.token), follow=True)
