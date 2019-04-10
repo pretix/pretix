@@ -104,6 +104,21 @@ def test_team_remove_token(event, admin_user, admin_team, client):
 
 
 @pytest.mark.django_db
+def test_team_resend_invite(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    djmail.outbox = []
+
+    inv = admin_team.invites.create(email='foo@example.org')
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'resend-invite': str(inv.pk)
+    }, follow=True)
+    assert 'Admin team' in resp.rendered_content
+    assert admin_user.email in resp.rendered_content
+    assert 'foo@example.org' in resp.rendered_content
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 def test_team_revoke_invite(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
 

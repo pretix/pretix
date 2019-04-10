@@ -555,6 +555,22 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 messages.success(self.request, _('The invite has been revoked.'))
                 return redirect(self.get_success_url())
 
+        elif 'resend-invite' in request.POST:
+            try:
+                invite = self.object.invites.get(pk=request.POST.get('resend-invite'))
+            except TeamInvite.DoesNotExist:
+                messages.error(self.request, _('Invalid invite selected.'))
+                return redirect(self.get_success_url())
+            else:
+                self._send_invite(invite)
+                self.object.log_action(
+                    'pretix.team.invite.resent', user=self.request.user, data={
+                        'email': invite.email
+                    }
+                )
+                messages.success(self.request, _('The invite has been resent.'))
+                return redirect(self.get_success_url())
+
         elif 'remove-token' in request.POST:
             try:
                 token = self.object.tokens.get(pk=request.POST.get('remove-token'))

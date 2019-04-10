@@ -389,6 +389,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.team.invite.created':
         return _('{user} has been invited to the team.').format(user=data.get('email'))
 
+    if logentry.action_type == 'pretix.team.invite.resent':
+        return _('Invite for {user} has been resent.').format(user=data.get('email'))
+
     if logentry.action_type == 'pretix.team.invite.deleted':
         return _('The invite for {user} has been revoked.').format(user=data.get('email'))
 
