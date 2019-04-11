@@ -247,11 +247,11 @@ def test_resend_invalid_invite(event, admin_user, admin_team, client):
 
     inv = admin_team.invites.create(email='foo@example.org')
     resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
-        'resend-invite': "foo{}bar".format(inv.pk)
+        'resend-invite': inv.pk + 1
     }, follow=True)
     assert b'alert-danger' in resp.content
     assert b'Invalid invite selected.' in resp.content
-    assert len(outbox) == 0
+    assert len(djmail.outbox) == 0
 
 
 @pytest.mark.django_db
