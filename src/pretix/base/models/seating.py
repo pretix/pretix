@@ -33,7 +33,7 @@ class SeatingPlan(LoggedModel):
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
 
     Category = namedtuple('Categrory', 'name')
-    RawSeat = namedtuple('Seat', 'name number row category')
+    RawSeat = namedtuple('Seat', 'name guid number row category')
 
     def __str__(self):
         return self.name
@@ -58,6 +58,7 @@ class SeatingPlan(LoggedModel):
                 for s in r['seats']:
                     yield self.RawSeat(
                         number=s['seat_number'],
+                        guid=s['seat_guid'],
                         name='{} {}'.format(r['row_number'], s['seat_number']),  # TODO: Zone? Variable scheme?
                         row=r['row_number'],
                         category=s['category']
@@ -75,6 +76,7 @@ class Seat(models.Model):
     event = models.ForeignKey(Event, related_name='seats', on_delete=models.CASCADE)
     subevent = models.ForeignKey(SubEvent, null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     name = models.CharField(max_length=190)
+    seat_guid = models.CharField(max_length=190, db_index=True)
     product = models.ForeignKey('Item', null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     blocked = models.BooleanField(default=False)
 

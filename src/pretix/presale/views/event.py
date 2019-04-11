@@ -49,7 +49,7 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
+def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0):
     items = event.items.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
@@ -79,15 +79,17 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                               to_attr='_subevent_quotas',
                               queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
                  ).distinct()),
-        Prefetch('seats', to_attr='available_seats',
-                 queryset=(subevent or event).free_seats),
     ).annotate(
         quotac=Count('quotas'),
         has_variations=Count('variations'),
         requires_seat=Count('seat_category_mappings')
     ).filter(
-        quotac__gt=0
+        quotac__gt=0,
     ).order_by('category__position', 'category_id', 'position', 'name')
+    if require_seat:
+        items = items.filter(requires_seat__gt=0)
+    else:
+        items = items.filter(requires_seat=0)
     display_add_to_cart = False
     external_quota_cache = event.cache.get('item_quota_cache')
     quota_cache = external_quota_cache or {}
