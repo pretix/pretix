@@ -518,7 +518,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         if 'remove-member' in request.POST:
             try:
                 user = User.objects.get(pk=request.POST.get('remove-member'))
-            except User.DoesNotExist:
+            except (User.DoesNotExist, ValueError):
                 pass
             else:
                 other_admin_teams = self.request.organizer.teams.exclude(pk=self.object.pk).filter(
@@ -542,7 +542,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         elif 'remove-invite' in request.POST:
             try:
                 invite = self.object.invites.get(pk=request.POST.get('remove-invite'))
-            except TeamInvite.DoesNotExist:
+            except (TeamInvite.DoesNotExist, ValueError):
                 messages.error(self.request, _('Invalid invite selected.'))
                 return redirect(self.get_success_url())
             else:
@@ -558,7 +558,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         elif 'resend-invite' in request.POST:
             try:
                 invite = self.object.invites.get(pk=request.POST.get('resend-invite'))
-            except TeamInvite.DoesNotExist:
+            except (TeamInvite.DoesNotExist, ValueError):
                 messages.error(self.request, _('Invalid invite selected.'))
                 return redirect(self.get_success_url())
             else:
@@ -574,7 +574,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         elif 'remove-token' in request.POST:
             try:
                 token = self.object.tokens.get(pk=request.POST.get('remove-token'))
-            except TeamAPIToken.DoesNotExist:
+            except (TeamAPIToken.DoesNotExist, ValueError):
                 messages.error(self.request, _('Invalid token selected.'))
                 return redirect(self.get_success_url())
             else:
