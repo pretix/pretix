@@ -222,6 +222,18 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
+product_list_top = EventPluginSignal(
+    providing_args=["request"]
+)
+"""
+This signal is sent out to display additional information at the top of the list of products
+on the pages it shows up (front page, voucher redemption, …). You will be passed the ``request``
+as a keyword argument.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. The
+receivers are expected to return HTML.
+"""
+
 front_page_bottom = EventPluginSignal(
     providing_args=[]
 )
