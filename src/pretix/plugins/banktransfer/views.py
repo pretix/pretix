@@ -24,7 +24,7 @@ from pretix.control.permissions import (
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.plugins.banktransfer import csvimport, mt940import
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
-from pretix.plugins.banktransfer.tasks import process_banktransfers, get_prefix_event_map
+from pretix.plugins.banktransfer.tasks import get_prefix_event_map, process_banktransfers
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
