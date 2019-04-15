@@ -219,14 +219,23 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         args.append((name, content, ct.type))
                         attach_size += len(content)
 
-                    if attach_tickets < 4 * 1024 * 1024:
+                    if attach_size < 4 * 1024 * 1024:
                         # Do not attach more than 4MB, it will bounce way to often.
-
                         for a in args:
                             try:
                                 email.attach(*a)
                             except:
                                 pass
+                    else:
+                        order.log_action(
+                            'pretix.event.order.email.error',
+                            data={
+                                'subject': 'Attachments skipped',
+                                'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
+                                'recipient': '',
+                                'invoices': [],
+                            }
+                        )
 
         email = email_filter.send_chained(event, 'message', message=email, order=order)
 
