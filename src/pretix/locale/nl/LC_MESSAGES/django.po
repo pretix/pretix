@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-03 13:19+0000\n"
-"PO-Revision-Date: 2019-04-06 13:05+0000\n"
+"PO-Revision-Date: 2019-04-16 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -5122,7 +5122,8 @@ msgstr "Vraag om namen van gasten"
 
 #: pretix/control/forms/event.py:344
 msgid "Ask for a name for all tickets which include admission to the event."
-msgstr "Vraag een naam voor alle tickets die toegang geven tot het evenement."
+msgstr ""
+"Vraag een naam voor alle tickets die als toegangsbewijs zijn gemarkeerd."
 
 #: pretix/control/forms/event.py:348
 msgid "Require attendee names"
@@ -16453,7 +16454,7 @@ msgstr "Bestelling bevestigd"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr "Betaling openstaand"
+msgstr "Wacht op betaling"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
