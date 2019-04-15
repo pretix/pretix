@@ -652,7 +652,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel)
 
-        free_order_flow = payment and payment_provider == 'free' and order.total == Decimal('0.00')
+        free_order_flow = payment and payment_provider == 'free' and order.total == Decimal('0.00') and not order.require_approval
         if free_order_flow:
             payment.confirm(send_mail=False, lock=False)
 
