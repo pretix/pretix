@@ -14,7 +14,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 
 from pretix.base.models import Order
-from pretix.base.models.orders import InvoiceAddress
+from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.services.cart import (
     get_fees, set_cart_addons, update_tax_rates,
 )
@@ -721,7 +721,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         return self.get_step_url(self.request)
 
     def get_order_url(self, order):
-        payment = order.payments.first()
+        payment = order.payments.filter(state__in=[OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING]).first()
         if not payment:
             return eventreverse(self.request.event, 'presale:event.order', kwargs={
                 'order': order.code,

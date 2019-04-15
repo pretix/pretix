@@ -41,7 +41,7 @@ def test_expiry_days(event):
     event.settings.set('payment_term_weekdays', False)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 5
 
 
@@ -52,14 +52,14 @@ def test_expiry_weekdays(event):
     event.settings.set('payment_term_weekdays', True)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 6
     assert order.expires.weekday() == 0
 
     today = make_aware(datetime(2016, 9, 19, 15, 0, 0, 0))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 7
     assert order.expires.weekday() == 0
 
@@ -72,12 +72,12 @@ def test_expiry_last(event):
     event.settings.set('payment_term_last', now() + timedelta(days=3))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 3
     event.settings.set('payment_term_last', now() + timedelta(days=7))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 5
 
 
@@ -93,7 +93,7 @@ def test_expiry_last_relative(event):
     ))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 3
 
 
@@ -124,7 +124,7 @@ def test_expiry_last_relative_subevents(event):
     ))
     order = _create_order(event, email='dummy@example.org', positions=[cp1, cp2],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     assert (order.expires - today).days == 6
 
 
@@ -136,7 +136,7 @@ def test_expiry_dst(event):
     today = tz.localize(datetime(2016, 10, 29, 12, 0, 0)).astimezone(utc)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today, payment_provider=FreeOrderProvider(event),
-                          locale='de')
+                          locale='de')[0]
     localex = order.expires.astimezone(tz)
     assert (localex.hour, localex.minute) == (23, 59)
 

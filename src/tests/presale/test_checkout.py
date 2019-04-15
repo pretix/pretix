@@ -907,6 +907,24 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(OrderPosition.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.first().price, 42)
 
+    def test_free_order(self):
+        self.ticket.free_price = True
+        self.ticket.save()
+        cr1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=0, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'free')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+        self.assertEqual(Order.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.count(), 1)
+        self.assertEqual(OrderPosition.objects.first().price, 0)
+        self.assertEqual(Order.objects.first().status, Order.STATUS_PAID)
+
     def test_confirm_in_time(self):
         cr1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -920,6 +938,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(OrderPosition.objects.count(), 1)
+        self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
 
     def test_subevent_confirm_expired_available(self):
         self.event.has_subevents = True

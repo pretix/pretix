@@ -1159,7 +1159,7 @@ class OrderPayment(models.Model):
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
 
-    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text=''):
+    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='', lock=True):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
         payment is required
@@ -1218,7 +1218,7 @@ class OrderPayment(models.Model):
         if payment_sum - refund_sum < self.order.total:
             return
 
-        if self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12):
+        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12)) or not lock:
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
             with transaction.atomic():
