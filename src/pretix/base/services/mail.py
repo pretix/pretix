@@ -15,6 +15,7 @@ from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import Event, Invoice, InvoiceAddress, Order
 from pretix.base.services.invoices import invoice_pdf_task
+from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter
 from pretix.celery_app import app
@@ -177,7 +178,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         chain(*task_chain).apply_async()
 
 
-@app.task(bind=True)
+@app.task(base=TransactionAwareTask, bind=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
                    order: int=None, attach_tickets=False) -> bool:
