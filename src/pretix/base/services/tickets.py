@@ -123,8 +123,10 @@ def get_tickets_for_order(order):
                     order=order, provider=p.identifier, file__isnull=False
                 ).last()
                 if not ct or not ct.file:
-                    retval = generate.apply(args=('order', order.pk, p.identifier))
-                    ct = CachedCombinedTicket.objects.get(pk=retval.get())
+                    retval = generate_order(order.pk, p.identifier)
+                    if not retval:
+                        continue
+                    ct = CachedCombinedTicket.objects.get(pk=retval)
                 tickets.append((
                     "{}-{}-{}{}".format(
                         order.event.slug.upper(), order.code, ct.provider, ct.extension,
@@ -140,8 +142,10 @@ def get_tickets_for_order(order):
                         order_position=pos, provider=p.identifier, file__isnull=False
                     ).last()
                     if not ct or not ct.file:
-                        retval = generate.apply(args=('orderposition', pos.pk, p.identifier))
-                        ct = CachedTicket.objects.get(pk=retval.get())
+                        retval = generate_orderposition(pos.pk, p.identifier)
+                        if not retval:
+                            continue
+                        ct = CachedCombinedTicket.objects.get(pk=retval)
                     tickets.append((
                         "{}-{}-{}-{}{}".format(
                             order.event.slug.upper(), order.code, pos.positionid, ct.provider, ct.extension,
