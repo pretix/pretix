@@ -29,7 +29,8 @@ free_price                            boolean                    If ``true``, cu
                                                                  they buy the product (however, the price can't be set
                                                                  lower than the price defined by ``default_price`` or
                                                                  otherwise).
-tax_rate                              decimal (string)           The VAT rate to be applied for this item.
+tax_rate                              decimal (string)           The VAT rate to be applied for this item (read-only,
+                                                                 set through ``tax_rule``).
 tax_rule                              integer                    The internal ID of the applied tax rule (or ``null``).
 admission                             boolean                    ``true`` for items that grant admission to the event
                                                                  (such as primary tickets) and ``false`` for others
