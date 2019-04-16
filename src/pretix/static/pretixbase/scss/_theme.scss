@@ -74,6 +74,11 @@
   outline: 0;
 }
 
+.btn-invisible {
+  background: transparent;
+  border: transparent;
+}
+
 .alert-primary, .alert-warning, .alert-info, .alert-success, .alert-danger {
   color: #3b3b3b;
 }

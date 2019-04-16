@@ -51,6 +51,11 @@
                         {{ i.email }}
                         <span class="fa fa-envelope-o" data-toggle="tooltip"
                               title="{% trans "invited, pending response" %}"></span>
+                        <button type="submit" name="resend-invite" value="{{ i.id }}"
+                                data-toggle="tooltip" title="{% trans "resend invite" %}"
+                                class="btn-invisible">
+                            <span class="fa fa-repeat"></span>
+                        </button>
                     </td>
                     <td class="text-right">
                         <button type="submit" name="remove-invite" value="{{ i.id }}"

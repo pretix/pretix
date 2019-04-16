@@ -104,6 +104,21 @@ def test_team_remove_token(event, admin_user, admin_team, client):
 
 
 @pytest.mark.django_db
+def test_team_resend_invite(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    djmail.outbox = []
+
+    inv = admin_team.invites.create(email='foo@example.org')
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'resend-invite': str(inv.pk)
+    }, follow=True)
+    assert 'Admin team' in resp.rendered_content
+    assert admin_user.email in resp.rendered_content
+    assert 'foo@example.org' in resp.rendered_content
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 def test_team_revoke_invite(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
 
@@ -223,6 +238,20 @@ def test_remove_last_admin_team(event, admin_user, admin_team, client):
     resp = client.post('/control/organizer/dummy/team/{}/delete'.format(admin_team.pk), {}, follow=True)
     assert Team.objects.count() == 1
     assert 'alert-danger' in resp.rendered_content
+
+
+@pytest.mark.django_db
+def test_resend_invalid_invite(event, admin_user, admin_team, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    djmail.outbox = []
+
+    inv = admin_team.invites.create(email='foo@example.org')
+    resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
+        'resend-invite': inv.pk + 1
+    }, follow=True)
+    assert b'alert-danger' in resp.content
+    assert b'Invalid invite selected.' in resp.content
+    assert len(djmail.outbox) == 0
 
 
 @pytest.mark.django_db
