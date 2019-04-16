@@ -90,7 +90,12 @@ def generate_widget_js(lang):
         c.translation = DjangoTranslation(lang, domain='djangojs')
         catalog, plural = c.get_catalog(), c.get_plural()
 
-        catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004'))
+        str_wl = (
+            'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su',
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+            'September', 'October', 'November', 'December'
+        )
+        catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004') or k in str_wl)
         template = Engine().from_string(js_catalog_template)
         context = Context({
             'catalog_str': indent(json.dumps(
