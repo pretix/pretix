@@ -294,12 +294,14 @@ class WidgetAPIProductList(EventListMixin, View):
                 event = ev.event
             else:
                 event = ev
+            tz = pytz.timezone(e['timezone'])
             events.append({
                 'name': str(ev.name),
-                'time': date_format(e['time'], 'TIME_FORMAT') if e.get('time') and event.settings.show_times else None,
+                'time': date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else
+                None,
                 'continued': e['continued'],
                 'date_range': ev.get_date_range_display() + (
-                    " " + date_format(ev.date_from, "TIME_FORMAT") if event.settings.show_times else ""
+                    " " + date_format(ev.date_from.astimezone(tz), "TIME_FORMAT") if event.settings.show_times else ""
                 ),
                 'availability': self._get_availability(ev, event),
                 'event_url': build_absolute_uri(event, 'presale:event.index'),
@@ -370,11 +372,12 @@ class WidgetAPIProductList(EventListMixin, View):
                 evs = self.request.event.subevents_sorted(
                     self.request.event.subevents_annotated(self.request.sales_channel)
                 )
+                tz = pytz.timezone(request.event.settings.timezone)
                 data['events'] = [
                     {
                         'name': str(ev.name),
-                        'date_range': ev.get_date_range_display() + (
-                            " " + date_format(ev.date_from, "TIME_FORMAT") if ev.event.settings.show_times else ""
+                        'date_range': ev.get_date_range_display(tz) + (
+                            (" " + ev.get_time_from_display(tz)) if ev.event.settings.show_times else ""
                         ),
                         'availability': self._get_availability(ev, ev.event),
                         'event_url': build_absolute_uri(ev.event, 'presale:event.index'),
@@ -393,8 +396,8 @@ class WidgetAPIProductList(EventListMixin, View):
                         )
                         avail = {'color': 'none', 'text': ugettext('Event series')}
                     else:
-                        dr = event.get_date_range_display() + (
-                            " " + date_format(event.date_from, "TIME_FORMAT") if event.settings.show_times else ""
+                        dr = event.get_date_range_display(tz) + (
+                            " " + event.get_time_from_display(tz) if event.settings.show_times else ""
                         )
                         avail = self._get_availability(event, event)
                     data['events'].append({

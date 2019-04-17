@@ -327,6 +327,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_subevent_list(self):
         self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
             self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
@@ -340,15 +341,16 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'list_type': 'list',
                 'events': [
-                    {'name': 'Present', 'date_range': 'Jan. 1, 2019 10:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                    {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk},
-                    {'name': 'Future', 'date_range': 'Jan. 4, 2019 10:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
+                    {'name': 'Future', 'date_range': 'Jan. 4, 2019 11:00', 'availability': {'color': 'green', 'text': 'Tickets on sale'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}
                 ]
             }
 
     def test_subevent_calendar(self):
         self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
             self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
@@ -366,13 +368,13 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     [
                         None,
                         {'day': 1, 'date': '2019-01-01', 'events': [
-                            {'name': 'Present', 'time': '10:00', 'continued': False, 'date_range': 'Jan. 1, 2019 10:00',
+                            {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 1, 2019 11:00',
                              'availability': {'color': 'green', 'text': 'Tickets on sale'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
                         {'day': 2, 'date': '2019-01-02', 'events': []},
                         {'day': 3, 'date': '2019-01-03', 'events': []},
                         {'day': 4, 'date': '2019-01-04', 'events': [
-                            {'name': 'Future', 'time': '10:00', 'continued': False, 'date_range': 'Jan. 4, 2019 10:00',
+                            {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Jan. 4, 2019 11:00',
                              'availability': {'color': 'green', 'text': 'Tickets on sale'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
                         {'day': 5, 'date': '2019-01-05', 'events': []},
@@ -417,6 +419,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_event_list(self):
         self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
             self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
@@ -452,6 +455,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_event_calendar(self):
         self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
             self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
@@ -485,11 +489,11 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                  {'availability': {'color': 'green',
                                                    'text': 'Tickets on sale'},
                                   'continued': False,
-                                  'date_range': 'Jan. 1, 2019 10:00',
+                                  'date_range': 'Jan. 1, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Present',
                                   'subevent': se1.pk,
-                                  'time': '10:00'}]},
+                                  'time': '11:00'}]},
                      {'date': '2019-01-02', 'day': 2, 'events': []},
                      {'date': '2019-01-03', 'day': 3, 'events': []},
                      {'date': '2019-01-04',
@@ -505,11 +509,11 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                  {'availability': {'color': 'green',
                                                    'text': 'Tickets on sale'},
                                   'continued': False,
-                                  'date_range': 'Jan. 4, 2019 10:00',
+                                  'date_range': 'Jan. 4, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Future',
                                   'subevent': se2.pk,
-                                  'time': '10:00'}]},
+                                  'time': '11:00'}]},
                      {'date': '2019-01-05', 'day': 5, 'events': []},
                      {'date': '2019-01-06', 'day': 6, 'events': []}],
                     [{'date': '2019-01-07', 'day': 7, 'events': []},
