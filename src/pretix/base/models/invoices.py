@@ -117,9 +117,32 @@ class Invoice(models.Model):
             self.invoice_from_name,
             self.invoice_from,
             (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
-            str(self.invoice_from_country),
+            self.invoice_from_country.name if self.invoice_from_country else "",
             pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
             pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id if self.invoice_from_tax_id else "",
+        ]
+        return '\n'.join([p.strip() for p in parts if p and p.strip()])
+
+    @property
+    def address_invoice_from(self):
+        parts = [
+            self.invoice_from_name,
+            self.invoice_from,
+            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            self.invoice_from_country.name if self.invoice_from_country else "",
+        ]
+        return '\n'.join([p.strip() for p in parts if p and p.strip()])
+
+    @property
+    def address_invoice_to(self):
+        if self.invoice_to and not self.invoice_to_company and not self.invoice_to_name:
+            return self.invoice_to
+        parts = [
+            self.invoice_to_company,
+            self.invoice_to_name,
+            self.invoice_to_street,
+            (self.invoice_to_zipcode or "") + " " + (self.invoice_to_city or ""),
+            self.invoice_to_country.name if self.invoice_to_country else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
