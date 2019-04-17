@@ -95,7 +95,15 @@
                                 {% endif %}
                             </td>
                             <td>{{ e.item }}{% if e.variation %} – {{ e.variation }}{% endif %}</td>
-                            <td>{{ e.order.email }}</td>
+                            <td>
+                                {% if e.addon_to and e.addon_to.attendee_email %}
+                                    {{ e.addon_to.attendee_email }}
+                                {% elif e.attendee_email %}
+                                    {{ e.attendee_email }}
+                                {% else %}
+                                    {{ e.order.email }}
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if e.addon_to %}
                                     {{ e.addon_to.attendee_name }}
