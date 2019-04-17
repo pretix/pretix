@@ -132,6 +132,7 @@ class BankTransfer(BasePaymentProvider):
         d.move_to_end('bank_details_sepa_iban', last=False)
         d.move_to_end('bank_details_sepa_name', last=False)
         d.move_to_end('bank_details_type', last=False)
+        d.move_to_end('ack', last=False)
         d.move_to_end('_enabled', last=False)
         return d
 
