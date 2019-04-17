@@ -212,8 +212,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
         Event.clean_dates(data.get('date_from'), data.get('date_to'))
         Event.clean_presale(data.get('presale_start'), data.get('presale_end'))
 
-        SubEvent.clean_items(event, [item['item'] for item in full_data.get('subeventitem_set')])
-        SubEvent.clean_variations(event, [item['variation'] for item in full_data.get('subeventitemvariation_set')])
+        SubEvent.clean_items(event, [item['item'] for item in full_data.get('subeventitem_set', [])])
+        SubEvent.clean_variations(event, [item['variation'] for item in full_data.get('subeventitemvariation_set', [])])
         return data
 
     def validate_item_price_overrides(self, data):
