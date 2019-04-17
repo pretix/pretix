@@ -605,12 +605,18 @@ $(function () {
         }
     });
 
-    $("a[data-expandlogs]").click(function (e) {
+    $("a[data-expandlogs], a[data-expandrefund], a[data-expandpayment]").click(function (e) {
         e.preventDefault();
         var $a = $(this);
         var id = $(this).attr("data-id");
         $a.find(".fa").removeClass("fa-eye").addClass("fa-cog fa-spin");
-        $.getJSON('/control/logdetail/?pk=' + id, function (data) {
+        var url = '/control/logdetail/';
+        if ($a.is("[data-expandrefund]")) {
+            url += 'refund/'
+        } else if ($a.is("[data-expandpayment]")) {
+            url += 'payment/'
+        }
+        $.getJSON(url + '?pk=' + id, function (data) {
             if ($a.parent().tagName === "p") {
                 $("<pre>").html(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
             } else {

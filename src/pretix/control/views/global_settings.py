@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
-from pretix.base.models import LogEntry
+from pretix.base.models import LogEntry, OrderPayment, OrderRefund
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
@@ -71,3 +71,15 @@ class LogDetailView(AdministratorPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         le = get_object_or_404(LogEntry, pk=request.GET.get('pk'))
         return JsonResponse({'data': le.parsed_data})
+
+
+class PaymentDetailView(AdministratorPermissionRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        p = get_object_or_404(OrderPayment, pk=request.GET.get('pk'))
+        return JsonResponse({'data': p.info_data})
+
+
+class RefundDetailView(AdministratorPermissionRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        p = get_object_or_404(OrderRefund, pk=request.GET.get('pk'))
+        return JsonResponse({'data': p.info_data})

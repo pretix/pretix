@@ -489,7 +489,27 @@
                                         {% if p.html_info %}
                                             <tr>
                                                 <td colspan="1"></td>
-                                                <td colspan="5">{{ p.html_info|safe }}</td>
+                                                <td colspan="5">
+                                                    {{ p.html_info|safe }}
+                                                    {% if staff_session %}
+                                                        <p>
+                                                            <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                                <span class="fa-eye fa fa-fw"></span>
+                                                                {% trans "Inspect" %}
+                                                            </a>
+                                                        </p>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% elif staff_session %}
+                                            <tr>
+                                                <td colspan="1"></td>
+                                                <td colspan="5">
+                                                    <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                        <span class="fa-eye fa fa-fw"></span>
+                                                        {% trans "Inspect" %}
+                                                    </a>
+                                                </td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -574,6 +594,18 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% if staff_session %}
+                                                <tr>
+                                                    <td colspan="1"></td>
+                                                    <td colspan="7">
+                                                        <a href="" class="btn btn-default btn-xs" data-expandrefund
+                                                                data-id="{{ r.pk }}">
+                                                            <span class="fa-eye fa fa-fw"></span>
+                                                            {% trans "Inspect" %}
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
                                         {% endfor %}
                                         </tbody>
                                     </table>
