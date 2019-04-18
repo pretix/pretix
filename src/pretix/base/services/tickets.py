@@ -173,7 +173,7 @@ def invalidate_cache(event: int, item: int=None, provider: str=None, order: int=
 
     if order:
         qs = qs.filter(order_position__order_id=order)
-        qsc = qsc.filter(order_id=Order)
+        qsc = qsc.filter(order_id=order)
 
     for ct in qs:
         ct.delete()
