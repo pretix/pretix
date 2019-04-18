@@ -156,3 +156,26 @@ def get_tickets_for_order(order):
                     logger.exception('Failed to generate ticket.')
 
     return tickets
+
+
+@app.task(base=ProfiledTask)
+def invalidate_cache(event: int, item: int=None, provider: str=None, order: int=None, **kwargs):
+    event = Event.objects.get(id=event)
+    qs = CachedTicket.objects.filter(order_position__order__event=event)
+    qsc = CachedCombinedTicket.objects.filter(order__event=event)
+
+    if item:
+        qs = qs.filter(order_position__item_id=item)
+
+    if provider:
+        qs = qs.filter(provider=provider)
+        qsc = qsc.filter(provider=provider)
+
+    if order:
+        qs = qs.filter(order_position__order_id=order)
+        qsc = qsc.filter(order_id=Order)
+
+    for ct in qs:
+        ct.delete()
+    for ct in qsc:
+        ct.delete()

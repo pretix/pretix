@@ -18,10 +18,9 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
 
-from pretix.base.models import (
-    CachedCombinedTicket, CachedFile, CachedTicket, OrderPosition,
-)
+from pretix.base.models import CachedFile, OrderPosition
 from pretix.base.pdf import Renderer
+from pretix.base.services.tickets import invalidate_cache
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.pdf import BaseEditorView
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutForm
@@ -40,12 +39,7 @@ class EditorView(BaseEditorView):
 
     def save_layout(self):
         super().save_layout()
-        CachedTicket.objects.filter(
-            order_position__order__event=self.request.event, provider='pdf'
-        ).delete()
-        CachedCombinedTicket.objects.filter(
-            order__event=self.request.event, provider='pdf'
-        ).delete()
+        invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})
 
     def get_layout_settings_key(self):
         return 'ticketoutput_pdf_layout'
@@ -212,10 +206,7 @@ class LayoutEditorView(BaseEditorView):
         self.layout.save(update_fields=['layout'])
         self.layout.log_action(action='pretix.plugins.ticketoutputpdf.layout.changed', user=self.request.user,
                                data={'layout': self.request.POST.get("data")})
-        for ct in CachedTicket.objects.filter(order_position__order__event=self.request.event, provider='pdf'):
-            ct.delete()
-        for ct in CachedCombinedTicket.objects.filter(order__event=self.request.event, provider='pdf'):
-            ct.delete()
+        invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})
 
     def get_default_background(self):
         return static('pretixpresale/pdf/ticket_default_a4.pdf')
@@ -251,9 +242,4 @@ class LayoutEditorView(BaseEditorView):
         if self.layout.background:
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
-        CachedTicket.objects.filter(
-            order_position__order__event=self.request.event, provider='pdf'
-        ).delete()
-        CachedCombinedTicket.objects.filter(
-            order__event=self.request.event, provider='pdf'
-        ).delete()
+        invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})

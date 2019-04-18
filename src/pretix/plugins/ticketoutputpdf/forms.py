@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from pretix.base.models import CachedCombinedTicket, CachedTicket
+from pretix.base.services import tickets
 
 from .models import TicketLayout, TicketLayoutItem
 
@@ -18,7 +18,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         fields = ('layout',)
 
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop('event')
+        self.event = kwargs.pop('event')
         self.sales_channel = kwargs.pop('sales_channel')
         super().__init__(*args, **kwargs)
         if self.sales_channel.identifier != 'web':
@@ -29,7 +29,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         else:
             self.fields['layout'].label = _('PDF ticket layout')
             self.fields['layout'].empty_label = _('(Event default)')
-        self.fields['layout'].queryset = event.ticket_layouts.all()
+        self.fields['layout'].queryset = self.event.ticket_layouts.all()
         self.fields['layout'].required = False
 
     def save(self, commit=True):
@@ -41,9 +41,5 @@ class TicketLayoutItemForm(forms.ModelForm):
                 return
         else:
             return super().save(commit=commit)
-        CachedTicket.objects.filter(
-            order_position__item_id=self.instance.item, provider='pdf'
-        ).delete()
-        CachedCombinedTicket.objects.filter(
-            order__all_positions__item=self.instance.item
-        ).delete()
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk, 'provider': 'pdf',
+                                                     'item': self.instance.item_id})

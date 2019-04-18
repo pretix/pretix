@@ -28,12 +28,13 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.base.models.orders import (
-    CachedCombinedTicket, CachedTicket, InvoiceAddress, OrderFee, OrderRefund,
-    generate_position_secret, generate_secret,
+    InvoiceAddress, OrderFee, OrderRefund, generate_position_secret,
+    generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
@@ -857,6 +858,7 @@ class OrderChangeManager:
         self.order = order
         self.user = user
         self.auth = auth
+        self.event = order.event
         self.split_order = None
         self._committed = False
         self._totaldiff = 0
@@ -1159,8 +1161,8 @@ class OrderChangeManager:
             elif isinstance(op, self.RegenerateSecretOperation):
                 op.position.secret = generate_position_secret()
                 op.position.save()
-                CachedTicket.objects.filter(order_position__order=self.order).delete()
-                CachedCombinedTicket.objects.filter(order=self.order).delete()
+                tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
+                                                             'order': self.order.pk})
                 self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
@@ -1393,11 +1395,11 @@ class OrderChangeManager:
         order_changed.send(self.order.event, order=self.order)
 
     def _clear_tickets_cache(self):
-        CachedTicket.objects.filter(order_position__order=self.order).delete()
-        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
+                                                     'order': self.order.pk})
         if self.split_order:
-            CachedTicket.objects.filter(order_position__order=self.split_order).delete()
-            CachedCombinedTicket.objects.filter(order=self.split_order).delete()
+            tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
+                                                         'order': self.split_order.pk})
 
     def _get_payment_provider(self):
         lp = self.order.payments.last()

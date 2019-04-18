@@ -18,11 +18,12 @@ from django.views.generic.edit import DeleteView
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CachedTicket, CartPosition, Item, ItemCategory, ItemVariation, Order,
-    Question, QuestionAnswer, QuestionOption, Quota, Voucher,
+    CartPosition, Item, ItemCategory, ItemVariation, Order, Question,
+    QuestionAnswer, QuestionOption, Quota, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle
+from pretix.base.services.tickets import invalidate_cache
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
@@ -875,7 +876,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
             self.object.log_action(
                 'pretix.event.item.changed', user=self.request.user, data=data
             )
-            CachedTicket.objects.filter(order_position__item=self.item).delete()
+            invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
         for f in self.plugin_forms:
             f.save()
         return super().form_valid(form)

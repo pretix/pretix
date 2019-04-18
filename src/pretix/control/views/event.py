@@ -31,8 +31,7 @@ from pytz import timezone
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import LazyCurrencyNumber
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, LogEntry, Order, RequiredAction,
-    TaxRule, Voucher,
+    Event, LogEntry, Order, RequiredAction, TaxRule, Voucher,
 )
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -789,12 +788,7 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
                             for k in provider.form.changed_data
                         }
                     )
-                    CachedTicket.objects.filter(
-                        order_position__order__event=self.request.event, provider=provider.identifier
-                    ).delete()
-                    CachedCombinedTicket.objects.filter(
-                        order__event=self.request.event, provider=provider.identifier
-                    ).delete()
+                    tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': provider.identifier})
             else:
                 success = False
         form = self.get_form(self.get_form_class())

@@ -43,6 +43,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.models.tax import EU_COUNTRIES
 from pretix.base.payment import PaymentException
+from pretix.base.services import tickets
 from pretix.base.services.export import export
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
@@ -1319,8 +1320,7 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
                                'you need to do this manually.')
             messages.success(self.request, _(success_message))
 
-        CachedTicket.objects.filter(order_position__order=self.order).delete()
-        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
 
         order_modified.send(sender=self.request.event, order=self.order)
         return redirect(self.get_order_url())
@@ -1363,8 +1363,7 @@ class OrderContactChange(OrderView):
                 for op in self.order.all_positions.all():
                     op.secret = generate_position_secret()
                     op.save()
-                CachedTicket.objects.filter(order_position__order=self.order).delete()
-                CachedCombinedTicket.objects.filter(order=self.order).delete()
+                tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
                 self.order.log_action('pretix.event.order.secret.changed', user=self.request.user)
 
             self.form.save()

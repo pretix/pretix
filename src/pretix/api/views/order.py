@@ -32,6 +32,7 @@ from pretix.base.models import (
     generate_position_secret, generate_secret,
 )
 from pretix.base.payment import PaymentException
+from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice,
@@ -370,6 +371,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.save(update_fields=['secret'])
         CachedTicket.objects.filter(order_position__order=order).delete()
         CachedCombinedTicket.objects.filter(order=order).delete()
+        tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk,
+                                                     'order': order.pk})
         order.log_action(
             'pretix.event.order.secret.changed',
             user=self.request.user,

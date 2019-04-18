@@ -29,7 +29,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import cancel_order, change_payment_provider
-from pretix.base.services.tickets import generate
+from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
     allow_ticket_download, order_modified, register_ticket_outputs,
 )
@@ -548,6 +548,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                                'to regenerate your invoice.')
             messages.success(self.request, _(success_message))
 
+        invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
         CachedTicket.objects.filter(order_position__order=self.order).delete()
         CachedCombinedTicket.objects.filter(order=self.order).delete()
         return redirect(self.get_order_url())
