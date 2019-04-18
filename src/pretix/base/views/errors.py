@@ -56,7 +56,9 @@ def page_not_found(request, exception):
     }
     template = get_template('404.html')
     body = template.render(context, request)
-    return HttpResponseNotFound(body)
+    r = HttpResponseNotFound(body)
+    r.xframe_options_exempt = True
+    return r
 
 
 @requires_csrf_token
@@ -65,7 +67,9 @@ def server_error(request):
         template = loader.get_template('500.html')
     except TemplateDoesNotExist:
         return HttpResponseServerError('<h1>Server Error (500)</h1>', content_type='text/html')
-    return HttpResponseServerError(template.render({
+    r = HttpResponseServerError(template.render({
         'request': request,
         'sentry_event_id': last_event_id(),
     }))
+    r.xframe_options_exempt = True
+    return r
