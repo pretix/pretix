@@ -550,6 +550,8 @@ class ItemVariation(models.Model):
     :type active: bool
     :param default_price: This variation's default price
     :type default_price: decimal.Decimal
+    :param original_price: The item's "original" price. Will not be used for any calculations, will just be shown.
+    :type original_price: decimal.Decimal
     """
     item = models.ForeignKey(
         Item,
@@ -577,6 +579,13 @@ class ItemVariation(models.Model):
         decimal_places=2, max_digits=7,
         null=True, blank=True,
         verbose_name=_("Default price"),
+    )
+    original_price = models.DecimalField(
+        verbose_name=_('Original price'),
+        blank=True, null=True,
+        max_digits=7, decimal_places=2,
+        help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
+                    'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
 
     class Meta:

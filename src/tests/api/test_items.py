@@ -319,6 +319,7 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "active": True,
         "description": None,
         "position": 0,
+        "original_price": None
     }]
     res["has_variations"] = True
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
@@ -941,7 +942,8 @@ TEST_VARIATIONS_RES = {
     "description": None,
     "position": 0,
     "default_price": None,
-    "price": "23.00"
+    "price": "23.00",
+    "original_price": None
 }
 
 TEST_VARIATIONS_UPDATE = {
@@ -952,6 +954,7 @@ TEST_VARIATIONS_UPDATE = {
     "description": None,
     "position": 1,
     "default_price": "20.0",
+    "original_price": None
 }
 
 
@@ -987,6 +990,7 @@ def test_variations_create(token_client, organizer, event, item, variation):
             "description": None,
             "position": 1,
             "default_price": None,
+            "original_price": "23.42",
             "price": 23.0
         },
         format='json'
@@ -1025,6 +1029,7 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
     res["id"] = variation.pk
     res["price"] = "20.00"
     res["default_price"] = "20.00"
+    res["original_price"] = "50.00"
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk),
         {
@@ -1032,7 +1037,8 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
                 "en": "ChildC2"
             },
             "position": 1,
-            "default_price": "20.00"
+            "default_price": "20.00",
+            "original_price": "50.00"
         },
         format='json'
     )

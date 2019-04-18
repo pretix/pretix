@@ -463,6 +463,7 @@ class ItemVariationForm(I18nModelForm):
             'value',
             'active',
             'default_price',
+            'original_price',
             'description',
         ]
 

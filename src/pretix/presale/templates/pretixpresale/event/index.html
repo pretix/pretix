@@ -270,7 +270,10 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-md-2 col-xs-6 price">
-                                                    {% if item.original_price %}
+                                                    {% if var.original_price %}
+                                                        <del>{{ var.original_price|money:event.currency }}</del>
+                                                        <ins>
+                                                    {% elif item.original_price %}
                                                         <del>{{ item.original_price|money:event.currency }}</del>
                                                         <ins>
                                                     {% endif %}
@@ -294,7 +297,7 @@
                                                     {% else %}
                                                         {{ var.display_price.gross|money:event.currency }}
                                                     {% endif %}
-                                                    {% if item.original_price %}
+                                                    {% if item.original_price or var.original_price %}
                                                         </ins>
                                                     {% endif %}
                                                     {% if item.includes_mixed_tax_rate %}

@@ -82,6 +82,8 @@ variations                            list of objects            A list with one
 ├ price                               money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
                                                                  to the item's ``default_price``.
+├ original_price                      money (string)             An original price, shown for comparison, not used
+                                                                 for price calculations (or ``null``).
 ├ active                              boolean                    If ``false``, this variation will not be sold or shown.
 ├ description                         multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
@@ -105,6 +107,10 @@ bundles                               list of objects            Definition of b
                                                                  used to split the price of the base item e.g. for mixed
                                                                  taxation. This is not added to the price.
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 2.7
+
+   The attribute ``original_price`` has been added for ``variations``.
 
 .. versionchanged:: 1.7
 
@@ -208,6 +214,7 @@ Endpoints
                  "value": {"en": "Student"},
                  "default_price": "10.00",
                  "price": "10.00",
+                 "original_price": null,
                  "active": true,
                  "description": null,
                  "position": 0
@@ -216,6 +223,7 @@ Endpoints
                  "value": {"en": "Regular"},
                  "default_price": null,
                  "price": "23.00",
+                 "original_price": null,
                  "active": true,
                  "description": null,
                  "position": 1
@@ -297,6 +305,7 @@ Endpoints
              "value": {"en": "Student"},
              "default_price": "10.00",
              "price": "10.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 0
@@ -305,6 +314,7 @@ Endpoints
              "value": {"en": "Regular"},
              "default_price": null,
              "price": "23.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 1
@@ -366,6 +376,7 @@ Endpoints
              "value": {"en": "Student"},
              "default_price": "10.00",
              "price": "10.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 0
@@ -374,6 +385,7 @@ Endpoints
              "value": {"en": "Regular"},
              "default_price": null,
              "price": "23.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 1
@@ -424,6 +436,7 @@ Endpoints
              "value": {"en": "Student"},
              "default_price": "10.00",
              "price": "10.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 0
@@ -432,6 +445,7 @@ Endpoints
              "value": {"en": "Regular"},
              "default_price": null,
              "price": "23.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 1
@@ -513,6 +527,7 @@ Endpoints
              "value": {"en": "Student"},
              "default_price": "10.00",
              "price": "10.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 0
@@ -521,6 +536,7 @@ Endpoints
              "value": {"en": "Regular"},
              "default_price": null,
              "price": "23.00",
+             "original_price": null,
              "active": true,
              "description": null,
              "position": 1
