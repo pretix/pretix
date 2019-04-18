@@ -16,11 +16,11 @@ class Command(BaseCommand):
     help = "Re-generate all custom stylesheets and scripts"
 
     def handle(self, *args, **options):
-        for es in Event_SettingsStore.objects.filter(key="presale_css_file"):
-            regenerate_css.apply_async(args=(es.object_id,))
-
         for es in Organizer_SettingsStore.objects.filter(key="presale_css_file"):
             regenerate_organizer_css.apply_async(args=(es.object_id,))
+
+        for es in Event_SettingsStore.objects.filter(key="presale_css_file").order_by('-object__date_from'):
+            regenerate_css.apply_async(args=(es.object_id,))
 
         gs = GlobalSettingsObject()
         for lc, ll in settings.LANGUAGES:
