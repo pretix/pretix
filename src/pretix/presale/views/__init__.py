@@ -103,13 +103,13 @@ class CartMixin:
             )
             addon_penalty = 1 if pos.addon_to else 0
             if downloads or pos.pk in has_addons or pos.addon_to:
-                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0)
+                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), pos.seat_id
             if answers and (has_attendee_data or pos.item.questions.all()):
-                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0)
+                return i, addon_penalty, pos.pk, 0, 0, 0, 0, (pos.subevent_id or 0), pos.seat_id
 
             return (
                 0, addon_penalty, 0, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0),
-                (pos.subevent_id or 0)
+                (pos.subevent_id or 0), pos.seat_id
             )
 
         positions = []

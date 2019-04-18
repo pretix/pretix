@@ -125,7 +125,7 @@
                         <input type="hidden" name="price_{{ line.item.id }}"
                                 value="{% if event.settings.display_net_prices %}{{ line.net_price }}{% else %}{{ line.price }}{% endif %}" />
                     {% endif %}
-                    <button class="btn btn-mini btn-link" title="{% trans "Add one more" %}">
+                    <button class="btn btn-mini btn-link" title="{% trans "Add one more" %}" {% if line.seat %}disabled{% endif %}>
                         <i class="fa fa-plus"></i>
                     </button>
                 </form>
