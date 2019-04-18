@@ -632,12 +632,12 @@ CELERY_TASK_ROUTES = ([
     ('pretix.base.services.cart.*', {'queue': 'checkout'}),
     ('pretix.base.services.orders.*', {'queue': 'checkout'}),
     ('pretix.base.services.mail.*', {'queue': 'mail'}),
-    ('pretix.base.services.style.*', {'queue': 'background'}),
     ('pretix.base.services.update_check.*', {'queue': 'background'}),
     ('pretix.base.services.quotas.*', {'queue': 'background'}),
     ('pretix.base.services.waitinglist.*', {'queue': 'background'}),
     ('pretix.base.services.notifications.*', {'queue': 'notifications'}),
     ('pretix.api.webhooks.*', {'queue': 'notifications'}),
+    ('pretix.presale.style.*', {'queue': 'background'}),
     ('pretix.plugins.banktransfer.*', {'queue': 'background'}),
 ],)
 
