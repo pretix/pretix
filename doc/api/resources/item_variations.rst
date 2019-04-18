@@ -18,11 +18,17 @@ default_price                         money (string)             The price set d
 price                                 money (string)             The price used for this variation. This is either the
                                                                  same as ``default_price`` if that value is set or equal
                                                                  to the item's ``default_price`` (read-only).
+original_price                        money (string)             An original price, shown for comparison, not used
+                                                                 for price calculations (or ``null``).
 active                                boolean                    If ``false``, this variation will not be sold or shown.
 description                           multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 position                              integer                    An integer, used for sorting
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 2.7
+
+   The attribute ``original_price`` has been added.
 
 .. versionchanged:: 1.12
 
@@ -67,7 +73,8 @@ Endpoints
             },
             "position": 0,
             "default_price": "223.00",
-            "price": 223.0
+            "price": 223.0,
+            "original_price": null,
           },
           {
             "id": 3,
@@ -120,6 +127,7 @@ Endpoints
         },
         "default_price": "10.00",
         "price": "10.00",
+        "original_price": null,
         "active": true,
         "description": null,
         "position": 0
@@ -167,6 +175,7 @@ Endpoints
         "value": {"en": "Student"},
         "default_price": "10.00",
         "price": "10.00",
+        "original_price": null,
         "active": true,
         "description": null,
         "position": 0
@@ -216,6 +225,7 @@ Endpoints
         "value": {"en": "Student"},
         "default_price": "10.00",
         "price": "10.00",
+        "original_price": null,
         "active": false,
         "description": null,
         "position": 1
