@@ -407,18 +407,30 @@ class CartManager:
         operations = []
 
         for i in items:
-            # Check whether the specified items are part of what we just fetched from the database
-            # If they are not, the user supplied item IDs which either do not exist or belong to
-            # a different event
-            if i['item'] not in self._items_cache or (i['variation'] and i['variation'] not in self._variations_cache):
-                raise CartError(error_messages['not_for_sale'])
-
             if self.event.has_subevents:
                 if not i.get('subevent'):
                     raise CartError(error_messages['subevent_required'])
                 subevent = self._subevents_cache[int(i.get('subevent'))]
             else:
                 subevent = None
+
+            # When a seat is given, we ignore the item that was given, since we can infer it from the
+            # seat. The variation is still relevant, though!
+            seat = None
+            if i.get('seat'):
+                try:
+                    seat = (subevent or self.event).seats.get(seat_guid=i.get('seat'))
+                except Seat.DoesNotExist:
+                    raise CartError(error_messages['seat_invalid'])
+                i['item'] = seat.product_id
+                if i['item'] not in self._items_cache:
+                    self._update_items_cache([i['item']], [i['variation']])
+
+            # Check whether the specified items are part of what we just fetched from the database
+            # If they are not, the user supplied item IDs which either do not exist or belong to
+            # a different event
+            if i['item'] not in self._items_cache or (i['variation'] and i['variation'] not in self._variations_cache):
+                raise CartError(error_messages['not_for_sale'])
 
             item = self._items_cache[i['item']]
             variation = self._variations_cache[i['variation']] if i['variation'] is not None else None
@@ -431,13 +443,6 @@ class CartManager:
                     raise CartError(error_messages['voucher_invalid'])
                 else:
                     voucher_use_diff[voucher] += i['count']
-
-            seat = None
-            if i.get('seat'):
-                try:
-                    seat = (subevent or self.event).seats.get(pk=i.get('seat'))
-                except Seat.DoesNotExist:
-                    raise CartError(error_messages['seat_invalid'])
 
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.filter(subevent=subevent)
