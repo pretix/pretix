@@ -308,6 +308,15 @@ class FakeRedis(object):
     def __init__(self):
         self.storage = {}
 
+    def pipeline(self):
+        return self
+
+    def hincrbyfloat(self, rkey, key, amount):
+        return self
+
+    def commit(self):
+        return self
+
     def exists(self, rkey):
         print(rkey in self.storage)
         return rkey in self.storage
@@ -352,6 +361,7 @@ class PasswordRecoveryFormTest(TestCase):
         fake_redis = FakeRedis()
         m = self.monkeypatch
         m.setattr('django_redis.get_redis_connection', fake_redis.get_redis_connection, raising=False)
+        m.setattr('pretix.base.metrics.redis', fake_redis, raising=False)
 
         djmail.outbox = []
 
