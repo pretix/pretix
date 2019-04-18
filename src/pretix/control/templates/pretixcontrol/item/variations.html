@@ -45,6 +45,7 @@
                             {% bootstrap_form_errors form %}
                             {% bootstrap_field form.active layout="control" %}
                             {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
+                            {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                             {% bootstrap_field form.description layout="control" %}
                         </div>
                     </div>
@@ -78,6 +79,7 @@
                         <div class="panel-body form-horizontal">
                             {% bootstrap_field formset.empty_form.active layout="control" %}
                             {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout="control" %}
+                            {% bootstrap_field formset.empty_form.original_price addon_after=request.event.currency layout="control" %}
                             {% bootstrap_field formset.empty_form.description layout="control" %}
                         </div>
                     </div>
