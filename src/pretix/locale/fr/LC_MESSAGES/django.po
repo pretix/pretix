@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-16 11:35+0000\n"
-"PO-Revision-Date: 2019-01-16 22:00+0000\n"
-"Last-Translator: Guillaume Petit <gpetit@edelzone.fr>\n"
+"PO-Revision-Date: 2019-04-18 14:13+0000\n"
+"Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:124
@@ -128,27 +128,23 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plugin inconnu : '{name}1'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:614
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
-"La catégorie de l'add-on doit appartenir au même événement que l'article."
+"Un produit qui est un forfait ne doit pas comprendre le le produit forfait."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:616
 msgid "The bundled item must not have bundles on its own."
 msgstr ""
+"Un forfait ne doit pas contenir des produits, qui sont eux-mêmes des "
+"forfaits."
 
 #: pretix/api/serializers/item.py:130
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
-#| "the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"La mise à jour des variantes via PATCH/PUT n'est pas prise en charge. "
-"Veuillez utiliser le point de terminaison imbriqué dédié."
+"La mise à jour des variantes, Add-Ons ou forfaits via PATCH/PUT n'est pas "
+"prise en charge. Veuillez utiliser le point de terminaison imbriqué dédié."
 
 #: pretix/api/serializers/item.py:227
 msgid ""
@@ -160,7 +156,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:243 pretix/control/forms/item.py:63
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Une dependance réciproque a été réconnue."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:233
 #, python-brace-format
@@ -191,10 +187,8 @@ msgid "New order placed"
 msgstr "Nouvelle commande passée"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:200
-#, fuzzy
-#| msgid "The order has been created."
 msgid "New order requires approval"
-msgstr "La commande a été créée."
+msgstr "Une nouvelle commande attend l'approbation"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:206
 msgid "Order marked as paid"
@@ -223,70 +217,56 @@ msgid "Order changed"
 msgstr "Commande modifiée"
 
 #: pretix/api/webhooks.py:145 pretix/base/notifications.py:248
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "External refund of payment"
-msgstr "Prolonger le délai de paiement"
+msgstr "Remboursement externe du paiement"
 
 #: pretix/api/webhooks.py:149
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order approved"
-msgstr "Commande expirée"
+msgstr "Commande approuvé"
 
 #: pretix/api/webhooks.py:153
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order denied"
-msgstr "Commande expirée"
+msgstr "Commande rejeté"
 
 #: pretix/api/webhooks.py:157
-#, fuzzy
-#| msgid "Not checked in"
 msgid "Ticket checked in"
-msgstr "Non enregistré"
+msgstr "ticket enregistré"
 
 #: pretix/api/webhooks.py:161
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "Ticket check-in reverted"
-msgstr "La liste sélectionnée a été supprimée."
+msgstr "L'enregistrement a été annulé"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Boutique en ligne"
 
 #: pretix/base/email.py:125
-#, fuzzy
-#| msgid "Default"
 msgid "pretix default"
-msgstr "Défaut"
+msgstr "pretix standard"
 
 #: pretix/base/exporter.py:91 pretix/base/exporter.py:169
-#, fuzzy
-#| msgid "Short form"
 msgid "Export format"
-msgstr "Forme courte"
+msgstr "format d'exportation"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:94 pretix/base/exporter.py:161
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (séparé par des virgules)"
 
 #: pretix/base/exporter.py:95 pretix/base/exporter.py:162
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (façon excel)"
 
 #: pretix/base/exporter.py:96 pretix/base/exporter.py:163
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (séparé par des points-virgules)"
 
 #: pretix/base/exporter.py:157
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Excel combiné (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
@@ -353,22 +333,15 @@ msgid "All payment providers"
 msgstr "Tous les fournisseurs de paiement"
 
 #: pretix/base/exporters/invoices.py:97
-#, fuzzy
-#| msgid ""
-#| "Only include invoices for orders that are currently set to this payment "
-#| "provider. Note that this might include some invoices of other payment "
-#| "providers or misses some invoices if the payment provider of an order has "
-#| "been changed and a new invoice has been generated."
 msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
-"N'incluez que les factures pour les commandes qui sont actuellement définies "
-"pour ce fournisseur de paiement. Notez que cela peut inclure certaines "
-"factures d'autres fournisseurs de paiement ou qu'il manque certaines "
-"factures si le fournisseur de paiement d'une commande a été modifié et "
-"qu'une nouvelle facture a été générée."
+"N'incluez que les factures pour les commandes qui ont au moins une tentative "
+"de paiement par ce fournisseur de paiement. Notez que cela peut inclure "
+"certaines factures d'ordres qui ont été paié partiellement ou totalement par "
+"un autre fournisseur de paiement."
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
