@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-16 11:35+0000\n"
-"PO-Revision-Date: 2019-04-18 14:13+0000\n"
+"PO-Revision-Date: 2019-04-21 00:00+0000\n"
 "Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -352,10 +352,8 @@ msgid "Filter by status"
 msgstr "Filtrer par statut"
 
 #: pretix/base/exporters/orderlist.py:23
-#, fuzzy
-#| msgid "Order date"
 msgid "Order data"
-msgstr "Date de commande"
+msgstr "Données de la commande"
 
 #: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:185
 #: pretix/control/navigation.py:181
@@ -371,10 +369,8 @@ msgid "Order positions"
 msgstr "Position de commande"
 
 #: pretix/base/exporters/orderlist.py:30
-#, fuzzy
-#| msgid "Other fees"
 msgid "Order fees"
-msgstr "Autres frais"
+msgstr "frais de la commande"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
@@ -541,10 +537,8 @@ msgid "VAT ID"
 msgstr "Identifiant de TVA"
 
 #: pretix/base/exporters/orderlist.py:100
-#, fuzzy
-#| msgid "Last date of payments"
 msgid "Date of last payment"
-msgstr "Dernière date de paiement"
+msgstr "date du dernier paiement"
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/services/stats.py:152
 msgid "Fees"
@@ -577,16 +571,12 @@ msgstr "Numéros de facture"
 #: pretix/base/exporters/orderlist.py:111
 #: pretix/base/exporters/orderlist.py:302
 #: pretix/control/templates/pretixcontrol/order/index.html:123
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channel"
-msgstr "Enregistrer les modifications"
+msgstr "canaux de vente"
 
 #: pretix/base/exporters/orderlist.py:197
-#, fuzzy
-#| msgid "Device type"
 msgid "Fee type"
-msgstr "Type d'appareil"
+msgstr "Type de frais"
 
 #: pretix/base/exporters/orderlist.py:198
 #: pretix/base/exporters/orderlist.py:560 pretix/base/models/items.py:258
@@ -632,10 +622,8 @@ msgid "Invoice address name"
 msgstr "Adresse de facturation: nom"
 
 #: pretix/base/exporters/orderlist.py:268
-#, fuzzy
-#| msgid "Position"
 msgid "Position ID"
-msgstr "Position"
+msgstr "Position ID"
 
 #: pretix/base/exporters/orderlist.py:272 pretix/base/models/items.py:378
 #: pretix/base/models/vouchers.py:140 pretix/base/models/waitinglist.py:51
@@ -686,17 +674,15 @@ msgstr "Bon de réduction"
 
 #: pretix/base/exporters/orderlist.py:287
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "ID pseudonyme"
 
 #: pretix/base/exporters/orderlist.py:366
-#, fuzzy
-#| msgid "List of orders (CSV)"
 msgid "Order payments and refunds"
-msgstr "Liste des commandes (CSV)"
+msgstr "Commandes et remboursements"
 
 #: pretix/base/exporters/orderlist.py:374
 msgid "Only successful payments"
-msgstr ""
+msgstr "seulement les paiements réussis"
 
 #: pretix/base/exporters/orderlist.py:407 pretix/base/models/orders.py:184
 #: pretix/base/models/orders.py:1090 pretix/base/models/orders.py:1401
@@ -712,25 +698,17 @@ msgid "Payment ID"
 msgstr "ID de paiement"
 
 #: pretix/base/exporters/orderlist.py:407
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgid "Creation date"
-msgstr "Créer une date"
+msgstr "Date de création"
 
 #: pretix/base/exporters/orderlist.py:407
 #: pretix/control/templates/pretixcontrol/order/index.html:520
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Completion date"
-msgstr "Date d'annulation"
+msgstr "Date de finalisation"
 
 #: pretix/base/exporters/orderlist.py:408
-#, fuzzy
-#| msgid "Status"
 msgid "Status code"
-msgstr "Statut"
+msgstr "code de statut"
 
 #: pretix/base/exporters/orderlist.py:408 pretix/base/models/orders.py:1086
 #: pretix/base/models/orders.py:1397
@@ -751,10 +729,8 @@ msgid "Payment method"
 msgstr "Mode de paiement"
 
 #: pretix/base/exporters/orderlist.py:437
-#, fuzzy
-#| msgid "Quota availabilities (CSV)"
 msgid "Quota availabilities"
-msgstr "Disponibilités des quotas (CSV)"
+msgstr "Disponibilités des quotas"
 
 #: pretix/base/exporters/orderlist.py:441
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
@@ -808,11 +784,8 @@ msgid "Infinite"
 msgstr "Illimité"
 
 #: pretix/base/exporters/orderlist.py:466
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice data"
-msgstr "Date de facturation"
+msgstr "Données de facture"
 
 #: pretix/base/exporters/orderlist.py:471 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:159
@@ -823,16 +796,11 @@ msgid "Invoices"
 msgstr "Factures"
 
 #: pretix/base/exporters/orderlist.py:472
-#, fuzzy
-#| msgid "Invoice numbers"
 msgid "Invoice lines"
-msgstr "Numéros de facture"
+msgstr "Lignes de facture"
 
 #: pretix/base/exporters/orderlist.py:478
 #: pretix/base/exporters/orderlist.py:558
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice number"
 msgid "Invoice number"
 msgstr "Numéro de facture"
 
@@ -855,17 +823,13 @@ msgstr "Adresse e-mail"
 
 #: pretix/base/exporters/orderlist.py:482
 #: pretix/base/exporters/orderlist.py:571
-#, fuzzy
-#| msgid "Invoice style"
 msgid "Invoice type"
-msgstr "Style de facture"
+msgstr "Type de facture"
 
 #: pretix/base/exporters/orderlist.py:483
 #: pretix/base/exporters/orderlist.py:572
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellation of"
-msgstr "Annulation"
+msgstr "Annulation de"
 
 #: pretix/base/exporters/orderlist.py:484 pretix/base/models/auth.py:90
 #: pretix/control/forms/event.py:1215 pretix/control/views/waitinglist.py:200
@@ -886,19 +850,13 @@ msgstr "Langue"
 #: pretix/base/exporters/orderlist.py:577
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/base/exporters/orderlist.py:579
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice number"
 msgid "Invoice sender:"
-msgstr "Numéro de facture"
+msgstr "expéditeur de facture:"
 
 #: pretix/base/exporters/orderlist.py:490
 #: pretix/base/exporters/orderlist.py:578
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "VAT-ID: %s"
 msgid "Tax ID"
-msgstr "ID TVA: %s"
+msgstr "numéro d'identification fiscale"
 
 #: pretix/base/exporters/orderlist.py:492
 #: pretix/base/exporters/orderlist.py:493
@@ -918,22 +876,18 @@ msgstr "ID TVA: %s"
 #: pretix/base/exporters/orderlist.py:586
 #: pretix/base/exporters/orderlist.py:587
 #: pretix/base/exporters/orderlist.py:588
-#, fuzzy
-#| msgid "Price settings"
 msgid "Invoice recipient:"
-msgstr "Paramètres de prix"
+msgstr "destinataire de facture:"
 
 #: pretix/base/exporters/orderlist.py:494
 #: pretix/base/exporters/orderlist.py:582
-#, fuzzy
-#| msgid "Sender address"
 msgid "Street address"
-msgstr "Adresse de l'expéditeur"
+msgstr "rue"
 
 #: pretix/base/exporters/orderlist.py:499
 #: pretix/base/exporters/orderlist.py:587 pretix/base/models/orders.py:1867
 msgid "Beneficiary"
-msgstr ""
+msgstr "bénéficiaire"
 
 #: pretix/base/exporters/orderlist.py:500
 #: pretix/base/exporters/orderlist.py:588 pretix/base/models/orders.py:1862
@@ -947,32 +901,23 @@ msgid "Reverse charge"
 msgstr "Charge inversée"
 
 #: pretix/base/exporters/orderlist.py:502
-#, fuzzy
-#| msgid "Event currency"
 msgid "Shown foreign currency"
-msgstr "Devise de l'événement"
+msgstr "Devise indiquée"
 
 #: pretix/base/exporters/orderlist.py:503
-#, fuzzy
-#| msgid "Event currency"
 msgid "Foreign currency rate"
-msgstr "Devise de l'événement"
+msgstr "taux de change de la devise étrangère"
 
 #: pretix/base/exporters/orderlist.py:504
-#, fuzzy
-#| msgid "Total value"
 msgid "Total value (with taxes)"
-msgstr "Valeur totale"
+msgstr "Valeur totale (taxes incluses)"
 
 #: pretix/base/exporters/orderlist.py:505
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Valeur totale (hors taxes)"
 
 #: pretix/base/exporters/orderlist.py:531
 #: pretix/base/exporters/orderlist.py:610
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation"
 msgid "Cancellation"
 msgstr "Annulation"
 
@@ -1004,32 +949,24 @@ msgid "No"
 msgstr "Non"
 
 #: pretix/base/exporters/orderlist.py:559
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Line number"
-msgstr "Nombre minimum"
+msgstr "Numéro de la ligne"
 
 #: pretix/base/exporters/orderlist.py:561 pretix/control/forms/orders.py:207
 msgid "Gross price"
 msgstr "Prix brut"
 
 #: pretix/base/exporters/orderlist.py:562
-#, fuzzy
-#| msgid "Default price"
 msgid "Net price"
-msgstr "Prix par défaut"
+msgstr "Prix net"
 
 #: pretix/base/exporters/orderlist.py:565
-#, fuzzy
-#| msgid "Team name"
 msgid "Tax name"
-msgstr "Nom de l'équipe"
+msgstr "règle fiscale"
 
 #: pretix/base/exporters/orderlist.py:566
-#, fuzzy
-#| msgid "Event start time"
 msgid "Event start date"
-msgstr "Heure de début d'événement"
+msgstr "date de début d'événement"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
@@ -1079,10 +1016,8 @@ msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
 #: pretix/base/forms/questions.py:316 pretix/control/forms/item.py:71
-#, fuzzy
-#| msgid "This field is required."
 msgid "This field is required"
-msgstr "Ce champ est obligatoire."
+msgstr "Ce champ est obligatoire"
 
 #: pretix/base/forms/questions.py:330
 msgid "Street and Number"
