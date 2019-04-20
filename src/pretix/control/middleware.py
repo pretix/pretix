@@ -73,6 +73,11 @@ class PermissionMiddleware:
         if not request.user.is_authenticated:
             return self._login_redirect(request)
 
+        if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
+            and not request.path.startswith('/control/settings/2fa/') \
+                and request.path not in ['/control/logout', '/control/login']:
+            return redirect(reverse('control:user.settings.2fa'))
+
         try:
             # If this logic is updated, make sure to also update the logic in pretix/api/auth/permission.py
             assert_session_valid(request)

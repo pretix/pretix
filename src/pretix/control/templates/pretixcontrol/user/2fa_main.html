@@ -11,6 +11,24 @@
             smartphone or a hardware token generator and that changes on a regular basis.
         {% endblocktrans %}
     </p>
+    {% if settings.PRETIX_OBLIGATORY_2FA %}
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Obligatory usage of two-factor authentication" %}</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <strong>{% trans "This system enforces the usage of two-factor authentication!" %}</strong>
+                </p>
+            {% if not devices|length %}
+                <p>{% trans "Please set up at least one device below." %}</p>
+            {% elif not user.require_2fa %}
+                <p>{% trans "Please activate two-factor authentication using the button below." %}</p>
+            {% endif %}
+            </div>
+        </div>
+
+    {% endif %}
     {% if user.require_2fa %}
         <div class="panel panel-success">
             <div class="panel-heading">
