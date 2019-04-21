@@ -222,13 +222,13 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
-product_list_top = EventPluginSignal(
-    providing_args=["request"]
+render_seating_plan = EventPluginSignal(
+    providing_args=["request", "subevent", "voucher"]
 )
 """
-This signal is sent out to display additional information at the top of the list of products
-on the pages it shows up (front page, voucher redemption, …). You will be passed the ``request``
-as a keyword argument.
+This signal is sent out to render a seating plan, if one is configured for the specific event.
+You will be passed the ``request`` as a keyword argument. If applicable, a ``subevent`` or
+``voucher`` argument might be given.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. The
 receivers are expected to return HTML.
