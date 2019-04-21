@@ -14,8 +14,8 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Checkin, Invoice, InvoiceAddress, InvoiceLine, Order, OrderPosition,
-    Question, QuestionAnswer,
+    Checkin, Invoice, InvoiceAddress, InvoiceLine, Item, ItemVariation, Order,
+    OrderPosition, Question, QuestionAnswer, SubEvent,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -286,6 +286,23 @@ class OrderSerializer(I18nAwareModelSerializer):
 
         instance.save(update_fields=update_fields)
         return instance
+
+
+class PriceCalcSerializer(serializers.Serializer):
+    item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
+    variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
+    subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+    locale = serializers.CharField(allow_null=True, required=False)
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        self.fields['item'].queryset = event.items.all()
+        self.fields['variation'].queryset = ItemVariation.objects.filter(item__event=event)
+        if event.has_subevents:
+            self.fields['subevent'].queryset = event.subevents.all()
+        else:
+            del self.fields['subevent']
 
 
 class AnswerCreateSerializer(I18nAwareModelSerializer):

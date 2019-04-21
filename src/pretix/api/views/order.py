@@ -24,11 +24,12 @@ from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.order import (
     InvoiceSerializer, OrderCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer,
+    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
 )
+from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Device, Event, Invoice, Order,
-    OrderPayment, OrderPosition, OrderRefund, Quota, TeamAPIToken,
+    CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
+    Order, OrderPayment, OrderPosition, OrderRefund, Quota, TeamAPIToken,
     generate_position_secret, generate_secret,
 )
 from pretix.base.payment import PaymentException
@@ -42,10 +43,12 @@ from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
 )
+from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     order_modified, order_placed, register_ticket_outputs,
 )
+from pretix.base.templatetags.money import money_filter
 
 
 class OrderFilter(FilterSet):
@@ -621,6 +624,82 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
             if prov.identifier == identifier:
                 return prov
         raise NotFound('Unknown output provider.')
+
+    @action(detail=True, methods=['POST'], url_name='price_calc')
+    def price_calc(self, request, *args, **kwargs):
+        """
+        This calculates the price assuming a change of product or subevent. This endpoint
+        is deliberately not documented and considered a private API, only to be used by
+        pretix' web interface.
+
+        Sample input:
+
+        {
+            "item": 2,
+            "variation": null,
+            "subevent": 3
+        }
+
+        Sample output:
+
+        {
+            "gross": "2.34",
+            "gross_formatted": "2,34",
+            "net": "2.34",
+            "tax": "0.00",
+            "rate": "0.00",
+            "name": "VAT"
+        }
+        """
+        serializer = PriceCalcSerializer(data=request.data, event=request.event)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        pos = self.get_object()
+
+        try:
+            ia = pos.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = InvoiceAddress()
+
+        kwargs = {
+            'item': pos.item,
+            'variation': pos.variation,
+            'voucher': pos.voucher,
+            'subevent': pos.subevent,
+            'addon_to': pos.addon_to,
+            'invoice_address': ia,
+        }
+
+        if data.get('item'):
+            item = data.get('item')
+            kwargs['item'] = item
+
+            if item.has_variations:
+                variation = data.get('variation') or pos.variation
+                if not variation:
+                    raise ValidationError('No variation given')
+                if variation.item != item:
+                    raise ValidationError('Variation does not belong to item')
+            else:
+                variation = None
+                kwargs['variation'] = None
+
+            if pos.voucher and not pos.voucher.applies_to(item, variation):
+                kwargs['voucher'] = None
+
+        if data.get('subevent'):
+            kwargs['subevent'] = data.get('subevent')
+
+        price = get_price(**kwargs)
+        with language(data.get('locale') or self.request.event.settings.locale):
+            return Response({
+                'gross': price.gross,
+                'gross_formatted': money_filter(price.gross, self.request.event.currency, hide_currency=True),
+                'net': price.net,
+                'rate': price.rate,
+                'name': str(price.name),
+                'tax': price.tax,
+            })
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):

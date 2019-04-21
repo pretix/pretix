@@ -935,11 +935,9 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'op-{}-operation'.format(self.op1.pk): 'product',
             'op-{}-itemvar'.format(self.op1.pk): str(self.shirt.pk),
-            'op-{}-operation'.format(self.op2.pk): '',
-            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-price'.format(self.op1.pk): str('12.00'),
+            'add-itemvar': str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -965,14 +963,9 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'op-{}-operation'.format(self.op1.pk): 'subevent',
             'op-{}-subevent'.format(self.op1.pk): str(se2.pk),
-            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
-            'op-{}-operation'.format(self.op2.pk): '',
-            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'op-{}-subevent'.format(self.op2.pk): str(se1.pk),
-            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'add-subevent'.format(self.op2.pk): str(se1.pk),
+            'add-itemvar': str(self.ticket.pk),
+            'add-subevent': str(se1.pk),
         })
         self.op1.refresh_from_db()
         self.op2.refresh_from_db()
@@ -989,7 +982,7 @@ class OrderChangeTests(SoupTest):
             'op-{}-price'.format(self.op1.pk): '24.00',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'add-itemvar': str(self.ticket.pk),
         })
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
@@ -1001,13 +994,8 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'op-{}-operation'.format(self.op1.pk): 'cancel',
-            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
-            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
-            'op-{}-operation'.format(self.op2.pk): '',
-            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
-            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'op-{}-operation_cancel'.format(self.op1.pk): 'on',
+            'add-itemvar': str(self.ticket.pk),
         })
         self.order.refresh_from_db()
         assert self.order.positions.count() == 1
@@ -1017,12 +1005,6 @@ class OrderChangeTests(SoupTest):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
-            'op-{}-operation'.format(self.op1.pk): '',
-            'op-{}-operation'.format(self.op2.pk): '',
-            'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
-            'op-{}-price'.format(self.op2.pk): str(self.op2.price),
-            'op-{}-itemvar'.format(self.op1.pk): str(self.ticket.pk),
-            'op-{}-price'.format(self.op1.pk): str(self.op1.price),
             'add-itemvar': str(self.shirt.pk),
             'add-do': 'on',
             'add-price': '14.00',
@@ -1047,7 +1029,7 @@ class OrderChangeTests(SoupTest):
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
             'other-recalculate_taxes': 'on',
-            'add-itemvar'.format(self.op2.pk): str(self.ticket.pk),
+            'add-itemvar': str(self.ticket.pk),
             'op-{}-operation'.format(self.op1.pk): '',
             'op-{}-operation'.format(self.op2.pk): '',
             'op-{}-itemvar'.format(self.op2.pk): str(self.ticket.pk),
