@@ -25,6 +25,7 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'orders/', 200),
     ('get', 'can_view_orders', 'orderpositions/', 200),
     ('delete', 'can_change_orders', 'orderpositions/1/', 404),
+    ('post', 'can_change_orders', 'orderpositions/1/price_calc/', 404),
     ('get', 'can_view_vouchers', 'vouchers/', 200),
     ('get', 'can_view_orders', 'invoices/', 200),
     ('get', 'can_view_orders', 'invoices/1/', 404),

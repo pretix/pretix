@@ -2798,3 +2798,222 @@ def test_order_resend_link(token_client, organizer, event, order):
         ), format='json', data={}
     )
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation(token_client, organizer, event, order, item):
+    op = order.positions.first()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('23.00'),
+        'gross_formatted': '23.00',
+        'name': '',
+        'net': Decimal('23.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_item_with_tax(token_client, organizer, event, order, item, taxrule):
+    item2 = event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
+    op = order.positions.first()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('23.00'),
+        'gross_formatted': '23.00',
+        'name': '',
+        'net': Decimal('19.33'),
+        'rate': Decimal('19.00'),
+        'tax': Decimal('3.67')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_item_with_variation(token_client, organizer, event, order):
+    item2 = event.items.create(name="Budget Ticket", default_price=23)
+    var = item2.variations.create(default_price=12, value="XS")
+    op = order.positions.first()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+            'variation': var.pk
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('12.00'),
+        'gross_formatted': '12.00',
+        'name': '',
+        'net': Decimal('12.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_subevent(token_client, organizer, event, order, subevent):
+    item2 = event.items.create(name="Budget Ticket", default_price=23)
+    op = order.positions.first()
+    op.subevent = subevent
+    op.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+            'subevent': subevent.pk
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('23.00'),
+        'gross_formatted': '23.00',
+        'name': '',
+        'net': Decimal('23.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_subevent_with_override(token_client, organizer, event, order, subevent):
+    item2 = event.items.create(name="Budget Ticket", default_price=23)
+    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+    se2.subeventitem_set.create(item=item2, price=12)
+    op = order.positions.first()
+    op.subevent = subevent
+    op.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+            'subevent': se2.pk
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('12.00'),
+        'gross_formatted': '12.00',
+        'name': '',
+        'net': Decimal('12.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_voucher_matching(token_client, organizer, event, order, subevent, item):
+    item2 = event.items.create(name="Budget Ticket", default_price=23)
+    q = event.quotas.create(name="Quota")
+    q.items.add(item)
+    q.items.add(item2)
+    voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
+    op = order.positions.first()
+    op.voucher = voucher
+    op.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('15.00'),
+        'gross_formatted': '15.00',
+        'name': '',
+        'net': Decimal('15.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_voucher_not_matching(token_client, organizer, event, order, subevent, item):
+    item2 = event.items.create(name="Budget Ticket", default_price=23)
+    q = event.quotas.create(name="Quota")
+    q.items.add(item)
+    voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
+    op = order.positions.first()
+    op.voucher = voucher
+    op.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('23.00'),
+        'gross_formatted': '23.00',
+        'name': '',
+        'net': Decimal('23.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_net_price(token_client, organizer, event, order, subevent, item, taxrule):
+    taxrule.price_includes_tax = False
+    taxrule.save()
+    item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
+    op = order.positions.first()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('11.90'),
+        'gross_formatted': '11.90',
+        'name': '',
+        'net': Decimal('10.00'),
+        'rate': Decimal('19.00'),
+        'tax': Decimal('1.90')
+    }
+
+
+@pytest.mark.django_db
+def test_orderposition_price_calculation_reverse_charge(token_client, organizer, event, order, subevent, item, taxrule):
+    taxrule.price_includes_tax = False
+    taxrule.eu_reverse_charge = True
+    taxrule.home_country = Country('DE')
+    taxrule.save()
+    order.invoice_address.is_business = True
+    order.invoice_address.vat_id = 'ATU1234567'
+    order.invoice_address.vat_id_validated = True
+    order.invoice_address.country = Country('AT')
+    order.invoice_address.save()
+    item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
+    op = order.positions.first()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
+        data={
+            'item': item2.pk,
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data == {
+        'gross': Decimal('10.00'),
+        'gross_formatted': '10.00',
+        'name': '',
+        'net': Decimal('10.00'),
+        'rate': Decimal('0.00'),
+        'tax': Decimal('0.00')
+    }

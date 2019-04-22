@@ -680,6 +680,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
                     raise ValidationError('No variation given')
                 if variation.item != item:
                     raise ValidationError('Variation does not belong to item')
+                kwargs['variation'] = variation
             else:
                 variation = None
                 kwargs['variation'] = None
