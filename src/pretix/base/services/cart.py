@@ -94,7 +94,7 @@ error_messages = {
     'seat_required': _('You need to select a specific seat.'),
     'seat_invalid': _('Please select a valid seat.'),
     'seat_forbidden': _('You can not select a seat for this position.'),
-    'seat_unavailable': _('The seat you selected has already been taken by a different. Please select a different seat.'),
+    'seat_unavailable': _('The seat you selected has already been taken. Please select a different seat.'),
     'seat_multiple': _('You can not select the same seat multiple times.'),
 }
 

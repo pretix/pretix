@@ -2841,6 +2841,7 @@ class CartSeatingTest(CartTestMixin, TestCase):
         self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, seat_guid="A1")
         self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, seat_guid="A2")
         self.seat_a3 = self.event.seats.create(name="A3", product=self.ticket, seat_guid="A3")
+        self.cm = CartManager(event=self.event, cart_id=self.session_key)
 
     def test_add_with_seat_without_variation(self):
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
@@ -2899,3 +2900,26 @@ class CartSeatingTest(CartTestMixin, TestCase):
         }, follow=True)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
+
+    def test_extend_seat_still_available(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        self.cm.commit()
+        cp.refresh_from_db()
+        assert cp.seat == self.seat_a1
+
+    def test_extend_seat_taken(self):
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
+            price=21.5, expires=now() - timedelta(minutes=10)
+        )
+        CartPosition.objects.create(
+            event=self.event, cart_id='secondcart', item=self.ticket, seat=self.seat_a1,
+            price=21.5, expires=now() + timedelta(minutes=10)
+        )
+        with self.assertRaises(CartError):
+            self.cm.commit()
+
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
