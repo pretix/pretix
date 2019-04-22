@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-16 11:35+0000\n"
-"PO-Revision-Date: 2019-04-21 00:00+0000\n"
+"PO-Revision-Date: 2019-04-22 19:00+0000\n"
 "Last-Translator: David100mark <david.hundertmark@gmx.net>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -1024,16 +1024,12 @@ msgid "Street and Number"
 msgstr "Rue et numéro"
 
 #: pretix/base/forms/questions.py:387
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide a company name."
-msgstr "Vous devez fournir le nom d'une société ou votre nom."
+msgstr "Vous devez fournir le nom d'une société."
 
 #: pretix/base/forms/questions.py:389
-#, fuzzy
-#| msgid "You need to provide either a company name or your name."
 msgid "You need to provide your name."
-msgstr "Vous devez fournir le nom d'une société ou votre nom."
+msgstr "Vous devez fournir votre nom."
 
 #: pretix/base/forms/questions.py:400 pretix/control/views/orders.py:976
 msgid "Your VAT ID does not match the selected country."
@@ -1152,12 +1148,10 @@ msgid "Individual customer"
 msgstr "Client individuel"
 
 #: pretix/base/invoice.py:56
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Page %d"
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Page %d"
+msgstr "Page %d sur %d"
 
 #: pretix/base/invoice.py:242
 msgctxt "invoice"
@@ -1179,7 +1173,7 @@ msgstr "Facture {num}"
 #: pretix/control/templates/pretixcontrol/search/orders.html:65
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "TEST MODE"
-msgstr ""
+msgstr "MODE TEST"
 
 #: pretix/base/invoice.py:288
 msgctxt "invoice"
