@@ -229,7 +229,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 pass
                     else:
                         order.log_action(
-                            'pretix.event.order.email.error',
+                            'pretix.event.order.email.attachments.skipped',
                             data={
                                 'subject': 'Attachments skipped',
                                 'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),

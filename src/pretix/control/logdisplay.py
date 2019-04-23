@@ -189,6 +189,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.error': _('Sending of an email has failed.'),
+        'pretix.event.order.email.attachments.skipped': _('The email has been sent without attachments since they '
+                                                          'would have been too large to be likely to arrive.'),
         'pretix.event.order.email.custom_sent': _('A custom email has been sent.'),
         'pretix.event.order.email.download_reminder_sent': _('An email has been sent with a reminder that the ticket '
                                                              'is available for download.'),
