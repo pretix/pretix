@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-16 11:35+0000\n"
+"POT-Creation-Date: 2019-04-23 08:50+0000\n"
 "PO-Revision-Date: 2019-04-16 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -214,7 +214,7 @@ msgstr "Geen"
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:646
+#: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
@@ -256,91 +256,91 @@ msgstr[0] ""
 msgstr[1] ""
 "De items in je winkelwagen zijn nog {num} minuten voor je gereserveerd."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:14
+#: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Uitverkocht"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:15
+#: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Buy"
 msgstr "Kopen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Gereserveerd"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "FREE"
 msgstr "GRATIS"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "vanaf %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "incl. %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "plus %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "incl. belasting"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "excl. belasting"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js:24
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "nu beschikbaar: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:24
+#: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Alleen beschikbaar met een voucher"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimale hoeveelheid om te bestellen: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Sluit kaartjeswinkel"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "De kaartjeswinkel kon niet geladen worden."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr ""
 "De winkelwagen kon niet gemaakt worden. Probeer het later alsjeblieft "
 "opnieuw."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Wachtlijst"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -349,12 +349,12 @@ msgstr ""
 "Je hebt momenteel een actieve winkelwagen voor dit evenement. Als je meer "
 "producten selecteert worden deze toegevoegd aan je bestaande winkelwagen."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Doorgaan met afrekenen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
@@ -363,128 +363,136 @@ msgstr ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
 "\">ticketsysteem mogelijk gemaakt door pretix</a>"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:35
+#: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Verzilver een voucher"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:36
+#: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Verzilveren"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:37
+#: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Vouchercode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Close"
 msgstr "Sluiten"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js:40
 msgctxt "widget"
 msgid "Continue"
 msgstr "Ga verder"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
+#: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "See variations"
 msgstr "Zie variaties"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Ander evenement kiezen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js:43
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Choose a different event"
+msgctxt "widget"
+msgid "Choose a different date"
+msgstr "Ander evenement kiezen"
+
+#: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Back"
 msgstr "Terug"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Next month"
 msgstr "Volgende maand"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Vorige maand"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js:48
 msgid "Mo"
 msgstr "Ma"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Tu"
 msgstr "Di"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:48
+#: pretix/static/pretixpresale/js/widget/widget.js:50
 msgid "We"
 msgstr "Wo"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/js/widget/widget.js:51
 msgid "Th"
 msgstr "Do"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js:52
 msgid "Fr"
 msgstr "Vr"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js:53
 msgid "Sa"
 msgstr "Za"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js:54
 msgid "Su"
 msgstr "Zo"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js:57
 msgid "January"
 msgstr "Januari"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:56
+#: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "February"
 msgstr "Februari"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "March"
 msgstr "Maart"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "April"
 msgstr "April"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "May"
 msgstr "Mei"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "June"
 msgstr "Juni"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "July"
 msgstr "Juli"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "August"
 msgstr "Augustus"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "September"
 msgstr "September"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:66
 msgid "October"
 msgstr "Oktober"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "December"
 msgstr "December"
