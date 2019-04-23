@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict, namedtuple
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.dispatch import receiver
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
 
 from pretix.base.i18n import language
@@ -19,6 +19,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
+from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.pricing import get_price
@@ -134,6 +135,15 @@ class CartManager:
             raise CartError(error_messages['not_started'])
         if self.event.presale_has_ended:
             raise CartError(error_messages['ended'])
+        if not self.event.has_subevents:
+            tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+            if tlv:
+                term_last = make_aware(datetime.combine(
+                    tlv.datetime(self.event).date(),
+                    time(hour=23, minute=59, second=59)
+                ), self.event.timezone)
+                if term_last < self.now_dt:
+                    raise CartError(error_messages['ended'])
 
     def _extend_expiry_of_valid_existing_positions(self):
         # Extend this user's cart session to ensure all items in the cart expire at the same time
@@ -152,6 +162,18 @@ class CartManager:
                 err = error_messages['some_subevent_ended']
                 cp.addons.all().delete()
                 cp.delete()
+
+            if cp.subevent:
+                tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+                if tlv:
+                    term_last = make_aware(datetime.combine(
+                        tlv.datetime(cp.subevent).date(),
+                        time(hour=23, minute=59, second=59)
+                    ), self.event.timezone)
+                    if term_last < self.now_dt:
+                        err = error_messages['some_subevent_ended']
+                        cp.addons.all().delete()
+                        cp.delete()
         return err
 
     def _update_subevents_cache(self, se_ids: List[int]):
@@ -215,6 +237,16 @@ class CartManager:
 
             if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
+
+            if op.subevent:
+                tlv = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+                if tlv:
+                    term_last = make_aware(datetime.combine(
+                        tlv.datetime(op.subevent).date(),
+                        time(hour=23, minute=59, second=59)
+                    ), self.event.timezone)
+                    if term_last < self.now_dt:
+                        raise CartError(error_messages['ended'])
 
         if isinstance(op, self.AddOperation):
             if op.item.category and op.item.category.is_addon and not (op.addon_to and op.addon_to != 'FAKE'):

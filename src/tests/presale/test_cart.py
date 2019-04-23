@@ -71,6 +71,16 @@ class CartTest(CartTestMixin, TestCase):
         assert 'alert-danger' in response.rendered_content
         assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
 
+    def test_after_payment_period(self):
+        self.event.settings.payment_term_last = (now() - datetime.timedelta(days=1)).date().isoformat()
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-danger' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists()
+
     def test_after_event(self):
         self.event.date_to = now() - timedelta(days=1)
         self.event.save()
@@ -320,6 +330,20 @@ class CartTest(CartTestMixin, TestCase):
         }, follow=False)
         objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 1)
+
+    def test_subevent_payment_period_over(self):
+        self.event.has_subevents = True
+        self.event.save()
+        self.event.settings.payment_term_last = 'RELDATE/1/23:59:59/date_from/'
+        se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+        q = se.quotas.create(name="foo", size=None, event=self.event)
+        q.items.add(self.ticket)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
 
     def test_subevent_sale_over(self):
         self.event.has_subevents = True
