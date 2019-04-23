@@ -72,9 +72,11 @@ def safelink_callback(attrs, new=False):
 
 
 def abslink_callback(attrs, new=False):
-    attrs[None, 'href'] = urllib.parse.urljoin(settings.SITE_URL, attrs.get((None, 'href'), '/'))
-    attrs[None, 'target'] = '_blank'
-    attrs[None, 'rel'] = 'noopener'
+    url = attrs.get((None, 'href'), '/')
+    if not url.startswith('mailto:') and not url.startswith('tel:'):
+        attrs[None, 'href'] = urllib.parse.urljoin(settings.SITE_URL, url)
+        attrs[None, 'target'] = '_blank'
+        attrs[None, 'rel'] = 'noopener'
     return attrs
 
 
@@ -90,7 +92,7 @@ def markdown_compile_email(source):
         tags=ALLOWED_TAGS,
         attributes=ALLOWED_ATTRIBUTES,
         protocols=ALLOWED_PROTOCOLS,
-    ))
+    ), parse_email=True)
 
 
 def markdown_compile(source):
@@ -116,6 +118,7 @@ def rich_text(text: str, **kwargs):
     text = str(text)
     body_md = bleach.linkify(
         markdown_compile(text),
-        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback])
+        callbacks=DEFAULT_CALLBACKS + ([safelink_callback] if kwargs.get('safelinks', True) else [abslink_callback]),
+        parse_email=True
     )
     return mark_safe(body_md)
