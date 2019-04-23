@@ -229,7 +229,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     )
                 ))
             ).select_related(
-                'item', 'variation', 'item__category', 'addon_to', 'order'
+                'item', 'variation', 'item__category', 'addon_to', 'order', 'order__invoice_address'
             )
         else:
             qs = qs.prefetch_related(

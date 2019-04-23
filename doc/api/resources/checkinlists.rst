@@ -351,6 +351,9 @@ Order position endpoints
    * An additional boolean property ``require_attention`` will inform you whether either the order or the item
      have the ``checkin_attention`` flag set.
 
+   * If ``attendee_name`` is empty, it will automatically fall back to values from a parent product or from invoice
+     addresses.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -453,8 +456,15 @@ Order position endpoints
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)/
 
    Returns information on one order position, identified by its internal ID.
-   The result format is the same as the :ref:`order-position-resource`, with one important difference: the
-   ``checkins`` value will only include check-ins for the selected list.
+   The result is the same as the :ref:`order-position-resource`, with the following differences:
+
+   * The ``checkins`` value will only include check-ins for the selected list.
+
+   * An additional boolean property ``require_attention`` will inform you whether either the order or the item
+     have the ``checkin_attention`` flag set.
+
+   * If ``attendee_name`` is empty, it will automatically fall back to values from a parent product or from invoice
+     addresses.
 
    **Instead of an ID, you can also use the ``secret`` field as the lookup parameter.**
 

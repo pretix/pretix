@@ -184,8 +184,40 @@ class RequireAttentionField(serializers.Field):
         return instance.order.checkin_attention or instance.item.checkin_attention
 
 
+class AttendeeNameField(serializers.Field):
+    def to_representation(self, instance: OrderPosition):
+        an = instance.attendee_name
+        if not an:
+            if instance.addon_to_id:
+                an = instance.addon_to.attendee_name
+        if not an:
+            try:
+                an = instance.order.invoice_address.name
+            except InvoiceAddress.DoesNotExist:
+                pass
+        return an
+
+
+class AttendeeNamePartsField(serializers.Field):
+    def to_representation(self, instance: OrderPosition):
+        an = instance.attendee_name
+        p = instance.attendee_name_parts
+        if not an:
+            if instance.addon_to_id:
+                an = instance.addon_to.attendee_name
+                p = instance.addon_to.attendee_name_parts
+        if not an:
+            try:
+                p = instance.order.invoice_address.name_parts
+            except InvoiceAddress.DoesNotExist:
+                pass
+        return p
+
+
 class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     require_attention = RequireAttentionField(source='*')
+    attendee_name = AttendeeNameField(source='*')
+    attendee_name_parts = AttendeeNamePartsField(source='*')
     order__status = serializers.SlugRelatedField(read_only=True, slug_field='status', source='order')
 
     class Meta:

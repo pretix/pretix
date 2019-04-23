@@ -475,6 +475,23 @@ def test_custom_datetime(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_name_fallback(token_client, organizer, clist, event, order):
+    order.invoice_address.name_parts = {'_legacy': 'Paul'}
+    order.invoice_address.save()
+    op = order.positions.first()
+    op.attendee_name_cached = None
+    op.attendee_name_parts = {}
+    op.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, op.pk
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert resp.data['position']['attendee_name'] == 'Paul'
+    assert resp.data['position']['attendee_name_parts'] == {'_legacy': 'Paul'}
+
+
+@pytest.mark.django_db
 def test_by_secret(token_client, organizer, clist, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, order.positions.first().secret
