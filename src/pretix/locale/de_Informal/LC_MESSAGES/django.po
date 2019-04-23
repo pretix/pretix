@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: 2019-04-17 18:00+0000\n"
+"PO-Revision-Date: 2019-04-23 08:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1251,12 +1251,9 @@ msgid "Customer reference: {reference}"
 msgstr "Kundenseitige Referenz: {reference}"
 
 #: pretix/base/invoice.py:481
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Kunde"
+msgstr "USt-ID des Kunden"
 
 #: pretix/base/invoice.py:488
 msgctxt "invoice"
@@ -1339,11 +1336,8 @@ msgstr ""
 "Wechselkurs von 1:{rate} entspricht der Rechnungsbetrag {total}."
 
 #: pretix/base/invoice.py:662
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Classic renderer (pretix 1.0)"
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Klassisch (pretix 1.0)"
+msgstr "Modern (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1660,16 +1654,12 @@ msgid ""
 msgstr "Nur wenn dieser Haken gesetzt ist, wird der Termin im Shop angezeigt."
 
 #: pretix/base/models/event.py:842
-#, fuzzy
-#| msgid ""
-#| "If selected, this event will show up publicly on the list of events for "
-#| "your organizer account."
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
-"Wenn diese Option aktiviert ist, wird die Veranstaltung in der "
-"Veranstaltungsliste dieses Veranstalterkontos angezeigt."
+"Wenn diese Option aktiviert ist, wird die Veranstaltung in der Übersicht "
+"dieser Veranstaltungsreihe angezeigt."
 
 #: pretix/base/models/event.py:871 pretix/control/forms/event.py:1052
 msgid "Frontpage text"
@@ -5488,13 +5478,8 @@ msgid "Ask for beneficiary"
 msgstr "Nach abweichendem Leistungsempfänger fragen"
 
 #: pretix/control/forms/event.py:625
-#, fuzzy
-#| msgid ""
-#| "Does only work if an invoice address is asked for. VAT ID is not required."
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
-"Funktioniert nur, wenn nach einer Rechnungsadresse gefragt wird. Die USt-ID-"
-"Eingabe ist freiwillig."
+msgstr "Frage nicht nach einer Rechnungsadresse für kostenlose Bestellungen"
 
 #: pretix/control/forms/event.py:629
 msgid "Show free products on invoices"
@@ -7776,10 +7761,9 @@ msgid "{user} has been invited to the team."
 msgstr "{user} wurde ins Team eingeladen."
 
 #: pretix/control/logdisplay.py:393
-#, fuzzy, python-brace-format
-#| msgid "The invite for {user} has been revoked."
+#, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr "Die Einladung für {user} wurde zurückgenommen."
+msgstr "Die Einladung für {user} wurde erneut verschickt."
 
 #: pretix/control/logdisplay.py:396
 #, python-brace-format
@@ -8311,7 +8295,7 @@ msgstr "Geräte-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "Transaktionsnummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "Transaction Code"
@@ -11618,10 +11602,8 @@ msgid "invited, pending response"
 msgstr "eingeladen, Antwort ausstehend"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
-#, fuzzy
-#| msgid "Resend link"
 msgid "resend invite"
-msgstr "Link erneut senden"
+msgstr "erneut senden"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:73
 msgid ""
@@ -13873,10 +13855,8 @@ msgid "The invite has been revoked."
 msgstr "Die Einladung wurde zurückgenommen."
 
 #: pretix/control/views/organizer.py:571
-#, fuzzy
-#| msgid "The invite has been revoked."
 msgid "The invite has been resent."
-msgstr "Die Einladung wurde zurückgenommen."
+msgstr "Die Einladung wurde erneut verschickt."
 
 #: pretix/control/views/organizer.py:578
 msgid "Invalid token selected."
