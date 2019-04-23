@@ -40,6 +40,7 @@ var strings = {
     'continue': django.pgettext('widget', 'Continue'),
     'variations': django.pgettext('widget', 'See variations'),
     'back_to_list': django.pgettext('widget', 'Choose a different event'),
+    'back_to_dates': django.pgettext('widget', 'Choose a different date'),
     'back': django.pgettext('widget', 'Back'),
     'next_month': django.pgettext('widget', 'Next month'),
     'previous_month': django.pgettext('widget', 'Previous month'),
@@ -641,8 +642,11 @@ Vue.component('pretix-overlay', {
 Vue.component('pretix-widget-event-form', {
     template: ('<div class="pretix-widget-event-form">'
         + '<div class="pretix-widget-event-list-back" v-if="$root.events || $root.weeks">'
-        + '<a href="#" @click.prevent="back_to_list">&lsaquo; '
+        + '<a href="#" @click.prevent="back_to_list" v-if="!$root.subevent">&lsaquo; '
         + strings['back_to_list']
+        + '</a>'
+        + '<a href="#" @click.prevent="back_to_list" v-if="$root.subevent">&lsaquo; '
+        + strings['back_to_dates']
         + '</a>'
         + '</div>'
         + '<div class="pretix-widget-event-header" v-if="$root.events || $root.weeks">'
