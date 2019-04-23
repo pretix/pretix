@@ -41,11 +41,6 @@ include_pending                       boolean                    If ``true``, th
 
    The ``include_pending`` field has been added.
 
-.. versionchanged:: 2.7
-
-   The ``positions`` subresource now contains the new attributes ``require_attention`` and ``order__status`` and
-   accepts the new ``ignore_status`` filter.
-
 Endpoints
 ---------
 
@@ -341,6 +336,12 @@ Order position endpoints
 
    The order positions endpoint has been extended by the filter queries ``voucher`` and ``voucher__code``.
 
+.. versionchanged:: 2.7
+
+   The resource now contains the new attributes ``require_attention`` and ``order__status`` and accepts the new
+   ``ignore_status`` filter. The ``attendee_name`` field is now "smart" (see below) and the redemption endpoint
+   returns ``400`` instead of ``404`` on tickets which are known but not paid.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/
 
    Returns a list of all order positions within a given event. The result is the same as
@@ -419,7 +420,7 @@ Order position endpoints
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
-   :query string ignore_status: If set to ``true``, results will be returned regardles of the state of
+   :query string ignore_status: If set to ``true``, results will be returned regardless of the state of
                                  the order they belong to and you will need to do your own filtering by order status.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``order__code``,
                            ``order__datetime``, ``positionid``, ``attendee_name``, ``last_checked_in`` and ``order__email``. Default:
