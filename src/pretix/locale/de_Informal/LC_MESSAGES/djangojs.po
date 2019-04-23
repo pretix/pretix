@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: 2019-03-22 15:00+0000\n"
+"PO-Revision-Date: 2019-04-23 08:55+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -399,12 +399,9 @@ msgid "Choose a different event"
 msgstr "Andere Veranstaltung auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Choose a different event"
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "Andere Veranstaltung auswählen"
+msgstr "Anderen Termin auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
