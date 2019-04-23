@@ -74,6 +74,7 @@ TEST_SUBEVENT_RES = {
     'id': 1,
     'variation_price_overrides': [],
     'location': None,
+    'is_public': True,
     'item_price_overrides': [],
     'meta_data': {'type': 'Workshop'}
 }

@@ -20,6 +20,8 @@ name                                  multi-lingual string       The sub-event's
 event                                 string                     The slug of the parent event
 active                                boolean                    If ``true``, the sub-event ticket shop is publicly
                                                                  available.
+is_public                             boolean                    If ``true``, the sub-event ticket shop is publicly
+                                                                 shown in lists.
 date_from                             datetime                   The sub-event's start date
 date_to                               datetime                   The sub-event's end date (or ``null``)
 date_admission                        datetime                   The sub-event's admission date (or ``null``)
@@ -47,6 +49,10 @@ meta_data                             dict                       Values set for 
 
 .. versionchanged:: 2.6
    The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added.
+
+.. versionchanged:: 2.7
+
+   The attribute ``is_public`` has been added.
 
 Endpoints
 ---------
@@ -81,6 +87,7 @@ Endpoints
             "name": {"en": "First Sample Conference"},
             "event": "sampleconf",
             "active": false,
+            "is_public": true,
             "date_from": "2017-12-27T10:00:00Z",
             "date_to": null,
             "date_admission": null,
@@ -128,6 +135,7 @@ Endpoints
       {
         "name": {"en": "First Sample Conference"},
         "active": false,
+        "is_public": true,
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
         "date_admission": null,
@@ -157,6 +165,7 @@ Endpoints
         "id": 1,
         "name": {"en": "First Sample Conference"},
         "active": false,
+        "is_public": true,
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
         "date_admission": null,
@@ -207,6 +216,7 @@ Endpoints
         "name": {"en": "First Sample Conference"},
         "event": "sampleconf",
         "active": false,
+        "is_public": true,
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
         "date_admission": null,
@@ -270,6 +280,7 @@ Endpoints
         "name": {"en": "New Subevent Name"},
         "event": "sampleconf",
         "active": false,
+        "is_public": true,
         "date_from": "2017-12-27T10:00:00Z",
         "date_to": null,
         "date_admission": null,
@@ -353,6 +364,7 @@ Endpoints
             "name": {"en": "First Sample Conference"},
             "event": "sampleconf",
             "active": false,
+            "is_public": true,
             "date_from": "2017-12-27T10:00:00Z",
             "date_to": null,
             "date_admission": null,

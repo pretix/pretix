@@ -199,7 +199,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
     class Meta:
         model = SubEvent
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
-                  'presale_start', 'presale_end', 'location', 'event',
+                  'presale_start', 'presale_end', 'location', 'event', 'is_public',
                   'item_price_overrides', 'variation_price_overrides', 'meta_data')
 
     def validate(self, data):

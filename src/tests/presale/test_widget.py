@@ -334,6 +334,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
             se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
             self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
             data = json.loads(response.content.decode())
@@ -357,6 +358,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
             se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
             self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list?style=calendar' % (self.orga.slug, self.event.slug))
             settings.SITE_URL = 'http://example.com'
@@ -431,6 +433,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             self.event.subevents.create(name="Present", active=True, date_from=now())
             self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
             self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             settings.SITE_URL = 'http://example.com'
             response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
@@ -467,6 +470,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
             se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
             self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/widget/product_list?style=calendar' % (self.orga.slug,))
             settings.SITE_URL = 'http://example.com'

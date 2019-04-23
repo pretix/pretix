@@ -128,6 +128,7 @@ class EventListMixin:
         tz = pytz.timezone(self.request.event.settings.timezone)
         next_sev = self.request.event.subevents.filter(
             active=True,
+            is_public=True,
             date_from__gte=now()
         ).select_related('event').order_by('date_from').first()
 
@@ -152,6 +153,7 @@ class EventListMixin:
             event__is_public=True,
             event__live=True,
             active=True,
+            is_public=True,
             date_from__gte=now()
         ), self.request).select_related('event').order_by('date_from').first()
 
@@ -261,7 +263,7 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
 
 
 def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None):
-    qs = qs.filter(active=True).filter(
+    qs = qs.filter(active=True, is_public=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
@@ -382,6 +384,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                     event__organizer=self.request.organizer,
                     event__is_public=True,
                     event__live=True,
+                    is_public=True,
                     active=True
                 ),
                 request

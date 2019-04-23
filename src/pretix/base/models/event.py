@@ -639,22 +639,6 @@ class Event(EventMixin, LoggedModel):
         irs = self.get_invoice_renderers()
         return irs[self.settings.invoice_renderer]
 
-    @property
-    def active_subevents(self):
-        """
-        Returns a queryset of active subevents.
-        """
-        return self.subevents.filter(active=True).order_by('-date_from', 'name')
-
-    @property
-    def active_future_subevents(self):
-        return self.subevents.filter(
-            Q(active=True) & (
-                Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
-                | Q(date_to__gte=now())
-            )
-        ).order_by('date_from', 'name')
-
     def subevents_annotated(self, channel):
         return SubEvent.annotated(self.subevents, channel)
 
@@ -667,7 +651,7 @@ class Event(EventMixin, LoggedModel):
             'name_descending': ('-name', 'date_from'),
         }[ordering]
         subevs = queryset.filter(
-            Q(active=True) & (
+            Q(active=True) & Q(is_public=True) & (
                 Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
                 | Q(date_to__gte=now() - timedelta(hours=24))
             )
@@ -833,6 +817,8 @@ class SubEvent(EventMixin, LoggedModel):
     :type event: Event
     :param active: Whether to show the subevent
     :type active: bool
+    :param is_public: Whether to show the subevent in lists
+    :type is_public: bool
     :param name: This event's full title
     :type name: str
     :param date_from: The datetime this event starts
@@ -851,6 +837,10 @@ class SubEvent(EventMixin, LoggedModel):
     active = models.BooleanField(default=False, verbose_name=_("Active"),
                                  help_text=_("Only with this checkbox enabled, this date is visible in the "
                                              "frontend to users."))
+    is_public = models.BooleanField(default=True,
+                                    verbose_name=_("Show in lists"),
+                                    help_text=_("If selected, this event will show up publicly on the list of dates "
+                                                "for your event."))
     name = I18nCharField(
         max_length=200,
         verbose_name=_("Name"),
