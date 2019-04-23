@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-16 11:35+0000\n"
-"PO-Revision-Date: 2019-04-16 05:00+0000\n"
+"PO-Revision-Date: 2019-04-18 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5457,13 +5457,8 @@ msgid "Ask for beneficiary"
 msgstr "Vraag om ontvanger"
 
 #: pretix/control/forms/event.py:625
-#, fuzzy
-#| msgid ""
-#| "Does only work if an invoice address is asked for. VAT ID is not required."
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
-"Werkt alleen als een factuuradres wordt gevraagd. Btw-nummer is niet "
-"verplicht."
+msgstr "Vraag niet om een factuuradres als de bestelling gratis is"
 
 #: pretix/control/forms/event.py:629
 msgid "Show free products on invoices"
@@ -8287,7 +8282,7 @@ msgstr "Apparaat-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "Transactienummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "Transaction Code"

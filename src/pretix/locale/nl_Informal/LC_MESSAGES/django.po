@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-16 11:35+0000\n"
-"PO-Revision-Date: 2019-04-16 05:00+0000\n"
+"PO-Revision-Date: 2019-04-18 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -5449,13 +5449,8 @@ msgid "Ask for beneficiary"
 msgstr "Vraag om ontvanger"
 
 #: pretix/control/forms/event.py:625
-#, fuzzy
-#| msgid ""
-#| "Does only work if an invoice address is asked for. VAT ID is not required."
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
-"Werkt alleen als een factuuradres wordt gevraagd. Btw-nummer is niet "
-"verplicht."
+msgstr "Vraag niet om een factuuradres als de bestelling gratis is"
 
 #: pretix/control/forms/event.py:629
 msgid "Show free products on invoices"
@@ -8278,7 +8273,7 @@ msgstr "Apparaat-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "Transactienummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "Transaction Code"
@@ -9821,8 +9816,7 @@ msgid ""
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
 "Merk op dat je product <strong>niet</strong> beschikbaar zal zijn om te "
-"kopen tot je het aan een bestaand of nieuw aangemaakt quotum heeft "
-"toegevoegd."
+"kopen tot je het aan een bestaand of nieuw aangemaakt quotum toevoegt."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:46
 msgid ""
@@ -9912,8 +9906,7 @@ msgid ""
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
 "Merk op dat je variant <strong>niet</strong> beschikbaar zal zijn om te "
-"kopen tot je het aan een bestaand of nieuw aangemaakt quotum heeft "
-"toegevoegd."
+"kopen tot je het aan een bestaand of nieuw aangemaakt quotum toevoegt."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:88
 msgid "Add a new variation"
