@@ -9,6 +9,7 @@ window.PretixWidget = {
 };
 
 var Vue = module.exports;
+Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
     'sold_out': django.pgettext('widget', 'Sold out'),
@@ -542,6 +543,9 @@ var shared_methods = {
             window.open(redirect_url);
         }
     },
+    handleResize: function () {
+        this.mobile = this.$refs.wrapper.clientWidth <= 800;
+    }
 };
 
 var shared_widget_data = function () {
@@ -918,6 +922,7 @@ Vue.component('pretix-widget-event-calendar', {
 Vue.component('pretix-widget', {
     template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
         + '<div :class="classObject">'
+        + '<resize-observer @notify="handleResize" />'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
         + '<pretix-widget-event-form ref="formcomp" v-if="$root.view === \'event\'"></pretix-widget-event-form>'

@@ -108,6 +108,7 @@ def generate_widget_js(lang):
 
         files = [
             'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
+            'vuejs/vue-resize.min.js',
             'pretixpresale/js/widget/docready.js',
             'pretixpresale/js/widget/floatformat.js',
             'pretixpresale/js/widget/widget.js',
