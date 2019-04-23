@@ -189,7 +189,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         except ValueError:
             raise Http404()
 
-    def get_queryset(self):
+    def get_queryset(self, ignore_status=False):
         cqs = Checkin.objects.filter(
             position_id=OuterRef('pk'),
             list_id=self.checkinlist.pk
@@ -204,7 +204,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             last_checked_in=Subquery(cqs)
         )
 
-        if self.request.query_params.get('ignore_status', 'false') != 'true':
+        if self.request.query_params.get('ignore_status', 'false') != 'true' and not ignore_status:
             qs = qs.filter(
                 order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.checkinlist.include_pending else [Order.STATUS_PAID]
             )
@@ -251,7 +251,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         force = bool(self.request.data.get('force', False))
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
-        op = self.get_object()
+        op = self.get_object(ignore_status=True)
 
         if 'datetime' in self.request.data:
             dt = DateTimeField().to_internal_value(self.request.data.get('datetime'))
@@ -304,8 +304,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=201)
 
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
+    def get_object(self, ignore_status=False):
+        queryset = self.filter_queryset(self.get_queryset(ignore_status=ignore_status))
         if self.kwargs['pk'].isnumeric():
             obj = get_object_or_404(queryset, Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
         else:

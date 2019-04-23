@@ -547,7 +547,16 @@ def test_require_paid(token_client, organizer, clist, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, order.positions.first().pk
     ), {}, format='json')
-    assert resp.status_code == 404
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'unpaid'
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, order.positions.first().pk
+    ), {'ignore_unpaid': True}, format='json')
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'unpaid'
 
     clist.include_pending = True
     clist.save()

@@ -539,7 +539,8 @@ Order position endpoints
    :<json boolean force: Specifies that the check-in should succeed regardless of previous check-ins or required
                          questions that have not been filled. Defaults to ``false``.
    :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
-                                 Defaults to ``false``.
+                                 Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
+                                 list.
    :<json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
                         this request twice with the same nonce, the second request will also succeed but will always
                         create only one check-in object even when the previous request was successful as well. This
