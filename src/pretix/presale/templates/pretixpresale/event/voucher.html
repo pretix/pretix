@@ -93,6 +93,13 @@
                                                 {% endif %}
                                             </div>
                                             <div class="col-md-2 col-xs-6 price">
+                                                {% if var.original_price %}
+                                                    <del>{{ var.original_price|money:event.currency }}</del>
+                                                    <ins>
+                                                {% elif item.original_price %}
+                                                    <del>{{ item.original_price|money:event.currency }}</del>
+                                                    <ins>
+                                                {% endif %}
                                                 {% if item.free_price %}
                                                     <div class="input-group input-group-price">
                                                         <span class="input-group-addon">{{ event.currency }}</span>
@@ -110,6 +117,9 @@
                                                     {{ var.display_price.net|money:event.currency }}
                                                 {% else %}
                                                     {{ var.display_price.gross|money:event.currency }}
+                                                {% endif %}
+                                                {% if item.original_price or var.original_price %}
+                                                    </ins>
                                                 {% endif %}
                                             {% if item.includes_mixed_tax_rate %}
                                                 {% if event.settings.display_net_prices %}
@@ -189,6 +199,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-xs-6 price">
+                                    {% if item.original_price %}
+                                        <del>{{ item.original_price|money:event.currency }}</del>
+                                        <ins>
+                                    {% endif %}
                                     {% if item.free_price %}
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
@@ -205,6 +219,9 @@
                                         {{ item.display_price.net|money:event.currency }}
                                     {% else %}
                                         {{ item.display_price.gross|money:event.currency }}
+                                    {% endif %}
+                                    {% if item.original_price %}
+                                        </ins>
                                     {% endif %}
                                     {% if item.includes_mixed_tax_rate %}
                                         {% if event.settings.display_net_prices %}
