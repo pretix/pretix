@@ -100,6 +100,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                         'list': self.list.pk,
                         'web': True
                     }, user=request.user)
+                    op.order.touch()
 
             messages.success(request, _('The selected check-ins have been reverted.'))
         else:
@@ -247,7 +248,7 @@ class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         self.object.checkins.all().delete()
-        self.object.log_action(action='pretix.event.orders.deleted', user=request.user)
+        self.object.log_action(action='pretix.event.checkinlists.deleted', user=request.user)
         self.object.delete()
         messages.success(self.request, _('The selected list has been deleted.'))
         return HttpResponseRedirect(success_url)

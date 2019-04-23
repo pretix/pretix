@@ -69,6 +69,8 @@ def order(event, item, other_item, taxrule):
 
 TEST_ORDERPOSITION1_RES = {
     "id": 1,
+    "require_attention": False,
+    "order__status": "p",
     "order": "FOO",
     "positionid": 1,
     "item": 1,
@@ -92,6 +94,8 @@ TEST_ORDERPOSITION1_RES = {
 
 TEST_ORDERPOSITION2_RES = {
     "id": 2,
+    "require_attention": False,
+    "order__status": "p",
     "order": "FOO",
     "positionid": 2,
     "item": 1,
@@ -371,6 +375,14 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     ))
     assert resp.status_code == 200
     assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ignore_status=true'.format(
+        organizer.slug, event.slug, clist_all.pk
+    ))
+    assert resp.status_code == 200
+    p1['order__status'] = 'n'
+    p2['order__status'] = 'n'
+    assert [p2, p1] == resp.data['results']
 
 
 @pytest.mark.django_db

@@ -179,6 +179,23 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             self.fields.pop('pdf_data')
 
 
+class RequireAttentionField(serializers.Field):
+    def to_representation(self, instance: OrderPosition):
+        return instance.order.checkin_attention or instance.item.checkin_attention
+
+
+class CheckinListOrderPositionSerializer(OrderPositionSerializer):
+    require_attention = RequireAttentionField(source='*')
+    order__status = serializers.SlugRelatedField(read_only=True, slug_field='status', source='order')
+
+    class Meta:
+        model = OrderPosition
+        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'require_attention',
+                  'order__status')
+
+
 class OrderPaymentTypeField(serializers.Field):
     # TODO: Remove after pretix 2.2
     def to_representation(self, instance: Order):

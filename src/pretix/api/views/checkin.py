@@ -13,7 +13,7 @@ from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import CheckinListSerializer
 from pretix.api.serializers.item import QuestionSerializer
-from pretix.api.serializers.order import OrderPositionSerializer
+from pretix.api.serializers.order import CheckinListOrderPositionSerializer
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.models import (
@@ -153,7 +153,7 @@ class CheckinOrderPositionFilter(OrderPositionFilter):
 
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = OrderPositionSerializer
+    serializer_class = CheckinListOrderPositionSerializer
     queryset = OrderPosition.objects.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     ordering = ('attendee_name_cached', 'positionid')
@@ -199,11 +199,15 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.checkinlist.include_pending else [Order.STATUS_PAID],
             subevent=self.checkinlist.subevent
         ).annotate(
             last_checked_in=Subquery(cqs)
         )
+
+        if self.request.query_params.get('ignore_status', 'false') != 'true':
+            qs = qs.filter(
+                order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.checkinlist.include_pending else [Order.STATUS_PAID]
+            )
         if self.request.query_params.get('pdf_data', 'false') == 'true':
             qs = qs.prefetch_related(
                 Prefetch(
@@ -225,7 +229,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     )
                 ))
             ).select_related(
-                'item', 'variation', 'item__category', 'addon_to'
+                'item', 'variation', 'item__category', 'addon_to', 'order'
             )
         else:
             qs = qs.prefetch_related(
@@ -235,7 +239,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 ),
                 'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
-            ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address')
+            ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order')
 
         if not self.checkinlist.all_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))
@@ -281,7 +285,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({
                 'status': 'incomplete',
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data,
+                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
                 ]
@@ -291,13 +295,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'status': 'error',
                 'reason': e.code,
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data
+                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': OrderPositionSerializer(op, context=self.get_serializer_context()).data
+                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
             }, status=201)
 
     def get_object(self):
