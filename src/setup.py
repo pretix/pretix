@@ -141,6 +141,7 @@ setup(
         'django-oauth-toolkit==1.2.*',
         'oauthlib==2.1.*',
         'idna==2.6',  # required by current requests
+        'urllib3==1.24',  # required by current requests
     ],
     extras_require={
         'dev': [

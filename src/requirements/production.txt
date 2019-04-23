@@ -53,6 +53,7 @@ pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.0.1
 vat_moss==0.11.0
 django-localflavor
-idna==2.6 # required by current requests
+idna==2.6 # required by cureent requests
+urllib3==1.24 # required by cureent requests
 django-redis==4.10.*
 redis==3.2.*
