@@ -120,10 +120,16 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                 max_per_order
             )
 
-            price = item_price_override.get(item.pk, item.default_price)
+            original_price = item_price_override.get(item.pk, item.default_price)
             if voucher:
-                price = voucher.calculate_price(price)
+                price = voucher.calculate_price(original_price)
+            else:
+                price = original_price
+
             item.display_price = item.tax(price, currency=event.currency, include_bundled=True)
+
+            if price != original_price:
+                item.original_price = original_price
 
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
@@ -143,10 +149,16 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                     max_per_order
                 )
 
-                price = var_price_override.get(var.pk, var.price)
+                original_price = var_price_override.get(var.pk, var.price)
                 if voucher:
-                    price = voucher.calculate_price(price)
+                    price = voucher.calculate_price(original_price)
+                else:
+                    price = original_price
+
                 var.display_price = var.tax(price, currency=event.currency, include_bundled=True)
+
+                if price != original_price:
+                    var.original_price = original_price
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 
