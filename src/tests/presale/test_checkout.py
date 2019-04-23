@@ -1439,6 +1439,18 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
 
+    def test_confirm_payment_period_over(self):
+        self.event.settings.payment_term_last = (now() - datetime.timedelta(days=1)).date().isoformat()
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+
     def test_confirm_require_voucher(self):
         self.ticket.require_voucher = True
         self.ticket.save()
@@ -1707,6 +1719,24 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.event.settings.display_net_prices = True
         self.event.save()
         se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() - datetime.timedelta(days=1))
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se
+        )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'presale period for one of the events in your cart has ended.' in response.rendered_content
+        assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+    def test_confirm_subevent_payment_period_over(self):
+        self.event.has_subevents = True
+        self.event.settings.display_net_prices = True
+        self.event.save()
+        self.event.settings.payment_term_last = 'RELDATE/1/23:59:59/date_from/'
+        se = self.event.subevents.create(name='Foo', date_from=now())
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=23, expires=now() + timedelta(minutes=10), subevent=se

@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import Counter, namedtuple
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import List, Optional
 
@@ -14,7 +14,7 @@ from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
 
 from pretix.api.models import OAuthApplication
@@ -34,6 +34,7 @@ from pretix.base.models.orders import (
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
@@ -403,6 +404,16 @@ def _check_date(event: Event, now_dt: datetime):
     if event.presale_has_ended:
         raise OrderError(error_messages['ended'])
 
+    if not event.has_subevents:
+        tlv = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+        if tlv:
+            term_last = make_aware(datetime.combine(
+                tlv.datetime(event).date(),
+                time(hour=23, minute=59, second=59)
+            ), event.timezone)
+            if term_last < now_dt:
+                raise OrderError(error_messages['ended'])
+
 
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None):
     err = None
@@ -456,6 +467,18 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['some_subevent_not_started']
             delete(cp)
             break
+
+        if cp.subevent:
+            tlv = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
+            if tlv:
+                term_last = make_aware(datetime.combine(
+                    tlv.datetime(cp.subevent).date(),
+                    time(hour=23, minute=59, second=59)
+                ), event.timezone)
+                if term_last < now_dt:
+                    err = err or error_messages['some_subevent_ended']
+                    delete(cp)
+                    break
 
         if cp.subevent and cp.subevent.presale_has_ended:
             err = err or error_messages['some_subevent_ended']
