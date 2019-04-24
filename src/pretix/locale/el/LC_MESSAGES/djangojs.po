@@ -8,46 +8,48 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-04-24 22:00+0000\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
+"el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "Επισήμανση ως πληρωμένο"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "Σχόλιο:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "Παραγγελίες"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Πληρωμένες παραγγελίες"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "Συνολικά κέρδη"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr ""
+msgstr "??????"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:95
@@ -55,6 +57,9 @@ msgid ""
 "Your request has been queued on the server and will now be processed. "
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
+"Το αίτημά σας έχει τεθεί σε ουρά στο διακομιστή και θα υποβληθεί σε "
+"επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος, αυτό μπορεί να διαρκέσει "
+"μερικά λεπτά."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:101
@@ -63,33 +68,40 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"Το αίτημά σας έφτασε στο διακομιστή, αλλά περιμένουμε ακόμα την επεξεργασία "
+"του. Αν αυτό διαρκεί περισσότερο από δύο λεπτά, επικοινωνήστε μαζί μας ή "
+"επιστρέψτε στο πρόγραμμα περιήγησής σας και δοκιμάστε ξανά."
 
 #: pretix/static/pretixbase/js/asynctask.js:66
 #: pretix/static/pretixbase/js/asynctask.js:124
 #: pretix/static/pretixcontrol/js/ui/mail.js:23
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα τύπου {code}."
 
 #: pretix/static/pretixbase/js/asynctask.js:69
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Αυτήν τη στιγμή δεν μπορούμε να φτάσουμε στο διακομιστή, αλλά συνεχίζουμε να "
+"προσπαθούμε. Τελευταίος κωδικός σφάλματος: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:115
 #: pretix/static/pretixcontrol/js/ui/mail.js:20
 msgid "The request took to long. Please try again."
-msgstr ""
+msgstr "Το αίτημα διήρκησε πολύ. Παρακαλώ προσπαθήστε ξανά."
 
 #: pretix/static/pretixbase/js/asynctask.js:127
 #: pretix/static/pretixcontrol/js/ui/mail.js:25
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Αυτήν τη στιγμή δεν μπορούμε να συνδεθούμε με το διακομιστή. Παρακαλώ "
+"προσπαθήστε ξανά. Κωδικός σφάλματος: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:148
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Επεξεργαζόμαστε το αίτημά σας …"
 
 #: pretix/static/pretixbase/js/asynctask.js:156
 msgid ""
@@ -97,43 +109,46 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Προς το παρόν στέλνουμε το αίτημά σας στο διακομιστή. Αν αυτό διαρκεί "
+"περισσότερο από ένα λεπτό, ελέγξτε τη σύνδεσή σας στο διαδίκτυο και στη "
+"συνέχεια επαναλάβετε τη φόρτωση αυτής της σελίδας και δοκιμάστε ξανά."
 
 #: pretix/static/pretixbase/js/asynctask.js:193
 #: pretix/static/pretixcontrol/js/ui/main.js:20
 msgid "Close message"
-msgstr ""
+msgstr "Κλείσιμο μηνύματος"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Αντιγράφηκε!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Πατήστε Ctrl-C για αντιγραφή!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:43
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "Οδηγός σάρωσης QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:45
 msgid "Check-in QR"
-msgstr ""
+msgstr "Έλεγχος QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
-msgstr ""
+msgstr "Ομάδα αντικειμένων"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:424
 msgid "Text object"
-msgstr ""
+msgstr "Αντικείμενο κειμένου"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:426
 msgid "Barcode area"
-msgstr ""
+msgstr "Περιοχή Barcode"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
@@ -141,53 +156,60 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
-msgstr ""
+msgstr "Αντικείμενο"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:434
 msgid "Ticket design"
-msgstr ""
+msgstr "Σχεδιασμός εισιτηρίων"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:687
 msgid "Saving failed."
-msgstr ""
+msgstr "Η αποθήκευση απέτυχε."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:735
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
+"Θέλετε πραγματικά να αφήσετε τον επεξεργαστή χωρίς να αποθηκεύσετε τις "
+"αλλαγές σας;"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:749
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:18
 msgid "An error has occurred."
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "Δημιουργία μηνυμάτων …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
-msgstr ""
+msgstr "Αγνωστο σφάλμα."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:217
 msgid "Your color has great contrast and is very easy to read!"
 msgstr ""
+"Το χρώμα σας έχει μεγάλη αντίθεση και είναι πολύ εύκολο να το διαβάσετε!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:221
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Το χρώμα σας έχει αξιοπρεπή αντίθεση και είναι ίσως αρκετά καλό για να "
+"διαβάσετε!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:225
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Το χρώμα σας έχει κακή αντίθεση για κείμενο σε λευκό φόντο, επιλέξτε μια πιο "
+"σκούρα σκιά."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "All"
-msgstr ""
+msgstr "Ολα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "None"
@@ -195,11 +217,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτερικά"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
-msgstr ""
+msgstr "Κάντε κλικ για να κλείσετε"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -207,15 +229,15 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
-msgstr ""
+msgstr "Λογαριασμός"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:120
 msgid "Yes"
-msgstr ""
+msgstr "Ναι"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:121
 msgid "No"
-msgstr ""
+msgstr "Όχι"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
@@ -225,11 +247,11 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Τα αντικείμενα στο καλάθι σας δεν είναι πλέον αποκλειστικά για εσάς."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
-msgstr ""
+msgstr "Το καλάθι έληξε"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
@@ -245,7 +267,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Αγορά"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
@@ -255,7 +277,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "ΔΩΡΕΑΝ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
