@@ -304,7 +304,7 @@ Vue.component('variation', {
         + '</div>'
 
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="item.original_price"'
+        + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
         + '</pricebox>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
@@ -321,6 +321,12 @@ Vue.component('variation', {
         item: Object,
     },
     computed: {
+        orig_price: function () {
+            if (this.variation.original_price) {
+                return this.variation.original_price;
+            }
+            return this.item.original_price;
+        },
         quota_left_str: function () {
             return django.interpolate(strings["quota_left"], [this.variation.avail[1]]);
         },
