@@ -140,7 +140,7 @@ class VoucherForm(I18nModelForm):
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
             cnt = len(data['codes']) * data.get('max_usages', 0)
         else:
-            cnt = data['max_usages']
+            cnt = data.get('max_usages', 0)
 
         Voucher.clean_item_properties(
             data, self.instance.event,
