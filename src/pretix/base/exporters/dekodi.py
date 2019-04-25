@@ -158,7 +158,7 @@ class DekodiNREIExporter(BaseExporter):
                     'PTNo4': None,
                     'PTNo5': None,
                     'PTNo6': None,
-                    'PTNo7': str(p.amount),
+                    'PTNo7': round(float(p.amount), 2),
                     'PTNo8': str(self.event.currency),
                     'PTNo9': None,
                     'PTNo10': None,
