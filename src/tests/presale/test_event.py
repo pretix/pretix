@@ -557,10 +557,12 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
 
         var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
         var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.items.add(self.item)
         q.variations.add(var1)
         q.variations.add(var2)
         SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
 
+        self.v.quota = q
         self.v.value = Decimal("2.00")
         self.v.price_mode = 'subtract'
         self.v.save()
@@ -580,10 +582,12 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
 
         var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
         var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.items.add(self.item)
         q.variations.add(var1)
         q.variations.add(var2)
         SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
 
+        self.v.quota = q
         self.v.value = Decimal("2.00")
         self.v.price_mode = 'subtract'
         self.v.save()
@@ -606,6 +610,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
 
         var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
         var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+        q.items.add(self.item)
         q.variations.add(var1)
         q.variations.add(var2)
 
