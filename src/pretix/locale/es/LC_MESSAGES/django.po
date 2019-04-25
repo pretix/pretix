@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: 2019-03-31 08:00+0000\n"
+"PO-Revision-Date: 2019-04-26 02:00+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -139,7 +139,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:617
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "El articulo add-on no debe de tener add-ons en si mismo."
 
 #: pretix/api/serializers/item.py:130
 #, fuzzy
@@ -1917,6 +1917,8 @@ msgid ""
 "If this option is set, the product will only be sold as part of bundle "
 "products."
 msgstr ""
+"Si esta opción está habilitada, el producto será solo vendido como parte de "
+"paquete."
 
 #: pretix/base/models/items.py:338
 msgid "Allow product to be canceled"
@@ -2113,7 +2115,7 @@ msgstr "Número"
 
 #: pretix/base/models/items.py:832
 msgid "Designated price part"
-msgstr ""
+msgstr "Precio designado de la parte"
 
 #: pretix/base/models/items.py:833
 msgid ""
@@ -8356,7 +8358,7 @@ msgstr "ID del dispositivo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "ID del recibo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "Transaction Code"
@@ -11278,7 +11280,7 @@ msgstr "Ir a la taquilla"
 #: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr "¡Ve!"
+msgstr "¡Ir!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, python-format
@@ -14678,6 +14680,8 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try ot re-import the file."
 msgstr ""
+"Algunas transacciones pueden estar perdidas, por favor intenta reimportar el "
+"archivo."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
@@ -17406,11 +17410,11 @@ msgstr "Inglés"
 
 #: pretix/settings.py:400
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 #: pretix/settings.py:401
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chino (simplificado)"
 
 #: pretix/settings.py:674
 msgid "Read access"
