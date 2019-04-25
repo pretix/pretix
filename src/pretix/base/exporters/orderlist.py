@@ -6,7 +6,7 @@ from django import forms
 from django.db.models import DateTimeField, F, Max, OuterRef, Subquery, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import pgettext, ugettext as _, ugettext_lazy
 
 from pretix.base.models import (
     InvoiceAddress, InvoiceLine, Order, OrderPosition,
@@ -269,6 +269,10 @@ class OrderListExporter(MultiSheetListExporter):
             _('Status'),
             _('Email'),
             _('Order date'),
+        ]
+        if self.event.has_subevents:
+            headers.append(pgettext('subevent', 'Date'))
+        headers += [
             _('Product'),
             _('Variation'),
             _('Price'),
@@ -311,6 +315,10 @@ class OrderListExporter(MultiSheetListExporter):
                 order.get_status_display(),
                 order.email,
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
+            ]
+            if self.event.has_subevents:
+                row.append(op.subevent)
+            row += [
                 str(op.item),
                 str(op.variation) if op.variation else '',
                 op.price,
