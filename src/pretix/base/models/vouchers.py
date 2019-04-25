@@ -344,6 +344,8 @@ class Voucher(LoggedModel):
         a variation).
         """
         if self.quota_id:
+            if variation:
+                return variation.quotas.filter(pk=self.quota_id).exists()
             return item.quotas.filter(pk=self.quota_id).exists()
         if self.item_id and not self.variation_id:
             return self.item_id == item.pk

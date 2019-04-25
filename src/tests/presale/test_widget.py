@@ -242,6 +242,67 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "cart_exists": False
         }
 
+    def test_product_list_view_with_voucher_variation_through_quota(self):
+        self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE")
+        self.quota_shirts.variations.remove(self.shirt_blue)
+        response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert data == {
+            "name": "30C3",
+            "currency": "EUR",
+            "show_variations_expanded": False,
+            "display_net_prices": False,
+            "vouchers_exist": True,
+            "waiting_list_enabled": False,
+            "error": None,
+            "items_by_category": [
+                {
+                    "items": [
+                        {
+                            'id': self.shirt.pk,
+                            'name': 'T-Shirt',
+                            'picture': None,
+                            'description': None,
+                            'has_variations': 2,
+                            'require_voucher': False,
+                            'order_min': None,
+                            'order_max': None,
+                            'price': None,
+                            'min_price': '14.00',
+                            'max_price': '14.00',
+                            'free_price': False,
+                            'avail': None,
+                            'original_price': None,
+                            'variations': [
+                                {
+                                    'id': self.shirt_red.pk,
+                                    'value': 'Red',
+                                    'order_max': 2,
+                                    'description': None,
+                                    'price': {
+                                        'gross': '14.00',
+                                        'net': '11.76',
+                                        'tax': '2.24',
+                                        'rate': '19.00',
+                                        'name': '',
+                                        'includes_mixed_tax_rate': False
+                                    },
+                                    'avail': [100, None]
+                                },
+                            ]
+                        }
+                    ],
+                    "description": None,
+                    "id": self.category.pk,
+                    "name": "Everything"
+                }
+            ],
+            "itemnum": 1,
+            "display_add_to_cart": True,
+            "cart_exists": False
+        }
+
     def test_product_list_view_with_voucher_expired(self):
         self.event.vouchers.create(item=self.ticket, code="ABCDE", valid_until=now() - datetime.timedelta(days=1))
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))

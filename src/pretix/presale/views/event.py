@@ -94,6 +94,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
         item_price_override = {}
         var_price_override = {}
 
+    restrict_vars = set()
+    if voucher and voucher.quota_id:
+        # If a voucher is set to a specific quota, we need to filter out on that level
+        restrict_vars = set(voucher.quota.variations.all())
+
     for item in items:
         if voucher and voucher.item_id and voucher.variation_id:
             # Restrict variations if the voucher only allows one
@@ -163,8 +168,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 
             item.available_variations = [
-                v for v in item.available_variations if v._subevent_quotas
+                v for v in item.available_variations if v._subevent_quotas and (
+                    not voucher or not voucher.quota_id or v in restrict_vars
+                )
             ]
+
             if voucher and voucher.variation_id:
                 item.available_variations = [v for v in item.available_variations
                                              if v.pk == voucher.variation_id]
