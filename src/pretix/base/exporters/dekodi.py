@@ -1,9 +1,12 @@
 import json
+from collections import OrderedDict
 from decimal import Decimal
 
+import dateutil
+from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext, ugettext_lazy
 
 from pretix.base.i18n import language
 from pretix.base.models import Invoice, OrderPayment
@@ -15,6 +18,7 @@ from ..signals import register_data_exporters
 class DekodiNREIExporter(BaseExporter):
     identifier = 'dekodi_nrei'
     verbose_name = 'dekodi NREI (JSON)'
+
     # Specification: http://manuals.dekodi.de/nexuspub/schnittstellenbuch/
 
     def _encode_invoice(self, invoice: Invoice):
@@ -59,8 +63,8 @@ class DekodiNREIExporter(BaseExporter):
         payments = []
         paypal_email = None
         for p in invoice.order.payments.filter(
-            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_PENDING,
-                       OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_REFUNDED)
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_PENDING,
+                           OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_REFUNDED)
         ):
             if p.provider == 'paypal':
                 paypal_email = p.info_data.get('payer', {}).get('payer_info', {}).get('email')
@@ -247,15 +251,52 @@ class DekodiNREIExporter(BaseExporter):
         }
 
     def render(self, form_data):
+        qs = self.event.invoices.select_related('order').prefetch_related('lines', 'lines__subevent')
+
+        if form_data.get('date_from'):
+            date_value = form_data.get('date_from')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+            qs = qs.filter(date__gte=date_value)
+
+        if form_data.get('date_to'):
+            date_value = form_data.get('date_to')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+            qs = qs.filter(date__lte=date_value)
+
         jo = {
             'Format': 'NREI',
             'Version': '18.10.2',
             'SourceSystem': 'pretix',
             'Data': [
-                self._encode_invoice(i) for i in self.event.invoices.select_related('order').prefetch_related('lines', 'lines__subevent')
+                self._encode_invoice(i) for i in qs
             ]
         }
         return '{}_nrei.json'.format(self.event.slug), 'application/json', json.dumps(jo, cls=DjangoJSONEncoder, indent=4)
+
+    @property
+    def export_form_fields(self):
+        return OrderedDict(
+            [
+                ('date_from',
+                 forms.DateField(
+                     label=ugettext_lazy('Start date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=ugettext_lazy('Only include invoices issued on or after this date. Note that the invoice date does '
+                                             'not always correspond to the order or payment date.')
+                 )),
+                ('date_to',
+                 forms.DateField(
+                     label=ugettext_lazy('End date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                     help_text=ugettext_lazy('Only include invoices issued on or before this date. Note that the invoice date '
+                                             'does not always correspond to the order or payment date.')
+                 )),
+            ]
+        )
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_dekodi_nrei")
