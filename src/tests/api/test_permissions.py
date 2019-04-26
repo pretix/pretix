@@ -2,6 +2,7 @@ import time
 
 import pytest
 from django.test import override_settings
+from django.utils.timezone import now
 
 from pretix.base.models import Organizer
 
@@ -442,3 +443,17 @@ def test_token_org_subresources_permission_not_allowed(token_client, team, organ
         assert resp.status_code == 403
     else:
         assert resp.status_code in (404, 403)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", event_urls)
+def test_event_staff_requires_staff_session(user_client, organizer, team, event, url, user):
+    team.delete()
+    user.is_staff = True
+    user.save()
+
+    resp = user_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
+    assert resp.status_code == 403
+    user.staffsession_set.create(date_start=now(), session_key=user_client.session.session_key)
+    resp = user_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
+    assert resp.status_code == 200

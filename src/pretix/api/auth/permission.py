@@ -1,7 +1,8 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from pretix.api.models import OAuthAccessToken
-from pretix.base.models import Device, Event
+from pretix.base.models import Device, Event, User
+from pretix.base.models.auth import SuperuserPermissionSet
 from pretix.base.models.organizer import Organizer, TeamAPIToken
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
@@ -37,10 +38,13 @@ class EventPermission(BasePermission):
                 slug=request.resolver_match.kwargs['event'],
                 organizer__slug=request.resolver_match.kwargs['organizer'],
             ).select_related('organizer').first()
-            if not request.event or not perm_holder.has_event_permission(request.event.organizer, request.event):
+            if not request.event or not perm_holder.has_event_permission(request.event.organizer, request.event, request=request):
                 return False
             request.organizer = request.event.organizer
-            request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
+            if isinstance(perm_holder, User) and perm_holder.has_active_staff_session(request.session.session_key):
+                request.eventpermset = SuperuserPermissionSet()
+            else:
+                request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
 
             if required_permission and required_permission not in request.eventpermset:
                 return False
@@ -49,9 +53,12 @@ class EventPermission(BasePermission):
             request.organizer = Organizer.objects.filter(
                 slug=request.resolver_match.kwargs['organizer'],
             ).first()
-            if not request.organizer or not perm_holder.has_organizer_permission(request.organizer):
+            if not request.organizer or not perm_holder.has_organizer_permission(request.organizer, request=request):
                 return False
-            request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
+            if isinstance(perm_holder, User) and perm_holder.has_active_staff_session(request.session.session_key):
+                request.orgapermset = SuperuserPermissionSet()
+            else:
+                request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
 
             if required_permission and required_permission not in request.orgapermset:
                 return False
