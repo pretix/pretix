@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: 2019-04-16 05:00+0000\n"
+"PO-Revision-Date: 2019-04-27 21:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -396,12 +396,9 @@ msgid "Choose a different event"
 msgstr "Ander evenement kiezen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Choose a different event"
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "Ander evenement kiezen"
+msgstr "Andere datum kiezen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
