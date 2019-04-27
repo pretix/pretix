@@ -8,80 +8,82 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-04-27 21:00+0000\n"
+"Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
+"sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:124
 #: pretix/control/views/dashboards.py:381
 msgid "Shop disabled"
-msgstr ""
+msgstr "Butiken är inaktiverad"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:373 pretix/control/forms/filter.py:508
 #: pretix/control/templates/pretixcontrol/events/index.html:126
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "Förköp avslutad"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:372 pretix/control/forms/filter.py:507
 #: pretix/control/templates/pretixcontrol/events/index.html:128
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "Förköp har inte startat"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:130
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:387
 msgid "On sale"
-msgstr ""
+msgstr "Till extrapris"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Applikationens namn"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Omdirigerings URI:er"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Lista med tillåtna URIs, separerade med mellanslag"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:69
 msgid "Client ID"
-msgstr ""
+msgstr "Klient-ID"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
-msgstr ""
+msgstr "Klient-hemlighet"
 
 #: pretix/api/models.py:75
 msgid "Enable webhook"
-msgstr ""
+msgstr "Aktivera webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Mål-URL"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Alla event (inkl. nyligen skapade)"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:43
 #: pretix/base/models/organizer.py:143
 msgid "Limit to events"
-msgstr ""
+msgstr "Begränsa till eventen"
 
 #: pretix/api/serializers/cart.py:56 pretix/api/serializers/order.py:578
 msgid "The product \"{}\" is not assigned to a quota."
@@ -720,7 +722,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:441 pretix/control/views/item.py:609
 msgid "Paid orders"
-msgstr ""
+msgstr "Betalade ordrar"
 
 #: pretix/base/exporters/orderlist.py:441 pretix/control/views/item.py:614
 msgid "Pending orders"
@@ -912,7 +914,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:641
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: pretix/base/exporters/orderlist.py:550 pretix/base/models/orders.py:838
 #: pretix/control/views/item.py:445 pretix/control/views/vouchers.py:78
@@ -922,7 +924,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:643
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: pretix/base/exporters/orderlist.py:559
 msgid "Line number"
@@ -5546,7 +5548,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:74
 msgid "All"
-msgstr ""
+msgstr "Alla"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
@@ -7387,7 +7389,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:385
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Vi behandlar din förfrågan …"
 
 #: pretix/control/templates/pretixcontrol/base.html:387
 #: pretix/presale/templates/pretixpresale/base.html:92
@@ -8953,7 +8955,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr ""
+msgstr "Antal"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
@@ -9652,7 +9654,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:431
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:220
 msgid "Total"
-msgstr ""
+msgstr "Totalt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:436
 msgid "Payments"
@@ -13132,7 +13134,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Kommentar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -14336,7 +14338,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:4
 msgid "Ticket design"
-msgstr ""
+msgstr "Biljettdesign"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:8
 msgid ""
@@ -14607,7 +14609,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/index.html:31
 msgid "Cart expired"
-msgstr ""
+msgstr "Varukorgen har gått ut"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:30
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:41
@@ -14620,7 +14622,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:47
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Varorna i din kundvagn är inte längre reserverade av dig."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
