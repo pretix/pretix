@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-23 08:50+0000\n"
-"PO-Revision-Date: 2019-04-18 03:00+0000\n"
+"PO-Revision-Date: 2019-04-27 21:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1248,12 +1248,9 @@ msgid "Customer reference: {reference}"
 msgstr "Klantkenmerk: {reference}"
 
 #: pretix/base/invoice.py:481
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Klant"
+msgstr "Btw-nummer van klant"
 
 #: pretix/base/invoice.py:488
 msgctxt "invoice"
@@ -1336,11 +1333,8 @@ msgstr ""
 "Centrale Bank op {date} komt het factuurtotaal uit op {total}."
 
 #: pretix/base/invoice.py:662
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Classic renderer (pretix 1.0)"
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Klassieke renderer (pretix 1.0)"
+msgstr "Moderne factuurrenderer (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1657,16 +1651,12 @@ msgstr ""
 "gebruikers."
 
 #: pretix/base/models/event.py:842
-#, fuzzy
-#| msgid ""
-#| "If selected, this event will show up publicly on the list of events for "
-#| "your organizer account."
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
 "Als dit is ingeschakeld zal dit evenement zichtbaar zijn in de lijst met "
-"evenementen van uw organisatoraccount."
+"datums van deze evenementenreeks."
 
 #: pretix/base/models/event.py:871 pretix/control/forms/event.py:1052
 msgid "Frontpage text"
@@ -7763,10 +7753,9 @@ msgid "{user} has been invited to the team."
 msgstr "{user} is uitgenodigd voor het team."
 
 #: pretix/control/logdisplay.py:393
-#, fuzzy, python-brace-format
-#| msgid "The invite for {user} has been revoked."
+#, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr "De uitnodiging voor {user} is ingetrokken."
+msgstr "De uitnodiging voor {user} is opnieuw verstuurd."
 
 #: pretix/control/logdisplay.py:396
 #, python-brace-format
@@ -11591,10 +11580,8 @@ msgid "invited, pending response"
 msgstr "uitgenodigd, wacht op reactie"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
-#, fuzzy
-#| msgid "Resend link"
 msgid "resend invite"
-msgstr "Stuur link opnieuw"
+msgstr "Stuur uitnodiging opnieuw"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:73
 msgid ""
@@ -13843,10 +13830,8 @@ msgid "The invite has been revoked."
 msgstr "De uitnodiging is ingetrokken."
 
 #: pretix/control/views/organizer.py:571
-#, fuzzy
-#| msgid "The invite has been revoked."
 msgid "The invite has been resent."
-msgstr "De uitnodiging is ingetrokken."
+msgstr "De uitnodiging is opnieuw verstuurd."
 
 #: pretix/control/views/organizer.py:578
 msgid "Invalid token selected."
