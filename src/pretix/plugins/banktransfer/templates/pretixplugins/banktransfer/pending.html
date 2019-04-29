@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load commadecimal %}
+{% load dotdecimal %}
 {% load ibanformat %}
 {% load money %}
 
@@ -44,7 +45,7 @@ SCT
 {{ settings.bank_details_sepa_bic }}
 {{ settings.bank_details_sepa_name }}
 {{ settings.bank_details_sepa_iban }}
-{{ event.currency }}{{ amount|floatformat:2 }}
+{{ event.currency }}{{ amount|dotdecimal }}
 
 
 {{ code }}
