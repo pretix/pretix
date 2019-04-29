@@ -29,6 +29,7 @@ class SubEventForm(I18nModelForm):
         fields = [
             'name',
             'active',
+            'is_public',
             'date_from',
             'date_to',
             'date_admission',
