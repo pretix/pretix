@@ -165,6 +165,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                 {
                                     "value": "Red",
                                     "id": self.shirt_red.pk,
+                                    'original_price': None,
                                     "price": {"gross": "14.00", "net": "11.76", "tax": "2.24", "name": "",
                                               "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
@@ -174,6 +175,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                 {
                                     "value": "Blue",
                                     "id": self.shirt_blue.pk,
+                                    'original_price': None,
                                     "price": {"gross": "12.00", "net": "10.08", "tax": "1.92", "name": "",
                                               "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
@@ -280,6 +282,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                     'value': 'Red',
                                     'order_max': 2,
                                     'description': None,
+                                    'original_price': None,
                                     'price': {
                                         'gross': '14.00',
                                         'net': '11.76',

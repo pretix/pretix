@@ -208,6 +208,7 @@ class WidgetAPIProductList(EventListMixin, View):
                                 'order_max': var.order_max,
                                 'description': str(rich_text(var.description, safelinks=False)) if var.description else None,
                                 'price': price_dict(item, var.display_price),
+                                'original_price': getattr(var, 'original_price') or item.original_price,
                                 'avail': [
                                     var.cached_availability[0],
                                     var.cached_availability[1] if self.request.event.settings.show_quota_left else None
