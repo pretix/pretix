@@ -145,6 +145,9 @@ class DekodiNREIExporter(BaseExporter):
             'VatDp': False,
             'Zip': invoice.invoice_to_zipcode
         }
+        if not hdr['FamN'] and not hdr['CN']:
+            hdr['CN'] = "Unbekannter Kunde"
+
         if invoice.refers:
             hdr['PvrINo'] = invoice.refers.full_invoice_no
         if p_last:
@@ -179,7 +182,7 @@ class DekodiNREIExporter(BaseExporter):
 
         jo = {
             'Format': 'NREI',
-            'Version': '18.10.2',
+            'Version': '18.10.2.0',
             'SourceSystem': 'pretix',
             'Data': [
                 self._encode_invoice(i) for i in qs
