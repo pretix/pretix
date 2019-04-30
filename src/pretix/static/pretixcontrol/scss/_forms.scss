@@ -407,6 +407,12 @@ table td > .checkbox input[type="checkbox"] {
   }
 }
 
+.form-order-change {
+  .row {
+    padding: 5px 0;
+  }
+}
+
 @media(max-width: $screen-xs-max) {
   .nameparts-form-group {
     display: block;
@@ -455,3 +461,4 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
+

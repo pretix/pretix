@@ -1240,7 +1240,11 @@ class OrderChange(OrderView):
                 return False
 
             try:
-                if p.form.cleaned_data['operation'] == 'product':
+                if p.form.cleaned_data['operation_cancel']:
+                    ocm.cancel(p)
+                    continue
+
+                if p.form.cleaned_data['itemvar']:
                     if '-' in p.form.cleaned_data['itemvar']:
                         itemid, varid = p.form.cleaned_data['itemvar'].split('-')
                     else:
@@ -1251,16 +1255,19 @@ class OrderChange(OrderView):
                         variation = ItemVariation.objects.get(pk=varid, item=item)
                     else:
                         variation = None
-                    ocm.change_item(p, item, variation, keep_price=p.form.cleaned_data['change_product_keep_price'])
-                elif p.form.cleaned_data['operation'] == 'price':
-                    ocm.change_price(p, p.form.cleaned_data['price'])
-                elif p.form.cleaned_data['operation'] == 'subevent':
+                    if item != p.item or variation != p.variation:
+                        ocm.change_item(p, item, variation)
+
+                if self.request.event.has_subevents and p.form.cleaned_data['subevent'] and p.form.cleaned_data['subevent'] != p.subevent:
                     ocm.change_subevent(p, p.form.cleaned_data['subevent'])
-                elif p.form.cleaned_data['operation'] == 'cancel':
-                    ocm.cancel(p)
-                elif p.form.cleaned_data['operation'] == 'split':
+
+                if p.form.cleaned_data['price'] != p.price:
+                    ocm.change_price(p, p.form.cleaned_data['price'])
+
+                if p.form.cleaned_data['operation_split']:
                     ocm.split(p)
-                elif p.form.cleaned_data['operation'] == 'secret':
+
+                if p.form.cleaned_data['operation_secret']:
                     ocm.regenerate_secret(p)
 
             except OrderError as e:

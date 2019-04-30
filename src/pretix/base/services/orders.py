@@ -872,8 +872,8 @@ class OrderChangeManager:
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
     }
-    ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation', 'price'))
-    SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent', 'price'))
+    ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
+    SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
@@ -893,33 +893,18 @@ class OrderChangeManager:
         self.notify = notify
         self._invoice_dirty = False
 
-    def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation], keep_price=False):
+    def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
             raise OrderError(self.error_messages['product_without_variation'])
-
-        if keep_price:
-            price = TaxedPrice(gross=position.price, net=position.price - position.tax_value,
-                               tax=position.tax_value, rate=position.tax_rate,
-                               name=position.tax_rule.name if position.tax_rule else None)
-        else:
-            price = get_price(item, variation, voucher=position.voucher, subevent=position.subevent,
-                              invoice_address=self._invoice_address)
-
-        if price is None:  # NOQA
-            raise OrderError(self.error_messages['product_invalid'])
 
         new_quotas = (variation.quotas.filter(subevent=position.subevent)
                       if variation else item.quotas.filter(subevent=position.subevent))
         if not new_quotas:
             raise OrderError(self.error_messages['quota_missing'])
 
-        if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
-            self._invoice_dirty = True
-
-        self._totaldiff += price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
-        self._operations.append(self.ItemOperation(position, item, variation, price))
+        self._operations.append(self.ItemOperation(position, item, variation))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
         price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent,
@@ -933,19 +918,15 @@ class OrderChangeManager:
         if not new_quotas:
             raise OrderError(self.error_messages['quota_missing'])
 
-        if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
-            self._invoice_dirty = True
-
-        self._totaldiff += price.gross - position.price
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
-        self._operations.append(self.SubeventOperation(position, subevent, price))
+        self._operations.append(self.SubeventOperation(position, subevent))
 
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
 
     def change_price(self, position: OrderPosition, price: Decimal):
-        price = position.item.tax(price)
+        price = position.item.tax(price, base_price_is='gross')
 
         self._totaldiff += price.gross - position.price
 
@@ -1102,14 +1083,11 @@ class OrderChangeManager:
                     'new_variation': op.variation.pk if op.variation else None,
                     'old_price': op.position.price,
                     'addon_to': op.position.addon_to_id,
-                    'new_price': op.price.gross
+                    'new_price': op.position.price
                 })
                 op.position.item = op.item
                 op.position.variation = op.variation
-                op.position.price = op.price.gross
-                op.position.tax_rate = op.price.rate
-                op.position.tax_value = op.price.tax
-                op.position.tax_rule = op.item.tax_rule
+                op.position._calculate_tax()
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
@@ -1118,13 +1096,9 @@ class OrderChangeManager:
                     'old_subevent': op.position.subevent.pk,
                     'new_subevent': op.subevent.pk,
                     'old_price': op.position.price,
-                    'new_price': op.price.gross
+                    'new_price': op.position.price
                 })
                 op.position.subevent = op.subevent
-                op.position.price = op.price.gross
-                op.position.tax_rate = op.price.rate
-                op.position.tax_value = op.price.tax
-                op.position.tax_rule = op.position.item.tax_rule
                 op.position.save()
             elif isinstance(op, self.PriceOperation):
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
@@ -1135,9 +1109,7 @@ class OrderChangeManager:
                     'new_price': op.price.gross
                 })
                 op.position.price = op.price.gross
-                op.position.tax_rate = op.price.rate
-                op.position.tax_value = op.price.tax
-                op.position.tax_rule = op.position.item.tax_rule
+                op.position._calculate_tax()
                 op.position.save()
             elif isinstance(op, self.CancelOperation):
                 for opa in op.position.addons.all():
