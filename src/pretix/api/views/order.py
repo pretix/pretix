@@ -514,6 +514,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 )
 
             serializer.save()
+            tickets.invalidate_cache.apply_async(kwargs={'event': serializer.instance.event.pk, 'order': serializer.instance.pk})
 
         if 'invoice_address' in self.request.data:
             order_modified.send(sender=serializer.instance.event, order=serializer.instance)

@@ -1411,6 +1411,7 @@ class OrderLocaleChange(OrderView):
             )
 
             self.form.save()
+            tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
             messages.success(self.request, _('The order has been changed.'))
             return redirect(self.get_order_url())
         return self.get(*args, **kwargs)
