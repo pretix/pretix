@@ -348,6 +348,10 @@ def source_webhook(event, event_json, source_id, rso):
                 'info': str(src)
             })
             payment.save()
+        elif src.status == 'canceled' and payment.state in (Order.STATUS_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
+            payment.info = str(src)
+            payment.state = OrderPayment.PAYMENT_STATE_CANCELED
+            payment.save()
 
     return HttpResponse(status=200)
 
