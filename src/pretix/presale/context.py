@@ -64,6 +64,8 @@ def contextprocessor(request):
 
         if request.resolver_match:
             ctx['cart_namespace'] = request.resolver_match.kwargs.get('cart_namespace', '')
+    elif hasattr(request, 'organizer'):
+        ctx['languages'] = [get_language_info(code) for code in request.organizer.settings.locales]
 
     if hasattr(request, 'organizer'):
         if request.organizer.settings.presale_css_file and not hasattr(request, 'event'):
