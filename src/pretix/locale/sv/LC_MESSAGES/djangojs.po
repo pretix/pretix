@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:50+0000\n"
+"POT-Creation-Date: 2019-05-01 12:02+0000\n"
 "PO-Revision-Date: 2019-04-27 21:00+0000\n"
 "Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/sv/>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -199,11 +199,11 @@ msgstr ""
 "Din färg har dålig kontrast för text på vit bakgrund, var god välj en "
 "mörkare nyans."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:306
+#: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
 msgstr "Alla"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:307
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
 msgstr "Ingen"
 
@@ -214,6 +214,12 @@ msgstr "Använd ett annat namn internt"
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
 msgstr "Klicka för att stänga"
+
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#, fuzzy
+#| msgid "Contacting Stripe …"
+msgid "Calculating default price…"
+msgstr "Kontakta Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -250,6 +256,10 @@ msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Artiklarna i din varukorg är reserverade i en minut."
 msgstr[1] "Artiklarna i din varukorg är reserverade i {num} minuter."
+
+#: pretix/static/pretixpresale/js/ui/main.js:201
+msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
@@ -353,8 +363,8 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">"
-"Biljettsystem av pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
+"\">Biljettsystem av pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"

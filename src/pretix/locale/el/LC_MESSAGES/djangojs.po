@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:50+0000\n"
+"POT-Creation-Date: 2019-05-01 12:02+0000\n"
 "PO-Revision-Date: 2019-04-24 22:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -136,7 +136,8 @@ msgstr "Έλεγχος QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:249
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr "Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
+msgstr ""
+"Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:418
 msgid "Group of objects"
@@ -207,11 +208,11 @@ msgstr ""
 "Το χρώμα σας έχει κακή αντίθεση για κείμενο σε λευκό φόντο, επιλέξτε μια πιο "
 "σκούρα σκιά."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:306
+#: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
 msgstr "Ολα"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:307
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
 msgstr ""
 
@@ -222,6 +223,12 @@ msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτ�
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
+
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#, fuzzy
+#| msgid "Contacting Stripe …"
+msgid "Calculating default price…"
+msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -258,6 +265,10 @@ msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 msgstr[1] ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:201
+msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:50+0000\n"
+"POT-Creation-Date: 2019-05-01 12:02+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -208,11 +208,11 @@ msgstr ""
 "Sua cor tem um contraste ruim para o texto sobre fundo branco, por favor, "
 "escolha um tom mais escuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:306
+#: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:307
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
 msgstr "Nenhum"
 
@@ -223,6 +223,12 @@ msgstr "Use um nome diferente internamente"
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
 msgstr "Clique para fechar"
+
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#, fuzzy
+#| msgid "Contacting Stripe …"
+msgid "Calculating default price…"
+msgstr "Contatando Stripe…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -262,6 +268,10 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Os items em seu carrinho estão reservados para você por 1 minuto."
 msgstr[1] ""
 "Os items em seu carrinho estão reservados para você por {num} minutos."
+
+#: pretix/static/pretixpresale/js/ui/main.js:201
+msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"

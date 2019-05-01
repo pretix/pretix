@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:50+0000\n"
+"POT-Creation-Date: 2019-05-01 12:02+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -193,11 +193,11 @@ msgid ""
 "darker shade."
 msgstr "你的配色在白色背景下的文本对比度很差，请选择较深的颜色。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:306
+#: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:307
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
 msgstr "无"
 
@@ -208,6 +208,12 @@ msgstr "在内部使用一个不同的名称"
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
 msgstr "点此关闭"
+
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+#, fuzzy
+#| msgid "Contacting Stripe …"
+msgid "Calculating default price…"
+msgstr "正在联系Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -242,6 +248,10 @@ msgstr "购物车已过期"
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "购物车中的物品将为您保留{num}分钟。"
+
+#: pretix/static/pretixpresale/js/ui/main.js:201
+msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"

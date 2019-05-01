@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:50+0000\n"
+"POT-Creation-Date: 2019-05-01 12:02+0000\n"
 "PO-Revision-Date: 2019-01-02 08:21+0000\n"
 "Last-Translator: Alexey Zh <write2aracon@gmail.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -188,11 +188,11 @@ msgid ""
 "darker shade."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:306
+#: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:307
+#: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
 msgstr ""
 
@@ -202,6 +202,10 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:652
 msgid "Click to close"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/orderchange.js:24
+msgid "Calculating default price…"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
@@ -241,6 +245,10 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:201
+msgid "Please enter a quantity for one of the ticket types."
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
