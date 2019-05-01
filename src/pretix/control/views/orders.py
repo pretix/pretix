@@ -2,6 +2,7 @@ import json
 import logging
 import mimetypes
 import os
+import re
 from datetime import timedelta
 from decimal import Decimal, DecimalException
 
@@ -1592,6 +1593,10 @@ class OrderGo(EventPermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         code = request.GET.get("code", "").upper().strip()
+        if '://' in code:
+            m = re.match('.*/ORDER/([A-Z0-9]{' + str(settings.ENTROPY['order_code']) + '})/.*', code)
+            if m:
+                code = m.group(1)
         try:
             if code.startswith(request.event.slug.upper()):
                 code = code[len(request.event.slug):]
