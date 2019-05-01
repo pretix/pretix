@@ -47,6 +47,11 @@
         {% if order.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
+        {% if backend_user %}
+            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}" class="btn btn-default">
+                {% trans "View in backend" %}
+            </a>
+        {% endif %}
         {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
         <div class="clearfix"></div>
     </h2>

@@ -128,6 +128,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
         )
 
+        ctx['backend_user'] = (
+            self.request.user.is_authenticated
+            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
+        )
+
         if self.order.status == Order.STATUS_PENDING:
             ctx['pending_sum'] = self.order.pending_sum
 
