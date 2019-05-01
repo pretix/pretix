@@ -606,7 +606,7 @@ class Order(LockModel, LoggedModel):
             ), tz)
         return term_last
 
-    def _can_be_paid(self, count_waitinglist=True) -> Union[bool, str]:
+    def _can_be_paid(self, count_waitinglist=True, ignore_date=False) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
@@ -617,13 +617,13 @@ class Order(LockModel, LoggedModel):
         if self.require_approval:
             return error_messages['require_approval']
         term_last = self.payment_term_last
-        if term_last:
+        if term_last and not ignore_date:
             if now() > term_last:
                 return error_messages['late_lastdate']
 
         if self.status == self.STATUS_PENDING:
             return True
-        if not self.event.settings.get('payment_term_accept_late'):
+        if not self.event.settings.get('payment_term_accept_late') and not ignore_date:
             return error_messages['late']
 
         return self._is_still_available(count_waitinglist=count_waitinglist)
@@ -1137,9 +1137,9 @@ class OrderPayment(models.Model):
         """
         return self.order.event.get_payment_providers().get(self.provider)
 
-    def _mark_paid(self, force, count_waitinglist, user, auth, overpaid=False):
+    def _mark_paid(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
         from pretix.base.signals import order_paid
-        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist)
+        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date)
         if not force and can_be_paid is not True:
             self.order.log_action('pretix.event.order.quotaexceeded', {
                 'message': can_be_paid
@@ -1159,7 +1159,7 @@ class OrderPayment(models.Model):
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
 
-    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='', lock=True):
+    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='', ignore_date=False, lock=True):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
         payment is required
@@ -1169,6 +1169,7 @@ class OrderPayment(models.Model):
         :type count_waitinglist: boolean
         :param force: Whether this payment should be marked as paid even if no remaining
                       quota is available (default: ``False``).
+        :param ignore_date: Whether this order should be marked as paid even when the last date of payments is over.
         :type force: boolean
         :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
         :type send_mail: boolean
@@ -1222,10 +1223,12 @@ class OrderPayment(models.Model):
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
             with transaction.atomic():
-                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total)
+                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
+                                ignore_date=ignore_date)
         else:
             with self.order.event.lock():
-                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total)
+                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
+                                ignore_date=ignore_date)
 
         invoice = None
         if invoice_qualified(self.order):

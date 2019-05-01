@@ -162,7 +162,7 @@ def mark_order_expired(order, user=None, auth=None):
     return order
 
 
-def approve_order(order, user=None, send_mail: bool=True, auth=None):
+def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False):
     """
     Mark this order as approved
     :param order: The order to change
@@ -185,7 +185,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None):
                 fee=None
             )
             try:
-                p.confirm(send_mail=False, count_waitinglist=False, user=user, auth=auth)
+                p.confirm(send_mail=False, count_waitinglist=False, user=user, auth=auth, ignore_date=True, force=force)
             except Quota.QuotaExceededException:
                 raise OrderError(error_messages['unavailable'])
 

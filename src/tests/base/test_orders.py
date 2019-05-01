@@ -269,6 +269,26 @@ def test_approve_free(event):
 
 
 @pytest.mark.django_db
+def test_approve_free_after_last_payment_date(event):
+    event.settings.payment_term_last = (now() - timedelta(days=1)).date().isoformat()
+    djmail.outbox = []
+    event.settings.invoice_generate = 'True'
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0, require_approval=True
+    )
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert o1.status == Order.STATUS_PAID
+    assert not o1.require_approval
+    assert o1.invoices.count() == 0
+    assert len(djmail.outbox) == 1
+    assert 'confirmed' in djmail.outbox[0].subject
+
+
+@pytest.mark.django_db
 def test_deny(event):
     djmail.outbox = []
     event.settings.invoice_generate = 'True'
