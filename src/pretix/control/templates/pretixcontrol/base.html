@@ -380,6 +380,12 @@
                     {% block content %}
                     {% endblock %}
                     <footer>
+                        {% if request.timezone %}
+                            <span class="fa fa-globe"></span>
+                            {% blocktrans trimmed with tz=request.timezone %}
+                                Times displayed in {{ tz }}
+                            {% endblocktrans %} &middot;
+                        {% endif %}
                         {% with "href='http://pretix.eu'" as a_attr %}
                             {% blocktrans trimmed %}
                                 powered by <a {{ a_attr }}>pretix</a>

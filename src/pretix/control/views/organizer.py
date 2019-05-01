@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, ProtectedError
+from django.db.models import Count, Max, Min, ProtectedError
+from django.db.models.functions import Coalesce, Greatest
 from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -19,7 +20,7 @@ from django.views.generic import (
 
 from pretix.api.models import WebHook
 from pretix.base.models import Device, Organizer, Team, TeamInvite, User
-from pretix.base.models.event import EventMetaProperty
+from pretix.base.models.event import Event, EventMetaProperty
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.services.mail import SendMailException, mail
 from pretix.control.forms.filter import OrganizerFilterForm
@@ -86,18 +87,33 @@ class OrganizerDetailViewMixin:
         return self.request.organizer
 
 
-class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
-    model = Organizer
+class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = Event
     template_name = 'pretixcontrol/organizers/detail.html'
     permission = None
-    context_object_name = 'organizer'
+    context_object_name = 'events'
 
-    def get_object(self, queryset=None) -> Organizer:
+    @property
+    def organizer(self):
         return self.request.organizer
+
+    def get_queryset(self):
+        qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
+            '_settings_objects', 'organizer___settings_objects'
+        ).filter(organizer=self.request.organizer).order_by('-date_from')
+        qs = qs.annotate(
+            min_from=Min('subevents__date_from'),
+            max_from=Max('subevents__date_from'),
+            max_to=Max('subevents__date_to'),
+            max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from'))
+        ).annotate(
+            order_from=Coalesce('min_from', 'date_from'),
+            order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
+        )
+        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['events'] = self.request.organizer.events.all()
         return ctx
 
 

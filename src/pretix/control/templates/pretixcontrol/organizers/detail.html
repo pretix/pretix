@@ -3,8 +3,16 @@
 {% load bootstrap3 %}
 {% block inner %}
     <h1>
-        {% blocktrans with name=organizer.name %}Organizer: {{ name }}{% endblocktrans %}
+        {% blocktrans with name=request.organizer.name %}Organizer: {{ name }}{% endblocktrans %}
     </h1>
+    {% if "can_create_events" in request.orgapermset %}
+        <p>
+            <a href="{% url "control:events.add" %}" class="btn btn-default">
+                <span class="fa fa-plus"></span>
+                {% trans "Create a new event" %}
+            </a>
+        </p>
+    {% endif %}
     {% if events|length == 0 %}
         <p>
             <em>{% trans "You currently do not have access to any events." %}</em>
@@ -14,7 +22,12 @@
             <thead>
             <tr>
                 <th>{% trans "Event name" %}</th>
-                <th>{% trans "Start date" %}</th>
+                <th>
+                    {% trans "Start date" %}
+                    /
+                    {% trans "End date" %}
+                </th>
+                <th>{% trans "Status" %}</th>
                 <th></th>
             </tr>
             </thead>
@@ -25,16 +38,47 @@
                         <strong><a
                                 href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
                     </td>
-                    <td>{{ e.get_date_from_display }}</td>
+                    <td>
+                        {% if e.has_subevents %}
+                            {{ e.min_from|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
+                        {% else %}
+                            {{ e.get_short_date_from_display }}
+                        {% endif %}
+                        {% if e.has_subevents %}
+                            <span class="label label-default">{% trans "Series" %}</span>
+                        {% endif %}
+                        {% if e.settings.show_date_to and e.date_to %}
+                            –<br>
+                            {% if e.has_subevents %}
+                                {{ e.max_fromto|default_if_none:e.max_from|default_if_none:e.max_to|default_if_none:""|date:"SHORT_DATETIME_FORMAT" }}
+                            {% else %}
+                                {{ e.get_short_date_to_display }}
+                            {% endif %}
+                        {% endif %}
+                        {% if e.settings.timezone != request.timezone %}
+                            <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{{ e.timezone }}"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not e.live %}
+                            <span class="label label-danger">{% trans "Shop disabled" %}</span>
+                            {% elif e.presale_has_ended %}
+                            <span class="label label-warning">{% trans "Presale over" %}</span>
+                            {% elif not e.presale_is_running %}
+                            <span class="label label-warning">{% trans "Presale not started" %}</span>
+                        {% else %}
+                            <span class="label label-success">{% trans "On sale" %}</span>
+                        {% endif %}
+                    </td>
                     <td class="text-right">
                         <a href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}"
-                                class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
-                                data-toggle="tooltip">
+                           class="btn btn-sm btn-default" title="{% trans "Open event dashboard" %}"
+                           data-toggle="tooltip">
                             <span class="fa fa-eye"></span>
                         </a>
                         {% if "can_create_events" in request.orgapermset %}
                             <a href="{% url "control:events.add" %}?clone={{ e.pk }}" class="btn btn-sm btn-default"
-                                    title="{% trans "Clone event" %}" data-toggle="tooltip">
+                               title="{% trans "Clone event" %}" data-toggle="tooltip">
                                 <span class="fa fa-copy"></span>
                             </a>
                         {% endif %}
@@ -43,11 +87,6 @@
             {% endfor %}
             </tbody>
         </table>
-    {% endif %}
-    {% if "can_create_events" in request.orgapermset %}
-        <a href="{% url "control:events.add" %}" class="btn btn-default">
-            <span class="fa fa-plus"></span>
-            {% trans "Create a new event" %}
-        </a>
+        {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}

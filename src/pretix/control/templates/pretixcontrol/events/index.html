@@ -106,6 +106,9 @@
                                 {{ e.get_short_date_to_display }}
                             {% endif %}
                         {% endif %}
+                        {% if e.settings.timezone != request.timezone %}
+                            <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{{ e.timezone }}"></span>
+                        {% endif %}
                     </td>
                     <td>
                         {% for q in e.first_quotas|slice:":3" %}

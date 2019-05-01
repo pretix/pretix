@@ -360,7 +360,8 @@ def widgets_for_event_qs(request, qs, user, nmax):
         '_settings_objects', 'organizer___settings_objects'
     ).select_related('organizer')[:nmax]
     for event in events:
-        tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+        tzname = event.cache.get_or_set('timezone', lambda: event.settings.timezone)
+        tz = pytz.timezone(tzname)
         if event.has_subevents:
             if event.min_from is None:
                 dr = pgettext("subevent", "No dates")
@@ -393,6 +394,9 @@ def widgets_for_event_qs(request, qs, user, nmax):
                     ((date_format(event.date_admission.astimezone(tz), 'TIME_FORMAT') + ' / ')
                      if event.date_admission and event.date_admission != event.date_from else '')
                     + (date_format(event.date_from.astimezone(tz), 'TIME_FORMAT') if event.date_from else '')
+                ) + (
+                    ' <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{}"></span>'.format(tzname)
+                    if tzname != request.timezone and not event.has_subevents else ''
                 ),
                 url=reverse('control:event.index', kwargs={
                     'event': event.slug,
