@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-01 12:01+0000\n"
-"PO-Revision-Date: 2019-04-23 08:54+0000\n"
+"PO-Revision-Date: 2019-05-01 12:12+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -285,10 +285,9 @@ msgid "Questions"
 msgstr "Fragen"
 
 #: pretix/base/exporters/dekodi.py:82
-#, fuzzy, python-brace-format
-#| msgid "{event}-{code}"
+#, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "{event}-{code}"
+msgstr "Ticket {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:199 pretix/base/exporters/invoices.py:74
 #: pretix/control/forms/subevents.py:228
@@ -3388,7 +3387,7 @@ msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:91
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Preis inklusive Zusatzprodukte"
 
 #: pretix/base/pdf.py:101 pretix/base/pdf.py:187
 #: pretix/base/services/invoices.py:306 pretix/control/views/event.py:627
@@ -4922,10 +4921,8 @@ msgstr ""
 "zumindest für diese Website."
 
 #: pretix/base/views/tasks.py:136
-#, fuzzy
-#| msgid "An internal error occurred, please try again."
 msgid "An unexpected error has occurred, please try again later."
-msgstr "Ein interner Fehler ist aufgetreten, bitte erneut versuchen."
+msgstr "Ein interner Fehler ist aufgetreten, bitte später erneut versuchen."
 
 #: pretix/base/views/tasks.py:139
 msgid "The task has been completed."
@@ -6771,10 +6768,8 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:263 pretix/control/forms/orders.py:304
 #: pretix/control/forms/orders.py:312
-#, fuzzy
-#| msgid "Keep unchanged"
 msgid "(Unchanged)"
-msgstr "Unverändert belassen"
+msgstr "(Unverändert)"
 
 #: pretix/control/forms/orders.py:269
 msgid "New price (gross)"
@@ -6785,10 +6780,8 @@ msgid "Generate a new secret"
 msgstr "Neuen Ticket-Code generieren"
 
 #: pretix/control/forms/orders.py:277
-#, fuzzy
-#| msgid "Cancel position"
 msgid "Cancel this position"
-msgstr "Position stornieren"
+msgstr "Diese Position stornieren"
 
 #: pretix/control/forms/orders.py:281
 msgid "Split into new order"
@@ -7277,16 +7270,12 @@ msgid "Sending of an email has failed."
 msgstr "Das Versenden einer E-Mail ist fehlgeschlagen."
 
 #: pretix/control/logdisplay.py:192
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received."
 msgid ""
 "The email has been sent without attachments since they would have been too "
 "large to be likely to arrive."
 msgstr ""
-"Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der "
-"Bestellung hinweist."
+"Eine E-Mail wurde ohne Anhänge verschickt, da diese größer sind als "
+"üblicherweise akzeptiert sind."
 
 #: pretix/control/logdisplay.py:194
 msgid "A custom email has been sent."
@@ -8242,7 +8231,7 @@ msgstr "Shop ansehen"
 #: pretix/control/templates/pretixcontrol/base.html:136
 #: pretix/control/templates/pretixcontrol/base.html:137
 msgid "Public profile"
-msgstr ""
+msgstr "Öffentliche Ansicht"
 
 #: pretix/control/templates/pretixcontrol/base.html:125
 #: pretix/control/templates/pretixcontrol/base.html:130
@@ -8333,7 +8322,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:385
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "Zeiten angezeigt in %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:395
 msgid "running in development mode"
@@ -10585,16 +10574,12 @@ msgid "Add-On to position #%(posid)s"
 msgstr "Zusatz zu Position #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:84
-#, fuzzy
-#| msgid "Current issues"
 msgid "Current value"
-msgstr "Aktuelle Probleme"
+msgstr "Aktueller Wert"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:87
-#, fuzzy
-#| msgid "Change"
 msgid "Change to"
-msgstr "Ändern"
+msgstr "Ändern zu"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:126
 #, python-format
@@ -10602,16 +10587,12 @@ msgid "<strong>incl.</strong> %(rate)s%% %(name)s"
 msgstr "<strong>inkl.</strong> %(rate)s%% %(name)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:133
-#, fuzzy
-#| msgid "incl. taxes"
 msgid "including all taxes"
-msgstr "inkl. Steuern"
+msgstr "inklusive aller Steuern"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:139
-#, fuzzy
-#| msgid "Ticket secret:"
 msgid "Ticket secret"
-msgstr "Ticket-Code:"
+msgstr "Ticket-Code"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:153
 msgid "Removing this position will also remove all add-ons to this position."
@@ -16812,7 +16793,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 msgid "View in backend"
-msgstr ""
+msgstr "Im Backend ansehen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
