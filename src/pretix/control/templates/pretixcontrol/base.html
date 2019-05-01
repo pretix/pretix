@@ -102,6 +102,11 @@
                                 <i class="fa fa-eye"></i>
                             </a>
                         {% endif %}
+                    {% elif request.organizer %}
+                        <a href="{% eventurl request.organizer "presale:organizer.index" %}" title="{% trans "Public profile" %}"  target="_blank"
+                            class="navbar-toggle mobile-navbar-view-link">
+                            <i class="fa fa-eye"></i>
+                        </a>
                     {% endif %}
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon.svg" %}" />
@@ -123,6 +128,12 @@
                                     <i class="fa fa-eye"></i> {% trans "Go to shop" %}
                                 </a>
                             {% endif %}
+                        </li>
+                    {% elif request.organizer %}
+                        <li>
+                            <a href="{% eventurl request.organizer "presale:organizer.index" %}" title="{% trans "Public profile" %}"  target="_blank">
+                                <i class="fa fa-eye"></i> {% trans "Public profile" %}
+                            </a>
                         </li>
                     {% endif %}
                 </ul>
