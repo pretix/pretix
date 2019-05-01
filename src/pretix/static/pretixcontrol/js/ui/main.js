@@ -226,7 +226,6 @@ var form_handlers = function (el) {
                     'shade.'));
             $note.addClass("text-danger").removeClass("text-success").removeClass("text-warning");
         }
-        console.log(c);
     });
 
     el.find("input[data-checkbox-dependency]").each(function () {
@@ -444,6 +443,7 @@ $(function () {
     "use strict";
 
     $("body").removeClass("nojs");
+    lightbox.init();
 
     $("[data-formset]").formset(
         {

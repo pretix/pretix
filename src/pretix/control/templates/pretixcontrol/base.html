@@ -12,6 +12,7 @@
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
 		{% compress css %}
     		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
+            <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
 		{% endcompress %}
         {% if DEBUG %}
             <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"
@@ -51,6 +52,7 @@
             <script type="text/javascript" src="{% static "colorpicker/bootstrap-colorpicker.js" %}"></script>
             <script type="text/javascript" src="{% static "fileupload/jquery.ui.widget.js" %}"></script>
             <script type="text/javascript" src="{% static "fileupload/jquery.fileupload.js" %}"></script>
+            <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
 		{% endcompress %}
         {{ html_head|safe }}
 

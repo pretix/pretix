@@ -4,6 +4,7 @@ import os
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.forms.utils import from_current_timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -66,10 +67,19 @@ def selector(values, prop):
 
 
 class ClearableBasenameFileInput(forms.ClearableFileInput):
+    template_name = 'pretixbase/forms/widgets/thumbnailed_file_input.html'
 
-    class FakeFile:
+    class FakeFile(File):
         def __init__(self, file):
             self.file = file
+
+        @property
+        def name(self):
+            return self.file.name
+
+        @property
+        def is_img(self):
+            return any(self.file.name.endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
 
         def __str__(self):
             return os.path.basename(self.file.name).split('.', 1)[-1]
