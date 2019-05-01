@@ -5,7 +5,6 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms.utils import from_current_timezone
-from django.utils.html import conditional_escape
 from django.utils.translation import ugettext_lazy as _
 
 from ...base.forms import I18nModelForm
@@ -68,15 +67,21 @@ def selector(values, prop):
 
 class ClearableBasenameFileInput(forms.ClearableFileInput):
 
-    def get_template_substitution_values(self, value):
-        """
-        Return value-related substitutions.
-        """
-        bname = os.path.basename(value.name)
-        return {
-            'initial': conditional_escape(bname),
-            'initial_url': conditional_escape(value.url),
-        }
+    class FakeFile:
+        def __init__(self, file):
+            self.file = file
+
+        def __str__(self):
+            return os.path.basename(self.file.name).split('.', 1)[-1]
+
+        @property
+        def url(self):
+            return self.file.url
+
+    def get_context(self, name, value, attrs):
+        ctx = super().get_context(name, value, attrs)
+        ctx['widget']['value'] = self.FakeFile(value)
+        return ctx
 
 
 class ExtFileField(forms.FileField):
