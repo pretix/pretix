@@ -118,7 +118,7 @@
                         <dt>{% trans "Order code" %}</dt>
                         <dd>{{ order.code }}</dd>
                         <dt>{% trans "Order date" %}</dt>
-                        <dd>{{ order.datetime }}</dd>
+                        <dd>{{ order.datetime|date:"SHORT_DATETIME_FORMAT" }}</dd>
                         {% if sales_channel %}
                             <dt>{% trans "Sales channel" %}</dt>
                             <dd>{{ sales_channel.verbose_name }}</dd>
@@ -132,7 +132,7 @@
                         </dd>
                         {% if order.status == "n" %}
                             <dt>{% trans "Expiry date" %}</dt>
-                            <dd>{{ order.expires }}</dd>
+                            <dd>{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}</dd>
                         {% endif %}
                         <dt>{% trans "User" %}</dt>
                         <dd>
