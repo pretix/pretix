@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-01 12:01+0000\n"
-"PO-Revision-Date: 2019-04-26 02:00+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-05-01 23:00+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -135,27 +135,20 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Plugin desconocido: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:615
-#, fuzzy
-#| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
-"La categoría del add-on debe pertenecer al mismo evento que el artículo."
+msgstr "El artículo en el paquete no debe ser el paquete."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:617
 msgid "The bundled item must not have bundles on its own."
 msgstr "El articulo add-on no debe de tener add-ons en si mismo."
 
 #: pretix/api/serializers/item.py:130
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
-#| "the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"Actualizando los add-ons o variaciones por medio de PATCH/PUT no es "
-"soportado. Use un punto dedicado para esta finalidad."
+"Actualizando los add-ons, paquetes o variaciones por medio de PATCH/PUT no "
+"es soportado. Use un punto dedicado para esta finalidad."
 
 #: pretix/api/serializers/item.py:227
 msgid ""
@@ -292,10 +285,9 @@ msgid "Questions"
 msgstr "Preguntas"
 
 #: pretix/base/exporters/dekodi.py:82
-#, fuzzy, python-brace-format
-#| msgid "{event}-{code}"
+#, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr "{event}-{code}"
+msgstr "Ticket para evento {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:199 pretix/base/exporters/invoices.py:74
 #: pretix/control/forms/subevents.py:228
@@ -2141,6 +2133,10 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Si se establece, se mostrará que este artículo agrupado es responsable de "
+"cierto valor del precio bruto total. Esto puede ser importante en casos de "
+"impuestos mixtos, pero de lo contrario puede mantenerse en blanco. Este "
+"valor NO se agregará al precio del artículo base."
 
 #: pretix/base/models/items.py:856
 #, fuzzy
@@ -3397,7 +3393,7 @@ msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:91
 msgid "Price including add-ons"
-msgstr ""
+msgstr "Precio incluyendo complementos"
 
 #: pretix/base/pdf.py:101 pretix/base/pdf.py:187
 #: pretix/base/services/invoices.py:306 pretix/control/views/event.py:627
@@ -6026,6 +6022,9 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"Este texto se mostrará sobre la tienda de boletos una vez que finalice el "
+"período de ventas designado para este evento. Puede usarlo para describir "
+"otras opciones para obtener un boleto, por ejemplo una taquilla física."
 
 #: pretix/control/forms/event.py:1065
 msgid "Voucher explanation"
@@ -6065,6 +6064,8 @@ msgstr "Preguntarle a los motores de búsqueda no indexar la tienda de tickets"
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Redirigir directamente a la compra después de que un producto se haya "
+"agregado al carrito."
 
 #: pretix/control/forms/event.py:1106
 msgid "Use feature"
@@ -8305,7 +8306,7 @@ msgstr "Ir a la tienda"
 #: pretix/control/templates/pretixcontrol/base.html:136
 #: pretix/control/templates/pretixcontrol/base.html:137
 msgid "Public profile"
-msgstr ""
+msgstr "Perfil público"
 
 #: pretix/control/templates/pretixcontrol/base.html:125
 #: pretix/control/templates/pretixcontrol/base.html:130
@@ -8396,7 +8397,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/base.html:385
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "Horas desplegadas en %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:395
 msgid "running in development mode"
@@ -9994,6 +9995,8 @@ msgid ""
 "With bundles, you can specify products that are always automatically added "
 "as add-ons in the cart for this product."
 msgstr ""
+"Con los paquetes, puede especificar productos que siempre se agregan "
+"automáticamente al carrito como complementos para este producto."
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
 #, fuzzy
@@ -11545,6 +11548,8 @@ msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"Si se han creado datos en este dispositivo (por ejemplo, transacciones de "
+"POS o registros de asistencia) y no se han cargado, ya no podrá cargarlos."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -11553,6 +11558,11 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Si el software del dispositivo lo admite, los datos personales, como los "
+"pedidos, se eliminarán del dispositivo en el próximo intento de "
+"sincronización. Los datos no personales, como los metadatos de eventos y las "
+"transacciones de POS, persistirán hasta que desinstale o reinicie el "
+"software manualmente."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:6
 msgid "Connected devices"
@@ -16888,7 +16898,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 msgid "View in backend"
-msgstr ""
+msgstr "Ver en el backend"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
