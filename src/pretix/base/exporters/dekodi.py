@@ -50,7 +50,7 @@ class DekodiNREIExporter(BaseExporter):
             if p.provider == 'paypal':
                 paypal_email = p.info_data.get('payer', {}).get('payer_info', {}).get('email')
                 try:
-                    ppid = p.info_data['transactions'][0]['related_resources']['sale']['id']
+                    ppid = p.info_data['transactions'][0]['related_resources'][0]['sale']['id']
                 except:
                     ppid = p.info_data.get('id')
                 payments.append({
