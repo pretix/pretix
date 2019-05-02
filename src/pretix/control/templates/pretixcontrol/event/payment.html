@@ -38,7 +38,10 @@
                 {% empty %}
                     <tr>
                         <td colspan="3">
-                            {% trans "There are no payment providers available. Please go to the plugin settings and activate one or more payment plugins." %}
+                            {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
+                            {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
+                                There are no payment providers available. Please go to the <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more payment plugins.
+                            {% endblocktrans %}
                         </td>
                     </tr>
                 {% endfor %}
