@@ -50,32 +50,34 @@ def item_group_by_category(items):
 
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
-    items = event.items.filter_available(channel=channel, voucher=voucher).select_related(
+    items = event.items.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
         Prefetch('quotas',
                  to_attr='_subevent_quotas',
-                 queryset=event.quotas.filter(subevent=subevent)),
+                 queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
         Prefetch('bundles',
-                 queryset=ItemBundle.objects.prefetch_related(
+                 queryset=ItemBundle.objects.using(settings.DATABASE_REPLICA).prefetch_related(
                      Prefetch('bundled_item',
-                              queryset=event.items.select_related('tax_rule').prefetch_related(
+                              queryset=event.items.using(settings.DATABASE_REPLICA).select_related('tax_rule').prefetch_related(
                                   Prefetch('quotas',
                                            to_attr='_subevent_quotas',
-                                           queryset=event.quotas.filter(subevent=subevent)),
+                                           queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
                               )),
                      Prefetch('bundled_variation',
-                              queryset=ItemVariation.objects.select_related('item', 'item__tax_rule').filter(item__event=event).prefetch_related(
+                              queryset=ItemVariation.objects.using(
+                                  settings.DATABASE_REPLICA
+                              ).select_related('item', 'item__tax_rule').filter(item__event=event).prefetch_related(
                                   Prefetch('quotas',
                                            to_attr='_subevent_quotas',
-                                           queryset=event.quotas.filter(subevent=subevent)),
+                                           queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
                               )),
                  )),
         Prefetch('variations', to_attr='available_variations',
-                 queryset=ItemVariation.objects.filter(active=True, quotas__isnull=False).prefetch_related(
+                 queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).filter(active=True, quotas__isnull=False).prefetch_related(
                      Prefetch('quotas',
                               to_attr='_subevent_quotas',
-                              queryset=event.quotas.filter(subevent=subevent))
+                              queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
                  ).distinct()),
     ).annotate(
         quotac=Count('quotas'),
@@ -229,7 +231,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         if request.event.has_subevents:
             if 'subevent' in kwargs:
-                self.subevent = request.event.subevents.filter(pk=kwargs['subevent'], active=True).first()
+                self.subevent = request.event.subevents.using(settings.DATABASE_REPLICA).filter(pk=kwargs['subevent'], active=True).first()
                 if not self.subevent:
                     raise Http404()
                 return super().get(request, *args, **kwargs)
@@ -287,7 +289,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request),
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel).using(settings.DATABASE_REPLICA), self.request),
                 before, after, ebd, set(), self.request.event,
                 kwargs.get('cart_namespace')
             )
@@ -297,7 +299,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['years'] = range(now().year - 2, now().year + 3)
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request)
+                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel).using(settings.DATABASE_REPLICA), self.request)
             )
 
         context['show_cart'] = (

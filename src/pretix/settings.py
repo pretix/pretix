@@ -109,6 +109,7 @@ if config.has_section('replica'):
             'COLLATION': 'utf8mb4_unicode_ci',
         } if 'mysql' in db_backend else {}
     }
+    DATABASE_ROUTERS = ['pretix.helpers.database.ReplicaRouter']
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 

@@ -93,7 +93,7 @@ class EventListMixin:
 
     def _get_event_queryset(self):
         query = Q(is_public=True) & Q(live=True)
-        qs = self.request.organizer.events.filter(query)
+        qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
         qs = qs.annotate(
             min_from=Min('subevents__date_from'),
             min_to=Min('subevents__date_to'),
@@ -126,7 +126,7 @@ class EventListMixin:
 
     def _set_month_to_next_subevent(self):
         tz = pytz.timezone(self.request.event.settings.timezone)
-        next_sev = self.request.event.subevents.filter(
+        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
             active=True,
             is_public=True,
             date_from__gte=now()
@@ -141,14 +141,14 @@ class EventListMixin:
             self.month = now().month
 
     def _set_month_to_next_event(self):
-        next_ev = filter_qs_by_attr(Event.objects.filter(
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
             organizer=self.request.organizer,
             live=True,
             is_public=True,
             date_from__gte=now(),
             has_subevents=False
         ), self.request).order_by('date_from').first()
-        next_sev = filter_qs_by_attr(SubEvent.objects.filter(
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -353,14 +353,14 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
         timezones = set()
-        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web'), before, after, ebd, timezones)
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
         ).prefetch_related(
             'event___settings_objects', 'event__organizer___settings_objects'
-        )), self.request), before, after, ebd, timezones)
+        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
 

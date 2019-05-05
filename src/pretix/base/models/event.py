@@ -164,7 +164,7 @@ class EventMixin:
     def annotated(cls, qs, channel='web'):
         from pretix.base.models import Item, ItemVariation, Quota
 
-        sq_active_item = Item.objects.filter_available(channel=channel).filter(
+        sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel).filter(
             Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))
         ).order_by().values_list('quotas__pk').annotate(
@@ -186,7 +186,7 @@ class EventMixin:
             Prefetch(
                 'quotas',
                 to_attr='active_quotas',
-                queryset=Quota.objects.annotate(
+                queryset=Quota.objects.using(settings.DATABASE_REPLICA).annotate(
                     active_items=Subquery(sq_active_item, output_field=models.TextField()),
                     active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
                 ).exclude(

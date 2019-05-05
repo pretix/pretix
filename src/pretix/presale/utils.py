@@ -21,6 +21,10 @@ def _detect_event(request, require_live=True, require_plugin=None):
     if hasattr(request, '_event_detected'):
         return
 
+    db = 'default'
+    if request.method == 'GET':
+        db = settings.DATABASE_REPLICA
+
     url = resolve(request.path_info)
     try:
         if hasattr(request, 'organizer_domain'):
@@ -31,24 +35,24 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 path = "/" + request.get_full_path().split("/", 2)[-1]
                 return redirect(path)
 
-            request.event = request.organizer.events\
-                .get(
-                    slug=url.kwargs['event'],
-                    organizer=request.organizer,
-                )
+            request.event = request.organizer.events.using(db).get(
+                slug=url.kwargs['event'],
+                organizer=request.organizer,
+            )
             request.organizer = request.organizer
         else:
             # We are on our main domain
             if 'event' in url.kwargs and 'organizer' in url.kwargs:
                 request.event = Event.objects\
                     .select_related('organizer')\
+                    .using(db)\
                     .get(
                         slug=url.kwargs['event'],
                         organizer__slug=url.kwargs['organizer']
                     )
                 request.organizer = request.event.organizer
             elif 'organizer' in url.kwargs:
-                request.organizer = Organizer.objects.get(
+                request.organizer = Organizer.objects.using(db).get(
                     slug=url.kwargs['organizer']
                 )
             else:

@@ -1290,7 +1290,8 @@ class Quota(LoggedModel):
                     'cached_availability_state', 'cached_availability_number', 'cached_availability_time',
                     'cached_availability_paid_orders'
                 ],
-                clear_cache=False
+                clear_cache=False,
+                using='default'
             )
 
         if _cache is not None:
