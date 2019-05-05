@@ -1,3 +1,5 @@
+.. _`installation`:
+
 Installation guide
 ==================
 

@@ -125,6 +125,8 @@ Example::
     Indicates if the database backend is a MySQL/MariaDB Galera cluster and
     turns on some optimizations/special case handlers. Default: ``False``
 
+.. _`config-replica`:
+
 Database replica settings
 -------------------------
 
@@ -141,6 +143,8 @@ Example::
 
     [replica]
     host=192.168.0.2
+
+.. _`config-urls`:
 
 URLs
 ----

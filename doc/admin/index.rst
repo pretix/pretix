@@ -11,3 +11,4 @@ This documentation is for everyone who wants to install pretix on a server.
    installation/index
    config
    maintainance
+   scaling
