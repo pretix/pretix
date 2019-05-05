@@ -39,7 +39,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
-from pretix.base.services.locking import LockTimeoutException
+from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledTask
@@ -665,9 +665,18 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    with event.lock() as now_dt:
-        positions = list(CartPosition.objects.filter(
-            id__in=position_ids).select_related('item', 'variation', 'subevent', 'addon_to').prefetch_related('addons'))
+    positions = CartPosition.objects.filter(id__in=position_ids, event=event)
+
+    lockfn = NoLockManager
+    locked = False
+    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2))).exists():
+        # Performance optimization: If no voucher is used and no cart position is dangerously close to its expiry date,
+        # creating this order shouldn't be prone to any race conditions and we don't need to lock the event.
+        locked = True
+        lockfn = event.lock
+
+    with lockfn() as now_dt:
+        positions = list(positions.select_related('item', 'variation', 'subevent', 'addon_to').prefetch_related('addons'))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
@@ -679,7 +688,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         free_order_flow = payment and payment_provider == 'free' and order.total == Decimal('0.00') and not order.require_approval
         if free_order_flow:
             try:
-                payment.confirm(send_mail=False, lock=False)
+                payment.confirm(send_mail=False, lock=not locked)
             except Quota.QuotaExceededException:
                 pass
 

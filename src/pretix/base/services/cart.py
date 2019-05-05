@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
 from django.core.exceptions import ValidationError
-from django.db import transaction
+from django.db import DatabaseError, transaction
 from django.db.models import Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
@@ -21,7 +21,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
-from pretix.base.services.locking import LockTimeoutException
+from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -791,7 +791,11 @@ class CartManager:
                     if available_count == 1:
                         op.position.expires = self._expiry
                         op.position.price = op.price.gross
-                        op.position.save()
+                        try:
+                            op.position.save(force_update=True)
+                        except DatabaseError:
+                            # Best effort... The position might have been deleted in the meantime!
+                            pass
                     elif available_count == 0:
                         op.position.addons.all().delete()
                         op.position.delete()
@@ -806,17 +810,33 @@ class CartManager:
         CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
         return err
 
+    def _require_locking(self):
+        if self._voucher_use_diff:
+            # If any vouchers are used, we lock to make sure we don't redeem them to often
+            return True
+
+        if self._quota_diff and any(q.size is not None for q in self._quota_diff):
+            # If any quotas are affected that are not unlimited, we lock
+            return True
+
+        return False
+
     def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
         self._calculate_expiry()
 
-        with self.event.lock() as now_dt:
+        err = self._delete_out_of_timeframe()
+        err = self.extend_expired_positions() or err
+
+        lockfn = NoLockManager
+        if self._require_locking():
+            lockfn = self.event.lock
+
+        with lockfn() as now_dt:
             with transaction.atomic():
                 self.now_dt = now_dt
                 self._extend_expiry_of_valid_existing_positions()
-                err = self._delete_out_of_timeframe()
-                err = self.extend_expired_positions() or err
                 err = self._perform_operations() or err
             if err:
                 raise CartError(err)

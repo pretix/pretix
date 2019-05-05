@@ -13,6 +13,18 @@ logger = logging.getLogger('pretix.base.locking')
 LOCK_TIMEOUT = 120
 
 
+class NoLockManager:
+    def __init__(self):
+        pass
+
+    def __enter__(self):
+        return now()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is not None:
+            return False
+
+
 class LockManager:
     def __init__(self, event):
         self.event = event
