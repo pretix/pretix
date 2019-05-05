@@ -32,6 +32,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import User
 from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from .base import LockModel, LoggedModel
@@ -1222,13 +1223,13 @@ class OrderPayment(models.Model):
         if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12)) or not lock:
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
-            with transaction.atomic():
-                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
-                                ignore_date=ignore_date)
+            lockfn = NoLockManager
         else:
-            with self.order.event.lock():
-                self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
-                                ignore_date=ignore_date)
+            lockfn = self.order.event.lock
+
+        with lockfn():
+            self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
+                            ignore_date=ignore_date)
 
         invoice = None
         if invoice_qualified(self.order):
