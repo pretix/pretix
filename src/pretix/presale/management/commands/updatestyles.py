@@ -26,7 +26,7 @@ class Command(BaseCommand):
         for lc, ll in settings.LANGUAGES:
             data = generate_widget_js(lc).encode()
             checksum = hashlib.sha1(data).hexdigest()
-            fname = gs.settings.get('widget_file_{}'.format(lc))
+            fname = gs.settings.get('widget_file_{}'.format(lc), as_type=str)
             if not fname or gs.settings.get('widget_checksum_{}'.format(lc), '') != checksum:
                 newname = default_storage.save(
                     'pub/widget/widget.{}.{}.js'.format(lc, checksum),
