@@ -136,7 +136,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
             item.display_price = item.tax(price, currency=event.currency, include_bundled=True)
 
             if price != original_price:
-                item.original_price = original_price
+                item.original_price = item.tax(original_price, currency=event.currency, include_bundled=True)
+            else:
+                item.original_price = (
+                    item.tax(item.original_price, currency=event.currency, include_bundled=True,
+                             base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
+                    if item.original_price else None
+                )
 
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
@@ -165,7 +171,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                 var.display_price = var.tax(price, currency=event.currency, include_bundled=True)
 
                 if price != original_price:
-                    var.original_price = original_price
+                    var.original_price = var.tax(original_price, currency=event.currency, include_bundled=True)
+                else:
+                    var.original_price = (
+                        var.tax(var.original_price or item.original_price, currency=event.currency,
+                                include_bundled=True,
+                                base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
+                    ) if var.original_price or item.original_price else None
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
 

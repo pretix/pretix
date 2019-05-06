@@ -271,10 +271,11 @@
                                                 </div>
                                                 <div class="col-md-2 col-xs-6 price">
                                                     {% if var.original_price %}
-                                                        <del>{{ var.original_price|money:event.currency }}</del>
-                                                        <ins>
-                                                    {% elif item.original_price %}
-                                                        <del>{{ item.original_price|money:event.currency }}</del>
+                                                        {% if event.settings.display_net_prices %}
+                                                            <del>{{ var.original_price.net|money:event.currency }}</del>
+                                                        {% else %}
+                                                            <del>{{ var.original_price.gross|money:event.currency }}</del>
+                                                        {% endif %}
                                                         <ins>
                                                     {% endif %}
                                                     {% if item.free_price %}
@@ -386,7 +387,11 @@
                                     </div>
                                     <div class="col-md-2 col-xs-6 price">
                                         {% if item.original_price %}
-                                            <del>{{ item.original_price|money:event.currency }}</del>
+                                            {% if event.settings.display_net_prices %}
+                                                <del>{{ item.original_price.net|money:event.currency }}</del>
+                                            {% else %}
+                                                <del>{{ item.original_price.gross|money:event.currency }}</del>
+                                            {% endif %}
                                             <ins>
                                         {% endif %}
                                         {% if item.free_price %}

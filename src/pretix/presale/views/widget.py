@@ -200,7 +200,12 @@ class WidgetAPIProductList(EventListMixin, View):
                             item.cached_availability[0],
                             item.cached_availability[1] if self.request.event.settings.show_quota_left else None
                         ] if not item.has_variations else None,
-                        'original_price': item.original_price,
+                        'original_price': (
+                            (item.original_price.net
+                             if self.request.event.settings.display_net_prices
+                             else item.original_price.gross)
+                            if item.original_price else None
+                        ),
                         'variations': [
                             {
                                 'id': var.id,
@@ -208,7 +213,19 @@ class WidgetAPIProductList(EventListMixin, View):
                                 'order_max': var.order_max,
                                 'description': str(rich_text(var.description, safelinks=False)) if var.description else None,
                                 'price': price_dict(item, var.display_price),
-                                'original_price': getattr(var, 'original_price') or item.original_price,
+                                'original_price': (
+                                    (
+                                        var.original_price.net
+                                        if self.request.event.settings.display_net_prices
+                                        else var.original_price.gross
+                                    ) if var.original_price else None
+                                ) or (
+                                    (
+                                        item.original_price.net
+                                        if self.request.event.settings.display_net_prices
+                                        else item.original_price.gross
+                                    ) if item.original_price else None
+                                ),
                                 'avail': [
                                     var.cached_availability[0],
                                     var.cached_availability[1] if self.request.event.settings.show_quota_left else None
