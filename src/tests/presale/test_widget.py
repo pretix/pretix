@@ -197,7 +197,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
             ],
             "itemnum": 2,
             "display_add_to_cart": True,
-            "cart_exists": False
+            "cart_exists": False,
+            "voucher_explanation_text": "",
         }
 
     def test_product_list_view_with_voucher(self):
@@ -240,6 +241,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 }
             ],
             "itemnum": 1,
+            "voucher_explanation_text": "",
             "display_add_to_cart": True,
             "cart_exists": False
         }
@@ -303,6 +305,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             ],
             "itemnum": 1,
             "display_add_to_cart": True,
+            "voucher_explanation_text": "",
             "cart_exists": False
         }
 
@@ -322,6 +325,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "items_by_category": [],
             "display_add_to_cart": False,
             "cart_exists": False,
+            "voucher_explanation_text": "",
             "itemnum": 0,
         }
 
