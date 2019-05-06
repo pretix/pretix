@@ -680,6 +680,7 @@ Vue.component('pretix-widget-event-form', {
         + '      v-if="$root.vouchers_exist && !$root.disable_vouchers && !$root.voucher_code">'
         + '<div class="pretix-widget-voucher">'
         + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
+        + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text">{{ $root.voucher_explanation_text }}</div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
         + '<input class="pretix-widget-voucher-input" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
         + '</div>'
@@ -1045,6 +1046,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
+                root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
                 root.waiting_list_enabled = data.waiting_list_enabled;
@@ -1200,6 +1202,7 @@ var create_widget = function (element) {
                 name: null,
                 voucher_code: voucher,
                 display_net_prices: false,
+                voucher_explanation_text: null,
                 show_variations_expanded: false,
                 skip_ssl: skip_ssl,
                 style: style,

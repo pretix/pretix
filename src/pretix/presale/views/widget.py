@@ -434,6 +434,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'display_net_prices': request.event.settings.display_net_prices,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
             'waiting_list_enabled': request.event.settings.waiting_list_enabled,
+            'voucher_explanation_text': str(request.event.settings.voucher_explanation_text),
             'error': None,
             'cart_exists': False
         }
