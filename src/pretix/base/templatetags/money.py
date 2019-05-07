@@ -17,6 +17,7 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         raise TypeError("Invalid data type passed to money filter: %r" % type(value))
     if not arg:
         raise ValueError("No currency passed.")
+    arg = arg.upper()
 
     places = settings.CURRENCY_PLACES.get(arg, 2)
     rounded = value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
