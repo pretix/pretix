@@ -41,7 +41,7 @@ oauthlib==2.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 # Stripe
-stripe==2.0.*
+stripe==2.27.*
 # PayPal
 paypalrestsdk==1.13.*
 pycparser==2.13  # https://github.com/eliben/pycparser/issues/147
