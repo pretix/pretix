@@ -279,7 +279,7 @@ class EventSettingsForm(SettingsForm):
     )
     display_net_prices = forms.BooleanField(
         label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
-        help_text=_("Independent of your choice, the cart will show gross prices as this the price that needs to be "
+        help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
                     "paid"),
         required=False
     )
