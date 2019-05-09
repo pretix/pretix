@@ -90,6 +90,7 @@ setup(
         'Django==2.2.*',
         'djangorestframework==3.9.*',
         'python-dateutil==2.8.*',
+        'requests==2.21.*',
         'pytz',
         'django-bootstrap3==11.0.*',
         'django-formset-js-improved==0.5.0.2',
@@ -140,8 +141,7 @@ setup(
         'openpyxl',
         'django-oauth-toolkit==1.2.*',
         'oauthlib==2.1.*',
-        'idna==2.6',  # required by current requests
-        'urllib3==1.24.2',  # required by current requests
+        'urllib3==1.24.*',  # required by current requests
     ],
     extras_require={
         'dev': [
