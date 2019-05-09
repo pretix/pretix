@@ -8,22 +8,24 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-09 12:44+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-05-09 23:00+0000\n"
+"Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
+"Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
+"sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:127
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 #: pretix/control/views/dashboards.py:382
 msgid "Shop disabled"
-msgstr ""
+msgstr "Trgovina izključena"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:373 pretix/control/forms/filter.py:508
