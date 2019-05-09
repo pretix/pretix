@@ -15,6 +15,7 @@ from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
+from django_countries.fields import Country
 
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
@@ -444,6 +445,10 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                     a['alink'] = a['answer']
                     a['answer'] = ugettext('Yes') if a['answer'] == 'True' else ugettext('No')
                     a['answer_bool'] = a['answer'] == 'True'
+            elif self.object.type == Question.TYPE_COUNTRYCODE:
+                for a in qs:
+                    a['alink'] = a['answer']
+                    a['answer'] = Country(a['answer']).name or a['answer']
 
         return list(qs)
 

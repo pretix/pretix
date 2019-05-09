@@ -16,6 +16,7 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_countries.fields import Country
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models import fields
@@ -912,6 +913,7 @@ class Question(LoggedModel):
     TYPE_DATE = "D"
     TYPE_TIME = "H"
     TYPE_DATETIME = "W"
+    TYPE_COUNTRYCODE = "CC"
     TYPE_CHOICES = (
         (TYPE_NUMBER, _("Number")),
         (TYPE_STRING, _("Text (one line)")),
@@ -923,6 +925,7 @@ class Question(LoggedModel):
         (TYPE_DATE, _("Date")),
         (TYPE_TIME, _("Time")),
         (TYPE_DATETIME, _("Date and time")),
+        (TYPE_COUNTRYCODE, _("Country code (ISO 3166-1 alpha-2)")),
     )
 
     event = models.ForeignKey(
@@ -1078,6 +1081,12 @@ class Question(LoggedModel):
                 return dt
             except:
                 raise ValidationError(_('Invalid datetime input.'))
+        elif self.type == Question.TYPE_COUNTRYCODE and answer:
+            c = Country(answer.upper())
+            if c.name:
+                return answer
+            else:
+                raise ValidationError(_('Unknown country code.'))
 
         return answer
 

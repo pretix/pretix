@@ -24,7 +24,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
-from django_countries.fields import CountryField
+from django_countries.fields import Country, CountryField
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 
@@ -860,6 +860,8 @@ class QuestionAnswer(models.Model):
                 return date_format(d, "TIME_FORMAT")
             except ValueError:
                 return self.answer
+        elif self.question.type == Question.TYPE_COUNTRYCODE and self.answer:
+            return Country(self.answer).name or self.answer
         else:
             return self.answer
 

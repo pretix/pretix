@@ -30,6 +30,7 @@ type                                  string                     The expected ty
                                                                  * ``D`` – date
                                                                  * ``H`` – time
                                                                  * ``W`` – date and time
+                                                                 * ``CC`` – country code (ISO 3666-1 alpha-2)
 required                              boolean                    If ``true``, the question needs to be filled out.
 position                              integer                    An integer, used for sorting
 items                                 list of integers           List of item IDs this question is assigned to.
@@ -72,7 +73,7 @@ dependency_value                      string                     The value ``dep
 
 .. versionchanged:: 2.7
 
-  The attribute ``hidden`` has been added.
+  The attribute ``hidden`` and the question type ``CC`` have been added.
 
 Endpoints
 ---------

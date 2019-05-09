@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django_countries.fields import CountryField
 
 from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
@@ -211,6 +212,14 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     widget=forms.Textarea,
+                    initial=initial.answer if initial else None,
+                )
+            elif q.type == Question.TYPE_COUNTRYCODE:
+                field = CountryField().formfield(
+                    label=label, required=required,
+                    help_text=help_text,
+                    widget=forms.Select,
+                    empty_label='',
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_CHOICE:
