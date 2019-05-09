@@ -333,7 +333,9 @@ class Item(LoggedModel):
     require_bundling = models.BooleanField(
         verbose_name=_('Only sell this product as part of a bundle'),
         default=False,
-        help_text=_('If this option is set, the product will only be sold as part of bundle products.')
+        help_text=_('If this option is set, the product will only be sold as part of bundle products. Do '
+                    '<strong>not</strong> check this option if you want to use this product as an add-on product, '
+                    'but only for fixed bundles!')
     )
     allow_cancel = models.BooleanField(
         verbose_name=_('Allow product to be canceled'),
