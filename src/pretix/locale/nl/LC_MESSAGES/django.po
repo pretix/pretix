@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 12:39+0000\n"
+"POT-Creation-Date: 2019-05-09 12:44+0000\n"
 "PO-Revision-Date: 2019-04-27 21:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -100,17 +100,17 @@ msgstr ""
 "uit te voeren."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:934
-#: pretix/base/models/items.py:1097 pretix/base/models/items.py:1429
+#: pretix/base/models/items.py:1099 pretix/base/models/items.py:1431
 msgid "One or more items do not belong to this event."
 msgstr "Één of meer items horen niet bij dit evenement."
 
-#: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1438
+#: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1440
 #: pretix/base/models/waitinglist.py:152
 msgid "Subevent cannot be null for event series."
 msgstr "Het onderevenement kan niet leeg zijn voor evenementreeksen."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
-#: pretix/base/models/items.py:1440 pretix/base/models/items.py:1443
+#: pretix/base/models/items.py:1442 pretix/base/models/items.py:1445
 #: pretix/base/models/waitinglist.py:154 pretix/base/models/waitinglist.py:157
 msgid "The subevent does not belong to this event."
 msgstr "Het onderevenement hoort niet bij dit evenement."
@@ -276,7 +276,7 @@ msgstr "Gecombineerde Excel (.xlsx)"
 msgid "Answers to file upload questions"
 msgstr "Antwoorden op bestandsuploadvragen"
 
-#: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:988
+#: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:990
 #: pretix/control/navigation.py:169
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
@@ -468,7 +468,7 @@ msgstr "Bedrijf"
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/base/exporters/orderlist.py:589 pretix/base/forms/questions.py:379
 #: pretix/base/models/devices.py:47 pretix/base/models/event.py:846
-#: pretix/base/models/event.py:1031 pretix/base/models/items.py:1211
+#: pretix/base/models/event.py:1031 pretix/base/models/items.py:1213
 #: pretix/base/models/organizer.py:31 pretix/base/models/tax.py:91
 #: pretix/base/settings.py:741 pretix/control/forms/event.py:1081
 #: pretix/control/forms/item.py:235
@@ -591,7 +591,7 @@ msgstr "Toeslagtype"
 
 #: pretix/base/exporters/orderlist.py:198
 #: pretix/base/exporters/orderlist.py:568 pretix/base/models/items.py:259
-#: pretix/base/models/items.py:564 pretix/base/models/items.py:571
+#: pretix/base/models/items.py:566 pretix/base/models/items.py:573
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -637,7 +637,7 @@ msgid "Position ID"
 msgstr "Plaatsnummer"
 
 #: pretix/base/exporters/orderlist.py:274 pretix/base/models/checkin.py:16
-#: pretix/base/models/items.py:1207 pretix/base/models/orders.py:912
+#: pretix/base/models/items.py:1209 pretix/base/models/orders.py:912
 #: pretix/base/models/vouchers.py:92 pretix/base/models/waitinglist.py:33
 #: pretix/control/forms/checkin.py:24 pretix/control/forms/event.py:1210
 #: pretix/control/forms/filter.py:187 pretix/control/forms/filter.py:789
@@ -659,7 +659,7 @@ msgctxt "subevent"
 msgid "Date"
 msgstr "Datum"
 
-#: pretix/base/exporters/orderlist.py:276 pretix/base/models/items.py:379
+#: pretix/base/exporters/orderlist.py:276 pretix/base/models/items.py:381
 #: pretix/base/models/vouchers.py:140 pretix/base/models/waitinglist.py:51
 #: pretix/control/forms/filter.py:795 pretix/control/forms/orders.py:185
 #: pretix/control/forms/vouchers.py:22
@@ -840,7 +840,7 @@ msgid "Invoice number"
 msgstr "Factuurnummer"
 
 #: pretix/base/exporters/orderlist.py:487
-#: pretix/base/exporters/orderlist.py:576 pretix/base/models/items.py:925
+#: pretix/base/exporters/orderlist.py:576 pretix/base/models/items.py:927
 #: pretix/base/models/orders.py:144 pretix/base/models/orders.py:1817
 #: pretix/control/forms/filter.py:378
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
@@ -1597,7 +1597,7 @@ msgid "Event series"
 msgstr "Evenementenreeks"
 
 #: pretix/base/models/event.py:340 pretix/base/models/items.py:235
-#: pretix/base/models/items.py:1200 pretix/base/models/orders.py:130
+#: pretix/base/models/items.py:1202 pretix/base/models/orders.py:130
 #: pretix/base/models/orders.py:1809 pretix/base/models/vouchers.py:86
 #: pretix/base/models/waitinglist.py:27 pretix/base/notifications.py:177
 #: pretix/control/templates/pretixcontrol/search/orders.html:39
@@ -1653,7 +1653,7 @@ msgstr ""
 "voorverkoop begint."
 
 #: pretix/base/models/event.py:837 pretix/base/models/items.py:256
-#: pretix/base/models/items.py:568 pretix/control/forms/filter.py:369
+#: pretix/base/models/items.py:570 pretix/control/forms/filter.py:369
 #: pretix/control/forms/filter.py:700
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
@@ -1769,7 +1769,7 @@ msgstr "Productcategorieën"
 msgid "{category} (Add-On products)"
 msgstr "{category} (add-on producten)"
 
-#: pretix/base/models/items.py:242 pretix/base/models/items.py:735
+#: pretix/base/models/items.py:242 pretix/base/models/items.py:737
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Category"
 msgstr "Categorie"
@@ -1790,7 +1790,7 @@ msgstr "Item naam"
 msgid "This is shown below the product name in lists."
 msgstr "Dit wordt onder de productnaam in lijsten weergegeven."
 
-#: pretix/base/models/items.py:264 pretix/base/models/items.py:582
+#: pretix/base/models/items.py:264 pretix/base/models/items.py:584
 msgid "Default price"
 msgstr "Standaardprijs"
 
@@ -1912,16 +1912,15 @@ msgstr "Verkoop dit product alleen als deel van een bundel"
 #: pretix/base/models/items.py:336
 msgid ""
 "If this option is set, the product will only be sold as part of bundle "
-"products."
+"products. Do <strong>not</strong> check this option if you want to use this "
+"product as an add-on product, but only for fixed bundles!"
 msgstr ""
-"Als deze optie is ingeschakeld zal dit product alleen worden verkocht als "
-"deel van productbundels."
 
-#: pretix/base/models/items.py:339
+#: pretix/base/models/items.py:341
 msgid "Allow product to be canceled"
 msgstr "Product mag geannuleerd worden"
 
-#: pretix/base/models/items.py:341
+#: pretix/base/models/items.py:343
 msgid ""
 "If this is checked, the usual cancellation settings of this event apply. If "
 "this is unchecked, orders containing this product can not be canceled by "
@@ -1932,11 +1931,11 @@ msgstr ""
 "dit product bevatten niet door gebruikers worden geannuleerd, maar alleen "
 "door u."
 
-#: pretix/base/models/items.py:345
+#: pretix/base/models/items.py:347
 msgid "Minimum amount per order"
 msgstr "Minimum aantal per bestelling"
 
-#: pretix/base/models/items.py:347
+#: pretix/base/models/items.py:349
 msgid ""
 "This product can only be bought if it is added to the cart at least this "
 "many times. If you keep the field empty or set it to 0, there is no special "
@@ -1946,11 +1945,11 @@ msgstr ""
 "winkelwagen is toegevoegd als hier ingesteld. Als u het veld leeg houdt of "
 "op 0 instelt is er geen minimumvereiste voor dit product."
 
-#: pretix/base/models/items.py:351
+#: pretix/base/models/items.py:353
 msgid "Maximum amount per order"
 msgstr "Maximum aantal per bestelling"
 
-#: pretix/base/models/items.py:353
+#: pretix/base/models/items.py:355
 msgid ""
 "This product can only be bought at most this many times within one order. If "
 "you keep the field empty or set it to 0, there is no special limit for this "
@@ -1962,11 +1961,11 @@ msgstr ""
 "speciaal limiet voor dit product. De limiet voor het maximale aantal items "
 "in een complete bestelling blijft van toepassing ongeacht deze instelling."
 
-#: pretix/base/models/items.py:358 pretix/base/models/orders.py:159
+#: pretix/base/models/items.py:360 pretix/base/models/orders.py:159
 msgid "Requires special attention"
 msgstr "Vereist speciale aandacht"
 
-#: pretix/base/models/items.py:360
+#: pretix/base/models/items.py:362
 msgid ""
 "If you set this, the check-in app will show a visible warning that this "
 "ticket requires special attention. You can use this for example for student "
@@ -1978,11 +1977,11 @@ msgstr ""
 "voor studententickets om duidelijk te maken dat de studentenkaart nog moet "
 "worden gecontroleerd."
 
-#: pretix/base/models/items.py:365 pretix/base/models/items.py:585
+#: pretix/base/models/items.py:367 pretix/base/models/items.py:587
 msgid "Original price"
 msgstr "Originele prijs"
 
-#: pretix/base/models/items.py:368 pretix/base/models/items.py:588
+#: pretix/base/models/items.py:370 pretix/base/models/items.py:590
 msgid ""
 "If set, this will be displayed next to the current price to show that the "
 "current price is a discounted one. This is just a cosmetic setting and will "
@@ -1993,11 +1992,11 @@ msgstr ""
 "alleen een cosmetische instelling, en zal geen invloed hebben op de "
 "prijsberekening."
 
-#: pretix/base/models/items.py:372 pretix/control/forms/item.py:369
+#: pretix/base/models/items.py:374 pretix/control/forms/item.py:369
 msgid "Sales channels"
 msgstr "Verkoopkanalen"
 
-#: pretix/base/models/items.py:380 pretix/base/models/items.py:962
+#: pretix/base/models/items.py:382 pretix/base/models/items.py:964
 #: pretix/control/forms/filter.py:181 pretix/control/forms/filter.py:636
 #: pretix/control/forms/item.py:131 pretix/control/navigation.py:135
 #: pretix/control/navigation.py:144
@@ -2011,7 +2010,7 @@ msgstr "Verkoopkanalen"
 msgid "Products"
 msgstr "Producten"
 
-#: pretix/base/models/items.py:519
+#: pretix/base/models/items.py:521
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
@@ -2019,52 +2018,52 @@ msgstr ""
 "Het maximum aantal per bestelling mag niet lager zijn dan het minimum aantal "
 "per bestelling."
 
-#: pretix/base/models/items.py:525
+#: pretix/base/models/items.py:527
 msgid "The item's category must belong to the same event as the item."
 msgstr ""
 "De categorie van het item moet bij hetzelfde evenement horen als het item."
 
-#: pretix/base/models/items.py:530
+#: pretix/base/models/items.py:532
 msgid "The item's tax rule must belong to the same event as the item."
 msgstr ""
 "De belastingregel van het item moet bij hetzelfde evenement horen als het "
 "item."
 
-#: pretix/base/models/items.py:536
+#: pretix/base/models/items.py:538
 msgid "The item's availability cannot end before it starts."
 msgstr "De beschikbaarheid van het item kan niet eindigen voordat het begint."
 
-#: pretix/base/models/items.py:572
+#: pretix/base/models/items.py:574
 msgid "This is shown below the variation name in lists."
 msgstr "Dit wordt weergegeven onder de variantnaam in lijsten."
 
-#: pretix/base/models/items.py:577 pretix/base/models/items.py:754
-#: pretix/base/models/items.py:968
+#: pretix/base/models/items.py:579 pretix/base/models/items.py:756
+#: pretix/base/models/items.py:970
 msgid "Position"
 msgstr "Plaats"
 
-#: pretix/base/models/items.py:593 pretix/base/models/vouchers.py:149
+#: pretix/base/models/items.py:595 pretix/base/models/vouchers.py:149
 #: pretix/base/models/waitinglist.py:59
 msgid "Product variation"
 msgstr "Productvariant"
 
-#: pretix/base/models/items.py:594
+#: pretix/base/models/items.py:596
 msgid "Product variations"
 msgstr "Productvarianten"
 
-#: pretix/base/models/items.py:740
+#: pretix/base/models/items.py:742
 msgid "Minimum number"
 msgstr "Minimum aantal"
 
-#: pretix/base/models/items.py:744
+#: pretix/base/models/items.py:746
 msgid "Maximum number"
 msgstr "Maximum aantal"
 
-#: pretix/base/models/items.py:748
+#: pretix/base/models/items.py:750
 msgid "Add-Ons are included in the price"
 msgstr "Add-ons zijn inbegrepen in de prijs"
 
-#: pretix/base/models/items.py:749
+#: pretix/base/models/items.py:751
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
@@ -2072,45 +2071,45 @@ msgstr ""
 "Als dit is ingeschakeld is het toevoegen van add-ons aan dit ticket gratis, "
 "ook als de add-ons los wel geld kosten."
 
-#: pretix/base/models/items.py:769
+#: pretix/base/models/items.py:771
 msgid "The add-on's category must belong to the same event as the item."
 msgstr ""
 "De categorie van de add-on moet bij hetzelfde evenement horen als het item."
 
-#: pretix/base/models/items.py:774
+#: pretix/base/models/items.py:776
 msgid "The item already has an add-on of this category."
 msgstr "Het item heeft al een add-on van deze categorie."
 
-#: pretix/base/models/items.py:779
+#: pretix/base/models/items.py:781
 msgid "The minimum count needs to be equal to or greater than zero."
 msgstr "Het minimum aantal moet gelijk zijn aan of groter zijn dan nul."
 
-#: pretix/base/models/items.py:784
+#: pretix/base/models/items.py:786
 msgid "The maximum count needs to be equal to or greater than zero."
 msgstr "Het maximale aantal moet gelijk zijn aan of groter zijn dan nul."
 
-#: pretix/base/models/items.py:789
+#: pretix/base/models/items.py:791
 msgid "The maximum count needs to be greater than the minimum count."
 msgstr "Het maximale aantal moet groter zijn dan het minimum aantal."
 
-#: pretix/base/models/items.py:816
+#: pretix/base/models/items.py:818
 msgid "Bundled item"
 msgstr "Gebundeld item"
 
-#: pretix/base/models/items.py:822
+#: pretix/base/models/items.py:824
 msgid "Bundled variation"
 msgstr "Gebundelde variant"
 
-#: pretix/base/models/items.py:828 pretix/base/models/items.py:918
+#: pretix/base/models/items.py:830 pretix/base/models/items.py:920
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgid "Number"
 msgstr "Getal"
 
-#: pretix/base/models/items.py:833
+#: pretix/base/models/items.py:835
 msgid "Designated price part"
 msgstr "Prijsaandeel"
 
-#: pretix/base/models/items.py:834
+#: pretix/base/models/items.py:836
 msgid ""
 "If set, it will be shown that this bundled item is responsible for the given "
 "value of the total gross price. This might be important in cases of mixed "
@@ -2123,59 +2122,59 @@ msgstr ""
 "toepassing zijn, maar kan anders leeg worden gelaten. De ingevoerde waarde "
 "zal NIET bij de prijs van het basisproduct worden opgeteld."
 
-#: pretix/base/models/items.py:857
+#: pretix/base/models/items.py:859
 msgid "The bundled item must belong to the same event as the item."
 msgstr "Het gebundelde item moet bij hetzelfde evenement horen als het item."
 
-#: pretix/base/models/items.py:859
+#: pretix/base/models/items.py:861
 msgid "A variation needs to be set for this item."
 msgstr "Er moet een variant van dit product worden gekozen."
 
-#: pretix/base/models/items.py:861
+#: pretix/base/models/items.py:863
 msgid "The chosen variation does not belong to this item."
 msgstr "De gekozen variant hoort niet bij dit product."
 
-#: pretix/base/models/items.py:866
+#: pretix/base/models/items.py:868
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Het aantal moet gelijk zijn aan of groter zijn dan nul."
 
-#: pretix/base/models/items.py:919
+#: pretix/base/models/items.py:921
 msgid "Text (one line)"
 msgstr "Tekst (één regel)"
 
-#: pretix/base/models/items.py:920
+#: pretix/base/models/items.py:922
 msgid "Multiline text"
 msgstr "Tekst (meerdere regels)"
 
-#: pretix/base/models/items.py:921
+#: pretix/base/models/items.py:923
 msgid "Yes/No"
 msgstr "Ja/nee"
 
-#: pretix/base/models/items.py:922
+#: pretix/base/models/items.py:924
 msgid "Choose one from a list"
 msgstr "Kies er een uit een lijst"
 
-#: pretix/base/models/items.py:923
+#: pretix/base/models/items.py:925
 msgid "Choose multiple from a list"
 msgstr "Kies meerdere uit een lijst"
 
-#: pretix/base/models/items.py:924
+#: pretix/base/models/items.py:926
 msgid "File upload"
 msgstr "Bestand upload"
 
-#: pretix/base/models/items.py:926 pretix/base/reldate.py:131
+#: pretix/base/models/items.py:928 pretix/base/reldate.py:131
 msgid "Time"
 msgstr "Tijd"
 
-#: pretix/base/models/items.py:927
+#: pretix/base/models/items.py:929
 msgid "Date and time"
 msgstr "Datum en tijd"
 
-#: pretix/base/models/items.py:928
+#: pretix/base/models/items.py:930
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr ""
 
-#: pretix/base/models/items.py:937 pretix/base/models/items.py:987
+#: pretix/base/models/items.py:939 pretix/base/models/items.py:989
 #: pretix/control/forms/item.py:38
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:9
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:16
@@ -2183,11 +2182,11 @@ msgstr ""
 msgid "Question"
 msgstr "Vraag"
 
-#: pretix/base/models/items.py:941
+#: pretix/base/models/items.py:943
 msgid "Internal identifier"
 msgstr "Intern kenmerk"
 
-#: pretix/base/models/items.py:942
+#: pretix/base/models/items.py:944
 msgid ""
 "You can enter any value here to make it easier to match the data with other "
 "sources. If you do not input one, we will generate one automatically."
@@ -2196,33 +2195,33 @@ msgstr ""
 "de data te koppelen aan andere bronnen. Als u niets invoert zal een kenmerk "
 "automatisch worden gegenereerd."
 
-#: pretix/base/models/items.py:946
+#: pretix/base/models/items.py:948
 msgid "Help text"
 msgstr "Helptekst"
 
-#: pretix/base/models/items.py:947
+#: pretix/base/models/items.py:949
 msgid "If the question needs to be explained or clarified, do it here!"
 msgstr ""
 "Als de vraag moet worden uitgelegd of verduidelijkt kunt u dat hier doen."
 
-#: pretix/base/models/items.py:953
+#: pretix/base/models/items.py:955
 msgid "Question type"
 msgstr "Vraagtype"
 
-#: pretix/base/models/items.py:957
+#: pretix/base/models/items.py:959
 #: pretix/control/templates/pretixcontrol/items/questions.html:49
 msgid "Required question"
 msgstr "Verplichte vraag"
 
-#: pretix/base/models/items.py:964
+#: pretix/base/models/items.py:966
 msgid "This question will be asked to buyers of the selected products"
 msgstr "Deze vraag wordt aan kopers van de geselecteerde producten gesteld"
 
-#: pretix/base/models/items.py:971
+#: pretix/base/models/items.py:973
 msgid "Ask during check-in instead of in the ticket buying process"
 msgstr "Vraag bij inchecken in plaats van bij het kopen van een ticket"
 
-#: pretix/base/models/items.py:972
+#: pretix/base/models/items.py:974
 msgid ""
 "This will only work if you handle your check-in with pretixdroid 1.8 or "
 "newer or pretixdesk 0.2 or newer."
@@ -2230,95 +2229,95 @@ msgstr ""
 "Dit werkt alleen als u gebruik maakt van pretixdroid 1.8 of nieuwer of "
 "pretixdesk 0.2 of nieuwer."
 
-#: pretix/base/models/items.py:977
+#: pretix/base/models/items.py:979
 #, fuzzy
 #| msgid "Edit question"
 msgid "Hidden question"
 msgstr "Vraag bewerken"
 
-#: pretix/base/models/items.py:978
+#: pretix/base/models/items.py:980
 #, fuzzy
 #| msgid "This question will be asked during check-in."
 msgid "This question will only show up in the backend."
 msgstr "Deze vraag zal bij het inchecken worden gesteld."
 
-#: pretix/base/models/items.py:1008
+#: pretix/base/models/items.py:1010
 msgid "This identifier is already used for a different question."
 msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
 
-#: pretix/base/models/items.py:1032
+#: pretix/base/models/items.py:1034
 msgid "An answer to this question is required to proceed."
 msgstr "Een antwoord op deze vraag is vereist om door te gaan."
 
-#: pretix/base/models/items.py:1042 pretix/base/models/items.py:1050
+#: pretix/base/models/items.py:1044 pretix/base/models/items.py:1052
 msgid "Invalid option selected."
 msgstr "Ongeldige optie geselecteerd."
 
-#: pretix/base/models/items.py:1059
+#: pretix/base/models/items.py:1061
 msgid "Invalid number input."
 msgstr "Ongeldige getalinvoer."
 
-#: pretix/base/models/items.py:1066
+#: pretix/base/models/items.py:1068
 msgid "Invalid date input."
 msgstr "Ongeldige datuminvoer."
 
-#: pretix/base/models/items.py:1073
+#: pretix/base/models/items.py:1075
 msgid "Invalid time input."
 msgstr "Ongeldige tijdsinvoer."
 
-#: pretix/base/models/items.py:1083
+#: pretix/base/models/items.py:1085
 msgid "Invalid datetime input."
 msgstr "Ongeldige datum en tijd invoer."
 
-#: pretix/base/models/items.py:1089
+#: pretix/base/models/items.py:1091
 #, fuzzy
 #| msgid "Unknown order code"
 msgid "Unknown country code."
 msgstr "Onbekende bestelcode"
 
-#: pretix/base/models/items.py:1103
+#: pretix/base/models/items.py:1105
 #: pretix/control/templates/pretixcontrol/items/question.html:68
 msgid "Answer"
 msgstr "Antwoord"
 
-#: pretix/base/models/items.py:1125
+#: pretix/base/models/items.py:1127
 msgid "The identifier \"{}\" is already used for a different option."
 msgstr "Het kenmerk \"{}\" wordt al voor een andere optie gebruikt."
 
-#: pretix/base/models/items.py:1128
+#: pretix/base/models/items.py:1130
 msgid "Question option"
 msgstr "Antwoordoptie"
 
-#: pretix/base/models/items.py:1129
+#: pretix/base/models/items.py:1131
 msgid "Question options"
 msgstr "Antwoordopties"
 
-#: pretix/base/models/items.py:1214 pretix/control/forms/event.py:1331
+#: pretix/base/models/items.py:1216 pretix/control/forms/event.py:1331
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Total capacity"
 msgstr "Totale capaciteit"
 
-#: pretix/base/models/items.py:1216 pretix/control/forms/item.py:245
+#: pretix/base/models/items.py:1218 pretix/control/forms/item.py:245
 msgid "Leave empty for an unlimited number of tickets."
 msgstr "Laat leeg voor een onbeperkt aantal tickets."
 
-#: pretix/base/models/items.py:1220 pretix/base/models/orders.py:916
+#: pretix/base/models/items.py:1222 pretix/base/models/orders.py:916
 #: pretix/control/templates/pretixcontrol/checkin/index.html:67
 msgid "Item"
 msgstr "Item"
 
-#: pretix/base/models/items.py:1228
+#: pretix/base/models/items.py:1230
 #: pretix/control/templates/pretixcontrol/item/base.html:16
 msgid "Variations"
 msgstr "Varianten"
 
-#: pretix/base/models/items.py:1236 pretix/base/models/vouchers.py:157
+#: pretix/base/models/items.py:1238 pretix/base/models/vouchers.py:157
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
 msgstr "Quotum"
 
-#: pretix/base/models/items.py:1237 pretix/control/navigation.py:153
+#: pretix/base/models/items.py:1239 pretix/control/navigation.py:153
 #: pretix/control/templates/pretixcontrol/items/quotas.html:3
 #: pretix/control/templates/pretixcontrol/items/quotas.html:5
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:299
@@ -2326,11 +2325,11 @@ msgstr "Quotum"
 msgid "Quotas"
 msgstr "Quota"
 
-#: pretix/base/models/items.py:1422
+#: pretix/base/models/items.py:1424
 msgid "All variations must belong to an item contained in the items list."
 msgstr "Alle varianten moeten bij een item behoren dat in de itemlijst staat."
 
-#: pretix/base/models/items.py:1432
+#: pretix/base/models/items.py:1434
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
@@ -17383,6 +17382,13 @@ msgstr "Leestoegang"
 #: pretix/settings.py:676
 msgid "Write access"
 msgstr "Schrijftoegang"
+
+#~ msgid ""
+#~ "If this option is set, the product will only be sold as part of bundle "
+#~ "products."
+#~ msgstr ""
+#~ "Als deze optie is ingeschakeld zal dit product alleen worden verkocht als "
+#~ "deel van productbundels."
 
 #~ msgid "An unexpected error has occurred."
 #~ msgstr "Er is een onverwachte fout opgetreden."
