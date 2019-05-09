@@ -1591,6 +1591,7 @@ TEST_QUESTION_RES = {
     "required": False,
     "items": [],
     "ask_during_checkin": False,
+    "hidden": False,
     "identifier": "ABC",
     "position": 0,
     "dependency_question": None,

@@ -15,7 +15,7 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
     def _positions_for_questions(self):
         qqs = self.request.event.questions.all()
         if self.only_user_visible:
-            qqs = qqs.filter(ask_during_checkin=False)
+            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
         cart = get_cart(self.request).select_related(
             'addon_to'
         ).prefetch_related(

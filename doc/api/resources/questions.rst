@@ -38,6 +38,8 @@ identifier                            string                     An arbitrary st
 ask_during_checkin                    boolean                    If ``true``, this question will not be asked while
                                                                  buying the ticket, but will show up when redeeming
                                                                  the ticket instead.
+hidden                                boolean                    If ``true``, the question will only be shown in the
+                                                                 backend.
 options                               list of objects            In case of question type ``C`` or ``M``, this lists the
                                                                  available objects. Only writable during creation,
                                                                  use separate endpoint to modify this later.
@@ -67,6 +69,10 @@ dependency_value                      string                     The value ``dep
 
   Write methods have been added. The attribute ``identifier`` has been added to both the resource itself and the
   options resource. The ``position`` attribute has been added to the options resource.
+
+.. versionchanged:: 2.7
+
+  The attribute ``hidden`` has been added.
 
 Endpoints
 ---------
@@ -110,6 +116,7 @@ Endpoints
             "position": 1,
             "identifier": "WY3TP9SL",
             "ask_during_checkin": false,
+            "hidden": false,
             "dependency_question": null,
             "dependency_value": null,
             "options": [
@@ -177,6 +184,7 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
         "options": [
@@ -228,6 +236,7 @@ Endpoints
         "items": [1, 2],
         "position": 1,
         "ask_during_checkin": false,
+        "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
         "options": [
@@ -261,6 +270,7 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
         "options": [
@@ -332,6 +342,7 @@ Endpoints
         "position": 2,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "hidden": false,
         "dependency_question": null,
         "dependency_value": null,
         "options": [

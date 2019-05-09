@@ -893,6 +893,8 @@ class Question(LoggedModel):
     :param items: A set of ``Items`` objects that this question should be applied to
     :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
     :type ask_during_checkin: bool
+    :param hidden: Whether to only show the question in the backend
+    :type hidden: bool
     :param identifier: An arbitrary, internal identifier
     :type identifier: str
     :param dependency_question: This question will only show up if the referenced question is set to `dependency_value`.
@@ -966,6 +968,11 @@ class Question(LoggedModel):
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
         help_text=_('This will only work if you handle your check-in with pretixdroid 1.8 or newer or '
                     'pretixdesk 0.2 or newer.'),
+        default=False
+    )
+    hidden = models.BooleanField(
+        verbose_name=_('Hidden question'),
+        help_text=_('This question will only show up in the backend.'),
         default=False
     )
     dependency_question = models.ForeignKey(

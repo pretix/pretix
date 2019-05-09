@@ -82,6 +82,7 @@ class QuestionForm(I18nModelForm):
             'type',
             'required',
             'ask_during_checkin',
+            'hidden',
             'identifier',
             'items',
             'dependency_question',

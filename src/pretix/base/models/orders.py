@@ -976,7 +976,8 @@ class AbstractPosition(models.Model):
             if hasattr(self.item, 'questions_to_ask'):
                 questions = list(copy.copy(q) for q in self.item.questions_to_ask)
             else:
-                questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False))
+                questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False,
+                                                                                  hidden=False))
         else:
             questions = list(copy.copy(q) for q in self.item.questions.all())
 
