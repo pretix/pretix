@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-01 12:01+0000\n"
+"POT-Creation-Date: 2019-05-09 12:39+0000\n"
 "PO-Revision-Date: 2018-09-12 07:17+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -19,14 +19,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.1.1\n"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:127
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 #: pretix/control/views/dashboards.py:382
 msgid "Shop disabled"
 msgstr "Mağaza devre dışı"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:373 pretix/control/forms/filter.py:508
 #: pretix/control/templates/pretixcontrol/events/index.html:129
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:66
@@ -34,7 +34,7 @@ msgstr "Mağaza devre dışı"
 msgid "Presale over"
 msgstr "Ön satış bitti"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:372 pretix/control/forms/filter.py:507
 #: pretix/control/templates/pretixcontrol/events/index.html:131
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
@@ -42,7 +42,7 @@ msgstr "Ön satış bitti"
 msgid "Presale not started"
 msgstr "Ön satış başlamadı"
 
-#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:133
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:70
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
@@ -101,17 +101,17 @@ msgid ""
 msgstr "İşlemi gerçekleştirmek için \"{}\" kotası üzerinde yeterli kota yok."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:934
-#: pretix/base/models/items.py:1081 pretix/base/models/items.py:1412
+#: pretix/base/models/items.py:1097 pretix/base/models/items.py:1429
 msgid "One or more items do not belong to this event."
 msgstr "Bir veya daha fazla öğe bu etkinliğe ait değil."
 
-#: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1421
+#: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1438
 #: pretix/base/models/waitinglist.py:152
 msgid "Subevent cannot be null for event series."
 msgstr "Etkinlik serisi için alt öğe boş olamaz."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
-#: pretix/base/models/items.py:1423 pretix/base/models/items.py:1426
+#: pretix/base/models/items.py:1440 pretix/base/models/items.py:1443
 #: pretix/base/models/waitinglist.py:154 pretix/base/models/waitinglist.py:157
 msgid "The subevent does not belong to this event."
 msgstr "Alt etkinlik bu etkinliğe ait değil."
@@ -134,13 +134,13 @@ msgstr "Meta veri özelliği '{name} ' mevcut değil."
 msgid "Unknown plugin: '{name}'."
 msgstr "Bilinmeyen eklenti: '{name}'."
 
-#: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:615
+#: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:616
 #, fuzzy
 #| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr "Eklentinin kategorisi, öğeyle aynı etkinliğe ait olmalıdır."
 
-#: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:617
+#: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:618
 msgid "The bundled item must not have bundles on its own."
 msgstr ""
 
@@ -156,7 +156,7 @@ msgstr ""
 "PATCH / PUT aracılığıyla eklenti veya varyasyon güncelleniyor. Lütfen özel "
 "yuvalanmış bitiş noktasını kullanın."
 
-#: pretix/api/serializers/item.py:227
+#: pretix/api/serializers/item.py:228
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
@@ -164,7 +164,7 @@ msgstr ""
 "PATCH / PUT ile güncelleme seçenekleri desteklenmiyor. Lütfen özel "
 "yuvalanmış bitiş noktasını kullanın."
 
-#: pretix/api/serializers/item.py:243 pretix/control/forms/item.py:63
+#: pretix/api/serializers/item.py:244 pretix/control/forms/item.py:63
 msgid "Circular dependency between questions detected."
 msgstr ""
 
@@ -293,7 +293,7 @@ msgstr ""
 msgid "Answers to file upload questions"
 msgstr "Dosya yükleme sorularına cevaplar"
 
-#: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:978
+#: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:988
 #: pretix/control/navigation.py:169
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
@@ -346,8 +346,8 @@ msgstr ""
 msgid "All invoices"
 msgstr "Tüm faturalar"
 
-#: pretix/base/exporters/invoices.py:90 pretix/base/models/orders.py:1103
-#: pretix/base/models/orders.py:1423 pretix/control/forms/filter.py:93
+#: pretix/base/exporters/invoices.py:90 pretix/base/models/orders.py:1107
+#: pretix/base/models/orders.py:1427 pretix/control/forms/filter.py:93
 #: pretix/control/forms/filter.py:893
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:42
@@ -383,7 +383,7 @@ msgstr "Durumuna göre filtrele"
 msgid "Order data"
 msgstr "Sipariş tarihi"
 
-#: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:185
+#: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:186
 #: pretix/control/navigation.py:181
 #: pretix/control/templates/pretixcontrol/event/settings.html:62
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
@@ -391,7 +391,7 @@ msgstr "Sipariş tarihi"
 msgid "Orders"
 msgstr "Siparişler"
 
-#: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1677
+#: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1681
 #: pretix/base/notifications.py:183
 msgid "Order positions"
 msgstr "Sipariş durumları"
@@ -409,7 +409,7 @@ msgstr "Yalnızca ödenmiş siparişler"
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:193
 #: pretix/base/exporters/orderlist.py:267
 #: pretix/base/exporters/orderlist.py:488
-#: pretix/base/exporters/orderlist.py:577 pretix/base/models/orders.py:117
+#: pretix/base/exporters/orderlist.py:577 pretix/base/models/orders.py:118
 #: pretix/base/notifications.py:178 pretix/base/pdf.py:51
 #: pretix/control/templates/pretixcontrol/checkin/index.html:65
 #: pretix/control/templates/pretixcontrol/order/index.html:118
@@ -434,7 +434,7 @@ msgstr "Sipariş toplamı"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:194
 #: pretix/base/exporters/orderlist.py:269
-#: pretix/base/exporters/orderlist.py:415 pretix/base/models/orders.py:123
+#: pretix/base/exporters/orderlist.py:415 pretix/base/models/orders.py:124
 #: pretix/control/forms/filter.py:366 pretix/control/forms/filter.py:501
 #: pretix/control/forms/filter.py:697 pretix/control/forms/filter.py:752
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:17
@@ -486,12 +486,12 @@ msgstr "Şirket"
 #: pretix/base/exporters/orderlist.py:92 pretix/base/exporters/orderlist.py:493
 #: pretix/base/exporters/orderlist.py:501
 #: pretix/base/exporters/orderlist.py:581
-#: pretix/base/exporters/orderlist.py:589 pretix/base/forms/questions.py:370
+#: pretix/base/exporters/orderlist.py:589 pretix/base/forms/questions.py:379
 #: pretix/base/models/devices.py:47 pretix/base/models/event.py:846
-#: pretix/base/models/event.py:1031 pretix/base/models/items.py:1195
+#: pretix/base/models/event.py:1031 pretix/base/models/items.py:1211
 #: pretix/base/models/organizer.py:31 pretix/base/models/tax.py:91
 #: pretix/base/settings.py:741 pretix/control/forms/event.py:1081
-#: pretix/control/forms/item.py:234
+#: pretix/control/forms/item.py:235
 #: pretix/control/templates/pretixcontrol/checkin/index.html:71
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:12
@@ -515,7 +515,7 @@ msgstr "Ad"
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
 #: pretix/base/exporters/orderlist.py:494
-#: pretix/base/exporters/orderlist.py:582 pretix/base/models/orders.py:1856
+#: pretix/base/exporters/orderlist.py:582 pretix/base/models/orders.py:1860
 #: pretix/control/templates/pretixcontrol/order/index.html:641
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:97
 #: pretix/presale/templates/pretixpresale/event/order.html:236
@@ -527,7 +527,7 @@ msgstr "Adres"
 #: pretix/base/exporters/orderlist.py:495
 #: pretix/base/exporters/orderlist.py:503
 #: pretix/base/exporters/orderlist.py:583
-#: pretix/base/exporters/orderlist.py:591 pretix/base/models/orders.py:1857
+#: pretix/base/exporters/orderlist.py:591 pretix/base/models/orders.py:1861
 #: pretix/control/forms/event.py:703
 msgid "ZIP code"
 msgstr "posta kodu"
@@ -537,7 +537,7 @@ msgstr "posta kodu"
 #: pretix/base/exporters/orderlist.py:496
 #: pretix/base/exporters/orderlist.py:504
 #: pretix/base/exporters/orderlist.py:584
-#: pretix/base/exporters/orderlist.py:592 pretix/base/models/orders.py:1858
+#: pretix/base/exporters/orderlist.py:592 pretix/base/models/orders.py:1862
 #: pretix/control/forms/event.py:710
 msgid "City"
 msgstr "Şehir"
@@ -547,8 +547,8 @@ msgstr "Şehir"
 #: pretix/base/exporters/orderlist.py:497
 #: pretix/base/exporters/orderlist.py:505
 #: pretix/base/exporters/orderlist.py:585
-#: pretix/base/exporters/orderlist.py:593 pretix/base/models/orders.py:1859
-#: pretix/base/models/orders.py:1860 pretix/control/forms/event.py:715
+#: pretix/base/exporters/orderlist.py:593 pretix/base/models/orders.py:1863
+#: pretix/base/models/orders.py:1864 pretix/control/forms/event.py:715
 #: pretix/control/templates/pretixcontrol/order/index.html:645
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:101
 #: pretix/presale/templates/pretixpresale/event/order.html:240
@@ -560,7 +560,7 @@ msgstr "Ülke"
 #: pretix/base/exporters/orderlist.py:499
 #: pretix/base/exporters/orderlist.py:506
 #: pretix/base/exporters/orderlist.py:587
-#: pretix/base/exporters/orderlist.py:594 pretix/base/models/orders.py:1861
+#: pretix/base/exporters/orderlist.py:594 pretix/base/models/orders.py:1865
 #: pretix/control/templates/pretixcontrol/order/index.html:648
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:104
 #: pretix/presale/templates/pretixpresale/event/order.html:243
@@ -614,13 +614,13 @@ msgid "Fee type"
 msgstr "Cihaz tipi"
 
 #: pretix/base/exporters/orderlist.py:198
-#: pretix/base/exporters/orderlist.py:568 pretix/base/models/items.py:258
-#: pretix/base/models/items.py:563 pretix/base/models/items.py:570
+#: pretix/base/exporters/orderlist.py:568 pretix/base/models/items.py:259
+#: pretix/base/models/items.py:564 pretix/base/models/items.py:571
 msgid "Description"
 msgstr "Açıklama"
 
 #: pretix/base/exporters/orderlist.py:199
-#: pretix/base/exporters/orderlist.py:278 pretix/base/models/orders.py:924
+#: pretix/base/exporters/orderlist.py:278 pretix/base/models/orders.py:927
 #: pretix/base/pdf.py:86
 #: pretix/control/templates/pretixcontrol/order/change.html:121
 #: pretix/plugins/checkinlists/exporters.py:213
@@ -630,8 +630,8 @@ msgstr "Fiyat"
 
 #: pretix/base/exporters/orderlist.py:200
 #: pretix/base/exporters/orderlist.py:279
-#: pretix/base/exporters/orderlist.py:572 pretix/base/models/orders.py:1555
-#: pretix/base/models/orders.py:1653 pretix/base/models/tax.py:98
+#: pretix/base/exporters/orderlist.py:572 pretix/base/models/orders.py:1559
+#: pretix/base/models/orders.py:1657 pretix/base/models/tax.py:98
 msgid "Tax rate"
 msgstr "Vergi oranı"
 
@@ -644,8 +644,8 @@ msgstr "Vergi kuralı"
 
 #: pretix/base/exporters/orderlist.py:202
 #: pretix/base/exporters/orderlist.py:281
-#: pretix/base/exporters/orderlist.py:571 pretix/base/models/orders.py:1564
-#: pretix/base/models/orders.py:1662
+#: pretix/base/exporters/orderlist.py:571 pretix/base/models/orders.py:1568
+#: pretix/base/models/orders.py:1666
 msgid "Tax value"
 msgstr "Vergi değeri"
 
@@ -665,11 +665,11 @@ msgid "Position ID"
 msgstr "Pozisyon"
 
 #: pretix/base/exporters/orderlist.py:274 pretix/base/models/checkin.py:16
-#: pretix/base/models/items.py:1191 pretix/base/models/orders.py:909
+#: pretix/base/models/items.py:1207 pretix/base/models/orders.py:912
 #: pretix/base/models/vouchers.py:92 pretix/base/models/waitinglist.py:33
 #: pretix/control/forms/checkin.py:24 pretix/control/forms/event.py:1210
 #: pretix/control/forms/filter.py:187 pretix/control/forms/filter.py:789
-#: pretix/control/forms/item.py:145 pretix/control/forms/orders.py:201
+#: pretix/control/forms/item.py:146 pretix/control/forms/orders.py:201
 #: pretix/control/forms/orders.py:246 pretix/control/forms/vouchers.py:70
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:61
 #: pretix/control/templates/pretixcontrol/items/quotas.html:47
@@ -687,7 +687,7 @@ msgctxt "subevent"
 msgid "Date"
 msgstr "Tarih"
 
-#: pretix/base/exporters/orderlist.py:276 pretix/base/models/items.py:378
+#: pretix/base/exporters/orderlist.py:276 pretix/base/models/items.py:379
 #: pretix/base/models/vouchers.py:140 pretix/base/models/waitinglist.py:51
 #: pretix/control/forms/filter.py:795 pretix/control/forms/orders.py:185
 #: pretix/control/forms/vouchers.py:22
@@ -704,13 +704,13 @@ msgstr "Tarih"
 msgid "Product"
 msgstr "Ürün"
 
-#: pretix/base/exporters/orderlist.py:277 pretix/base/models/orders.py:919
+#: pretix/base/exporters/orderlist.py:277 pretix/base/models/orders.py:922
 msgid "Variation"
 msgstr "Varyasyon"
 
 #: pretix/base/exporters/orderlist.py:282
-#: pretix/base/exporters/orderlist.py:287 pretix/base/forms/questions.py:157
-#: pretix/base/models/orders.py:928 pretix/base/pdf.py:100
+#: pretix/base/exporters/orderlist.py:287 pretix/base/forms/questions.py:158
+#: pretix/base/models/orders.py:931 pretix/base/pdf.py:100
 #: pretix/control/templates/pretixcontrol/order/index.html:293
 #: pretix/plugins/badges/exporters.py:105
 #: pretix/plugins/checkinlists/exporters.py:52
@@ -720,8 +720,8 @@ msgstr "Varyasyon"
 msgid "Attendee name"
 msgstr "Katılımcı adı"
 
-#: pretix/base/exporters/orderlist.py:289 pretix/base/forms/questions.py:163
-#: pretix/base/models/orders.py:936
+#: pretix/base/exporters/orderlist.py:289 pretix/base/forms/questions.py:164
+#: pretix/base/models/orders.py:939
 #: pretix/control/templates/pretixcontrol/order/index.html:298
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:31
 msgid "Attendee email"
@@ -749,9 +749,9 @@ msgstr "Ödeme ve geri ödeme listesi (CSV)"
 msgid "Only successful payments"
 msgstr "Sadece başarılı ödemeler"
 
-#: pretix/base/exporters/orderlist.py:415 pretix/base/models/orders.py:184
-#: pretix/base/models/orders.py:1090 pretix/base/models/orders.py:1404
-#: pretix/base/models/orders.py:1544 pretix/base/models/orders.py:1647
+#: pretix/base/exporters/orderlist.py:415 pretix/base/models/orders.py:185
+#: pretix/base/models/orders.py:1094 pretix/base/models/orders.py:1408
+#: pretix/base/models/orders.py:1548 pretix/base/models/orders.py:1651
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:211
 msgid "Order"
@@ -777,8 +777,8 @@ msgstr "Tamamlama tarihi"
 msgid "Status code"
 msgstr "Durum"
 
-#: pretix/base/exporters/orderlist.py:416 pretix/base/models/orders.py:1086
-#: pretix/base/models/orders.py:1400
+#: pretix/base/exporters/orderlist.py:416 pretix/base/models/orders.py:1090
+#: pretix/base/models/orders.py:1404
 #: pretix/control/templates/pretixcontrol/order/index.html:449
 #: pretix/control/templates/pretixcontrol/order/index.html:545
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:46
@@ -811,11 +811,11 @@ msgstr "Kota adı"
 msgid "Total quota"
 msgstr "Toplam kota"
 
-#: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:609
+#: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:614
 msgid "Paid orders"
 msgstr "Ücretli siparişler"
 
-#: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:614
+#: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:619
 msgid "Pending orders"
 msgstr "Bekleyen siparişler"
 
@@ -823,7 +823,7 @@ msgstr "Bekleyen siparişler"
 msgid "Blocking vouchers"
 msgstr "Kuponları engelleme"
 
-#: pretix/base/exporters/orderlist.py:450 pretix/control/views/item.py:624
+#: pretix/base/exporters/orderlist.py:450 pretix/control/views/item.py:629
 msgid "Current user's carts"
 msgstr "Mevcut kullanıcının sepetleri"
 
@@ -838,7 +838,7 @@ msgstr "Mevcut kullanıcının sepetleri"
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:3
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:45
 #: pretix/presale/templates/pretixpresale/organizers/index.html:68
-#: pretix/presale/views/widget.py:270
+#: pretix/presale/views/widget.py:287
 msgid "Waiting list"
 msgstr "Bekleme listesi"
 
@@ -882,8 +882,8 @@ msgid "Invoice number"
 msgstr "Fatura numarası"
 
 #: pretix/base/exporters/orderlist.py:487
-#: pretix/base/exporters/orderlist.py:576 pretix/base/models/items.py:921
-#: pretix/base/models/orders.py:143 pretix/base/models/orders.py:1813
+#: pretix/base/exporters/orderlist.py:576 pretix/base/models/items.py:925
+#: pretix/base/models/orders.py:144 pretix/base/models/orders.py:1817
 #: pretix/control/forms/filter.py:378
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
@@ -976,12 +976,12 @@ msgid "Street address"
 msgstr "Gönderen adresi"
 
 #: pretix/base/exporters/orderlist.py:507
-#: pretix/base/exporters/orderlist.py:595 pretix/base/models/orders.py:1870
+#: pretix/base/exporters/orderlist.py:595 pretix/base/models/orders.py:1874
 msgid "Beneficiary"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:508
-#: pretix/base/exporters/orderlist.py:596 pretix/base/models/orders.py:1865
+#: pretix/base/exporters/orderlist.py:596 pretix/base/models/orders.py:1869
 #: pretix/control/templates/pretixcontrol/order/index.html:664
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Internal reference"
@@ -1028,8 +1028,8 @@ msgstr "İptal"
 msgid "Invoice"
 msgstr "Fatura"
 
-#: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:836
-#: pretix/control/views/item.py:445 pretix/control/views/vouchers.py:78
+#: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:837
+#: pretix/control/views/item.py:446 pretix/control/views/vouchers.py:78
 #: pretix/control/views/vouchers.py:79
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:82
@@ -1038,8 +1038,8 @@ msgstr "Fatura"
 msgid "Yes"
 msgstr "Evet"
 
-#: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:838
-#: pretix/control/views/item.py:445 pretix/control/views/vouchers.py:78
+#: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:839
+#: pretix/control/views/item.py:446 pretix/control/views/vouchers.py:78
 #: pretix/control/views/vouchers.py:79
 #: pretix/plugins/checkinlists/exporters.py:359
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:82
@@ -1078,7 +1078,7 @@ msgstr "Etkinlik başlangıç zamanı"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
-#: pretix/base/models/orders.py:135 pretix/control/navigation.py:68
+#: pretix/base/models/orders.py:136 pretix/control/navigation.py:68
 #: pretix/plugins/checkinlists/exporters.py:313
 #: pretix/presale/checkoutflow.py:631 pretix/presale/forms/checkout.py:26
 #: pretix/presale/forms/user.py:6
@@ -1122,37 +1122,37 @@ msgstr "E-posta adresi"
 msgid "Repeat password"
 msgstr "Şifreyi tekrar girin"
 
-#: pretix/base/forms/questions.py:316 pretix/control/forms/item.py:71
+#: pretix/base/forms/questions.py:325 pretix/control/forms/item.py:71
 #, fuzzy
 #| msgid "This field is required."
 msgid "This field is required"
 msgstr "Bu alan gereklidir."
 
-#: pretix/base/forms/questions.py:330
+#: pretix/base/forms/questions.py:339
 msgid "Street and Number"
 msgstr "Sokak ve numara"
 
-#: pretix/base/forms/questions.py:387
+#: pretix/base/forms/questions.py:396
 #, fuzzy
 #| msgid "You need to provide either a company name or your name."
 msgid "You need to provide a company name."
 msgstr "Bir şirket adı veya adınızı belirtmeniz gerekir."
 
-#: pretix/base/forms/questions.py:389
+#: pretix/base/forms/questions.py:398
 #, fuzzy
 #| msgid "You need to provide either a company name or your name."
 msgid "You need to provide your name."
 msgstr "Bir şirket adı veya adınızı belirtmeniz gerekir."
 
-#: pretix/base/forms/questions.py:400 pretix/control/views/orders.py:978
+#: pretix/base/forms/questions.py:409 pretix/control/views/orders.py:978
 msgid "Your VAT ID does not match the selected country."
 msgstr "KDV kimliğiniz seçilen ülke ile eşleşmiyor."
 
-#: pretix/base/forms/questions.py:408
+#: pretix/base/forms/questions.py:417
 msgid "This VAT ID is not valid. Please re-check your input."
 msgstr "Bu KDV kimliği geçerli değil. Lütfen girişinizi tekrar kontrol edin."
 
-#: pretix/base/forms/questions.py:413
+#: pretix/base/forms/questions.py:422
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge VAT on "
@@ -1163,7 +1163,7 @@ msgstr ""
 "kontrol edilemedi. Bu nedenle faturanızda KDV ödemeniz gerekecek. Vergi "
 "miktarını KDV iadesi süreci ile geri alabilirsiniz."
 
-#: pretix/base/forms/questions.py:421
+#: pretix/base/forms/questions.py:430
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country returned an incorrect result. We will therefore need to charge VAT "
@@ -1247,7 +1247,7 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Geçersiz yer tutucu(lar): %(value)s"
 
 #: pretix/base/forms/widgets.py:126 pretix/base/forms/widgets.py:131
-#: pretix/base/models/orders.py:1852
+#: pretix/base/models/orders.py:1856
 msgid "Business customer"
 msgstr "Kurumsal müşteri"
 
@@ -1464,7 +1464,7 @@ msgstr "Klasik işleyici (pretix 1.0)"
 msgid "Default list"
 msgstr "Varsayılan liste"
 
-#: pretix/base/models/auth.py:80 pretix/base/models/orders.py:1854
+#: pretix/base/models/auth.py:80 pretix/base/models/orders.py:1858
 #: pretix/base/settings.py:752 pretix/base/settings.py:763
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 msgid "Full name"
@@ -1686,13 +1686,13 @@ msgstr "İç yorum"
 #: pretix/control/templates/pretixcontrol/event/index.html:12
 #: pretix/control/views/dashboards.py:393
 #: pretix/presale/templates/pretixpresale/organizers/index.html:63
-#: pretix/presale/views/widget.py:399
+#: pretix/presale/views/widget.py:416
 msgid "Event series"
 msgstr "Etkinlik dizisi"
 
-#: pretix/base/models/event.py:340 pretix/base/models/items.py:234
-#: pretix/base/models/items.py:1184 pretix/base/models/orders.py:129
-#: pretix/base/models/orders.py:1805 pretix/base/models/vouchers.py:86
+#: pretix/base/models/event.py:340 pretix/base/models/items.py:235
+#: pretix/base/models/items.py:1200 pretix/base/models/orders.py:130
+#: pretix/base/models/orders.py:1809 pretix/base/models/vouchers.py:86
 #: pretix/base/models/waitinglist.py:27 pretix/base/notifications.py:177
 #: pretix/control/templates/pretixcontrol/search/orders.html:39
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
@@ -1743,8 +1743,8 @@ msgstr "Etkinlik başlamadan bitemez."
 msgid "The event's presale cannot end before it starts."
 msgstr "Etkinliğin ön satışı etkinlik başlamadan bitemez."
 
-#: pretix/base/models/event.py:837 pretix/base/models/items.py:255
-#: pretix/base/models/items.py:567 pretix/control/forms/filter.py:369
+#: pretix/base/models/event.py:837 pretix/base/models/items.py:256
+#: pretix/base/models/items.py:568 pretix/control/forms/filter.py:369
 #: pretix/control/forms/filter.py:700
 #: pretix/control/templates/pretixcontrol/users/index.html:46
 msgid "Active"
@@ -1814,28 +1814,28 @@ msgctxt "invoice"
 msgid "Tax ID: %s"
 msgstr "KDV KİMLİĞİ: %s"
 
-#: pretix/base/models/items.py:46
+#: pretix/base/models/items.py:47
 msgid "Category name"
 msgstr "Kategori adı"
 
-#: pretix/base/models/items.py:49 pretix/base/models/items.py:249
+#: pretix/base/models/items.py:50 pretix/base/models/items.py:250
 msgid "Internal name"
 msgstr "Dahili İsim"
 
-#: pretix/base/models/items.py:50 pretix/base/models/items.py:250
+#: pretix/base/models/items.py:51 pretix/base/models/items.py:251
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr "Bunu ayarlarsanız, bu arka uçta genel ad yerine kullanılır."
 
-#: pretix/base/models/items.py:54
+#: pretix/base/models/items.py:55
 msgid "Category description"
 msgstr "Kategori tanımı"
 
-#: pretix/base/models/items.py:61
+#: pretix/base/models/items.py:62
 msgid "Products in this category are add-on products"
 msgstr "Bu kategorideki ürünler eklenti ürünlerdir"
 
-#: pretix/base/models/items.py:62
+#: pretix/base/models/items.py:63
 msgid ""
 "If selected, the products belonging to this category are not for sale on "
 "their own. They can only be bought in combination with a product that has "
@@ -1845,30 +1845,30 @@ msgstr ""
 "Yalnızca, bu kategori eklentiler için olası bir kaynak olarak "
 "yapılandırılmış bir ürünle birlikte satın alınabilir."
 
-#: pretix/base/models/items.py:68 pretix/base/pdf.py:79
+#: pretix/base/models/items.py:69 pretix/base/pdf.py:79
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
 msgstr "Ürün Kategorisi"
 
-#: pretix/base/models/items.py:69
+#: pretix/base/models/items.py:70
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:31
 msgid "Product categories"
 msgstr "Ürün kategorileri"
 
-#: pretix/base/models/items.py:75
+#: pretix/base/models/items.py:76
 #, python-brace-format
 msgid "{category} (Add-On products)"
 msgstr "{category}(Eklenti ürünler)"
 
-#: pretix/base/models/items.py:241 pretix/base/models/items.py:734
+#: pretix/base/models/items.py:242 pretix/base/models/items.py:735
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Category"
 msgstr "Kategori"
 
-#: pretix/base/models/items.py:242
+#: pretix/base/models/items.py:243
 msgid ""
 "If you have many products, you can optionally sort them into categories to "
 "keep things organized."
@@ -1876,19 +1876,19 @@ msgstr ""
 "Çok fazla ürününüz varsa, bunları organize tutmak için isteğe bağlı olarak "
 "kategorilere ayırabilirsiniz."
 
-#: pretix/base/models/items.py:246
+#: pretix/base/models/items.py:247
 msgid "Item name"
 msgstr "Öğe adı"
 
-#: pretix/base/models/items.py:259
+#: pretix/base/models/items.py:260
 msgid "This is shown below the product name in lists."
 msgstr "Bu, listelerde ürün adının altında gösterilmiştir."
 
-#: pretix/base/models/items.py:263 pretix/base/models/items.py:581
+#: pretix/base/models/items.py:264 pretix/base/models/items.py:582
 msgid "Default price"
 msgstr "Varsayılan fiyat"
 
-#: pretix/base/models/items.py:264
+#: pretix/base/models/items.py:265
 msgid ""
 "If this product has multiple variations, you can set different prices for "
 "each of the variations. If a variation does not have a special price or if "
@@ -1898,11 +1898,11 @@ msgstr ""
 "fiyatlar belirleyebilirsiniz. Bir varyasyonun özel bir fiyatı yoksa veya "
 "varyasyonlarınız yoksa, bu fiyat kullanılır."
 
-#: pretix/base/models/items.py:271
+#: pretix/base/models/items.py:272
 msgid "Free price input"
 msgstr "Serbest fiyat girişi"
 
-#: pretix/base/models/items.py:272
+#: pretix/base/models/items.py:273
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
@@ -1916,50 +1916,50 @@ msgstr ""
 "toplamak için kullanabilirsiniz. Bu özellik diğer ürünlere bir eklenti "
 "olarak satın alınan ürünler için şu anda desteklenmemektedir."
 
-#: pretix/base/models/items.py:279
+#: pretix/base/models/items.py:280
 msgid "Sales tax"
 msgstr "Satış vergisi"
 
-#: pretix/base/models/items.py:284
+#: pretix/base/models/items.py:285
 msgid "Is an admission ticket"
 msgstr "Giriş bileti"
 
-#: pretix/base/models/items.py:286
+#: pretix/base/models/items.py:287
 msgid "Whether or not buying this product allows a person to enter your event"
 msgstr ""
 "Bu ürünü satın alıp almamanız, bir kişinin etkinliğinize girmesine izin verir"
 
-#: pretix/base/models/items.py:292
+#: pretix/base/models/items.py:293
 #, fuzzy
 #| msgid "Generate invoices"
 msgid "Generate tickets"
 msgstr "Faturalar oluştur"
 
-#: pretix/base/models/items.py:299
+#: pretix/base/models/items.py:300
 msgid "Product picture"
 msgstr "Ürün resmi"
 
-#: pretix/base/models/items.py:304
+#: pretix/base/models/items.py:305
 msgid "Available from"
 msgstr "Mevcut"
 
-#: pretix/base/models/items.py:306
+#: pretix/base/models/items.py:307
 msgid "This product will not be sold before the given date."
 msgstr "Bu ürün belirtilen tarihten önce satılmayacaktır."
 
-#: pretix/base/models/items.py:309 pretix/base/payment.py:204
+#: pretix/base/models/items.py:310 pretix/base/payment.py:204
 msgid "Available until"
 msgstr "Kadar mevcut"
 
-#: pretix/base/models/items.py:311
+#: pretix/base/models/items.py:312
 msgid "This product will not be sold after the given date."
 msgstr "Bu ürün belirtilen tarihten sonra satılmayacaktır."
 
-#: pretix/base/models/items.py:314
+#: pretix/base/models/items.py:315
 msgid "This product can only be bought using a voucher."
 msgstr "Bu ürün sadece bir kupon kullanılarak satın alınabilir."
 
-#: pretix/base/models/items.py:316
+#: pretix/base/models/items.py:317
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
@@ -1967,11 +1967,11 @@ msgstr ""
 "Bu ürünü satın almak için, kullanıcının doğrudan veya bir kota yoluyla bu "
 "ürün için geçerli bir kuponunun olması gerekir."
 
-#: pretix/base/models/items.py:320
+#: pretix/base/models/items.py:321
 msgid "Buying this product requires approval"
 msgstr "Bu ürünü satın almak onay gerektiriyor"
 
-#: pretix/base/models/items.py:322
+#: pretix/base/models/items.py:323
 msgid ""
 "If this product is part of an order, the order will be put into an \"approval"
 "\" state and will need to be confirmed by you before it can be paid and "
@@ -1982,7 +1982,7 @@ msgstr ""
 "ödeme ve tamamlanmadan önce tarafınızdan onaylanması gerekecektir. Bu örn. "
 "Yalnızca belirli gruplara sunulan indirimli biletler için."
 
-#: pretix/base/models/items.py:327
+#: pretix/base/models/items.py:328
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
@@ -1990,7 +1990,7 @@ msgstr ""
 "Bu ürün sadece ürünle eşleşen bir kuponun kullanılması durumunda "
 "gösterilecektir."
 
-#: pretix/base/models/items.py:329
+#: pretix/base/models/items.py:330
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher code that is specifically tied to this product (and not via a quota)."
@@ -1998,32 +1998,32 @@ msgstr ""
 "Bu ürün, kullanıcı bu ürüne özel olarak (kota yoluyla değil) bağlı bir kupon "
 "kodu girene kadar etkinlik sayfasından gizlenecektir."
 
-#: pretix/base/models/items.py:333
+#: pretix/base/models/items.py:334
 msgid "Only sell this product as part of a bundle"
 msgstr ""
 
-#: pretix/base/models/items.py:335
+#: pretix/base/models/items.py:336
 msgid ""
 "If this option is set, the product will only be sold as part of bundle "
 "products."
 msgstr ""
 
-#: pretix/base/models/items.py:338
+#: pretix/base/models/items.py:339
 msgid "Allow product to be canceled"
 msgstr "Ürünün iptal edilmesine izin ver"
 
-#: pretix/base/models/items.py:340
+#: pretix/base/models/items.py:341
 msgid ""
 "If this is checked, the usual cancellation settings of this event apply. If "
 "this is unchecked, orders containing this product can not be canceled by "
 "users but only by you."
 msgstr ""
 
-#: pretix/base/models/items.py:344
+#: pretix/base/models/items.py:345
 msgid "Minimum amount per order"
 msgstr "Sipariş başına minimum miktar"
 
-#: pretix/base/models/items.py:346
+#: pretix/base/models/items.py:347
 msgid ""
 "This product can only be bought if it is added to the cart at least this "
 "many times. If you keep the field empty or set it to 0, there is no special "
@@ -2032,11 +2032,11 @@ msgstr ""
 "Bu ürün sadece en az bu kadar kez sepete eklendiyse satın alınabilir. Alanı "
 "boş tutar veya 0 olarak ayarlarsanız, bu ürün için özel bir sınır yoktur."
 
-#: pretix/base/models/items.py:350
+#: pretix/base/models/items.py:351
 msgid "Maximum amount per order"
 msgstr "Sipariş başına maksimum miktar"
 
-#: pretix/base/models/items.py:352
+#: pretix/base/models/items.py:353
 msgid ""
 "This product can only be bought at most this many times within one order. If "
 "you keep the field empty or set it to 0, there is no special limit for this "
@@ -2047,11 +2047,11 @@ msgstr ""
 "tutar veya 0 olarak ayarlarsanız, bu ürün için özel bir sınır yoktur. Tüm "
 "sıradaki maksimum öğe sayısı sınırı ne olursa olsun geçerlidir."
 
-#: pretix/base/models/items.py:357 pretix/base/models/orders.py:158
+#: pretix/base/models/items.py:358 pretix/base/models/orders.py:159
 msgid "Requires special attention"
 msgstr "Özel ilgi gerektirir"
 
-#: pretix/base/models/items.py:359
+#: pretix/base/models/items.py:360
 msgid ""
 "If you set this, the check-in app will show a visible warning that this "
 "ticket requires special attention. You can use this for example for student "
@@ -2063,11 +2063,11 @@ msgstr ""
 "sırasında öğrencinin kimlik kartının hala kontrol edilmesi gerektiğini "
 "ilgili kişiye belirtin."
 
-#: pretix/base/models/items.py:364 pretix/base/models/items.py:584
+#: pretix/base/models/items.py:365 pretix/base/models/items.py:585
 msgid "Original price"
 msgstr "Orijinal fiyat"
 
-#: pretix/base/models/items.py:367 pretix/base/models/items.py:587
+#: pretix/base/models/items.py:368 pretix/base/models/items.py:588
 msgid ""
 "If set, this will be displayed next to the current price to show that the "
 "current price is a discounted one. This is just a cosmetic setting and will "
@@ -2077,15 +2077,15 @@ msgstr ""
 "yanında görüntülenir. Bu sadece kozmetik bir ayardır ve fiyatlandırmayı "
 "etkilemeyecektir."
 
-#: pretix/base/models/items.py:371 pretix/control/forms/item.py:368
+#: pretix/base/models/items.py:372 pretix/control/forms/item.py:369
 #, fuzzy
 #| msgid "Save changes"
 msgid "Sales channels"
 msgstr "Değişiklikleri Kaydet"
 
-#: pretix/base/models/items.py:379 pretix/base/models/items.py:957
+#: pretix/base/models/items.py:380 pretix/base/models/items.py:962
 #: pretix/control/forms/filter.py:181 pretix/control/forms/filter.py:636
-#: pretix/control/forms/item.py:130 pretix/control/navigation.py:135
+#: pretix/control/forms/item.py:131 pretix/control/navigation.py:135
 #: pretix/control/navigation.py:144
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:27
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:63
@@ -2097,7 +2097,7 @@ msgstr "Değişiklikleri Kaydet"
 msgid "Products"
 msgstr "Ürünler"
 
-#: pretix/base/models/items.py:518
+#: pretix/base/models/items.py:519
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
@@ -2105,49 +2105,49 @@ msgstr ""
 "Sipariş başına maksimum sayı, sipariş başına minimum sayıdan daha düşük "
 "olamaz."
 
-#: pretix/base/models/items.py:524
+#: pretix/base/models/items.py:525
 msgid "The item's category must belong to the same event as the item."
 msgstr "Öğenin kategorisi, öğe ile aynı etkinliğe ait olmalıdır."
 
-#: pretix/base/models/items.py:529
+#: pretix/base/models/items.py:530
 msgid "The item's tax rule must belong to the same event as the item."
 msgstr "Öğenin vergi kuralı, öğe ile aynı etkinliğe ait olmalıdır."
 
-#: pretix/base/models/items.py:535
+#: pretix/base/models/items.py:536
 msgid "The item's availability cannot end before it starts."
 msgstr "Öğenin kullanılabilirliği başlamadan bitemez."
 
-#: pretix/base/models/items.py:571
+#: pretix/base/models/items.py:572
 msgid "This is shown below the variation name in lists."
 msgstr "Bu, listelerdeki varyasyon adının altında gösterilir."
 
-#: pretix/base/models/items.py:576 pretix/base/models/items.py:753
-#: pretix/base/models/items.py:963
+#: pretix/base/models/items.py:577 pretix/base/models/items.py:754
+#: pretix/base/models/items.py:968
 msgid "Position"
 msgstr "Pozisyon"
 
-#: pretix/base/models/items.py:592 pretix/base/models/vouchers.py:149
+#: pretix/base/models/items.py:593 pretix/base/models/vouchers.py:149
 #: pretix/base/models/waitinglist.py:59
 msgid "Product variation"
 msgstr "Ürün varyasyonu"
 
-#: pretix/base/models/items.py:593
+#: pretix/base/models/items.py:594
 msgid "Product variations"
 msgstr "Ürün varyasyonları"
 
-#: pretix/base/models/items.py:739
+#: pretix/base/models/items.py:740
 msgid "Minimum number"
 msgstr "Minimum sayı"
 
-#: pretix/base/models/items.py:743
+#: pretix/base/models/items.py:744
 msgid "Maximum number"
 msgstr "Azami sayı"
 
-#: pretix/base/models/items.py:747
+#: pretix/base/models/items.py:748
 msgid "Add-Ons are included in the price"
 msgstr "Eklenti fiyata dahildir"
 
-#: pretix/base/models/items.py:748
+#: pretix/base/models/items.py:749
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
@@ -2155,48 +2155,48 @@ msgstr ""
 "Eğer seçilirse, eklentiler normalde ayrı ücretlendirilmiş olsa bile, "
 "eklentiler bu bilet için ücretsizdir."
 
-#: pretix/base/models/items.py:768
+#: pretix/base/models/items.py:769
 msgid "The add-on's category must belong to the same event as the item."
 msgstr "Eklentinin kategorisi, öğeyle aynı etkinliğe ait olmalıdır."
 
-#: pretix/base/models/items.py:773
+#: pretix/base/models/items.py:774
 msgid "The item already has an add-on of this category."
 msgstr "Öğenin zaten bu kategoriden bir eklentisi var."
 
-#: pretix/base/models/items.py:778
+#: pretix/base/models/items.py:779
 msgid "The minimum count needs to be equal to or greater than zero."
 msgstr "Minimum sayının sıfır veya sıfırdan büyük olması gerekir."
 
-#: pretix/base/models/items.py:783
+#: pretix/base/models/items.py:784
 msgid "The maximum count needs to be equal to or greater than zero."
 msgstr "Maksimum sayının sıfır veya sıfırdan büyük olması gerekir."
 
-#: pretix/base/models/items.py:788
+#: pretix/base/models/items.py:789
 msgid "The maximum count needs to be greater than the minimum count."
 msgstr "Maksimum sayısının minimum sayısından daha büyük olması gerekir."
 
-#: pretix/base/models/items.py:815
+#: pretix/base/models/items.py:816
 #, fuzzy
 #| msgid "invalid item"
 msgid "Bundled item"
 msgstr "geçersiz öğe"
 
-#: pretix/base/models/items.py:821
+#: pretix/base/models/items.py:822
 #, fuzzy
 #| msgid "Sample variation"
 msgid "Bundled variation"
 msgstr "Örnek varyasyon"
 
-#: pretix/base/models/items.py:827 pretix/base/models/items.py:914
+#: pretix/base/models/items.py:828 pretix/base/models/items.py:918
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgid "Number"
 msgstr "Numara"
 
-#: pretix/base/models/items.py:832
+#: pretix/base/models/items.py:833
 msgid "Designated price part"
 msgstr ""
 
-#: pretix/base/models/items.py:833
+#: pretix/base/models/items.py:834
 msgid ""
 "If set, it will be shown that this bundled item is responsible for the given "
 "value of the total gross price. This might be important in cases of mixed "
@@ -2204,63 +2204,67 @@ msgid ""
 "the base item's price."
 msgstr ""
 
-#: pretix/base/models/items.py:856
+#: pretix/base/models/items.py:857
 #, fuzzy
 #| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must belong to the same event as the item."
 msgstr "Eklentinin kategorisi, öğeyle aynı etkinliğe ait olmalıdır."
 
-#: pretix/base/models/items.py:858
+#: pretix/base/models/items.py:859
 #, fuzzy
 #| msgid "This variation does not belong to this product."
 msgid "A variation needs to be set for this item."
 msgstr "Bu varyasyon bu ürüne ait değildir."
 
-#: pretix/base/models/items.py:860
+#: pretix/base/models/items.py:861
 #, fuzzy
 #| msgid "This variation does not belong to this product."
 msgid "The chosen variation does not belong to this item."
 msgstr "Bu varyasyon bu ürüne ait değildir."
 
-#: pretix/base/models/items.py:865
+#: pretix/base/models/items.py:866
 #, fuzzy
 #| msgid "The minimum count needs to be equal to or greater than zero."
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Minimum sayının sıfır veya sıfırdan büyük olması gerekir."
 
-#: pretix/base/models/items.py:915
+#: pretix/base/models/items.py:919
 msgid "Text (one line)"
 msgstr "Metin (bir satır)"
 
-#: pretix/base/models/items.py:916
+#: pretix/base/models/items.py:920
 msgid "Multiline text"
 msgstr "Çok satırlı metin"
 
-#: pretix/base/models/items.py:917
+#: pretix/base/models/items.py:921
 msgid "Yes/No"
 msgstr "Evet/Hayır"
 
-#: pretix/base/models/items.py:918
+#: pretix/base/models/items.py:922
 msgid "Choose one from a list"
 msgstr "Listeden birini seç"
 
-#: pretix/base/models/items.py:919
+#: pretix/base/models/items.py:923
 msgid "Choose multiple from a list"
 msgstr "Bir listeden çoklu seçim yap"
 
-#: pretix/base/models/items.py:920
+#: pretix/base/models/items.py:924
 msgid "File upload"
 msgstr "Dosya yükleme"
 
-#: pretix/base/models/items.py:922 pretix/base/reldate.py:131
+#: pretix/base/models/items.py:926 pretix/base/reldate.py:131
 msgid "Time"
 msgstr "zaman"
 
-#: pretix/base/models/items.py:923
+#: pretix/base/models/items.py:927
 msgid "Date and time"
 msgstr "Tarih ve zaman"
 
-#: pretix/base/models/items.py:932 pretix/base/models/items.py:977
+#: pretix/base/models/items.py:928
+msgid "Country code (ISO 3166-1 alpha-2)"
+msgstr ""
+
+#: pretix/base/models/items.py:937 pretix/base/models/items.py:987
 #: pretix/control/forms/item.py:38
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:9
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:16
@@ -2268,11 +2272,11 @@ msgstr "Tarih ve zaman"
 msgid "Question"
 msgstr "Soru"
 
-#: pretix/base/models/items.py:936
+#: pretix/base/models/items.py:941
 msgid "Internal identifier"
 msgstr "Dahili tanımlayıcı"
 
-#: pretix/base/models/items.py:937
+#: pretix/base/models/items.py:942
 msgid ""
 "You can enter any value here to make it easier to match the data with other "
 "sources. If you do not input one, we will generate one automatically."
@@ -2281,33 +2285,33 @@ msgstr ""
 "bir değer girebilirsiniz. Birini girmezseniz, otomatik olarak bir tane "
 "üreteceğiz."
 
-#: pretix/base/models/items.py:941
+#: pretix/base/models/items.py:946
 msgid "Help text"
 msgstr "Yardım metni"
 
-#: pretix/base/models/items.py:942
+#: pretix/base/models/items.py:947
 msgid "If the question needs to be explained or clarified, do it here!"
 msgstr ""
 "Sorunun açıklanması veya açıklığa kavuşturulması gerekiyorsa, burada yapın!"
 
-#: pretix/base/models/items.py:948
+#: pretix/base/models/items.py:953
 msgid "Question type"
 msgstr "Soru tipi"
 
-#: pretix/base/models/items.py:952
+#: pretix/base/models/items.py:957
 #: pretix/control/templates/pretixcontrol/items/questions.html:49
 msgid "Required question"
 msgstr "Gerekli soru"
 
-#: pretix/base/models/items.py:959
+#: pretix/base/models/items.py:964
 msgid "This question will be asked to buyers of the selected products"
 msgstr "Bu soru seçilen ürünlerin alıcılarına sorulacak"
 
-#: pretix/base/models/items.py:966
+#: pretix/base/models/items.py:971
 msgid "Ask during check-in instead of in the ticket buying process"
 msgstr "Bilet satın alma işlemi yerine check-in sırasında sor"
 
-#: pretix/base/models/items.py:967
+#: pretix/base/models/items.py:972
 msgid ""
 "This will only work if you handle your check-in with pretixdroid 1.8 or "
 "newer or pretixdesk 0.2 or newer."
@@ -2315,77 +2319,95 @@ msgstr ""
 "Bu sadece check-in işleminizi pretixdroid 1.8 ya da pretixdesk 0.2 veya bu "
 "ürünlerin daha yeni sürümleriyle gerçekleştirirseniz çalışacaktır."
 
-#: pretix/base/models/items.py:998
+#: pretix/base/models/items.py:977
+#, fuzzy
+#| msgid "Edit question"
+msgid "Hidden question"
+msgstr "Soruyu düzenle"
+
+#: pretix/base/models/items.py:978
+#, fuzzy
+#| msgid "This question will be asked during check-in."
+msgid "This question will only show up in the backend."
+msgstr "Bu soru giriş sırasında sorulacaktır."
+
+#: pretix/base/models/items.py:1008
 msgid "This identifier is already used for a different question."
 msgstr "Bu tanımlayıcı zaten farklı bir soru için kullanılıyor."
 
-#: pretix/base/models/items.py:1022
+#: pretix/base/models/items.py:1032
 msgid "An answer to this question is required to proceed."
 msgstr "Devam etmek için bu soruya cevap verilmelidir."
 
-#: pretix/base/models/items.py:1032 pretix/base/models/items.py:1040
+#: pretix/base/models/items.py:1042 pretix/base/models/items.py:1050
 msgid "Invalid option selected."
 msgstr "Geçersiz seçenek seçildi."
 
-#: pretix/base/models/items.py:1049
+#: pretix/base/models/items.py:1059
 msgid "Invalid number input."
 msgstr "Geçersiz sayı girişi."
 
-#: pretix/base/models/items.py:1056
+#: pretix/base/models/items.py:1066
 msgid "Invalid date input."
 msgstr "Geçersiz tarih girişi."
 
-#: pretix/base/models/items.py:1063
+#: pretix/base/models/items.py:1073
 msgid "Invalid time input."
 msgstr "Geçersiz zaman girişi."
 
-#: pretix/base/models/items.py:1073
+#: pretix/base/models/items.py:1083
 msgid "Invalid datetime input."
 msgstr "Geçersiz tarihsaat girişi."
 
-#: pretix/base/models/items.py:1087
+#: pretix/base/models/items.py:1089
+#, fuzzy
+#| msgid "Unknown order code"
+msgid "Unknown country code."
+msgstr "Bilinmeyen sipariş kodu"
+
+#: pretix/base/models/items.py:1103
 #: pretix/control/templates/pretixcontrol/items/question.html:68
 msgid "Answer"
 msgstr "Cevap"
 
-#: pretix/base/models/items.py:1109
+#: pretix/base/models/items.py:1125
 msgid "The identifier \"{}\" is already used for a different option."
 msgstr "\"{}\" tanımlayıcısı farklı bir seçenek için zaten kullanılıyor."
 
-#: pretix/base/models/items.py:1112
+#: pretix/base/models/items.py:1128
 msgid "Question option"
 msgstr "Soru seçeneği"
 
-#: pretix/base/models/items.py:1113
+#: pretix/base/models/items.py:1129
 msgid "Question options"
 msgstr "Soru seçenekleri"
 
-#: pretix/base/models/items.py:1198 pretix/control/forms/event.py:1331
+#: pretix/base/models/items.py:1214 pretix/control/forms/event.py:1331
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 msgid "Total capacity"
 msgstr "Toplam kapasite"
 
-#: pretix/base/models/items.py:1200 pretix/control/forms/item.py:244
+#: pretix/base/models/items.py:1216 pretix/control/forms/item.py:245
 msgid "Leave empty for an unlimited number of tickets."
 msgstr "Sınırsız sayıda bilet için boş bırakınız."
 
-#: pretix/base/models/items.py:1204 pretix/base/models/orders.py:913
+#: pretix/base/models/items.py:1220 pretix/base/models/orders.py:916
 #: pretix/control/templates/pretixcontrol/checkin/index.html:67
 msgid "Item"
 msgstr "Madde"
 
-#: pretix/base/models/items.py:1212
+#: pretix/base/models/items.py:1228
 #: pretix/control/templates/pretixcontrol/item/base.html:16
 msgid "Variations"
 msgstr "Varyasyonlar"
 
-#: pretix/base/models/items.py:1220 pretix/base/models/vouchers.py:157
+#: pretix/base/models/items.py:1236 pretix/base/models/vouchers.py:157
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
 msgstr "Kota"
 
-#: pretix/base/models/items.py:1221 pretix/control/navigation.py:153
+#: pretix/base/models/items.py:1237 pretix/control/navigation.py:153
 #: pretix/control/templates/pretixcontrol/items/quotas.html:3
 #: pretix/control/templates/pretixcontrol/items/quotas.html:5
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:299
@@ -2393,11 +2415,11 @@ msgstr "Kota"
 msgid "Quotas"
 msgstr "Kotalar"
 
-#: pretix/base/models/items.py:1405
+#: pretix/base/models/items.py:1422
 msgid "All variations must belong to an item contained in the items list."
 msgstr "Tüm varyasyonlar, öğeler listesinde yer alan bir öğeye ait olmalıdır."
 
-#: pretix/base/models/items.py:1415
+#: pretix/base/models/items.py:1432
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
@@ -2446,40 +2468,40 @@ msgstr "Soru {val}"
 msgid "Tax rule {val}"
 msgstr "Vergi kuralı {val}"
 
-#: pretix/base/models/orders.py:109
+#: pretix/base/models/orders.py:110
 msgid "pending"
 msgstr "bekleniyor"
 
-#: pretix/base/models/orders.py:110
+#: pretix/base/models/orders.py:111
 msgid "paid"
 msgstr "ödenmiş"
 
-#: pretix/base/models/orders.py:111
+#: pretix/base/models/orders.py:112
 msgid "expired"
 msgstr "süresi doldu"
 
-#: pretix/base/models/orders.py:112
+#: pretix/base/models/orders.py:113
 msgid "canceled"
 msgstr "iptal edildi"
 
-#: pretix/base/models/orders.py:139
+#: pretix/base/models/orders.py:140
 msgid "Locale"
 msgstr "Yerel"
 
-#: pretix/base/models/orders.py:146 pretix/base/models/orders.py:1817
+#: pretix/base/models/orders.py:147 pretix/base/models/orders.py:1821
 msgid "Expiration date"
 msgstr "Son kullanma tarihi"
 
-#: pretix/base/models/orders.py:150
+#: pretix/base/models/orders.py:151
 msgid "Total amount"
 msgstr "Toplam tutar"
 
-#: pretix/base/models/orders.py:153 pretix/base/models/vouchers.py:171
+#: pretix/base/models/orders.py:154 pretix/base/models/vouchers.py:171
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
 msgid "Comment"
 msgstr "Yorum"
 
-#: pretix/base/models/orders.py:154 pretix/base/models/vouchers.py:172
+#: pretix/base/models/orders.py:155 pretix/base/models/vouchers.py:172
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
@@ -2487,7 +2509,7 @@ msgstr ""
 "Bu alana girilen metin, kullanıcı tarafından görülmeyecek ve size kolaylık "
 "sağlayacaktır."
 
-#: pretix/base/models/orders.py:160
+#: pretix/base/models/orders.py:161
 msgid ""
 "If you set this, the check-in app will show a visible warning that tickets "
 "of this order require special attention. This will not show any details or "
@@ -2499,11 +2521,11 @@ msgstr ""
 "veya özel mesaj göstermeyecektir, bu nedenle check-in görevlilerinize bu "
 "durumların nasıl ele alınacağı konusunda kısaca bilgi vermelisiniz."
 
-#: pretix/base/models/orders.py:172 pretix/base/models/orders.py:947
+#: pretix/base/models/orders.py:173 pretix/base/models/orders.py:950
 msgid "Meta information"
 msgstr "Meta bilgisi"
 
-#: pretix/base/models/orders.py:611
+#: pretix/base/models/orders.py:612
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
@@ -2511,7 +2533,7 @@ msgstr ""
 "Ödeme, ödeme ayarlarında yapılandırılan son ödeme tarihi geçtiğinden kabul "
 "edilemez."
 
-#: pretix/base/models/orders.py:613
+#: pretix/base/models/orders.py:614
 #, fuzzy
 #| msgid ""
 #| "The payment can not be accepted as it the order is expired and you "
@@ -2524,175 +2546,175 @@ msgstr ""
 "Ödeme, siparişin süresi dolduğundan kabul edilemez ve ödeme ayarlarında geç "
 "ödemelerin kabul edilmemesi gerektiğini yapılandırmıştınız."
 
-#: pretix/base/models/orders.py:615
+#: pretix/base/models/orders.py:616
 msgid "This order is not yet approved by the event organizer."
 msgstr "Bu sipariş etkinlik düzenleyici tarafından henüz onaylanmadı."
 
-#: pretix/base/models/orders.py:633
+#: pretix/base/models/orders.py:634
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
 msgstr "Sipraiş edilen {item} ürünü artık kullanılabilir değil."
 
-#: pretix/base/models/orders.py:738 pretix/base/services/orders.py:732
+#: pretix/base/models/orders.py:739 pretix/base/services/orders.py:741
 #: pretix/control/views/event.py:697
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 #, python-format
 msgid "Your order: %(code)s"
 msgstr "Siparişiniz: %(code)s"
 
-#: pretix/base/models/orders.py:840
+#: pretix/base/models/orders.py:841
 msgid "<file>"
 msgstr "<dosya>"
 
-#: pretix/base/models/orders.py:930 pretix/base/models/orders.py:938
+#: pretix/base/models/orders.py:933 pretix/base/models/orders.py:941
 msgid "Empty, if this product is not an admission ticket"
 msgstr "Boş, eğer bu ürün giriş bileti değilse"
 
-#: pretix/base/models/orders.py:1073
+#: pretix/base/models/orders.py:1077
 msgctxt "payment_state"
 msgid "created"
 msgstr "Oluşturuldu"
 
-#: pretix/base/models/orders.py:1074
+#: pretix/base/models/orders.py:1078
 msgctxt "payment_state"
 msgid "pending"
 msgstr "bekleniyor"
 
-#: pretix/base/models/orders.py:1075
+#: pretix/base/models/orders.py:1079
 msgctxt "payment_state"
 msgid "confirmed"
 msgstr "onaylandı"
 
-#: pretix/base/models/orders.py:1076
+#: pretix/base/models/orders.py:1080
 msgctxt "payment_state"
 msgid "canceled"
 msgstr "iptal edildi"
 
-#: pretix/base/models/orders.py:1077
+#: pretix/base/models/orders.py:1081
 msgctxt "payment_state"
 msgid "failed"
 msgstr "başarısız oldu"
 
-#: pretix/base/models/orders.py:1078
+#: pretix/base/models/orders.py:1082
 msgctxt "payment_state"
 msgid "refunded"
 msgstr "iade edildi"
 
-#: pretix/base/models/orders.py:1106 pretix/base/models/orders.py:1426
+#: pretix/base/models/orders.py:1110 pretix/base/models/orders.py:1430
 #: pretix/base/shredder.py:334
 msgid "Payment information"
 msgstr "Ödeme bilgileri"
 
-#: pretix/base/models/orders.py:1267
+#: pretix/base/models/orders.py:1271
 #, python-format
 msgid "Payment received for your order: %(code)s"
 msgstr "Siparişiniz için ödeme alındı: %(code)s"
 
-#: pretix/base/models/orders.py:1372
+#: pretix/base/models/orders.py:1376
 msgctxt "refund_state"
 msgid "started externally"
 msgstr "dışarıdan başladı"
 
-#: pretix/base/models/orders.py:1373
+#: pretix/base/models/orders.py:1377
 msgctxt "refund_state"
 msgid "created"
 msgstr "oluşturuldu"
 
-#: pretix/base/models/orders.py:1374
+#: pretix/base/models/orders.py:1378
 msgctxt "refund_state"
 msgid "in transit"
 msgstr "transit olarak"
 
-#: pretix/base/models/orders.py:1375
+#: pretix/base/models/orders.py:1379
 msgctxt "refund_state"
 msgid "done"
 msgstr "tamam"
 
-#: pretix/base/models/orders.py:1376
+#: pretix/base/models/orders.py:1380
 msgctxt "refund_state"
 msgid "failed"
 msgstr "başarısız oldu"
 
-#: pretix/base/models/orders.py:1378
+#: pretix/base/models/orders.py:1382
 msgctxt "refund_state"
 msgid "canceled"
 msgstr "iptal edildi"
 
-#: pretix/base/models/orders.py:1386
+#: pretix/base/models/orders.py:1390
 msgctxt "refund_source"
 msgid "Organizer"
 msgstr "Organizatör"
 
-#: pretix/base/models/orders.py:1387
+#: pretix/base/models/orders.py:1391
 msgctxt "refund_source"
 msgid "Customer"
 msgstr "Müşteri"
 
-#: pretix/base/models/orders.py:1388
+#: pretix/base/models/orders.py:1392
 msgctxt "refund_source"
 msgid "External"
 msgstr "Harici"
 
-#: pretix/base/models/orders.py:1530
+#: pretix/base/models/orders.py:1534
 msgid "Payment fee"
 msgstr "Ödeme ücreti"
 
-#: pretix/base/models/orders.py:1531
+#: pretix/base/models/orders.py:1535
 msgid "Shipping fee"
 msgstr "Nakliye ücreti"
 
-#: pretix/base/models/orders.py:1532
+#: pretix/base/models/orders.py:1536
 msgid "Service fee"
 msgstr "Servis ücreti"
 
-#: pretix/base/models/orders.py:1533
+#: pretix/base/models/orders.py:1537
 #, fuzzy
 #| msgid "Cancellation"
 msgid "Cancellation fee"
 msgstr "İptal"
 
-#: pretix/base/models/orders.py:1534
+#: pretix/base/models/orders.py:1538
 msgid "Other fees"
 msgstr "Diğer ücretler"
 
-#: pretix/base/models/orders.py:1535
+#: pretix/base/models/orders.py:1539
 msgid "Gift card"
 msgstr "Hediye kartı"
 
-#: pretix/base/models/orders.py:1540 pretix/control/views/vouchers.py:62
+#: pretix/base/models/orders.py:1544 pretix/control/views/vouchers.py:62
 msgid "Value"
 msgstr "Değer"
 
-#: pretix/base/models/orders.py:1676
+#: pretix/base/models/orders.py:1680
 msgid "Order position"
 msgstr "Sipariş pozisyonu"
 
-#: pretix/base/models/orders.py:1810
+#: pretix/base/models/orders.py:1814
 msgid "Cart ID (e.g. session key)"
 msgstr "Sepet kimliği (ör. oturum anahtarı)"
 
-#: pretix/base/models/orders.py:1826
+#: pretix/base/models/orders.py:1830
 msgid "Cart position"
 msgstr "Sepet pozisyonu"
 
-#: pretix/base/models/orders.py:1827
+#: pretix/base/models/orders.py:1831
 msgid "Cart positions"
 msgstr "Sepet pozisyonları"
 
-#: pretix/base/models/orders.py:1853 pretix/control/forms/event.py:685
+#: pretix/base/models/orders.py:1857 pretix/control/forms/event.py:685
 msgid "Company name"
 msgstr "Şirket Adı"
 
-#: pretix/base/models/orders.py:1860 pretix/control/forms/event.py:589
+#: pretix/base/models/orders.py:1864 pretix/control/forms/event.py:589
 #: pretix/plugins/stripe/payment.py:123
 msgid "Select country"
 msgstr "Ülke seçin"
 
-#: pretix/base/models/orders.py:1862
+#: pretix/base/models/orders.py:1866
 msgid "Only for business customers within the EU."
 msgstr "Sadece AB içindeki kurumsal müşteriler için."
 
-#: pretix/base/models/orders.py:1866
+#: pretix/base/models/orders.py:1870
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
 "Bu referans, sizin için rahat olması amacıyla faturanızda yazdırılacaktır."
@@ -2876,7 +2898,7 @@ msgstr "Ürün fiyatını azalt(%)"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:98
 #: pretix/control/views/vouchers.py:61 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:322
-#: pretix/presale/templates/pretixpresale/event/index.html:491
+#: pretix/presale/templates/pretixpresale/event/index.html:496
 msgid "Voucher code"
 msgstr "Kupon kodu"
 
@@ -4108,40 +4130,40 @@ msgstr ""
 msgid "Order canceled: %(code)s"
 msgstr "Sipariş iptal edildi: %(code)s"
 
-#: pretix/base/services/orders.py:803
+#: pretix/base/services/orders.py:812
 #, python-format
 msgid "Your order is about to expire: %(code)s"
 msgstr "Siparişinizin süresi dolmak üzere: %(code)s"
 
-#: pretix/base/services/orders.py:805
+#: pretix/base/services/orders.py:814
 #, python-format
 msgid "Your order is pending payment: %(code)s"
 msgstr "Siparişiniz ödemeyi bekliyor: %(code)s"
 
-#: pretix/base/services/orders.py:850
+#: pretix/base/services/orders.py:859
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
 msgstr "Biletin indirilmeye hazır: %(code)s"
 
-#: pretix/base/services/orders.py:863
+#: pretix/base/services/orders.py:872
 msgid "You need to select a variation of the product."
 msgstr "Ürünün bir varyasyonunu seçmeniz gerekiyor."
 
-#: pretix/base/services/orders.py:864
+#: pretix/base/services/orders.py:873
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr "Kota {name} nın işlemi gerçekleştirmek için yeterli kapasitesi yok."
 
-#: pretix/base/services/orders.py:865
+#: pretix/base/services/orders.py:874
 msgid "There is no quota defined that allows this operation."
 msgstr "Bu işleme izin veren herhangi bir kota yoktur."
 
-#: pretix/base/services/orders.py:866
+#: pretix/base/services/orders.py:875
 msgid "The selected product is not active or has no price set."
 msgstr "Seçilen ürün aktif değil veya fiyat ayarlı değil."
 
-#: pretix/base/services/orders.py:867
+#: pretix/base/services/orders.py:876
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
@@ -4149,11 +4171,11 @@ msgstr ""
 "Bu işlem siparişi boş bırakacaktır. Lütfen bunun yerine siparişin kendisini "
 "iptal edin."
 
-#: pretix/base/services/orders.py:868
+#: pretix/base/services/orders.py:877
 msgid "Only pending or paid orders can be changed."
 msgstr "Sadece bekleyen veya ödenen siparişler değiştirilebilir."
 
-#: pretix/base/services/orders.py:869
+#: pretix/base/services/orders.py:878
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
@@ -4161,29 +4183,29 @@ msgstr ""
 "Bu işlem siparişi ücretsiz yapacak ve bu nedenle hemen ödeme yapacak, ancak "
 "kota mevcut değil."
 
-#: pretix/base/services/orders.py:871
+#: pretix/base/services/orders.py:880
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr "Bu bir eklenti ürün, lütfen eklenmesi gereken taban konumunu seçin."
 
-#: pretix/base/services/orders.py:872
+#: pretix/base/services/orders.py:881
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
 "Seçilen taban konumu, bu ürünü bir eklenti olarak eklemenize izin vermez."
 
-#: pretix/base/services/orders.py:873
+#: pretix/base/services/orders.py:882
 msgid "You need to choose a subevent for the new position."
 msgstr "Yeni pozisyon için bir alt öğe seçmeniz gerekiyor."
 
-#: pretix/base/services/orders.py:1351
+#: pretix/base/services/orders.py:1360
 #, python-format
 msgid "Your order has been changed: %(code)s"
 msgstr "Siparişiniz değiştirildi: %(code)s"
 
-#: pretix/base/services/orders.py:1479
+#: pretix/base/services/orders.py:1488
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -5128,7 +5150,7 @@ msgstr "Varsayılan yerel ayarınız belirtilmelidir."
 msgid "Copy configuration from"
 msgstr "Yapılandırmayı kopyala"
 
-#: pretix/control/forms/event.py:195 pretix/control/forms/item.py:205
+#: pretix/control/forms/event.py:195 pretix/control/forms/item.py:206
 msgid "Do not copy"
 msgstr "Kopyalama"
 
@@ -5173,8 +5195,12 @@ msgstr ""
 "Ürün listesinde brüt fiyatlar yerine net fiyatları gösterin (önerilmez!)"
 
 #: pretix/control/forms/event.py:282
+#, fuzzy
+#| msgid ""
+#| "Independent of your choice, the cart will show gross prices as this the "
+#| "price that needs to be paid"
 msgid ""
-"Independent of your choice, the cart will show gross prices as this the "
+"Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid"
 msgstr ""
 "Seçiminizden bağımsız olarak, sepet, brüt fiyatları gösterecek ve ödenmesi "
@@ -6673,11 +6699,11 @@ msgstr ""
 msgid "Dependencies between questions are not supported during check-in."
 msgstr "Bu soru giriş sırasında sorulacaktır."
 
-#: pretix/control/forms/item.py:187
+#: pretix/control/forms/item.py:188
 msgid "The product should exist in multiple variations"
 msgstr "Ürün çoklu varyasyonlarda mevcut olmalıdır"
 
-#: pretix/control/forms/item.py:188
+#: pretix/control/forms/item.py:189
 msgid ""
 "Select this option e.g. for t-shirts that come in multiple sizes. You can "
 "select the variations in the next step."
@@ -6685,67 +6711,67 @@ msgstr ""
 "Bu seçeneği seçin örn. çoklu boyutlarda gelen tişörtler için. Bir sonraki "
 "adımdaki varyasyonları seçebilirsiniz."
 
-#: pretix/control/forms/item.py:200
+#: pretix/control/forms/item.py:201
 msgid "No taxation"
 msgstr "Vergi yok"
 
-#: pretix/control/forms/item.py:202
+#: pretix/control/forms/item.py:203
 msgid "Copy product information"
 msgstr "Ürün bilgilerini kopyala"
 
-#: pretix/control/forms/item.py:211
+#: pretix/control/forms/item.py:212
 msgid "Do not add to a quota now"
 msgstr "Şimdi kotaya eklemeyin"
 
-#: pretix/control/forms/item.py:212
+#: pretix/control/forms/item.py:213
 msgid "Add product to an existing quota"
 msgstr "Ürünü mevcut bir kotaya ekleyin"
 
-#: pretix/control/forms/item.py:213
+#: pretix/control/forms/item.py:214
 msgid "Create a new quota for this product"
 msgstr "Bu ürün için yeni bir kota oluştur"
 
-#: pretix/control/forms/item.py:219
+#: pretix/control/forms/item.py:220
 msgid "Quota options"
 msgstr "Kota seçenekleri"
 
-#: pretix/control/forms/item.py:227
+#: pretix/control/forms/item.py:228
 msgid "Add to existing quota"
 msgstr "Mevcut kotaya ekle"
 
-#: pretix/control/forms/item.py:236
+#: pretix/control/forms/item.py:237
 msgid "New quota name"
 msgstr "Yeni kota adı"
 
-#: pretix/control/forms/item.py:242
+#: pretix/control/forms/item.py:243
 msgid "Size"
 msgstr "Boyut"
 
-#: pretix/control/forms/item.py:243
+#: pretix/control/forms/item.py:244
 msgid "Number of tickets"
 msgstr "Bilet sayısı"
 
-#: pretix/control/forms/item.py:322
+#: pretix/control/forms/item.py:323
 msgid "Quota name is required."
 msgstr "Kota adı gerekli."
 
-#: pretix/control/forms/item.py:327
+#: pretix/control/forms/item.py:328
 msgid "Please select a quota."
 msgstr "Lütfen bir kota seçin."
 
-#: pretix/control/forms/item.py:349
+#: pretix/control/forms/item.py:350
 msgid "Choose automatically depending on event settings"
 msgstr ""
 
-#: pretix/control/forms/item.py:350
+#: pretix/control/forms/item.py:351
 msgid "Yes, if ticket generation is enabled in general"
 msgstr ""
 
-#: pretix/control/forms/item.py:351
+#: pretix/control/forms/item.py:352
 msgid "Never"
 msgstr ""
 
-#: pretix/control/forms/item.py:362
+#: pretix/control/forms/item.py:363
 msgid ""
 "e.g. This reduced price is available for full-time students, jobless and "
 "people over 65. This ticket includes access to all parts of the event, "
@@ -6755,7 +6781,7 @@ msgstr ""
 "üzerindeki kişiler için geçerlidir. Bu bilet, VIP alanı hariç olayın tüm "
 "bölümlerine erişim içerir."
 
-#: pretix/control/forms/item.py:423
+#: pretix/control/forms/item.py:424
 #, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
@@ -6766,11 +6792,11 @@ msgstr ""
 "halihazırda bir kullanıcının arabası içinde olduğu için silinemez. Lütfen "
 "varyasyonu \"etkin değil\" olarak ayarlayın."
 
-#: pretix/control/forms/item.py:497
+#: pretix/control/forms/item.py:498
 msgid "You added the same add-on category twice"
 msgstr "Aynı eklenti kategorisini iki kez eklediniz"
 
-#: pretix/control/forms/item.py:531
+#: pretix/control/forms/item.py:532
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
@@ -6778,7 +6804,7 @@ msgstr ""
 "Minimum sayıda ayarlamanın, mevcut tüm eklentilerin satılması durumunda bu "
 "ürünü satın almayı imkansız kıldığını unutmayın."
 
-#: pretix/control/forms/item.py:564
+#: pretix/control/forms/item.py:565
 #: pretix/control/templates/pretixcontrol/item/bundles.html:26
 #: pretix/control/templates/pretixcontrol/item/bundles.html:53
 #, fuzzy
@@ -6786,7 +6812,7 @@ msgstr ""
 msgid "Bundled product"
 msgstr "Ürün ekle"
 
-#: pretix/control/forms/item.py:588 pretix/control/forms/orders.py:219
+#: pretix/control/forms/item.py:589 pretix/control/forms/orders.py:219
 #: pretix/control/forms/orders.py:317
 msgid "inactive"
 msgstr "etkin değil"
@@ -7100,7 +7126,7 @@ msgid "Event types"
 msgstr "Etkinlik tarihi"
 
 #: pretix/control/forms/renderers.py:27
-#: pretix/control/templates/pretixcontrol/items/question_edit.html:116
+#: pretix/control/templates/pretixcontrol/items/question_edit.html:117
 msgctxt "form"
 msgid "Optional"
 msgstr "İsteğe bağlı"
@@ -8334,12 +8360,12 @@ msgstr "Yeni şifre belirle"
 #: pretix/control/templates/pretixcontrol/event/display.html:35
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:53
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
-#: pretix/control/templates/pretixcontrol/event/payment.html:61
+#: pretix/control/templates/pretixcontrol/event/payment.html:64
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:36
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:201
 #: pretix/control/templates/pretixcontrol/event/settings.html:80
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:119
-#: pretix/control/templates/pretixcontrol/event/tickets.html:49
+#: pretix/control/templates/pretixcontrol/event/tickets.html:52
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
 #: pretix/control/templates/pretixcontrol/global_update.html:86
 #: pretix/control/templates/pretixcontrol/item/addons.html:94
@@ -8347,7 +8373,7 @@ msgstr "Yeni şifre belirle"
 #: pretix/control/templates/pretixcontrol/item/index.html:66
 #: pretix/control/templates/pretixcontrol/item/variations.html:95
 #: pretix/control/templates/pretixcontrol/items/category.html:37
-#: pretix/control/templates/pretixcontrol/items/question_edit.html:129
+#: pretix/control/templates/pretixcontrol/items/question_edit.html:130
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:40
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html:12
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html:12
@@ -9388,15 +9414,20 @@ msgstr "Etkin"
 msgid "Disabled"
 msgstr "Devre dışı"
 
-#: pretix/control/templates/pretixcontrol/event/payment.html:41
+#: pretix/control/templates/pretixcontrol/event/payment.html:42
+#, fuzzy, python-format
+#| msgid ""
+#| "There are no payment providers available. Please go to the plugin "
+#| "settings and activate one or more payment plugins."
 msgid ""
-"There are no payment providers available. Please go to the plugin settings "
-"and activate one or more payment plugins."
+"There are no payment providers available. Please go to the <a "
+"%(plugin_settings_href)s>plugin settings</a> and activate one or more "
+"payment plugins."
 msgstr ""
 "Mevcut ödeme sağlayıcı yok. Lütfen eklenti ayarlarına gidin ve bir veya daha "
 "fazla ödeme eklentisini etkinleştirin."
 
-#: pretix/control/templates/pretixcontrol/event/payment.html:49
+#: pretix/control/templates/pretixcontrol/event/payment.html:52
 msgid "General payment settings"
 msgstr "Genel ödeme ayarları"
 
@@ -9442,11 +9473,11 @@ msgstr "Yüklü eklentiler"
 #: pretix/control/views/event.py:359 pretix/control/views/event.py:537
 #: pretix/control/views/event.py:804 pretix/control/views/event.py:1146
 #: pretix/control/views/global_settings.py:25
-#: pretix/control/views/global_settings.py:48 pretix/control/views/item.py:153
-#: pretix/control/views/item.py:500 pretix/control/views/item.py:696
-#: pretix/control/views/item.py:806 pretix/control/views/item.py:863
-#: pretix/control/views/item.py:947 pretix/control/views/item.py:1017
-#: pretix/control/views/item.py:1103 pretix/control/views/organizer.py:150
+#: pretix/control/views/global_settings.py:48 pretix/control/views/item.py:154
+#: pretix/control/views/item.py:505 pretix/control/views/item.py:701
+#: pretix/control/views/item.py:811 pretix/control/views/item.py:868
+#: pretix/control/views/item.py:952 pretix/control/views/item.py:1022
+#: pretix/control/views/item.py:1108 pretix/control/views/organizer.py:150
 #: pretix/control/views/organizer.py:283 pretix/control/views/organizer.py:439
 #: pretix/control/views/organizer.py:731 pretix/control/views/organizer.py:877
 #: pretix/control/views/subevents.py:386 pretix/control/views/user.py:119
@@ -9749,10 +9780,15 @@ msgstr ""
 "etkin değil. Bir eklentiyi etkinleştirdiğinizden ve bir çıkış sağlayıcısını "
 "etkinleştirdiğinizden emin olun."
 
-#: pretix/control/templates/pretixcontrol/event/tickets.html:43
+#: pretix/control/templates/pretixcontrol/event/tickets.html:44
+#, fuzzy, python-format
+#| msgid ""
+#| "There are no ticket outputs available. Please go to the plugin settings "
+#| "and activate one or more ticket output plugins."
 msgid ""
-"There are no ticket outputs available. Please go to the plugin settings and "
-"activate one or more ticket output plugins."
+"There are no ticket outputs available. Please go to the <a "
+"%(plugin_settings_href)s>plugin settings</a> and activate one or more ticket "
+"output plugins."
 msgstr ""
 "Mevcut bilet çıkışı yok. Lütfen eklenti ayarlarına gidin ve bir veya daha "
 "fazla bilet çıkış eklentisini etkinleştirin."
@@ -10214,7 +10250,7 @@ msgstr "Tamamen ayrılmış"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:27
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:49
 #: pretix/presale/templates/pretixpresale/organizers/index.html:72
-#: pretix/presale/views/widget.py:276
+#: pretix/presale/views/widget.py:293
 msgid "Sold out"
 msgstr "Satıldı"
 
@@ -10361,7 +10397,7 @@ msgstr "Yeni cevap seçeneği"
 msgid "Add a new option"
 msgstr "Yeni bir seçenek ekle"
 
-#: pretix/control/templates/pretixcontrol/items/question_edit.html:115
+#: pretix/control/templates/pretixcontrol/items/question_edit.html:116
 #, fuzzy
 #| msgid "Question type"
 msgid "Question dependency"
@@ -13285,11 +13321,11 @@ msgstr "Yeni check-in listesi oluşturuldu."
 #: pretix/control/views/event.py:362 pretix/control/views/event.py:489
 #: pretix/control/views/event.py:540 pretix/control/views/event.py:773
 #: pretix/control/views/event.py:1105 pretix/control/views/event.py:1165
-#: pretix/control/views/event.py:1272 pretix/control/views/item.py:169
-#: pretix/control/views/item.py:195 pretix/control/views/item.py:510
-#: pretix/control/views/item.py:536 pretix/control/views/item.py:592
-#: pretix/control/views/item.py:730 pretix/control/views/item.py:827
-#: pretix/control/views/item.py:885 pretix/control/views/item.py:949
+#: pretix/control/views/event.py:1272 pretix/control/views/item.py:170
+#: pretix/control/views/item.py:196 pretix/control/views/item.py:515
+#: pretix/control/views/item.py:541 pretix/control/views/item.py:597
+#: pretix/control/views/item.py:735 pretix/control/views/item.py:832
+#: pretix/control/views/item.py:890 pretix/control/views/item.py:954
 #: pretix/control/views/organizer.py:153 pretix/control/views/organizer.py:188
 #: pretix/control/views/user.py:205 pretix/plugins/badges/views.py:67
 #: pretix/plugins/ticketoutputpdf/views.py:103
@@ -13398,7 +13434,7 @@ msgstr "Eylem Gerekli"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:32
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:54
 #: pretix/presale/templates/pretixpresale/organizers/index.html:77
-#: pretix/presale/views/widget.py:282
+#: pretix/presale/views/widget.py:299
 msgid "Sale over"
 msgstr "Satış bitti"
 
@@ -13587,97 +13623,97 @@ msgstr "İndirimli bilet"
 msgid "Your changes have not been saved, see below for errors."
 msgstr "Değişiklikleriniz kaydedilmedi, hatalar için aşağıya bakın."
 
-#: pretix/control/views/item.py:69 pretix/control/views/item.py:1156
+#: pretix/control/views/item.py:70 pretix/control/views/item.py:1161
 msgid "The requested product does not exist."
 msgstr "İstenen ürün mevcut değil."
 
-#: pretix/control/views/item.py:82
+#: pretix/control/views/item.py:83
 msgid "The order of items has been updated."
 msgstr "Öğelerin sırası güncellendi."
 
-#: pretix/control/views/item.py:114 pretix/control/views/item.py:149
-#: pretix/control/views/item.py:219
+#: pretix/control/views/item.py:115 pretix/control/views/item.py:150
+#: pretix/control/views/item.py:220
 msgid "The requested product category does not exist."
 msgstr "İstenen ürün kategorisi mevcut değil."
 
-#: pretix/control/views/item.py:125
+#: pretix/control/views/item.py:126
 msgid "The selected category has been deleted."
 msgstr "Seçilen kategori silindi."
 
-#: pretix/control/views/item.py:189
+#: pretix/control/views/item.py:190
 msgid "The new category has been created."
 msgstr "Yeni kategori oluşturuldu."
 
-#: pretix/control/views/item.py:232
+#: pretix/control/views/item.py:233
 msgid "The order of categories has been updated."
 msgstr "Kategorilerin sırası güncellendi."
 
-#: pretix/control/views/item.py:271
+#: pretix/control/views/item.py:272
 msgid "The selected question does not exist."
 msgstr "Seçilen soru mevcut değil."
 
-#: pretix/control/views/item.py:284
+#: pretix/control/views/item.py:285
 msgid "The order of questions has been updated."
 msgstr "Soruların sırası güncellendi."
 
-#: pretix/control/views/item.py:315 pretix/control/views/item.py:464
-#: pretix/control/views/item.py:486
+#: pretix/control/views/item.py:316 pretix/control/views/item.py:469
+#: pretix/control/views/item.py:491
 msgid "The requested question does not exist."
 msgstr "İstenen soru mevcut değil."
 
-#: pretix/control/views/item.py:328
+#: pretix/control/views/item.py:329
 msgid "The selected question has been deleted."
 msgstr "Seçilen soru silindi."
 
-#: pretix/control/views/item.py:421
+#: pretix/control/views/item.py:422
 msgid "File uploaded"
 msgstr "Dosya yüklendi"
 
-#: pretix/control/views/item.py:545
+#: pretix/control/views/item.py:550
 msgid "The new question has been created."
 msgstr "Yeni soru oluşturuldu."
 
-#: pretix/control/views/item.py:586
+#: pretix/control/views/item.py:591
 msgid "The new quota has been created."
 msgstr "Yeni kota oluşturuldu."
 
-#: pretix/control/views/item.py:619
+#: pretix/control/views/item.py:624
 msgid "Vouchers and waiting list reservations"
 msgstr "Kuponlar ve bekleme listesi rezervasyonları"
 
-#: pretix/control/views/item.py:634
+#: pretix/control/views/item.py:639
 msgid "Available quota"
 msgstr "Mevcut kota"
 
-#: pretix/control/views/item.py:640
+#: pretix/control/views/item.py:645
 msgid "Waiting list (pending)"
 msgstr "Bekleme listesi (beklemede)"
 
-#: pretix/control/views/item.py:647
+#: pretix/control/views/item.py:652
 msgid "Currently for sale"
 msgstr "Şu anda satılık"
 
-#: pretix/control/views/item.py:672 pretix/control/views/item.py:692
-#: pretix/control/views/item.py:746
+#: pretix/control/views/item.py:677 pretix/control/views/item.py:697
+#: pretix/control/views/item.py:751
 msgid "The requested quota does not exist."
 msgstr "İstenen kota mevcut değil."
 
-#: pretix/control/views/item.py:759
+#: pretix/control/views/item.py:764
 msgid "The selected quota has been deleted."
 msgstr "Seçilen kota silindi."
 
-#: pretix/control/views/item.py:782
+#: pretix/control/views/item.py:787
 msgid "The requested item does not exist."
 msgstr "İstenen öğe mevcut değil."
 
-#: pretix/control/views/item.py:1023
+#: pretix/control/views/item.py:1028
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
 "Yalnızca bir eklenti olarak kullanılabilen bir ürüne eklenti ekleyemezsiniz."
 
-#: pretix/control/views/item.py:1109
+#: pretix/control/views/item.py:1114
 #, fuzzy
 #| msgid ""
 #| "You cannot add add-ons to a product that is only available as an add-on "
@@ -13688,11 +13724,11 @@ msgid ""
 msgstr ""
 "Yalnızca bir eklenti olarak kullanılabilen bir ürüne eklenti ekleyemezsiniz."
 
-#: pretix/control/views/item.py:1168
+#: pretix/control/views/item.py:1173
 msgid "The selected product has been deleted."
 msgstr "Seçilen ürün silindi."
 
-#: pretix/control/views/item.py:1177
+#: pretix/control/views/item.py:1182
 msgid "The selected product has been deactivated."
 msgstr "Seçilen ürün devre dışı bırakıldı."
 
@@ -16732,7 +16768,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:47
 #: pretix/presale/templates/pretixpresale/organizers/index.html:70
-#: pretix/presale/views/widget.py:273
+#: pretix/presale/views/widget.py:290
 msgid "Reserved"
 msgstr "Ayrılmış"
 
@@ -16786,7 +16822,7 @@ msgstr "Git"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/organizers/index.html:66
 #: pretix/presale/templates/pretixpresale/organizers/index.html:75
-#: pretix/presale/views/widget.py:267 pretix/presale/views/widget.py:279
+#: pretix/presale/views/widget.py:284 pretix/presale/views/widget.py:296
 msgid "Tickets on sale"
 msgstr "Satış biletleri"
 
@@ -16823,18 +16859,18 @@ msgid "Choose date to buy a ticket"
 msgstr "Bir bilet almak için tarih seçin"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:116
-#: pretix/presale/views/widget.py:453
+#: pretix/presale/views/widget.py:471
 msgid "The presale period for this event is over."
 msgstr "Bu etkinlik için presale süresi bitti."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:121
-#: pretix/presale/views/widget.py:455
+#: pretix/presale/views/widget.py:473
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr "Bu etkinlik için satış öncesi %(date)s %(time)s ile başlayacaktır."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:125
-#: pretix/presale/views/widget.py:460
+#: pretix/presale/views/widget.py:478
 msgid "The presale for this event has not yet started."
 msgstr "Bu etkinlik için önceden teklif henüz başlamamıştır."
 
@@ -16868,17 +16904,17 @@ msgid "We're now trying to reserve this for you!"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:228
-#: pretix/presale/templates/pretixpresale/event/index.html:379
+#: pretix/presale/templates/pretixpresale/event/index.html:380
 #, python-format
 msgid "minimum amount to order: %(num)s"
 msgstr "sipariş için minimum miktar: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:240
-#: pretix/presale/templates/pretixpresale/event/index.html:294
-#: pretix/presale/templates/pretixpresale/event/index.html:404
+#: pretix/presale/templates/pretixpresale/event/index.html:295
+#: pretix/presale/templates/pretixpresale/event/index.html:409
 #: pretix/presale/templates/pretixpresale/event/voucher.html:71
-#: pretix/presale/templates/pretixpresale/event/voucher.html:115
-#: pretix/presale/templates/pretixpresale/event/voucher.html:217
+#: pretix/presale/templates/pretixpresale/event/voucher.html:116
+#: pretix/presale/templates/pretixpresale/event/voucher.html:222
 msgctxt "price"
 msgid "FREE"
 msgstr "ÜCRETSİZ"
@@ -16887,86 +16923,86 @@ msgstr "ÜCRETSİZ"
 msgid "Show variants"
 msgstr "Varyantları göster"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:288
-#: pretix/presale/templates/pretixpresale/event/index.html:399
-#: pretix/presale/templates/pretixpresale/event/voucher.html:110
-#: pretix/presale/templates/pretixpresale/event/voucher.html:212
+#: pretix/presale/templates/pretixpresale/event/index.html:289
+#: pretix/presale/templates/pretixpresale/event/index.html:404
+#: pretix/presale/templates/pretixpresale/event/voucher.html:111
+#: pretix/presale/templates/pretixpresale/event/voucher.html:217
 #, python-format
 msgid "Modify price for %(item)s"
 msgstr "%(item)s İçin fiyatı değiştir"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:305
-#: pretix/presale/templates/pretixpresale/event/index.html:415
-#: pretix/presale/templates/pretixpresale/event/voucher.html:126
-#: pretix/presale/templates/pretixpresale/event/voucher.html:228
+#: pretix/presale/templates/pretixpresale/event/index.html:306
+#: pretix/presale/templates/pretixpresale/event/index.html:420
+#: pretix/presale/templates/pretixpresale/event/voucher.html:127
+#: pretix/presale/templates/pretixpresale/event/voucher.html:233
 #, fuzzy
 #| msgid "taxes"
 msgid "plus taxes"
 msgstr "vergi"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:307
-#: pretix/presale/templates/pretixpresale/event/index.html:417
-#: pretix/presale/templates/pretixpresale/event/voucher.html:128
-#: pretix/presale/templates/pretixpresale/event/voucher.html:230
+#: pretix/presale/templates/pretixpresale/event/index.html:308
+#: pretix/presale/templates/pretixpresale/event/index.html:422
+#: pretix/presale/templates/pretixpresale/event/voucher.html:129
+#: pretix/presale/templates/pretixpresale/event/voucher.html:235
 #, fuzzy
 #| msgctxt "invoice"
 #| msgid "Included taxes"
 msgid "incl. taxes"
 msgstr "Dahil vergiler"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:310
-#: pretix/presale/templates/pretixpresale/event/index.html:420
-#: pretix/presale/templates/pretixpresale/event/voucher.html:131
-#: pretix/presale/templates/pretixpresale/event/voucher.html:233
+#: pretix/presale/templates/pretixpresale/event/index.html:311
+#: pretix/presale/templates/pretixpresale/event/index.html:425
+#: pretix/presale/templates/pretixpresale/event/voucher.html:132
+#: pretix/presale/templates/pretixpresale/event/voucher.html:238
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
 msgstr "<strong>artı</strong> %(rate)s%% %(name)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:314
-#: pretix/presale/templates/pretixpresale/event/index.html:424
-#: pretix/presale/templates/pretixpresale/event/voucher.html:135
-#: pretix/presale/templates/pretixpresale/event/voucher.html:237
+#: pretix/presale/templates/pretixpresale/event/index.html:315
+#: pretix/presale/templates/pretixpresale/event/index.html:429
+#: pretix/presale/templates/pretixpresale/event/voucher.html:136
+#: pretix/presale/templates/pretixpresale/event/voucher.html:242
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "%(rate)s%% dahil %(name)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:322
-#: pretix/presale/templates/pretixpresale/event/index.html:432
+#: pretix/presale/templates/pretixpresale/event/index.html:323
+#: pretix/presale/templates/pretixpresale/event/index.html:437
 msgid "Enter a voucher code below to buy this ticket."
 msgstr "Bu bileti almak için aşağıda bir kupon kodu girin."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:333
-#: pretix/presale/templates/pretixpresale/event/voucher.html:150
-#: pretix/presale/templates/pretixpresale/event/voucher.html:159
+#: pretix/presale/templates/pretixpresale/event/index.html:334
+#: pretix/presale/templates/pretixpresale/event/voucher.html:151
+#: pretix/presale/templates/pretixpresale/event/voucher.html:160
 #, python-format
 msgid "Amount of %(item)s – %(var)s to order"
 msgstr "%(item)s -%(var)s sipariş vermek için  miktar"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:450
-#: pretix/presale/templates/pretixpresale/event/voucher.html:252
-#: pretix/presale/templates/pretixpresale/event/voucher.html:261
+#: pretix/presale/templates/pretixpresale/event/index.html:455
+#: pretix/presale/templates/pretixpresale/event/voucher.html:257
+#: pretix/presale/templates/pretixpresale/event/voucher.html:266
 #, python-format
 msgid "Amount of %(item)s to order"
 msgstr "Sipariş için %(item)s miktarı"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:467
-#: pretix/presale/templates/pretixpresale/event/voucher.html:286
+#: pretix/presale/templates/pretixpresale/event/index.html:472
+#: pretix/presale/templates/pretixpresale/event/voucher.html:291
 msgid "Add to cart"
 msgstr "Sepete ekle"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:479
+#: pretix/presale/templates/pretixpresale/event/index.html:484
 msgid "Redeem a voucher"
 msgstr "Bir kuponu kullan"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:497
+#: pretix/presale/templates/pretixpresale/event/index.html:502
 msgid "Redeem voucher"
 msgstr "Kuponu kullan"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:508
+#: pretix/presale/templates/pretixpresale/event/index.html:513
 msgid "If you already ordered a ticket"
 msgstr "Zaten bir bilet sipariş ettiyseniz"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:512
+#: pretix/presale/templates/pretixpresale/event/index.html:517
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -16979,7 +17015,7 @@ msgstr ""
 "gönderilmesini istediğiniz bağlantıyı istemek için aşağıdaki düğmeyi "
 "tıklayın."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:521
+#: pretix/presale/templates/pretixpresale/event/index.html:526
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
@@ -17366,20 +17402,20 @@ msgstr "Yaklaşan hiçbir etkinlik bulunamadı."
 msgid "Page %(page)s of %(of)s"
 msgstr "Sayfa %(page)s arasında %(of)s"
 
-#: pretix/presale/utils.py:30 pretix/presale/utils.py:125
-#: pretix/presale/utils.py:126
+#: pretix/presale/utils.py:34 pretix/presale/utils.py:129
+#: pretix/presale/utils.py:130
 msgid "The selected event was not found."
 msgstr "Seçilen etkinlik bulunamadı."
 
-#: pretix/presale/utils.py:90
+#: pretix/presale/utils.py:94
 msgid "The selected ticket shop is currently not available."
 msgstr "Seçilen bilet dükkanı şu anda mevcut değil."
 
-#: pretix/presale/utils.py:95
+#: pretix/presale/utils.py:99
 msgid "This feature is not enabled."
 msgstr "Bu özellik etkin değil."
 
-#: pretix/presale/utils.py:134 pretix/presale/utils.py:138
+#: pretix/presale/utils.py:138 pretix/presale/utils.py:142
 msgid "The selected organizer was not found."
 msgstr "Seçilen düzen bulunamadı."
 
@@ -17412,22 +17448,22 @@ msgstr "Sepetiniz boş"
 msgid "The presale for this event is over or has not yet started."
 msgstr "Bu etkinliğin satış fiyatı bitti veya henüz başlamadı."
 
-#: pretix/presale/views/event.py:328
+#: pretix/presale/views/event.py:342
 msgid "Unknown event code or not authorized to access this event."
 msgstr "Bilinmeyen etkinlik kodu veya bu etkinliğe erişim yetkisi yok."
 
-#: pretix/presale/views/event.py:335
+#: pretix/presale/views/event.py:349
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Tarih seçilmedi."
 
-#: pretix/presale/views/event.py:338
+#: pretix/presale/views/event.py:352
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Bilinmeyen tarih seçildi."
 
-#: pretix/presale/views/event.py:361 pretix/presale/views/event.py:369
-#: pretix/presale/views/event.py:372
+#: pretix/presale/views/event.py:375 pretix/presale/views/event.py:383
+#: pretix/presale/views/event.py:386
 msgid "Please go back and try again."
 msgstr "Lütfen geri dön ve tekrar dene."
 
@@ -17514,99 +17550,99 @@ msgstr ""
 "Seni bekleme listesine ekledik. Biletler tekrar kullanılabilir hale gelir "
 "gelmez bir e-posta alacaksınız."
 
-#: pretix/presale/views/widget.py:235
+#: pretix/presale/views/widget.py:252
 #, fuzzy
 #| msgid "The selected ticket shop is currently not available."
 msgid "This ticket shop is currently disabled."
 msgstr "Seçilen bilet dükkanı şu anda mevcut değil."
 
-#: pretix/presale/views/widget.py:244
+#: pretix/presale/views/widget.py:261
 #, fuzzy
 #| msgid "The selected item does not belong to this event."
 msgid "The selected date does not exist in this event series."
 msgstr "Seçilen öğe bu etkinliğe ait değil."
 
-#: pretix/presale/views/widget.py:251
+#: pretix/presale/views/widget.py:268
 #, fuzzy
 #| msgid "This is an event series"
 msgid "This is not an event series."
 msgstr "Bu bir olay serisi"
 
-#: pretix/presale/views/widget.py:285
+#: pretix/presale/views/widget.py:302
 #, fuzzy, python-format
 #| msgid "Show start date"
 msgid "from %(start_date)s"
 msgstr "Başlangıç tarihini göster"
 
-#: pretix/presale/views/widget.py:288
+#: pretix/presale/views/widget.py:305
 #, fuzzy
 #| msgid "Sale over"
 msgid "Sale Soon"
 msgstr "Satış bitti"
 
-#: pretix/settings.py:389
+#: pretix/settings.py:390
 msgid "English"
 msgstr "İngilizce"
 
-#: pretix/settings.py:390
+#: pretix/settings.py:391
 msgid "German"
 msgstr "Almanca"
 
-#: pretix/settings.py:391
+#: pretix/settings.py:392
 msgid "German (informal)"
 msgstr "Almanca (gayri resmi)"
 
-#: pretix/settings.py:392
+#: pretix/settings.py:393
 msgid "Dutch"
 msgstr "Flemenkçe"
 
-#: pretix/settings.py:393
+#: pretix/settings.py:394
 #, fuzzy
 #| msgid "German (informal)"
 msgid "Dutch (informal)"
 msgstr "Almanca (gayri resmi)"
 
-#: pretix/settings.py:394
+#: pretix/settings.py:395
 msgid "Danish"
 msgstr "Danimarkalı"
 
-#: pretix/settings.py:395
+#: pretix/settings.py:396
 msgid "French"
 msgstr ""
 
-#: pretix/settings.py:396
+#: pretix/settings.py:397
 msgid "Portuguese (Brazil)"
 msgstr "Portekizce (Brezilya)"
 
-#: pretix/settings.py:397
+#: pretix/settings.py:398
 #, fuzzy
 #| msgid "Danish"
 msgid "Spanish"
 msgstr "Danimarkalı"
 
-#: pretix/settings.py:398
+#: pretix/settings.py:399
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: pretix/settings.py:399
+#: pretix/settings.py:400
 #, fuzzy
 #| msgid "English"
 msgid "Polish"
 msgstr "İngilizce"
 
-#: pretix/settings.py:400
+#: pretix/settings.py:401
 msgid "Italian"
 msgstr ""
 
-#: pretix/settings.py:401
+#: pretix/settings.py:402
 msgid "Chinese (simplified)"
 msgstr ""
 
-#: pretix/settings.py:674
+#: pretix/settings.py:675
 msgid "Read access"
 msgstr "Okuma erişimi"
 
-#: pretix/settings.py:675
+#: pretix/settings.py:676
 msgid "Write access"
 msgstr "Yazma erişimi"
 
