@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 12:44+0000\n"
-"PO-Revision-Date: 2019-05-01 12:12+0000\n"
+"POT-Creation-Date: 2019-05-09 12:39+0000\n"
+"PO-Revision-Date: 2019-05-09 12:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1911,7 +1911,8 @@ msgstr ""
 #: pretix/base/models/items.py:334
 msgid "Only sell this product as part of a bundle"
 msgstr ""
-"Dieses Produkt nicht einzeln verkaufen, sondern nur als Teil anderer Produkte"
+"Dieses Produkt nicht einzeln verkaufen, sondern nur als Teil eines festen "
+"Produktpakets"
 
 #: pretix/base/models/items.py:336
 msgid ""
@@ -1919,6 +1920,10 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
+"Wenn diese Option gesetzt ist, wird das Produkt nur als Teil von Paketen "
+"verkauft. Diese Option darf <strong>nicht</strong> gesetzt werden, wenn "
+"dieses Produkt als <strong>Zusatzprodukt</strong> verwendet werden soll, "
+"sondern nur für feste Produktpakete!"
 
 #: pretix/base/models/items.py:341
 msgid "Allow product to be canceled"
@@ -2177,7 +2182,7 @@ msgstr "Datum und Uhrzeit"
 
 #: pretix/base/models/items.py:930
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Land (ISO3166-1-alpha-2-Ländercode)"
 
 #: pretix/base/models/items.py:939 pretix/base/models/items.py:989
 #: pretix/control/forms/item.py:38
@@ -2236,16 +2241,12 @@ msgstr ""
 "oder pretixdesk 0.2 oder neuer abwickelst."
 
 #: pretix/base/models/items.py:979
-#, fuzzy
-#| msgid "Edit question"
 msgid "Hidden question"
-msgstr "Frage bearbeiten"
+msgstr "Versteckte Frage"
 
 #: pretix/base/models/items.py:980
-#, fuzzy
-#| msgid "This question will be asked during check-in."
 msgid "This question will only show up in the backend."
-msgstr "Diese Frage wird beim Check-In gestellt."
+msgstr "Diese Frage wird nur im Backend angezeigt."
 
 #: pretix/base/models/items.py:1010
 msgid "This identifier is already used for a different question."
@@ -2276,10 +2277,8 @@ msgid "Invalid datetime input."
 msgstr "Ungültige Zeitstempeleingabe."
 
 #: pretix/base/models/items.py:1091
-#, fuzzy
-#| msgid "Unknown order code"
 msgid "Unknown country code."
-msgstr "Unbekannte Bestellnummer"
+msgstr "Unbekanntes Länderkürzel."
 
 #: pretix/base/models/items.py:1105
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -5081,10 +5080,6 @@ msgstr ""
 "Zeige Netto- statt Bruttopreisen in den Produktlisten (nicht empfohlen)"
 
 #: pretix/control/forms/event.py:282
-#, fuzzy
-#| msgid ""
-#| "Independent of your choice, the cart will show gross prices as this the "
-#| "price that needs to be paid"
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid"
@@ -9246,17 +9241,15 @@ msgid "Disabled"
 msgstr "Deaktiviert"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:42
-#, fuzzy, python-format
-#| msgid ""
-#| "There are no payment providers available. Please go to the plugin "
-#| "settings and activate one or more payment plugins."
+#, python-format
 msgid ""
 "There are no payment providers available. Please go to the <a "
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more "
 "payment plugins."
 msgstr ""
-"Es sind keine Zahlungsmethoden verfügbar. Bitte gehe in die Erweiterungs-"
-"Einstellungen und aktiviere ein oder mehrere Zahlungsplugins."
+"Es sind keine Zahlungsmethoden verfügbar. Bitte gehe in die <a "
+"%(plugin_settings_href)s>Erweiterungs-Einstellungen</a> und aktiviere ein "
+"oder mehrere Zahlungsplugins."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:52
 msgid "General payment settings"
@@ -9612,17 +9605,15 @@ msgstr ""
 "Output auf dieser Seite."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:44
-#, fuzzy, python-format
-#| msgid ""
-#| "There are no ticket outputs available. Please go to the plugin settings "
-#| "and activate one or more ticket output plugins."
+#, python-format
 msgid ""
 "There are no ticket outputs available. Please go to the <a "
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more ticket "
 "output plugins."
 msgstr ""
-"Es sind keine Ausgabemethoden verfügbar. Bitte gehe in die Erweiterungs-"
-"Einstellungen und aktiviere ein oder mehrere Ticketausgabe-Erweiterungen."
+"Es sind keine Ausgabemethoden verfügbar. Bitte gehe in die <a "
+"%(plugin_settings_href)s>Erweiterungs-Einstellungen</a> und aktiviere ein "
+"oder mehrere Ticketausgabe-Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
