@@ -196,7 +196,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
 
         story = [
             Paragraph(
-                '{} – {}'.format(cl.name, (cl.subevent or self.event).get_date_from_display()),
+                cl.name,
                 headlinestyle
             ),
             Spacer(1, 5 * mm)
