@@ -82,7 +82,8 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 
 checkout_flow_steps = EventPluginSignal()
 """
-This signal is sent out to retrieve pages for the checkout flow
+This signal is sent out to retrieve pages for the checkout flow. Receivers are expected to return
+a subclass of ``pretix.presale.checkoutflow.BaseCheckoutFlowStep``.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """

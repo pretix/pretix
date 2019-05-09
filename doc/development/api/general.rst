@@ -12,7 +12,7 @@ Core
 
 .. automodule:: pretix.base.signals
    :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types,
-      item_copy_data, register_sales_channels
+      item_copy_data, register_sales_channels, register_global_settings
 
 Order events
 """"""""""""
@@ -26,11 +26,7 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble
-
-
-.. automodule:: pretix.presale.signals
-   :members: order_info, order_meta_from_request
+   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble, checkout_flow_steps, order_info, order_meta_from_request
 
 Request flow
 """"""""""""
