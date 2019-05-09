@@ -23,7 +23,7 @@ Organizers and events
    :members:
 
 .. autoclass:: pretix.base.models.Event
-   :members: get_date_from_display, get_time_from_display, get_date_to_display, get_date_range_display, presale_has_ended, presale_is_running, cache, lock, get_plugins, get_mail_backend, payment_term_last, get_payment_providers, get_invoice_renderers, active_subevents, invoice_renderer, settings
+   :members: get_date_from_display, get_time_from_display, get_date_to_display, get_date_range_display, presale_has_ended, presale_is_running, cache, lock, get_plugins, get_mail_backend, payment_term_last, get_payment_providers, get_invoice_renderers, invoice_renderer, settings
 
 .. autoclass:: pretix.base.models.SubEvent
    :members: get_date_from_display, get_time_from_display, get_date_to_display, get_date_range_display, presale_has_ended, presale_is_running
