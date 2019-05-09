@@ -1,8 +1,10 @@
+import sys
 from enum import Enum
 from typing import List
 
-from django.apps import apps
+from django.apps import AppConfig, apps
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 
 class PluginType(Enum):
@@ -39,3 +41,22 @@ def get_all_plugins(event=None) -> List[type]:
         plugins,
         key=lambda m: (0 if m.module.startswith('pretix.') else 1, str(m.name).lower().replace('pretix ', ''))
     )
+
+
+class PluginConfig(AppConfig):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not hasattr(self, 'PretixPluginMeta'):
+            raise ImproperlyConfigured("A pretix plugin config should have a PretixPluginMeta inner class.")
+
+        if hasattr(self.PretixPluginMeta, 'compatibility'):
+            import pkg_resources
+            try:
+                pkg_resources.require(self.PretixPluginMeta.compatibility)
+            except pkg_resources.VersionConflict as e:
+                print("Incompatible plugins found!")
+                print("Plugin {} requires you to have {}, but you installed {}.".format(
+                    self.name, e.req, e.dist
+                ))
+                sys.exit(1)

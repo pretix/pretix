@@ -49,15 +49,19 @@ description        string               A more verbose description of what your 
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
+compatibility      string               Specifier for compatible pretix versions.
 ================== ==================== ===========================================================
 
 A working example would be::
 
-    from django.apps import AppConfig
+    try:
+        from pretix.base.plugins import PluginConfig
+    except ImportError:
+        raise RuntimeError("Please use pretix 2.7 or above to run this plugin!")
     from django.utils.translation import ugettext_lazy as _
 
 
-    class PaypalApp(AppConfig):
+    class PaypalApp(PluginConfig):
         name = 'pretix_paypal'
         verbose_name = _("PayPal")
 
@@ -68,6 +72,7 @@ A working example would be::
             visible = True
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
+            compatibility = "pretix>=2.7.0"
 
 
     default_app_config = 'pretix_paypal.PaypalApp'
