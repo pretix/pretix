@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-09 12:44+0000\n"
-"PO-Revision-Date: 2019-05-09 23:00+0000\n"
+"PO-Revision-Date: 2019-05-10 20:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -33,7 +33,7 @@ msgstr "Trgovina izključena"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:66
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "Prednaročilo zaključeno"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:372 pretix/control/forms/filter.py:507
@@ -41,7 +41,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "Prednaročilo se še ni začelo"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:133
@@ -49,36 +49,38 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:388
 msgid "On sale"
-msgstr ""
+msgstr "Naprodaj"
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Ime aplikacije"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URIji za preusmeritev"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Seznam dovoljenih URI naslovov, ločenih z vejico"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:69
 msgid "Client ID"
-msgstr ""
+msgstr "ID klienta"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
-msgstr ""
+msgstr "Skrivno geslo klienta"
 
 #: pretix/api/models.py:75
+#, fuzzy
 msgid "Enable webhook"
-msgstr ""
+msgstr "Enable webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
+#, fuzzy
 msgid "Target URL"
-msgstr ""
+msgstr "Target URL"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
@@ -87,116 +89,145 @@ msgstr ""
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:43
 #: pretix/base/models/organizer.py:143
+#, fuzzy
 msgid "Limit to events"
-msgstr ""
+msgstr "Limit to events"
 
 #: pretix/api/serializers/cart.py:56 pretix/api/serializers/order.py:644
+#, fuzzy
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "The product \"{}\" is not assigned to a quota."
 
 #: pretix/api/serializers/cart.py:64 pretix/api/serializers/order.py:656
+#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"There is not enough quota available on quota \"{}\" to perform the operation."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:934
 #: pretix/base/models/items.py:1099 pretix/base/models/items.py:1431
+#, fuzzy
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "One or more items do not belong to this event."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1440
 #: pretix/base/models/waitinglist.py:152
+#, fuzzy
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Subevent cannot be null for event series."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1442 pretix/base/models/items.py:1445
 #: pretix/base/models/waitinglist.py:154 pretix/base/models/waitinglist.py:157
+#, fuzzy
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "The subevent does not belong to this event."
 
 #: pretix/api/serializers/event.py:77
+#, fuzzy
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Events cannot be created as 'live'. Quotas and payment must be added to the "
+"event before sales can go live."
 
 #: pretix/api/serializers/event.py:92 pretix/api/serializers/event.py:234
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Meta data property '{name}' does not exist."
 
 #: pretix/api/serializers/event.py:105
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Unknown plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:616
+#, fuzzy
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "The bundled item must not be the same item as the bundling one."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:618
+#, fuzzy
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "The bundled item must not have bundles on its own."
 
 #: pretix/api/serializers/item.py:130
+#, fuzzy
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
+"Please use the dedicated nested endpoint."
 
 #: pretix/api/serializers/item.py:228
+#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Updating options via PATCH/PUT is not supported. Please use the dedicated "
+"nested endpoint."
 
 #: pretix/api/serializers/item.py:244 pretix/control/forms/item.py:63
+#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Circular dependency between questions detected."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:235
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"The application \"{application_name}\" has been authorized to access your "
+"account."
 
 #: pretix/api/views/order.py:329 pretix/control/views/orders.py:939
 #: pretix/presale/views/order.py:515
+#, fuzzy
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "You cannot generate an invoice for this order."
 
 #: pretix/api/views/order.py:334 pretix/control/views/orders.py:941
 #: pretix/presale/views/order.py:517
+#, fuzzy
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "An invoice for this order already exists."
 
 #: pretix/api/views/order.py:360 pretix/control/views/orders.py:1063
 #: pretix/control/views/users.py:92
+#, fuzzy
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "There was an error sending the mail. Please try again later."
 
 #: pretix/api/webhooks.py:113 pretix/base/notifications.py:194
+#, fuzzy
 msgid "New order placed"
-msgstr ""
+msgstr "New order placed"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:200
+#, fuzzy
 msgid "New order requires approval"
-msgstr ""
+msgstr "New order requires approval"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:206
+#, fuzzy
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Order marked as paid"
 
 #: pretix/api/webhooks.py:125 pretix/base/notifications.py:212
 #: pretix/control/templates/pretixcontrol/event/mail.html:63
+#, fuzzy
 msgid "Order canceled"
-msgstr ""
+msgstr "Order canceled"
 
 #: pretix/api/webhooks.py:129 pretix/base/notifications.py:218
+#, fuzzy
 msgid "Order expired"
-msgstr ""
+msgstr "Order expired"
 
 #: pretix/api/webhooks.py:133 pretix/base/notifications.py:224
 msgid "Order information changed"
