@@ -18,7 +18,7 @@ for f in glob.glob(os.path.join(doc_dir, "development/api/*.rst")):
         plugin_docs += doc_file.read()
 
 
-@pytest.mark.parametrize("app", settings.CORE_MODULES)
+@pytest.mark.parametrize("app", sorted(settings.CORE_MODULES))
 def test_documentation_includes_signals(app):
     with suppress(ImportError):
         module = importlib.import_module(app + ".signals")
