@@ -1,7 +1,7 @@
 import hashlib
 
 from django.conf import settings
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.core.management.base import BaseCommand
 
@@ -35,4 +35,7 @@ class Command(BaseCommand):
                 gs.settings.set('widget_file_{}'.format(lc), 'file://' + newname)
                 gs.settings.set('widget_checksum_{}'.format(lc), checksum)
                 if fname:
-                    default_storage.delete(fname)
+                    if isinstance(fname, File):
+                        default_storage.delete(fname.name)
+                    else:
+                        default_storage.delete(fname)
