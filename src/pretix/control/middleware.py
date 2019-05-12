@@ -35,6 +35,19 @@ class PermissionMiddleware:
         "user.settings.notifications.off",
     )
 
+    EXCEPTIONS_2FA = (
+        "control:user.settings.2fa",
+        "control:user.settings.2fa.add",
+        "control:user.settings.2fa.enable",
+        "control:user.settings.2fa.disable",
+        "control:user.settings.2fa.regenemergency",
+        "control:user.settings.2fa.confirm.totp",
+        "control:user.settings.2fa.confirm.u2f",
+        "control:user.settings.2fa.delete",
+        "control:auth.logout",
+        "control:user.reauth"
+    )
+
     def __init__(self, get_response=None):
         self.get_response = get_response
         super().__init__()
@@ -74,8 +87,7 @@ class PermissionMiddleware:
             return self._login_redirect(request)
 
         if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
-            and not request.path.startswith('/control/settings/2fa/') \
-                and request.path not in ['/control/logout', '/control/login']:
+            and url_name not in self.EXCEPTIONS_2FA:
             return redirect(reverse('control:user.settings.2fa'))
 
         try:
