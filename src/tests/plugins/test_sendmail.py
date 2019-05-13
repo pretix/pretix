@@ -5,7 +5,7 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, Order, OrderPosition, Organizer, Team, User,
+    Event, Item, Order, OrderPosition, Organizer, Team, User,
 )
 
 
@@ -25,12 +25,6 @@ def event():
 def item(event):
     """Returns an item instance"""
     return Item.objects.create(name='Test item', event=event, default_price=13)
-
-
-@pytest.fixture
-def item_category(event):
-    """Returns an item category instance"""
-    return ItemCategory.objects.create(event=event)
 
 
 @pytest.fixture

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 from unittest import mock
 
@@ -7,9 +7,7 @@ from django.conf import settings
 from django_countries.fields import Country
 from pytz import UTC
 
-from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Order, OrderPosition,
-)
+from pretix.base.models import Event, InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
 
 
@@ -54,24 +52,6 @@ def order_position(item, order, taxrule, variations):
         secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
     )
     return op
-
-
-@pytest.fixture
-def cart_position(event, item, variations):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
-
-    with mock.patch('django.utils.timezone.now') as mock_now:
-        mock_now.return_value = testtime
-        c = CartPosition.objects.create(
-            event=event,
-            item=item,
-            datetime=datetime.now(),
-            expires=datetime.now() + timedelta(days=1),
-            variation=variations[0],
-            price=Decimal("23"),
-            cart_id="z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
-        )
-        return c
 
 
 TEST_EVENT_RES = {
