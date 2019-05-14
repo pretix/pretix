@@ -234,7 +234,7 @@ Vue.component('pricebox', {
         + '<div v-if="free_price">'
         + '{{ $root.currency }} '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
-        + '       :min="display_price" :value="display_price" :name="field_name"'
+        + '       :min="display_price_nonlocalized" :value="display_price_nonlocalized" :name="field_name"'
         + '       step="any">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
@@ -253,6 +253,13 @@ Vue.component('pricebox', {
                 return floatformat(parseFloat(this.price.net), 2);
             } else {
                 return floatformat(parseFloat(this.price.gross), 2);
+            }
+        },
+        display_price_nonlocalized: function () {
+            if (this.$root.display_net_prices) {
+                return parseFloat(this.price.net).toFixed(2);
+            } else {
+                return parseFloat(this.price.gross).toFixed(2);
             }
         },
         original_line: function () {
