@@ -3,26 +3,16 @@ import json
 
 import pytest
 from django.utils.http import urlquote
-from django.utils.timezone import now
 
 from pretix.api.models import (
     OAuthAccessToken, OAuthApplication, OAuthGrant, OAuthRefreshToken,
 )
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import Organizer, Team, User
 
 
 @pytest.fixture
 def organizer():
     return Organizer.objects.create(name='Dummy', slug='dummy')
-
-
-@pytest.fixture
-def event(organizer):
-    event = Event.objects.create(
-        organizer=organizer, name='Dummy', slug='dummy',
-        date_from=now()
-    )
-    return event
 
 
 @pytest.fixture
