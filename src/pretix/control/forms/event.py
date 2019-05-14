@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
 from django.forms import formset_factory
 from django.utils.html import escape
@@ -781,6 +781,13 @@ class InvoiceSettingsForm(SettingsForm):
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
 
 
+def multimail_validate(val):
+    s = val.split(',')
+    for part in s:
+        validate_email(part.strip())
+    return s
+
+
 class MailSettingsForm(SettingsForm):
     mail_prefix = forms.CharField(
         label=_("Subject prefix"),
@@ -790,12 +797,14 @@ class MailSettingsForm(SettingsForm):
     )
     mail_from = forms.EmailField(
         label=_("Sender address"),
-        help_text=_("Sender address for outgoing emails")
+        help_text=_("Sender address for outgoing emails"),
     )
-    mail_bcc = forms.EmailField(
+    mail_bcc = forms.CharField(
         label=_("Bcc address"),
         help_text=_("All emails will be sent to this address as a Bcc copy"),
-        required=False
+        validators=[multimail_validate],
+        required=False,
+        max_length=255
     )
 
     mail_text_signature = I18nFormField(

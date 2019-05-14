@@ -111,7 +111,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         if event:
             renderer = event.get_html_mail_renderer()
             if event.settings.mail_bcc:
-                bcc.append(event.settings.mail_bcc)
+                for bcc_mail in event.settings.mail_bcc.split(','):
+                    bcc.append(bcc_mail.strip())
 
             if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail and not headers.get('Reply-To'):
                 headers['Reply-To'] = event.settings.contact_mail
