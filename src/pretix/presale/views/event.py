@@ -146,12 +146,6 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
 
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
-            item.original_price = (
-                item.tax(item.original_price, currency=event.currency, include_bundled=True,
-                         base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
-                if item.original_price else None
-            )
-
             for var in item.available_variations:
                 if voucher and (voucher.allow_ignore_quota or voucher.block_quota):
                     var.cached_availability = (
@@ -186,6 +180,12 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                     ) if var.original_price or item.original_price else None
 
                 display_add_to_cart = display_add_to_cart or var.order_max > 0
+
+            item.original_price = (
+                item.tax(item.original_price, currency=event.currency, include_bundled=True,
+                         base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
+                if item.original_price else None
+            )
 
             item.available_variations = [
                 v for v in item.available_variations if v._subevent_quotas and (
