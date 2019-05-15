@@ -3,6 +3,7 @@ import hmac
 
 from django.conf import settings
 from django.http import HttpResponse
+from django_scopes import scopes_disabled
 
 from .. import metrics
 
@@ -15,6 +16,7 @@ def unauthed_response():
     return response
 
 
+@scopes_disabled()
 def serve_metrics(request):
     if not settings.METRICS_ENABLED:
         return unauthed_response()

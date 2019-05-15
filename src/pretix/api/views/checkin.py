@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
@@ -25,10 +26,11 @@ from pretix.base.services.checkin import (
 from pretix.helpers.database import FixedOrderBy
 
 
-class CheckinListFilter(FilterSet):
-    class Meta:
-        model = CheckinList
-        fields = ['subevent']
+with scopes_disabled():
+    class CheckinListFilter(FilterSet):
+        class Meta:
+            model = CheckinList
+            fields = ['subevent']
 
 
 class CheckinListViewSet(viewsets.ModelViewSet):
@@ -154,7 +156,7 @@ class CheckinOrderPositionFilter(OrderPositionFilter):
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CheckinListOrderPositionSerializer
-    queryset = OrderPosition.objects.none()
+    queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     ordering = ('attendee_name_cached', 'positionid')
     ordering_fields = (

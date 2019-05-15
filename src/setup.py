@@ -97,6 +97,7 @@ setup(
         'django-compressor==2.2.*',
         'django-hierarkey==1.0.*,>=1.0.2',
         'django-filter==2.1.*',
+        'django-scopes==1.1.*',
         'reportlab==3.5.*',
         'Pillow==5.*',
         'PyPDF2==1.26.*',

@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes import ScopedManager
 
 from pretix.base.i18n import language
 from pretix.base.models import Voucher
@@ -66,6 +67,8 @@ class WaitingListEntry(LoggedModel):
         default='en'
     )
     priority = models.IntegerField(default=0)
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Waiting list entry")

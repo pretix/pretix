@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes import ScopedManager
 
 from ..decimal import round_decimal
 from .base import LoggedModel
@@ -172,6 +173,8 @@ class Voucher(LoggedModel):
         help_text=_("The text entered in this field will not be visible to the user and is available for your "
                     "convenience.")
     )
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Voucher")

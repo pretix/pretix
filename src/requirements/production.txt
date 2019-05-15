@@ -9,6 +9,7 @@ django-formset-js-improved==0.5.0.2
 django-compressor==2.2.*
 django-hierarkey==1.0.*,>=1.0.3
 django-filter==2.1.*
+django-scopes==1.1.*
 reportlab==3.5.*
 PyPDF2==1.26.*
 Pillow==5.*

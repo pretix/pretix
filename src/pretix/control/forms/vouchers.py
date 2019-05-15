@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, Voucher
@@ -35,6 +36,7 @@ class VoucherForm(I18nModelForm):
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
+            'subevent': SafeModelChoiceField,
         }
         widgets = {
             'valid_until': SplitDateTimePickerWidget(),
@@ -199,6 +201,7 @@ class VoucherBulkForm(VoucherForm):
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
+            'subevent': SafeModelChoiceField,
         }
         widgets = {
             'valid_until': SplitDateTimePickerWidget(),

@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.translation import (
     pgettext_lazy, ugettext as __, ugettext_lazy as _,
 )
+from django_scopes.forms import SafeModelMultipleChoiceField, SafeModelChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.channels import get_all_sales_channels
@@ -94,6 +95,10 @@ class QuestionForm(I18nModelForm):
             ),
             'dependency_value': forms.Select,
         }
+        field_classes = {
+            'items': SafeModelMultipleChoiceField,
+            'dependency_question': SafeModelChoiceField,
+        }
 
 
 class QuestionOptionForm(I18nModelForm):
@@ -159,6 +164,9 @@ class QuotaForm(I18nModelForm):
             'size',
             'subevent'
         ]
+        field_classes = {
+            'subevent': SafeModelChoiceField,
+        }
 
     def save(self, *args, **kwargs):
         creating = not self.instance.pk

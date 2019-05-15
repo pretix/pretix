@@ -6,6 +6,7 @@ import os
 import string
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from django_scopes import ScopedManager
 from typing import Any, Dict, List, Union
 
 import dateutil
@@ -185,6 +186,8 @@ class Order(LockModel, LoggedModel):
         default=False,
         verbose_name=_('E-mail address verified')
     )
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -822,6 +825,8 @@ class QuestionAnswer(models.Model):
         max_length=255
     )
 
+    objects = ScopedManager(organizer='question__event__organizer')
+
     @property
     def backend_file_url(self):
         if self.file:
@@ -1144,6 +1149,8 @@ class OrderPayment(models.Model):
         null=True, blank=True, related_name='payments', on_delete=models.SET_NULL
     )
     migrated = models.BooleanField(default=False)
+
+    objects = ScopedManager(organizer='order__event__organizer')
 
     class Meta:
         ordering = ('local_id',)
@@ -1501,6 +1508,8 @@ class OrderRefund(models.Model):
         null=True, blank=True
     )
 
+    objects = ScopedManager(organizer='order__event__organizer')
+
     class Meta:
         ordering = ('local_id',)
 
@@ -1562,7 +1571,7 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivePositionManager(models.Manager):
+class ActivePositionManager(ScopedManager(organizer='order__event__organizer').__class__):
     def get_queryset(self):
         return super().get_queryset().filter(canceled=False)
 
@@ -1639,7 +1648,7 @@ class OrderFee(models.Model):
     )
     canceled = models.BooleanField(default=False)
 
-    all = models.Manager()
+    all = ScopedManager(organizer='order__event__organizer')
     objects = ActivePositionManager()
 
     @property
@@ -1744,7 +1753,7 @@ class OrderPosition(AbstractPosition):
     )
     canceled = models.BooleanField(default=False)
 
-    all = models.Manager()
+    all = ScopedManager(organizer='order__event__organizer')
     objects = ActivePositionManager()
 
     class Meta:
@@ -1951,6 +1960,8 @@ class CartPosition(AbstractPosition):
     )
     is_bundled = models.BooleanField(default=False)
 
+    objects = ScopedManager(organizer='event__organizer')
+
     class Meta:
         verbose_name = _("Cart position")
         verbose_name_plural = _("Cart positions")
@@ -1999,6 +2010,8 @@ class InvoiceAddress(models.Model):
         verbose_name=_('Beneficiary'),
         blank=True
     )
+
+    objects = ScopedManager(organizer='order__event__organizer')
 
     def save(self, **kwargs):
         if self.order:

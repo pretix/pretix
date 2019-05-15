@@ -3,7 +3,7 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 from pretix.api.models import OAuthAccessToken
 from pretix.base.models import Device, Event, User
 from pretix.base.models.auth import SuperuserPermissionSet
-from pretix.base.models.organizer import Organizer, TeamAPIToken
+from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.security import (
     SessionInvalid, SessionReauthRequired, assert_session_valid,
 )
@@ -50,9 +50,6 @@ class EventPermission(BasePermission):
                 return False
 
         elif 'organizer' in request.resolver_match.kwargs:
-            request.organizer = Organizer.objects.filter(
-                slug=request.resolver_match.kwargs['organizer'],
-            ).first()
             if not request.organizer or not perm_holder.has_organizer_permission(request.organizer, request=request):
                 return False
             if isinstance(perm_holder, User) and perm_holder.has_active_staff_session(request.session.session_key):

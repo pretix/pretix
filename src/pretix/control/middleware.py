@@ -1,3 +1,4 @@
+from django_scopes import scope
 from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
@@ -17,7 +18,7 @@ from pretix.helpers.security import (
 )
 
 
-class PermissionMiddleware(MiddlewareMixin):
+class PermissionMiddleware:
     """
     This middleware enforces all requests to the control app to require login.
     Additionally, it enforces all requests to "control:event." URLs
@@ -33,6 +34,10 @@ class PermissionMiddleware(MiddlewareMixin):
         "auth.invite",
         "user.settings.notifications.off",
     )
+
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+        super().__init__()
 
     def _login_redirect(self, request):
         # Taken from django/contrib/auth/decorators.py
@@ -52,19 +57,19 @@ class PermissionMiddleware(MiddlewareMixin):
         return redirect_to_login(
             path, resolved_login_url, REDIRECT_FIELD_NAME)
 
-    def process_request(self, request):
+    def __call__(self, request):
         url = resolve(request.path_info)
         url_name = url.url_name
 
         if not request.path.startswith(get_script_prefix() + 'control'):
             # This middleware should only touch the /control subpath
-            return
+            return self.get_response(request)
 
         if hasattr(request, 'organizer'):
             # If the user is on a organizer's subdomain, he should be redirected to pretix
             return redirect(urljoin(settings.SITE_URL, request.get_full_path()))
         if url_name in self.EXCEPTIONS:
-            return
+            return self.get_response(request)
         if not request.user.is_authenticated:
             return self._login_redirect(request)
 
@@ -79,10 +84,11 @@ class PermissionMiddleware(MiddlewareMixin):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
-            request.event = Event.objects.filter(
-                slug=url.kwargs['event'],
-                organizer__slug=url.kwargs['organizer'],
-            ).select_related('organizer').first()
+            with scope(organizer=None):
+                request.event = Event.objects.filter(
+                    slug=url.kwargs['event'],
+                    organizer__slug=url.kwargs['organizer'],
+                ).select_related('organizer').first()
             if not request.event or not request.user.has_event_permission(request.event.organizer, request.event,
                                                                           request=request):
                 raise Http404(_("The selected event was not found or you "
@@ -103,6 +109,9 @@ class PermissionMiddleware(MiddlewareMixin):
                 request.orgapermset = SuperuserPermissionSet()
             else:
                 request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
+
+        with scope(organizer=getattr(request, 'organizer', None)):
+            return self.get_response(request)
 
 
 class AuditLogMiddleware:

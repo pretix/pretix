@@ -1,4 +1,6 @@
 import json
+from django.urls import resolve
+from django_scopes import scope
 from hashlib import sha1
 
 from django.conf import settings
@@ -8,6 +10,7 @@ from django.utils.timezone import now
 from rest_framework import status
 
 from pretix.api.models import ApiCall
+from pretix.base.models import Organizer
 
 
 class IdempotencyMiddleware:
@@ -89,3 +92,21 @@ class IdempotencyMiddleware:
             for k, v in json.loads(call.response_headers).values():
                 r[k] = v
             return r
+
+
+class ApiScopeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest):
+        if not request.path.startswith('/api/'):
+            return self.get_response(request)
+
+        url = resolve(request.path_info)
+        if 'organizer' in url.kwargs:
+            request.organizer = Organizer.objects.filter(
+                slug=url.kwargs['organizer'],
+            ).first()
+
+        with scope(organizer=getattr(request, 'organizer', None)):
+            return self.get_response(request)

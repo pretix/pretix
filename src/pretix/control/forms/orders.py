@@ -192,7 +192,7 @@ class OrderPositionAddForm(forms.Form):
         label=_('Product')
     )
     addon_to = forms.ModelChoiceField(
-        OrderPosition.objects.none(),
+        OrderPosition.all.none(),
         required=False,
         label=_('Add-on to'),
     )

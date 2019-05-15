@@ -1,7 +1,9 @@
 from datetime import datetime
 
 import pytest
+from django.test import utils
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from pytz import UTC
 from rest_framework.test import APIClient
 
@@ -144,3 +146,6 @@ def taxrule(event):
 @pytest.fixture
 def taxrule2(event2):
     return event2.tax_rules.create(name="VAT", rate=25)
+
+
+utils.setup_databases = scopes_disabled()(utils.setup_databases)

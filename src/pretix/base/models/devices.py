@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Max
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel
 
@@ -70,6 +71,8 @@ class Device(LoggedModel):
         max_length=190,
         null=True, blank=True
     )
+
+    objects = ScopedManager(organizer='organizer')
 
     class Meta:
         unique_together = (('organizer', 'device_id'),)
