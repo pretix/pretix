@@ -26,7 +26,7 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble, checkout_flow_steps, order_info, order_meta_from_request
+   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble, checkout_flow_steps, order_info, order_meta_from_request, position_info
 
 Request flow
 """"""""""""

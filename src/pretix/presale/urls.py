@@ -91,9 +91,12 @@ event_patterns = [
         pretix.presale.views.order.InvoiceDownload.as_view(),
         name='event.invoice.download'),
 
-    url(r'^order/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/$',
+    url(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/$',
         pretix.presale.views.order.OrderPositionDetails.as_view(),
         name='event.order.position'),
+    url(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<output>[^/]+)$',
+        pretix.presale.views.order.OrderPositionDownload.as_view(),
+        name='event.order.position.download'),
 
     url(r'^ical/?$',
         pretix.presale.views.event.EventIcalDownload.as_view(),

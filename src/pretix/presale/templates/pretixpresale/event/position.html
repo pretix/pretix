@@ -1,0 +1,51 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventsignal %}
+{% load money %}
+{% load eventurl %}
+{% block title %}{% trans "Registration details" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed %}
+            Your registration
+        {% endblocktrans %}
+        {% if order.testmode %}
+            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+        {% endif %}
+        {% if backend_user %}
+            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}" class="btn btn-default">
+                {% trans "View in backend" %}
+            </a>
+        {% endif %}
+        {% include "pretixpresale/event/fragment_order_status.html" with order=order class="pull-right" %}
+        <div class="clearfix"></div>
+    </h2>
+    {% include "pretixpresale/event/fragment_downloads.html" %}
+    <div class="panel panel-primary cart">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Your items" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download position_page=True editable=False %}
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Additional information" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans trimmed with email="<strong>"|add:order.email|add:"</strong>"|safe %}
+                    This order is managed for you by {{ email }}. Please contact them for any questions regarding
+                    payment, cancellation or changes to this order.
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    {% eventsignal event "pretix.presale.signals.position_info" order=order position=position %}
+{% endblock %}
