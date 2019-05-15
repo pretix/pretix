@@ -130,6 +130,21 @@ class OrdersTest(TestCase):
         )
         assert response.status_code == 404
 
+    def test_orders_confirm_email(self):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/open/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, 'aabbccdd')
+        )
+        assert response.status_code == 302
+        self.order.refresh_from_db()
+        assert not self.order.email_known_to_work
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/open/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, self.order.email_confirm_hash())
+        )
+        assert response.status_code == 302
+        self.order.refresh_from_db()
+        assert self.order.email_known_to_work
+
     def test_orders_detail(self):
         response = self.client.get(
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)

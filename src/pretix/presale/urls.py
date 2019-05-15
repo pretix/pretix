@@ -49,6 +49,8 @@ event_patterns = [
         name='event.cart.add'),
 
     url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
+    url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/open/(?P<hash>[a-z0-9]+)/$', pretix.presale.views.order.OrderOpen.as_view(),
+        name='event.order.open'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
         name='event.order'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice$',

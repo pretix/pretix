@@ -27,7 +27,7 @@
                     <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
                     <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
                     <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                    <a href="{% abseventurl event "presale:event.order" order=order.code secret=order.secret %}">
+                    <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}">
                         {% trans "View order details" %}
                     </a>
                 </div>

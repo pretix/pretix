@@ -66,6 +66,15 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+class OrderOpen(EventViewMixin, OrderDetailMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if kwargs.get('hash') == self.order.email_confirm_hash():
+            self.order.email_known_to_work = True
+            self.order.save(update_fields=['email_known_to_work'])
+        return redirect(self.get_order_url())
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 

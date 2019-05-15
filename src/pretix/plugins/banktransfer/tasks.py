@@ -38,9 +38,10 @@ def notify_incomplete_payment(o: Order):
         email_template = o.event.settings.mail_text_order_expire_warning
         email_context = {
             'event': o.event.name,
-            'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+            'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
                 'order': o.code,
-                'secret': o.secret
+                'secret': o.secret,
+                'hash': o.email_confirm_hash()
             }),
             'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
             'invoice_name': invoice_name,

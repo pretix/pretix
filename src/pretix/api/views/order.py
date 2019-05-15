@@ -482,6 +482,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 )
 
             if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
+                serializer.instance.email_known_to_work = False
                 serializer.instance.log_action(
                     'pretix.event.order.contact.changed',
                     user=self.request.user,

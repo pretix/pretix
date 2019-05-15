@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 import logging
 import os
@@ -180,6 +181,10 @@ class Order(LockModel, LoggedModel):
         default=False
     )
     sales_channel = models.CharField(max_length=190, default="web")
+    email_known_to_work = models.BooleanField(
+        default=False,
+        verbose_name=_('E-mail address verified')
+    )
 
     class Meta:
         verbose_name = _("Order")
@@ -205,6 +210,9 @@ class Order(LockModel, LoggedModel):
         self.payments.all().delete()
         self.event.cache.delete('complain_testmode_orders')
         self.delete()
+
+    def email_confirm_hash(self):
+        return hashlib.sha256(settings.SECRET_KEY + self.secret.encode()).hexdigest()[:9]
 
     @property
     def fees(self):
@@ -729,9 +737,10 @@ class Order(LockModel, LoggedModel):
             email_template = self.event.settings.mail_text_resend_link
             email_context = {
                 'event': self.event.name,
-                'url': build_absolute_uri(self.event, 'presale:event.order', kwargs={
+                'url': build_absolute_uri(self.event, 'presale:event.order.open', kwargs={
                     'order': self.code,
-                    'secret': self.secret
+                    'secret': self.secret,
+                    'hash': self.email_confirm_hash()
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
@@ -1259,9 +1268,10 @@ class OrderPayment(models.Model):
                 email_template = self.order.event.settings.mail_text_order_paid
                 email_context = {
                     'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                    'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
                         'order': self.order.code,
-                        'secret': self.order.secret
+                        'secret': self.order.secret,
+                        'hash': self.order.email_confirm_hash()
                     }),
                     'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
                     'invoice_name': invoice_name,

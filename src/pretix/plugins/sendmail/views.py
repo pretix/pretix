@@ -95,9 +95,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         'event': self.request.event.name,
                         'date': date_format(now(), 'SHORT_DATE_FORMAT'),
                         'expire_date': date_format(now() + timedelta(days=7), 'SHORT_DATE_FORMAT'),
-                        'url': build_absolute_uri(self.request.event, 'presale:event.order', kwargs={
+                        'url': build_absolute_uri(self.request.event, 'presale:event.order.open', kwargs={
                             'order': 'ORDER1234',
-                            'secret': 'longrandomsecretabcdef123456'
+                            'secret': 'longrandomsecretabcdef123456',
+                            'hash': 'abcdef',
                         }),
                         'invoice_name': _('John Doe'),
                         'invoice_company': _('Sample Company LLC')

@@ -340,7 +340,7 @@ class OrderContactForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['email']
+        fields = ['email', 'email_known_to_work']
 
 
 class OrderLocaleForm(forms.ModelForm):

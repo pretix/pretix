@@ -136,7 +136,10 @@
                         {% endif %}
                         <dt>{% trans "User" %}</dt>
                         <dd>
-                            {{ order.email|default_if_none:"" }}&nbsp;&nbsp;
+                            {{ order.email|default_if_none:"" }}
+                            {% if order.email and order.email_known_to_work %}
+                                <span class="fa fa-check-circle text-success" data-toggle="tooltip" title="{% trans "We know that this email address works because the user clicked a link we sent them." %}"></span>
+                            {% endif %}&nbsp;&nbsp;
                             <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                 <span class="fa fa-edit"></span>
                             </a>

@@ -222,9 +222,10 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 'total_with_currency': LazyCurrencyNumber(order.total, order.event.currency),
                 'date': LazyDate(order.expires),
                 'event': order.event.name,
-                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
-                    'secret': order.secret
+                    'secret': order.secret,
+                    'hash': order.email_confirm_hash()
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,
@@ -282,9 +283,10 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
             'total_with_currency': LazyCurrencyNumber(order.total, order.event.currency),
             'date': LazyDate(order.expires),
             'event': order.event.name,
-            'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+            'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
                 'order': order.code,
-                'secret': order.secret
+                'secret': order.secret,
+                'hash': order.email_confirm_hash()
             }),
             'comment': comment,
             'invoice_name': invoice_name,
@@ -375,9 +377,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             email_context = {
                 'event': order.event.name,
                 'code': order.code,
-                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
-                    'secret': order.secret
+                    'secret': order.secret,
+                    'hash': order.email_confirm_hash()
                 })
             }
             with language(order.locale):
@@ -730,9 +733,10 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
             'date': LazyDate(order.expires),
             'event': event.name,
-            'url': build_absolute_uri(event, 'presale:event.order', kwargs={
+            'url': build_absolute_uri(event, 'presale:event.order.open', kwargs={
                 'order': order.code,
-                'secret': order.secret
+                'secret': order.secret,
+                'hash': order.email_confirm_hash()
             }),
             'payment_info': payment_info,
             'invoice_name': invoice_name,
@@ -800,9 +804,10 @@ def send_expiry_warnings(sender, **kwargs):
                     email_template = eventsettings.mail_text_order_expire_warning
                     email_context = {
                         'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                        'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
                             'order': o.code,
-                            'secret': o.secret
+                            'secret': o.secret,
+                            'hash': o.email_confirm_hash()
                         }),
                         'expire_date': date_format(o.expires.astimezone(tz), 'SHORT_DATE_FORMAT'),
                         'invoice_name': invoice_name,
@@ -851,9 +856,10 @@ def send_download_reminders(sender, **kwargs):
                     email_template = e.settings.mail_text_download_reminder
                     email_context = {
                         'event': o.event.name,
-                        'url': build_absolute_uri(o.event, 'presale:event.order', kwargs={
+                        'url': build_absolute_uri(o.event, 'presale:event.order.open', kwargs={
                             'order': o.code,
-                            'secret': o.secret
+                            'secret': o.secret,
+                            'hash': o.email_confirm_hash()
                         }),
                     }
                     email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
@@ -1350,9 +1356,10 @@ class OrderChangeManager:
             email_template = order.event.settings.mail_text_order_changed
             email_context = {
                 'event': order.event.name,
-                'url': build_absolute_uri(self.order.event, 'presale:event.order', kwargs={
+                'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
-                    'secret': order.secret
+                    'secret': order.secret,
+                    'hash': order.email_confirm_hash()
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,

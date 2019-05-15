@@ -1365,6 +1365,7 @@ class OrderContactChange(OrderView):
                     },
                     user=self.request.user,
                 )
+
             if self.form.cleaned_data['regenerate_secrets']:
                 changed = True
                 self.order.secret = generate_secret()
@@ -1474,9 +1475,10 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 'code': order.code,
                 'date': date_format(order.datetime.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
                 'expire_date': date_format(order.expires, 'SHORT_DATE_FORMAT'),
-                'url': build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                'url': build_absolute_uri(order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
-                    'secret': order.secret
+                    'secret': order.secret,
+                    'hash': order.email_confirm_hash()
                 }),
                 'invoice_name': invoice_name,
                 'invoice_company': invoice_company,

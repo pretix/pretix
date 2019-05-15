@@ -142,9 +142,10 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                     "You can view your order details at the following URL:\n{orderurl}."
                 ).replace("\n", "\r\n").format(
                     event=event.name, orderurl=build_absolute_uri(
-                        order.event, 'presale:event.order', kwargs={
+                        order.event, 'presale:event.order.open', kwargs={
                             'order': order.code,
-                            'secret': order.secret
+                            'secret': order.secret,
+                            'hash': order.email_confirm_hash()
                         }
                     )
                 )
