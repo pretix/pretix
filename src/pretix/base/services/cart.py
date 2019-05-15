@@ -634,7 +634,7 @@ class CartManager:
                 Q(voucher=voucher) & Q(event=self.event) &
                 Q(expires__gte=self.now_dt)
             ).exclude(pk__in=[
-                op.position.voucher_id for op in self._operations if isinstance(op, self.ExtendOperation)
+                op.position.id for op in self._operations if isinstance(op, self.ExtendOperation)
             ])
             cart_count = redeemed_in_carts.count()
             v_avail = voucher.max_usages - voucher.redeemed - cart_count
