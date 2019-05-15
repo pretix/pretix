@@ -65,6 +65,39 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
         })
 
 
+class OrderPositionDetailMixin(NoSearchIndexViewMixin):
+    @cached_property
+    def position(self):
+        p = OrderPosition.objects.filter(
+            order__event=self.request.event,
+            addon_to__isnull=True,
+            order__code=self.kwargs['order'],
+            positionid=self.kwargs['position']
+        ).select_related('order', 'order__event').first()
+        if p:
+            if p.web_secret.lower() == self.kwargs['secret'].lower():
+                return p
+            else:
+                return None
+        else:
+            # Do a comparison as well to harden timing attacks
+            if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
+                return None
+            else:
+                return None
+
+    @cached_property
+    def order(self):
+        return self.position.order if self.position else None
+
+    def get_position_url(self):
+        return eventreverse(self.request.event, 'presale:event.order.position', kwargs={
+            'order': self.order.code,
+            'secret': self.position.web_secret,
+            'position': self.position.id,
+        })
+
+
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderOpen(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
@@ -83,6 +116,106 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         self.kwargs = kwargs
         if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return super().get(request, *args, **kwargs)
+
+    @cached_property
+    def download_buttons(self):
+        buttons = []
+
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled:
+                continue
+            buttons.append({
+                'text': provider.download_button_text or 'Download',
+                'icon': provider.download_button_icon or 'fa-download',
+                'identifier': provider.identifier,
+                'multi': provider.multi_download_enabled
+            })
+        return buttons
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+
+        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
+        if self.request.event.settings.ticket_download_date:
+            ctx['ticket_download_date'] = self.order.ticket_download_date
+        ctx['can_download'] = can_download and self.order.ticket_download_available and self.order.positions_with_tickets
+        ctx['download_buttons'] = self.download_buttons
+        ctx['cart'] = self.get_cart(
+            answers=True, downloads=ctx['can_download'],
+            queryset=self.order.positions.select_related('tax_rule'),
+            order=self.order
+        )
+        ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
+                [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
+        )
+        ctx['invoices'] = list(self.order.invoices.all())
+        can_generate_invoice = (
+                self.request.event.settings.get('invoice_generate') in ('user', 'True')
+                or (
+                        self.request.event.settings.get('invoice_generate') == 'paid'
+                        and self.order.status == Order.STATUS_PAID
+                )
+        )
+        ctx['can_generate_invoice'] = invoice_qualified(self.order) and can_generate_invoice
+        ctx['url'] = build_absolute_uri(
+            self.request.event, 'presale:event.order', kwargs={
+                'order': self.order.code,
+                'secret': self.order.secret
+            }
+        )
+        ctx['invoice_address_asked'] = self.request.event.settings.invoice_address_asked and (
+                self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
+        )
+
+        ctx['backend_user'] = (
+                self.request.user.is_authenticated
+                and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
+        )
+
+        if self.order.status == Order.STATUS_PENDING:
+            ctx['pending_sum'] = self.order.pending_sum
+
+            lp = self.order.payments.last()
+            ctx['can_pay'] = False
+
+            for provider in self.request.event.get_payment_providers().values():
+                if provider.is_enabled and provider.order_change_allowed(self.order):
+                    ctx['can_pay'] = True
+                    break
+
+            if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+                ctx['last_payment'] = self.order.payments.last()
+
+                pp = lp.payment_provider
+                ctx['last_payment_info'] = pp.payment_pending_render(self.request, ctx['last_payment'])
+
+                if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.abort_pending_allowed:
+                    ctx['can_pay'] = False
+
+            ctx['can_pay'] = ctx['can_pay'] and self.order._can_be_paid() is True
+
+        elif self.order.status == Order.STATUS_PAID:
+            ctx['can_pay'] = False
+
+        ctx['refunds'] = self.order.refunds.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_CREATED)
+        )
+
+        return ctx
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, TemplateView):
+    template_name = "pretixpresale/event/order.html"
+
+    def get(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         return super().get(request, *args, **kwargs)
 

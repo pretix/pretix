@@ -1677,6 +1677,7 @@ class OrderPosition(AbstractPosition):
         verbose_name=_('Tax value')
     )
     secret = models.CharField(max_length=64, default=generate_position_secret, db_index=True)
+    web_secret = models.CharField(max_length=32, default=generate_secret, db_index=True)
     pseudonymization_id = models.CharField(
         max_length=16,
         unique=True,
