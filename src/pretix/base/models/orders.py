@@ -673,7 +673,7 @@ class Order(LockModel, LoggedModel):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False):
+                  auth=None, attach_tickets=False, position: 'OrderPosition'=None):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -690,6 +690,9 @@ class Order(LockModel, LoggedModel):
         :param headers: Dictionary with additional mail headers
         :param sender: Custom email sender.
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
+        :param position: An order position this refers to. If given, no invoices will be attached, the tickets will
+                         only be attached for this position and child positions, the link will only point to the
+                         position and the attendee email will be used if available.
         """
         from pretix.base.services.mail import SendMailException, mail, render_mail
 
@@ -701,12 +704,16 @@ class Order(LockModel, LoggedModel):
 
         with language(self.locale):
             recipient = self.email
+            if position and position.attendee_email:
+                recipient = self.attendee_email
+
             try:
                 email_content = render_mail(template, context)
                 mail(
                     recipient, subject, template, context,
-                    self.event, self.locale, self, headers, sender,
-                    invoices=invoices, attach_tickets=attach_tickets
+                    self.event, self.locale, self, headers=headers, sender=sender,
+                    invoices=invoices, attach_tickets=attach_tickets,
+                    position=position
                 )
             except SendMailException:
                 raise
@@ -718,6 +725,7 @@ class Order(LockModel, LoggedModel):
                     data={
                         'subject': subject,
                         'message': email_content,
+                        'position': position.positionid,
                         'recipient': recipient,
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
@@ -1800,6 +1808,60 @@ class OrderPosition(AbstractPosition):
     @property
     def event(self):
         return self.order.event
+
+    def send_mail(self, subject: str, template: Union[str, LazyI18nString],
+                  context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
+                  user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
+                  auth=None, attach_tickets=False):
+        """
+        Sends an email to the user that placed this order. Basically, this method does two things:
+
+        * Call ``pretix.base.services.mail.mail`` with useful values for the ``event``, ``locale``, ``recipient`` and
+          ``order`` parameters.
+
+        * Create a ``LogEntry`` with the email contents.
+
+        :param subject: Subject of the email
+        :param template: LazyI18nString or template filename, see ``pretix.base.services.mail.mail`` for more details
+        :param context: Dictionary to use for rendering the template
+        :param log_entry_type: Key to be used for the log entry
+        :param user: Administrative user who triggered this mail to be sent
+        :param headers: Dictionary with additional mail headers
+        :param sender: Custom email sender.
+        :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
+        """
+        from pretix.base.services.mail import SendMailException, mail, render_mail
+
+        if not self.email:
+            return
+
+        for k, v in self.event.meta_data.items():
+            context['meta_' + k] = v
+
+        with language(self.locale):
+            recipient = self.email
+            try:
+                email_content = render_mail(template, context)
+                mail(
+                    recipient, subject, template, context,
+                    self.event, self.locale, self, headers, sender,
+                    invoices=invoices, attach_tickets=attach_tickets
+                )
+            except SendMailException:
+                raise
+            else:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    auth=auth,
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'recipient': recipient,
+                        'invoices': [i.pk for i in invoices] if invoices else [],
+                        'attach_tickets': attach_tickets,
+                    }
+                )
 
 
 class CartPosition(AbstractPosition):

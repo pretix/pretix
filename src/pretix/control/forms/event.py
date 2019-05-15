@@ -844,7 +844,7 @@ class MailSettingsForm(SettingsForm):
     )
 
     mail_text_order_placed = I18nFormField(
-        label=_("Text"),
+        label=_("Text sent to order contact address"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {total_with_currency}, {total}, {currency}, {date}, "
@@ -852,20 +852,62 @@ class MailSettingsForm(SettingsForm):
         validators=[PlaceholderValidator(['{event}', '{total_with_currency}', '{total}', '{currency}', '{date}',
                                           '{payment_info}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
+    mail_send_order_placed_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_text_order_placed_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+    )
+
     mail_text_order_paid = I18nFormField(
-        label=_("Text"),
+        label=_("Text sent to order contact address"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}, {payment_info}"),
         validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}', '{payment_info}'])]
     )
+    mail_send_order_paid_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_text_order_paid_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+    )
+
     mail_text_order_free = I18nFormField(
-        label=_("Text"),
+        label=_("Text sent to order contact address"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}, {invoice_name}, {invoice_company}"),
         validators=[PlaceholderValidator(['{event}', '{url}', '{invoice_name}', '{invoice_company}'])]
     )
+    mail_send_order_free_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_text_order_free_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+    )
+
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
@@ -925,11 +967,24 @@ class MailSettingsForm(SettingsForm):
                                           '{invoice_name}', '{invoice_company}'])]
     )
     mail_text_download_reminder = I18nFormField(
-        label=_("Text"),
+        label=_("Text sent to order contact address"),
         required=False,
         widget=I18nTextarea,
         help_text=_("Available placeholders: {event}, {url}"),
         validators=[PlaceholderValidator(['{event}', '{url}'])]
+    )
+    mail_send_download_reminder_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_text_download_reminder_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("Available placeholders: {attendee_name}, {event}, {url}"),
+        validators=[PlaceholderValidator(['{attendee_name}', '{event}', '{url}'])]
     )
     mail_days_download_reminder = forms.IntegerField(
         label=_("Number of days"),
@@ -1011,12 +1066,17 @@ class MailSettingsForm(SettingsForm):
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
         keys = list(event.meta_data.keys())
-        for k, v in self.fields.items():
+        for k, v in list(self.fields.items()):
             if k.startswith('mail_text_'):
                 v.help_text = str(v.help_text) + ', ' + ', '.join({
                     '{meta_' + p + '}' for p in keys
                 })
                 v.validators[0].limit_value += ['{meta_' + p + '}' for p in keys]
+
+            if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
+                # If we don't ask for attendee emails, we can't send them anything and we don't need to clutter
+                # the user interface with it
+                del self.fields[k]
 
     def clean(self):
         data = self.cleaned_data

@@ -41,13 +41,13 @@
             <legend>{% trans "E-mail content" %}</legend>
             <div class="panel-group" id="questions_group">
                 {% blocktrans asvar title_placed_order %}Placed order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed" %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_placed" title=title_placed_order items="mail_text_order_placed,mail_send_order_placed_attendee,mail_text_order_placed_attendee" exclude="mail_send_order_placed_attendee" %}
 
                 {% blocktrans asvar title_paid_order %}Paid order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid" %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_paid" title=title_paid_order items="mail_text_order_paid,mail_send_order_paid_attendee,mail_text_order_paid_attendee" exclude="mail_send_order_paid_attendee" %}
 
                 {% blocktrans asvar title_free_order %}Free order{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free" %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_free" title=title_free_order items="mail_text_order_free,mail_send_order_free_attendee,mail_text_order_free_attendee" exclude="mail_send_order_free_attendee" %}
 
                 {% blocktrans asvar title_resend_link %}Resend link{% endblocktrans %}
                 {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="resend_link" title=title_resend_link items="mail_text_resend_link,mail_text_resend_all_links" %}
@@ -68,7 +68,7 @@
                 {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="custom_mail" title=title_order_custom_mail items="mail_text_order_custom_mail" %}
 
                 {% blocktrans asvar title_download_tickets_reminder %}Reminder to download tickets{% endblocktrans %}
-                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder" exclude="mail_days_download_reminder" %}
+                {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_download_tickets_reminder items="mail_days_download_reminder,mail_text_download_reminder,mail_send_download_reminder_attendee,mail_text_download_reminder_attendee" exclude="mail_days_download_reminder,mail_send_download_reminder_attendee" %}
 
                 {% blocktrans asvar title_require_approval %}Order approval process{% endblocktrans %}
                 {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_require_approval  items="mail_text_order_placed_require_approval,mail_text_order_approved,mail_text_order_denied" %}

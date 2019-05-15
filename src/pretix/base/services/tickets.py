@@ -96,7 +96,7 @@ def preview(event: int, provider: str):
                 return prov.generate(p)
 
 
-def get_tickets_for_order(order):
+def get_tickets_for_order(order, base_position=None):
     can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
     if not can_download:
         return []
@@ -111,13 +111,20 @@ def get_tickets_for_order(order):
 
     tickets = []
 
+    positions = list(order.positions_with_tickets)
+    if base_position:
+        # Only the given position and its children
+        positions = [
+            p for p in positions if p.pk == base_position.pk or p.addon_to_id == base_position.pk
+        ]
+
     for p in providers:
         if not p.is_enabled:
             continue
 
-        if p.multi_download_enabled:
+        if p.multi_download_enabled and not base_position:
             try:
-                if len(list(order.positions_with_tickets)) == 0:
+                if len(positions) == 0:
                     continue
                 ct = CachedCombinedTicket.objects.filter(
                     order=order, provider=p.identifier, file__isnull=False
@@ -136,7 +143,7 @@ def get_tickets_for_order(order):
             except:
                 logger.exception('Failed to generate ticket.')
         else:
-            for pos in order.positions_with_tickets:
+            for pos in positions:
                 try:
                     ct = CachedTicket.objects.filter(
                         order_position=pos, provider=p.identifier, file__isnull=False

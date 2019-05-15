@@ -13,7 +13,9 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
-from pretix.base.models import Event, Invoice, InvoiceAddress, Order
+from pretix.base.models import (
+    Event, Invoice, InvoiceAddress, Order, OrderPosition,
+)
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
@@ -38,8 +40,8 @@ class SendMailException(Exception):
 
 def mail(email: str, subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any]=None, event: Event=None, locale: str=None,
-         order: Order=None, headers: dict=None, sender: str=None, invoices: list=None,
-         attach_tickets=False):
+         order: Order=None, position: OrderPosition=None, headers: dict=None, sender: str=None,
+         invoices: list=None, attach_tickets=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -59,6 +61,9 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
     :param order: The order this email is related to (optional). If set, this will be used to include a link to the
         order below the email.
+
+    :param order: The order position this email is related to (optional). If set, this will be used to include a link
+        to the order position instead of the orderbelow the email.
 
     :param headers: A dict of custom mail headers to add to the mail
 
@@ -132,9 +137,26 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
 
-            if order:
-                if order.testmode:
-                    subject = "[TESTMODE] " + subject
+            if order and order.testmode:
+                subject = "[TESTMODE] " + subject
+
+            if order and position:
+                body_plain += _(
+                    "You are receiving this email because someone placed an order for {event} for you."
+                ).format(event=event.name)
+                body_plain += "\r\n"
+                body_plain += _(
+                    "You can view your order details at the following URL:\n{orderurl}."
+                ).replace("\n", "\r\n").format(
+                    event=event.name, orderurl=build_absolute_uri(
+                        order.event, 'presale:event.order.position', kwargs={
+                            'order': order.code,
+                            'secret': position.web_secret,
+                            'position': position.positionid,
+                        }
+                    )
+                )
+            elif order:
                 body_plain += _(
                     "You are receiving this email because you placed an order for {event}."
                 ).format(event=event.name)
@@ -167,8 +189,9 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
             sender=sender,
             event=event.id if event else None,
             headers=headers,
-            invoices=[i.pk for i in invoices] if invoices else [],
+            invoices=[i.pk for i in invoices] if invoices and not position else [],
             order=order.pk if order else None,
+            position=position.pk if position else None,
             attach_tickets=attach_tickets
         )
 
@@ -183,8 +206,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
 
 @app.task(base=TransactionAwareTask, bind=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int=None, headers: dict=None, bcc: List[str]=None, invoices: List[int]=None,
-                   order: int=None, attach_tickets=False) -> bool:
+                   event: int=None, position: int=None, headers: dict=None, bcc: List[str]=None,
+                   invoices: List[int]=None, order: int=None, attach_tickets=False) -> bool:
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(html, "text/html")
@@ -215,10 +238,15 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             except Order.DoesNotExist:
                 order = None
             else:
+                if position:
+                    try:
+                        position = order.positions.get(pk=position)
+                    except OrderPosition.DoesNotExist:
+                        attach_tickets = False
                 if attach_tickets:
                     args = []
                     attach_size = 0
-                    for name, ct in get_tickets_for_order(order):
+                    for name, ct in get_tickets_for_order(order, base_position=position):
                         content = ct.file.read()
                         args.append((name, content, ct.type))
                         attach_size += len(content)

@@ -13,11 +13,11 @@
             {% with exclude|split as exclusion %}
             {% with items|split as item_list %}
             {% for item in item_list %}
-                {% if item in exclusion %}
+                {% if item in exclusion and form|hasattr:item %}
                     {% with form|getattr:item as field %}
                         {% bootstrap_field field layout="horizontal" %}
                     {% endwith %}
-                {% else %}
+                {% elif form|hasattr:item %}
                     <div id="{{ item }}_panel" class="preview-panel form-group" for="{{ item }}">
                         {% with form|getattr:item as field %}
                         <label class="col-md-3 control-label">{{ field.label }}</label>
