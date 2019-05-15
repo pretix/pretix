@@ -240,6 +240,19 @@ subclass of pretix.base.exporter.BaseExporter
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+validate_order = EventPluginSignal(
+    providing_args=["payment_provider", "positions", "email", "locale", "invoice_address",
+                    "meta_info"]
+)
+"""
+This signal is sent out when the user tries to confirm the order, before we actually create
+the order. It allows you to inspect the cart positions. Your return value will be ignored,
+but you can raise an OrderError with an appropriate exception message if you like to block
+the order. We strongly discourage making changes to the order here.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 validate_cart = EventPluginSignal(
     providing_args=["positions"]
 )

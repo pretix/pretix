@@ -46,7 +46,7 @@ from pretix.base.services.tasks import ProfiledTask
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_placed,
-    periodic_task,
+    periodic_task, validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers.models import modelcopy
@@ -669,6 +669,9 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
             pass
 
     positions = CartPosition.objects.filter(id__in=position_ids, event=event)
+
+    validate_order.send(event, payment_provider=pprov, email=email, positions=positions,
+                        locale=locale, invoice_address=addr, meta_info=meta_info)
 
     lockfn = NoLockManager
     locked = False
