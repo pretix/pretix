@@ -534,7 +534,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 continue
 
         if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
-            positions[i] = cp
             cp.price = price.gross
             cp.includes_tax = bool(price.rate)
             cp.save()
@@ -558,7 +557,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                     break
 
         if quota_ok:
-            positions[i] = cp
             cp.expires = now_dt + timedelta(
                 minutes=event.settings.get('reservation_time', as_type=int))
             cp.save()

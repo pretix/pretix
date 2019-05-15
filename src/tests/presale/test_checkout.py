@@ -2206,6 +2206,21 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         assert a.tax_rate == Decimal('7.00')
         assert a.tax_value == Decimal('0.10')
 
+    def test_simple_bundle_with_voucher(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='none',
+                                   valid_until=now() + timedelta(days=2))
+        self.cp1.voucher = v
+        self.cp1.save()
+        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23 - 1.5
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 1.5
+
     def test_expired_keep_price(self):
         self.cp1.expires = now() - timedelta(minutes=10)
         self.cp1.save()
