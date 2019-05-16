@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 from inlinestyler.utils import inline_css
 
-from pretix.base.models import Event, Order
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.signals import register_html_mail_renderers
 from pretix.base.templatetags.rich_text import markdown_compile_email
 
@@ -44,7 +44,8 @@ class BaseHTMLMailRenderer:
     def __str__(self):
         return self.identifier
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order: Order=None) -> str:
+    def render(self, plain_body: str, plain_signature: str, subject: str, order: Order=None,
+               position: OrderPosition=None) -> str:
         """
         This method should generate the HTML part of the email.
 
@@ -52,6 +53,7 @@ class BaseHTMLMailRenderer:
         :param plain_signature: The signature with event organizer contact details in plain text.
         :param subject: The email subject.
         :param order: The order if this email is connected to one, otherwise ``None``.
+        :param position: The order position if this email is connected to one, otherwise ``None``.
         :return: An HTML string
         """
         raise NotImplementedError()
@@ -95,7 +97,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def template_name(self):
         raise NotImplementedError()
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order: Order) -> str:
+    def render(self, plain_body: str, plain_signature: str, subject: str, order: Order, position: OrderPosition) -> str:
         body_md = markdown_compile_email(plain_body)
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
@@ -115,6 +117,9 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
         if order:
             htmlctx['order'] = order
+
+        if position:
+            htmlctx['position'] = position
 
         tpl = get_template(self.template_name)
         body_html = inline_css(tpl.render(htmlctx))

@@ -862,8 +862,8 @@ class MailSettingsForm(SettingsForm):
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
-        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+        help_text=_("Available placeholders: {event}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{attendee_name}'])],
     )
 
     mail_text_order_paid = I18nFormField(
@@ -883,8 +883,8 @@ class MailSettingsForm(SettingsForm):
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
-        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+        help_text=_("Available placeholders: {event}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{attendee_name}'])],
     )
 
     mail_text_order_free = I18nFormField(
@@ -904,8 +904,8 @@ class MailSettingsForm(SettingsForm):
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("Available placeholders: {event}, {date}, {url}, {attendee_name}"),
-        validators=[PlaceholderValidator(['{event}', '{date}', '{url}', '{attendee_name}'])],
+        help_text=_("Available placeholders: {event}, {url}, {attendee_name}"),
+        validators=[PlaceholderValidator(['{event}', '{url}', '{attendee_name}'])],
     )
 
     mail_text_order_changed = I18nFormField(
@@ -1066,12 +1066,20 @@ class MailSettingsForm(SettingsForm):
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
         keys = list(event.meta_data.keys())
+        name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
         for k, v in list(self.fields.items()):
             if k.startswith('mail_text_'):
                 v.help_text = str(v.help_text) + ', ' + ', '.join({
                     '{meta_' + p + '}' for p in keys
                 })
                 v.validators[0].limit_value += ['{meta_' + p + '}' for p in keys]
+
+                if '{attendee_name}' in v.validators[0].limit_value:
+                    for f, l, w in name_scheme['fields']:
+                        if f == 'full_name':
+                            continue
+                        v.help_text = str(v.help_text) + ', ' + '{attendee_name_%s}' % f
+                        v.validators[0].limit_value += ['{attendee_name_' + f + '}']
 
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
                 # If we don't ask for attendee emails, we can't send them anything and we don't need to clutter

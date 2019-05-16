@@ -705,7 +705,7 @@ class Order(LockModel, LoggedModel):
         with language(self.locale):
             recipient = self.email
             if position and position.attendee_email:
-                recipient = self.attendee_email
+                recipient = position.attendee_email
 
             try:
                 email_content = render_mail(template, context)
@@ -725,7 +725,7 @@ class Order(LockModel, LoggedModel):
                     data={
                         'subject': subject,
                         'message': email_content,
-                        'position': position.positionid,
+                        'position': position.positionid if position else None,
                         'recipient': recipient,
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
@@ -1202,8 +1202,6 @@ class OrderPayment(models.Model):
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
         from pretix.base.services.invoices import generate_invoice, invoice_qualified
-        from pretix.base.services.mail import SendMailException
-        from pretix.multidomain.urlreverse import build_absolute_uri
 
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
@@ -1267,36 +1265,77 @@ class OrderPayment(models.Model):
                 )
 
         if send_mail:
-            with language(self.order.locale):
-                try:
-                    invoice_name = self.order.invoice_address.name
-                    invoice_company = self.order.invoice_address.company
-                except InvoiceAddress.DoesNotExist:
-                    invoice_name = ""
-                    invoice_company = ""
-                email_template = self.order.event.settings.mail_text_order_paid
-                email_context = {
-                    'event': self.order.event.name,
-                    'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret,
-                        'hash': self.order.email_confirm_hash()
-                    }),
-                    'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
-                    'invoice_name': invoice_name,
-                    'invoice_company': invoice_company,
-                    'payment_info': mail_text
-                }
-                email_subject = _('Payment received for your order: %(code)s') % {'code': self.order.code}
-                try:
-                    self.order.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.order_paid', user,
-                        invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
-                        attach_tickets=True
-                    )
-                except SendMailException:
-                    logger.exception('Order paid email could not be sent')
+            self._send_paid_mail(invoice, user, mail_text)
+            if self.order.event.settings.mail_send_order_paid_attendee:
+                for p in self.order.positions.all():
+                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != self.order.email:
+                        self._send_paid_mail_attendee(p, user)
+
+    def _send_paid_mail_attendee(self, position, user):
+        from pretix.base.services.mail import SendMailException
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        with language(self.order.locale):
+            name_scheme = PERSON_NAME_SCHEMES[self.order.event.settings.name_scheme]
+            email_template = self.order.event.settings.mail_text_order_paid_attendee
+            email_context = {
+                'event': self.order.event.name,
+                'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
+                'url': build_absolute_uri(self.order.event, 'presale:event.order.position', kwargs={
+                    'order': self.order.code,
+                    'secret': position.web_secret,
+                    'position': position.positionid
+                }),
+                'attendee_name': position.attendee_name,
+            }
+            for f, l, w in name_scheme['fields']:
+                email_context['attendee_name_%s' % f] = position.attendee_name_parts.get(f, '')
+
+            email_subject = _('Event registration confirmed: %(code)s') % {'code': self.order.code}
+            try:
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_paid', user,
+                    invoices=[], position=position,
+                    attach_tickets=True
+                )
+            except SendMailException:
+                logger.exception('Order paid email could not be sent')
+
+    def _send_paid_mail(self, invoice, user, mail_text):
+        from pretix.base.services.mail import SendMailException
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        with language(self.order.locale):
+            try:
+                invoice_name = self.order.invoice_address.name
+                invoice_company = self.order.invoice_address.company
+            except InvoiceAddress.DoesNotExist:
+                invoice_name = ""
+                invoice_company = ""
+            email_template = self.order.event.settings.mail_text_order_paid
+            email_context = {
+                'event': self.order.event.name,
+                'url': build_absolute_uri(self.order.event, 'presale:event.order.open', kwargs={
+                    'order': self.order.code,
+                    'secret': self.order.secret,
+                    'hash': self.order.email_confirm_hash()
+                }),
+                'downloads': self.order.event.settings.get('ticket_download', as_type=bool),
+                'invoice_name': invoice_name,
+                'invoice_company': invoice_company,
+                'payment_info': mail_text
+            }
+            email_subject = _('Payment received for your order: %(code)s') % {'code': self.order.code}
+            try:
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_paid', user,
+                    invoices=[invoice] if invoice and self.order.event.settings.invoice_email_attachment else [],
+                    attach_tickets=True
+                )
+            except SendMailException:
+                logger.exception('Order paid email could not be sent')
 
     @property
     def refunded_amount(self):

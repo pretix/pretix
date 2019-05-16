@@ -440,7 +440,7 @@ Your {event} team"""))
     },
     'mail_text_order_paid_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello,
+        'default': LazyI18nString.from_gettext(ugettext_noop("""Hello {attendee_name},
 
 a ticket for {event} that has been ordered for you is now paid.
 

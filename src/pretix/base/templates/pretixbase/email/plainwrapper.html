@@ -23,13 +23,23 @@
                     <table cellpadding="20"><tr><td>
                 <![endif]-->
                 <div class="content">
-                    {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
-                    <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
-                    <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
-                    <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
-                    <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}">
-                        {% trans "View order details" %}
-                    </a>
+                    {% if position %}
+                        {% trans "You are receiving this email because someone signed you up for the following event:" %}<br>
+                        <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
+                        <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
+                        <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
+                        <a href="{% abseventurl event "presale:event.order.position" order=order.code secret=position.web_secret position=position.positionid %}">
+                            {% trans "View registration details" %}
+                        </a>
+                    {% else %}
+                        {% trans "You are receiving this email because you placed an order for the following event:" %}<br>
+                        <strong>{% trans "Event:" %}</strong> {{ event.name }}<br>
+                        <strong>{% trans "Order code:" %}</strong> {{ order.code }}<br>
+                        <strong>{% trans "Order date:" %}</strong> {{ order.datetime|date:"SHORT_DATE_FORMAT" }}<br>
+                        <a href="{% abseventurl event "presale:event.order.open" hash=order.email_confirm_hash order=order.code secret=order.secret %}">
+                            {% trans "View order details" %}
+                        </a>
+                    {% endif %}
                 </div>
                 <!--[if gte mso 9]>
                     </td></tr></table>
