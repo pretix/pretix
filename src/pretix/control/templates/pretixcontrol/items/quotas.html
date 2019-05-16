@@ -60,7 +60,13 @@
                         <td>
                             <ul>
                                 {% for item in q.items.all %}
-                                    <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a></li>
+                                    {% if not item.has_variations %}
+                                        <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for v in q.variations.all %}
+                                    <li><a href="{% url "control:event.item.variations" organizer=request.event.organizer.slug event=request.event.slug item=v.item.id %}">
+                                        {{ v.item }} – {{ v }}</a></li>
                                 {% endfor %}
                             </ul>
                         </td>

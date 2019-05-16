@@ -3,7 +3,7 @@ import json
 from django.contrib import messages
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, F, Q
+from django.db.models import Count, F, Prefetch, Q
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -565,7 +565,14 @@ class QuotaList(PaginationMixin, ListView):
     def get_queryset(self):
         qs = Quota.objects.filter(
             event=self.request.event
-        ).prefetch_related("items")
+        ).prefetch_related(
+            Prefetch(
+                "items",
+                queryset=Item.objects.annotate(has_variations=Count('variations'))
+            ),
+            "variations",
+            "variations__item"
+        )
         if self.request.GET.get("subevent", "") != "":
             s = self.request.GET.get("subevent", "")
             qs = qs.filter(subevent_id=s)
