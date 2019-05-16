@@ -8,6 +8,20 @@
 {% load rich_text %}
 {% block title %}{% trans "Presale" %}{% endblock %}
 
+{% block custom_header %}
+    {{ block.super }}
+    <meta property="og:title" content="{{ ev.name }}" />
+    <meta property="og:description" content="{{ ev.get_date_range_display }}" />
+    {% if event_logo %}
+        <meta property="og:image" content="{{ event_logo|thumb:'5000x120' }}" />
+    {% endif %}
+    <meta property="og:type" content="website" />
+    {% if subevent %}
+        <meta property="og:url" content="{% abseventurl request.event "presale:event.index" subevent=subevent.pk %}" />
+    {% else %}
+        <meta property="og:url" content="{% abseventurl request.event "presale:event.index" %}" />
+    {% endif %}
+{% endblock %}
 {% block content %}
 
     {% autoescape off %}

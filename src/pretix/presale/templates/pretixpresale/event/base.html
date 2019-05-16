@@ -11,6 +11,7 @@
     {% if event.settings.meta_noindex %}
         <meta name="robots" content="noindex, nofollow">
     {% endif %}
+    {{ block.super }}
 {% endblock %}
 {% block above %}
     <script type="text/javascript" src="{% static "pretixpresale/js/ui/iframe.js" %}"></script>
