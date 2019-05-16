@@ -145,7 +145,7 @@ def get_tickets_for_order(order):
                         retval = generate_orderposition(pos.pk, p.identifier)
                         if not retval:
                             continue
-                        ct = CachedCombinedTicket.objects.get(pk=retval)
+                        ct = CachedTicket.objects.get(pk=retval)
                     tickets.append((
                         "{}-{}-{}-{}{}".format(
                             order.event.slug.upper(), order.code, pos.positionid, ct.provider, ct.extension,

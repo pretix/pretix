@@ -65,6 +65,7 @@ def test_notification_trigger_event_specific(event, order, user, monkeypatch_on_
     with transaction.atomic():
         order.log_action('pretix.event.order.paid', {})
     assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].subject.endswith("DUMMY: Order FOO has been marked as paid.")
 
 
 @pytest.mark.django_db
