@@ -23,6 +23,7 @@
         <input type="hidden" name="status" value="p" />
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.amount layout='horizontal' %}
+        {% bootstrap_field form.payment_date layout='horizontal' %}
         {% if form.force %}
             {% bootstrap_field form.force layout='horizontal' horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
         {% endif %}

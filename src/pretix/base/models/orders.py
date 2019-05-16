@@ -1172,7 +1172,8 @@ class OrderPayment(models.Model):
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
 
-    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='', ignore_date=False, lock=True):
+    def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
+                ignore_date=False, lock=True, payment_date=None):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
         payment is required
@@ -1203,7 +1204,7 @@ class OrderPayment(models.Model):
                 return
 
             locked_instance.state = self.PAYMENT_STATE_CONFIRMED
-            locked_instance.payment_date = now()
+            locked_instance.payment_date = payment_date or now()
             locked_instance.info = self.info  # required for backwards compatibility
             locked_instance.save(update_fields=['state', 'payment_date', 'info'])
 

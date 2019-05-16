@@ -3,7 +3,7 @@ import logging
 import mimetypes
 import os
 import re
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 
 import pytz
@@ -24,7 +24,7 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
@@ -862,8 +862,15 @@ class OrderTransition(OrderView):
                     fee=None
                 )
 
+            payment_date = None
+            if self.mark_paid_form.cleaned_data['payment_date'] != now().date():
+                payment_date = make_aware(datetime.combine(
+                    self.mark_paid_form.cleaned_data['payment_date'],
+                    time(hour=0, minute=0, second=0)
+                ), self.order.event.timezone)
+
             try:
-                p.confirm(user=self.request.user, count_waitinglist=False,
+                p.confirm(user=self.request.user, count_waitinglist=False, payment_date=payment_date,
                           force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 p.state = OrderPayment.PAYMENT_STATE_FAILED

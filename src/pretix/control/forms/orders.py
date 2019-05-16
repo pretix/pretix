@@ -9,6 +9,7 @@ from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
@@ -115,6 +116,12 @@ class MarkPaidForm(ConfirmPaymentForm):
         max_digits=10, decimal_places=2,
         localize=True,
         label=_('Payment amount'),
+    )
+    payment_date = forms.DateField(
+        required=True,
+        label=_('Payment date'),
+        widget=DatePickerWidget(),
+        initial=now
     )
 
     def __init__(self, *args, **kwargs):
