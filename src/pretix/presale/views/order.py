@@ -67,7 +67,9 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderOpen(EventViewMixin, OrderDetailMixin, View):
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
         if kwargs.get('hash') == self.order.email_confirm_hash():
             self.order.email_known_to_work = True
             self.order.save(update_fields=['email_known_to_work'])
