@@ -56,8 +56,9 @@
             {% endif %}
         </div>
 
-        {% if download and line.generate_ticket %}
+        {% if download %}
             <div class="download-desktop">
+            {% if line.generate_ticket %}
                 {% for b in download_buttons %}
                     <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
                             method="post" data-asynctask data-asynctask-download class="download-btn-form">
@@ -68,6 +69,7 @@
                         </button>
                     </form>
                 {% endfor %}
+            {% endif %}
             </div>
         {% elif line.addon_to %}
             <div class="count">&nbsp;</div>
@@ -147,8 +149,9 @@
                 {% endif %}
             {% endif %}
         </div>
-        {% if download and line.generate_ticket %}
+        {% if download %}
             <div class="download-mobile">
+                {% if line.generate_ticket %}
                 {% for b in download_buttons %}
                     <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
                         method="post" data-asynctask data-asynctask-download class="download-btn-form">
@@ -159,6 +162,7 @@
                         </button>
                     </form>
                 {% endfor %}
+                {% endif %}
             </div>
         {% endif %}
         <div class="clearfix"></div>
