@@ -919,6 +919,31 @@ def send_download_reminders(sender, **kwargs):
                     except SendMailException:
                         logger.exception('Reminder email could not be sent')
 
+                    if e.settings.mail_send_download_reminder_attendee:
+                        name_scheme = PERSON_NAME_SCHEMES[e.settings.name_scheme]
+                        for p in o.positions.all():
+                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
+                                email_template = e.settings.mail_text_download_reminder_attendee
+                                email_context = {
+                                    'event': e.name,
+                                    'url': build_absolute_uri(e, 'presale:event.order.position', kwargs={
+                                        'order': o.code,
+                                        'secret': p.web_secret,
+                                        'position': p.positionid
+                                    }),
+                                    'attendee_name': p.attendee_name,
+                                }
+                                for f, l, w in name_scheme['fields']:
+                                    email_context['attendee_name_%s' % f] = p.attendee_name_parts.get(f, '')
+                                try:
+                                    o.send_mail(
+                                        email_subject, email_template, email_context,
+                                        'pretix.event.order.email.download_reminder_sent',
+                                        attach_tickets=True, position=p
+                                    )
+                                except SendMailException:
+                                    logger.exception('Reminder email could not be sent to attendee')
+
 
 class OrderChangeManager:
     error_messages = {
