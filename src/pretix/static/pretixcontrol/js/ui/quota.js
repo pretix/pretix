@@ -18,3 +18,24 @@ $(function () {
         ]
     });
 });
+
+$(function () {
+    if (!$("input[name=itemvars]").length) {
+        return;
+    }
+    var autofill = ($("#id_name").val() === "");
+
+    $("#id_name").on("change keyup keydown keypress", function () {
+        autofill = false;
+    })
+
+    $("input[name=itemvars]").change(function () {
+        if (autofill) {
+            var names = [];
+            $("input[name=itemvars]:checked").each(function () {
+                names.push($.trim($(this).closest("label").text()))
+            });
+            $("#id_name").val(names.join(', '));
+        }
+    });
+});
