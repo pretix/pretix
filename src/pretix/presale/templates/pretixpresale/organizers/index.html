@@ -3,7 +3,17 @@
 {% load rich_text %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load thumb %}
 {% block title %}{% trans "Event list" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    <meta property="og:title" content="{{ organizer.name }}" />
+    {% if organizer_logo %}
+        <meta property="og:image" content="{{ organizer_logo|thumb:'5000x120' }}" />
+    {% endif %}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{% abseventurl organizer "presale:organizer.index" %}" />
+{% endblock %}
 {% block content %}
     <div>
 	{% if organizer_homepage_text %}
