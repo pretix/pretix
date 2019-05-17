@@ -2291,8 +2291,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
         o = Order.objects.get(pk=oid)
         cp = o.positions.get(addon_to__isnull=True)
-        b = cp.addons.first()
-        a = cp.addons.last()
+        b = cp.addons.order_by('price').first()
+        a = cp.addons.order_by('price').last()
         assert cp.price == 21.5
         assert b.price == 1.5
         assert cp.price == 21.5
