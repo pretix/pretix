@@ -25,6 +25,7 @@ Your should install the following on your system:
 * ``libssl`` (Debian package: ``libssl-dev``)
 * ``libxml2`` (Debian package ``libxml2-dev``)
 * ``libxslt`` (Debian package ``libxslt1-dev``)
+* ``libenchant1c2a`` (Debian package ``libenchant1c2a``)
 * ``msgfmt`` (Debian package ``gettext``)
 * ``git``
 
