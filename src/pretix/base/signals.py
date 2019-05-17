@@ -515,3 +515,12 @@ dictionaries as values that contain keys like in the following example::
 The evaluate member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable.
 """
+
+
+timeline_events = EventPluginSignal()
+"""
+This signal is sent out to collect events for the time line shown on event dashboards. You are passed
+a ``subevent`` argument which might be none and you are expected to return a list of instances of
+``pretix.base.timeline.TimelineEvent``, which is a ``namedtuple`` with the fields ``event``, ``subevent``,
+``datetime``, ``description`` and ``edit_url``.
+"""

@@ -49,7 +49,7 @@ Backend
 
 
 .. automodule:: pretix.base.signals
-   :members: logentry_display, logentry_object_link, requiredaction_display
+   :members: logentry_display, logentry_object_link, requiredaction_display, timeline_events
 
 Vouchers
 """"""""
