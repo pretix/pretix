@@ -8,14 +8,20 @@
     <div class="panel-body timeline">
         {% regroup timeline by date as tl_list %}
         {% for day in tl_list %}
-            <div class="row">
+            <div class="row {% if day.grouper < today %}text-muted{% endif %}">
                 <div class="col-date">
                     <strong>{{ day.grouper|date:"SHORT_DATE_FORMAT" }}</strong>
+                    &nbsp;
+                    <a href="{{ e.entry.edit_url }}" class="text-muted">
+                        <span class="fa fa-edit"></span>
+                    </a>
                 </div>
                 <div class="col-event">
                     {% for e in day.list %}
-                        <span class="text-muted">{{ e.time|date:"TIME_FORMAT" }}</span>
-                        {{ e.entry.description }}
+                        <strong class="">{{ e.time|date:"TIME_FORMAT" }}</strong>
+                        <span class="{% if e.time < nearly_now %}text-muted{% endif %}">
+                            {{ e.entry.description }}
+                        </span>
                         {% if forloop.revcounter > 1 %}
                             <br/>
                         {% endif %}

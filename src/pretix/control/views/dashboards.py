@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 
 import pytz
@@ -312,6 +313,8 @@ def event_index(request, organizer, event):
         }
         for t in timeline_for_event(request.event, subevent)
     ]
+    ctx['today'] = now().astimezone(request.event.timezone).date()
+    ctx['nearly_now'] = now().astimezone(request.event.timezone) - timedelta(seconds=20)
     resp = render(request, 'pretixcontrol/event/index.html', ctx)
     # resp['Content-Security-Policy'] = "style-src 'unsafe-inline'"
     return resp
