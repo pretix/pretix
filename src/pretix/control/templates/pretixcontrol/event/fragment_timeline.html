@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-event">
                     {% for e in day.list %}
-                        <span class="text-muted">{{ e.entry.datetime|date:"TIME_FORMAT" }}</span>
+                        <span class="text-muted">{{ e.time|date:"TIME_FORMAT" }}</span>
                         {{ e.entry.description }}
                         {% if forloop.revcounter > 1 %}
                             <br/>

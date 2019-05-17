@@ -305,7 +305,11 @@ def event_index(request, organizer, event):
         a.display = a.display(request)
 
     ctx['timeline'] = [
-        {'date': t.datetime.astimezone(request.event.timezone).date(), 'entry': t}
+        {
+            'date': t.datetime.astimezone(request.event.timezone).date(),
+            'entry': t,
+            'time': t.datetime.astimezone(request.event.timezone)
+        }
         for t in timeline_for_event(request.event, subevent)
     ]
     resp = render(request, 'pretixcontrol/event/index.html', ctx)
