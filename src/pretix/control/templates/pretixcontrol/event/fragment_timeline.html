@@ -11,17 +11,20 @@
             <div class="row {% if day.grouper < today %}text-muted{% endif %}">
                 <div class="col-date">
                     <strong>{{ day.grouper|date:"SHORT_DATE_FORMAT" }}</strong>
-                    &nbsp;
-                    <a href="{{ e.entry.edit_url }}" class="text-muted">
-                        <span class="fa fa-edit"></span>
-                    </a>
                 </div>
                 <div class="col-event">
                     {% for e in day.list %}
                         <strong class="">{{ e.time|date:"TIME_FORMAT" }}</strong>
+                        &nbsp;
                         <span class="{% if e.time < nearly_now %}text-muted{% endif %}">
                             {{ e.entry.description }}
                         </span>
+                        {% if e.entry.edit_url %}
+                            &nbsp;
+                            <a href="{{ e.entry.edit_url }}" class="text-muted">
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        {% endif %}
                         {% if forloop.revcounter > 1 %}
                             <br/>
                         {% endif %}

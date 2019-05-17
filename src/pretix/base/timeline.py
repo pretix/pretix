@@ -3,10 +3,10 @@ from datetime import timedelta
 
 from django.db.models import Q
 from django.urls import reverse
-from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy
 
 from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.signals import timeline_events
 
 TimelineEvent = namedtuple('TimelineEvent', ('event', 'subevent', 'datetime', 'description', 'edit_url'))
 
@@ -183,13 +183,7 @@ def timeline_for_event(event, subevent=None):
                 })
             ))
 
-    tl.append(TimelineEvent(
-        event=event, subevent=subevent,
-        datetime=now(),
-        description=pgettext_lazy('timeline', 'This is where you are now'),
-        edit_url=None
-    ))
-
-    # plugin API
+    for recv, resp in timeline_events.send(sender=event, subevent=subevent):
+        tl += resp
 
     return sorted(tl, key=lambda e: e.datetime)

@@ -624,16 +624,14 @@ h1 .label {
         position: relative;
         min-height: 1px;
         padding-left: 15px;
-        padding-right: 15px;
-        width: 140px;
+        width: 120px;
         float: left;
     }
     .col-event {
         position: relative;
         min-height: 1px;
-        padding-left: 15px;
         padding-right: 15px;
-        margin-left: 130px;
+        margin-left: 120px;
     }
 }
 @media(max-width: $screen-sm-max) {

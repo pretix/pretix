@@ -42,9 +42,9 @@ def test_event_dates(event):
     tl = timeline_for_event(event)
     assert one([
         e for e in tl
-        if e.event == event and e.date == event.date_from and e.description == 'Event start'
+        if e.event == event and e.datetime == event.date_from and e.description == 'Your event starts'
     ])
     assert one([
         e for e in tl
-        if e.event == event and e.date == event.date_to and e.description == 'Event end'
+        if e.event == event and e.datetime == event.date_to and e.description == 'Your event ends'
     ])
