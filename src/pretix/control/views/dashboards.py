@@ -22,6 +22,7 @@ from pretix.base.models import (
     WaitingListEntry,
 )
 from pretix.base.models.checkin import CheckinList
+from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
@@ -279,6 +280,7 @@ def event_index(request, organizer, event):
     ctx = {
         'widgets': rearrange(widgets),
         'logs': qs[:5],
+        'subevent': subevent,
         'actions': a_qs[:5] if can_change_orders else [],
         'comment_form': CommentForm(initial={'comment': request.event.comment})
     }
@@ -302,7 +304,13 @@ def event_index(request, organizer, event):
     for a in ctx['actions']:
         a.display = a.display(request)
 
-    return render(request, 'pretixcontrol/event/index.html', ctx)
+    ctx['timeline'] = [
+        {'date': t.datetime.astimezone(request.event.timezone).date(), 'entry': t}
+        for t in timeline_for_event(request.event, subevent)
+    ]
+    resp = render(request, 'pretixcontrol/event/index.html', ctx)
+    # resp['Content-Security-Policy'] = "style-src 'unsafe-inline'"
+    return resp
 
 
 def annotated_event_query(request):

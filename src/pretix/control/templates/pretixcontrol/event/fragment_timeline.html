@@ -1,0 +1,27 @@
+{% load i18n %}
+<div class="panel panel-default items">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "Your timeline" %}
+        </h3>
+    </div>
+    <div class="panel-body timeline">
+        {% regroup timeline by date as tl_list %}
+        {% for day in tl_list %}
+            <div class="row">
+                <div class="col-date">
+                    <strong>{{ day.grouper|date:"SHORT_DATE_FORMAT" }}</strong>
+                </div>
+                <div class="col-event">
+                    {% for e in day.list %}
+                        <span class="text-muted">{{ e.entry.datetime|date:"TIME_FORMAT" }}</span>
+                        {{ e.entry.description }}
+                        {% if forloop.revcounter > 1 %}
+                            <br/>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

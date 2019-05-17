@@ -618,3 +618,32 @@ h1 .label {
     border-radius: $border-radius-small;
     box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
 }
+
+.timeline {
+    .col-date {
+        position: relative;
+        min-height: 1px;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 120px;
+        float: left;
+    }
+    .col-event {
+        position: relative;
+        min-height: 1px;
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-left: 130px;
+    }
+}
+@media(max-width: $screen-sm-max) {
+    .timeline {
+        .col-date {
+            width: 100%;
+            float: none;
+        }
+        .col-event {
+            margin-left: 0;
+        }
+    }
+}

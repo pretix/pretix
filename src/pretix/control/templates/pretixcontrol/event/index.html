@@ -90,6 +90,9 @@
             {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
         </form>
     {% endif %}
+    {% if not request.event.has_subevents or subevent %}
+        {% include "pretixcontrol/event/fragment_timeline.html" %}
+    {% endif %}
     <div class="dashboard">
         {% for w in widgets %}
             <div class="widget-container widget-{{ w.display_size|default:"small" }}">
