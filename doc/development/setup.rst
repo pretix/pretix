@@ -21,6 +21,7 @@ Your should install the following on your system:
 * Python 3.5 or newer
 * ``pip`` for Python 3 (Debian package: ``python3-pip``)
 * ``python-dev`` for Python 3 (Debian package: ``python3-dev``)
+* ``python-venv`` for Python 3 (Debian package: ``python3-venv``)
 * ``libffi`` (Debian package: ``libffi-dev``)
 * ``libssl`` (Debian package: ``libssl-dev``)
 * ``libxml2`` (Debian package ``libxml2-dev``)
