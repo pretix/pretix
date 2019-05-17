@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-17 15:33+0000\n"
+"POT-Creation-Date: 2019-05-09 12:44+0000\n"
 "PO-Revision-Date: 2019-05-10 20:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -185,8 +185,8 @@ msgstr ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 
-#: pretix/api/views/order.py:329 pretix/control/views/orders.py:946
-#: pretix/presale/views/order.py:526
+#: pretix/api/views/order.py:329 pretix/control/views/orders.py:939
+#: pretix/presale/views/order.py:515
 #, fuzzy
 msgid "You cannot generate an invoice for this order."
 msgstr "You cannot generate an invoice for this order."
