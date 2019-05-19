@@ -1,8 +1,9 @@
 from collections import namedtuple
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy
 
 from pretix.base.reldate import RelativeDateWrapper
@@ -80,9 +81,13 @@ def timeline_for_event(event, subevent=None):
 
     rd = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
     if rd:
+        d = make_aware(datetime.combine(
+            rd.date(ev),
+            time(hour=23, minute=59, second=59)
+        ), event.timezone)
         tl.append(TimelineEvent(
             event=event, subevent=subevent,
-            datetime=rd.datetime(ev),
+            datetime=d,
             description=pgettext_lazy('timeline', 'No more payments can be completed'),
             edit_url=reverse('control:event.settings.payment', kwargs={
                 'event': event.slug,
@@ -170,9 +175,13 @@ def timeline_for_event(event, subevent=None):
     for pprov in pprovs.values():
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
+            d = make_aware(datetime.combine(
+                availability_date.date(ev),
+                time(hour=23, minute=59, second=59)
+            ), event.timezone)
             tl.append(TimelineEvent(
                 event=event, subevent=subevent,
-                datetime=availability_date.datetime(ev),
+                datetime=d,
                 description=pgettext_lazy('timeline', 'Payment provider "{name}" can no longer be selected').format(
                     name=str(pprov.verbose_name)
                 ),
