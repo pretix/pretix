@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-17 15:41+0000\n"
-"PO-Revision-Date: 2019-05-09 12:48+0000\n"
+"PO-Revision-Date: 2019-05-19 11:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2444,10 +2444,8 @@ msgid "Meta information"
 msgstr "Meta-Informationen"
 
 #: pretix/base/models/orders.py:186
-#, fuzzy
-#| msgid "E-mail address"
 msgid "E-mail address verified"
-msgstr "E-Mail-Adresse"
+msgstr "E-Mail-Adresse verzifiziert"
 
 #: pretix/base/models/orders.py:620
 msgid ""
@@ -4912,96 +4910,78 @@ msgid "Download ticket"
 msgstr "Ticket herunterladen"
 
 #: pretix/base/timeline.py:36
-#, fuzzy
-#| msgid "Your event series"
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "Ihre Veranstaltungsreihen"
+msgstr "Ihre Veranstaltung beginnt"
 
 #: pretix/base/timeline.py:44
-#, fuzzy
-#| msgid "Your event series"
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr "Ihre Veranstaltungsreihen"
+msgstr "Ihre Veranstaltung endet"
 
 #: pretix/base/timeline.py:52
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr ""
+msgstr "Einlass für die Veranstaltung beginnt"
 
 #: pretix/base/timeline.py:60
-#, fuzzy
-#| msgid "Start of presale"
 msgctxt "timeline"
 msgid "Start of ticket sales"
 msgstr "Beginn des Vorverkaufs"
 
 #: pretix/base/timeline.py:68
-#, fuzzy
-#| msgid "End of presale"
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "Ende des Vorverkaufs"
 
 #: pretix/base/timeline.py:77
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
-msgstr "Kunden können bezahlte Bestellungen stornieren"
+msgstr "Kunden können ihre Bestellungen nicht mehr bearbeiten"
 
 #: pretix/base/timeline.py:86
-#, fuzzy
-#| msgid "Mark payment as complete"
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr "Zahlung als abgeschlossen bestätigen"
+msgstr "Keine Zahlungen werden mehr angenommen"
 
 #: pretix/base/timeline.py:98
-#, fuzzy
-#| msgid "Ticket download"
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr "Ticket-Download"
+msgstr "Tickets können heruntergeladen werden"
 
 #: pretix/base/timeline.py:110
-#, fuzzy
-#| msgid "Customers can cancel their unpaid orders"
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
-msgstr "Kunden können unbezahlte Bestellungen stornieren"
+msgstr ""
+"Kunden können unbezahlte oder kostenlose Bestellungen nicht mehr stornieren"
 
 #: pretix/base/timeline.py:122
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "Kunden können bezahlte Bestellungen stornieren"
+msgstr "Kunden können bezahlte Bestellungen nicht mehr stornieren"
 
 #: pretix/base/timeline.py:136
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
-msgstr ""
+msgstr "Ticket-Download-Erinnerungen werden verschickt"
 
 #: pretix/base/timeline.py:148
-#, fuzzy, python-brace-format
-#| msgid "Product name and variation"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr "Produkt und Variante"
+msgstr "Produkt „{name}“ ist verfügbar"
 
 #: pretix/base/timeline.py:159
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr ""
+msgstr "Produkt „{name}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:176
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr ""
+msgstr "Zahlungsanbieter „{name}“ kann nicht mehr ausgewählt werden"
 
 #: pretix/base/validators.py:15
 #, python-format
@@ -9025,10 +9005,8 @@ msgid "Shop design"
 msgstr "Shop-Design"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
-#, fuzzy
-#| msgid "Timeline"
 msgid "Your timeline"
-msgstr "Ablauf"
+msgstr "Ihr Ablauf"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:20
 msgid ""
@@ -10910,6 +10888,8 @@ msgid ""
 "We know that this email address works because the user clicked a link we "
 "sent them."
 msgstr ""
+"Wir wissen, dass diese E-Mail-Adresse funktioniert, da der Kunde auf einen "
+"der Links in einer E-Mail geklickt hat."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:173
 msgid "Rebuild the invoice with updated data but the same invoice number."
