@@ -15,8 +15,8 @@ from pretix.base.models import (
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     build_preview_invoice_pdf, generate_cancellation, generate_invoice,
-    invoice_pdf_task, regenerate_invoice,
-    invoice_qualified)
+    invoice_pdf_task, invoice_qualified, regenerate_invoice,
+)
 from pretix.base.services.orders import OrderChangeManager
 from pretix.base.settings import GlobalSettingsObject
 
