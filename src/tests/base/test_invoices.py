@@ -415,4 +415,3 @@ def test_sales_channels_qualify(env):
 
     event.settings.set('invoice_generate_sales_channels', [])
     assert invoice_qualified(order) is False
-
