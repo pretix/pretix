@@ -2705,6 +2705,17 @@ def test_order_update_locale_to_invalid(token_client, organizer, event, order):
 @pytest.mark.django_db
 def test_order_create_invoice(token_client, organizer, event, order):
     event.settings.invoice_generate = 'True'
+
+    event.settings.invoice_generate_sales_channels = []
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/create_invoice/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 400
+
+    event.settings.invoice_generate_sales_channels = ['web']
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/create_invoice/'.format(
             organizer.slug, event.slug, order.code

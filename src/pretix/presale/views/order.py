@@ -122,10 +122,13 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         )
         ctx['invoices'] = list(self.order.invoices.all())
         can_generate_invoice = (
-            self.request.event.settings.get('invoice_generate') in ('user', 'True')
-            or (
-                self.request.event.settings.get('invoice_generate') == 'paid'
-                and self.order.status == Order.STATUS_PAID
+            self.order.sales_channel in self.request.event.settings.get('invoice_generate_sales_channels')
+            and (
+                self.request.event.settings.get('invoice_generate') in ('user', 'True')
+                or (
+                    self.request.event.settings.get('invoice_generate') == 'paid'
+                    and self.order.status == Order.STATUS_PAID
+                )
             )
         )
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and can_generate_invoice
@@ -516,10 +519,13 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
     def post(self, request, *args, **kwargs):
         can_generate_invoice = (
-            self.request.event.settings.get('invoice_generate') in ('user', 'True')
-            or (
-                self.request.event.settings.get('invoice_generate') == 'paid'
-                and self.order.status == Order.STATUS_PAID
+            self.order.sales_channel in self.request.event.settings.get('invoice_generate_sales_channels')
+            and (
+                self.request.event.settings.get('invoice_generate') in ('user', 'True')
+                or (
+                    self.request.event.settings.get('invoice_generate') == 'paid'
+                    and self.order.status == Order.STATUS_PAID
+                )
             )
         )
         if not can_generate_invoice or not invoice_qualified(self.order):

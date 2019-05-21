@@ -145,6 +145,10 @@ DEFAULTS = {
         'default': 'False',
         'type': str
     },
+    'invoice_generate_sales_channels': {
+        'default': json.dumps(['web']),
+        'type': list
+    },
     'invoice_address_from': {
         'default': '',
         'type': str

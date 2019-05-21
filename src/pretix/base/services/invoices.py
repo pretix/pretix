@@ -257,7 +257,8 @@ def invoice_pdf_task(invoice: int):
 
 
 def invoice_qualified(order: Order):
-    if order.total == Decimal('0.00') or order.require_approval:
+    if order.total == Decimal('0.00') or order.require_approval or \
+            order.sales_channel not in order.event.settings.get('invoice_generate_sales_channels'):
         return False
     return True
 

@@ -9,6 +9,7 @@
         <fieldset>
             <legend>{% trans "General settings" %}</legend>
             {% bootstrap_field form.invoice_generate layout="control" %}
+            {% bootstrap_field form.invoice_generate_sales_channels layout="control" %}
             {% bootstrap_field form.invoice_email_attachment layout="control" %}
             {% bootstrap_field form.invoice_numbers_prefix layout="control" %}
             {% bootstrap_field form.invoice_numbers_consecutive layout="control" %}

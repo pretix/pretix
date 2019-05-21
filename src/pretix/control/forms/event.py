@@ -18,6 +18,7 @@ from i18nfield.forms import (
 )
 from pytz import common_timezones, timezone
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule
 from pretix.base.models.event import EventMetaValue, SubEvent
@@ -664,6 +665,13 @@ class InvoiceSettingsForm(SettingsForm):
         ),
         help_text=_("Invoices will never be automatically generated for free orders.")
     )
+    invoice_generate_sales_channels = forms.MultipleChoiceField(
+        label=_('Generate invoices for Sales channels'),
+        choices=[],
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_("If you have enabled invoice generation in the previous setting, you can limit it here to specific "
+                    "sales channels.")
+    )
     invoice_attendee_name = forms.BooleanField(
         label=_("Show attendee names on invoices"),
         required=False
@@ -779,6 +787,9 @@ class InvoiceSettingsForm(SettingsForm):
         self.fields['invoice_numbers_prefix'].widget.attrs['placeholder'] = event.slug.upper() + '-'
         locale_names = dict(settings.LANGUAGES)
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
+        self.fields['invoice_generate_sales_channels'].choices = (
+            (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+        )
 
 
 def multimail_validate(val):

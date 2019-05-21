@@ -16,7 +16,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
     build_preview_invoice_pdf, generate_cancellation, generate_invoice,
     invoice_pdf_task, regenerate_invoice,
-)
+    invoice_qualified)
 from pretix.base.services.orders import OrderChangeManager
 from pretix.base.settings import GlobalSettingsObject
 
@@ -398,3 +398,21 @@ def test_invoice_number_prefixes(env):
                 locale='en',
                 invoice_no='00001',
             )
+
+
+@pytest.mark.django_db
+def test_sales_channels_qualify(env):
+    event, order = env
+    event.settings.set('invoice_generate', 'admin')
+
+    # Orders with Total of 0 do never qualify
+    assert invoice_qualified(order) is False
+
+    order.total = Decimal('42.00')
+
+    # Order with default Sales Channel (web)
+    assert invoice_qualified(order) is True
+
+    event.settings.set('invoice_generate_sales_channels', [])
+    assert invoice_qualified(order) is False
+
