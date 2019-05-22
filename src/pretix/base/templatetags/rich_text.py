@@ -47,7 +47,7 @@ ALLOWED_TAGS = [
 ]
 
 ALLOWED_ATTRIBUTES = {
-    'a': ['href', 'title'],
+    'a': ['href', 'title', 'class'],
     'abbr': ['title'],
     'acronym': ['title'],
     'table': ['width'],
