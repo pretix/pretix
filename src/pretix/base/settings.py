@@ -301,6 +301,10 @@ DEFAULTS = {
         'default': settings.MAIL_FROM,
         'type': str
     },
+    'mail_from_name': {
+        'default': None,
+        'type': str
+    },
     'mail_text_signature': {
         'type': LazyI18nString,
         'default': ""

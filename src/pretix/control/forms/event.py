@@ -810,6 +810,12 @@ class MailSettingsForm(SettingsForm):
         label=_("Sender address"),
         help_text=_("Sender address for outgoing emails"),
     )
+    mail_from_name = forms.CharField(
+        label=_("Sender name"),
+        help_text=_("Sender name used in conjunction with the sender address for outgoing emails. "
+                    "Defaults to your event name."),
+        required=False
+    )
     mail_bcc = forms.CharField(
         label=_("Bcc address"),
         help_text=_("All emails will be sent to this address as a Bcc copy"),

@@ -100,7 +100,8 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         subject = str(subject).format_map(context)
         sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM)
         if event:
-            sender = formataddr((str(event.name), sender))
+            sender_name = event.settings.mail_from_name or str(event.name)
+            sender = formataddr((sender_name, sender))
         else:
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
