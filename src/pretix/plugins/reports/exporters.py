@@ -430,8 +430,8 @@ class OrderTaxListReport(Report):
             [
                 _('Total'), '', '', '', ''
             ] + sum(([
-                localize(round_decimal(price_sums.get(t), self.event.currency)),
-                localize(round_decimal(tax_sums.get(t), self.event.currency))
+                localize(round_decimal(price_sums.get(t) or Decimal('0.00'), self.event.currency)),
+                localize(round_decimal(tax_sums.get(t) or Decimal('0.00'), self.event.currency))
             ] for t in tax_rates), []),
         )
 
