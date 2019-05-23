@@ -153,7 +153,7 @@ def webhook(request, *args, **kwargs):
 
     if event_json['data']['object']['object'] == "charge":
         func = charge_webhook
-        objid = event_json['data']['object']['id']
+        objid = event_json['data']['object']['payment_intent'] or event_json['data']['object']['id']
     elif event_json['data']['object']['object'] == "dispute":
         func = charge_webhook
         objid = event_json['data']['object']['charge']
@@ -187,6 +187,10 @@ SOURCE_TYPES = {
 def charge_webhook(event, event_json, charge_id, rso):
     prov = StripeCC(event)
     prov._init_api()
+
+    if charge_id.startswith('pi_'):
+        charge_id = event_json['data']['object']['id']
+
     try:
         charge = stripe.Charge.retrieve(charge_id, expand=['dispute'], **prov.api_kwargs)
     except stripe.error.StripeError:
