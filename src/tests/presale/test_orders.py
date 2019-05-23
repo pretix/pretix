@@ -475,7 +475,7 @@ class OrdersTest(TestCase):
         response = self.client.post(
             '/%s/%s/ticket/%s/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
                                                               self.ticket_pos.positionid, self.ticket_pos.web_secret,
-                                                              self.ticket_pos.positionid),
+                                                              self.ticket_pos.pk),
             follow=True)
         assert response.status_code == 200
 
