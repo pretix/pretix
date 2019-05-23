@@ -40,6 +40,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     action_type='pretix.plugins.sendmail.sent'
                 )
                 kwargs['initial'] = {
+                    'recipients': logentry.parsed_data['recipients'],
                     'message': LazyI18nString(logentry.parsed_data['message']),
                     'subject': LazyI18nString(logentry.parsed_data['subject']),
                     'sendto': logentry.parsed_data['sendto'],
@@ -68,7 +69,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        qs = Order.objects.filter(event=self.request.event, email__isnull=False)
+        qs = Order.objects.filter(event=self.request.event)
         statusq = Q(status__in=form.cleaned_data['sendto'])
         if 'overdue' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
@@ -118,17 +119,20 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         send_mails.apply_async(
             kwargs={
+                'recipients': form.cleaned_data['recipients'],
                 'event': self.request.event.pk,
                 'user': self.request.user.pk,
                 'subject': form.cleaned_data['subject'].data,
                 'message': form.cleaned_data['message'].data,
                 'orders': [o.pk for o in orders],
+                'items': [i.pk for i in form.cleaned_data.get('items')]
             }
         )
         self.request.event.log_action('pretix.plugins.sendmail.sent',
                                       user=self.request.user,
                                       data=dict(form.cleaned_data))
-        messages.success(self.request, _('Your message has been queued and will be sent to %d users in the next minutes.') % len(orders))
+        messages.success(self.request, _('Your message has been queued and will be sent to the contact addresses of %d '
+                                         'orders in the next minutes.') % len(orders))
 
         return redirect(
             'plugins:sendmail:send',

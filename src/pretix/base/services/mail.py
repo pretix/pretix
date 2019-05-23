@@ -64,7 +64,7 @@ def mail(email: str, subject: str, template: Union[str, LazyI18nString],
         order below the email.
 
     :param order: The order position this email is related to (optional). If set, this will be used to include a link
-        to the order position instead of the orderbelow the email.
+        to the order position instead of the order below the email.
 
     :param headers: A dict of custom mail headers to add to the mail
 

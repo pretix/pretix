@@ -26,6 +26,13 @@
                         {% if log.pdata.subevent_obj %}
                             <br/><span class="fa fa-calendar fa-fw"></span> {{ log.pdata.subevent_obj }}
                         {% endif %}
+                        {% if log.pdata.recipients == "attendees" %}
+                            <br/><span class="fa fa-envelope fa-fw"></span> {% trans "Attendee contact addresses" %}
+                        {% elif log.pdata.recipients == "both" %}
+                            <br/><span class="fa fa-envelope fa-fw"></span> {% trans "All contact addresses" %}
+                        {% else%}
+                            <br/><span class="fa fa-envelope fa-fw"></span> {% trans "Order contact addresses" %}
+                        {% endif %}
                     </p>
                     <p>
                         {% for locale, value in log.pdata.locales.items %}
