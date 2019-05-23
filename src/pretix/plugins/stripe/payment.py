@@ -773,6 +773,26 @@ class StripeCC(StripeMethod):
             payment.save()
 
             self._handle_payment_intent(request, payment)
+        except stripe.error.CardError as e:
+            if e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                err = {'message': str(e)}
+                logger.exception('Stripe error: %s' % str(e))
+            logger.info('Stripe card error: %s' % str(err))
+            payment.info_data = {
+                'error': True,
+                'message': err['message'],
+            }
+            payment.state = OrderPayment.PAYMENT_STATE_FAILED
+            payment.save()
+            payment.order.log_action('pretix.event.order.payment.failed', {
+                'local_id': payment.local_id,
+                'provider': payment.provider,
+                'message': err['message']
+            })
+            raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
         except stripe.error.InvalidRequestError as e:
             if e.json_body:
                 err = e.json_body['error']
