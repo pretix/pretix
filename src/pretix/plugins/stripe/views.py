@@ -26,7 +26,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
-from pretix.plugins.stripe.payment import StripeCC
+from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
     get_domain_for_event, stripe_verify_domain,
 )
@@ -470,3 +470,37 @@ class ReturnView(StripeOrderView, View):
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class ScaView(StripeOrderView, View):
+    def get(self, request, *args, **kwargs):
+        prov = self.pprov
+        prov._init_api()
+
+        payment_info = json.loads(self.payment.info)
+
+        if 'id' in payment_info:
+            intent = stripe.PaymentIntent.retrieve(
+                payment_info['id'],
+                **prov.api_kwargs
+            )
+        else:
+            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
+                                           'in your emails to continue.'))
+            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+
+        if intent.status == 'requires_action' and intent.next_action.type == 'use_stripe_sdk':
+            r = render(request, 'pretixplugins/stripe/sca.html', {
+                'stripe_settings': StripeSettingsHolder(self.order.event).settings,
+                'payment_intent_client_secret': intent.client_secret,
+            })
+            r._csp_ignore = True
+            return r
+        else:
+            StripeCC._handle_payment_intent(prov, request, self.payment)
+
+            return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
+                'order': self.order.code,
+                'secret': self.order.secret
+            }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))

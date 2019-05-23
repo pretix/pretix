@@ -1,0 +1,32 @@
+{% load compress %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ event.name }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/cachedfiles.scss" %}"/>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+    {% endcompress %}
+    {% include "pretixplugins/stripe/presale_head.html" with settings=stripe_settings %}
+    <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_intent_client_secret }}</script>
+</head>
+<body>
+    <div class="container">
+        <h1>{% trans "The payment requires Strong Customer Authentication." %}</h1>
+
+        <p>
+            {% trans "You should see a popup requesting you to approve or decline the payment." %}
+        </p>
+        <p>
+            {% trans "The window to enter your payment data was not opened or was closed?" %}
+        </p>
+        <p>
+            {% trans "Please make sure you have Javascript enabled and refresh this page" %}
+        </p>
+    </div>
+</body>
+</html>

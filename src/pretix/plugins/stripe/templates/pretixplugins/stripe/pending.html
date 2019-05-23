@@ -1,8 +1,6 @@
 {% load i18n %}
 
-{% if payment.state == "pending" and payment_info and payment_info.status == "requires_action" and payment_info.next_action.type == "use_stripe_sdk" %}
-    <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_info.client_secret }}</script>
-{% elif payment.state == "pending" or payment.state == "confirmed" %}
+{% if payment.state == "pending" %}
     <p>{% blocktrans trimmed %}
         We're waiting for an answer from the payment provider regarding your payment. Please contact us if this
         takes more than a few days.
@@ -12,8 +10,8 @@
         The payment transaction could not be completed for the following reason:
     {% endblocktrans %}
         <br/>
-        {% if payment_info and payment_info.last_payment_error %}
-            {{ payment_info.last_payment_error.message }}
+        {% if payment_info and payment_info.error %}
+            {{ payment_info.message }}
         {% else %}
             {% trans "Unknown reason" %}
         {% endif %}

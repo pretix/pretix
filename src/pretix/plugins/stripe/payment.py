@@ -606,7 +606,7 @@ class StripeCC(StripeMethod):
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
-            self._handle_payment_intent(request, payment)
+            return self._handle_payment_intent(request, payment)
         finally:
             del request.session['payment_stripe_payment_method_id']
 
@@ -628,6 +628,10 @@ class StripeCC(StripeMethod):
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
+                    statement_descriptor=ugettext('{event}-{code}').format(
+                        event=self.event.slug.upper(),
+                        code=payment.order.code
+                    )[:22],
                     metadata={
                         'order': str(payment.order.id),
                         'event': self.event.id,
@@ -698,7 +702,17 @@ class StripeCC(StripeMethod):
                 payment.info = str(intent)
                 payment.state = OrderPayment.PAYMENT_STATE_PENDING
                 payment.save()
-                return
+                return self.redirect(request, build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                }))
+
+            if intent.status == 'requires_action' and intent.next_action.type == 'redirect_to_url':
+                payment.info = str(intent)
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save()
+                return self.redirect(request, intent.next_action.redirect_to_url.url)
 
             if intent.status == 'requires_confirmation':
                 payment.info = str(intent)
@@ -784,6 +798,7 @@ class StripeCC(StripeMethod):
         self._handle_payment_intent(request, payment)
 
         return super().payment_pending_render(request, payment)
+
 
 class StripeGiropay(StripeMethod):
     identifier = 'stripe_giropay'
