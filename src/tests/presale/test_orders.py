@@ -130,6 +130,29 @@ class OrdersTest(TestCase):
         )
         assert response.status_code == 404
 
+    def test_unknown_position(self):
+        response = self.client.get(
+            '/%s/%s/ticket/ABCDE/1/123/' % (self.orga.slug, self.event.slug)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/1/123/' % (self.orga.slug, self.event.slug, self.order.code)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/1/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/1/123/' % (self.orga.slug, self.event.slug, self.not_my_order.code)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                         self.deleted_pos.positionid, self.deleted_pos.web_secret)
+        )
+        assert response.status_code == 404
+
     def test_orders_confirm_email(self):
         response = self.client.get(
             '/%s/%s/order/%s/%s/open/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, 'aabbccdd')
@@ -148,6 +171,18 @@ class OrdersTest(TestCase):
     def test_orders_detail(self):
         response = self.client.get(
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        assert len(doc.select(".cart-row")) > 0
+        assert "pending" in doc.select(".label-warning")[0].text.lower()
+        assert "Peter" in response.rendered_content
+        assert "Lukas" not in response.rendered_content
+
+    def test_ticket_detail(self):
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                         self.ticket_pos.positionid, self.ticket_pos.web_secret)
         )
         assert response.status_code == 200
         doc = BeautifulSoup(response.rendered_content, "lxml")
@@ -431,6 +466,18 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
+
+    def test_ticket_download(self):
+        self.event.settings.set('ticket_download', True)
+        del self.event.settings['ticket_download_date']
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/download/%d/testdummy' % (self.orga.slug, self.event.slug, self.order.code,
+                                                              self.ticket_pos.positionid, self.ticket_pos.web_secret,
+                                                              self.ticket_pos.positionid),
+            follow=True)
+        assert response.status_code == 200
 
     def test_orders_download(self):
         self.event.settings.set('ticket_download', True)

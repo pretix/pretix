@@ -70,6 +70,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
@@ -95,6 +96,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
@@ -110,6 +112,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
@@ -127,6 +130,7 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       },
@@ -152,6 +156,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'recipients': 'orders',
                                       'items': item.pk,
                                       'subject_0': 'Test subject',
                                       'message_0': 'Test message',
@@ -188,6 +193,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
@@ -201,6 +207,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
@@ -221,6 +228,7 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
+                                      'recipients': 'orders',
                                       'items': order.positions.first().item_id,
                                       'subject_0': '{code} Test subject',
                                       'message_0': 'This is a test file for sending mails.',
@@ -232,3 +240,130 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
     assert 'ORDER1234' in response.rendered_content
 
     assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order):
+    p = order.positions.first()
+    event.settings.attendee_emails_asked = True
+    p.attendee_email = 'attendee@dummy.test'
+    p.save()
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': order.positions.first().item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order):
+    p = order.positions.first()
+    event.settings.attendee_emails_asked = True
+    p.attendee_email = 'attendee@dummy.test'
+    p.save()
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'both',
+                                      'items': order.positions.first().item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['attendee@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+    assert djmail.outbox[1].to == ['dummy@dummy.test']
+    assert '/ticket/' not in djmail.outbox[1].body
+    assert '/order/' in djmail.outbox[1].body
+
+
+@pytest.mark.django_db
+def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, order):
+    p = order.positions.first()
+    event.settings.attendee_emails_asked = True
+    p.attendee_email = 'dummy@dummy.test'
+    p.save()
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'both',
+                                      'items': order.positions.first().item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert '/ticket/' not in djmail.outbox[0].body
+    assert '/order/' in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order):
+    p = order.positions.first()
+    event.settings.attendee_emails_asked = True
+    p.attendee_email = None
+    p.save()
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': order.positions.first().item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert '/ticket/' not in djmail.outbox[0].body
+    assert '/order/' in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event, order):
+    event.settings.attendee_emails_asked = True
+    i2 = Item.objects.create(name='Test item', event=event, default_price=13)
+    p = order.positions.first()
+    p.attendee_email = 'attendee1@dummy.test'
+    p.save()
+    order.positions.create(
+        item=i2, price=0, attendee_email='attendee2@dummy.test'
+    )
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url,
+                                     {'sendto': 'n',
+                                      'recipients': 'attendees',
+                                      'items': i2.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.'
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee2@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body

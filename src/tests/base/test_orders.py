@@ -401,6 +401,28 @@ class DownloadReminderTests(TestCase):
         send_download_reminders(sender=self.event)
         assert len(djmail.outbox) == 1
 
+    def test_send_to_attendees(self):
+        self.event.settings.mail_send_download_reminder_attendee = True
+        self.event.settings.mail_days_download_reminder = 2
+        self.op1.attendee_email = 'attendee@dummy.test'
+        self.op1.save()
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 2
+        assert djmail.outbox[0].to == ['dummy@dummy.test']
+        assert djmail.outbox[1].to == ['attendee@dummy.test']
+        assert '/ticket/' in djmail.outbox[1].body
+        assert '/order/' not in djmail.outbox[1].body
+
+    def test_send_not_to_attendees_with_same_address(self):
+        self.event.settings.mail_send_download_reminder_attendee = True
+        self.event.settings.mail_days_download_reminder = 2
+        self.op1.attendee_email = 'dummy@dummy.test'
+        self.op1.save()
+        send_download_reminders(sender=self.event)
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == ['dummy@dummy.test']
+        assert '/order/' in djmail.outbox[0].body
+
     def test_sent_paid_only(self):
         self.event.settings.mail_days_download_reminder = 2
         self.order.status = Order.STATUS_PENDING
