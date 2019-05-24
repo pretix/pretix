@@ -900,6 +900,12 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, UpdateVie
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['plugin_forms'] = self.plugin_forms
+
+        if not ctx['item'].active and ctx['item'].bundled_with.count() > 0:
+            messages.info(self.request, _("You disabled this item, but it is still part of a product bundle. "
+                                          "Your participants won't be able to buy the bundle unless you remove this "
+                                          "item from it."))
+
         return ctx
 
 
