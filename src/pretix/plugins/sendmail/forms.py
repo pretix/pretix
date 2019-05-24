@@ -9,6 +9,12 @@ from pretix.control.forms.widgets import Select2
 
 
 class MailForm(forms.Form):
+    recipients = forms.ChoiceField(
+        label=_('Send email to'),
+        widget=forms.RadioSelect,
+        initial='orders',
+        choices=[]
+    )
     sendto = forms.MultipleChoiceField()  # overridden later
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
@@ -30,6 +36,18 @@ class MailForm(forms.Form):
     def __init__(self, *args, **kwargs):
         event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
+
+        recp_choices = [
+            ('orders', _('Everyone who created a ticket order'))
+        ]
+        if event.settings.attendee_emails_asked:
+            recp_choices += [
+                ('attendees', _('Every attendee (falling back to the order contact when no attendee email address is '
+                                'given)')),
+                ('both', _('Both (all order contact addresses and all attendee email addresses)'))
+            ]
+        self.fields['recipients'].choices = recp_choices
+
         self.fields['subject'] = I18nFormField(
             label=_('Subject'),
             widget=I18nTextInput, required=True,

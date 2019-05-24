@@ -7,6 +7,7 @@
     {% block inner %}
         <form class="form-horizontal" method="post" action="">
             {% csrf_token %}
+            {% bootstrap_field form.recipients layout='horizontal' %}
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout='horizontal' %}

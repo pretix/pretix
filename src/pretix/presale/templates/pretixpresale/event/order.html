@@ -111,38 +111,7 @@
             </div>
         {% endif %}
     {% endif %}
-    {% if can_download and download_buttons and order.count_positions %}
-        <div class="alert alert-info info-download">
-            {% blocktrans trimmed %}
-                You can download your tickets using the buttons below. Please have your ticket ready when entering the event.
-            {% endblocktrans %}
-        </div>
-        {% if cart.positions|length > 1 and can_download_multi %}
-            <p class="info-download">
-                {% trans "Download all tickets at once:" %}
-                {% for b in download_buttons %}
-                    {% if b.multi %}
-                        <form action="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}"></span> {{ b.text }}
-                            </button>
-                        </form>
-                    {% endif %}
-                {% endfor %}
-            </p>
-        {% endif %}
-    {% elif not download_buttons and ticket_download_date %}
-        {% if order.status == 'p' %}
-            <div class="alert alert-info info-download">
-                {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}
-                    You will be able to download your tickets here starting on {{ date }}.
-                {% endblocktrans %}
-            </div>
-        {% endif %}
-    {% endif %}
+    {% include "pretixpresale/event/fragment_downloads.html" %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
             {% if order.can_modify_answers %}

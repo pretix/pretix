@@ -49,6 +49,7 @@ event_patterns = [
         name='event.cart.add'),
 
     url(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
+
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/open/(?P<hash>[a-z0-9]+)/$', pretix.presale.views.order.OrderOpen.as_view(),
         name='event.order.open'),
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
@@ -89,6 +90,14 @@ event_patterns = [
     url(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice/(?P<invoice>[0-9]+)$',
         pretix.presale.views.order.InvoiceDownload.as_view(),
         name='event.invoice.download'),
+
+    url(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/$',
+        pretix.presale.views.order.OrderPositionDetails.as_view(),
+        name='event.order.position'),
+    url(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<output>[^/]+)$',
+        pretix.presale.views.order.OrderPositionDownload.as_view(),
+        name='event.order.position.download'),
+
     url(r'^ical/?$',
         pretix.presale.views.event.EventIcalDownload.as_view(),
         name='event.ical.download'),

@@ -64,7 +64,7 @@
             <div class="download-desktop">
             {% if line.generate_ticket %}
                 {% for b in download_buttons %}
-                    <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                    <form action="{% if position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
                             method="post" data-asynctask data-asynctask-download class="download-btn-form">
                         {% csrf_token %}
                         <button type="submit"
@@ -157,7 +157,7 @@
             <div class="download-mobile">
                 {% if line.generate_ticket %}
                 {% for b in download_buttons %}
-                    <form action="{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}"
+                    <form action="{% if position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code pid=line.pk output=b.identifier position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.id %}{% endif %}"
                         method="post" data-asynctask data-asynctask-download class="download-btn-form">
                         {% csrf_token %}
                         <button type="submit"

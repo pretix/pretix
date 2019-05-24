@@ -43,6 +43,7 @@ from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import ProfiledTask
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_placed,
@@ -645,6 +646,75 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     return order, p
 
 
+def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
+                        invoice):
+    try:
+        invoice_name = order.invoice_address.name
+        invoice_company = order.invoice_address.company
+    except InvoiceAddress.DoesNotExist:
+        invoice_name = ""
+        invoice_company = ""
+
+    if pprov:
+        payment_info = str(pprov.order_pending_mail_render(order))
+    else:
+        payment_info = None
+
+    email_context = {
+        'total': LazyNumber(order.total),
+        'currency': event.currency,
+        'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
+        'date': LazyDate(order.expires),
+        'event': event.name,
+        'url': build_absolute_uri(event, 'presale:event.order.open', kwargs={
+            'order': order.code,
+            'secret': order.secret,
+            'hash': order.email_confirm_hash()
+        }),
+        'payment_info': payment_info,
+        'invoice_name': invoice_name,
+        'invoice_company': invoice_company,
+    }
+    email_subject = _('Your order: %(code)s') % {'code': order.code}
+    try:
+        order.send_mail(
+            email_subject, email_template, email_context,
+            log_entry,
+            invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
+            attach_tickets=True
+        )
+    except SendMailException:
+        logger.exception('Order received email could not be sent')
+
+
+def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str):
+    name_scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+    email_context = {
+        'event': event.name,
+        'url': build_absolute_uri(event, 'presale:event.order.position', kwargs={
+            'order': order.code,
+            'secret': position.web_secret,
+            'position': position.positionid
+        }),
+        'attendee_name': position.attendee_name,
+    }
+    for f, l, w in name_scheme['fields']:
+        email_context['attendee_name_%s' % f] = position.attendee_name_parts.get(f, '')
+
+    email_subject = _('Your event registration: %(code)s') % {'code': order.code}
+
+    try:
+        order.send_mail(
+            email_subject, email_template, email_context,
+            log_entry,
+            invoices=[],
+            attach_tickets=True,
+            position=position
+        )
+    except SendMailException:
+        logger.exception('Order received email could not be sent to attendee')
+
+
 def _perform_order(event: str, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web'):
 
@@ -709,50 +779,26 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
         if order.require_approval:
             email_template = event.settings.mail_text_order_placed_require_approval
             log_entry = 'pretix.event.order.email.order_placed_require_approval'
+
+            email_attendees = False
         elif free_order_flow:
             email_template = event.settings.mail_text_order_free
             log_entry = 'pretix.event.order.email.order_free'
+
+            email_attendees = event.settings.mail_send_order_free_attendee
+            email_attendees_template = event.settings.mail_text_order_free_attendee
         else:
             email_template = event.settings.mail_text_order_placed
             log_entry = 'pretix.event.order.email.order_placed'
 
-        try:
-            invoice_name = order.invoice_address.name
-            invoice_company = order.invoice_address.company
-        except InvoiceAddress.DoesNotExist:
-            invoice_name = ""
-            invoice_company = ""
+            email_attendees = event.settings.mail_send_order_placed_attendee
+            email_attendees_template = event.settings.mail_text_order_placed_attendee
 
-        if pprov:
-            payment_info = str(pprov.order_pending_mail_render(order))
-        else:
-            payment_info = None
-
-        email_context = {
-            'total': LazyNumber(order.total),
-            'currency': event.currency,
-            'total_with_currency': LazyCurrencyNumber(order.total, event.currency),
-            'date': LazyDate(order.expires),
-            'event': event.name,
-            'url': build_absolute_uri(event, 'presale:event.order.open', kwargs={
-                'order': order.code,
-                'secret': order.secret,
-                'hash': order.email_confirm_hash()
-            }),
-            'payment_info': payment_info,
-            'invoice_name': invoice_name,
-            'invoice_company': invoice_company,
-        }
-        email_subject = _('Your order: %(code)s') % {'code': order.code}
-        try:
-            order.send_mail(
-                email_subject, email_template, email_context,
-                log_entry,
-                invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
-                attach_tickets=True
-            )
-        except SendMailException:
-            logger.exception('Order received email could not be sent')
+        _order_placed_email(event, order, pprov, email_template, log_entry, invoice)
+        if email_attendees:
+            for p in order.positions.all():
+                if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                    _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry)
 
     return order.id
 
@@ -872,6 +918,31 @@ def send_download_reminders(sender, **kwargs):
                         )
                     except SendMailException:
                         logger.exception('Reminder email could not be sent')
+
+                    if e.settings.mail_send_download_reminder_attendee:
+                        name_scheme = PERSON_NAME_SCHEMES[e.settings.name_scheme]
+                        for p in o.positions.all():
+                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
+                                email_template = e.settings.mail_text_download_reminder_attendee
+                                email_context = {
+                                    'event': e.name,
+                                    'url': build_absolute_uri(e, 'presale:event.order.position', kwargs={
+                                        'order': o.code,
+                                        'secret': p.web_secret,
+                                        'position': p.positionid
+                                    }),
+                                    'attendee_name': p.attendee_name,
+                                }
+                                for f, l, w in name_scheme['fields']:
+                                    email_context['attendee_name_%s' % f] = p.attendee_name_parts.get(f, '')
+                                try:
+                                    o.send_mail(
+                                        email_subject, email_template, email_context,
+                                        'pretix.event.order.email.download_reminder_sent',
+                                        attach_tickets=True, position=p
+                                    )
+                                except SendMailException:
+                                    logger.exception('Reminder email could not be sent to attendee')
 
 
 class OrderChangeManager:

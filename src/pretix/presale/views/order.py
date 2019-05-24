@@ -65,6 +65,39 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
         })
 
 
+class OrderPositionDetailMixin(NoSearchIndexViewMixin):
+    @cached_property
+    def position(self):
+        p = OrderPosition.objects.filter(
+            order__event=self.request.event,
+            addon_to__isnull=True,
+            order__code=self.kwargs['order'],
+            positionid=self.kwargs['position']
+        ).select_related('order', 'order__event').first()
+        if p:
+            if p.web_secret.lower() == self.kwargs['secret'].lower():
+                return p
+            else:
+                return None
+        else:
+            # Do a comparison as well to harden timing attacks
+            if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
+                return None
+            else:
+                return None
+
+    @cached_property
+    def order(self):
+        return self.position.order if self.position else None
+
+    def get_position_url(self):
+        return eventreverse(self.request.event, 'presale:event.order.position', kwargs={
+            'order': self.order.code,
+            'secret': self.position.web_secret,
+            'position': self.position.positionid,
+        })
+
+
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderOpen(EventViewMixin, OrderDetailMixin, View):
     def get(self, request, *args, **kwargs):
@@ -76,8 +109,28 @@ class OrderOpen(EventViewMixin, OrderDetailMixin, View):
         return redirect(self.get_order_url())
 
 
+class TicketPageMixin:
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx['order'] = self.order
+
+        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
+        if self.request.event.settings.ticket_download_date:
+            ctx['ticket_download_date'] = self.order.ticket_download_date
+        ctx['can_download'] = can_download and self.order.ticket_download_available and self.order.positions_with_tickets
+        ctx['download_buttons'] = self.download_buttons
+
+        ctx['backend_user'] = (
+            self.request.user.is_authenticated
+            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
+        )
+        return ctx
+
+
 @method_decorator(xframe_options_exempt, 'dispatch')
-class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
+class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
     def get(self, request, *args, **kwargs):
@@ -105,13 +158,6 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['order'] = self.order
-
-        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
-        if self.request.event.settings.ticket_download_date:
-            ctx['ticket_download_date'] = self.order.ticket_download_date
-        ctx['can_download'] = can_download and self.order.ticket_download_available and self.order.positions_with_tickets
-        ctx['download_buttons'] = self.download_buttons
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
             queryset=self.order.positions.select_related('tax_rule'),
@@ -140,11 +186,6 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
         )
         ctx['invoice_address_asked'] = self.request.event.settings.invoice_address_asked and (
             self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
-        )
-
-        ctx['backend_user'] = (
-            self.request.user.is_authenticated
-            and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
         )
 
         if self.order.status == Order.STATUS_PENDING:
@@ -176,6 +217,47 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TemplateView):
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_CREATED)
         )
 
+        return ctx
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, TicketPageMixin, TemplateView):
+    template_name = "pretixpresale/event/position.html"
+
+    def get(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.position:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        return super().get(request, *args, **kwargs)
+
+    @cached_property
+    def download_buttons(self):
+        buttons = []
+
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            provider = response(self.request.event)
+            if not provider.is_enabled:
+                continue
+            buttons.append({
+                'text': provider.download_button_text or 'Download',
+                'icon': provider.download_button_icon or 'fa-download',
+                'identifier': provider.identifier,
+                'multi': provider.multi_download_enabled
+            })
+        return buttons
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['can_download_multi'] = False
+        ctx['position'] = self.position
+        ctx['cart'] = self.get_cart(
+            answers=True, downloads=ctx['can_download'],
+            queryset=self.order.positions.select_related('tax_rule').filter(
+                Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
+            ),
+            order=self.order
+        )
         return ctx
 
 
@@ -669,21 +751,9 @@ class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
         return resp
 
 
-@method_decorator(xframe_options_exempt, 'dispatch')
-class OrderDownload(EventViewMixin, OrderDetailMixin, AsyncAction, View):
-    task = generate
-
+class OrderDownloadMixin:
     def get_success_url(self, value):
         return self.get_self_url()
-
-    def get_error_url(self):
-        return self.get_order_url()
-
-    def get_self_url(self):
-        return eventreverse(self.request.event,
-                            'presale:event.order.download' if 'position' in self.kwargs
-                            else 'presale:event.order.download.combined',
-                            kwargs=self.kwargs)
 
     @cached_property
     def output(self):
@@ -694,13 +764,6 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             provider = response(self.request.event)
             if provider.identifier == self.kwargs.get('output'):
                 return provider
-
-    @cached_property
-    def order_position(self):
-        try:
-            return self.order.positions.get(pk=self.kwargs.get('position'))
-        except OrderPosition.DoesNotExist:
-            return None
 
     def get(self, request, *args, **kwargs):
         if not self.output or not self.output.is_enabled:
@@ -768,6 +831,51 @@ class OrderDownload(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         if not ct or not ct.file:
             return None
         return ct
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
+    task = generate
+
+    def get_error_url(self):
+        return self.get_order_url()
+
+    def get_self_url(self):
+        return eventreverse(self.request.event,
+                            'presale:event.order.download' if 'position' in self.kwargs
+                            else 'presale:event.order.download.combined',
+                            kwargs=self.kwargs)
+
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            return None
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionDownload(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
+    task = generate
+
+    def get_error_url(self):
+        return self.get_position_url()
+
+    def get_self_url(self):
+        return eventreverse(self.request.event,
+                            'presale:event.order.position.download',
+                            kwargs=self.kwargs)
+
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(
+                Q(pk=self.kwargs.get('pid')) & Q(
+                    Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
+                )
+            )
+        except OrderPosition.DoesNotExist:
+            return None
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
