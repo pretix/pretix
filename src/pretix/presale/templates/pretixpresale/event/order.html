@@ -222,7 +222,7 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
-    {% if order.cancel_allowed %}
+    {% if order.cancel_allowed and order.user_cancel_allowed %}
         <div class="panel panel-primary panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -230,48 +230,40 @@
                 </h3>
             </div>
             <div class="panel-body">
-                {% if order.user_cancel_allowed %}
-                    {% if order.status == "p" and order.total != 0 %}
-                        {% if order.user_cancel_fee %}
-                            <p>
-                                {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
-                                    You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
-                                    will be kept and you will receive a refund of the remainder to your original payment method.
-                                {% endblocktrans %}
-                                {% trans "This will invalidate all of your tickets." %}
-                            </p>
-                        {% else %}
-                            <p>
-                                {% blocktrans trimmed %}
-                                    You can cancel this order and receive a full refund to your original payment method.
-                                {% endblocktrans %}
-                                {% trans "This will invalidate all of your tickets." %}
-                            </p>
-                        {% endif %}
-                        <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
-                           class="btn btn-danger">
-                            <span class="fa fa-remove"></span>
-                            {% trans "Cancel order" %}
-                        </a>
-                    {% else %}
+                {% if order.status == "p" and order.total != 0 %}
+                    {% if order.user_cancel_fee %}
                         <p>
-                            {% blocktrans trimmed %}
-                                You can cancel this order using the following button.
+                            {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                                You can cancel this order. In this case, a cancellation fee of <strong>{{ fee }}</strong>
+                                will be kept and you will receive a refund of the remainder to your original payment method.
                             {% endblocktrans %}
                             {% trans "This will invalidate all of your tickets." %}
                         </p>
-                        <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
-                            class="btn btn-danger">
-                            <span class="fa fa-remove"></span>
-                            {% trans "Cancel order" %}
-                        </a>
+                    {% else %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                You can cancel this order and receive a full refund to your original payment method.
+                            {% endblocktrans %}
+                            {% trans "This will invalidate all of your tickets." %}
+                        </p>
                     {% endif %}
+                    <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+                       class="btn btn-danger">
+                        <span class="fa fa-remove"></span>
+                        {% trans "Cancel order" %}
+                    </a>
                 {% else %}
                     <p>
                         {% blocktrans trimmed %}
-                            You can not cancel this order yourself. Please contact the event organizer for more information.
+                            You can cancel this order using the following button.
                         {% endblocktrans %}
+                        {% trans "This will invalidate all of your tickets." %}
                     </p>
+                    <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+                        class="btn btn-danger">
+                        <span class="fa fa-remove"></span>
+                        {% trans "Cancel order" %}
+                    </a>
                 {% endif %}
             </div>
         </div>
