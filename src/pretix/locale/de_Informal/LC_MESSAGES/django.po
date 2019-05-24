@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-19 20:00+0000\n"
+"PO-Revision-Date: 2019-05-24 08:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -2525,10 +2525,9 @@ msgid "Payment information"
 msgstr "Zahlungsinformationen"
 
 #: pretix/base/models/orders.py:1294
-#, fuzzy, python-format
-#| msgid "Order approved and confirmed: %(code)s"
+#, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr "Bestellung bestätigt: %(code)s"
+msgstr "Registrierung bestätigt: %(code)s"
 
 #: pretix/base/models/orders.py:1329
 #, python-format
@@ -3901,15 +3900,13 @@ msgid "Sample product A"
 msgstr "Beispielprodukt A"
 
 #: pretix/base/services/mail.py:146
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Du erhältst diese E-Mail, weil du eine Bestellung für die Veranstaltung "
-"{event} getätigt hast."
+"Du erhältst diese E-Mail, weil jemand dich für die Veranstaltung {event} "
+"angemeldet hat."
 
 #: pretix/base/services/mail.py:150 pretix/base/services/mail.py:166
 #, python-brace-format
@@ -4068,10 +4065,9 @@ msgid "Order canceled: %(code)s"
 msgstr "Bestellung storniert: %(code)s"
 
 #: pretix/base/services/orders.py:704
-#, fuzzy, python-format
-#| msgid "Your order: %(code)s"
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "Deine Bestellung: %(code)s"
+msgstr "Deine Registrierung: %(code)s"
 
 #: pretix/base/services/orders.py:864
 #, python-format
@@ -4286,17 +4282,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:339
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order {code} for {event} has been canceled.\n"
-#| "\n"
-#| "You can view the details of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -4308,11 +4294,11 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hallo,\n"
+"Hallo {attendee_name},\n"
 "\n"
-"deine Bestellung {code} für {event} wurde storniert.\n"
+"du wurdest erfolgreich für {event} angemeldet.\n"
 "\n"
-"Du kannst deine Bestellung unter folgender Adresse einsehen:\n"
+"Du kannst die Details und den Status deines Tickets hier einsehen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
@@ -4403,17 +4389,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:401
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} has been changed.\n"
-#| "\n"
-#| "You can view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -4425,11 +4401,11 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hallo,\n"
+"Hallo {attendee_name},\n"
 "\n"
-"deine Bestellung für {event} wurde geändert.\n"
+"ein Ticket für die Veranstaltung {event} wurde für dich bestellt\n"
 "\n"
-"Du kannst deine Bestellung unter folgender Adresse ändern und einsehen:\n"
+"Du kannst die Details und den Status deines Tickets hier einsehen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
@@ -4486,17 +4462,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:443
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} has been changed.\n"
-#| "\n"
-#| "You can view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -4508,11 +4474,11 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hallo,\n"
+"Hallo {attendee_name},\n"
 "\n"
-"deine Bestellung für {event} wurde geändert.\n"
+"ein Ticket für {event}, das für dich bestellt wurde, ist nun bezahlt.\n"
 "\n"
-"Du kannst deine Bestellung unter folgender Adresse ändern und einsehen:\n"
+"Du kannst die Details und den Status deines Tickets hier einsehen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
@@ -4696,17 +4662,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:557
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you bought a ticket for {event}.\n"
-#| "\n"
-#| "If you did not do so already, you can download your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -4718,11 +4674,11 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hallo,\n"
+"Hallo {attendee_name},\n"
 "\n"
-"du hast ein Ticket für {event} gekauft.\n"
+"du bist für die Veranstaltung {event} angemeldet.\n"
 "\n"
-"Wenn noch nicht geschehen, kannst du dein Ticket hier herunterladen:\n"
+"Wenn du es noch nicht getan hast, kannst du dein Ticket hier herunterladen:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,\n"
@@ -5021,16 +4977,12 @@ msgid "Click here disable all notifications immediately:"
 msgstr "Klicke hier um sofort alle Benachrichtigungen abzustellen:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:27
-#, fuzzy
-#| msgid ""
-#| "You are receiving this email because you placed an order for the "
-#| "following event:"
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
-"Du erhältst diese E-Mail, weil du eine Bestellung für die folgende "
-"Veranstaltung getätigt hast:"
+"Du erhältst diese E-Mail, weil jemand dich für die folgende Veranstaltung "
+"angemeldet hat:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:28
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:36
@@ -5048,10 +5000,8 @@ msgid "Order date:"
 msgstr "Bestelldatum:"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:32
-#, fuzzy
-#| msgid "View order details"
 msgid "View registration details"
-msgstr "Bestelldetails anzeigen"
+msgstr "Anmeldedetails anzeigen"
 
 #: pretix/base/templates/pretixbase/email/plainwrapper.html:35
 msgid ""
@@ -5099,8 +5049,6 @@ msgid "Start of ticket sales"
 msgstr "Beginn des Vorverkaufs"
 
 #: pretix/base/timeline.py:69
-#, fuzzy
-#| msgid "End of presale"
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "Ende des Vorverkaufs"
@@ -5858,16 +5806,16 @@ msgstr ""
 "kostenlose Produkte enthalten, keine Rechnungen erzeugt."
 
 #: pretix/control/forms/event.py:669
-#, fuzzy
-#| msgid "Generate invoices"
 msgid "Generate invoices for Sales channels"
-msgstr "Rechnungen ausstellen"
+msgstr "Rechnungen nur für bestimmte Verkaufskanäle generieren"
 
 #: pretix/control/forms/event.py:672
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
 msgstr ""
+"Wenn du die Rechnungserstellung weiter oben aktiviert hast, kannst du sie "
+"hier auf bestimmte Verkaufskanäle einschränken."
 
 #: pretix/control/forms/event.py:676
 msgid "Show attendee names on invoices"
@@ -5996,16 +5944,16 @@ msgid "Sender address for outgoing emails"
 msgstr "Absender-Adresse für ausgehende E-Mails"
 
 #: pretix/control/forms/event.py:814
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Sender name"
-msgstr "Name des/der Teilnehmer*in"
+msgstr "Absendername"
 
 #: pretix/control/forms/event.py:815
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"Name, der zusammen mit der Absenderadresse für ausgehende E-Mails verwendet "
+"wird. Standardmäßig wird der Name der Veranstaltung verwendet."
 
 #: pretix/control/forms/event.py:820
 msgid "Bcc address"
@@ -6034,10 +5982,8 @@ msgstr "HTML-E-Mail-Renderer"
 
 #: pretix/control/forms/event.py:847 pretix/control/forms/event.py:870
 #: pretix/control/forms/event.py:891 pretix/control/forms/event.py:970
-#, fuzzy
-#| msgid "Order contact address changed"
 msgid "Text sent to order contact address"
-msgstr "E-Mail-Adresse einer Bestellung geändert"
+msgstr "Text an die Besteller-Adresse"
 
 #: pretix/control/forms/event.py:850
 #, python-brace-format
@@ -6050,10 +5996,8 @@ msgstr ""
 
 #: pretix/control/forms/event.py:856 pretix/control/forms/event.py:877
 #: pretix/control/forms/event.py:898 pretix/control/forms/event.py:977
-#, fuzzy
-#| msgid "Send a new email based on this"
 msgid "Send an email to attendees"
-msgstr "Neue Mail auf dieser Basis verschicken"
+msgstr "E-Mail an einzelne Teilnehmer verschicken"
 
 #: pretix/control/forms/event.py:857 pretix/control/forms/event.py:878
 #: pretix/control/forms/event.py:899 pretix/control/forms/event.py:978
@@ -6062,20 +6006,20 @@ msgid ""
 "person who orders the tickets, the following email will be sent out to the "
 "attendees."
 msgstr ""
+"Wenn die Bestellung Teilnehmer mit E-Mail-Adressen enthält, die von der "
+"Kontaktadresse der Bestellung abweichen, wird die folgende E-Mail an die "
+"einzelnen Teilnehmer verschickt."
 
 #: pretix/control/forms/event.py:862 pretix/control/forms/event.py:883
 #: pretix/control/forms/event.py:904 pretix/control/forms/event.py:983
-#, fuzzy
-#| msgid "Text (sent by admin)"
 msgid "Text sent to attendees"
-msgstr "Text (vom Admin verschickt)"
+msgstr "Text an die Teilnehmer"
 
 #: pretix/control/forms/event.py:865 pretix/control/forms/event.py:886
 #: pretix/control/forms/event.py:907
-#, fuzzy, python-brace-format
-#| msgid "Available placeholders: {event}, {url}"
+#, python-brace-format
 msgid "Available placeholders: {event}, {url}, {attendee_name}"
-msgstr "Verfügbare Platzhalter: {event}, {url}"
+msgstr "Verfügbare Platzhalter: {event}, {url}, {attendee_name}"
 
 #: pretix/control/forms/event.py:873
 #, python-brace-format
@@ -6161,10 +6105,9 @@ msgid "Available placeholders: {event}, {url}"
 msgstr "Verfügbare Platzhalter: {event}, {url}"
 
 #: pretix/control/forms/event.py:986
-#, fuzzy, python-brace-format
-#| msgid "Available placeholders: {event}, {url}"
+#, python-brace-format
 msgid "Available placeholders: {attendee_name}, {event}, {url}"
-msgstr "Verfügbare Platzhalter: {event}, {url}"
+msgstr "Verfügbare Platzhalter: {attendee_name}, {event}, {url}"
 
 #: pretix/control/forms/event.py:993
 msgid ""
@@ -15695,10 +15638,8 @@ msgid "This plugin allows you to send out emails to all your customers."
 msgstr "Dieses Plugin erlaubt, E-Mails an alle Kunden zu verschicken."
 
 #: pretix/plugins/sendmail/forms.py:13
-#, fuzzy
-#| msgid "Send email"
 msgid "Send email to"
-msgstr "E-Mails verschicken"
+msgstr "E-Mail verschicken an"
 
 #: pretix/plugins/sendmail/forms.py:25
 msgid "Only send to people who bought"
@@ -15710,17 +15651,20 @@ msgstr "Nur an Kunden von"
 
 #: pretix/plugins/sendmail/forms.py:41
 msgid "Everyone who created a ticket order"
-msgstr ""
+msgstr "Jeden, der ein Ticket bestellt hat"
 
 #: pretix/plugins/sendmail/forms.py:45
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
+"Jeden Teilnehmer (oder stattdessen an den Besteller, wenn keine Teilnehmer-E"
+"-Mail-Adresse angegeben wurde)"
 
 #: pretix/plugins/sendmail/forms.py:47
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
+"Beide (alle Bestell-Kontaktadressen und alle Teilnehmer-E-Mail-Adressen)"
 
 #: pretix/plugins/sendmail/forms.py:72 pretix/plugins/sendmail/views.py:170
 msgid "pending with payment overdue"
@@ -15739,32 +15683,24 @@ msgid "The order received a mass email."
 msgstr "Die Bestellung hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/signals.py:50
-#, fuzzy
-#| msgid "The order received a mass email."
 msgid "A ticket holder of this order received a mass email."
-msgstr "Die Bestellung hat eine Rundmail erhalten."
+msgstr "Ein Ticketinhaber dieser Bestellung hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:19
 msgid "Sent to orders:"
 msgstr "An Bestellungen:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:30
-#, fuzzy
-#| msgid "Order contact address changed"
 msgid "Attendee contact addresses"
-msgstr "E-Mail-Adresse einer Bestellung geändert"
+msgstr "Teilnehmer-E-Mail-Adressen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:32
-#, fuzzy
-#| msgid "Contact address"
 msgid "All contact addresses"
-msgstr "Kontakt-E-Mail"
+msgstr "Alle E-Mail-Adressen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:34
-#, fuzzy
-#| msgid "Order contact address changed"
 msgid "Order contact addresses"
-msgstr "E-Mail-Adresse einer Bestellung geändert"
+msgstr "Besteller-E-Mail-Adressen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:45
 msgid "Send a new email based on this"
@@ -15784,16 +15720,13 @@ msgid "Sample Company LLC"
 msgstr "Musterfirma GmbH"
 
 #: pretix/plugins/sendmail/views.py:134
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to %d users in the next "
-#| "minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next minutes."
 msgstr ""
-"Die Nachricht wurde gespeichert und wird in den nächsten Minuten an %d "
-"Benutzer versendet."
+"Die Nachricht wurde gespeichert und wird in den nächsten Minuten an die "
+"Kontaktadressen von %d Bestellungen versendet."
 
 #: pretix/plugins/statistics/__init__.py:9
 #: pretix/plugins/statistics/__init__.py:12
@@ -17399,29 +17332,20 @@ msgid "Total: %(total)s"
 msgstr "Gesamt: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Registration details"
-msgstr "Geräteeinrichtung fehlgeschlagen."
+msgstr "Anmeldedetails"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
-#, fuzzy
-#| msgid "Submit registration"
 msgid "Your registration"
-msgstr "Anmeldung abschicken"
+msgstr "Deine Anmeldung"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:28
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Your event ends"
 msgid "Your items"
-msgstr "Deine Veranstaltung endet"
+msgstr "Deine Produkte"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:38
-#, fuzzy
-#| msgid "Meta information"
 msgid "Additional information"
-msgstr "Meta-Informationen."
+msgstr "Zusätzliche Informationen"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:43
 #, python-format
@@ -17429,6 +17353,9 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
+"Diese Bestellung wurde für dich von %(email)s getätigt. Bitte kontaktiere "
+"diese Person für Fragen zur Zahlung, Stornierung oder Änderungen dieser "
+"Bestellung."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid ""
