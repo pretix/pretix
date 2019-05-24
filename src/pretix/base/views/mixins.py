@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
-from django.db.models import Prefetch
+from django.db.models import Prefetch, QuerySet
 from django.utils.functional import cached_property
 
 from pretix.base.forms.questions import (
@@ -89,19 +89,20 @@ class BaseQuestionsViewMixin:
                     elif k == 'attendee_email':
                         form.pos.attendee_email = v if v != '' else None
                         form.pos.save()
-                    elif k.startswith('question_') and v is not None:
+                    elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
-                            if v == '' or v is None or (isinstance(field, forms.FileField) and v is False):
+                            if v == '' or v is None or (isinstance(field, forms.FileField) and v is False) \
+                                    or (isinstance(v, QuerySet) and not v.exists()):
                                 if field.answer.file:
                                     field.answer.file.delete()
                                 field.answer.delete()
                             else:
                                 self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
-                        elif v != '':
+                        elif v != '' and v is not None:
                             answer = QuestionAnswer(
                                 cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
                                 orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
