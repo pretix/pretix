@@ -400,12 +400,13 @@ ALL_LANGUAGES = [
     ('pl', _('Polish')),
     ('it', _('Italian')),
     ('zh-hans', _('Chinese (simplified)')),
+    ('el', _('Greek'))
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pt-br', 'da', 'pl', 'it'
+    'pt-br', 'da', 'pl', 'it', 'el'
 }
 
 if DEBUG:
