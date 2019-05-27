@@ -11,8 +11,9 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
-from django_countries.fields import CountryField
+from django.utils.translation import get_language, ugettext_lazy as _
+from django_countries import countries
+from django_countries.fields import Country, CountryField
 
 from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
@@ -351,6 +352,27 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         self.validate_vat_id = kwargs.pop('validate_vat_id')
         self.all_optional = kwargs.pop('all_optional', False)
+
+        kwargs.setdefault('initial', {})
+        if not kwargs.get('instance') or not kwargs['instance'].country:
+            # Try to guess the initial country from either the country of the merchant
+            # or the locale. This will hopefully save at least some users some scrolling :)
+            locale = get_language()
+            country = event.settings.invoice_address_from_country
+            if not country:
+                valid_countries = countries.countries
+                if '-' in locale:
+                    parts = locale.split('-')
+                    if parts[1].upper() in valid_countries:
+                        country = Country(parts[1].upper())
+                    elif parts[0].upper() in valid_countries:
+                        country = Country(parts[0].upper())
+                else:
+                    if locale in valid_countries:
+                        country = Country(locale.upper())
+
+            kwargs['initial']['country'] = country
+
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
@@ -401,6 +423,10 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             self.instance.vat_id_validated = False
 
         self.instance.name_parts = data.get('name_parts')
+
+        if all(not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')) and len(data['name_parts']) == 1:
+            # Do not save the country if it is the only field set -- we don't know the user even checked it!
+            self.cleaned_data['country'] = ''
 
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
