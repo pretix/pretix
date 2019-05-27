@@ -424,7 +424,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         self.instance.name_parts = data.get('name_parts')
 
-        if all(not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')) and len(data['name_parts']) == 1:
+        if all(
+                not v for k, v in data.items() if k not in ('is_business', 'country', 'name_parts')
+        ) and len(data.get('name_parts', {})) == 1:
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
 
