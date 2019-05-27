@@ -69,7 +69,9 @@ def filter_qs_by_attr(qs, request):
                 property__name=attr,
             )
 
-        prop = props[attr]
+        prop = props.get(attr)
+        if not prop:
+            continue
         annotations = {'attr_{}'.format(i): Exists(emv_with_value)}
         if qs.model == SubEvent:
             annotations['attr_{}_sub'.format(i)] = Exists(semv_with_value)
