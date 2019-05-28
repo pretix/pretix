@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:22+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5551,7 +5551,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1123
 msgid "We strongly suggest to use a dark shade of red."
-msgstr ""
+msgstr "Συνιστούμε να χρησιμοποιήσετε μια σκούρα σκιά κόκκινου χρώματος."
 
 #: pretix/control/forms/event.py:1135
 msgid ""
@@ -5559,19 +5559,22 @@ msgid ""
 "and date in the page header. We will show your logo with a maximal height of "
 "120 pixels."
 msgstr ""
+"Εάν παρέχετε μια εικόνα λογότυπου, από προεπιλογή δεν θα εμφανιστεί το όνομα "
+"και η ημερομηνία των συμβάντων στην κεφαλίδα της σελίδας. Θα εμφανιστεί το "
+"λογότυπό σας με μέγιστο ύψος 120 pixel."
 
 #: pretix/control/forms/event.py:1139 pretix/control/forms/organizer.py:259
 #: pretix/control/templates/pretixcontrol/pdf/index.html:275
 msgid "Font"
-msgstr ""
+msgstr "Γραμματοσειρά"
 
 #: pretix/control/forms/event.py:1143 pretix/control/forms/organizer.py:263
 msgid "Only respected by modern browsers."
-msgstr ""
+msgstr "Συμαβτό μόνο από τα σύγχρονα προγράμματα περιήγησης."
 
 #: pretix/control/forms/event.py:1151
 msgid "End of presale text"
-msgstr ""
+msgstr "Τέλος κειμένου προπώλησης"
 
 #: pretix/control/forms/event.py:1155
 msgid ""
@@ -5579,37 +5582,45 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"Αυτό το κείμενο θα εμφανίζεται πάνω από το κατάστημα εισιτηρίων μόλις "
+"ολοκληρωθεί η καθορισμένη χρονική περίοδος πωλήσεων για αυτό το γεγονός. "
+"Μπορείτε να το χρησιμοποιήσετε για να περιγράψετε άλλες επιλογές για να "
+"λάβετε ένα εισιτήριο, όπως ένα ταμείο θεάτρου."
 
 #: pretix/control/forms/event.py:1159
 msgid "Voucher explanation"
-msgstr ""
+msgstr "Εξήγηση κουπονιού"
 
 #: pretix/control/forms/event.py:1163
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Αυτό το κείμενο θα εμφανιστεί δίπλα στην είσοδο για έναν κωδικό κουπονιού. "
+"Μπορείτε να το χρησιμοποιήσετε π.χ. για να εξηγήσετε τον τρόπο απόκτησης "
+"ενός κωδικού κουπονιού."
 
 #: pretix/control/forms/event.py:1167
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "Εμφάνιση παραλλαγών ενός προϊόντος που έχει επεκταθεί από προεπιλογή"
 
 #: pretix/control/forms/event.py:1171
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr ""
+msgstr "Ημερομηνία παραγγελίας"
 
 #: pretix/control/forms/event.py:1174
 msgid "Event start time (descending)"
-msgstr ""
+msgstr "Ώρα έναρξης εκδήλωσης (φθίνουσα)"
 
 #: pretix/control/forms/event.py:1176
 msgid "Name (descending)"
-msgstr ""
+msgstr "Όνομα (φθίνουσα)"
 
 #: pretix/control/forms/event.py:1180
 msgid "Ask search engines not to index the ticket shop"
 msgstr ""
+"Ζητήστε από τις μηχανές αναζήτησης να μην αναγράφουν το κατάστημα εισιτηρίων"
 
 #: pretix/control/forms/event.py:1184
 msgid ""
@@ -5646,51 +5657,52 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1212
 msgid "Offer to download tickets separately for add-on products"
-msgstr ""
+msgstr "Προσφορά για τη λήψη ξεχωριστών εισιτηρίων για πρόσθετα προϊόντα"
 
 #: pretix/control/forms/event.py:1216
 msgid "Generate tickets for non-admission products"
-msgstr ""
+msgstr "Δημιουργήστε εισιτήρια για προϊόντα που δεν εισάγονται"
 
 #: pretix/control/forms/event.py:1220
 msgid "Offer to download tickets even before an order is paid"
 msgstr ""
+"Προσφορά για να κατεβάσετε εισιτήρια ακόμα και πριν καταβληθεί μια παραγγελία"
 
 #: pretix/control/forms/event.py:1261
 msgid "Any country"
-msgstr ""
+msgstr "Οποιαδήποτε χώρα"
 
 #: pretix/control/forms/event.py:1262
 msgid "European Union"
-msgstr ""
+msgstr "Ευρωπαϊκή Ένωση"
 
 #: pretix/control/forms/event.py:1274
 msgid "Any customer"
-msgstr ""
+msgstr "Κάθε πελάτης"
 
 #: pretix/control/forms/event.py:1275
 msgid "Individual"
-msgstr ""
+msgstr "Άτομο"
 
 #: pretix/control/forms/event.py:1276
 msgid "Business"
-msgstr ""
+msgstr "Επιχείρηση"
 
 #: pretix/control/forms/event.py:1277
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "Επιχειρήσεις με έγκυρο αναγνωριστικό ΦΠΑ"
 
 #: pretix/control/forms/event.py:1283
 msgid "Charge VAT"
-msgstr ""
+msgstr "Χρέωση Φ.Π.Α"
 
 #: pretix/control/forms/event.py:1285
 msgid "No VAT"
-msgstr ""
+msgstr "Όχι Φ.Π.Α"
 
 #: pretix/control/forms/event.py:1314
 msgid "Pre-selected voucher"
-msgstr ""
+msgstr "Προεπιλεγμένο κουπόνι"
 
 #: pretix/control/forms/event.py:1316
 msgid ""
@@ -5699,10 +5711,14 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"Εάν έχει οριστεί, το widget θα εμφανίζει προϊόντα σαν να έχει εισαχθεί αυτό "
+"το κουπόνι και όταν αγοράζεται ένα προϊόν μέσω του widget , θα "
+"χρησιμοποιηθεί αυτό το κουπόνι. Αυτό μπορεί για παράδειγμα να χρησιμοποιηθεί "
+"για την παροχή widgets που δίνουν εκπτώσεις ή ξεκλειδώνουν μυστικά προϊόντα."
 
 #: pretix/control/forms/event.py:1321
 msgid "Compatibility mode"
-msgstr ""
+msgstr "Λειτουργία συμβατότητας"
 
 #: pretix/control/forms/event.py:1323
 msgid ""
@@ -6058,7 +6074,7 @@ msgstr "Κατάσταση επιστροφής χρημάτων"
 
 #: pretix/control/forms/filter.py:902
 msgid "All open refunds"
-msgstr ""
+msgstr "Όλες οι ανοικτές επιστροφές χρημάτων"
 
 #: pretix/control/forms/filter.py:903
 msgid "All refunds"
@@ -6128,21 +6144,23 @@ msgstr ""
 
 #: pretix/control/forms/item.py:73
 msgid "Dependencies between questions are not supported during check-in."
-msgstr ""
+msgstr "Οι εξαρτήσεις μεταξύ ερωτήσεων δεν υποστηρίζονται κατά το check-in."
 
 #: pretix/control/forms/item.py:188
 msgid "The product should exist in multiple variations"
-msgstr ""
+msgstr "Το προϊόν πρέπει να υπάρχει σε πολλαπλές παραλλαγές"
 
 #: pretix/control/forms/item.py:189
 msgid ""
 "Select this option e.g. for t-shirts that come in multiple sizes. You can "
 "select the variations in the next step."
 msgstr ""
+"Επιλέξτε αυτήν την επιλογή π.χ. για t-shirts που έρχονται σε πολλαπλά "
+"μεγέθη. Μπορείτε να επιλέξετε τις παραλλαγές στο επόμενο βήμα."
 
 #: pretix/control/forms/item.py:201
 msgid "No taxation"
-msgstr ""
+msgstr "Χωρίς φορολογία"
 
 #: pretix/control/forms/item.py:203
 msgid "Copy product information"
@@ -6150,55 +6168,55 @@ msgstr "Αντιγραφή πληροφοριών προϊόντος"
 
 #: pretix/control/forms/item.py:212
 msgid "Do not add to a quota now"
-msgstr ""
+msgstr "Μην προσθέτετε τώρα ποσόστωση"
 
 #: pretix/control/forms/item.py:213
 msgid "Add product to an existing quota"
-msgstr ""
+msgstr "Προσθέστε προϊόν σε υπάρχουσα ποσόστωση"
 
 #: pretix/control/forms/item.py:214
 msgid "Create a new quota for this product"
-msgstr ""
+msgstr "Δημιουργήστε μια νέα ποσόστωση για αυτό το προϊόν"
 
 #: pretix/control/forms/item.py:220
 msgid "Quota options"
-msgstr ""
+msgstr "Επιλογές ποσοστώσεων"
 
 #: pretix/control/forms/item.py:228
 msgid "Add to existing quota"
-msgstr ""
+msgstr "Προσθήκη στην υπάρχουσα ποσόστωση"
 
 #: pretix/control/forms/item.py:237
 msgid "New quota name"
-msgstr ""
+msgstr "Νέο όνομα ποσόστωσης"
 
 #: pretix/control/forms/item.py:243
 msgid "Size"
-msgstr ""
+msgstr "Μέγεθος"
 
 #: pretix/control/forms/item.py:244
 msgid "Number of tickets"
-msgstr ""
+msgstr "Αριθμός εισιτηρίων"
 
 #: pretix/control/forms/item.py:323
 msgid "Quota name is required."
-msgstr ""
+msgstr "Το όνομα της ποσόστωσης απαιτείται."
 
 #: pretix/control/forms/item.py:328
 msgid "Please select a quota."
-msgstr ""
+msgstr "Επιλέξτε μια ποσόστωση."
 
 #: pretix/control/forms/item.py:350
 msgid "Choose automatically depending on event settings"
-msgstr ""
+msgstr "Επιλέξτε αυτόματα ανάλογα με τις ρυθμίσεις συμβάντων"
 
 #: pretix/control/forms/item.py:351
 msgid "Yes, if ticket generation is enabled in general"
-msgstr ""
+msgstr "Ναι, εάν γενικά ενεργοποιηθεί η δημιουργία εισιτηρίων"
 
 #: pretix/control/forms/item.py:352
 msgid "Never"
-msgstr ""
+msgstr "Ποτέ"
 
 #: pretix/control/forms/item.py:363
 msgid ""
@@ -6206,6 +6224,9 @@ msgid ""
 "people over 65. This ticket includes access to all parts of the event, "
 "except the VIP area."
 msgstr ""
+"π.χ. Αυτή η μειωμένη τιμή είναι διαθέσιμη για φοιτητές πλήρους φοίτησης, "
+"ανέργους και άτομα άνω των 65 ετών. Αυτό το εισιτήριο περιλαμβάνει πρόσβαση "
+"σε όλα τα μέρη της εκδήλωσης, εκτός από την περιοχή VIP."
 
 #: pretix/control/forms/item.py:424
 #, python-format
@@ -6214,41 +6235,49 @@ msgid ""
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
+"Η παραλλαγή \"% s\" δεν μπορεί να διαγραφεί επειδή έχει ήδη παραγγελθεί από "
+"έναν χρήστη ή βρίσκεται στο καλάθι του χρήστη. Ορίστε την παραλλαγή ως \""
+"ανενεργή\"."
 
 #: pretix/control/forms/item.py:498
 msgid "You added the same add-on category twice"
-msgstr ""
+msgstr "Προσθέσατε την ίδια κατηγορία προσθέτου δύο φορές"
 
 #: pretix/control/forms/item.py:532
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
 msgstr ""
+"Λάβετε υπόψη ότι η ρύθμιση ενός ελάχιστου αριθμού καθιστά αδύνατη την αγορά "
+"αυτού του προϊόντος αν όλα τα διαθέσιμα πρόσθετα εξαντληθούν."
 
 #: pretix/control/forms/item.py:565
 #: pretix/control/templates/pretixcontrol/item/bundles.html:26
 #: pretix/control/templates/pretixcontrol/item/bundles.html:53
 msgid "Bundled product"
-msgstr ""
+msgstr "Συσκευασμένο προϊόν"
 
 #: pretix/control/forms/item.py:589 pretix/control/forms/orders.py:226
 #: pretix/control/forms/orders.py:324
 msgid "inactive"
-msgstr ""
+msgstr "αδρανής"
 
 #: pretix/control/forms/orders.py:22
 msgid "Overbook quota"
-msgstr ""
+msgstr "Υπερβολική ποσότητα"
 
 #: pretix/control/forms/orders.py:23
 msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned!"
 msgstr ""
+"Αν επιλέξετε αυτό το πλαίσιο, αυτή η λειτουργία θα εκτελεστεί ακόμα και αν "
+"οδηγεί σε υπερβολική ποσόστωση και έχετε πουλήσει περισσότερα εισιτήρια από "
+"ό, τι σχεδιάσατε!"
 
 #: pretix/control/forms/orders.py:55
 msgid "Overbook quota and ignore late payment"
-msgstr ""
+msgstr "Overbook quota και αγνοήστε την καθυστέρηση πληρωμής"
 
 #: pretix/control/forms/orders.py:56
 msgid ""
@@ -6257,15 +6286,19 @@ msgid ""
 "operation will also be performed regardless of the settings for late "
 "payments."
 msgstr ""
+"Αν επιλέξετε αυτό το πλαίσιο, αυτή η λειτουργία θα εκτελεστεί ακόμα και αν "
+"οδηγεί σε υπερβολική ποσόστωση και έχετε πουλήσει περισσότερα εισιτήρια από "
+"ό, τι σχεδιάσατε! Η λειτουργία θα γίνει επίσης ανεξάρτητα από τις ρυθμίσεις "
+"για τις καθυστερημένες πληρωμές."
 
 #: pretix/control/forms/orders.py:82
 #: pretix/control/templates/pretixcontrol/order/deny.html:19
 msgid "Notify user by e-mail"
-msgstr ""
+msgstr "Ειδοποιήστε τον χρήστη μέσω ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/control/forms/orders.py:89
 msgid "Keep a cancellation fee of"
-msgstr ""
+msgstr "Κρατήστε ένα τέλος ακύρωσης της"
 
 #: pretix/control/forms/orders.py:90
 msgid ""
