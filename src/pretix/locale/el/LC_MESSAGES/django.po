@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 21:00+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -14677,7 +14677,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:887 pretix/plugins/stripe/payment.py:959
 #, python-brace-format
 msgid "{event}-{code}"
-msgstr ""
+msgstr "{event}-{code}"
 
 #: pretix/plugins/stripe/payment.py:356
 #, python-format
