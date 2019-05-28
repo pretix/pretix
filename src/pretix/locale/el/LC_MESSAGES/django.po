@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 09:32+0000\n"
+"PO-Revision-Date: 2019-05-28 09:33+0000\n"
 "Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -467,7 +467,7 @@ msgstr "Ημερομηνία παραγγελίας"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:92
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 msgid "Company"
-msgstr ""
+msgstr "Εταιρεία"
 
 #: pretix/base/exporters/orderlist.py:92 pretix/base/exporters/orderlist.py:493
 #: pretix/base/exporters/orderlist.py:501
@@ -496,7 +496,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:202
 #: pretix/presale/templates/pretixpresale/organizers/index.html:56
 msgid "Name"
-msgstr ""
+msgstr "Όνομα"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
@@ -506,7 +506,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:97
 #: pretix/presale/templates/pretixpresale/event/order.html:205
 msgid "Address"
-msgstr ""
+msgstr "Διεύθυνση"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
