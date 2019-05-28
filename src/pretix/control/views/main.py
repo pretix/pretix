@@ -204,6 +204,7 @@ class EventWizard(SafeSessionWizardView):
             event.organizer = foundation_data['organizer']
             event.plugins = settings.PRETIX_PLUGINS_DEFAULT
             event.has_subevents = foundation_data['has_subevents']
+            event.testmode = True
             form_dict['basics'].save()
 
             has_control_rights = self.request.user.teams.filter(
