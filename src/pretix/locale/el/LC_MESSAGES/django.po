@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 09:32+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 #: pretix/control/views/dashboards.py:397
 msgid "Shop disabled"
-msgstr ""
+msgstr "Το κατάστημα απενεργοποιήθηκε"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:900
 #: pretix/control/forms/filter.py:373 pretix/control/forms/filter.py:508
@@ -40,7 +40,7 @@ msgstr "Η προπώληση τελείωσε"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:68
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 msgid "Presale not started"
-msgstr ""
+msgstr "Η προεργασία δεν ξεκίνησε"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:904
 #: pretix/control/templates/pretixcontrol/events/index.html:133
@@ -48,7 +48,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:119
 #: pretix/control/views/dashboards.py:403
 msgid "On sale"
-msgstr ""
+msgstr "Σε έκπτωση"
 
 #: pretix/api/models.py:18
 msgid "Application name"
@@ -60,99 +60,110 @@ msgstr "URI ανακατεύθυνση"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Επιτρεπόμενη λίστα URI, διαχωρισμένος χώρος"
 
 #: pretix/api/models.py:25 pretix/plugins/paypal/payment.py:69
 msgid "Client ID"
-msgstr ""
+msgstr "ταυτότητα πελάτη"
 
 #: pretix/api/models.py:29
 msgid "Client secret"
-msgstr ""
+msgstr "Μυστικό πελάτη"
 
 #: pretix/api/models.py:75
 msgid "Enable webhook"
-msgstr ""
+msgstr "Ενεργοποιήστε το webhook"
 
 #: pretix/api/models.py:76
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Διεύθυνση URL προορισμού"
 
 #: pretix/api/models.py:77 pretix/base/models/devices.py:42
 #: pretix/base/models/organizer.py:142
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Όλα τα γεγονότα (συμπεριλαμβανομένων των νεοσύστατων)"
 
 #: pretix/api/models.py:78 pretix/base/models/devices.py:43
 #: pretix/base/models/organizer.py:143
 msgid "Limit to events"
-msgstr ""
+msgstr "Περιορίστε τα συμβάντα"
 
 #: pretix/api/serializers/cart.py:56 pretix/api/serializers/order.py:644
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Το προϊόν \"{}\" δεν έχει αντιστοιχηθεί σε μια ποσόστωση."
 
 #: pretix/api/serializers/cart.py:64 pretix/api/serializers/order.py:656
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Δεν υπάρχει επαρκής ποσόστωση για την ποσόστωση \"{}\" για την εκτέλεση της "
+"λειτουργίας."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:934
 #: pretix/base/models/items.py:1099 pretix/base/models/items.py:1431
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Ένα ή περισσότερα αντικείμενα δεν ανήκουν σε αυτό το γεγονός."
 
 #: pretix/api/serializers/checkin.py:31 pretix/base/models/items.py:1440
 #: pretix/base/models/waitinglist.py:152
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Το Subevent δεν μπορεί να είναι μηδενικό για σειρές συμβάντων."
 
 #: pretix/api/serializers/checkin.py:33 pretix/api/serializers/checkin.py:36
 #: pretix/base/models/items.py:1442 pretix/base/models/items.py:1445
 #: pretix/base/models/waitinglist.py:154 pretix/base/models/waitinglist.py:157
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Το υποκείμενο δεν ανήκει σε αυτό το γεγονός."
 
 #: pretix/api/serializers/event.py:77
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Τα γεγονότα δεν μπορούν να δημιουργηθούν ως 'ζωντανά'. Οι ποσοστώσεις και η "
+"πληρωμή πρέπει να προστεθούν στην εκδήλωση προτού να μπορέσουν να ξεκινήσουν "
+"οι πωλήσεις."
 
 #: pretix/api/serializers/event.py:92 pretix/api/serializers/event.py:234
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Η ιδιότητα μεταδεδομένων '{name}' δεν υπάρχει."
 
 #: pretix/api/serializers/event.py:105
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Άγνωστο plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:66 pretix/control/forms/item.py:616
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
+"Το ομαδοποιημένο στοιχείο δεν πρέπει να είναι το ίδιο στοιχείο με το "
+"στοιχείο δέσμευσης."
 
 #: pretix/api/serializers/item.py:69 pretix/control/forms/item.py:618
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Το ομαδοποιημένο στοιχείο δεν πρέπει να έχει δέσμες μόνο του."
 
 #: pretix/api/serializers/item.py:130
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Η ενημέρωση των πρόσθετων, των δεσμών ή των παραλλαγών μέσω του PATCH / PUT "
+"δεν υποστηρίζεται. Χρησιμοποιήστε το ειδικό ένθετο τελικό σημείο."
 
 #: pretix/api/serializers/item.py:228
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Η ενημέρωση των επιλογών μέσω PATCH / PUT δεν υποστηρίζεται. Χρησιμοποιήστε "
+"το ειδικό ένθετο τελικό σημείο."
 
 #: pretix/api/serializers/item.py:244 pretix/control/forms/item.py:63
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Κυκλική εξάρτηση μεταξύ των ερωτήσεων που εντοπίστηκαν."
 
 #: pretix/api/views/oauth.py:74 pretix/control/logdisplay.py:235
 #, python-brace-format
@@ -160,123 +171,127 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"Η εφαρμογή \"{application_name}\" έχει εξουσιοδοτηθεί για πρόσβαση στον "
+"λογαριασμό σας."
 
 #: pretix/api/views/order.py:329 pretix/control/views/orders.py:946
 #: pretix/presale/views/order.py:614
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Δεν μπορείτε να δημιουργήσετε τιμολόγιο για αυτήν την παραγγελία."
 
 #: pretix/api/views/order.py:334 pretix/control/views/orders.py:948
 #: pretix/presale/views/order.py:616
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Ένα τιμολόγιο για αυτήν την παραγγελία υπάρχει ήδη."
 
 #: pretix/api/views/order.py:360 pretix/control/views/orders.py:1070
 #: pretix/control/views/users.py:92
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος. Παρακαλώ προσπαθήστε "
+"ξανά αργότερα."
 
 #: pretix/api/webhooks.py:113 pretix/base/notifications.py:194
 msgid "New order placed"
-msgstr ""
+msgstr "Νέα παραγγελία"
 
 #: pretix/api/webhooks.py:117 pretix/base/notifications.py:200
 msgid "New order requires approval"
-msgstr ""
+msgstr "Η νέα παραγγελία απαιτεί έγκριση"
 
 #: pretix/api/webhooks.py:121 pretix/base/notifications.py:206
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Η παραγγελία έχει επισημανθεί ως πληρωμένη"
 
 #: pretix/api/webhooks.py:125 pretix/base/notifications.py:212
 #: pretix/control/templates/pretixcontrol/event/mail.html:64
 msgid "Order canceled"
-msgstr ""
+msgstr "Η παραγγελία ακυρώθηκε"
 
 #: pretix/api/webhooks.py:129 pretix/base/notifications.py:218
 msgid "Order expired"
-msgstr ""
+msgstr "Η παραγγελία έληξε"
 
 #: pretix/api/webhooks.py:133 pretix/base/notifications.py:224
 msgid "Order information changed"
-msgstr ""
+msgstr "Οι πληροφορίες παραγγελίας άλλαξαν"
 
 #: pretix/api/webhooks.py:137 pretix/base/notifications.py:230
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Η διεύθυνση επικοινωνίας παραγγελίας άλλαξε"
 
 #: pretix/api/webhooks.py:141 pretix/base/notifications.py:236
 #: pretix/control/templates/pretixcontrol/event/mail.html:55
 msgid "Order changed"
-msgstr ""
+msgstr "Η παραγγελία άλλαξε"
 
 #: pretix/api/webhooks.py:145 pretix/base/notifications.py:248
 msgid "External refund of payment"
-msgstr ""
+msgstr "Εξωτερική επιστροφή πληρωμής"
 
 #: pretix/api/webhooks.py:149
 msgid "Order approved"
-msgstr ""
+msgstr "Η παραγγελία εγκρίνεται"
 
 #: pretix/api/webhooks.py:153
 msgid "Order denied"
-msgstr ""
+msgstr "Η παραγγελία απορρίφθηκε"
 
 #: pretix/api/webhooks.py:157
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Έλεγχος εισιτηρίου"
 
 #: pretix/api/webhooks.py:161
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Το check-in των εισιτηρίων επανήλθε"
 
 #: pretix/base/channels.py:58
 msgid "Online shop"
-msgstr ""
+msgstr "Ηλεκτρονικό κατάστημα"
 
 #: pretix/base/email.py:130
 msgid "pretix default"
-msgstr ""
+msgstr "προεπιλογή προεπιλογή"
 
 #: pretix/base/exporter.py:91 pretix/base/exporter.py:169
 msgid "Export format"
-msgstr ""
+msgstr "Εξαγωγή μορφής"
 
 #: pretix/base/exporter.py:93
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:94 pretix/base/exporter.py:161
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (με κόμματα)"
 
 #: pretix/base/exporter.py:95 pretix/base/exporter.py:162
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (στυλ Excel)"
 
 #: pretix/base/exporter.py:96 pretix/base/exporter.py:163
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (με ερωτηματικά)"
 
 #: pretix/base/exporter.py:157
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Συνδυασμένο Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:18
 msgid "Answers to file upload questions"
-msgstr ""
+msgstr "Συνδυασμένο Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:27 pretix/base/models/items.py:990
 #: pretix/control/navigation.py:169
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Ερωτήσεις"
 
 #: pretix/base/exporters/dekodi.py:82
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Εισιτήριο συμβάντος {event} - {code}"
 
 #: pretix/base/exporters/dekodi.py:199 pretix/base/exporters/invoices.py:74
 #: pretix/control/forms/subevents.py:228
@@ -288,13 +303,16 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:19
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:18
 msgid "Start date"
-msgstr ""
+msgstr "Ημερομηνία έναρξης"
 
 #: pretix/base/exporters/dekodi.py:202 pretix/base/exporters/invoices.py:77
 msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Περιλαμβάνουν μόνο τα τιμολόγια που εκδόθηκαν την ή μετά την ημερομηνία "
+"αυτή. Λάβετε υπόψη ότι η ημερομηνία τιμολόγησης δεν αντιστοιχεί πάντα στην "
+"ημερομηνία παραγγελίας ή πληρωμής."
 
 #: pretix/base/exporters/dekodi.py:207 pretix/base/exporters/invoices.py:82
 #: pretix/control/templates/pretixcontrol/events/index.html:66
@@ -302,17 +320,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:21
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:20
 msgid "End date"
-msgstr ""
+msgstr "Ημερομηνία λήξης"
 
 #: pretix/base/exporters/dekodi.py:210 pretix/base/exporters/invoices.py:85
 msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Περιλαμβάνουν μόνο τα τιμολόγια που εκδόθηκαν την ή πριν την ημερομηνία "
+"αυτή. Λάβετε υπόψη ότι η ημερομηνία τιμολόγησης δεν αντιστοιχεί πάντα στην "
+"ημερομηνία παραγγελίας ή πληρωμής."
 
 #: pretix/base/exporters/invoices.py:21
 msgid "All invoices"
-msgstr ""
+msgstr "Όλα τα τιμολόγια"
 
 #: pretix/base/exporters/invoices.py:90 pretix/base/models/orders.py:1124
 #: pretix/base/models/orders.py:1485 pretix/control/forms/filter.py:93
@@ -320,12 +341,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:42
 msgid "Payment provider"
-msgstr ""
+msgstr "Πάροχος πληρωμής"
 
 #: pretix/base/exporters/invoices.py:92 pretix/control/forms/filter.py:95
 #: pretix/control/forms/filter.py:895
 msgid "All payment providers"
-msgstr ""
+msgstr "Όλοι οι πάροχοι πληρωμών"
 
 #: pretix/base/exporters/invoices.py:97
 msgid ""
@@ -333,18 +354,22 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Συμπεριλάβετε μόνο τα τιμολόγια για παραγγελίες που έχουν τουλάχιστον μία "
+"προσπάθεια πληρωμής με αυτόν τον πάροχο πληρωμής. Σημειώστε ότι αυτό μπορεί "
+"να περιλαμβάνει ορισμένα τιμολόγια παραγγελιών τα οποία στο τέλος έχουν "
+"πληρωθεί πλήρως ή μερικώς με διαφορετικό πάροχο."
 
 #: pretix/base/exporters/mail.py:16
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου (αρχείο κειμένου)"
 
 #: pretix/base/exporters/mail.py:34 pretix/plugins/reports/exporters.py:289
 msgid "Filter by status"
-msgstr ""
+msgstr "Φιλτράρετε κατά κατάσταση"
 
 #: pretix/base/exporters/orderlist.py:23
 msgid "Order data"
-msgstr ""
+msgstr "Στοιχεία παραγγελίας"
 
 #: pretix/base/exporters/orderlist.py:28 pretix/base/models/orders.py:191
 #: pretix/control/navigation.py:181
@@ -352,20 +377,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 msgid "Orders"
-msgstr ""
+msgstr "Παραγγελίες"
 
 #: pretix/base/exporters/orderlist.py:29 pretix/base/models/orders.py:1740
 #: pretix/base/notifications.py:183
 msgid "Order positions"
-msgstr ""
+msgstr "Παραγγείλετε θέσεις"
 
 #: pretix/base/exporters/orderlist.py:30
 msgid "Order fees"
-msgstr ""
+msgstr "Τέλη παραγγελίας"
 
 #: pretix/base/exporters/orderlist.py:39
 msgid "Only paid orders"
-msgstr ""
+msgstr "Μόνο πληρωμένες παραγγελίες"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:193
 #: pretix/base/exporters/orderlist.py:267
