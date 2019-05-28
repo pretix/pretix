@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:35+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1100,30 +1100,38 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"Ο αριθμός ΦΠΑ δεν ήταν δυνατό να ελεγχθεί, καθώς η υπηρεσία ελέγχου ΦΠΑ της "
+"χώρας σας επέστρεψε εσφαλμένο αποτέλεσμα. Επομένως, θα χρειαστεί να "
+"χρεώσουμε το ΦΠΑ στο τιμολόγιό σας. Επικοινωνήστε με την υποστήριξη για να "
+"το επιλύσετε χειροκίνητα."
 
 #: pretix/base/forms/user.py:16 pretix/control/forms/users.py:22
 msgid ""
 "There already is an account associated with this e-mail address. Please "
 "choose a different one."
 msgstr ""
+"Υπάρχει ήδη ένας λογαριασμός που σχετίζεται με αυτήν τη διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου. Επιλέξτε διαφορετικό."
 
 #: pretix/base/forms/user.py:18
 msgid ""
 "Please enter your current password if you want to change your e-mail address "
 "or password."
 msgstr ""
+"Εισαγάγετε τον τρέχοντα κωδικό πρόσβασης εάν θέλετε να αλλάξετε τη διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου ή τον κωδικό πρόσβασής σας."
 
 #: pretix/base/forms/user.py:20 pretix/control/views/shredder.py:107
 msgid "The current password you entered was not correct."
-msgstr ""
+msgstr "Ο τρέχων κωδικός πρόσβασης που καταχωρίσατε δεν ήταν σωστός."
 
 #: pretix/base/forms/user.py:26
 msgid "Your current password"
-msgstr ""
+msgstr "Το τρέχον συνθηματικό σας"
 
 #: pretix/base/forms/user.py:30 pretix/control/forms/users.py:29
 msgid "New password"
-msgstr ""
+msgstr "Νέος κωδικός πρόσβασης"
 
 #: pretix/base/forms/user.py:34 pretix/control/forms/users.py:33
 msgid "Repeat new password"
