@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:30+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5523,13 +5523,15 @@ msgstr "Χρήση SSL"
 
 #: pretix/control/forms/event.py:1058
 msgid "Commonly enabled on port 465."
-msgstr ""
+msgstr "Συνήθως ενεργοποιημένο στη θύρα 465."
 
 #: pretix/control/forms/event.py:1098
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr ""
+"Μπορείτε να ενεργοποιήσετε την ασφάλεια SSL ή STARTTLS, αλλά όχι και τα δύο "
+"ταυτόχρονα."
 
 #: pretix/control/forms/event.py:1103 pretix/control/forms/organizer.py:192
 msgid "Primary color"
