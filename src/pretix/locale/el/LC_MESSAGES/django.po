@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 12:33+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-28 12:34+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5940,7 +5940,8 @@ msgstr "Όλα"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
-msgstr "Πραγματοποιήστε ζωντανή και προκαθορισμένη λειτουργία"
+msgstr ""
+"Πραγματοποιήστε ζωντανή και λειτουργία προπώλησης ( live and presale running)"
 
 #: pretix/control/forms/filter.py:371 pretix/control/forms/filter.py:701
 msgid "Inactive"
