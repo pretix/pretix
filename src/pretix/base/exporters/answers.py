@@ -40,6 +40,7 @@ class AnswerFilesExporter(BaseExporter):
         if form_data.get('questions'):
             qs = qs.filter(question__in=form_data['questions'])
         with tempfile.TemporaryDirectory() as d:
+            any = False
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in qs:
                     if i.file:
@@ -51,9 +52,12 @@ class AnswerFilesExporter(BaseExporter):
                             i.question.pk,
                             os.path.basename(i.file.name).split('.', 1)[1]
                         )
+                        any = True
                         zipf.writestr(fname, i.file.read())
                         i.file.close()
 
+            if not any:
+                return None
             with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
                 return '{}_answers.zip'.format(self.event.slug), 'application/zip', zipf.read()
 

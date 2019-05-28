@@ -1655,6 +1655,7 @@ class ExportMixin:
 
 class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, View):
     permission = 'can_view_orders'
+    known_errortypes = ['ExportError']
     task = export
 
     def get_success_message(self, value):
