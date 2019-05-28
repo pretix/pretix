@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:35+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -6002,56 +6002,56 @@ msgstr "Αγοράστε όχι ζωντανά(Shop not live)"
 
 #: pretix/control/forms/filter.py:509
 msgid "Single event running or in the future"
-msgstr ""
+msgstr "Εκτελείται ένα μόνο γεγονός ή στο μέλλον"
 
 #: pretix/control/forms/filter.py:510
 msgid "Single event in the past"
-msgstr ""
+msgstr "Ένα γεγονός στο παρελθόν"
 
 #: pretix/control/forms/filter.py:619 pretix/control/forms/filter.py:621
 msgid "Search attendee…"
-msgstr ""
+msgstr "Αναζήτηση συμμετέχοντα ..."
 
 #: pretix/control/forms/filter.py:627
 msgid "Check-in status"
-msgstr ""
+msgstr "Κατάσταση check-in"
 
 #: pretix/control/forms/filter.py:629
 msgid "All attendees"
-msgstr ""
+msgstr "Όλοι οι συμμετέχοντες"
 
 #: pretix/control/forms/filter.py:630
 #: pretix/control/templates/pretixcontrol/checkin/index.html:121
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:59
 #: pretix/plugins/checkinlists/exporters.py:302
 msgid "Checked in"
-msgstr ""
+msgstr "Έλεγχος"
 
 #: pretix/control/forms/filter.py:631
 #: pretix/control/templates/pretixcontrol/checkin/index.html:119
 msgid "Not checked in"
-msgstr ""
+msgstr "Όχι έλεγχος"
 
 #: pretix/control/forms/filter.py:706 pretix/control/forms/filter.py:709
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Administrator"
-msgstr ""
+msgstr "Διαχειριστής"
 
 #: pretix/control/forms/filter.py:710
 msgid "No administrator"
-msgstr ""
+msgstr "Όχι διαχειριστής"
 
 #: pretix/control/forms/filter.py:715 pretix/control/forms/filter.py:717
 msgid "Search query"
-msgstr ""
+msgstr "Ερώτημα αναζήτησης"
 
 #: pretix/control/forms/filter.py:755
 msgid "Valid"
-msgstr ""
+msgstr "Έγκυρος"
 
 #: pretix/control/forms/filter.py:756
 msgid "Unredeemed"
-msgstr ""
+msgstr "Δεν έχει εξαργυρωθεί"
 
 #: pretix/control/forms/filter.py:757
 msgid "Redeemed at least once"
@@ -6059,15 +6059,15 @@ msgstr "Εξαργύρωση τουλάχιστον μία φορά"
 
 #: pretix/control/forms/filter.py:758
 msgid "Fully redeemed"
-msgstr ""
+msgstr "Έχει εξαργυρωθεί πλήρως"
 
 #: pretix/control/forms/filter.py:760
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "Εξαργυρωμένο και ελεγχόμενο με το εισιτήριο"
 
 #: pretix/control/forms/filter.py:765
 msgid "Quota handling"
-msgstr ""
+msgstr "Χειρισμός ποσοστώσεων"
 
 #: pretix/control/forms/filter.py:769
 msgid "Allow to ignore quota"
