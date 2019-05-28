@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:33+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5925,7 +5925,7 @@ msgstr "Δοκιμή λειτουργίας (Test mode)"
 #: pretix/control/forms/filter.py:328 pretix/control/forms/filter.py:333
 #: pretix/control/forms/filter.py:519 pretix/control/forms/filter.py:524
 msgid "All organizers"
-msgstr ""
+msgstr "Όλοι οι διοργανωτές"
 
 #: pretix/control/forms/filter.py:368 pretix/control/forms/filter.py:699
 #: pretix/control/forms/filter.py:708 pretix/control/forms/filter.py:754
@@ -5936,11 +5936,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:74
 msgid "All"
-msgstr ""
+msgstr "Όλα"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
-msgstr ""
+msgstr "Πραγματοποιήστε ζωντανή και προκαθορισμένη λειτουργία"
 
 #: pretix/control/forms/filter.py:371 pretix/control/forms/filter.py:701
 msgid "Inactive"
