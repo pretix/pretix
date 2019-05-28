@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 09:33+0000\n"
-"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-28 09:37+0000\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -516,7 +516,7 @@ msgstr "Διεύθυνση"
 #: pretix/base/exporters/orderlist.py:591 pretix/base/models/orders.py:1974
 #: pretix/control/forms/event.py:711
 msgid "ZIP code"
-msgstr "ταχυδρομικός κώδικας"
+msgstr "Ταχυδρομικός Κώδικας"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
@@ -555,7 +555,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:100
 msgid "Date of last payment"
-msgstr ""
+msgstr "Ημερομηνία τελευταίας πληρωμής"
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/services/stats.py:152
 msgid "Fees"
@@ -583,7 +583,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:110
 msgid "Invoice numbers"
-msgstr ""
+msgstr "Αριθμοί τιμολογίων"
 
 #: pretix/base/exporters/orderlist.py:111
 #: pretix/base/exporters/orderlist.py:306
