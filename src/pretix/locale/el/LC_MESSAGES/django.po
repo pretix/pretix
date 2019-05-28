@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:30+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5535,25 +5535,25 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1103 pretix/control/forms/organizer.py:192
 msgid "Primary color"
-msgstr ""
+msgstr "Βασικό χρώμα"
 
 #: pretix/control/forms/event.py:1107 pretix/control/forms/event.py:1117
 #: pretix/control/forms/event.py:1127 pretix/control/forms/organizer.py:196
 #: pretix/control/forms/organizer.py:206 pretix/control/forms/organizer.py:216
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr ""
+msgstr "Παρακαλώ εισάγετε τον δεκαεξαδικό κώδικα ενός χρώματος, π.χ. # 990000."
 
 #: pretix/control/forms/event.py:1112 pretix/control/forms/organizer.py:201
 msgid "Accent color for success"
-msgstr ""
+msgstr "Χρώμα για επιτυχία"
 
 #: pretix/control/forms/event.py:1113 pretix/control/forms/organizer.py:202
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Συνιστούμε να χρησιμοποιήσετε μια πράσινη απόχρωση."
 
 #: pretix/control/forms/event.py:1122 pretix/control/forms/organizer.py:211
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Χρώμα για σφάλματα"
 
 #: pretix/control/forms/event.py:1123
 msgid "We strongly suggest to use a dark shade of red."
@@ -5731,14 +5731,17 @@ msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"Το κανονικό widget δεν λειτουργεί σε όλους τους κατασκευαστές ιστότοπων. Εάν "
+"αντιμετωπίζετε πρόβλημα, δοκιμάστε να χρησιμοποιήσετε αυτήν τη λειτουργία "
+"συμβατότητας."
 
 #: pretix/control/forms/event.py:1344
 msgid "The given voucher code does not exist."
-msgstr ""
+msgstr "Ο συγκεκριμένος κωδικός κουπονιού δεν υπάρχει."
 
 #: pretix/control/forms/event.py:1351
 msgid "The password you entered was not correct."
-msgstr ""
+msgstr "Ο κωδικός πρόσβασης που εισαγάγατε δεν ήταν σωστός."
 
 #: pretix/control/forms/event.py:1352 pretix/control/forms/organizer.py:41
 msgid "The slug you entered was not correct."
@@ -5747,7 +5750,7 @@ msgstr ""
 #: pretix/control/forms/event.py:1356
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
 msgid "Your password"
-msgstr ""
+msgstr "Ο κωδικός σας"
 
 #: pretix/control/forms/event.py:1361 pretix/control/forms/organizer.py:45
 msgid "Event slug"
@@ -5755,25 +5758,28 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1403
 msgid "Ticket downloads"
-msgstr ""
+msgstr "Λήψη εισιτηρίων"
 
 #: pretix/control/forms/event.py:1404
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr ""
+"Οι πελάτες σας θα μπορούν να κάνουν λήψη των εισιτηρίων τους σε μορφή PDF."
 
 #: pretix/control/forms/event.py:1408
 msgid "Require all attendees to fill in their names"
-msgstr ""
+msgstr "Απαιτήστε από όλους τους συμμετέχοντες να συμπληρώσουν τα ονόματά τους"
 
 #: pretix/control/forms/event.py:1409
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"Από προεπιλογή, θα ζητήσουμε ονόματα αλλά δεν θα τα απαιτήσουμε. Μπορείτε να "
+"το απενεργοποιήσετε τελείως στις ρυθμίσεις."
 
 #: pretix/control/forms/event.py:1435
 msgid "Payment via Stripe"
-msgstr ""
+msgstr "Πληρωμή μέσω Stripe"
 
 #: pretix/control/forms/event.py:1436
 msgid ""
@@ -5782,10 +5788,15 @@ msgid ""
 "up an account with them, which takes less than five minutes using their "
 "simple interface."
 msgstr ""
+"Το Stripe είναι ένας ηλεκτρονικός επεξεργαστής πληρωμών που υποστηρίζει "
+"πιστωτικές κάρτες και πολλές άλλες επιλογές πληρωμής. Για να δεχτείτε "
+"πληρωμές μέσω του Stripe, θα χρειαστεί να δημιουργήσετε έναν λογαριασμό μαζί "
+"τους, ο οποίος διαρκεί λιγότερο από πέντε λεπτά χρησιμοποιώντας την απλή "
+"διεπαφή τους."
 
 #: pretix/control/forms/event.py:1442
 msgid "Payment by bank transfer"
-msgstr ""
+msgstr "Πληρωμή με τραπεζικό έμβασμα"
 
 #: pretix/control/forms/event.py:1443
 msgid ""
@@ -5793,33 +5804,37 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
+"Οι πελάτες σας θα έχουν την εντολή να μεταφέρουν τα χρήματα στο λογαριασμό "
+"σας. Στη συνέχεια, μπορείτε να εισαγάγετε τις τραπεζικές δηλώσεις σας για να "
+"διεκπεραιώσετε τις πληρωμές εντός του προνομίου ή να τις επισημάνετε ως "
+"πληρωμένες με μη αυτόματο τρόπο."
 
 #: pretix/control/forms/event.py:1482
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
-msgstr ""
+msgstr "Τιμή (προαιρετικό)"
 
 #: pretix/control/forms/event.py:1487
 msgid "Free"
-msgstr ""
+msgstr "Δωρεάν"
 
 #: pretix/control/forms/event.py:1492
 msgid "Quantity available"
-msgstr ""
+msgstr "Διαθέσιμη ποσότητα"
 
 #: pretix/control/forms/filter.py:85 pretix/control/forms/filter.py:87
 msgid "Search for…"
-msgstr ""
+msgstr "Αναζήτηση για..."
 
 #: pretix/control/forms/filter.py:102 pretix/control/forms/filter.py:202
 #: pretix/control/navigation.py:190
 #: pretix/control/templates/pretixcontrol/items/question.html:19
 msgid "All orders"
-msgstr ""
+msgstr "Όλες οι παραγγελίες"
 
 #: pretix/control/forms/filter.py:103 pretix/control/forms/filter.py:203
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Πληρωμή (ή ακύρωση με καταβληθείσα αμοιβή)"
 
 #: pretix/control/forms/filter.py:104 pretix/control/forms/filter.py:204
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -5827,17 +5842,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:41
 #: pretix/plugins/reports/exporters.py:206
 msgid "Pending"
-msgstr ""
+msgstr "Εκκρεμής"
 
 #: pretix/control/forms/filter.py:105 pretix/control/forms/filter.py:205
 #: pretix/control/templates/pretixcontrol/items/question.html:23
 msgid "Pending (overdue)"
-msgstr ""
+msgstr "Εν αναμονή (καθυστερημένη)"
 
 #: pretix/control/forms/filter.py:106 pretix/control/forms/filter.py:206
 #: pretix/control/templates/pretixcontrol/items/question.html:22
 msgid "Pending or paid"
-msgstr ""
+msgstr "Εκκρεμεί ή είναι πληρωμένο"
 
 #: pretix/control/forms/filter.py:107 pretix/control/forms/filter.py:207
 #: pretix/control/forms/filter.py:759
@@ -5847,12 +5862,12 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:202
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:16
 msgid "Expired"
-msgstr ""
+msgstr "έχει λήξει"
 
 #: pretix/control/forms/filter.py:108 pretix/control/forms/filter.py:208
 #: pretix/control/templates/pretixcontrol/items/question.html:25
 msgid "Pending or expired"
-msgstr ""
+msgstr "Εκκρεμεί ή έχει λήξει"
 
 #: pretix/control/forms/filter.py:109 pretix/control/forms/filter.py:209
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -5861,14 +5876,14 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:202
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:18
 msgid "Canceled"
-msgstr ""
+msgstr "Ακυρώθηκε"
 
 #: pretix/control/forms/filter.py:184 pretix/control/forms/filter.py:639
 #: pretix/control/forms/filter.py:819
 #: pretix/control/templates/pretixcontrol/items/question.html:29
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:99
 msgid "All products"
-msgstr ""
+msgstr "Ολα τα προϊόντα"
 
 #: pretix/control/forms/filter.py:190 pretix/control/forms/filter.py:237
 #: pretix/control/forms/filter.py:792 pretix/control/forms/filter.py:812
@@ -5878,25 +5893,25 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:273 pretix/plugins/sendmail/forms.py:33
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Όλες οι ημερομηνίες"
 
 #: pretix/control/forms/filter.py:210
 msgid "Canceled (or with paid fee)"
-msgstr ""
+msgstr "Άκυρο (ή με καταβληθείσα αμοιβή)"
 
 #: pretix/control/forms/filter.py:211
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
 msgid "Approval pending"
-msgstr ""
+msgstr "Η έγκριση εκκρεμεί"
 
 #: pretix/control/forms/filter.py:212
 msgid "Overpaid"
-msgstr ""
+msgstr "Πληρωμή επιπλέον"
 
 #: pretix/control/forms/filter.py:213
 msgid "Underpaid"
-msgstr ""
+msgstr "Ανεπαρκώς αμειβόμενος"
 
 #: pretix/control/forms/filter.py:214
 msgid "Pending (but fully paid)"
