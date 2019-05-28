@@ -173,6 +173,8 @@ def timeline_for_event(event, subevent=None):
     # This is a special case, depending on payment providers not overriding BasePaymentProvider by too much, but it's
     # preferrable to having all plugins implement this spearately.
     for pprov in pprovs.values():
+        if not pprov.settings.get('_enabled', as_type=bool):
+            continue
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
             d = make_aware(datetime.combine(
