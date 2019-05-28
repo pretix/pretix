@@ -12,6 +12,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import pgettext, ugettext as _
 
 from pretix.base.models import Organizer, User
+from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import event_permission_required
 from pretix.helpers.daterange import daterange
 from pretix.helpers.i18n import i18ncomp
@@ -72,7 +73,13 @@ def event_list(request):
         page = int(request.GET.get('page', '1'))
     except ValueError:
         page = 1
-    qs = request.user.get_events_with_any_permission(request).filter(
+
+    if 'can_copy' in request.GET:
+        qs = EventWizardCopyForm.copy_from_queryset(request.user, request.session)
+    else:
+        qs = request.user.get_events_with_any_permission(request)
+
+    qs.filter(
         Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) |
         Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
     ).annotate(
@@ -332,7 +339,10 @@ def organizer_select2(request):
     if term:
         qs = qs.filter(Q(name__icontains=term) | Q(slug__icontains=term))
     if not request.user.has_active_staff_session(request.session.session_key):
-        qs = qs.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
+        if 'can_create' in request.GET:
+            qs = qs.filter(pk__in=request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True))
+        else:
+            qs = qs.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
 
     total = qs.count()
     pagesize = 20

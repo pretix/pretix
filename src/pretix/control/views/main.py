@@ -97,7 +97,7 @@ class EventList(PaginationMixin, ListView):
 def condition_copy(wizard):
     return (
         not wizard.clone_from and
-        EventWizardCopyForm.copy_from_queryset(wizard.request.user).exists()
+        EventWizardCopyForm.copy_from_queryset(wizard.request.user, wizard.request.session).exists()
     )
 
 
@@ -176,7 +176,8 @@ class EventWizard(SafeSessionWizardView):
 
     def get_form_kwargs(self, step=None):
         kwargs = {
-            'user': self.request.user
+            'user': self.request.user,
+            'session': self.request.session,
         }
         if step != 'foundation':
             fdata = self.get_cleaned_data_for_step('foundation')

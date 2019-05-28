@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, validate_email
 from django.db.models import Q
 from django.forms import formset_factory
+from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
@@ -28,6 +29,7 @@ from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
     SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
+from pretix.control.forms.widgets import Select2
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.presale.style import get_fonts
@@ -52,16 +54,28 @@ class EventWizardFoundationForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        self.session = kwargs.pop('session')
         super().__init__(*args, **kwargs)
+        qs = Organizer.objects.all()
+        if not self.user.has_active_staff_session(self.session.session_key):
+            qs = qs.filter(
+                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+            )
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
-            queryset=Organizer.objects.filter(
-                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+            queryset=qs,
+            widget=Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizers.select2') + '?can_create=1',
+                    'data-placeholder': _('Organizer')
+                }
             ),
-            widget=forms.RadioSelect,
             empty_label=None,
             required=True
         )
+        self.fields['organizer'].widget.choices = self.fields['organizer'].choices
+
         if len(self.fields['organizer'].choices) == 1:
             self.fields['organizer'].initial = self.fields['organizer'].queryset.first()
 
@@ -117,6 +131,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.locales = kwargs.get('locales')
         self.has_subevents = kwargs.pop('has_subevents')
         kwargs.pop('user')
+        kwargs.pop('session')
         super().__init__(*args, **kwargs)
         self.initial['timezone'] = get_current_timezone_name()
         self.fields['locale'].choices = [(a, b) for a, b in settings.LANGUAGES if a in self.locales]
@@ -174,7 +189,9 @@ class EventChoiceField(forms.ModelChoiceField):
 class EventWizardCopyForm(forms.Form):
 
     @staticmethod
-    def copy_from_queryset(user):
+    def copy_from_queryset(user, session):
+        if user.has_active_staff_session(session.session_key):
+            return Event.objects.all()
         return Event.objects.filter(
             Q(organizer_id__in=user.teams.filter(
                 all_events=True, can_change_event_settings=True, can_change_items=True
@@ -186,16 +203,25 @@ class EventWizardCopyForm(forms.Form):
     def __init__(self, *args, **kwargs):
         kwargs.pop('organizer')
         kwargs.pop('locales')
+        self.session = kwargs.pop('session')
         kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+
         self.fields['copy_from_event'] = EventChoiceField(
             label=_("Copy configuration from"),
-            queryset=EventWizardCopyForm.copy_from_queryset(self.user),
-            widget=forms.RadioSelect,
+            queryset=EventWizardCopyForm.copy_from_queryset(self.user, self.session),
+            widget=Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:events.typeahead') + '?can_copy=1',
+                    'data-placeholder': _('Do not copy')
+                }
+            ),
             empty_label=_('Do not copy'),
             required=False
         )
+        self.fields['copy_from_event'].widget.choices = self.fields['copy_from_event'].choices
 
 
 class EventMetaValueForm(forms.ModelForm):
