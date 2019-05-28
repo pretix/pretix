@@ -19,7 +19,7 @@ $(function () {
                 return;
             }
             $.getJSON(
-                $container.attr("data-source") + "?query=" + encodeURIComponent($query.val()),
+                $container.attr("data-source") + "?query=" + encodeURIComponent($query.val()) + (typeof $container.attr("data-organizer") !== "undefined" ? "&organizer=" + $container.attr("data-organizer") : ""),
                 function (data) {
                     $container.find("li:not(.query-holder)").remove();
                     $.each(data.results, function (i, res) {

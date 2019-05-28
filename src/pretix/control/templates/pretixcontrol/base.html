@@ -242,7 +242,10 @@
                                     <span class="caret"></span></a>
                             {% endif %}
                             <ul class="dropdown-menu event-dropdown" role="menu" data-event-typeahead
-                                data-source="{% url "control:nav.typeahead" %}">
+                                data-source="{% url "control:nav.typeahead" %}"
+                                {% if request.event %}
+                                    data-organizer="{{ request.organizer.id }}"
+                                {% endif %}>
                                 <li class="query-holder">
                                     <div class="form-box">
                                         <input type="text" class="form-control" id="event-dropdown-field"

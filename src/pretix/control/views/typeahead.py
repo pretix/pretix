@@ -107,6 +107,8 @@ def event_list(request):
 
 def nav_context_list(request):
     query = request.GET.get('query', '')
+    organizer = request.GET.get('organizer', None)
+
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -145,6 +147,11 @@ def nav_context_list(request):
     ] + [
         serialize_event(e) for e in qs_events.select_related('organizer')[offset:offset + (pagesize if query else 5)]
     ]
+
+    if show_user and organizer:
+        organizer = serialize_orga(Organizer.objects.get(pk=organizer))
+        results.insert(1, results.pop(results.index(organizer)) if results.index(organizer) else organizer)
+
     doc = {
         'results': results,
         'pagination': {
