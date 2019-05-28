@@ -79,7 +79,7 @@ def event_list(request):
     else:
         qs = request.user.get_events_with_any_permission(request)
 
-    qs.filter(
+    qs = qs.filter(
         Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) |
         Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
     ).annotate(
