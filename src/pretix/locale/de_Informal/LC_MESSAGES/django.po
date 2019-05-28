@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 10:08+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -11369,7 +11369,7 @@ msgstr "Erstattung"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr "Automatisch erstatten:"
+msgstr "Automatisch erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:59
 msgid "Automatically refund full amount"
@@ -11400,7 +11400,7 @@ msgstr "Manuelle Erstattung"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:93
 msgctxt "amount_label"
 msgid "Manually refund"
-msgstr "Manuell erstatten:"
+msgstr "Manuell erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:104
 msgid "Keep transfer as to do"
@@ -11478,7 +11478,7 @@ msgstr "Vollen Zahlungsbetrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr "Nur diesen Betrag erstatten:"
+msgstr "Nur diesen Betrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
