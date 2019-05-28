@@ -50,6 +50,10 @@ plugins                               list                       A list of packa
 
    The ``testmode`` attribute has been added.
 
+.. versionchanged:: 2.8
+
+    When cloning events, the ``testmode`` attribute will now be cloned, too.
+
 Endpoints
 ---------
 
@@ -246,7 +250,7 @@ Endpoints
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/clone/
 
    Creates a new event with properties as set in the request body. The properties that are copied are: 'is_public',
-   settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
+   `testmode`, settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
 
    If the 'plugins' and/or 'is_public' fields are present in the post body this will determine their value. Otherwise
    their value will be copied from the existing event.
