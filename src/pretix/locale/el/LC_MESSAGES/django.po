@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:34+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1080,7 +1080,7 @@ msgstr "Ο αριθμός ΦΠΑ δεν αντιστοιχεί στην επιλ
 
 #: pretix/base/forms/questions.py:417
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr ""
+msgstr "Ο αριθμός ΦΠΑ δεν είναι έγκυρος. Ελέγξτε ξανά την εισαγωγή σας."
 
 #: pretix/base/forms/questions.py:422
 msgid ""
@@ -1089,6 +1089,10 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"Ο αριθμός ΦΠΑ δεν ήταν δυνατό να ελεγχθεί, καθώς αυτή τη στιγμή δεν είναι "
+"διαθέσιμη η υπηρεσία ελέγχου ΦΠΑ της χώρας σας. Επομένως, θα χρειαστεί να "
+"χρεώσουμε το ΦΠΑ στο τιμολόγιό σας. Μπορείτε να πάρετε πίσω το ποσό του "
+"φόρου μέσω της διαδικασίας επιστροφής του ΦΠΑ."
 
 #: pretix/base/forms/questions.py:430
 msgid ""
