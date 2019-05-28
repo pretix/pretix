@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:34+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5945,56 +5945,56 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:371 pretix/control/forms/filter.py:701
 msgid "Inactive"
-msgstr ""
+msgstr "Αδρανής"
 
 #: pretix/control/forms/filter.py:383 pretix/control/forms/subevents.py:289
 #: pretix/control/forms/subevents.py:328
 msgid "Weekday"
-msgstr ""
+msgstr "Καθημερινή"
 
 #: pretix/control/forms/filter.py:385
 msgid "All days"
-msgstr ""
+msgstr "Όλες τις ημέρες"
 
 #: pretix/control/forms/filter.py:386
 msgid "Monday"
-msgstr ""
+msgstr "Δευτέρα"
 
 #: pretix/control/forms/filter.py:387
 msgid "Tuesday"
-msgstr ""
+msgstr "Τρίτη"
 
 #: pretix/control/forms/filter.py:388
 msgid "Wednesday"
-msgstr ""
+msgstr "Τετάρτη"
 
 #: pretix/control/forms/filter.py:389
 msgid "Thursday"
-msgstr ""
+msgstr "Πέμπτη"
 
 #: pretix/control/forms/filter.py:390
 msgid "Friday"
-msgstr ""
+msgstr "Παρασκευή"
 
 #: pretix/control/forms/filter.py:391
 msgid "Saturday"
-msgstr ""
+msgstr "Σάββατο"
 
 #: pretix/control/forms/filter.py:392
 msgid "Sunday"
-msgstr ""
+msgstr "Κυριακή"
 
 #: pretix/control/forms/filter.py:503
 msgid "All events"
-msgstr ""
+msgstr "Όλα τα γεγονότα"
 
 #: pretix/control/forms/filter.py:504
 msgid "Shop live"
-msgstr ""
+msgstr "Αγοράστε ζωντανά"
 
 #: pretix/control/forms/filter.py:506
 msgid "Shop not live"
-msgstr ""
+msgstr "Αγοράστε όχι ζωντανά"
 
 #: pretix/control/forms/filter.py:509
 msgid "Single event running or in the future"
