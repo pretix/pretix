@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 12:22+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-28 12:30+0000\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1016,7 +1016,7 @@ msgstr "Ημερομηνία έναρξης του γεγονότος"
 #: pretix/presale/checkoutflow.py:631 pretix/presale/forms/checkout.py:26
 #: pretix/presale/forms/user.py:6
 msgid "E-mail"
-msgstr "E-mail"
+msgstr "Ηλεκτρονικό ταχυδρομείο"
 
 #: pretix/base/forms/auth.py:18 pretix/base/forms/auth.py:84
 #: pretix/base/forms/auth.py:136 pretix/control/forms/event.py:1045
@@ -1026,37 +1026,41 @@ msgstr "Κωδικός πρόσβασης"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:97
 msgid "Keep me logged in"
-msgstr ""
+msgstr "Κρατήστε με συνδεδεμένο"
 
 #: pretix/base/forms/auth.py:22
 msgid "Please enter a correct email address and password."
 msgstr ""
+"Εισαγάγετε μια σωστή διεύθυνση ηλεκτρονικού ταχυδρομείου και κωδικό "
+"πρόσβασης."
 
 #: pretix/base/forms/auth.py:23
 msgid "This account is inactive."
-msgstr ""
+msgstr "Αυτός ο λογαριασμός είναι ανενεργός."
 
 #: pretix/base/forms/auth.py:76
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
+"Έχετε ήδη εγγραφεί στη διεύθυνση ηλεκτρονικού ταχυδρομείου, χρησιμοποιήστε "
+"τη φόρμα σύνδεσης."
 
 #: pretix/base/forms/auth.py:77 pretix/base/forms/auth.py:133
 #: pretix/base/forms/user.py:21 pretix/control/forms/users.py:24
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "Εισαγάγετε τον ίδιο κωδικό πρόσβασης δύο φορές"
 
 #: pretix/base/forms/auth.py:80
 msgid "Email address"
-msgstr ""
+msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/base/forms/auth.py:91 pretix/base/forms/auth.py:141
 msgid "Repeat password"
-msgstr ""
+msgstr "Επαναλάβετε τον κωδικό πρόσβασης"
 
 #: pretix/base/forms/questions.py:325 pretix/control/forms/item.py:71
 msgid "This field is required"
-msgstr ""
+msgstr "Αυτό το πεδίο απαιτείται"
 
 #: pretix/base/forms/questions.py:339
 msgid "Street and Number"
@@ -1064,11 +1068,11 @@ msgstr "Οδός και Αριθμός"
 
 #: pretix/base/forms/questions.py:396
 msgid "You need to provide a company name."
-msgstr ""
+msgstr "Θα πρέπει να δώσετε ένα όνομα εταιρείας."
 
 #: pretix/base/forms/questions.py:398
 msgid "You need to provide your name."
-msgstr ""
+msgstr "Θα πρέπει να δώσετε το όνομά σας."
 
 #: pretix/base/forms/questions.py:409 pretix/control/views/orders.py:985
 msgid "Your VAT ID does not match the selected country."
