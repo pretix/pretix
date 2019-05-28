@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 10:30+0000\n"
+"PO-Revision-Date: 2019-05-28 10:38+0000\n"
 "Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -8608,7 +8608,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:14
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:10
 msgid "Congratulations!"
-msgstr ""
+msgstr "Συγχαρητήρια!"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:16
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:12
