@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:22+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1016,13 +1016,13 @@ msgstr "Ημερομηνία έναρξης του γεγονότος"
 #: pretix/presale/checkoutflow.py:631 pretix/presale/forms/checkout.py:26
 #: pretix/presale/forms/user.py:6
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: pretix/base/forms/auth.py:18 pretix/base/forms/auth.py:84
 #: pretix/base/forms/auth.py:136 pretix/control/forms/event.py:1045
 #: pretix/control/templates/pretixcontrol/user/reauth.html:18
 msgid "Password"
-msgstr ""
+msgstr "Κωδικός πρόσβασης"
 
 #: pretix/base/forms/auth.py:19 pretix/base/forms/auth.py:97
 msgid "Keep me logged in"
@@ -1060,7 +1060,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py:339
 msgid "Street and Number"
-msgstr ""
+msgstr "Οδός και Αριθμός"
 
 #: pretix/base/forms/questions.py:396
 msgid "You need to provide a company name."
@@ -3184,7 +3184,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:87 pretix/base/pdf.py:92
 msgid "123.45 EUR"
-msgstr ""
+msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:91
 msgid "Price including add-ons"
@@ -3242,7 +3242,7 @@ msgstr "20:00"
 
 #: pretix/base/pdf.py:141
 msgid "Event end date and time"
-msgstr ""
+msgstr "Ημερομηνία και ώρα λήξης του συμβάντος"
 
 #: pretix/base/pdf.py:142
 msgid "2017-05-31 22:00"
@@ -13561,7 +13561,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr ""
+msgstr "Αποτέλεσμα"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
@@ -13583,7 +13583,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:63
 msgid "Comment:"
-msgstr ""
+msgstr "Σχόλιο:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
@@ -16003,7 +16003,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:302
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "από %(start_date)s"
 
 #: pretix/presale/views/widget.py:305
 msgid "Sale Soon"
@@ -16011,60 +16011,60 @@ msgstr ""
 
 #: pretix/settings.py:390
 msgid "English"
-msgstr ""
+msgstr "Αγγλικά"
 
 #: pretix/settings.py:391
 msgid "German"
-msgstr ""
+msgstr "Γερμανικά"
 
 #: pretix/settings.py:392
 msgid "German (informal)"
-msgstr ""
+msgstr "Γερμανικά (ανεπίσημα)"
 
 #: pretix/settings.py:393
 msgid "Dutch"
-msgstr ""
+msgstr "Ολλανδικά"
 
 #: pretix/settings.py:394
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Ολλανδικά (ανεπίσημα)"
 
 #: pretix/settings.py:395
 msgid "Danish"
-msgstr ""
+msgstr "Δανικά"
 
 #: pretix/settings.py:396
 msgid "French"
-msgstr ""
+msgstr "Γαλλικά"
 
 #: pretix/settings.py:397
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Πορτογαλικά (Βραζιλία)"
 
 #: pretix/settings.py:398
 msgid "Spanish"
-msgstr ""
+msgstr "Ισπανικά"
 
 #: pretix/settings.py:399
 msgid "Turkish"
-msgstr ""
+msgstr "Τούρκικα"
 
 #: pretix/settings.py:400
 msgid "Polish"
-msgstr ""
+msgstr "Πολωνικά"
 
 #: pretix/settings.py:401
 msgid "Italian"
-msgstr ""
+msgstr "Ιταλικά"
 
 #: pretix/settings.py:402
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Κινέζικα (απλοποιημένα)"
 
 #: pretix/settings.py:675
 msgid "Read access"
-msgstr ""
+msgstr "Πρόσβαση για ανάγνωση"
 
 #: pretix/settings.py:676
 msgid "Write access"
-msgstr ""
+msgstr "Πρόσβαση για εγγραφή"
