@@ -245,10 +245,6 @@ class Order(LockModel, LoggedModel):
         except TypeError:
             return None
 
-    @meta_info_data.setter
-    def meta_info_data(self, d):
-        self.meta_info = json.dumps(d)
-
     @property
     def payment_refund_sum(self):
         payment_sum = self.payments.filter(
