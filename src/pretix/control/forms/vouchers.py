@@ -146,6 +146,14 @@ class VoucherForm(I18nModelForm):
             data, self.instance.event,
             self.instance.quota, self.instance.item, self.instance.variation
         )
+        if self.instance.quota:
+            if all(i.hide_without_voucher for i in self.instance.quota.items.all()):
+                raise ValidationError({
+                    'itemvar': [
+                        _('The quota you selected only contains hidden products. Hidden products can currently only be '
+                          'shown by using vouchers that directly apply to the product, not via a quota.')
+                    ]
+                })
         Voucher.clean_subevent(
             data, self.instance.event
         )
