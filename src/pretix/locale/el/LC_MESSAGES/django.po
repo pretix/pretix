@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-03-18 15:52+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
-">\n"
+"PO-Revision-Date: 2019-05-28 09:32+0000\n"
+"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:898
 #: pretix/control/templates/pretixcontrol/events/index.html:127
@@ -32,7 +32,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:66
 #: pretix/control/templates/pretixcontrol/subevents/index.html:115
 msgid "Presale over"
-msgstr ""
+msgstr "Η προπώληση τελείωσε"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:902
 #: pretix/control/forms/filter.py:372 pretix/control/forms/filter.py:507
@@ -52,11 +52,11 @@ msgstr ""
 
 #: pretix/api/models.py:18
 msgid "Application name"
-msgstr ""
+msgstr "Όνομα εφαρμογής"
 
 #: pretix/api/models.py:21
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URI ανακατεύθυνση"
 
 #: pretix/api/models.py:22
 msgid "Allowed URIs list, space separated"
@@ -5529,18 +5529,22 @@ msgstr ""
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Άμεση ανακατεύθυνση στο check-out μετά την προσθήκη ενός προϊόντος στο "
+"καλάθι."
 
 #: pretix/control/forms/event.py:1200
 msgid "Use feature"
-msgstr ""
+msgstr "Χρησιμοποιήστε τη λειτουργία"
 
 #: pretix/control/forms/event.py:1201
 msgid "Use pretix to generate tickets for the user to download and print out."
 msgstr ""
+"Χρησιμοποιήστε το Pretix για να δημιουργήσετε εισιτήρια για να κατεβάσει και "
+"να εκτυπώσει ο χρήστης."
 
 #: pretix/control/forms/event.py:1205
 msgid "Download date"
-msgstr ""
+msgstr "Ημερομηνία λήψης"
 
 #: pretix/control/forms/event.py:1206
 msgid ""
@@ -5548,6 +5552,11 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"Η λήψη των εισιτηρίων θα γίνει μετά από αυτή την ημερομηνία. Αν "
+"χρησιμοποιείτε τη λειτουργία σειράς συμβάντων και μια παραγγελία περιέχει "
+"εισιτήρια για πολλαπλές ημερομηνίες γεγονότων, η λήψη όλων των εισιτηρίων θα "
+"είναι διαθέσιμη εάν το επιτρέπει τουλάχιστον μία από τις ημερομηνίες του "
+"γεγονότος."
 
 #: pretix/control/forms/event.py:1212
 msgid "Offer to download tickets separately for add-on products"
