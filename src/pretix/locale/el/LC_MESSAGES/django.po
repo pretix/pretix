@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 09:33+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -516,7 +516,7 @@ msgstr "Διεύθυνση"
 #: pretix/base/exporters/orderlist.py:591 pretix/base/models/orders.py:1974
 #: pretix/control/forms/event.py:711
 msgid "ZIP code"
-msgstr ""
+msgstr "ταχυδρομικός κώδικας"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
@@ -526,7 +526,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:592 pretix/base/models/orders.py:1975
 #: pretix/control/forms/event.py:718
 msgid "City"
-msgstr ""
+msgstr "Πόλη"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
@@ -539,7 +539,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:101
 #: pretix/presale/templates/pretixpresale/event/order.html:209
 msgid "Country"
-msgstr ""
+msgstr "Χώρα"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
