@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 09:32+0000\n"
-"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -409,14 +409,14 @@ msgstr "Μόνο πληρωμένες παραγγελίες"
 #: pretix/plugins/reports/exporters.py:363
 #: pretix/plugins/ticketoutputpdf/exporters.py:40
 msgid "Order code"
-msgstr ""
+msgstr "Κωδικός παραγγελίας"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/notifications.py:179
 #: pretix/control/templates/pretixcontrol/orders/index.html:101
 #: pretix/control/templates/pretixcontrol/search/orders.html:48
 #: pretix/plugins/reports/exporters.py:363
 msgid "Order total"
-msgstr ""
+msgstr "Σύνολο παραγγελίας"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:194
 #: pretix/base/exporters/orderlist.py:269
@@ -439,13 +439,13 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:48
 #: pretix/presale/templates/pretixpresale/organizers/index.html:58
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:195
 #: pretix/base/exporters/orderlist.py:270
 #: pretix/control/templates/pretixcontrol/checkin/index.html:69
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: pretix/base/exporters/orderlist.py:91 pretix/base/exporters/orderlist.py:196
 #: pretix/base/exporters/orderlist.py:271 pretix/base/notifications.py:181
@@ -456,7 +456,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:300
 #: pretix/plugins/reports/exporters.py:363
 msgid "Order date"
-msgstr ""
+msgstr "Ημερομηνία παραγγελίας"
 
 #: pretix/base/exporters/orderlist.py:92 pretix/base/exporters/orderlist.py:203
 #: pretix/base/exporters/orderlist.py:297
@@ -853,29 +853,29 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
 #: pretix/presale/templates/pretixpresale/organizers/index.html:57
 msgid "Date"
-msgstr ""
+msgstr "Ημερομηνία"
 
 #: pretix/base/exporters/orderlist.py:489
 #: pretix/base/exporters/orderlist.py:578 pretix/base/models/waitinglist.py:40
 #: pretix/control/templates/pretixcontrol/users/index.html:37
 #: pretix/control/views/waitinglist.py:199
 msgid "E-mail address"
-msgstr ""
+msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/base/exporters/orderlist.py:490
 #: pretix/base/exporters/orderlist.py:579
 msgid "Invoice type"
-msgstr ""
+msgstr "Τύπος τιμολογίου"
 
 #: pretix/base/exporters/orderlist.py:491
 #: pretix/base/exporters/orderlist.py:580
 msgid "Cancellation of"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: pretix/base/exporters/orderlist.py:492 pretix/base/models/auth.py:90
 #: pretix/control/forms/event.py:1309 pretix/control/views/waitinglist.py:200
 msgid "Language"
-msgstr ""
+msgstr "Γλώσσα"
 
 #: pretix/base/exporters/orderlist.py:493
 #: pretix/base/exporters/orderlist.py:494
@@ -960,14 +960,14 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:539
 #: pretix/base/exporters/orderlist.py:618
 msgid "Cancellation"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: pretix/base/exporters/orderlist.py:539
 #: pretix/base/exporters/orderlist.py:618
 #: pretix/control/templates/pretixcontrol/order/index.html:166
 #: pretix/presale/templates/pretixpresale/event/order.html:148
 msgid "Invoice"
-msgstr ""
+msgstr "Τιμολόγιο"
 
 #: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:854
 #: pretix/control/views/item.py:446 pretix/control/views/vouchers.py:78
@@ -977,7 +977,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:641
 msgid "Yes"
-msgstr ""
+msgstr "Ναι"
 
 #: pretix/base/exporters/orderlist.py:558 pretix/base/models/orders.py:856
 #: pretix/control/views/item.py:446 pretix/control/views/vouchers.py:78
@@ -987,7 +987,7 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:83
 #: pretix/presale/checkoutflow.py:643
 msgid "No"
-msgstr ""
+msgstr "Όχι"
 
 #: pretix/base/exporters/orderlist.py:567
 msgid "Line number"
