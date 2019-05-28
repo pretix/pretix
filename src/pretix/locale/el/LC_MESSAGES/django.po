@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 10:30+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3222,7 +3222,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:121
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:128
 msgid "Event begin date"
@@ -3230,7 +3230,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:129 pretix/base/pdf.py:150 pretix/base/pdf.py:219
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:136
 msgid "Event begin time"
@@ -3238,7 +3238,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:137
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:141
 msgid "Event end date and time"
@@ -3246,7 +3246,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:142
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:149
 msgid "Event end date"
@@ -3254,7 +3254,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:158
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:165
 msgid "Event admission date and time"
@@ -3262,7 +3262,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:166 pretix/base/pdf.py:227
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:173
 msgid "Event admission time"
@@ -3270,7 +3270,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:174 pretix/base/pdf.py:235
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:181
 msgid "Event location"
@@ -3278,7 +3278,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:182 pretix/control/forms/event.py:715
 msgid "Random City"
-msgstr ""
+msgstr "Τυχαία Πόλη"
 
 #: pretix/base/pdf.py:191
 msgid "Invoice address company"
