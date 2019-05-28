@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:22+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -771,33 +771,33 @@ msgstr "Μέθοδος πληρωμής"
 
 #: pretix/base/exporters/orderlist.py:445
 msgid "Quota availabilities"
-msgstr ""
+msgstr "Διαθεσιμότητα quota"
 
 #: pretix/base/exporters/orderlist.py:449
 #: pretix/control/templates/pretixcontrol/items/quotas.html:44
 msgid "Quota name"
-msgstr ""
+msgstr "Όνομα quota"
 
 #: pretix/base/exporters/orderlist.py:449
 #: pretix/control/templates/pretixcontrol/items/quota.html:35
 msgid "Total quota"
-msgstr ""
+msgstr "Συνολικό quota"
 
 #: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:621
 msgid "Paid orders"
-msgstr ""
+msgstr "Πληρωμένες παραγγελίες"
 
 #: pretix/base/exporters/orderlist.py:449 pretix/control/views/item.py:626
 msgid "Pending orders"
-msgstr ""
+msgstr "Εκκρεμείς παραγγελίες"
 
 #: pretix/base/exporters/orderlist.py:449
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "Αποκλεισμός κουπονιών"
 
 #: pretix/base/exporters/orderlist.py:450 pretix/control/views/item.py:636
 msgid "Current user's carts"
-msgstr ""
+msgstr "Το καλάθι του τρέχοντος χρήστη"
 
 #: pretix/base/exporters/orderlist.py:450 pretix/base/shredder.py:170
 #: pretix/control/forms/event.py:1396 pretix/control/navigation.py:222
@@ -812,21 +812,21 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:78
 #: pretix/presale/views/widget.py:287
 msgid "Waiting list"
-msgstr ""
+msgstr "Λίστα αναμονής"
 
 #: pretix/base/exporters/orderlist.py:450
 msgid "Current availability"
-msgstr ""
+msgstr "Τρέχουσα διαθεσιμότητα"
 
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:464
 #: pretix/control/templates/pretixcontrol/items/quota.html:37
 msgid "Infinite"
-msgstr ""
+msgstr "Άπειρος"
 
 #: pretix/base/exporters/orderlist.py:474
 msgid "Invoice data"
-msgstr ""
+msgstr "Δεδομένα τιμολογίου"
 
 #: pretix/base/exporters/orderlist.py:479 pretix/base/shredder.py:290
 #: pretix/control/templates/pretixcontrol/order/index.html:162
@@ -834,16 +834,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:140
 #: pretix/presale/templates/pretixpresale/event/order.html:161
 msgid "Invoices"
-msgstr ""
+msgstr "Τιμολόγια"
 
 #: pretix/base/exporters/orderlist.py:480
 msgid "Invoice lines"
-msgstr ""
+msgstr "Γραμμές τιμολογίων"
 
 #: pretix/base/exporters/orderlist.py:486
 #: pretix/base/exporters/orderlist.py:566
 msgid "Invoice number"
-msgstr ""
+msgstr "Αριθμός τιμολογίου"
 
 #: pretix/base/exporters/orderlist.py:487
 #: pretix/base/exporters/orderlist.py:576 pretix/base/models/items.py:927
@@ -892,12 +892,12 @@ msgstr "Γλώσσα"
 #: pretix/base/exporters/orderlist.py:586
 #: pretix/base/exporters/orderlist.py:587
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Αποστολέας τιμολογίου:"
 
 #: pretix/base/exporters/orderlist.py:498
 #: pretix/base/exporters/orderlist.py:586
 msgid "Tax ID"
-msgstr ""
+msgstr "Αριθμός φορολογικού μητρώου"
 
 #: pretix/base/exporters/orderlist.py:500
 #: pretix/base/exporters/orderlist.py:501
@@ -918,44 +918,44 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:595
 #: pretix/base/exporters/orderlist.py:596
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Αποδέκτης τιμολογίου:"
 
 #: pretix/base/exporters/orderlist.py:502
 #: pretix/base/exporters/orderlist.py:590
 msgid "Street address"
-msgstr ""
+msgstr "Διεύθυνση"
 
 #: pretix/base/exporters/orderlist.py:507
 #: pretix/base/exporters/orderlist.py:595 pretix/base/models/orders.py:1987
 msgid "Beneficiary"
-msgstr ""
+msgstr "Δικαιούχος"
 
 #: pretix/base/exporters/orderlist.py:508
 #: pretix/base/exporters/orderlist.py:596 pretix/base/models/orders.py:1982
 #: pretix/control/templates/pretixcontrol/order/index.html:667
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Internal reference"
-msgstr ""
+msgstr "Εσωτερική αναφορά"
 
 #: pretix/base/exporters/orderlist.py:509 pretix/control/forms/event.py:1284
 msgid "Reverse charge"
-msgstr ""
+msgstr "Αντίστροφη φόρτιση"
 
 #: pretix/base/exporters/orderlist.py:510
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Εμφανίστηκε ξένο νόμισμα"
 
 #: pretix/base/exporters/orderlist.py:511
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Συνάλλαγμα"
 
 #: pretix/base/exporters/orderlist.py:512
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Συνολική αξία (με φόρους)"
 
 #: pretix/base/exporters/orderlist.py:513
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Συνολική αξία (χωρίς φόρους)"
 
 #: pretix/base/exporters/orderlist.py:539
 #: pretix/base/exporters/orderlist.py:618
@@ -991,23 +991,23 @@ msgstr "Όχι"
 
 #: pretix/base/exporters/orderlist.py:567
 msgid "Line number"
-msgstr ""
+msgstr "Αριθμός σειράς"
 
 #: pretix/base/exporters/orderlist.py:569 pretix/control/forms/orders.py:203
 msgid "Gross price"
-msgstr ""
+msgstr "Μικτή τιμή"
 
 #: pretix/base/exporters/orderlist.py:570
 msgid "Net price"
-msgstr ""
+msgstr "Καθαρή τιμή"
 
 #: pretix/base/exporters/orderlist.py:573
 msgid "Tax name"
-msgstr ""
+msgstr "Φορολογικό όνομα"
 
 #: pretix/base/exporters/orderlist.py:574
 msgid "Event start date"
-msgstr ""
+msgstr "Ημερομηνία έναρξης του γεγονότος"
 
 #: pretix/base/forms/auth.py:17 pretix/base/forms/auth.py:173
 #: pretix/base/models/auth.py:78 pretix/base/models/notifications.py:25
@@ -6054,7 +6054,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:900
 msgid "Refund status"
-msgstr ""
+msgstr "Κατάσταση επιστροφής χρημάτων"
 
 #: pretix/control/forms/filter.py:902
 msgid "All open refunds"
@@ -6062,35 +6062,36 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:903
 msgid "All refunds"
-msgstr ""
+msgstr "Όλες οι επιστροφές χρημάτων"
 
 #: pretix/control/forms/global_settings.py:21
 msgid "Additional footer text"
-msgstr ""
+msgstr "Πρόσθετο κείμενο υποσέλιδου"
 
 #: pretix/control/forms/global_settings.py:22
 msgid "Will be included as additional text in the footer, site-wide."
 msgstr ""
+"Θα συμπεριληφθεί ως πρόσθετο κείμενο στο υποσέλιδο, σε ολόκληρο τον ιστότοπο."
 
 #: pretix/control/forms/global_settings.py:27
 msgid "Additional footer link"
-msgstr ""
+msgstr "Πρόσθετη σύνδεση υποσέλιδου"
 
 #: pretix/control/forms/global_settings.py:28
 msgid "Will be included as the link in the additional footer text."
-msgstr ""
+msgstr "Θα συμπεριληφθεί ως σύνδεσμος στο πρόσθετο κείμενο υποσέλιδου."
 
 #: pretix/control/forms/global_settings.py:33
 msgid "Global message banner"
-msgstr ""
+msgstr "Παγκόσμιο banner μηνύματος"
 
 #: pretix/control/forms/global_settings.py:38
 msgid "Global message banner detail text"
-msgstr ""
+msgstr "Κείμενο παγκόσμιας λεπτομέρειας banner μηνύματος"
 
 #: pretix/control/forms/global_settings.py:54
 msgid "Perform update checks"
-msgstr ""
+msgstr "Εκτελέστε ελέγχους ενημέρωσης"
 
 #: pretix/control/forms/global_settings.py:55
 msgid ""
@@ -6101,10 +6102,18 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
+"Κατά τη διάρκεια του ελέγχου ενημέρωσης, το pretix θα αναφέρει ένα ανώνυμο, "
+"μοναδικό αναγνωριστικό εγκατάστασης, την τρέχουσα έκδοση του pretix και τα "
+"εγκατεστημένα plugins και τον αριθμό των ενεργών και ανενεργών συμβάντων "
+"στην εγκατάσταση σας σε διακομιστές που λειτουργούν από τους προπτυχιακούς "
+"προγραμματιστές. Θα αποθηκεύουμε μόνο ανώνυμα δεδομένα, ποτέ δεν υπάρχουν "
+"διευθύνσεις IP και δεν θα γνωρίζουμε ποιοι είστε ή πού να βρείτε το δικό σας "
+"παράδειγμα. Μπορείτε να απενεργοποιήσετε αυτή τη συμπεριφορά εδώ ανά πάσα "
+"στιγμή."
 
 #: pretix/control/forms/global_settings.py:63
 msgid "E-mail notifications"
-msgstr ""
+msgstr "Ειδοποιήσεις ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/control/forms/global_settings.py:64
 msgid ""
@@ -6112,6 +6121,10 @@ msgid ""
 "available. This address will not be transmitted to pretix.eu, the emails "
 "will be sent by this server locally."
 msgstr ""
+"Θα σας ειδοποιήσουμε σε αυτή τη διεύθυνση εάν εντοπίσουμε ότι είναι "
+"διαθέσιμη μια νέα ενημέρωση. Αυτή η διεύθυνση δεν θα μεταδοθεί στο "
+"pretix.eu, τα μηνύματα ηλεκτρονικού ταχυδρομείου θα αποστέλλονται από αυτόν "
+"τον εξυπηρετητή τοπικά."
 
 #: pretix/control/forms/item.py:73
 msgid "Dependencies between questions are not supported during check-in."
@@ -11220,12 +11233,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:69
 msgid "Begin"
-msgstr ""
+msgstr "Αρχίζω"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:132
 msgctxt "subevent"
 msgid "Use as a template for a new date"
-msgstr ""
+msgstr "Χρησιμοποιήστε ως πρότυπο για μια νέα ημερομηνία"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:137
 msgctxt "subevent"
@@ -11235,15 +11248,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:151
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:150
 msgid "Delete selected"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένων"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Enable selected"
-msgstr ""
+msgstr "Ενεργοποίηση επιλεγμένων"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:157
 msgid "Disable selected"
-msgstr ""
+msgstr "Απενεργοποίηση επιλεγμένων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -11252,140 +11265,165 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:6
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:8
 msgid "Add a two-factor authentication device"
-msgstr ""
+msgstr "Προσθέστε μια συσκευή ελέγχου ταυτότητας δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
-msgstr ""
+msgstr "Για να ρυθμίσετε αυτήν τη συσκευή, ακολουθήστε τα παρακάτω βήματα:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
 msgid "Download the Google Authenticator application to your phone:"
-msgstr ""
+msgstr "Κάντε λήψη της εφαρμογής Google Authenticator στο τηλέφωνό σας:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 msgid "Android (Google Play)"
-msgstr ""
+msgstr "Android (Google Play)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:23
 msgid "Android (F-Droid)"
-msgstr ""
+msgstr "Android (F-Droid)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:28
 msgid "iOS (iTunes)"
-msgstr ""
+msgstr "iOS (iTunes)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:33
 msgid "Blackberry (Link via Google)"
-msgstr ""
+msgstr "Blackberry (Σύνδεση μέσω Google)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
 msgstr ""
+"Προσθέστε ένα νέο λογαριασμό στην εφαρμογή σαρώνοντας τον ακόλουθο γραμμωτό "
+"κώδικα:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 msgid "Can't scan the barcode?"
-msgstr ""
+msgstr "Δεν είναι δυνατή η σάρωση του γραμμωτού κώδικα;"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:49
 msgid "Use the \"provide a key\" option of your authenticator app."
 msgstr ""
+"Χρησιμοποιήστε την επιλογή \"Παρέχετε ένα κλειδί\" της εφαρμογής \""
+"Ειδοποίηση."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:52
 msgid "In \"Account name\", type your login name for pretix."
 msgstr ""
+"Στο \"Όνομα λογαριασμού\", πληκτρολογήστε το όνομα σύνδεσης σας για το "
+"pretix."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:55
 msgid "In \"Secret\"/\"Account Key\", enter the following code:"
 msgstr ""
+"Στο \"Μυστικό\"/\"Κλειδί λογαριασμού\", πληκτρολογήστε τον ακόλουθο κωδικό:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:60
 msgid "copy"
-msgstr ""
+msgstr "αντίγραφο"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:68
 msgid ""
 "If present, make sure \"Time-based\"/\"TOTP\" and 6 digit codes are selected."
 msgstr ""
+"Εάν υπάρχει, βεβαιωθείτε ότι έχετε επιλέξει \"Χρόνος-βάση\" / \"TOTP\" και 6-"
+"ψήφιοι κωδικούς."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:74
 msgid "Enter the displayed code here:"
-msgstr ""
+msgstr "Πληκτρολογήστε τον εμφανιζόμενο κωδικό εδώ:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:19
 msgid "Require second factor for future logins"
-msgstr ""
+msgstr "Απαιτήστε δεύτερο παράγοντα για μελλοντικές συνδέσεις"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:11
 msgid ""
 "Please connect your U2F device. If it has a button, touch it now. You might "
 "have to unplug the device and plug it back in again."
 msgstr ""
+"Συνδέστε τη συσκευή σας U2F. Αν έχει ένα κουμπί, αγγίξτε το τώρα. Μπορεί να "
+"χρειαστεί να αποσυνδέσετε τη συσκευή και να την συνδέσετε ξανά."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_u2f.html:26
 msgid "Device registration failed."
-msgstr ""
+msgstr "Η καταχώριση συσκευής απέτυχε."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:6
 msgid "Delete a two-factor authentication device"
-msgstr ""
+msgstr "Διαγράψτε μια συσκευή επαλήθευσης δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε τη συσκευή ελέγχου ταυτότητας \""
+"%(device)s\";"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
 msgstr ""
+"Δεν θα μπορείτε πλέον να χρησιμοποιείτε αυτήν τη συσκευή για να συνδεθείτε "
+"στο pretix."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:14
 msgid ""
 "If this is the only device connected to your account, we will disable two-"
 "factor authentication."
 msgstr ""
+"Εάν αυτή είναι η μόνη συνδεδεμένη συσκευή στο λογαριασμό σας, θα "
+"απενεργοποιήσουμε τον έλεγχο ταυτότητας δύο παραγόντων."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:6
 msgid "Disable two-factor authentication"
-msgstr ""
+msgstr "Απενεργοποιήστε τον έλεγχο ταυτότητας δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:10
 msgid "Do you really want to disable two-factor authentication?"
 msgstr ""
+"Θέλετε πραγματικά να απενεργοποιήσετε τον έλεγχο ταυτότητας δύο παραγόντων;"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:13
 msgid "You will no longer require a second device to log in to your account."
 msgstr ""
+"Δεν θα χρειάζεται πλέον μια δεύτερη συσκευή για να συνδεθείτε στο λογαριασμό "
+"σας."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:6
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "Ενεργοποιήστε τον έλεγχο ταυτότητας δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:10
 msgid "Do you really want to enable two-factor authentication?"
 msgstr ""
+"Θέλετε πραγματικά να ενεργοποιήσετε τον έλεγχο ταυτότητας δύο παραγόντων;"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:13
 msgid ""
 "You will no longer be able to log in to pretix without one of your "
 "configured devices."
 msgstr ""
+"Δεν θα μπορείτε πλέον να συνδεθείτε στο pretix χωρίς μια από τις "
+"διαμορφωμένες συσκευές σας."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:14
 msgid ""
 "Please make sure to print out or copy the emergency tokens and store them in "
 "a safe place."
 msgstr ""
+"Βεβαιωθείτε ότι έχετε εκτυπώσει ή αντιγράψετε τα tokens έκτακτης ανάγκης και "
+"τα έχετε αποθηκεύσει σε ασφαλές μέρος."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:41
 msgid "Two-factor authentication"
-msgstr ""
+msgstr "Έλεγχος ταυτότητας δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
 msgid ""
@@ -11394,35 +11432,43 @@ msgid ""
 "but also an additional token that is generated e.g. by an app on your "
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
+"Ο έλεγχος ταυτότητας δύο παραγόντων είναι ένας τρόπος για να προσθέσετε "
+"επιπλέον ασφάλεια στο λογαριασμό σας. Εάν την ενεργοποιήσετε, θα χρειαστεί "
+"όχι μόνο ο κωδικός πρόσβασής σας για να συνδεθείτε, αλλά και ένα πρόσθετο "
+"token που παράγεται π.χ. από μια εφαρμογή στο smartphone σας ή ένα δημιουργό "
+"hardware \n"
+"token το οποίο αλλάζει σε τακτική βάση."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:31
 msgid "Two-factor status"
-msgstr ""
+msgstr "Κατάσταση δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
 msgid "Two-factor authentication is currently enabled."
-msgstr ""
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι ενεργοποιημένος."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:40
 msgid "Two-factor authentication is currently disabled."
-msgstr ""
+msgstr "Ο έλεγχος ταυτότητας δύο παραγόντων είναι προσωρινά απενεργοποιημένος."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:43
 msgid "To enable it, you need to configure at least one device below."
 msgstr ""
+"Για να το ενεργοποιήσετε, πρέπει να διαμορφώσετε τουλάχιστον μία συσκευή "
+"παρακάτω."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:50
 msgid "Registered devices"
-msgstr ""
+msgstr "Εγγεγραμμένες συσκευές"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:71
 msgid "Add a new device"
-msgstr ""
+msgstr "Προσθέστε μια νέα συσκευή"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:78
 msgid "Emergency tokens"
-msgstr ""
+msgstr "Tokens έκτακτης ανάγκης"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:82
 msgid ""
@@ -11430,68 +11476,73 @@ msgid ""
 "log in. We recommend to store them in a safe place, e.g. printed out or in a "
 "password manager. Every token can be used at most once."
 msgstr ""
+"Εάν χάσετε την πρόσβαση στις συσκευές σας, μπορείτε να χρησιμοποιήσετε ένα "
+"από τα παρακάτω κλειδιά για να συνδεθείτε. Σας συνιστούμε να τα αποθηκεύσετε "
+"σε ασφαλές μέρος, π.χ. εκτυπωμένα ή σε διαχειριστή κωδικών πρόσβασης. Κάθε "
+"token μπορεί να χρησιμοποιηθεί το πολύ μία φορά."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:84
 msgid "Unused tokens:"
-msgstr ""
+msgstr "Μη χρησιμοποιημένα tokens:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:92
 msgid "Generate new emergency tokens"
-msgstr ""
+msgstr "Δημιουργήστε νέα tokens έκτακτης ανάγκης"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:6
 msgid "Regenerate emergency codes"
-msgstr ""
+msgstr "Αναδημιουργήστε τους κωδικούς έκτακτης ανάγκης"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
 msgstr ""
+"Θέλετε πραγματικά να αναδημιουργήσετε τους κωδικούς σας έκτακτης ανάγκης;"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
-msgstr ""
+msgstr "Οι παλιοί κωδικοί δεν θα λειτουργούν πλέον."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
 msgid "Notification settings"
-msgstr ""
+msgstr "Ρυθμίσεις ειδοποιήσεων"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:16
 msgid "Notifications are turned on according to the settings below."
-msgstr ""
+msgstr "Οι ειδοποιήσεις ενεργοποιούνται σύμφωνα με τις παρακάτω ρυθμίσεις."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:25
 msgid "All notifications are turned off globally."
-msgstr ""
+msgstr "Όλες οι ειδοποιήσεις απενεργοποιούνται παγκοσμίως."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:33
 msgid "Choose event"
-msgstr ""
+msgstr "Επιλέξτε γεγονός"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:37
 msgid "All my events"
-msgstr ""
+msgstr "Όλα τα γεγονότα μου"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:45
 msgid "Save your modifications before switching events."
-msgstr ""
+msgstr "Αποθηκεύστε τις τροποποιήσεις σας πριν από την αλλαγή των γεγονότων."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:52
 msgid "Choose notifications to get"
-msgstr ""
+msgstr "Επιλέξτε ειδοποιήσεις για να λάβετε"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:56
 msgid "Notification type"
-msgstr ""
+msgstr "Τύπος ειδοποίησης"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:57
 msgid "E-Mail notification"
-msgstr ""
+msgstr "Ειδοποίηση ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
-msgstr ""
+msgstr "Παγκόσμια"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
@@ -11507,46 +11558,48 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
-msgstr ""
+msgstr "Δεν έχετε καμία άδεια να λάβετε αυτήν την ειδοποίηση"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:11
 msgid ""
 "We just want to make sure it's really you. Please re-enter your password to "
 "continue."
 msgstr ""
+"Απλά θέλουμε να βεβαιωθούμε ότι είστε πραγματικά εσείς. Πληκτρολογήστε ξανά "
+"τον κωδικό πρόσβασής σας για να συνεχίσετε."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:27
 msgid "Alternatively, you can use your U2F device."
-msgstr ""
+msgstr "Εναλλακτικά, μπορείτε να χρησιμοποιήσετε τη συσκευή U2F σας."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:35
 msgid "Log in as someone else"
-msgstr ""
+msgstr "Συνδεθείτε ως κάποιος άλλος"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:4
 #: pretix/control/templates/pretixcontrol/user/settings.html:6
 msgid "Account settings"
-msgstr ""
+msgstr "Ρυθμίσεις λογαριασμού"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:35
 msgid "Login settings"
-msgstr ""
+msgstr "Ρυθμίσεις σύνδεσης"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:46
 msgid "Change two-factor settings"
-msgstr ""
+msgstr "Αλλάξτε τις ρυθμίσεις δύο παραγόντων"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
 msgid "Show applications"
-msgstr ""
+msgstr "Εμφάνιση εφαρμογών"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Show account history"
-msgstr ""
+msgstr "Εμφάνιση ιστορικού λογαριασμού"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
-msgstr ""
+msgstr "Προσωπικό"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:6
 msgid "Session notes"
