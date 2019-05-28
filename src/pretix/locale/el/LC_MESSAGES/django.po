@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:36+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -6079,7 +6079,7 @@ msgstr "Χειρισμός ποσοστώσεων (Quota handling)"
 
 #: pretix/control/forms/filter.py:769
 msgid "Allow to ignore quota"
-msgstr "Αφήστε να αγνοήσετε την ποσόστωση"
+msgstr "Αφήστε να αγνοήσετε την ποσόστωση(quota)"
 
 #: pretix/control/forms/filter.py:774 pretix/control/forms/filter.py:776
 msgid "Filter by tag"
