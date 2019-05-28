@@ -445,6 +445,7 @@ class Event(EventMixin, LoggedModel):
 
         self.plugins = other.plugins
         self.is_public = other.is_public
+        self.testmode = other.testmode
         self.save()
 
         tax_map = {}
