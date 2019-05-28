@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 10:38+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-28 10:42+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -13517,34 +13517,36 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/__init__.py:13
 msgid "Check-in list exporter"
-msgstr ""
+msgstr "Εξαγωγέας λίστας Check-in"
 
 #: pretix/plugins/checkinlists/__init__.py:17
 msgid "This plugin allows you to generate check-in lists for your conference."
 msgstr ""
+"Αυτό το plugin σάς επιτρέπει να δημιουργείτε check-in λίστες για τη διάσκεψη "
+"σας."
 
 #: pretix/plugins/checkinlists/exporters.py:44
 msgid "Include QR-code secret"
-msgstr ""
+msgstr "Συμπεριλάβετε μυστικό κώδικα QR"
 
 #: pretix/plugins/checkinlists/exporters.py:64
 msgid "Include questions"
-msgstr ""
+msgstr "Συμπεριλάβετε ερωτήσεις"
 
 #: pretix/plugins/checkinlists/exporters.py:159
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Λίστα Check-in (PDF)"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:210
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "Μεταφραστές: μέγιστο 5 χαρακτήρες"
 
 #: pretix/plugins/checkinlists/exporters.py:311
 #: pretix/plugins/paypal/payment.py:79
 msgid "Secret"
-msgstr ""
+msgstr "Mυστικό (secret)"
 
 #: pretix/plugins/manualpayment/__init__.py:15
 msgid "This plugin adds a customizable payment method for manual processing."
@@ -13553,7 +13555,7 @@ msgstr ""
 #: pretix/plugins/paypal/__init__.py:10 pretix/plugins/paypal/__init__.py:13
 #: pretix/plugins/paypal/payment.py:31
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/__init__.py:16
 msgid "This plugin allows you to receive payments via PayPal"
