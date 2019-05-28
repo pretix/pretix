@@ -245,6 +245,10 @@ class Order(LockModel, LoggedModel):
         except TypeError:
             return None
 
+    @meta_info_data.setter
+    def meta_info_data(self, d):
+        self.meta_info = json.dumps(d)
+
     @property
     def payment_refund_sum(self):
         payment_sum = self.payments.filter(
@@ -977,6 +981,10 @@ class AbstractPosition(models.Model):
             return json.loads(self.meta_info)
         else:
             return {}
+
+    @meta_info_data.setter
+    def meta_info_data(self, d):
+        self.meta_info = json.dumps(d)
 
     def cache_answers(self, all=True):
         """
