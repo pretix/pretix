@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 09:37+0000\n"
+"PO-Revision-Date: 2019-05-28 10:08+0000\n"
 "Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -559,7 +559,7 @@ msgstr "Ημερομηνία τελευταίας πληρωμής"
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/services/stats.py:152
 msgid "Fees"
-msgstr ""
+msgstr "Αμοιβές"
 
 #: pretix/base/exporters/orderlist.py:100
 #: pretix/control/templates/pretixcontrol/order/index.html:126
