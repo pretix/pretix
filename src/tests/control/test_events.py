@@ -540,9 +540,6 @@ class EventsTest(SoupTest):
 
     def test_create_event_success(self):
         doc = self.get_doc('/control/events/add')
-        tabletext = doc.select("form")[0].text
-        self.assertIn("CCC", tabletext)
-        self.assertNotIn("MRM", tabletext)
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
@@ -574,8 +571,6 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-
-        assert doc.select("#id_copy-copy_from_event_1")
 
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
@@ -655,9 +650,6 @@ class EventsTest(SoupTest):
         )
         self.event1.settings.tax_rate_default = tr
         doc = self.get_doc('/control/events/add')
-        tabletext = doc.select("form")[0].text
-        self.assertIn("CCC", tabletext)
-        self.assertNotIn("MRM", tabletext)
 
         doc = self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
@@ -689,8 +681,6 @@ class EventsTest(SoupTest):
             'basics-presale_end_0': '2016-11-30',
             'basics-presale_end_1': '18:00:00',
         })
-
-        assert doc.select("#id_copy-copy_from_event_1")
 
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'copy',
