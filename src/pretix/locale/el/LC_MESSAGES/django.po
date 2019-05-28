@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-28 12:36+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1135,12 +1135,12 @@ msgstr "Νέος κωδικός πρόσβασης"
 
 #: pretix/base/forms/user.py:34 pretix/control/forms/users.py:33
 msgid "Repeat new password"
-msgstr ""
+msgstr "Επαναλάβετε τον νέο κωδικό πρόσβασης"
 
 #: pretix/base/forms/user.py:38 pretix/control/forms/event.py:302
 #: pretix/control/forms/users.py:37
 msgid "Default timezone"
-msgstr ""
+msgstr "Προεπιλεγμένη ζώνη ώρας"
 
 #: pretix/base/forms/user.py:39 pretix/control/forms/users.py:38
 msgid ""
