@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-04-24 22:00+0000\n"
+"PO-Revision-Date: 2019-05-28 21:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
@@ -210,7 +210,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
-msgstr "Ολα"
+msgstr "Όλα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
