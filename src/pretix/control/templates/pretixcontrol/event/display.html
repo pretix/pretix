@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load hierarkey_form %}
+{% block custom_header %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+{% endblock %}
 {% block inside %}
     <h1>{% trans "Display settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">

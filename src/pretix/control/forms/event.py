@@ -25,8 +25,8 @@ from pretix.base.models.event import EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.forms import (
-    ExtFileField, MultipleLanguagesWidget, SingleLanguageWidget, SlugWidget,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
+    SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
@@ -1140,6 +1140,7 @@ class DisplaySettingsForm(SettingsForm):
         choices=[
             ('Open Sans', 'Open Sans')
         ],
+        widget=FontSelect,
         help_text=_('Only respected by modern browsers.')
     )
     frontpage_text = I18nFormField(

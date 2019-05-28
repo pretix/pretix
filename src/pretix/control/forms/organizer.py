@@ -12,7 +12,9 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, SettingsForm
 from pretix.base.models import Device, Organizer, Team
-from pretix.control.forms import ExtFileField, MultipleLanguagesWidget
+from pretix.control.forms import (
+    ExtFileField, FontSelect, MultipleLanguagesWidget,
+)
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.style import get_fonts
 
@@ -260,6 +262,7 @@ class OrganizerDisplaySettingsForm(SettingsForm):
         choices=[
             ('Open Sans', 'Open Sans')
         ],
+        widget=FontSelect,
         help_text=_('Only respected by modern browsers.')
     )
     favicon = ExtFileField(

@@ -8,7 +8,7 @@
     {% compress css %}
         <link type="text/css" rel="stylesheet" href="{% static "pretixcontrol/scss/pdfeditor.css" %}">
     {% endcompress %}
-    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" organizer=request.organizer.slug event=request.event.slug %}">
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
 {% endblock %}
 {% block content %}
     <h1>

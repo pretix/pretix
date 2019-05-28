@@ -200,3 +200,7 @@ class SplitDateTimeField(forms.SplitDateTimeField):
             result = datetime.datetime.combine(*data_list)
             return from_current_timezone(result)
         return None
+
+
+class FontSelect(forms.RadioSelect):
+    option_template_name = 'pretixcontrol/font_option.html'

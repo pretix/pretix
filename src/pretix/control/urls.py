@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^users/(?P<id>\d+)/reset$', users.UserResetView.as_view(), name='users.reset'),
     url(r'^users/(?P<id>\d+)/impersonate', users.UserImpersonateView.as_view(), name='users.impersonate'),
     url(r'^users/(?P<id>\d+)/anonymize', users.UserAnonymizeView.as_view(), name='users.anonymize'),
+    url(r'^pdf/editor/webfonts.css', pdf.FontsCSSView.as_view(), name='pdf.css'),
     url(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     url(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
     url(r'^settings/notifications/$', user.UserNotificationsEditView.as_view(), name='user.settings.notifications'),
