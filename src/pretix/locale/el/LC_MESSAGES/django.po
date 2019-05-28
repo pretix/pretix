@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 12:35+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-28 12:36+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -6075,7 +6075,7 @@ msgstr "Εξαργυρωμένο και ελεγχόμενο με το εισι�
 
 #: pretix/control/forms/filter.py:765
 msgid "Quota handling"
-msgstr "Χειρισμός ποσοστώσεων"
+msgstr "Χειρισμός ποσοστώσεων (Quota handling)"
 
 #: pretix/control/forms/filter.py:769
 msgid "Allow to ignore quota"
