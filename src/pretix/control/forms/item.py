@@ -206,6 +206,8 @@ class ItemCreateForm(I18nModelForm):
             empty_label=_('Do not copy'),
             required=False
         )
+        if self.event.tax_rules.exists():
+            self.fields['tax_rule'].required = True
 
         if not self.event.has_subevents:
             choices = [
@@ -364,6 +366,8 @@ class ItemUpdateForm(I18nModelForm):
             'over 65. This ticket includes access to all parts of the event, except the VIP '
             'area.'
         )
+        if self.event.tax_rules.exists():
+            self.fields['tax_rule'].required = True
         self.fields['description'].widget.attrs['rows'] = '4'
         self.fields['sales_channels'] = forms.MultipleChoiceField(
             label=_('Sales channels'),
