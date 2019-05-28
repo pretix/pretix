@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 12:30+0000\n"
-"Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
+"PO-Revision-Date: 2019-05-28 12:31+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5911,7 +5911,7 @@ msgstr "Πληρωμή επιπλέον"
 
 #: pretix/control/forms/filter.py:213
 msgid "Underpaid"
-msgstr "Ανεπαρκώς αμειβόμενος"
+msgstr "Ανεπαρκώς αμειβόμενος (Underpaid)"
 
 #: pretix/control/forms/filter.py:214
 msgid "Pending (but fully paid)"
