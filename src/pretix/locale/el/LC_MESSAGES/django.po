@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 08:09+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: GiorgosPap <gipap90@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -13510,35 +13510,37 @@ msgstr "Badge"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Είστε σίγουροι ότι θέλετε να διαγράψετε τη διάταξη του badge "
+"<strong>%(layout)s</strong>;"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Διάταξη Badge: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
-msgstr ""
+msgstr "Σχέδιο badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr ""
+msgstr "Μπορείτε να τροποποιήσετε το σχέδιο αφού αποθηκεύσετε αυτήν τη σελίδα."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "Δεν έχετε δημιουργήσει ακόμα διατάξεις badge."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Δημιουργήστε μια νέα διάταξη badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
 msgid "Make default"
-msgstr ""
+msgstr "Κάντε προεπιλογή"
 
 #: pretix/plugins/badges/views.py:56
 msgid "The new badge layout has been created."
