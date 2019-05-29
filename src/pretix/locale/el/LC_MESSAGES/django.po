@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:14+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -16922,7 +16922,7 @@ msgstr "συν τους φόρους"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:129
 #: pretix/presale/templates/pretixpresale/event/voucher.html:235
 msgid "incl. taxes"
-msgstr ""
+msgstr "συμπεριλαμβανομένων των φόρων"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:127
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:241
@@ -16944,6 +16944,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:253
 msgid "Enter a voucher code below to buy this ticket."
 msgstr ""
+"Εισαγάγετε έναν κωδικό κουπονιού παρακάτω για να αγοράσετε αυτό το εισιτήριο."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:150
 #: pretix/presale/templates/pretixpresale/event/voucher.html:151
@@ -16962,7 +16963,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:52
 msgid "Go"
-msgstr ""
+msgstr "Πήγαινε"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:21
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
@@ -16983,7 +16984,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:40
 #: pretix/presale/templates/pretixpresale/organizers/index.html:95
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Δεν είναι ακόμα σε πώληση"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:9
 msgid "Presale"
@@ -17076,6 +17077,11 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Εάν θέλετε να δείτε ή να αλλάξετε την κατάσταση και τα στοιχεία της "
+"παραγγελίας σας, κάντε κλικ στο σύνδεσμο σε ένα από τα μηνύματα ηλεκτρονικού "
+"ταχυδρομείου που σας στείλαμε κατά τη διάρκεια της διαδικασίας παραγγελίας. "
+"Αν δεν μπορείτε να βρείτε τον σύνδεσμο, κάντε κλικ στο παρακάτω κουμπί για "
+"να ζητήσετε ξανά τη σύνδεση με την παραγγελία σας."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
