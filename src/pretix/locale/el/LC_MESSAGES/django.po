@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 13:14+0000\n"
-"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-29 22:00+0000\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -10317,9 +10317,9 @@ msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
-"Λάβετε υπόψη ότι το προϊόν σας <strong> όχι </strong> θα είναι διαθέσιμο "
+"Λάβετε υπόψη ότι το προϊόν σας <strong> δεν </strong> θα είναι διαθέσιμο "
 "προς πώληση μέχρι να προσθέσετε το στοιχείο σας σε υπάρχουσα ή νεοσυσταθείσα "
-"ποσόστωση."
+"ποσόστωση(quota)."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:46
 msgid ""
@@ -10548,7 +10548,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
-msgstr ""
+msgstr "Δεν βρέθηκαν απαντήσεις που να ταιριάζουν."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:50
 msgid "You need to assign the question to a product to collect answers."
@@ -10560,12 +10560,12 @@ msgstr "Λογαριασμός"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Question history"
-msgstr ""
+msgstr "Ιστορικό ερωτήσεων"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:6
 msgid "Delete question"
-msgstr ""
+msgstr "Διαγραφή ερώτησης"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:9
 #, python-format
@@ -10578,6 +10578,8 @@ msgid ""
 "All answers to the question given by the buyers of the following products "
 "will be <strong>lost</strong>."
 msgstr ""
+"Όλες οι απαντήσεις στην ερώτηση που δόθηκε από τους αγοραστές των παρακάτω "
+"προϊόντων θα <strong>χαθούν</strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:29
 msgid ""
@@ -10605,7 +10607,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:103
 msgid "Add a new option"
-msgstr ""
+msgstr "Προσθέστε μια νέα επιλογή"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:116
 msgid "Question dependency"
@@ -10620,7 +10622,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:15
 msgid "You haven't created any questions yet."
-msgstr ""
+msgstr "Δεν έχετε δημιουργήσει ακόμα ερωτήσεις."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 #: pretix/control/templates/pretixcontrol/items/questions.html:25
@@ -10633,11 +10635,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:13
 #, python-format
 msgid "Quota: %(name)s"
-msgstr ""
+msgstr "Quota: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:14
 msgid "Edit quota"
-msgstr ""
+msgstr "Επεξεργασία ποσόστωσης (quota)"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:25
 msgid "Usage overview"
@@ -12996,12 +12998,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/create.html:4
 #: pretix/control/templates/pretixcontrol/users/create.html:6
 msgid "Create user"
-msgstr ""
+msgstr "Δημιουργία χρήστη"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:11
 #: pretix/control/templates/pretixcontrol/users/form.html:24
 msgid "Base settings"
-msgstr ""
+msgstr "Βασικές ρυθμίσεις"
 
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:32
@@ -15654,7 +15656,7 @@ msgstr ""
 
 #: pretix/plugins/reports/exporters.py:367
 msgid "Tax"
-msgstr ""
+msgstr "Φόρος"
 
 #: pretix/plugins/sendmail/__init__.py:9 pretix/plugins/sendmail/__init__.py:12
 #: pretix/plugins/sendmail/signals.py:16
@@ -15662,7 +15664,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:6
 msgid "Send out emails"
-msgstr ""
+msgstr "Αποστολή emails"
 
 #: pretix/plugins/sendmail/__init__.py:15
 msgid "This plugin allows you to send out emails to all your customers."
@@ -15670,15 +15672,15 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:13
 msgid "Send email to"
-msgstr ""
+msgstr "Στείλτε email στο"
 
 #: pretix/plugins/sendmail/forms.py:25
 msgid "Only send to people who bought"
-msgstr ""
+msgstr "Αποστολή μόνο σε άτομα που αγόρασαν"
 
 #: pretix/plugins/sendmail/forms.py:31
 msgid "Only send to customers of"
-msgstr ""
+msgstr "Στείλτε μόνο στους πελάτες της"
 
 #: pretix/plugins/sendmail/forms.py:41
 msgid "Everyone who created a ticket order"
@@ -16631,7 +16633,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid "We're now trying to book these add-ons for you!"
-msgstr ""
+msgstr "Τώρα προσπαθούμε να κλείσουμε αυτά τα πρόσθετα για εσάς!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:39
 #, python-format
@@ -17436,6 +17438,8 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
+"Αν θέλετε να διαμορφώσετε αυτήν την εγκατάσταση, παρακαλούμε να %(a_attr)"
+"sκατευθυνθείτε εδώ</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
