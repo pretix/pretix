@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 09:41+0000\n"
-"Last-Translator: GiorgosPap <gipap90@gmail.com>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -13856,11 +13856,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid "Name of bank"
-msgstr ""
+msgstr "Όνομα τράπεζας"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "Bank account details"
-msgstr ""
+msgstr "Λεπτομέρειες τραπεζικού λογαριασμού"
 
 #: pretix/plugins/banktransfer/payment.py:88
 msgid ""
@@ -13988,7 +13988,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
-msgstr ""
+msgstr "Ανεβάστε ένα νέο αρχείο"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
@@ -14007,10 +14007,12 @@ msgstr ""
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
+"Προς το παρόν γίνεται επεξεργασία μιας εισαγωγής, δοκιμάστε ξανά σε λίγα "
+"λεπτά."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:34
 msgid "Import file"
-msgstr ""
+msgstr "Εισαγωγή αρχείου"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:38
 msgid "Start upload"
@@ -14018,7 +14020,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:48
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Μη εξουσιοδοτημένες συναλλαγές"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:53
 msgid ""
@@ -14032,7 +14034,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:63
 msgid "Search"
-msgstr ""
+msgstr "Αναζήτηση"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:72
 msgid "Discard all"
@@ -14040,25 +14042,29 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:83
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Η αναζήτησή σας δεν αντιστοιχούσε σε καμία συναλλαγή."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Αποτέλεσμα εισαγωγής"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Το αποτέλεσμα της εισαγωγής σας βρίσκεται σε εξέλιξη. Παρακαλούμε να είστε "
+"υπομονετικοί ενώ επεξεργαζόμαστε τα δεδομένα …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
-msgstr ""
+msgstr "Παρουσιάστηκε εσωτερικό σφάλμα κατά την επεξεργασία των δεδομένων σας."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try ot re-import the file."
 msgstr ""
+"Ενδέχεται να λείπουν ορισμένες συναλλαγές, προσπαθήστε να εισαγάγετε ξανά το "
+"αρχείο."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
@@ -14067,37 +14073,41 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Παραγγελίες που έχουν επισημανθεί ως πληρωμένες"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Μη έγκυρες πληρωμές"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Πληρωμές που δεν έχουν συμπεριληφθεί"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Ελέγξτε τις μη έγκυρες και τις πληρωμές που δεν έχουν συμπεριληφθεί"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:8
 msgid "Please transfer the full amount to the following bank account:"
 msgstr ""
+"Παρακαλώ μεταφέρετε ολόκληρο το ποσό στον ακόλουθο τραπεζικό λογαριασμό:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "Amount:"
-msgstr ""
+msgstr "Ποσό:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Κωδικός αναφοράς (σημαντικό):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:28
 msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Αφού στείλετε την τραπεζική μεταφορά, μπορείτε να κλείσετε αυτό το παράθυρο. "
+"Θα σας στείλουμε ένα μήνυμα ηλεκτρονικού ταχυδρομείου μόλις λάβουμε την "
+"πληρωμή σας."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:58
 msgid "Open banking app"
@@ -14105,7 +14115,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:60
 msgid "Requires that the app supports BezahlCode"
-msgstr ""
+msgstr "Απαιτεί ότι η εφαρμογή υποστηρίζει το BezahlCode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
@@ -14117,17 +14127,17 @@ msgstr "Αποτέλεσμα"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Αποδoχή σε κάθε περίπτωση"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:41
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:52
 msgid "Discard"
-msgstr ""
+msgstr "Απόρριψη"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 msgid "Assign to order"
-msgstr ""
+msgstr "Ανάθεση στην παραγγελία"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:48
 msgid "Retry"
@@ -14139,74 +14149,80 @@ msgstr "Σχόλιο:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:75
 msgid "No order code detected"
-msgstr ""
+msgstr "Δεν εντοπίστηκε κωδικός παραγγελίας"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:77
 msgid "Invalid for this order"
-msgstr ""
+msgstr "Μη έγκυρο για αυτήν την παραγγελία"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:79
 msgid "Error while processing"
-msgstr ""
+msgstr "Σφάλμα κατά την επεξεργασία"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:81
 msgid "The order is already marked as paid"
-msgstr ""
+msgstr "Η παραγγελία έχει ήδη επισημανθεί ως πληρωμένη"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:83
 msgid "Order already paid"
-msgstr ""
+msgstr "Η παραγγελία έχει ήδη πληρωθεί"
 
 #: pretix/plugins/banktransfer/views.py:50
 msgid "The order is already marked as paid."
-msgstr ""
+msgstr "Η παραγγελία έχει ήδη επισημανθεί ως πληρωμένη."
 
 #: pretix/plugins/banktransfer/views.py:82
 msgid "Problem sending email."
-msgstr ""
+msgstr "Πρόβλημα αποστολής μηνυμάτων ηλεκτρονικού ταχυδρομείου."
 
 #: pretix/plugins/banktransfer/views.py:104
 msgid "Unknown order code"
-msgstr ""
+msgstr "Άγνωστος κωδικός παραγγελίας"
 
 #: pretix/plugins/banktransfer/views.py:282
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Όλες οι ανεπίλυτες συναλλαγές έχουν απορριφθεί."
 
 #: pretix/plugins/banktransfer/views.py:301
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Πρέπει να επιλέξετε ένα αρχείο για εισαγωγή."
 
 #: pretix/plugins/banktransfer/views.py:305
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Δεν ήταν δυνατή η ανίχνευση του τύπου αρχείου αυτής της εισαγωγής. "
+"Επικοινωνήστε με την υποστήριξη για βοήθεια."
 
 #: pretix/plugins/banktransfer/views.py:318
 #: pretix/plugins/banktransfer/views.py:362
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η επεξεργασία της εισόδου σας."
 
 #: pretix/plugins/banktransfer/views.py:327
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Λυπούμαστε, αλλά δεν ήταν δυνατή η εισαγωγή αυτού του αρχείου CSV. "
+"Επικοινωνήστε με την υποστήριξη για βοήθεια."
 
 #: pretix/plugins/banktransfer/views.py:332
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"Λυπούμαστε, αλλά εντοπίσαμε αυτό το αρχείο ως κενό. Επικοινωνήστε με την "
+"υποστήριξη για βοήθεια."
 
 #: pretix/plugins/banktransfer/views.py:352
 msgid "Invalid input data."
-msgstr ""
+msgstr "Μη έγκυρα δεδομένα εισόδου."
 
 #: pretix/plugins/banktransfer/views.py:356
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Πρέπει να επιλέξετε τη στήλη που περιέχει την αναφορά πληρωμής."
 
 #: pretix/plugins/banktransfer/views.py:456
 msgid ""
@@ -14268,7 +14284,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:59
 msgid "PayPal account"
-msgstr ""
+msgstr "Λογαριασμός PayPal"
 
 #: pretix/plugins/paypal/payment.py:72 pretix/plugins/stripe/payment.py:129
 #, python-brace-format
@@ -14281,7 +14297,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:85 pretix/plugins/stripe/payment.py:109
 msgid "Endpoint"
-msgstr ""
+msgstr "Τελικό σημείο"
 
 #: pretix/plugins/paypal/payment.py:115
 msgid ""
@@ -14349,19 +14365,19 @@ msgstr ""
 
 #: pretix/plugins/paypal/signals.py:34
 msgid "Payment pending."
-msgstr ""
+msgstr "Πληρωμή σε εκκρεμότητα."
 
 #: pretix/plugins/paypal/signals.py:43
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "Το PayPal ανέφερε μία εκδήλωση: {}"
 
 #: pretix/plugins/paypal/signals.py:68
 msgid "PayPal Connect: Client ID"
-msgstr ""
+msgstr "Σύνδεση PayPal: Αναγνωριστικό πελάτη"
 
 #: pretix/plugins/paypal/signals.py:72
 msgid "PayPal Connect: Secret key"
-msgstr ""
+msgstr "Σύνδεση PayPal: Μυστικό κλειδί"
 
 #: pretix/plugins/paypal/signals.py:76
 msgid "PayPal Connect Endpoint"
@@ -14396,6 +14412,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Το συνολικό ποσό που αναφέρεται παραπάνω θα αφαιρεθεί από τον λογαριασμό σας "
+"στο PayPal μετά την επιβεβαίωση της αγοράς σας."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -14403,52 +14421,62 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Αφού κάνετε κλικ στη συνέχεια, θα σας ανακατευθύνουμε στην PayPal για να "
+"συμπληρώσετε τα στοιχεία πληρωμής σας. Στη συνέχεια, θα μεταφερθείτε ξανά "
+"εδώ για να ελέγξετε και να επιβεβαιώσετε την παραγγελία σας."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
 msgid "Last update"
-msgstr ""
+msgstr "Τελευταία ενημέρωση"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:40
 msgid "Total value"
-msgstr ""
+msgstr "Συνολική αξία"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Η προσπάθειά μας να εκτελέσουμε την πληρωμή σας μέσω του PayPal απέτυχε. "
+"Δοκιμάστε ξανά ή επικοινωνήστε μαζί μας."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Περιμένουμε μια απάντηση από την PayPal σχετικά με την πληρωμή σας. "
+"Επικοινωνήστε μαζί μας, εάν αυτό διαρκέσει περισσότερο από μερικές ώρες."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Η διαδικασία πληρωμής ξεκίνησε σε ένα νέο παράθυρο."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"Το παράθυρο για την εισαγωγή δεδομένων πληρωμής δεν ανοίχθηκε ή έκλεισε;"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Κάντε κλικ εδώ για να ανοίξετε το παράθυρο."
 
 #: pretix/plugins/paypal/views.py:45 pretix/plugins/paypal/views.py:58
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα κατά τη σύνδεση με την PayPal, δοκιμάστε ξανά."
 
 #: pretix/plugins/paypal/views.py:61
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ο λογαριασμός σας στην PayPal είναι πλέον συνδεδεμένος με το pretix. "
+"Μπορείτε να αλλάξετε τις ρυθμίσεις λεπτομερέστερα παρακάτω."
 
 #: pretix/plugins/paypal/views.py:102
 msgid "Invalid response from PayPal received."
@@ -14456,11 +14484,11 @@ msgstr ""
 
 #: pretix/plugins/paypal/views.py:118
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Φαίνεται ότι ακυρώσατε την πληρωμή PayPal"
 
 #: pretix/plugins/paypal/views.py:247
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "Ο λογαριασμός σας στην PayPal έχει αποσυνδεθεί."
 
 #: pretix/plugins/pretixdroid/__init__.py:9
 #: pretix/plugins/pretixdroid/__init__.py:12
@@ -14475,15 +14503,15 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/models.py:11
 msgid "Can scan all products"
-msgstr ""
+msgstr "Μπορεί να σαρώσει όλα τα προϊόντα"
 
 #: pretix/plugins/pretixdroid/models.py:12
 msgid "Can scan these products"
-msgstr ""
+msgstr "Μπορεί να σαρώσει αυτά τα προϊόντα"
 
 #: pretix/plugins/pretixdroid/models.py:13
 msgid "Show information"
-msgstr ""
+msgstr "Εμφάνιση πληροφοριών"
 
 #: pretix/plugins/pretixdroid/models.py:14
 msgid ""
@@ -14493,7 +14521,7 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/models.py:16
 msgid "Search allowed"
-msgstr ""
+msgstr "Επιτρέπεται η αναζήτηση"
 
 #: pretix/plugins/pretixdroid/models.py:17
 msgid ""
@@ -14503,7 +14531,7 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/models.py:19
 msgid "Scan software"
-msgstr ""
+msgstr "Λογισμικό σάρωσης"
 
 #: pretix/plugins/pretixdroid/models.py:20
 msgid "pretixdroid – for Android smartphones"
@@ -14531,25 +14559,27 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:14
 msgid "Create app configuration"
-msgstr ""
+msgstr "Δημιουργία διαμόρφωσης εφαρμογής"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:16
 msgid ""
 "To start scanning tickets with our apps, first create a configuration code "
 "here:"
 msgstr ""
+"Για να ξεκινήσετε τη σάρωση των εισιτηρίων με τις εφαρμογές μας, "
+"δημιουργήστε πρώτα έναν κωδικό διαμόρφωσης εδώ:"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:32
 msgid "Create configuration"
-msgstr ""
+msgstr "Δημιουργία διαμόρφωσης"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:41
 msgid "Existing app configurations"
-msgstr ""
+msgstr "Υπάρχουσες διαμορφώσεις εφαρμογής"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:43
 msgid "Create a new configuration"
-msgstr ""
+msgstr "Δημιουργήστε μια νέα διαμόρφωση"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:50
 msgid "ID"
@@ -14557,19 +14587,19 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:53
 msgid "Show info"
-msgstr ""
+msgstr "Εμφάνιση πληροφοριών"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:54
 msgid "Allow search"
-msgstr ""
+msgstr "Επιτρέπεται η αναζήτηση"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:86
 msgid "Configure device"
-msgstr ""
+msgstr "Ρύθμιση συσκευής"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:5
 msgid "Device configuration"
-msgstr ""
+msgstr "Διαμόρφωση συσκευής"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:9
 msgid "pretixdroid configuration"
@@ -14578,15 +14608,15 @@ msgstr ""
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:11
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:40
 msgid "Back to overview"
-msgstr ""
+msgstr "Επιστροφή στην επισκόπηση"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:14
 msgid "1. Download app"
-msgstr ""
+msgstr "1. Κατεβάστε την εφαρμογή"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:18
 msgid "Download the app from the Google Play Store"
-msgstr ""
+msgstr "Κάντε λήψη της εφαρμογής από το Google Play Store"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:23
 msgid ""
@@ -14595,12 +14625,12 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:28
 msgid "2. Scan code"
-msgstr ""
+msgstr "2. Κωδικός σάρωσης"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:34
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:64
 msgid "3. Start scanning tickets"
-msgstr ""
+msgstr "3. Ξεκινήστε τη σάρωση των εισιτηρίων"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:38
 msgid "pretixdesk configuration"
@@ -14612,11 +14642,11 @@ msgstr ""
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:46
 msgid "Open download page"
-msgstr ""
+msgstr "Ανοίξτε τη σελίδα λήψης"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:49
 msgid "2. Connect device"
-msgstr ""
+msgstr "2. Συνδέστε τη συσκευή"
 
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration_code.html:52
 msgid "Connect with pretixdesk"
@@ -14638,11 +14668,11 @@ msgstr ""
 #: pretix/plugins/pretixdroid/views.py:46
 #: pretix/plugins/pretixdroid/views.py:109
 msgid "The selected configuration does not exist."
-msgstr ""
+msgstr "Η επιλεγμένη διαμόρφωση δεν υπάρχει."
 
 #: pretix/plugins/pretixdroid/views.py:107
 msgid "The selected configuration has been deleted."
-msgstr ""
+msgstr "Η επιλεγμένη διαμόρφωση έχει διαγραφεί."
 
 #: pretix/plugins/reports/__init__.py:10 pretix/plugins/reports/__init__.py:13
 msgid "Report exporter"
@@ -14651,25 +14681,27 @@ msgstr ""
 #: pretix/plugins/reports/__init__.py:16
 msgid "This plugin allows you to generate printable reports about your sales."
 msgstr ""
+"Αυτό το πρόσθετο σας επιτρέπει να δημιουργείτε εκτυπώσιμες αναφορές σχετικά "
+"με τις πωλήσεις σας."
 
 #: pretix/plugins/reports/exporters.py:112
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "Σελίδα %d"
 
 #: pretix/plugins/reports/exporters.py:114
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Δημιουργήθηκε: %s"
 
 #: pretix/plugins/reports/exporters.py:151
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "Επισκόπηση παραγγελίας (PDF)"
 
 #: pretix/plugins/reports/exporters.py:190
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
 msgid "Orders by product"
-msgstr ""
+msgstr "Παραγγελίες ανά προϊόν"
 
 #: pretix/plugins/reports/exporters.py:210
 #: pretix/plugins/reports/exporters.py:211
@@ -14677,11 +14709,11 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:213
 #: pretix/plugins/reports/exporters.py:214
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:281
 msgid "List of orders with taxes (PDF)"
-msgstr ""
+msgstr "Κατάλογος παραγγελιών με φόρους (PDF)"
 
 #: pretix/plugins/reports/exporters.py:358
 #, python-brace-format
@@ -15014,43 +15046,49 @@ msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Είχαμε πρόβλημα στην επικοινωνία με το Stripe. Δοκιμάστε ξανά και "
+"επικοινωνήστε μαζί μας αν το πρόβλημα παραμένει."
 
 #: pretix/plugins/stripe/payment.py:394
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Η πληρωμή σας εκκρεμεί. Θα σας ενημερώσουμε μόλις ολοκληρωθεί η πληρωμή."
 
 #: pretix/plugins/stripe/payment.py:410
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Το Stripe ανέφερε ένα σφάλμα: %s"
 
 #: pretix/plugins/stripe/payment.py:454
 msgid "No payment information found."
-msgstr ""
+msgstr "Δεν βρέθηκαν πληροφορίες πληρωμής."
 
 #: pretix/plugins/stripe/payment.py:470
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"Είχαμε πρόβλημα στην επικοινωνία με το Stripe. Δοκιμάστε ξανά και "
+"επικοινωνήστε με την υποστήριξη εάν το πρόβλημα παραμένει."
 
 #: pretix/plugins/stripe/payment.py:474
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Το Stripe επέστρεψε ένα σφάλμα"
 
 #: pretix/plugins/stripe/payment.py:577
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Πιστωτική κάρτα μέσω Stripe"
 
 #: pretix/plugins/stripe/payment.py:578
 msgid "Credit card"
-msgstr ""
+msgstr "Πιστωτική κάρτα"
 
 #: pretix/plugins/stripe/payment.py:608
 msgid "You may need to enable JavaScript for Stripe payments."
 msgstr ""
+"Ίσως χρειαστεί να ενεργοποιήσετε την JavaScript για τις πληρωμές Stripe."
 
 #: pretix/plugins/stripe/payment.py:691
 msgid "giropay via Stripe"
@@ -15058,7 +15096,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:723 pretix/plugins/stripe/payment.py:884
 msgid "unknown name"
-msgstr ""
+msgstr "άγνωστο όνομα"
 
 #: pretix/plugins/stripe/payment.py:760
 msgid "iDEAL via Stripe"
@@ -15078,95 +15116,95 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:938
 msgid "Country of your bank"
-msgstr ""
+msgstr "Χώρα της τράπεζάς σας"
 
 #: pretix/plugins/stripe/payment.py:939
 msgid "Germany"
-msgstr ""
+msgstr "Γερμανία"
 
 #: pretix/plugins/stripe/payment.py:940
 msgid "Austria"
-msgstr ""
+msgstr "Αυστρία"
 
 #: pretix/plugins/stripe/payment.py:941
 msgid "Belgium"
-msgstr ""
+msgstr "Βέλγιο"
 
 #: pretix/plugins/stripe/payment.py:942
 msgid "Netherlands"
-msgstr ""
+msgstr "Ολλανδία"
 
 #: pretix/plugins/stripe/payment.py:943
 msgid "Spain"
-msgstr ""
+msgstr "Ισπανία"
 
 #: pretix/plugins/stripe/signals.py:59
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Επιτυχής χρέωση."
 
 #: pretix/plugins/stripe/signals.py:60
 msgid "Charge refunded."
-msgstr ""
+msgstr "Αποτυχία χρέωσης."
 
 #: pretix/plugins/stripe/signals.py:61
 msgid "Charge updated."
-msgstr ""
+msgstr "Ανανέωση χρέωσης."
 
 #: pretix/plugins/stripe/signals.py:62
 msgid "Charge pending"
-msgstr ""
+msgstr "Εκκρεμής χρέωση"
 
 #: pretix/plugins/stripe/signals.py:63
 msgid "Payment authorized."
-msgstr ""
+msgstr "Η πληρωμή εγκρίθηκε."
 
 #: pretix/plugins/stripe/signals.py:64
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Η εντολή πληρωμής ακυρώθηκε."
 
 #: pretix/plugins/stripe/signals.py:65
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Η εντολή πληρωμής απέτυχε."
 
 #: pretix/plugins/stripe/signals.py:71
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Η χρέωση απέτυχε. Αιτία: {}"
 
 #: pretix/plugins/stripe/signals.py:73
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Δημιουργήθηκε διαφορά. Αιτία: {}"
 
 #: pretix/plugins/stripe/signals.py:75
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Η διαφορά ενημερώθηκε. Αιτία: {}"
 
 #: pretix/plugins/stripe/signals.py:77
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Η διαφορά έκλεισε. Κατάσταση: {}"
 
 #: pretix/plugins/stripe/signals.py:80
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Η Stripe ανέφερε ένα γεγονός: {}"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Σύνδεση Stripe: Αναγνωριστικό πελάτη"
 
 #: pretix/plugins/stripe/signals.py:98
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Σύνδεση Stripe: Μυστικό κλειδί"
 
 #: pretix/plugins/stripe/signals.py:105
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Σύνδεση Stripe: Κλειδί δημοσίευσης"
 
 #: pretix/plugins/stripe/signals.py:112
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Σύνδεση Stripe: Μυστικό κλειδί (δοκιμή)"
 
 #: pretix/plugins/stripe/signals.py:119
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Σύνδεση Stripe: Κλειδί για δημοσίευση (δοκιμή)"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/action_double.html:5
 #, python-format
@@ -15195,14 +15233,14 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Το συνολικό ποσό θα αφαιρεθεί από την πιστωτική σας κάρτα."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:19
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:11
 msgid "Card type"
-msgstr ""
+msgstr "Τύπος κάρτας"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_bancontact.html:4
@@ -15214,11 +15252,14 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Αφού υποβάλετε την παραγγελία σας, θα σας ανακατευθύνουμε στον πάροχο "
+"υπηρεσιών πληρωμών για να ολοκληρώσετε την πληρωμή σας. Στη συνέχεια θα "
+"μεταφερθείτε εδώ για να λάβετε τα εισιτήριά σας."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:9
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:6
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr ""
+msgstr "Για πληρωμή με πιστωτική κάρτα, ενεργοποιήστε την JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:10
@@ -15226,11 +15267,13 @@ msgid ""
 "You already entered a card number that we will use to charge the payment "
 "amount."
 msgstr ""
+"Έχετε ήδη εισαγάγει έναν αριθμό κάρτας που θα χρησιμοποιήσουμε για να "
+"χρεώσουμε το ποσό της πληρωμής."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:20
 msgid "Use a different card"
-msgstr ""
+msgstr "Χρησιμοποιήστε μια διαφορετική κάρτα"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form.html:43
 msgid "OR"
@@ -15242,65 +15285,74 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
+"Η πληρωμή σας θα υποβληθεί σε επεξεργασία από την Stripe, Inc. Τα δεδομένα "
+"της πιστωτικής σας κάρτας θα μεταφερθούν απευθείας στην Stripe και δεν θα "
+"αγγίξουν ποτέ τους διακομιστές μας."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_stripe_checkout.html:28
 msgid "Please continue below to start the credit card payment."
-msgstr ""
+msgstr "Συνεχίστε παρακάτω για να ξεκινήσετε την πληρωμή με πιστωτική κάρτα."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
-msgstr ""
+msgstr "Αναγνωριστικό χρέωσης"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:16
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:23
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:35
 msgid "Payer name"
-msgstr ""
+msgstr "Όνομα πληρωτή"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:52
 msgid "Error message"
-msgstr ""
+msgstr "Μήνυμα λάθους"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Περιμένουμε μια απάντηση από τον πάροχο πληρωμής σχετικά με την πληρωμή σας. "
+"Επικοινωνήστε μαζί μας εάν αυτό διαρκεί περισσότερο από μερικές ημέρες."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Η συναλλαγή πληρωμής δεν ολοκληρώθηκε για τον ακόλουθο λόγο:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:16
 msgid "Unknown reason"
-msgstr ""
+msgstr "Άγνωστος λόγος"
 
 #: pretix/plugins/stripe/views.py:53 pretix/plugins/stripe/views.py:59
 #: pretix/plugins/stripe/views.py:86 pretix/plugins/stripe/views.py:98
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα κατά τη σύνδεση με την Stripe, δοκιμάστε ξανά."
 
 #: pretix/plugins/stripe/views.py:106 pretix/plugins/stripe/views.py:108
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Η Stripe επέστρεψε ένα σφάλμα: {}"
 
 #: pretix/plugins/stripe/views.py:111
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ο λογαριασμός σας Stripe είναι πλέον συνδεδεμένος με το pretix. Μπορείτε να "
+"αλλάξετε τις ρυθμίσεις λεπτομερέστερα παρακάτω."
 
 #: pretix/plugins/stripe/views.py:369
 msgid "Your Stripe account has been disconnected."
-msgstr ""
+msgstr "Ο λογαριασμός σας Stripe έχει αποσυνδεθεί."
 
 #: pretix/plugins/stripe/views.py:417 pretix/plugins/stripe/views.py:462
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Λυπούμαστε, υπήρξε ένα σφάλμα στη διαδικασία πληρωμής. Ελέγξτε τη σύνδεση "
+"στα μηνύματα ηλεκτρονικού ταχυδρομείου για να συνεχίσετε."
 
 #: pretix/plugins/stripe/views.py:456
 msgid ""
@@ -16071,14 +16123,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:23
 msgid "Please note that we still await your payment to complete the process."
 msgstr ""
+"Λάβετε υπόψη ότι εξακολουθούμε να περιμένουμε την πληρωμή σας για να "
+"ολοκληρώσουμε τη διαδικασία."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
 msgstr ""
+"Η παραγγελία σας έχει υποβληθεί σε επεξεργασία με επιτυχία! Δείτε παρακάτω "
+"για λεπτομέρειες."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Λάβαμε με επιτυχία την πληρωμή σας. Δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid ""
@@ -16086,41 +16142,50 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Παρακαλούμε να προσθέσετε σελιδοδείκτη ή να αποθηκεύσετε τη σύνδεση σε αυτή "
+"την ακριβή σελίδα, αν θέλετε να αποκτήσετε πρόσβαση στην παραγγελία σας "
+"αργότερα. Σας στείλαμε επίσης ένα μήνυμα ηλεκτρονικού ταχυδρομείου που "
+"περιέχει τον σύνδεσμο προς τη διεύθυνση που έχετε ορίσει."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Αποθηκεύστε τον παρακάτω σύνδεσμο, εάν θέλετε να αποκτήσετε πρόσβαση στην "
+"παραγγελία σας αργότερα. Σας έστειλε επίσης ένα μήνυμα ηλεκτρονικού "
+"ταχυδρομείου που περιέχει τον σύνδεσμο προς τη διεύθυνση που έχετε ορίσει."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:52
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Προβολή στο backend"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Μία πληρωμή %(total)s εξακολουθεί να εκκρεμεί για αυτήν την παραγγελία."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:69
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Παρακαλούμε ολοκληρώστε την πληρωμή σας πριν από %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:78
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Ξαναπροσπαθήστε να πληρώσετε ή επιλέξτε έναν άλλο τρόπο πληρωμής"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:86
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:45
 msgid "Pay now"
-msgstr ""
+msgstr "Πλήρωσε τώρα"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:100
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Μια επιστροφή των %(amount)s θα σας αποσταλεί σύντομα, παρακαλώ να είστε "
+"υπομονετικοί."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:104
 #, python-format
@@ -16128,19 +16193,22 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Μία επιστροφή χρημάτων των %(amount)s έχει σταλεί σε εσάς. Ανάλογα με τη "
+"μέθοδο πληρωμής, παρακαλώ περιμένετε έως και 14 ημέρες μέχρι να εμφανιστεί "
+"στη δήλωση σας."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:184
 msgid "Change details"
-msgstr ""
+msgstr "Αλλαγή λεπτομερειών"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 msgid "Request invoice"
-msgstr ""
+msgstr "Ζητήστε τιμολόγιο"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:215
 msgid "Internal Reference"
-msgstr ""
+msgstr "Εσωτερική Αναφορά"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:237
 #, python-format
@@ -16155,28 +16223,34 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:261
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:16
 msgid "This will invalidate all of your tickets."
-msgstr ""
+msgstr "Αυτό θα ακυρώσει όλα τα εισιτήριά σας."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:245
 msgid ""
 "You can cancel this order and receive a full refund to your original payment "
 "method."
 msgstr ""
+"Μπορείτε να ακυρώσετε αυτήν την παραγγελία και να λάβετε πλήρη επιστροφή "
+"στον αρχικό τρόπο πληρωμής."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:258
 msgid "You can cancel this order using the following button."
 msgstr ""
+"Μπορείτε να ακυρώσετε αυτήν την παραγγελία χρησιμοποιώντας το παρακάτω "
+"κουμπί."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:271
 msgid ""
 "You can not cancel this order yourself. Please contact the event organizer "
 "for more information."
 msgstr ""
+"Δεν μπορείτε να ακυρώσετε την παραγγελία σας μόνοι σας. Επικοινωνήστε με τον "
+"διοργανωτή εκδηλώσεων για περισσότερες πληροφορίες."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:8
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Ακύρωση παραγγελίας: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:22
 #, python-format
@@ -16317,7 +16391,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:34
 msgid "Add me to the list"
-msgstr ""
+msgstr "Προσθέστε με στη λίστα"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:57
 #, python-format
@@ -16329,7 +16403,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Γειά σου!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -16343,6 +16417,8 @@ msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
 msgstr ""
+"Αν θέλετε να αγοράσετε ένα εισιτήριο, πρέπει να ακολουθήσετε έναν απευθείας "
+"σύνδεσμο σε ένα προφίλ ή ένα διοργανωτή."
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
@@ -16353,11 +16429,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Απολαύστε!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Επισκόπηση γεγονότων"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:37
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
@@ -16367,39 +16443,41 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:71
 msgid "Note that the events in this view are in different timezones."
 msgstr ""
+"Σημειώστε ότι οι εκδηλώσεις σε αυτήν την προβολή βρίσκονται σε διαφορετικές "
+"ζώνες ώρας."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:7
 msgid "Event list"
-msgstr ""
+msgstr "Λίστα εκδηλώσεων"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:24
 msgid "Past events"
-msgstr ""
+msgstr "Παρελθοντικές εκδηλώσεις"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:26
 msgid "Upcoming events"
-msgstr ""
+msgstr "Επερχόμενες εκδηλώσεις"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Show upcoming"
-msgstr ""
+msgstr "Εμφάνιση επερχόμενων"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:49
 msgid "Show past events"
-msgstr ""
+msgstr "Εμφάνιση παλιότερων εκδηλώσεων"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:100
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
 msgid "Buy tickets"
-msgstr ""
+msgstr "Αγορά εισιτηρίων"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
 msgid "More info"
-msgstr ""
+msgstr "Περισσότερες πληροφορίες"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:111
 msgid "No archived events found."
-msgstr ""
+msgstr "Δεν βρέθηκαν αρχειοθετημένες εκδηλώσεις."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:117
 msgid "No public upcoming events found."
