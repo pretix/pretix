@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 13:19+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-29 13:21+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -45,7 +45,7 @@ msgstr "Συνολικά κέρδη"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr "Επικοινωνία με το Stripe …"
+msgstr "Επικοινωνία με το Stripe ..."
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
@@ -58,8 +58,8 @@ msgid ""
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
 "Το αίτημά σας έχει τεθεί σε ουρά στο διακομιστή και θα υποβληθεί σε "
-"επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος, αυτό μπορεί να διαρκέσει "
-"μερικά λεπτά."
+"επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος σας, αυτό μπορεί να "
+"διαρκέσει μερικά λεπτά."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:101
@@ -153,7 +153,7 @@ msgstr "Περιοχή Barcode"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr "Powered by pretix"
+msgstr "Υποστηρίζεται από το Pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
@@ -183,7 +183,7 @@ msgstr "Παρουσιάστηκε σφάλμα."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr "Δημιουργία μηνυμάτων …"
+msgstr "Δημιουργία μηνυμάτων ..."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
@@ -210,11 +210,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:305
 msgid "All"
-msgstr "Όλα"
+msgstr "Ολα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
-msgstr "Κανένα"
+msgstr "Κανένας"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
@@ -232,7 +232,7 @@ msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr "Άλλα"
+msgstr "Άλλοι"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
@@ -263,8 +263,8 @@ msgstr "Το καλάθι έληξε"
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Τα στοιχεία του καλαθιού σας προορίζονται για ένα λεπτό."
+msgstr[1] "The items in your cart are reserved for you for {num} minutes."
 
 #: pretix/static/pretixpresale/js/ui/main.js:201
 msgid "Please enter a quantity for one of the ticket types."
@@ -283,7 +283,7 @@ msgstr "Αγορά"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Κατοχυρωμένα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
@@ -313,7 +313,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "συν τους φόρους"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 #, javascript-format
@@ -372,8 +372,8 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
-"ticketing powered by pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\"> εκδηλώσεις "
+"με εκδηλώσεις που προωθούνται από το pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
