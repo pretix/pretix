@@ -319,7 +319,7 @@ msgstr "συν τους φόρους"
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "διαθέσιμο σήμερα: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
