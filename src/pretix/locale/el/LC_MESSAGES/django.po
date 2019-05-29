@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 11:52+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -8891,26 +8891,26 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:54
 msgid "Show affected orders"
-msgstr ""
+msgstr "Εμφάνιση επηρεαζόμενων παραγγελιών"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:61
 msgid "Your attention is required to resolve the following issues"
-msgstr ""
+msgstr "Η προσοχή σας απαιτείται για την επίλυση των ακόλουθων ζητημάτων"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:82
 msgid "Show more"
-msgstr ""
+msgstr "Δείτε περισσότερα"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:133
 #: pretix/control/templates/pretixcontrol/order/index.html:690
 msgid "Update comment"
-msgstr ""
+msgstr "Ενημέρωση σχολίου"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:142
 #: pretix/control/templates/pretixcontrol/event/logs.html:4
 #: pretix/control/templates/pretixcontrol/event/logs.html:6
 msgid "Event logs"
-msgstr ""
+msgstr "Αρχεία καταγραφής εκδηλώσεων"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:154
 #: pretix/control/templates/pretixcontrol/event/logs.html:39
@@ -8922,7 +8922,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/logs.html:48
 #: pretix/control/templates/pretixcontrol/includes/logs.html:12
 msgid "This change was performed by a pretix administrator."
-msgstr ""
+msgstr "Αυτή η αλλαγή εκτελέστηκε από έναν διαχειριστή του pretix."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:191
 #: pretix/control/templates/pretixcontrol/event/logs.html:76
@@ -8935,42 +8935,42 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:201
 msgid "Show more logs"
-msgstr ""
+msgstr "Εμφάνιση περισσότερων αρχείων καταγραφής"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:5
 msgid "Invoice settings"
-msgstr ""
+msgstr "Ρυθμίσεις τιμολογίου"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:10
 #: pretix/control/templates/pretixcontrol/event/mail.html:12
 #: pretix/control/templates/pretixcontrol/event/settings.html:5
 #: pretix/control/templates/pretixcontrol/user/settings.html:11
 msgid "General settings"
-msgstr ""
+msgstr "Γενικές ρυθμίσεις"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:21
 msgid "Invoice address form"
-msgstr ""
+msgstr "Φόρμα διεύθυνσης τιμολογίου"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:31
 msgid "Your invoice details"
-msgstr ""
+msgstr "Τα στοιχεία του τιμολογίου σας"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:41
 msgid "Invoice customization"
-msgstr ""
+msgstr "Προσαρμογή τιμολογίου"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:51
 msgid "Save and show preview"
-msgstr ""
+msgstr "Αποθηκεύστε και προβάλλετε προεπισκόπηση"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:5
 msgid "Shop status"
-msgstr ""
+msgstr "Κατάσταση καταστήματος"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:8
 msgid "Shop visibility"
-msgstr ""
+msgstr "Ορατότητα καταστήματος"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:13
 msgid ""
@@ -12406,11 +12406,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/create.html:18
 #: pretix/control/templates/pretixcontrol/users/form.html:32
 msgid "Log-in settings"
-msgstr ""
+msgstr "Ρυθμίσεις σύνδεσης"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:10
 msgid "Send password reset email"
-msgstr ""
+msgstr "Αποστολή ηλεκτρονικού ταχυδρομείου επαναφοράς κωδικού πρόσβασης"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:14
 msgid "Impersonate user"
@@ -12418,11 +12418,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Anonymize"
-msgstr ""
+msgstr "Ανώνυμος"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:39
 msgid "Team memberships"
-msgstr ""
+msgstr "Συμμετοχή στην ομάδα"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:44
 #, python-format
@@ -12431,46 +12431,46 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:63
 msgid "User history"
-msgstr ""
+msgstr "Ιστορικό χρηστών"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:72
 msgid "User created."
-msgstr ""
+msgstr "Δημιουργήθηκε χρήστης."
 
 #: pretix/control/templates/pretixcontrol/users/index.html:30
 msgid "Create a new user"
-msgstr ""
+msgstr "Δημιουργία νέου χρήστη"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple vouchers"
-msgstr ""
+msgstr "Δημιουργία πολλαπλών κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
-msgstr ""
+msgstr "Κωδικοί κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr ""
+msgstr "Πρόθεμα (προαιρετικό)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "Δημιουργία τυχαίων κωδικών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
-msgstr ""
+msgstr "Αντιγραφή κωδικών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
 msgid "Voucher details"
-msgstr ""
+msgstr "Λεπτομέρειες κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:45
 #: pretix/control/views/vouchers.py:62
 msgid "Price effect"
-msgstr ""
+msgstr "Επιπτώσεις τιμής"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:56
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:58
@@ -12483,22 +12483,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
 msgid "Delete voucher"
-msgstr ""
+msgstr "Διαγραφή κουπονιού"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
 msgstr ""
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε το κουπόνι "
+"<strong>%(voucher)s</strong>;"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
 msgid "Delete vouchers"
-msgstr ""
+msgstr "Διαγραφή κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:10
 msgid "Are you sure you want to delete the following vouchers?"
-msgstr ""
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε τα παρακάτω κουπόνια;"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:21
 msgid ""
@@ -12509,19 +12511,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
 msgstr ""
+"Αυτό το κουπόνι έχει ήδη χρησιμοποιηθεί. Δεν συνιστάται η τροποποίησή του."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "Παραγγελία %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
 msgid "Voucher link"
-msgstr ""
+msgstr "Σύνδεσμος κουπονιού"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:84
 msgid "Voucher history"
-msgstr ""
+msgstr "Ιστορικό κουπονιού"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:9
 msgid ""
@@ -12531,34 +12534,34 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:63
 msgid "Your search did not match any vouchers."
-msgstr ""
+msgstr "Η αναζήτησή σας δεν ταιριάζει με κανένα κουπόνι."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:65
 msgid "You haven't created any vouchers yet."
-msgstr ""
+msgstr "Δεν έχετε δημιουργήσει ακόμα κουπόνια."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:72
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:79
 msgid "Create a new voucher"
-msgstr ""
+msgstr "Δημιουργία νέου κουπονιού"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:74
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:82
 msgid "Create multiple new vouchers"
-msgstr ""
+msgstr "Δημιουργία πολλαπλών νέων κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:85
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:121
 msgid "Download list"
-msgstr ""
+msgstr "Λήψη λίστας"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:99
 msgid "Redemptions"
-msgstr ""
+msgstr "Εξαγορές"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:100
 msgid "Expiry"
-msgstr ""
+msgstr "Λήξη"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:132
 #, python-format
@@ -12568,30 +12571,32 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:3
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:5
 msgid "Voucher tags"
-msgstr ""
+msgstr "Ετικέτες κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:7
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
 msgstr ""
+"Αν προσθέσετε μια ετικέτα σε ένα κουπόνι, μπορείτε να δείτε εδώ στατιστικά "
+"στοιχεία σχετικά με τη χρήση τους."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:14
 msgid "You haven't added any tags to vouchers yet."
-msgstr ""
+msgstr "Δεν έχετε προσθέσει ακόμα ετικέτες στα κουπόνια."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:25
 msgid "Redeemed vouchers"
-msgstr ""
+msgstr "Εξαντλημένα κουπόνια"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:39
 msgid "Empty tag"
-msgstr ""
+msgstr "Κενή ετικέτα"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
 msgid "Delete entry"
-msgstr ""
+msgstr "Διαγραφή συμμετοχής"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
@@ -12599,6 +12604,8 @@ msgid ""
 "Are you sure you want to delete the following waiting list entry <strong>"
 "%(entry)s</strong>?"
 msgstr ""
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε την ακόλουθη καταχώριση στη λίστα "
+"αναμονής <strong>%(entry)s</strong>;"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -12608,7 +12615,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr ""
+msgstr "Στείλτε κουπόνια"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -12643,6 +12650,9 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional <strong>"
 "%(amount)s</strong>."
 msgstr ""
+"Εάν μπορείτε να έχετε αρκετό χώρο στην εκδήλωσή σας για να χωρέσετε όλα τα "
+"άτομα που βρίσκονται στη λίστα αναμονής, μπορείτε να πουλήσετε εισιτήρια "
+"αξίας <strong>%(amount)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
@@ -12886,7 +12896,7 @@ msgstr "διατίθενται σε άτομα που βρίσκονται σε 
 
 #: pretix/control/views/dashboards.py:149
 msgid "total waiting list length"
-msgstr ""
+msgstr "συνολικό μήκος λίστας αναμονής"
 
 #: pretix/control/views/dashboards.py:169
 #, python-brace-format
