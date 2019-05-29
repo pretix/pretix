@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 13:21+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-29 13:22+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -330,22 +330,23 @@ msgstr "Διατίθεται μόνο με ένα κουπόνι"
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "ελάχιστο ποσό για παραγγελία:% s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Κλείστε το κατάστημα εισιτηρίων"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η φόρτωση του εισιτηρίου."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr ""
+"Δεν ήταν δυνατή η δημιουργία του καλαθιού. Παρακαλώ προσπαθήστε ξανά αργότερα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
