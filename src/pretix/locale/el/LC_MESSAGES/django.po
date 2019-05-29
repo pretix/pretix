@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:14+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -10317,6 +10317,9 @@ msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
+"Λάβετε υπόψη ότι το προϊόν σας <strong> όχι </strong> θα είναι διαθέσιμο "
+"προς πώληση μέχρι να προσθέσετε το στοιχείο σας σε υπάρχουσα ή νεοσυσταθείσα "
+"ποσόστωση."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:46
 msgid ""
@@ -10331,6 +10334,8 @@ msgid ""
 "With bundles, you can specify products that are always automatically added "
 "as add-ons in the cart for this product."
 msgstr ""
+"Με δέσμες, μπορείτε να ορίσετε προϊόντα που προστίθενται πάντα αυτόματα ως "
+"πρόσθετα στο καλάθι για αυτό το προϊόν."
 
 #: pretix/control/templates/pretixcontrol/item/bundles.html:71
 msgid "Add a new bundled product"
@@ -10388,7 +10393,7 @@ msgstr "Διαθεσιμότητα"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:40
 msgid "Check-in"
-msgstr ""
+msgstr "Check-in"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:44
 msgid "Additional settings"
@@ -10403,6 +10408,8 @@ msgid ""
 "Please note that your variation will <strong>not</strong> be available for "
 "sale until you have added it to an existing or newly created quota."
 msgstr ""
+"Λάβετε υπόψη ότι η παραλλαγή σας <strong> δεν </strong> θα είναι διαθέσιμη "
+"προς πώληση μέχρι να την προσθέσετε σε υπάρχουσα ή νεοσυσταθείσα ποσόστωση."
 
 #: pretix/control/templates/pretixcontrol/item/variations.html:90
 msgid "Add a new variation"
@@ -10503,15 +10510,15 @@ msgstr "Εισιτήριο εισόδου"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:76
 msgid "Product with variations"
-msgstr ""
+msgstr "Προϊόν με παραλλαγές"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:82
 msgid "Only available as an add-on product"
-msgstr ""
+msgstr "Διατίθεται μόνο ως πρόσθετο προϊόν"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:85
 msgid "Only visible with a voucher"
-msgstr ""
+msgstr "Εμφανίζεται μόνο με ένα δελτίο"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:88
 msgid "Can only be bought using a voucher"
@@ -10686,6 +10693,10 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
+"Επιλέξτε τα προϊόντα ή τις παραλλαγές προϊόντων που πρέπει να εφαρμοστούν "
+"στην εν λόγω ποσόστωση(quota). Αν εφαρμόσετε δύο ποσοστώσεις(quota) στο ίδιο "
+"προϊόν, θα είναι διαθέσιμες μόνο αν <strong> και </strong> quotas έχει "
+"μείνει ικανότητα."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:7
 msgid ""
@@ -10700,16 +10711,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:24
 msgid "Your search did not match any quotas."
-msgstr ""
+msgstr "Η αναζήτησή σας δεν αντιστοιχεί σε καμία ποσόστωση(quotas)."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:26
 msgid "You haven't created any quotas yet."
-msgstr ""
+msgstr "Δεν έχετε δημιουργήσει ακόμα ποσοστώσεις(quotas)."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:33
 #: pretix/control/templates/pretixcontrol/items/quotas.html:37
 msgid "Create a new quota"
-msgstr ""
+msgstr "Δημιουργήστε ένα νέο quota"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:50
 msgid "Capacity left"
