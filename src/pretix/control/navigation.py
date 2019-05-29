@@ -281,7 +281,7 @@ def get_event_navigation(request: HttpRequest):
 
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_event.send(request.event, request=request)), []),
-        key=lambda r: r['label']
+        key=lambda r: (1 if r.get('parent') else 0, r['label'])
     ))
 
     return nav
@@ -391,7 +391,7 @@ def get_global_navigation(request):
 
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_global.send(request, request=request)), []),
-        key=lambda r: r['label']
+        key=lambda r: (1 if r.get('parent') else 0, r['label'])
     ))
     return nav
 
@@ -464,7 +464,7 @@ def get_organizer_navigation(request):
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
             []),
-        key=lambda r: r['label']
+        key=lambda r: (1 if r.get('parent') else 0, r['label'])
     ))
     return nav
 
