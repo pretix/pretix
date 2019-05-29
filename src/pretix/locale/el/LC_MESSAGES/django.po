@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 10:36+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1164,7 +1164,7 @@ msgstr "Smartphone με την εφαρμογή Authenticator"
 
 #: pretix/base/forms/user.py:118
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
-msgstr "U2F-συμαβτό hardware token (e.g. Yubikey)"
+msgstr "Token hardware συμβατό με U2F (π.χ. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
@@ -4957,6 +4957,10 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"Βλέπετε αυτό το μήνυμα επειδή αυτός ο ιστότοπος HTTPS απαιτεί μια \"κεφαλίδα "
+"Referer\" που θα αποσταλεί από το πρόγραμμα περιήγησης στο Web, αλλά καμία "
+"δεν έχει σταλεί. Αυτή η κεφαλίδα απαιτείται για λόγους ασφαλείας, για να "
+"διασφαλιστεί ότι το πρόγραμμα περιήγησής σας δεν καταπατηθεί από τρίτους."
 
 #: pretix/base/views/errors.py:24
 msgid ""
@@ -4964,6 +4968,9 @@ msgid ""
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
+"Αν έχετε ρυθμίσει το πρόγραμμα περιήγησής σας για να απενεργοποιήσετε τις "
+"κεφαλίδες Referer, ενεργοποιήστε τις ξανά, τουλάχιστον για αυτόν τον "
+"ιστότοπο ή για συνδέσεις HTTPS ή για αιτήσεις τύπου \"ίδιας προέλευσης\"."
 
 #: pretix/base/views/errors.py:29
 msgid ""
@@ -4971,6 +4978,9 @@ msgid ""
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
+"Βλέπετε αυτό το μήνυμα επειδή αυτός ο ιστότοπος απαιτεί cookie CSRF κατά την "
+"υποβολή αιτήσεων. Αυτό το cookie απαιτείται για λόγους ασφαλείας, για να "
+"διασφαλιστεί ότι το πρόγραμμα περιήγησής σας δεν θα καταπατηθεί από τρίτους."
 
 #: pretix/base/views/errors.py:34
 msgid ""
@@ -4991,19 +5001,21 @@ msgstr "Η εργασία έχει ολοκληρωθεί."
 
 #: pretix/control/forms/__init__.py:112
 msgid "Filetype not allowed!"
-msgstr ""
+msgstr "Δεν επιτρέπεται ο τύπος αρχείου!"
 
 #: pretix/control/forms/event.py:39 pretix/control/forms/organizer.py:254
 msgid "Use languages"
-msgstr ""
+msgstr "Χρήση γλωσσών"
 
 #: pretix/control/forms/event.py:41
 msgid "Choose all languages that your event should be available in."
 msgstr ""
+"Επιλέξτε όλες τις γλώσσες στις οποίες πρέπει να είναι διαθέσιμο το συμβάν "
+"σας."
 
 #: pretix/control/forms/event.py:44
 msgid "This is an event series"
-msgstr ""
+msgstr "Αυτή είναι μια σειρά συμβάντων"
 
 #: pretix/control/forms/event.py:45
 msgid ""
@@ -5014,23 +5026,33 @@ msgid ""
 "settings, and buying tickets across multiple of these events at the same "
 "time is possible. You cannot change this setting for this event later."
 msgstr ""
+"Συνιστάται μόνο για προχωρημένους χρήστες. Αν αυτή η λειτουργία είναι "
+"ενεργοποιημένη, δεν πρόκειται μόνο για ένα μόνο γεγονός, αλλά για μια σειρά "
+"πολύ παρόμοιων συμβάντων που αντιμετωπίζονται σε ένα μόνο κατάστημα. Τα "
+"μεμονωμένα γεγονότα εντός της σειράς μπορούν να διαφέρουν μόνο ως προς την "
+"ημερομηνία, την ώρα, την τοποθεσία, τις τιμές και τις ποσοστώσεις, αλλά όχι "
+"σε άλλες ρυθμίσεις και είναι δυνατή η αγορά εισιτηρίων σε πολλαπλά από αυτά "
+"τα γεγονότα. Δεν μπορείτε να αλλάξετε αυτήν τη ρύθμιση για αυτό το συμβάν "
+"αργότερα."
 
 #: pretix/control/forms/event.py:71
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr ""
+"Έχετε ήδη χρησιμοποιήσει αυτό το slug για ένα διαφορετικό συμβάν. Επιλέξτε "
+"ένα νέο."
 
 #: pretix/control/forms/event.py:75
 msgid "Event timezone"
-msgstr ""
+msgstr "Χρονική ζώνη γεγονότος"
 
 #: pretix/control/forms/event.py:79 pretix/control/forms/event.py:312
 msgid "Default language"
-msgstr ""
+msgstr "Προεπιλεγμένη γλώσσα"
 
 #: pretix/control/forms/event.py:82
 msgid "Sales tax rate"
-msgstr ""
+msgstr "Ποσοστό φόρου επί των πωλήσεων"
 
 #: pretix/control/forms/event.py:83
 msgid ""
@@ -5038,80 +5060,96 @@ msgid ""
 "applicable tax rate here in percent. If you have a more complicated tax "
 "situation, you can add more tax rates and detailed configuration later."
 msgstr ""
+"Χρειάζεται να πληρώσετε τον φόρο πωλήσεων στα εισιτήριά σας; Σε αυτή την "
+"περίπτωση, εισάγετε τον ισχύοντα φορολογικό συντελεστή εδώ στο ποσοστό. Εάν "
+"έχετε μια πιο περίπλοκη φορολογική κατάσταση, μπορείτε να προσθέσετε "
+"περισσότερους φορολογικούς συντελεστές και λεπτομερή ρύθμιση αργότερα."
 
 #: pretix/control/forms/event.py:125 pretix/control/forms/event.py:226
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
-msgstr ""
+msgstr "Δείγμα Συνεδριακού Κέντρου - Χαϊδελβέργη, Γερμανία"
 
 #: pretix/control/forms/event.py:136 pretix/control/forms/event.py:417
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
+"Η προεπιλεγμένη σας τοπική ρύθμιση πρέπει επίσης να είναι ενεργοποιημένη για "
+"την εκδήλωσή σας (δείτε το πλαίσιο παραπάνω)."
 
 #: pretix/control/forms/event.py:140
 msgid "Your default locale must be specified."
-msgstr ""
+msgstr "Πρέπει να οριστεί η προεπιλεγμένη τοπική σας ρύθμιση."
 
 #: pretix/control/forms/event.py:193
 msgid "Copy configuration from"
-msgstr ""
+msgstr "Αντιγραφή διαμόρφωσης από"
 
 #: pretix/control/forms/event.py:196 pretix/control/forms/item.py:206
 msgid "Do not copy"
-msgstr ""
+msgstr "Μην αντιγράφετε"
 
 #: pretix/control/forms/event.py:267
 msgid "Show event end date"
-msgstr ""
+msgstr "Εμφάνιση ημερομηνίας λήξης συμβάντος"
 
 #: pretix/control/forms/event.py:268
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
+"Εάν απενεργοποιηθεί, μόνο η ημερομηνία έναρξης του συμβάντος θα εμφανιστεί "
+"στο κοινό."
 
 #: pretix/control/forms/event.py:272
 msgid "Show dates with time"
-msgstr ""
+msgstr "Εμφάνιση ημερομηνιών με ώρα"
 
 #: pretix/control/forms/event.py:273
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
 msgstr ""
+"Εάν απενεργοποιηθεί, η ημερομηνία έναρξης και λήξης του συμβάντος θα "
+"εμφανιστεί χωρίς την ώρα της ημέρας."
 
 #: pretix/control/forms/event.py:277
 msgid "Show items outside presale period"
-msgstr ""
+msgstr "Εμφάνιση αντικειμένων εκτός περιόδου προπώλησης"
 
 #: pretix/control/forms/event.py:278
 msgid ""
 "Show item details before presale has started and after presale has ended"
 msgstr ""
+"Παρουσιάστε της λεπτομέρειες του στοιχείου πριν ξεκινήσει η εκκίνηση και "
+"μετά την ολοκλήρωση της προπώλησης"
 
 #: pretix/control/forms/event.py:282
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Εμφάνιση των καθαρών τιμών αντί των ακαθάριστων τιμών στον κατάλογο "
+"προϊόντων (δεν συνιστάται!)"
 
 #: pretix/control/forms/event.py:283
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid"
 msgstr ""
+"Ανεξάρτητα από την επιλογή σας, το καλάθι θα εμφανίσει μικτές τιμές, καθώς "
+"αυτή είναι η τιμή που πρέπει να πληρωθεί"
 
 #: pretix/control/forms/event.py:288
 msgid "Show start date"
-msgstr ""
+msgstr "Εμφάνιση ημερομηνίας έναρξης"
 
 #: pretix/control/forms/event.py:289
 msgid "Show the presale start date before presale has started."
-msgstr ""
+msgstr "Εμφάνιση της ημερομηνίας έναρξης πριν από την εκκίνηση."
 
 #: pretix/control/forms/event.py:294
 msgid "Last date of modifications"
-msgstr ""
+msgstr "Τελευταία ημερομηνία τροποποιήσεων"
 
 #: pretix/control/forms/event.py:295
 msgid ""
@@ -5120,22 +5158,28 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
+"Την τελευταία ημερομηνία οι χρήστες μπορούν να τροποποιήσουν τις "
+"λεπτομέρειες των παραγγελιών τους, όπως ονόματα συμμετεχόντων ή απαντήσεις "
+"σε ερωτήσεις. Αν χρησιμοποιείτε τη λειτουργία σειράς συμβάντων και μια "
+"παραγγελία περιέχει εισιτήρια για πολλαπλές ημερομηνίες γεγονότων, θα "
+"χρησιμοποιηθεί η νωρίτερη ημερομηνία."
 
 #: pretix/control/forms/event.py:307
 msgid "Available languages"
-msgstr ""
+msgstr "Διαθέσιμες γλώσσες"
 
 #: pretix/control/forms/event.py:315 pretix/control/forms/event.py:1391
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Εμφάνιση του αριθμού των εισιτηρίων που απομένουν"
 
 #: pretix/control/forms/event.py:316 pretix/control/forms/event.py:1392
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr ""
+"Δηλώστε δημόσια πόσα εισιτήρια συγκεκριμένου τύπου είναι ακόμα διαθέσιμα."
 
 #: pretix/control/forms/event.py:320
 msgid "Enable waiting list"
-msgstr ""
+msgstr "Ενεργοποίηση λίστας αναμονής"
 
 #: pretix/control/forms/event.py:321 pretix/control/forms/event.py:1397
 msgid ""
@@ -5144,10 +5188,15 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Μόλις εξαντληθεί το εισιτήριο, οι άνθρωποι μπορούν να προστεθούν σε λίστα "
+"αναμονής. Μόλις το εισιτήριο γίνει ξανά διαθέσιμο, θα παραμείνει δεσμευμένο "
+"για το πρώτο άτομο στη λίστα αναμονής και αυτό το άτομο θα λάβει μια "
+"ειδοποίηση μέσω ηλεκτρονικού ταχυδρομείου με ένα κουπόνι που μπορεί να "
+"χρησιμοποιηθεί για να αγοράσει ένα εισιτήριο."
 
 #: pretix/control/forms/event.py:327
 msgid "Waiting list response time"
-msgstr ""
+msgstr "Χρόνος απόκρισης λίστας αναμονής"
 
 #: pretix/control/forms/event.py:329
 msgid ""
@@ -5155,10 +5204,13 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Εάν αποστέλλεται ένα δελτίο εισιτηρίων σε ένα άτομο στη λίστα αναμονής, "
+"πρέπει να εξαργυρωθεί μέσα σε αυτόν τον αριθμό ωρών μέχρι να λήξει και "
+"μπορεί να ανατεθεί στο επόμενο άτομο που βρίσκεται στη λίστα."
 
 #: pretix/control/forms/event.py:335
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "Αυτόματες αναθέσεις της λίστας αναμονής"
 
 #: pretix/control/forms/event.py:336
 msgid ""
@@ -5168,26 +5220,36 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Εάν η χωρητικότητα εισιτηρίων είναι ελεύθερη, δημιουργήστε αυτόματα ένα "
+"κουπόνι και στείλτε το στο πρώτο άτομο στη λίστα αναμονής για το "
+"συγκεκριμένο προϊόν. Αν αυτό δεν είναι ενεργό, τα μηνύματα δεν αποστέλλονται "
+"αυτόματα, αλλά μπορείτε να τα στείλετε με μη αυτόματο τρόπο μέσω του πίνακα "
+"ελέγχου. Αν απενεργοποιήσετε τη λίστα αναμονής, αλλά διατηρείτε αυτήν την "
+"επιλογή ενεργοποιημένη, τα εισιτήρια θα σταλούν ακόμα."
 
 #: pretix/control/forms/event.py:344
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Ζητήστε ονόματα συμμετεχόντων"
 
 #: pretix/control/forms/event.py:345
 msgid "Ask for a name for all tickets which include admission to the event."
 msgstr ""
+"Ζητήστε ένα όνομα για όλα τα εισιτήρια που περιλαμβάνουν την είσοδο στην "
+"εκδήλωση."
 
 #: pretix/control/forms/event.py:349
 msgid "Require attendee names"
-msgstr ""
+msgstr "Απαιτήστε ονόματα συμμετεχόντων"
 
 #: pretix/control/forms/event.py:350
 msgid "Require customers to fill in the names of all attendees."
 msgstr ""
+"Να απαιτούν από τους πελάτες να συμπληρώνουν τα ονόματα όλων των "
+"συμμετεχόντων."
 
 #: pretix/control/forms/event.py:355
 msgid "Name format"
-msgstr ""
+msgstr "Μορφή ονόματος"
 
 #: pretix/control/forms/event.py:356
 msgid ""
@@ -5195,10 +5257,13 @@ msgid ""
 "already received orders might lead to unexpected behaviour when sorting or "
 "changing names."
 msgstr ""
+"Αυτό καθορίζει τον τρόπο με τον οποίο το pretix θα ζητήσει ανθρώπινα "
+"ονόματα. Η αλλαγή αυτού μετά την παραλαβή παραγγελιών μπορεί να οδηγήσει σε "
+"απροσδόκητη συμπεριφορά κατά την ταξινόμηση ή την αλλαγή ονομάτων."
 
 #: pretix/control/forms/event.py:361
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Ζητήστε διευθύνσεις ηλεκτρονικού ταχυδρομείου ανά εισιτήριο"
 
 #: pretix/control/forms/event.py:362
 msgid ""
@@ -5210,10 +5275,19 @@ msgid ""
 "However, pretix will send the order confirmation only to the one primary "
 "email address, not to the per-attendee addresses."
 msgstr ""
+"Κανονικά, το pretix ζητά μία διεύθυνση ηλεκτρονικού ταχυδρομείου ανά "
+"παραγγελία και η επιβεβαίωση της παραγγελίας θα σταλεί μόνο σε εκείνη τη "
+"διεύθυνση ηλεκτρονικού ταχυδρομείου. Εάν ενεργοποιήσετε αυτήν την επιλογή, "
+"το σύστημα θα ζητήσει επιπρόσθετα και μεμονωμένες διευθύνσεις ηλεκτρονικού "
+"ταχυδρομείου για κάθε εισιτήριο εισόδου. Αυτό μπορεί να είναι χρήσιμο αν "
+"θέλετε να αποκτήσετε μεμονωμένες διευθύνσεις για κάθε συμμετέχοντα ακόμη και "
+"σε περίπτωση ομαδικών παραγγελιών. Ωστόσο, το pretix θα στείλει την "
+"επιβεβαίωση της παραγγελίας μόνο στην κύρια διεύθυνση ηλεκτρονικού "
+"ταχυδρομείου και όχι στις διευθύνσεις ανά συμμετέχοντα."
 
 #: pretix/control/forms/event.py:371
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Απαιτήστε διευθύνσεις ηλεκτρονικού ταχυδρομείου ανά εισιτήριο"
 
 #: pretix/control/forms/event.py:372
 msgid ""
@@ -5221,42 +5295,53 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Να απαιτείται από τους πελάτες να συμπληρώνουν μεμονωμένες διευθύνσεις "
+"ηλεκτρονικού ταχυδρομείου για όλα τα εισιτήρια εισόδου. Δείτε την παραπάνω "
+"επιλογή για περισσότερες λεπτομέρειες. Μία διεύθυνση ηλεκτρονικού "
+"ταχυδρομείου για την επιβεβαίωση της παραγγελίας θα είναι πάντα απαραίτητη "
+"ανεξάρτητα από αυτή τη ρύθμιση."
 
 #: pretix/control/forms/event.py:379
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Ζητήστε δύο φορές τη διεύθυνση ηλεκτρονικού ταχυδρομείου παραγγελίας"
 
 #: pretix/control/forms/event.py:380
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Απαιτήστε από τους πελάτες να συμπληρώσουν δύο φορές την κύρια διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου για να αποφύγουν τα σφάλματα."
 
 #: pretix/control/forms/event.py:385
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Μέγιστος αριθμός αντικειμένων ανά παραγγελία"
 
 #: pretix/control/forms/event.py:386
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "Τα πρόσθετα προϊόντα δεν θα μετρηθούν."
 
 #: pretix/control/forms/event.py:390
 msgid "Reservation period"
-msgstr ""
+msgstr "Περίοδος κράτησης"
 
 #: pretix/control/forms/event.py:391
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
+"Ο αριθμός των λεπτών όπου τα στοιχεία του καλαθιού ενός χρήστη προορίζονται "
+"για αυτόν τον χρήστη."
 
 #: pretix/control/forms/event.py:394 pretix/control/forms/event.py:1414
 msgid "Imprint URL"
-msgstr ""
+msgstr "Διεύθυνση URL αποτύπωσης"
 
 #: pretix/control/forms/event.py:395 pretix/control/forms/event.py:1415
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Αυτό πρέπει να δείχνει π.χ. σε ένα μέρος του ιστότοπού σας που έχει τα "
+"στοιχεία επικοινωνίας σας και νομικές πληροφορίες."
 
 #: pretix/control/forms/event.py:400
 msgid "Confirmation text"
