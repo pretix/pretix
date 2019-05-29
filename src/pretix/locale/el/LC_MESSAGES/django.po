@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:14+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -7146,7 +7146,7 @@ msgstr "Ακύρωση αυτής της θέσης"
 
 #: pretix/control/forms/orders.py:288
 msgid "Split into new order"
-msgstr "Διαχωρίστε σε νέα διάταξη"
+msgstr "Διαχωρίστε σε νέα παραγγελία"
 
 #: pretix/control/forms/orders.py:338
 msgid "You need to enter a price if you want to change the product price."
