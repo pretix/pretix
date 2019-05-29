@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 22:00+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -6666,7 +6666,7 @@ msgstr "Όλοι οι διοργανωτές"
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/pretixdroid/templates/pretixplugins/pretixdroid/configuration.html:74
 msgid "All"
-msgstr "Όλα"
+msgstr "Ολα"
 
 #: pretix/control/forms/filter.py:370 pretix/control/forms/filter.py:505
 msgid "Shop live and presale running"
@@ -10243,7 +10243,7 @@ msgstr "Τελευταία ενημέρωση: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:59
 msgid "Component"
-msgstr ""
+msgstr "Συστατικό (component)"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:60
 msgid "Installed version"
@@ -10522,7 +10522,7 @@ msgstr "Εμφανίζεται μόνο με ένα δελτίο"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:88
 msgid "Can only be bought using a voucher"
-msgstr ""
+msgstr "Μπορεί να αγοραστεί μόνο με ένα κουπόνι"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:6
 #: pretix/control/templates/pretixcontrol/items/question.html:9
@@ -10530,12 +10530,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:14
 #, python-format
 msgid "Question: %(name)s"
-msgstr ""
+msgstr "Ερώτηση: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:13
 #: pretix/control/templates/pretixcontrol/items/question.html:54
 msgid "Edit question"
-msgstr ""
+msgstr "Επεξεργασία ερωτήματος"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:20
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:13
@@ -10544,7 +10544,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:206
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:13
 msgid "Paid"
-msgstr ""
+msgstr "επί πληρωμή"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
@@ -10553,6 +10553,7 @@ msgstr "Δεν βρέθηκαν απαντήσεις που να ταιριάζ�
 #: pretix/control/templates/pretixcontrol/items/question.html:50
 msgid "You need to assign the question to a product to collect answers."
 msgstr ""
+"Πρέπει να ορίσετε την ερώτηση σε ένα προϊόν για να συλλέξετε απαντήσεις."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
@@ -10572,6 +10573,8 @@ msgstr "Διαγραφή ερώτησης"
 msgid ""
 "Are you sure you want to delete the question <strong>%(question)s</strong>?"
 msgstr ""
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε την ερώτηση <strong>%(question)s "
+"</strong>;"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:11
 msgid ""
@@ -10587,14 +10590,19 @@ msgid ""
 "select Yes and No is not accepted. If you want to allow both options, do not "
 "make this field required."
 msgstr ""
+"Εάν επισημάνετε μια ερώτηση Ναι / Όχι όπως απαιτείται, σημαίνει ότι ο "
+"χρήστης πρέπει να επιλέξει Ναι και Όχι δεν είναι αποδεκτός. Εάν θέλετε να "
+"επιτρέψετε και τις δύο επιλογές, μην κάνετε αυτό το πεδίο απαραίτητο."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:35
 msgid "Answer options"
-msgstr ""
+msgstr "Επιλογές απάντησης"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:37
 msgid "Only applicable if you choose 'Choose one/multiple from a list' above."
 msgstr ""
+"Ισχύει μόνο αν επιλέξετε \"Επιλέξτε ένα / πολλαπλάσιο από μια λίστα\" "
+"παραπάνω."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:53
 #, python-format
@@ -10603,7 +10611,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:84
 msgid "New answer option"
-msgstr ""
+msgstr "Νέα επιλογή απάντησης"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:103
 msgid "Add a new option"
@@ -10619,6 +10627,9 @@ msgid ""
 "ticket. If you provide food, one example might be to ask your users about "
 "dietary requirements."
 msgstr ""
+"Οι ερωτήσεις επιτρέπουν στους συμμετέχοντες σας να συμπληρώσουν πρόσθετα "
+"δεδομένα σχετικά με το εισιτήριό τους. Εάν παρέχετε τρόφιμα, ένα παράδειγμα "
+"μπορεί να είναι να ζητήσετε από τους χρήστες σας τις διατροφικές απαιτήσεις."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:15
 msgid "You haven't created any questions yet."
@@ -10653,6 +10664,7 @@ msgstr "Υπολογισμός διαθεσιμότητας"
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
 msgstr ""
+"Αυτή η ποσόστωση είναι επί του παρόντος υπερκρατημένη από εισιτήρια %(num)s."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:63
 msgid ""
@@ -12407,6 +12419,9 @@ msgid ""
 "selected categories of data from the event <strong>%(event)s</strong>. In "
 "this case, please enter your user password here:"
 msgstr ""
+"Επαναβεβαιώστε ότι είστε απόλυτα βέβαιοι ότι θέλετε να διαγράψετε τις "
+"επιλεγμένες κατηγορίες δεδομένων από την εκδήλωση <strong> %(event)s  "
+"</strong>.Σε αυτή την περίπτωση, εισαγάγετε τον κωδικό χρήστη εδώ:"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
