@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 08:04+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: GiorgosPap <gipap90@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -13488,21 +13488,22 @@ msgstr ""
 
 #: pretix/plugins/badges/signals.py:155
 msgid "Badge layout changed."
-msgstr ""
+msgstr "Η διάταξη του badge άλλαξε."
 
 #: pretix/plugins/badges/signals.py:168
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr ""
+msgstr "Διάταξη Badge {val}"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "Εκτύπωση badges"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
+#, fuzzy
 msgid "Badge"
-msgstr ""
+msgstr "Badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
