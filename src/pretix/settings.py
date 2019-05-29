@@ -408,7 +408,7 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pt-br', 'da', 'pl', 'it', 'el'
+    'pt-br', 'da', 'pl', 'it',
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 
 if DEBUG:
