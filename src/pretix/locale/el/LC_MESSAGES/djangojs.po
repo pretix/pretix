@@ -293,7 +293,7 @@ msgstr "ΔΩΡΕΑΝ"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "απο %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
@@ -324,7 +324,7 @@ msgstr "διαθέσιμο σήμερα: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Διατίθεται μόνο με ένα κουπόνι"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
