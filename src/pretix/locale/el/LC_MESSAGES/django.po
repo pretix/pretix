@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:05+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -9356,6 +9356,8 @@ msgstr "Αρχεία καταγραφής εκδηλώσεων"
 #: pretix/control/templates/pretixcontrol/includes/logs.html:32
 msgid "Personal data was cleared from this log entry."
 msgstr ""
+"Τα προσωπικά δεδομένα διαγράφηκαν από αυτήν την καταχώρηση αρχείου "
+"καταγραφής."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:163
 #: pretix/control/templates/pretixcontrol/event/logs.html:48
@@ -12026,7 +12028,7 @@ msgstr "Δημιουργήστε νέο webhook"
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:5
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr ""
+msgstr "Αρχεία καταγραφής για webhook %(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
@@ -12081,7 +12083,7 @@ msgstr "Δημιουργία webhook"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
 msgid "Logs"
-msgstr ""
+msgstr "Logs"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:14
 #, python-format
@@ -12266,7 +12268,7 @@ msgstr "Σκούρο"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:296
 msgid "Light"
-msgstr ""
+msgstr "Ανοιχτό"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:302
 msgid "Text content"
@@ -14672,6 +14674,11 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Έχω καταλάβει ότι οι άνθρωποι θα πληρώσουν την τιμή του εισιτηρίου απευθείας "
+"στον τραπεζικό λογαριασμό μου και το pretix δεν μπορεί να ξέρει αυτόματα τι "
+"πληρωμές έφτασε. Ως εκ τούτου, είτε θα επισημάνω τις πληρωμές ως "
+"ολοκληρωμένες με μη αυτόματο τρόπο, είτε θα εισαγάγω τακτικά μια δήλωση "
+"ψηφιακής τράπεζας για να δώσω στο pretix τις απαιτούμενες πληροφορίες."
 
 #: pretix/plugins/banktransfer/payment.py:36
 msgid "Bank account type"
@@ -14728,6 +14735,9 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"Για λογαριασμούς SEPA, μπορείτε να το αφήσετε κενό. Διαφορετικά, προσθέστε "
+"ό,τι χρειάζονται οι πελάτες σας για να μεταφέρετε τα χρήματα, π.χ. αριθμούς "
+"λογαριασμού, αριθμούς δρομολόγησης, διευθύνσεις κ.λπ."
 
 #: pretix/plugins/banktransfer/payment.py:122
 msgid "Do not include a hypen in the payment reference."
@@ -14836,6 +14846,9 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"Δεν ήταν δυνατό να καθορίσουμε αυτόματα τον τρόπο με τον οποίο "
+"ευθυγραμμίζονται οι στήλες στο αρχείο σας. Παρακαλώ βοηθήστε μας επιλέγοντας "
+"σε ποια στήλη θα περιέχονται τι είδους δεδομένα."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:63
 msgid ""
@@ -14850,6 +14863,9 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"Στις ρυθμίσεις πληρωμής της εκδήλωσής σας, ρυθμίζετε το %(date)s ως την "
+"τελευταία ημερομηνία οποιασδήποτε πληρωμής. Επομένως, δεν θα μπορείτε να "
+"επισημάνετε οποιαδήποτε παραγγελία ως πληρωμένη εδώ."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
@@ -14868,6 +14884,8 @@ msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Επί του παρόντος, αυτή η δυνατότητα υποστηρίζει αρχεία τύπου "
+"<code>.csv</code> και αρχεία στη μορφή MT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:28
 #: pretix/plugins/banktransfer/views.py:419
@@ -14894,6 +14912,9 @@ msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Σε αυτήν τη σελίδα, μπορείτε να εισαγάγετε τραπεζικά δεδομένα σε ανά "
+"εκδήλωση επίπεδο (per-event level). Επίσης, βλέπετε μόνο μη αντιστοιχισμένες "
+"συναλλαγές που εισάγονται απευθείας για αυτή την εκδήλωση."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:58
 msgid "Go to organizer-level import"
@@ -14905,7 +14926,7 @@ msgstr "Αναζήτηση"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:72
 msgid "Discard all"
-msgstr ""
+msgstr "Απόρριψη όλων"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:83
 msgid "Your search matched no transactions."
