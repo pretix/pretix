@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:21+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -268,7 +268,7 @@ msgstr[1] "The items in your cart are reserved for you for {num} minutes."
 
 #: pretix/static/pretixpresale/js/ui/main.js:201
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
