@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 09:41+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"Last-Translator: GiorgosPap <gipap90@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -13782,35 +13782,38 @@ msgstr "Κάντε προεπιλογή"
 
 #: pretix/plugins/badges/views.py:56
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "Η νέα διάταξη badge έχει δημιουργηθεί."
 
 #: pretix/plugins/badges/views.py:84 pretix/plugins/badges/views.py:114
 #: pretix/plugins/badges/views.py:144
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "Η απαιτούμενη διάταξη badge δεν υπάρχει."
 
 #: pretix/plugins/badges/views.py:126
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "Η επιλεγμένη διάταξη badge διαγράφηκε."
 
 #: pretix/plugins/badges/views.py:148
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Διάταξη badge: {}"
 
 #: pretix/plugins/banktransfer/__init__.py:10
 #: pretix/plugins/banktransfer/__init__.py:13
 #: pretix/plugins/banktransfer/payment.py:21
 msgid "Bank transfer"
-msgstr ""
+msgstr "Τραπεζική μεταφορά"
 
 #: pretix/plugins/banktransfer/__init__.py:16
 msgid "This plugin allows you to receive payments via bank transfer "
 msgstr ""
+"Αυτό το plugin σας επιτρέπει να λαμβάνετε πληρωμές μέσω τραπεζικής μεταφοράς "
 
 #: pretix/plugins/banktransfer/__init__.py:30
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr ""
+"Εγκαταστήστε το πακέτο python 'chardet' για καλύτερες δυνατότητες εισαγωγής "
+"CSV."
 
 #: pretix/plugins/banktransfer/payment.py:29
 msgid ""
