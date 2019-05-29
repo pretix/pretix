@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 10:36+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -10485,17 +10485,19 @@ msgstr "Δεν απαντήθηκε"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:311
 msgid "This question will be asked during check-in."
-msgstr ""
+msgstr "Αυτή η ερώτηση θα ζητηθεί κατά το check-in."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:323
 msgid ""
 "This file has been uploaded by a user and could contain viruses or other "
 "malicious content."
 msgstr ""
+"Αυτό το αρχείο έχει μεταφορτωθεί από έναν χρήστη και μπορεί να περιέχει ιούς "
+"ή άλλο κακόβουλο περιεχόμενο."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:324
 msgid "UNSAFE"
-msgstr ""
+msgstr "ΕΠΙΣΦΑΛΗΣ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:348
 #: pretix/control/templates/pretixcontrol/order/index.html:382
@@ -10503,7 +10505,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "<strong> συν </strong>%(rate)s%%%(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:358
 #: pretix/control/templates/pretixcontrol/order/index.html:392
@@ -10511,17 +10513,17 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "συμπεριλαμβανομένου του %(rate)s%%%(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:405
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:209
 msgid "Net total"
-msgstr ""
+msgstr "Καθαρή συνολική αξία"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:414
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:218
 msgid "Taxes"
-msgstr ""
+msgstr "Φόροι"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:424
 #: pretix/control/templates/pretixcontrol/orders/overview.html:43
@@ -10531,21 +10533,23 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:431
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:228
 msgid "Total"
-msgstr ""
+msgstr "Σύνολο"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:439
 msgid "Payments"
-msgstr ""
+msgstr "Πληρωμές"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:449
 msgid "Confirmation date"
-msgstr ""
+msgstr "Ημερομηνία επιβεβαίωσης"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:462
 msgid ""
 "This payment was created with an older version of pretix, therefore accurate "
 "data might not be available."
 msgstr ""
+"Αυτή η πληρωμή δημιουργήθηκε με μια παλαιότερη έκδοση του pretix, επομένως "
+"τα ακριβή δεδομένα ενδέχεται να μην είναι διαθέσιμα."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:463
 msgid "MIGRATED"
@@ -10555,29 +10559,29 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:8
 msgid "Cancel payment"
-msgstr ""
+msgstr "Ακύρωση πληρωμής"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:480
 msgid "Confirm as paid"
-msgstr ""
+msgstr "Επιβεβαίωση πληρωμής"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:523
 msgid "Create a refund"
-msgstr ""
+msgstr "Δημιουργήστε μια επιστροφή χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:544
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:44
 msgid "Source"
-msgstr ""
+msgstr "Πηγή"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:577
 msgid "Cancel transfer"
-msgstr ""
+msgstr "Ακύρωση μεταφοράς"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:582
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:85
 msgid "Confirm as done"
-msgstr ""
+msgstr "Επιβεβαιώστε ότι ολοκληρώθηκε"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:589
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:91
@@ -10588,17 +10592,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:50
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:96
 msgid "Process refund"
-msgstr ""
+msgstr "Διαδικασία επιστροφής χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:630
 msgid "Change"
-msgstr ""
+msgstr "Αλλαγή"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:646
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:207
 msgid "ZIP code and city"
-msgstr ""
+msgstr "Ταχυδρομικός κώδικας και πόλη"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:655
 msgid "Valid EU VAT ID"
@@ -10606,30 +10610,32 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:661
 msgid "Check"
-msgstr ""
+msgstr "Έλεγχος"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:703
 msgid "Order history"
-msgstr ""
+msgstr "Ιστορικό παραγγελιών"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:4
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:7
 #: pretix/plugins/sendmail/signals.py:33
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:6
 msgid "Email history"
-msgstr ""
+msgstr "Ιστορικό ηλεκτρονικού ταχυδρομείου"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:33
 msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
+"Αυτό το μήνυμα ηλεκτρονικού ταχυδρομείου έχει αποσταλεί με παλαιότερη έκδοση "
+"του pretix. Επομένως, δεν μπορούμε να το εμφανίσουμε εδώ με ακρίβεια."
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:39
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:40
 msgid "Subject:"
-msgstr ""
+msgstr "Θέμα:"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
@@ -10639,38 +10645,44 @@ msgstr "Σημειώστε την παραγγελία ως πληρωμένη"
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
 msgstr ""
+"Θέλετε πραγματικά να δημιουργήσετε μια μη αυτόματη πληρωμή για αυτήν την "
+"παραγγελία;"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:36
 msgid "Create payment"
-msgstr ""
+msgstr "Δημιουργία πληρωμής"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
 msgstr ""
+"Θέλετε πραγματικά να ακυρώσετε αυτήν την πληρωμή; Δεν μπορείτε να "
+"επαναφέρετε αυτήν την ενέργεια."
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "Ναι, ακυρώστε την πληρωμή"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
 msgid "Mark payment as complete"
-msgstr ""
+msgstr "Σημειώστε την πληρωμή ως ολοκληρωμένη"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
+msgstr "Θέλετε πραγματικά να επισημάνετε αυτήν την πληρωμή ως ολοκληρωμένη;"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
 msgid "Cancel refund"
-msgstr ""
+msgstr "Ακύρωση επιστροφής χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
+"Θέλετε πραγματικά να ακυρώσετε αυτήν την επιστροφή χρημάτων; Δεν μπορείτε να "
+"επαναφέρετε αυτήν την ενέργεια."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -10681,52 +10693,52 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "Ναι, ακύρωση της επιστροφής χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr ""
+msgstr "Επιστροφή χρημάτων παραγγελίας"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:21
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "Πώς πρέπει να σταλεί η επιστροφή χρημάτων;"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:28
 msgid "Payment confirmation date"
-msgstr ""
+msgstr "Ημερομηνία επιβεβαίωσης πληρωμής"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:30
 msgid "Amount not refunded"
-msgstr ""
+msgstr "Δεν γίνεται επιστροφή χρημάτων για το ποσό"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:31
 msgid "Refund"
-msgstr ""
+msgstr "Επιστροφή χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:45
 msgctxt "amount_label"
 msgid "Automatically refund"
-msgstr ""
+msgstr "Αυτόματη επιστροφή χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:59
 msgid "Automatically refund full amount"
-msgstr ""
+msgstr "Αυτόματη επιστροφή πλήρους ποσού"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:62
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "Αυτός ο τρόπος πληρωμής δεν υποστηρίζει αυτόματες επιστροφές χρημάτων."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:70
 msgid "Transfer to other order"
-msgstr ""
+msgstr "Μεταφορά σε άλλη παραγγελία"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:73
 msgctxt "amount_label"
 msgid "Transfer"
-msgstr ""
+msgstr "Μεταφορά"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:81
 msgctxt "order_label"
@@ -10752,7 +10764,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr ""
+msgstr "Επισημάνετε την επιστροφή χρημάτων ως ολοκληρωμένη"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:118
 msgid ""
@@ -10764,11 +10776,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:139
 msgid "Perform refund"
-msgstr ""
+msgstr "Εκτελέστε επιστροφή χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
 msgstr ""
+"Θέλετε πραγματικά να επισημάνετε αυτήν την επιστροφή χρημάτων ως "
+"ολοκληρωμένη;"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
@@ -10785,7 +10799,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:29
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "Τι πρέπει να γίνει για την παραγγελία εισιτηρίων;"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid ""
@@ -10807,45 +10821,45 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr ""
+msgstr "Μόνο επιστροφή χρημάτων"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
-msgstr ""
+msgstr "Τι πρέπει να συμβαίνει με την παραγγελία;"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:4
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
 #: pretix/plugins/sendmail/signals.py:25
 msgid "Send email"
-msgstr ""
+msgstr "Αποστολή email"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:23
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:20
 msgid "E-mail preview"
-msgstr ""
+msgstr "Προβολή e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:34
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:33
 msgid "Preview email"
-msgstr ""
+msgstr "Προεπισκόπηση email"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:37
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:36
 msgid "Send"
-msgstr ""
+msgstr "Αποστολή"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
 msgid "Data export"
-msgstr ""
+msgstr "Εξαγωγή δεδομένων"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:10
 msgid "Show all"
-msgstr ""
+msgstr "Προβολή όλων"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:30
 msgid "Start export"
-msgstr ""
+msgstr "Ξεκινήστε την εξαγωγή"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
@@ -10854,7 +10868,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "Κανείς δεν αγόρασε εισιτήριο ακόμη."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Take your shop live"
@@ -10862,30 +10876,30 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:25
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "Πηγαίνετε στο κατάστημα εισιτηρίων(ticket shop)"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:36
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr ""
+msgstr "Πάμε!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:78
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "Η λίστα φιλτράρεται με απαντήσεις στην ερώτηση %(question)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:83
 msgid "Remove filter"
-msgstr ""
+msgstr "Κατάργηση φίλτρου"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Positions"
-msgstr ""
+msgstr "Θέσεις"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:132
 #: pretix/control/templates/pretixcontrol/orders/index.html:134
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "Η ΕΠΙΣΤΡΟΦΗ ΧΡΗΜΑΤΩΝ ΕΚΚΡΕΜΕΙ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:137
 msgid "OVERPAID"
@@ -10897,11 +10911,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:141
 msgid "FULLY PAID"
-msgstr ""
+msgstr "ΠΛΗΡΩΣ ΠΛΗΡΩΜΕΝΟ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:153
 msgid "Sum over all pages"
-msgstr ""
+msgstr "Αθροίστε όλες τις σελίδες"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:156
 #, python-format
