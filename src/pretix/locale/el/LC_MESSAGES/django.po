@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 08:04+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -16164,12 +16164,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Σελίδα %(page)s από %(of)s"
 
 #: pretix/presale/utils.py:34 pretix/presale/utils.py:129
 #: pretix/presale/utils.py:130
 msgid "The selected event was not found."
-msgstr ""
+msgstr "Η επιλεγμένη εκδήλωση δεν βρέθηκε"
 
 #: pretix/presale/utils.py:94
 msgid "The selected ticket shop is currently not available."
@@ -16177,32 +16177,32 @@ msgstr ""
 
 #: pretix/presale/utils.py:99
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Αυτή η λειτουργία δεν είναι ενεργοποιημένη."
 
 #: pretix/presale/utils.py:138 pretix/presale/utils.py:142
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "Ο επιλεγμένος διοργανωτής δεν βρέθηκε."
 
 #: pretix/presale/views/cart.py:98 pretix/presale/views/cart.py:116
 #: pretix/presale/views/cart.py:128
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "Παρακαλώ εισάγετε μόνο αριθμούς."
 
 #: pretix/presale/views/cart.py:100
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Παρακαλώ εισαγάγετε μόνο θετικούς αριθμούς."
 
 #: pretix/presale/views/cart.py:320
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "Το καλάθι σας έχει ενημερωθεί."
 
 #: pretix/presale/views/cart.py:323 pretix/presale/views/cart.py:344
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Το καλάθι σας είναι άδειο."
 
 #: pretix/presale/views/cart.py:358
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Τα προϊόντα προστέθηκαν με επιτυχία στο καλάθι σας."
 
 #: pretix/presale/views/checkout.py:34
 msgid "Your cart is empty"
