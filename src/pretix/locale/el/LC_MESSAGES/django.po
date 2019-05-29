@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 09:41+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3120,7 +3120,7 @@ msgstr "Η παραγγελία {order.code} έχει επισημανθεί ω�
 #: pretix/base/notifications.py:213
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "Η παραγγελία {order.code} ακυρώθηκε."
 
 #: pretix/base/notifications.py:219
 #, python-brace-format
@@ -3130,17 +3130,17 @@ msgstr "Η παραγγελία{order.code} έχει επισημανθεί ως
 #: pretix/base/notifications.py:225
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr ""
+msgstr "Οι πληροφορίες εισιτηρίων της παραγγελίας {order.code} έχουν αλλάξει."
 
 #: pretix/base/notifications.py:231
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "Η διεύθυνση επικοινωνίας της παραγγελίας {order.code} έχει αλλάξει."
 
 #: pretix/base/notifications.py:237
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr ""
+msgstr "Η παραγγελία {order.code} έχει αλλάξει."
 
 #: pretix/base/notifications.py:242
 msgid "Order has been overpaid"
@@ -3154,30 +3154,32 @@ msgstr "Στην παραγγελία{order.code} έχει καταβληθεί 
 #: pretix/base/notifications.py:249
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "Έχει υπάρξει εξωτερική επιστροφή χρημάτων για την {order.code}."
 
 #: pretix/base/notifications.py:254
 msgid "Refund requested"
-msgstr ""
+msgstr "Ζητήθηκε επιστροφή χρημάτων"
 
 #: pretix/base/notifications.py:255
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Ζητήσατε να κάνετε επιστροφή χρημάτων για την {order.code}."
 
 #: pretix/base/payment.py:44 pretix/control/forms/event.py:582
 #: pretix/control/forms/event.py:1244
 msgid "This field is required."
-msgstr ""
+msgstr "Αυτό το πεδίο είναι απαραίτητο."
 
 #: pretix/base/payment.py:199
 msgid "Enable payment method"
-msgstr ""
+msgstr "Ενεργοποιήστε τη μέθοδο πληρωμής"
 
 #: pretix/base/payment.py:205
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Οι χρήστες δεν θα μπορούν να επιλέξουν αυτόν τον πάροχο πληρωμών μετά την "
+"καθορισμένη ημερομηνία."
 
 #: pretix/base/payment.py:210
 msgid "Text on invoices"
@@ -3190,10 +3192,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Θα εκτυπωθούν ακριβώς κάτω από τα στοιχεία πληρωμής και πάνω από το κείμενο "
+"κλεισίματος των τιμολογίων. Αυτό θα χρησιμοποιηθεί μόνο εάν το τιμολόγιο "
+"δημιουργηθεί πριν πληρωθεί η παραγγελία. Αν το τιμολόγιο δημιουργηθεί "
+"αργότερα, θα εμφανιστεί ένα κείμενο που δηλώνει ότι έχει ήδη πληρωθεί."
 
 #: pretix/base/payment.py:220
 msgid "Minimum order total"
-msgstr ""
+msgstr "Ελάχιστο συνολικό ποσό παραγγελίας"
 
 #: pretix/base/payment.py:221
 msgid ""
@@ -3201,10 +3207,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Αυτή η πληρωμή θα είναι διαθέσιμη μόνο εάν το σύνολο των παραγγελιών είναι "
+"ίσο ή υπερβαίνει τη δεδομένη τιμή. Το σύνολο της παραγγελίας για το σκοπό "
+"αυτό μπορεί να υπολογιστεί χωρίς να ληφθούν υπόψη τα τέλη που επιβάλλονται "
+"από αυτή τη μέθοδο πληρωμής."
 
 #: pretix/base/payment.py:231
 msgid "Maximum order total"
-msgstr ""
+msgstr "Μέγιστο συνολικό ποσό παραγγελίας"
 
 #: pretix/base/payment.py:232
 msgid ""
@@ -3212,14 +3222,18 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Αυτή η πληρωμή θα είναι διαθέσιμη μόνο εάν το σύνολο των παραγγελιών είναι "
+"ίσο ή χαμηλότερο από τη δεδομένη τιμή. Το σύνολο της παραγγελίας για το "
+"σκοπό αυτό μπορεί να υπολογιστεί χωρίς να ληφθούν υπόψη τα τέλη που "
+"επιβάλλονται από αυτή τη μέθοδο πληρωμής."
 
 #: pretix/base/payment.py:242 pretix/base/payment.py:251
 msgid "Additional fee"
-msgstr ""
+msgstr "Επιπλέον χρέωση"
 
 #: pretix/base/payment.py:243
 msgid "Absolute value"
-msgstr ""
+msgstr "Απόλυτη τιμή"
 
 #: pretix/base/payment.py:252
 msgid ""
@@ -3227,6 +3241,9 @@ msgid ""
 "be calculated on the summed price of sold tickets, not on other fees like e."
 "g. shipping fees, if there are any."
 msgstr ""
+"Ποσοστό της συνολικής παραγγελίας. Σημειώστε ότι το ποσοστό αυτό θα "
+"υπολογιστεί επί του παρόντος μόνο για την αθροιστική τιμή των εισιτηρίων που "
+"πωλήθηκαν, και όχι για άλλα τέλη όπως π.χ. έξοδα αποστολής, εάν υπάρχουν."
 
 #: pretix/base/payment.py:260
 msgid "Calculate the fee from the total value including the fee."
@@ -3250,7 +3267,7 @@ msgstr ""
 
 #: pretix/base/payment.py:269
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Περιορίστε σε χώρες"
 
 #: pretix/base/payment.py:271
 msgid ""
@@ -3258,58 +3275,69 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Επιτρέψτε να επιλέξετε μόνο αυτόν τον πάροχο πληρωμής για διευθύνσεις "
+"τιμολογίου στις επιλεγμένες χώρες. Αν δεν επιλέξετε χώρα, επιτρέπονται όλες "
+"οι χώρες. Αυτό ενεργοποιείται μόνο αν απαιτείται η διεύθυνση του τιμολογίου."
 
 #: pretix/base/payment.py:308 pretix/base/services/invoices.py:57
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Η πληρωμή για αυτό το τιμολόγιο έχει ήδη παραληφθεί."
 
 #: pretix/base/payment.py:645
 msgid "Automatic refunds are not supported by this payment provider."
 msgstr ""
+"Οι αυτόματες επιστροφές δεν υποστηρίζονται από αυτόν τον πάροχο πληρωμών."
 
 #: pretix/base/payment.py:671
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Δεν απαιτείται πληρωμή, καθώς αυτή η παραγγελία περιλαμβάνει μόνο προϊόντα "
+"που είναι δωρεάν."
 
 #: pretix/base/payment.py:678
 msgid "Free of charge"
-msgstr ""
+msgstr "Δωρεάν"
 
 #: pretix/base/payment.py:705
 msgid "Box office"
-msgstr ""
+msgstr "Εκδοτήριο"
 
 #: pretix/base/payment.py:742 pretix/plugins/manualpayment/__init__.py:9
 #: pretix/plugins/manualpayment/__init__.py:12
 msgid "Manual payment"
-msgstr ""
+msgstr "Μη αυτόματη πληρωμή"
 
 #: pretix/base/payment.py:746 pretix/plugins/banktransfer/payment.py:114
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"Στη δοκιμαστική λειτουργία, μπορείτε απλώς να επισημάνετε με μη αυτόματο "
+"τρόπο αυτή την παραγγελία ως πληρωμένη στο backend μετά τη δημιουργία της."
 
 #: pretix/base/payment.py:768 pretix/plugins/banktransfer/payment.py:102
 msgid "Payment method name"
-msgstr ""
+msgstr "Όνομα μεθόδου πληρωμής"
 
 #: pretix/base/payment.py:772
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Περιγραφή διαδικασίας πληρωμής κατά την ολοκλήρωση του ελέγχου"
 
 #: pretix/base/payment.py:773
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Αυτό το κείμενο θα εμφανιστεί κατά την ολοκλήρωση του ελέγχου όταν ο χρήστης "
+"επιλέξει αυτή τη μέθοδο πληρωμής. Πρέπει να δώσει μια σύντομη εξήγηση "
+"σχετικά με αυτήν τη μέθοδο πληρωμής."
 
 #: pretix/base/payment.py:778
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Περιγραφή διαδικασίας πληρωμής για emails επιβεβαίωσης παραγγελίας"
 
 #: pretix/base/payment.py:779
 #, python-brace-format
@@ -3319,10 +3347,14 @@ msgid ""
 "payment. You can usethe placeholders {order}, {total}, {currency} and "
 "{total_with_currency}"
 msgstr ""
+"Αυτό το κείμενο θα συμπεριληφθεί για το {payment_info} placeholder σε mails "
+"επιβεβαίωσης παραγγελίας. Θα πρέπει να καθοδηγήσει τον χρήστη σχετικά με τον "
+"τρόπο με τον οποίο θα γίνει η πληρωμή. Μπορείτε να χρησιμοποιήσετε τα "
+"placeholders {order}, {total}, {currency} και {total_with_currency}"
 
 #: pretix/base/payment.py:786
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Περιγραφή διαδικασίας πληρωμής για εκκρεμείς παραγγελίες"
 
 #: pretix/base/payment.py:787
 #, python-brace-format
@@ -3331,14 +3363,18 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can "
 "usethe placeholders {order}, {total}, {currency} and {total_with_currency}"
 msgstr ""
+"Αυτό το κείμενο θα εμφανιστεί στη σελίδα επιβεβαίωσης παραγγελίας για "
+"εκκρεμείς παραγγελίες. Θα πρέπει να καθοδηγήσει τον χρήστη σχετικά με τον "
+"τρόπο με τον οποίο θα γίνει η πληρωμή. Μπορείτε να χρησιμοποιήσετε τα "
+"placeholders {order}, {total}, {currency} και {total_with_currency}"
 
 #: pretix/base/payment.py:833
 msgid "Offsetting"
-msgstr ""
+msgstr "Offsetting"
 
 #: pretix/base/payment.py:847 pretix/control/views/orders.py:704
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Εισαγάγατε μια παραγγελία που δεν βρέθηκε."
 
 #: pretix/base/payment.py:868
 #, python-format
@@ -3347,25 +3383,25 @@ msgstr "Ισορροπία κατά παραγγελίες: %s"
 
 #: pretix/base/pdf.py:46
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Κωδικός εισιτηρίου (περιεχόμενο barcode)"
 
 #: pretix/base/pdf.py:56 pretix/control/forms/event.py:1478
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
-msgstr ""
+msgstr "Όνομα προϊόντος"
 
 #: pretix/base/pdf.py:57 pretix/base/services/tickets.py:74
 #: pretix/control/views/event.py:690 pretix/control/views/pdf.py:59
 msgid "Sample product"
-msgstr ""
+msgstr "Δείγμα προϊόντος"
 
 #: pretix/base/pdf.py:61
 msgid "Variation name"
-msgstr ""
+msgstr "Όνομα μεταβλητής (variation)"
 
 #: pretix/base/pdf.py:62
 msgid "Sample variation"
-msgstr ""
+msgstr "Δείγμα παραλλαγής (variation)"
 
 #: pretix/base/pdf.py:66
 msgid "Product description"
@@ -3615,38 +3651,45 @@ msgstr "Άγνωστη θέση καλαθιού."
 #: pretix/base/services/cart.py:52
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "Δεν καθορίστηκε ημερομηνία."
 
 #: pretix/base/services/cart.py:53
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "Επιλέξατε ένα προϊόν το οποίο δεν είναι διαθέσιμο προς πώληση."
 
 #: pretix/base/services/cart.py:54
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
 msgstr ""
+"Ορισμένα από τα προϊόντα που επιλέξατε δεν είναι πλέον διαθέσιμα. Παρακαλώ "
+"δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/base/services/cart.py:56
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Ορισμένα από τα προϊόντα που επιλέξατε δεν είναι πλέον διαθέσιμα στην "
+"ποσότητα που επιλέξατε. Παρακαλώ δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/base/services/cart.py:58
 #, python-format
 msgid "You cannot select more than %s items per order."
-msgstr ""
+msgstr "Δεν μπορείτε να επιλέξετε περισσότερα από %s στοιχεία ανά παραγγελία."
 
 #: pretix/base/services/cart.py:59
 #, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
 msgstr ""
+"Δεν μπορείτε να επιλέξετε περισσότερα από %(max)s στοιχεία του προϊόντος "
+"%(product)s."
 
 #: pretix/base/services/cart.py:60
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
 msgstr ""
+"Πρέπει να επιλέξετε τουλάχιστον %(min)s στοιχεία του προϊόντος %(product)s."
 
 #: pretix/base/services/cart.py:61
 #, python-format
@@ -3654,20 +3697,24 @@ msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
+"Καταργήσαμε το %(product)s από το καλάθι σας, καθώς δεν μπορείτε να "
+"αγοράσετε λιγότερο από %(min)s στοιχεία του."
 
 #: pretix/base/services/cart.py:63 pretix/base/services/orders.py:69
 msgid "The presale period for this event has not yet started."
-msgstr ""
+msgstr "Η περίοδος προπώλησης για αυτή την εκδήλωση δεν έχει ξεκινήσει ακόμα."
 
 #: pretix/base/services/cart.py:64
 msgid "The presale period for this event has ended."
-msgstr ""
+msgstr "Η περίοδος προπώλησης για αυτή την εκδήλωση έχει λήξει."
 
 #: pretix/base/services/cart.py:65
 msgid ""
 "The presale period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Η περίοδος προπώλησης για αυτή την εκδήλωση δεν έχει ξεκινήσει ακόμα. Οι "
+"επηρεαζόμενες θέσεις έχουν αφαιρεθεί από το καλάθι σας."
 
 #: pretix/base/services/cart.py:67 pretix/base/services/orders.py:82
 msgid ""
@@ -16454,65 +16501,77 @@ msgstr "Δεν μπορείτε να τροποποιήσετε αυτήν τη�
 #: pretix/presale/views/order.py:784
 msgid "Ticket download is not (yet) enabled for this order."
 msgstr ""
+"Η λήψη των εισιτηρίων δεν είναι (ακόμα) ενεργοποιημένη για αυτήν την "
+"παραγγελία."
 
 #: pretix/presale/views/user.py:25
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Είχαμε δυσκολίες στην επεξεργασία των πληροφοριών σας."
 
 #: pretix/presale/views/user.py:34
 msgid "We already sent you an email in the last 24 hours."
-msgstr ""
+msgstr "Έχουμε ήδη στείλει ένα email τις τελευταίες 24 ώρες."
 
 #: pretix/presale/views/user.py:53
 msgid "Your orders for {}"
-msgstr ""
+msgstr "Οι παραγγελίες σας για {}"
 
 #: pretix/presale/views/user.py:64
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Έχουμε πρόβλημα με την αποστολή emails αυτήν τη στιγμή, παρακαλώ ελέγξτε "
+"αργότερα."
 
 #: pretix/presale/views/user.py:67
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
+"Εάν υπήρχαν παραγγελίες από αυτόν τον χρήστη, ο χρήστης θα λάβει ένα email "
+"με τους κωδικούς παραγγελίας του."
 
 #: pretix/presale/views/waiting.py:77
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Οι λίστες αναμονής είναι απενεργοποιημένες για αυτή την εκδήλωση."
 
 #: pretix/presale/views/waiting.py:81
 msgid "We could not identify the product you selected."
-msgstr ""
+msgstr "Δεν μπορέσαμε να εντοπίσουμε το προϊόν που επιλέξατε."
 
 #: pretix/presale/views/waiting.py:90
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Πρέπει να επιλέξετε μια ημερομηνία."
 
 #: pretix/presale/views/waiting.py:102
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Δεν μπορείτε να προσθέσετε τον εαυτό σας στη λίστα αναμονής, καθώς αυτό το "
+"προϊόν δεν είναι διαθέσιμο προς το παρόν."
 
 #: pretix/presale/views/waiting.py:107
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Σας έχουμε προσθέσει στη λίστα αναμονής. Θα λάβετε ένα email μόλις τα "
+"εισιτήρια θα είναι διαθέσιμα ξανά."
 
 #: pretix/presale/views/widget.py:252
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "Αυτό το κατάστημα εισιτηρίων είναι απενεργοποιημένο αυτήν τη στιγμή."
 
 #: pretix/presale/views/widget.py:261
 msgid "The selected date does not exist in this event series."
 msgstr ""
+"Η επιλεγμένη ημερομηνία δεν υπάρχει σε αυτή τη σειρά εκδηλώσεων (event "
+"series)."
 
 #: pretix/presale/views/widget.py:268
 msgid "This is not an event series."
-msgstr ""
+msgstr "Αυτή δεν είναι μια σειρά συμβάντων (event series)."
 
 #: pretix/presale/views/widget.py:302
 #, python-format
@@ -16521,7 +16580,7 @@ msgstr "από %(start_date)s"
 
 #: pretix/presale/views/widget.py:305
 msgid "Sale Soon"
-msgstr ""
+msgstr "Σύντομα για πώληση"
 
 #: pretix/settings.py:390
 msgid "English"
