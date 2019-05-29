@@ -36,7 +36,7 @@ on the type of navigation. You should also return an ``active`` key with a boole
 set to ``True``, when this item should be marked as active. The ``request`` object
 will have an attribute ``event``.
 
-You can optionally create sub-items to create hierarchical navigation. There is two
+You can optionally create sub-items to create hierarchical navigation. There are two
 ways to achieve this: Either you specify a key ``children`` on your top navigation item
 that contains a list of navigation items (as dictionaries), or you specify a ``parent``
 key with the ``url`` value of the designated parent item.
@@ -79,7 +79,7 @@ a fontawesome icon name with the key ``icon``, it will  be respected depending
 on the type of navigation. You should also return an ``active`` key with a boolean
 set to ``True``, when this item should be marked as active.
 
-You can optionally create sub-items to create hierarchical navigation. There is two
+You can optionally create sub-items to create hierarchical navigation. There are two
 ways to achieve this: Either you specify a key ``children`` on your top navigation item
 that contains a list of navigation items (as dictionaries), or you specify a ``parent``
 key with the ``url`` value of the designated parent item.
@@ -185,7 +185,7 @@ should contain at least the keys ``label`` and ``url``. You should also return
 an ``active`` key with a boolean set to ``True``, when this item should be marked
 as active.
 
-You can optionally create sub-items to create hierarchical navigation. There is two
+You can optionally create sub-items to create hierarchical navigation. There are two
 ways to achieve this: Either you specify a key ``children`` on your top navigation item
 that contains a list of navigation items (as dictionaries), or you specify a ``parent``
 key with the ``url`` value of the designated parent item.
