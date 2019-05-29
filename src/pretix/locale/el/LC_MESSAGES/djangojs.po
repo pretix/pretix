@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:24+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -45,7 +45,7 @@ msgstr "Συνολικά κέρδη"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr "Επικοινωνία με το Stripe ..."
+msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
@@ -183,7 +183,7 @@ msgstr "Παρουσιάστηκε σφάλμα."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr "Δημιουργία μηνυμάτων ..."
+msgstr "Δημιουργία μηνυμάτων …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:55
 msgid "Unknown error."
@@ -225,8 +225,6 @@ msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
 msgstr "Επικοινωνία με το Stripe …"
 
@@ -249,8 +247,8 @@ msgstr "Όχι"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(μία παραπάνω ημερομηνία)"
+msgstr[1] "( {num} περισσότερες ημερομηνίες)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
@@ -303,7 +301,7 @@ msgstr "συμπεριλαμβανομένου %(rate)s% %(taxname)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "συν %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
