@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 09:44+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -15393,7 +15393,7 @@ msgstr "Το layout του PDF εισιτηρίων για {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
-msgstr ""
+msgstr "(Ιδια όπως παραπάνω)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
@@ -15403,11 +15403,11 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:179
 msgid "Default layout"
-msgstr ""
+msgstr "Προεπιλεγμένο layout"
 
 #: pretix/plugins/ticketoutputpdf/signals.py:99
 msgid "Ticket layout created."
-msgstr ""
+msgstr "Δημιουργήθηκε το layout των εισιτηρίων."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:100
 msgid "Ticket layout deleted."
