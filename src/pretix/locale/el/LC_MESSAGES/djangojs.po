@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-04-24 22:00+0000\n"
+"PO-Revision-Date: 2019-05-29 13:24+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
@@ -49,7 +49,7 @@ msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:56
 msgid "Total"
-msgstr "??????"
+msgstr "Σύνολο"
 
 #: pretix/static/pretixbase/js/asynctask.js:39
 #: pretix/static/pretixbase/js/asynctask.js:95
@@ -58,8 +58,8 @@ msgid ""
 "Depending on the size of your event, this might take up to a few minutes."
 msgstr ""
 "Το αίτημά σας έχει τεθεί σε ουρά στο διακομιστή και θα υποβληθεί σε "
-"επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος, αυτό μπορεί να διαρκέσει "
-"μερικά λεπτά."
+"επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος σας, αυτό μπορεί να "
+"διαρκέσει μερικά λεπτά."
 
 #: pretix/static/pretixbase/js/asynctask.js:45
 #: pretix/static/pretixbase/js/asynctask.js:101
@@ -153,7 +153,7 @@ msgstr "Περιοχή Barcode"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Υποστηρίζεται από το Pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
@@ -214,7 +214,7 @@ msgstr "Ολα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
-msgstr ""
+msgstr "Κανένας"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
@@ -225,14 +225,12 @@ msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
 msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Άλλοι"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
@@ -249,8 +247,8 @@ msgstr "Όχι"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:108
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(μία παραπάνω ημερομηνία)"
+msgstr[1] "( {num} περισσότερες ημερομηνίες)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
@@ -263,17 +261,17 @@ msgstr "Το καλάθι έληξε"
 #: pretix/static/pretixpresale/js/ui/cart.js:46
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Τα στοιχεία του καλαθιού σας προορίζονται για ένα λεπτό."
+msgstr[1] "The items in your cart are reserved for you for {num} minutes."
 
 #: pretix/static/pretixpresale/js/ui/main.js:201
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Εισαγάγετε μια ποσότητα για έναν από τους τύπους εισιτηρίων."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Εξαντλημένα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
@@ -283,7 +281,7 @@ msgstr "Αγορά"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Κατοχυρωμένα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
@@ -293,59 +291,60 @@ msgstr "ΔΩΡΕΑΝ"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "απο %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "συμπεριλαμβανομένου %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "συν %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "συμπεριλαμβανομένων των φόρων"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "συν τους φόρους"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "διαθέσιμη προς το παρόν:%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Διατίθεται μόνο με ένα κουπόνι"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "ελάχιστο ποσό για παραγγελία: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Κλείστε το κατάστημα εισιτηρίων"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η φόρτωση του εισιτηρίου."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr ""
+"Δεν ήταν δυνατή η δημιουργία του καλαθιού. Παρακαλώ προσπαθήστε ξανά αργότερα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
@@ -372,8 +371,8 @@ msgid ""
 "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 "ticketing powered by pretix</a>"
 msgstr ""
-"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
-"ticketing powered by pretix</a>"
+"<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\"> εκδηλώσεις "
+"με εκδηλώσεις που προωθούνται από το pretix</a>"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
