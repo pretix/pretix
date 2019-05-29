@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 10:36+0000\n"
-"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5406,7 +5406,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:461
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "Διατηρήστε ένα σταθερό τέλος ακύρωσης"
 
 #: pretix/control/forms/event.py:465
 msgid "Keep payment, shipping and service fees"
