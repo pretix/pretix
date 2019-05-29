@@ -378,9 +378,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOCALE_PATHS = (
+LOCALE_PATHS = [
     os.path.join(os.path.dirname(__file__), 'locale'),
-)
+]
+if config.has_option('languages', 'path'):
+    LOCALE_PATHS.insert(0, config.get('languages', 'path'))
 
 FORMAT_MODULE_PATH = [
     'pretix.helpers.formats',
@@ -407,7 +409,7 @@ LANGUAGES_OFFICIAL = {
 }
 LANGUAGES_INCUBATING = {
     'pt-br', 'da', 'pl', 'it', 'el'
-}
+} - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 
 if DEBUG:
     LANGUAGES = ALL_LANGUAGES

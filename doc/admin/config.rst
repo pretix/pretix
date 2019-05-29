@@ -273,6 +273,24 @@ to speed up various operations::
 If redis is not configured, pretix will store sessions and locks in the database. If memcached
 is configured, memcached will be used for caching instead of redis.
 
+Translations
+------------
+
+pretix comes with a nubmer of translations. Some of them are marked as "incubating", which means
+they can usually only be selected in development mode. If you want to use them nevertheless, you
+can activate them like this::
+
+    [languages]
+    allow_incubating=pt-br,da
+
+You can also tell pretix about additional paths where it will search for translations::
+
+    [languages]
+    path=/path/to/my/translations
+
+For a given language (e.g. ``pt-br``), pretix will then look in the
+specific subfolder, e.g. ``/path/to/my/translations/pt_BR/LC_MESSAGES/django.po``.
+
 Celery task queue
 -----------------
 
