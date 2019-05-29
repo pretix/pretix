@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 07:18+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1160,11 +1160,11 @@ msgstr "Τύπος συσκευής"
 
 #: pretix/base/forms/user.py:117
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Smartphone με την εφαρμογή Authenticator"
 
 #: pretix/base/forms/user.py:118
 msgid "U2F-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "U2F-συμαβτό hardware token (e.g. Yubikey)"
 
 #: pretix/base/forms/validators.py:28
 msgid ""
