@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 11:52+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: Andrikopoulos-Giannis <iandrikopoulos@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -5557,21 +5557,26 @@ msgstr ""
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
+"Δεν μπορείτε να απαιτήσετε να διευκρινίσετε τα ονόματα των συμμετεχόντων εάν "
+"δεν τα ζητήσετε."
 
 #: pretix/control/forms/event.py:425
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
+"Πρέπει να ζητήσετε emails για τους συμμετέχοντες, αν θέλετε να τα απαιτήσετε."
 
 #: pretix/control/forms/event.py:433
 msgid ""
 "e.g. I hereby confirm that I have read and agree with the event organizer's "
 "terms of service and agree with them."
 msgstr ""
+"π.χ. Επιβεβαιώνω ότι έχω διαβάσει και συμφωνώ με τους όρους υπηρεσίας του "
+"διοργανωτή της εκδήλωσης και συμφωνώ μαζί τους."
 
 #: pretix/control/forms/event.py:437
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "Ζητήστε {πεδία}, εμφάνιση όπως {παράδειγμα}"
 
 #: pretix/control/forms/event.py:447
 msgid "Customers can cancel their unpaid orders"
@@ -5780,15 +5785,17 @@ msgstr ""
 
 #: pretix/control/forms/event.py:643
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "Δημιουργήστε τιμολόγια με διαδοχικούς αριθμούς"
 
 #: pretix/control/forms/event.py:644
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
+"Εάν απενεργοποιηθεί, ο κωδικός παραγγελίας θα χρησιμοποιηθεί στον αριθμό "
+"τιμολογίου."
 
 #: pretix/control/forms/event.py:648
 msgid "Invoice number prefix"
-msgstr ""
+msgstr "Πρόθεμα αριθμού τιμολογίου"
 
 #: pretix/control/forms/event.py:649
 msgid ""
@@ -5798,44 +5805,52 @@ msgid ""
 "will share their number range, i.e. every full number will be used at most "
 "once over all of your events. This setting only affects future invoices."
 msgstr ""
+"Αυτό θα προστεθεί στους αριθμούς τιμολογίων. Αν αφήσετε αυτό το πεδίο κενό, "
+"θα χρησιμοποιηθεί το slug συμβάντος που ακολουθείται από μια παύλα. Προσοχή: "
+"Αν πολλά γεγονότα εντός του ίδιου οργανισμού χρησιμοποιούν την ίδια τιμή σε "
+"αυτό το πεδίο, θα μοιράζονται το φάσμα των αριθμών τους, δηλαδή κάθε πλήρης "
+"αριθμός θα χρησιμοποιηθεί το πολύ μία φορά σε όλα τα συμβάντα σας. Αυτή η "
+"ρύθμιση επηρεάζει μόνο μελλοντικά τιμολόγια."
 
 #: pretix/control/forms/event.py:656
 msgid "Generate invoices"
-msgstr ""
+msgstr "Δημιουργία τιμολογίων"
 
 #: pretix/control/forms/event.py:660
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "Μη δημιουργείτε τιμολόγια"
 
 #: pretix/control/forms/event.py:661
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "Μόνο με μη αυτόματο τρόπο στον πίνακα διαχείρισης"
 
 #: pretix/control/forms/event.py:662
 msgid "Automatically on user request"
-msgstr ""
+msgstr "Αυτόματα κατόπιν αιτήματος του χρήστη"
 
 #: pretix/control/forms/event.py:663
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "Αυτόματα για όλες τις δημιουργηθείσες παραγγελίες"
 
 #: pretix/control/forms/event.py:664
 msgid "Automatically on payment"
-msgstr ""
+msgstr "Αυτόματα με πληρωμή"
 
 #: pretix/control/forms/event.py:666
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
+msgstr "Τα τιμολόγια δεν θα δημιουργηθούν αυτόματα για τις δωρεάν παραγγελίες."
 
 #: pretix/control/forms/event.py:669
 msgid "Generate invoices for Sales channels"
-msgstr ""
+msgstr "Δημιουργήστε τιμολόγια για τα κανάλια πωλήσεων"
 
 #: pretix/control/forms/event.py:672
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
 msgstr ""
+"Εάν έχετε ενεργοποιήσει τη δημιουργία τιμολογίων στην προηγούμενη ρύθμιση, "
+"μπορείτε να την περιορίσετε εδώ σε συγκεκριμένα κανάλια πωλήσεων."
 
 #: pretix/control/forms/event.py:676
 msgid "Show attendee names on invoices"
@@ -6460,7 +6475,7 @@ msgstr "Ο κωδικός πρόσβασης που εισαγάγατε δεν 
 
 #: pretix/control/forms/event.py:1352 pretix/control/forms/organizer.py:41
 msgid "The slug you entered was not correct."
-msgstr ""
+msgstr "Το slug που εισάγατε δεν ήταν σωστό."
 
 #: pretix/control/forms/event.py:1356
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
@@ -6469,7 +6484,7 @@ msgstr "Ο κωδικός σας"
 
 #: pretix/control/forms/event.py:1361 pretix/control/forms/organizer.py:45
 msgid "Event slug"
-msgstr ""
+msgstr "Slug εκδηλώσεων"
 
 #: pretix/control/forms/event.py:1403
 msgid "Ticket downloads"
@@ -7054,18 +7069,18 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:118
 msgid "Payment amount"
-msgstr ""
+msgstr "Ποσό πληρωμής"
 
 #: pretix/control/forms/orders.py:122
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:7
 #: pretix/plugins/reports/exporters.py:301
 #: pretix/plugins/reports/exporters.py:363
 msgid "Payment date"
-msgstr ""
+msgstr "Ημερομηνία πληρωμής"
 
 #: pretix/control/forms/orders.py:160
 msgid "Re-calculate taxes"
-msgstr ""
+msgstr "Επανυπολογισμός των φόρων"
 
 #: pretix/control/forms/orders.py:163
 msgid ""
@@ -7075,48 +7090,59 @@ msgid ""
 "care and only if you need to. Note that rounding differences might occur in "
 "this procedure."
 msgstr ""
+"Αυτή η ενέργεια ελέγχει εκ νέου εάν πρέπει να καταβληθούν φόροι στα στοιχεία "
+"που οφείλονται π.χ. διαμορφώνονται κανόνες αντιστροφής της επιβάρυνσης και "
+"μεταβάλλουν ανάλογα τις τιμές και τις φορολογικές τιμές. Αυτό είναι χρήσιμο "
+"π.χ. μετά την αλλαγή της διεύθυνσης τιμολογίου. Χρησιμοποιείτε με προσοχή "
+"και μόνο εάν το χρειάζεστε. Σημειώστε ότι στη διαδικασία αυτή ενδέχεται να "
+"προκύψουν διαφορές στρογγυλοποίησης."
 
 #: pretix/control/forms/orders.py:169
 msgid "Notify user"
-msgstr ""
+msgstr "Ειδοποίηση χρήστη"
 
 #: pretix/control/forms/orders.py:173
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
+"Στείλτε ένα μήνυμα ηλεκτρονικού ταχυδρομείου στον πελάτη που ειδοποιεί ότι η "
+"παραγγελία του έχει αλλάξει."
 
 #: pretix/control/forms/orders.py:177
 msgid "Allow to overbook quotas when performing this operation"
 msgstr ""
+"Να επιτρέπεται η υπέρβαση των quotas κατά την εκτέλεση αυτής της ενέργειας"
 
 #: pretix/control/forms/orders.py:188
 msgid "Add a new product to the order"
-msgstr ""
+msgstr "Προσθέστε ένα νέο προϊόν στην παραγγελία"
 
 #: pretix/control/forms/orders.py:197
 msgid "Add-on to"
-msgstr ""
+msgstr "Προσθήκη στο"
 
 #: pretix/control/forms/orders.py:204
 msgid "Including taxes, if any. Keep empty for the product's default price"
 msgstr ""
+"Συμπεριλαμβανομένων των φόρων, αν υπάρχουν. Κρατήστε κενό για την "
+"προεπιλεγμένη τιμή του προϊόντος"
 
 #: pretix/control/forms/orders.py:270 pretix/control/forms/orders.py:311
 #: pretix/control/forms/orders.py:319
 msgid "(Unchanged)"
-msgstr ""
+msgstr "(Αμετάβλητος)"
 
 #: pretix/control/forms/orders.py:276
 msgid "New price (gross)"
-msgstr ""
+msgstr "Νέα τιμή (ακαθάριστη)"
 
 #: pretix/control/forms/orders.py:280
 msgid "Generate a new secret"
-msgstr ""
+msgstr "Δημιουργήστε ένα νέο μυστικό"
 
 #: pretix/control/forms/orders.py:284
 msgid "Cancel this position"
-msgstr ""
+msgstr "Ακύρωση αυτής της θέσης"
 
 #: pretix/control/forms/orders.py:288
 msgid "Split into new order"
