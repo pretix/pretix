@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:09+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -16717,7 +16717,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
 msgid "Place binding order"
-msgstr ""
+msgstr "Τοποθετήστε τη σειρά παραγγελιών"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:186
 msgid "Submit registration"
@@ -16737,33 +16737,37 @@ msgstr "Εάν συνεχίσετε, τα χρήματα ενδέχεται να
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "Δεν υπάρχουν ενεργοποιημένοι παροχείς πληρωμών."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:56
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
 msgstr ""
+"Παρακαλώ μεταβείτε στις ρυθμίσεις πληρωμής και ενεργοποιήστε έναν ή "
+"περισσότερους παρόχους πληρωμών."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Πριν συνεχίσετε, θα πρέπει να απαντήσετε σε κάποιες ερωτήσεις."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Θα πρέπει να συμπληρώσετε όλα τα πεδία που σημειώνονται με <span> * </span> "
+"για να συνεχίσετε."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:65
 msgid "Copy answers from above"
-msgstr ""
+msgstr "Αντιγράψτε τις απαντήσεις από πάνω"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:78
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Επιλεγμένα πρόσθετα"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:7
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Συνεχίστε σε μια νέα καρτέλα"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:9
 msgid ""
@@ -16775,15 +16779,15 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:16
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Ζητούμε συγγνώμη για την αναστάτωση!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:23
 msgid "Continue in new tab"
-msgstr ""
+msgstr "Συνεχίστε στη νέα καρτέλα"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:30
 msgid "Cookies not supported"
-msgstr ""
+msgstr "Τα cookies δεν υποστηρίζονται"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:32
 msgid ""
@@ -16791,6 +16795,9 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"Το πρόγραμμα περιήγησής σας δεν δέχεται cookies από εμάς. Ωστόσο, πρέπει να "
+"ορίσετε ένα cookie για να θυμάστε ποιοι είστε και τι υπάρχει στο καλάθι σας. "
+"Αλλάξτε τις ρυθμίσεις του προγράμματος περιήγησης ανάλογα."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:16
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
@@ -16803,14 +16810,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "All remaining products are reserved but might become available again."
 msgstr ""
+"Όλα τα υπόλοιπα προϊόντα είναι δεσμευμένα αλλά ενδέχεται να είναι και πάλι "
+"διαθέσιμα."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:91
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "Εντάξει, το αφαιρούμε αυτό …"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:95
 msgid "Remove one"
-msgstr ""
+msgstr "Αφαιρέστε ένα"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:103
 msgid "We're trying to reserve another one for you!"
