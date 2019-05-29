@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 13:09+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-29 13:12+0000\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -16833,40 +16833,45 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
+"Μόλις τα στοιχεία βρίσκονται στο καλάθι σας, θα έχετε %(time)s λεπτά για να "
+"ολοκληρώσετε την αγορά σας."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:119
 msgid "Add one more"
-msgstr ""
+msgstr "Προσθέστε ακόμα ένα"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Η παραγγελία επιβεβαιώθηκε"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:5
 msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
 msgstr ""
+"Μπορείτε να κατεβάσετε τα εισιτήριά σας χρησιμοποιώντας τα παρακάτω κουμπιά. "
+"Παρακαλείστε να έχετε έτοιμο το εισιτήριό σας κατά την είσοδο στην εκδήλωση."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:11
 msgid "Download all tickets at once:"
-msgstr ""
+msgstr "Κατεβάστε όλα τα εισιτήρια ταυτόχρονα:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:29
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""
+"Θα μπορείτε να κατεβάσετε τα εισιτήριά σας εδώ ξεκινώντας από το %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Payment pending"
-msgstr ""
+msgstr "Πληρωμή σε εκκρεμότητα"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:44
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:196
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "ελάχιστο ποσό προς παραγγελία: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:111
@@ -16876,11 +16881,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:222
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "ΔΩΡΕΑΝ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:64
 msgid "Show variants"
-msgstr ""
+msgstr "Εμφάνιση παραλλαγών"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:105
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:220
@@ -16888,14 +16893,14 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:217
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "Τροποποιήστε την τιμή για %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:122
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher.html:127
 #: pretix/presale/templates/pretixpresale/event/voucher.html:233
 msgid "plus taxes"
-msgstr ""
+msgstr "συν τους φόρους"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:124
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:238
