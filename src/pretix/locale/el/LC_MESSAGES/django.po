@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 09:42+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-29 09:44+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3726,16 +3726,18 @@ msgstr ""
 
 #: pretix/base/services/cart.py:69
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Η τιμή που εισάγεται είναι υψηλή."
 
 #: pretix/base/services/cart.py:70
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Αυτός ο κωδικός κουπονιού δεν είναι γνωστός στη βάση δεδομένων μας."
 
 #: pretix/base/services/cart.py:71
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
+"Αυτός ο κωδικός κουπονιού έχει ήδη χρησιμοποιηθεί ο μέγιστος αριθμός φορών "
+"που επιτρέπεται."
 
 #: pretix/base/services/cart.py:72
 #, python-format
@@ -3745,38 +3747,47 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Αυτός ο κωδικός κουπονιού είναι σήμερα κλειδωμένος, δεδομένου ότι "
+"περιλαμβάνεται ήδη σε ένα καλάθι. Αυτό μπορεί να σημαίνει ότι κάποιος άλλος "
+"εξαργυρώνει αυτό το κουπόνι αυτή τη στιγμή ή ότι προσπαθήσατε να το "
+"εξαργυρώσετε πριν αλλά δεν ολοκληρώσατε τη διαδικασία πληρωμής. Μπορείτε να "
+"προσπαθήσετε να το χρησιμοποιήσετε ξανά σε %d λεπτά."
 
 #: pretix/base/services/cart.py:76
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Αυτός ο κωδικός κουπονιού μπορεί να εξαργυρωθεί %d περισσότερες φορές."
 
 #: pretix/base/services/cart.py:77
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"Έχετε ήδη χρησιμοποιήσει αυτόν τον κωδικό κουπονιού. Καταργήστε τη σχετική "
+"γραμμή από το καλάθι σας, αν θέλετε να το χρησιμοποιήσετε για ένα "
+"διαφορετικό προϊόν."
 
 #: pretix/base/services/cart.py:79
 msgid "This voucher is expired."
-msgstr ""
+msgstr "Αυτό το κουπόνι έχει λήξει."
 
 #: pretix/base/services/cart.py:80
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "Αυτό το δελτίο δεν ισχύει για αυτό το προϊόν."
 
 #: pretix/base/services/cart.py:82
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "Το κουπόνι σας ισχύει για προϊόν που δεν πωλείται αυτήν τη στιγμή."
 
 #: pretix/base/services/cart.py:83
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Αυτό το δελτίο δεν ισχύει για αυτήν την ημερομηνία."
 
 #: pretix/base/services/cart.py:84
 msgid "You need a valid voucher code to order this product."
 msgstr ""
+"Χρειάζεστε έναν έγκυρο κωδικό κουπονιού για να παραγγείλετε αυτό το προϊόν."
 
 #: pretix/base/services/cart.py:85
 msgctxt "subevent"
@@ -15378,7 +15389,7 @@ msgstr "Όλα τα εισιτήρια PDF σε ένα αρχείο"
 #: pretix/plugins/ticketoutputpdf/forms.py:25
 #, python-brace-format
 msgid "PDF ticket layout for {channel}"
-msgstr ""
+msgstr "Το layout του PDF εισιτηρίων για {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:28
 msgid "(Same as above)"
