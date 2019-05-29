@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 08:09+0000\n"
-"Last-Translator: GiorgosPap <gipap90@gmail.com>\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -1367,6 +1367,9 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
+"Χρησιμοποιώντας το (ψονωερσιον ρατε) συντελεστή μετατροπής 1:{rate} όπως "
+"δημοσιεύθηκε από την Ευρωπαϊκή Κεντρική Τράπεζα στις {date}, αυτό "
+"αντιστοιχεί σε:"
 
 #: pretix/base/invoice.py:649
 #, python-brace-format
@@ -1375,10 +1378,13 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
+"Χρησιμοποιώντας το (ψονωερσιον ρατε) συντελεστή μετατροπής 1:{rate} όπως "
+"δημοσιεύθηκε από την Ευρωπαϊκή Κεντρική Τράπεζα στις {date}, το συνολικό "
+"τιμολόγιο αντιστοιχεί στο {total}."
 
 #: pretix/base/invoice.py:662
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr ""
+msgstr "Μοντέρνο τιμολόγιο (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -1397,7 +1403,7 @@ msgstr "Είναι ενεργό"
 
 #: pretix/base/models/auth.py:84
 msgid "Is site admin"
-msgstr ""
+msgstr "Είναι site admin"
 
 #: pretix/base/models/auth.py:86
 msgid "Date joined"
