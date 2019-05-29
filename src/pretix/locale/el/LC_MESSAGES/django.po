@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 13:12+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"PO-Revision-Date: 2019-05-29 13:14+0000\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -10271,7 +10271,7 @@ msgid ""
 "variations, only one of them can be bought."
 msgstr ""
 "Με πρόσθετα, μπορείτε να καθορίσετε προϊόντα που μπορείτε να αγοράσετε ως "
-"προσθήκη σε αυτό το προϊόν. Για παράδειγμα, εάν φιλοξενείτε μια διάσκεψη με "
+"προσθήκη σε αυτό το προϊόν. Για παράδειγμα, εάν φιλοξενείτε ένα συνέδριο με "
 "εισιτήριο βασικής διάσκεψης και μια σειρά από εργαστήρια, μπορείτε να "
 "ορίσετε τα εργαστήρια ως πρόσθετα στο εισιτήριο του συνεδρίου. Με αυτή τη "
 "διαμόρφωση, τα εργαστήρια δεν μπορούν να αγοραστούν μόνοι τους, αλλά μόνο σε "
@@ -10290,7 +10290,7 @@ msgstr "Πρόσθετο"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:89
 msgid "Add a new add-on"
-msgstr ""
+msgstr "Προσθέστε ένα νέο πρόσθετο (add-on)"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
@@ -10298,7 +10298,7 @@ msgstr "Τροποποίηση προϊόντος:"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:22
 msgid "Add-Ons"
-msgstr ""
+msgstr "Πρόσθετα (Add-Ons)"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
 msgid "Bundled products"
