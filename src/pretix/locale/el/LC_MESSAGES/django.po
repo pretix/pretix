@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 09:41+0000\n"
+"PO-Revision-Date: 2019-05-29 09:42+0000\n"
 "Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -15367,11 +15367,11 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/__init__.py:16
 msgid "This plugin allows you to print out tickets as PDF files"
-msgstr ""
+msgstr "Αυτό το πρόσθετο σας επιτρέπει να εκτυπώνετε εισιτήρια ως αρχεία PDF"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:22
 msgid "All PDF tickets in one file"
-msgstr ""
+msgstr "Όλα τα εισιτήρια PDF σε ένα αρχείο"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:25
 #, python-brace-format
@@ -16495,7 +16495,7 @@ msgstr "Η επιλεγμένη εκδήλωση δεν βρέθηκε"
 
 #: pretix/presale/utils.py:94
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "Το επιλεγμένο κατάστημα εισιτηρίων δεν είναι διαθέσιμο προς το παρόν."
 
 #: pretix/presale/utils.py:99
 msgid "This feature is not enabled."
