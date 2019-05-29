@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:22+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -308,7 +308,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "συμπεριλαμβανομένων των φόρων"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -319,7 +319,7 @@ msgstr "συν τους φόρους"
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr "διαθέσιμο σήμερα: %s"
+msgstr "διαθέσιμη προς το παρόν:% s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
