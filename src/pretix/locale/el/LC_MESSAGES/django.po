@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 10:36+0000\n"
+"PO-Revision-Date: 2019-05-29 11:52+0000\n"
 "Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -5410,15 +5410,15 @@ msgstr "Διατηρήστε ένα σταθερό τέλος ακύρωσης"
 
 #: pretix/control/forms/event.py:465
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Διατηρείτε τα τέλη πληρωμής, αποστολής και παροχής υπηρεσιών"
 
 #: pretix/control/forms/event.py:469
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "Διατηρήστε μια ποσοστιαία αμοιβή ακύρωσης"
 
 #: pretix/control/forms/event.py:480
 msgid "Payment term in days"
-msgstr ""
+msgstr "Διάρκεια πληρωμής σε ημέρες"
 
 #: pretix/control/forms/event.py:481
 msgid ""
@@ -5427,10 +5427,16 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"Ο αριθμός των ημερών μετά την τοποθέτηση μιας παραγγελίας πρέπει να πληρώσει "
+"ο χρήστης για να διατηρήσει την κράτησή του. Εάν χρησιμοποιείτε μεθόδους "
+"αργής πληρωμής όπως τραπεζική μεταφορά, συνιστούμε 14 ημέρες. Αν "
+"χρησιμοποιείτε μόνο μεθόδους πληρωμής σε πραγματικό χρόνο, συνιστούμε να "
+"ορίσετε ακόμα δύο ή τρεις ημέρες για να επιτρέψετε σε άτομα να επαναλάβουν "
+"τις αποτυχημένες πληρωμές."
 
 #: pretix/control/forms/event.py:487
 msgid "Last date of payments"
-msgstr ""
+msgstr "Τελευταία ημερομηνία πληρωμών"
 
 #: pretix/control/forms/event.py:488
 msgid ""
@@ -6915,39 +6921,44 @@ msgstr ""
 #: pretix/control/forms/orders.py:368 pretix/plugins/sendmail/forms.py:19
 #: pretix/plugins/sendmail/forms.py:52
 msgid "Subject"
-msgstr ""
+msgstr "Θέμα"
 
 #: pretix/control/forms/orders.py:376
 msgid "Recipient"
-msgstr ""
+msgstr "Παραλήπτης"
 
 #: pretix/control/forms/orders.py:382 pretix/plugins/sendmail/forms.py:20
 #: pretix/plugins/sendmail/forms.py:61
 msgid "Message"
-msgstr ""
+msgstr "Μήνυμα"
 
 #: pretix/control/forms/orders.py:398
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
+"Ακύρωση της παραγγελίας. Όλα τα εισιτήρια δεν θα λειτουργούν πλέον. Αυτό δεν "
+"μπορεί να επανέλθει."
 
 #: pretix/control/forms/orders.py:399
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr ""
+"Σημειώστε την παραγγελία ως εκκρεμής και επιτρέψτε στο χρήστη να πληρώσει το "
+"ανοικτό ποσό με άλλο τρόπο πληρωμής."
 
 #: pretix/control/forms/orders.py:401
 msgid "Do nothing and keep the order as it is."
-msgstr ""
+msgstr "Μην κάνετε τίποτα και κρατήστε την παραγγελία όπως είναι."
 
 #: pretix/control/forms/orders.py:428
 msgid "The refund amount needs to be positive and less than {}."
 msgstr ""
+"Το ποσό επιστροφής χρημάτων πρέπει να είναι θετικό και μικρότερο από {}."
 
 #: pretix/control/forms/orders.py:434
 msgid "You need to specify an amount for a partial refund."
-msgstr ""
+msgstr "Πρέπει να καθορίσετε ένα ποσό για μερική επιστροφή χρημάτων."
 
 #: pretix/control/forms/organizer.py:22
 msgid "This slug is already in use. Please choose a different one."
