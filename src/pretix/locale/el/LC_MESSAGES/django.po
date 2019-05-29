@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 22:00+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -10638,7 +10638,7 @@ msgstr "Δεν έχετε δημιουργήσει ακόμα ερωτήσεις
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 #: pretix/control/templates/pretixcontrol/items/questions.html:25
 msgid "Create a new question"
-msgstr ""
+msgstr "Δημιουργία μιας νέας ερώτησης"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -10722,6 +10722,14 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
+"Για να είναι πραγματικά διαθέσιμα τα προϊόντα σας, χρειάζεστε επίσης quotas. "
+"Τα quotas καθορίζουν πόσες περιπτώσεις του pretix προϊόντος σας θα πωληθούν. "
+"Με αυτό τον τρόπο, μπορείτε να ρυθμίσετε εάν η εκδήλωση σας μπορεί να λάβει "
+"απεριόριστο αριθμό συμμετεχόντων ή ο αριθμός των συμμετεχόντων είναι "
+"περιορισμένος. Μπορείτε να ορίσετε ένα προϊόν σε πολλαπλά quotas για να "
+"εκπληρώσετε πιο περίπλοκες απαιτήσεις, π.χ. εάν θέλετε να περιορίσετε "
+"ταυτόχρονα τον συνολικό αριθμό των εισιτηρίων που πωλούνται και τον αριθμό "
+"ενός συγκεκριμένου τύπου εισιτηρίου."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:24
 msgid "Your search did not match any quotas."
