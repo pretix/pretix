@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 09:44+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"PO-Revision-Date: 2019-05-29 09:47+0000\n"
+"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3792,15 +3792,15 @@ msgstr ""
 #: pretix/base/services/cart.py:85
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "Η επιλεγμένη ημερομηνία της εκδήλωσης δεν είναι ενεργή."
 
 #: pretix/base/services/cart.py:86
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "Δεν μπορείτε να επιλέξετε ένα πρόσθετο για το επιλεγμένο προϊόν."
 
 #: pretix/base/services/cart.py:87
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "Δεν μπορείτε να επιλέξετε δύο παραλλαγές του ίδιου προϊόντος πρόσθετου."
 
 #: pretix/base/services/cart.py:88
 #, python-format
@@ -3808,6 +3808,8 @@ msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
+"Μπορείτε να επιλέξετε τα περισσότερα %(max)s πρόσθετα από την κατηγορία "
+"%(cat)s για το προϊόν %(base)s."
 
 #: pretix/base/services/cart.py:89
 #, python-format
@@ -3815,36 +3817,43 @@ msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
+"Πρέπει να επιλέξετε τουλάχιστον %(min)s πρόσθετα από την κατηγορία %(cat)s "
+"για το προϊόν %(base)s."
 
 #: pretix/base/services/cart.py:91
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
 msgstr ""
+"Ένα από τα προϊόντα που επιλέξατε μπορεί να αγοραστεί μόνο ως πρόσθετο σε "
+"άλλο έργο."
 
 #: pretix/base/services/cart.py:92
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
+"Ένα από τα προϊόντα που επιλέξατε μπορεί να αγοραστεί μόνο μέρος του πακέτου."
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
-msgstr ""
+msgstr "Αυτή η θέση παραγγελίας έχει ακυρωθεί."
 
 #: pretix/base/services/checkin.py:109
 msgid "This order position has an invalid product for this check-in list."
 msgstr ""
+"Αυτή η θέση παραγγελίας έχει μη έγκυρο προϊόν για αυτήν τη chek-in λίστα."
 
 #: pretix/base/services/checkin.py:116
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "Αυτή η παραγγελία δεν έχει επισημανθεί ως πληρωμένη."
 
 #: pretix/base/services/checkin.py:121
 msgid "You need to answer questions to complete this check-in."
 msgstr ""
+"Θα πρέπει να απαντήσετε σε ερωτήσεις για να ολοκληρώσετε αυτό το check-in."
 
 #: pretix/base/services/checkin.py:147
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "Αυτό το εισιτήριο έχει ήδη εξαργυρωθεί."
 
 #: pretix/base/services/invoices.py:68
 #, python-brace-format
@@ -3856,6 +3865,11 @@ msgid ""
 "{i.zipcode} {i.city}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py:139
 #, python-brace-format
@@ -10445,7 +10459,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:51
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:57
 msgid "not answered"
-msgstr ""
+msgstr "Δεν απαντήθηκε"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:311
 msgid "This question will be asked during check-in."
@@ -13368,15 +13382,15 @@ msgstr "Το μέλος έχει αφαιρεθεί από την ομάδα."
 
 #: pretix/control/views/organizer.py:562 pretix/control/views/organizer.py:578
 msgid "Invalid invite selected."
-msgstr ""
+msgstr "Έχει επιλεγεί μη έγκυρη πρόσκληση."
 
 #: pretix/control/views/organizer.py:571
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "Η πρόσκληση έχει ανακληθεί."
 
 #: pretix/control/views/organizer.py:587
 msgid "The invite has been resent."
-msgstr ""
+msgstr "Η πρόσκληση έχει ξανασταλεί."
 
 #: pretix/control/views/organizer.py:594
 msgid "Invalid token selected."
@@ -13384,7 +13398,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:604
 msgid "The token has been revoked."
-msgstr ""
+msgstr "Το token έχει ανακληθεί."
 
 #: pretix/control/views/organizer.py:613
 msgid "This user already has been invited for this team."
@@ -15397,7 +15411,7 @@ msgstr "(Ιδια όπως παραπάνω)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:30
 msgid "PDF ticket layout"
-msgstr ""
+msgstr "Layout του PDF εισιτηρίου"
 
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
