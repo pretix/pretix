@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-28 21:00+0000\n"
-"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
+"PO-Revision-Date: 2019-05-29 07:18+0000\n"
+"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -12139,11 +12139,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:57
 msgid "Send as many vouchers as possible"
-msgstr ""
+msgstr "Στείλτε όσο το δυνατόν περισσότερα κουπόνια"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:66
 msgid "Sales estimate"
-msgstr ""
+msgstr "Εκτιμήσεις πωλήσεων"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:69
 #, python-format
@@ -12155,11 +12155,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:82
 msgid "All entries"
-msgstr ""
+msgstr "Όλες οι καταχωρήσεις"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:85
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "Αναμονή για ένα κουπόνι"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:170
