@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-29 07:19+0000\n"
+"PO-Revision-Date: 2019-05-29 08:04+0000\n"
 "Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -12173,28 +12173,30 @@ msgstr "Αναμονή για εξαργύρωση"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:93
 msgid "Successfully redeemed"
-msgstr ""
+msgstr "Επιτυχής εξαργύρωση"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:96
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:168
 #: pretix/control/views/waitinglist.py:216
 msgid "Voucher expired"
-msgstr ""
+msgstr "Το κουπόνι έληξε"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:135
 msgid "On the list since"
-msgstr ""
+msgstr "Στη λίστα από τότε"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:158
 msgid ""
 "This entry has a modified priority. The higher this number is, the earlier "
 "this person will be assigned a voucher."
 msgstr ""
+"Η προτεραιότητα σε αυτή την καταχώρηση έχει τροποποιηθεί. Όσο υψηλότερος "
+"είναι αυτός ο αριθμός, τόσο πιο σύντομα αυτό το πρόσωπο θα λάβει ένα κουπόνι."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 #: pretix/control/views/waitinglist.py:214
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Το κουπόνι εξαργυρώθηκε"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:174
 #, python-format
@@ -12206,23 +12208,23 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:179
 msgid "Waiting, product unavailable"
-msgstr ""
+msgstr "Αναμονή, το προϊόν δεν είναι διαθέσιμο"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:189
 msgid "Send a voucher"
-msgstr ""
+msgstr "Στείλτε ένα δελτίο"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:196
 msgid "Move to the top of the list"
-msgstr ""
+msgstr "Μετακινηθείτε στην κορυφή της λίστας"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:200
 msgid "Move to the end of the list"
-msgstr ""
+msgstr "Μετακινηθείτε στο τέλος της λίστας"
 
 #: pretix/control/templatetags/hierarkey_form.py:42
 msgid "Organizer-level settings"
-msgstr ""
+msgstr "Ρυθμίσεις σε επίπεδο διοργανωτή"
 
 #: pretix/control/templatetags/hierarkey_form.py:45
 msgid ""
@@ -12231,22 +12233,27 @@ msgid ""
 "go to the organizer settings to change them or decouple them from the "
 "organizer account to change them for this event individually."
 msgstr ""
+"Αυτές οι ρυθμίσεις είναι αυτήν τη στιγμή ρυθμισμένες σε επίπεδο διοργανωτή. "
+"Με αυτόν τον τρόπο, μπορείτε να τις αλλάξετε εύκολα για όλες τις εκδηλώσεις "
+"σας ταυτόχρονα. Μπορείτε να μεταβείτε στις ρυθμίσεις του διοργανωτή για να "
+"τις αλλάξετε ή να τις αποσυνδέσετε από το λογαριασμό του διοργανωτή για να "
+"τις αλλάξετε μόνο για αυτήν την εκδήλωση."
 
 #: pretix/control/templatetags/hierarkey_form.py:49
 msgid "Change only for this event"
-msgstr ""
+msgstr "Αλλάξτε μόνο για αυτή την εκδήλωση"
 
 #: pretix/control/templatetags/hierarkey_form.py:50
 msgid "Change for all events"
-msgstr ""
+msgstr "Αλλαγή για όλες τις εκδηλώσεις"
 
 #: pretix/control/views/__init__.py:145
 msgid "That page number is not an integer"
-msgstr ""
+msgstr "Αυτός ο αριθμός σελίδας δεν είναι ακέραιος"
 
 #: pretix/control/views/__init__.py:147
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "Αυτός ο αριθμός σελίδας είναι μικρότερος από 1"
 
 #: pretix/control/views/auth.py:120
 msgid ""
@@ -12254,20 +12261,25 @@ msgid ""
 "address bar and make sure it is correct and that the link has not been used "
 "before."
 msgstr ""
+"Χρησιμοποιήσατε έναν μη έγκυρο σύνδεσμο. Παρακαλώ αντιγράψτε το σύνδεσμο από "
+"το email σας στη γραμμή διευθύνσεων και βεβαιωθείτε ότι είναι σωστό και ότι "
+"ο σύνδεσμος δεν έχει χρησιμοποιηθεί πριν."
 
 #: pretix/control/views/auth.py:126
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
 msgstr ""
+"Δεν μπορείτε να αποδεχτείτε την πρόσκληση για \"{}\" καθώς είστε ήδη μέλος "
+"αυτής της ομάδας."
 
 #: pretix/control/views/auth.py:140
 msgid "You are now part of the team \"{}\"."
-msgstr ""
+msgstr "Είστε τώρα μέλος της ομάδας \"{}\"."
 
 #: pretix/control/views/auth.py:170
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
-msgstr ""
+msgstr "Καλώς ήρθατε στο pretix! Είστε τώρα μέλος της ομάδας \"{}\"."
 
 #: pretix/control/views/auth.py:228
 msgid ""
@@ -12275,12 +12287,18 @@ msgid ""
 "containing further instructions. Please note that we will send at most one "
 "email every 24 hours."
 msgstr ""
+"Αν η διεύθυνση είναι καταχωρημένη σε έγκυρο λογαριασμό, τότε σας έχουμε "
+"στείλει ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει περισσότερες "
+"οδηγίες. Σημειώστε ότι θα στείλουμε το πολύ ένα email κάθε 24 ώρες."
 
 #: pretix/control/views/auth.py:231
 msgid ""
 "If the adress is registred to valid account, then we have sent you an e-mail "
 "containing further instructions."
 msgstr ""
+"Αν η διεύθυνση είναι καταχωρημένη σε έγκυρο λογαριασμό, τότε σας έχουμε "
+"στείλει ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει περισσότερες "
+"οδηγίες."
 
 #: pretix/control/views/auth.py:251
 msgid ""
@@ -12288,26 +12306,33 @@ msgid ""
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
+"Κάνατε κλικ σε έναν μη έγκυρο σύνδεσμο. Βεβαιωθείτε ότι έχετε αντιγράψει την "
+"πλήρη διεύθυνση ιστού στη γραμμή διευθύνσεών σας. Λάβετε υπόψη ότι ο "
+"σύνδεσμος ισχύει μόνο για τρεις ημέρες και ότι ο σύνδεσμος μπορεί να "
+"χρησιμοποιηθεί μόνο μία φορά."
 
 #: pretix/control/views/auth.py:254
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
+"Δεν ήταν δυνατή η εύρεση του χρήστη για τον οποίο ζητήσατε έναν νέο κωδικό "
+"πρόσβασης."
 
 #: pretix/control/views/auth.py:287
 msgid "You can now login using your new password."
 msgstr ""
+"Μπορείτε να συνδεθείτε τώρα χρησιμοποιώντας τον νέο κωδικό πρόσβασης σας."
 
 #: pretix/control/views/auth.py:328
 msgid "Please try again."
-msgstr ""
+msgstr "Παρακαλώ προσπαθήστε ξανά."
 
 #: pretix/control/views/auth.py:357
 msgid "Invalid code, please try again."
-msgstr ""
+msgstr "Μη έγκυρος κωδικός, παρακαλώ προσπαθήστε ξανά."
 
 #: pretix/control/views/checkin.py:83
 msgid "You do not have permission to perform this action."
-msgstr ""
+msgstr "Δεν έχετε άδεια να εκτελέσετε αυτήν την ενέργεια."
 
 #: pretix/control/views/checkin.py:105
 msgid "The selected check-ins have been reverted."
@@ -12315,11 +12340,11 @@ msgstr ""
 
 #: pretix/control/views/checkin.py:123
 msgid "The selected tickets have been marked as checked in."
-msgstr ""
+msgstr "Τα επιλεγμένα εισιτήρια έχουν επισημανθεί ως καταχωρημένα."
 
 #: pretix/control/views/checkin.py:183
 msgid "The new check-in list has been created."
-msgstr ""
+msgstr "Η νέα λίστα ελέγχου έχει δημιουργηθεί."
 
 #: pretix/control/views/checkin.py:190 pretix/control/views/checkin.py:228
 #: pretix/control/views/event.py:169 pretix/control/views/event.py:311
@@ -12336,14 +12361,16 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/views.py:103
 msgid "We could not save your changes. See below for details."
 msgstr ""
+"Δεν ήταν δυνατή η αποθήκευση των αλλαγών σας. Δείτε παρακάτω για "
+"λεπτομέρειες."
 
 #: pretix/control/views/checkin.py:207 pretix/control/views/checkin.py:244
 msgid "The requested list does not exist."
-msgstr ""
+msgstr "Η ζητούμενη λίστα δεν υπάρχει."
 
 #: pretix/control/views/checkin.py:253
 msgid "The selected list has been deleted."
-msgstr ""
+msgstr "Η επιλεγμένη λίστα έχει διαγραφεί."
 
 #: pretix/control/views/dashboards.py:76
 msgid "Attendees (ordered)"
@@ -12356,15 +12383,15 @@ msgstr ""
 #: pretix/control/views/dashboards.py:95
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr ""
+msgstr "Συνολικά έσοδα ({currency})"
 
 #: pretix/control/views/dashboards.py:104
 msgid "Active products"
-msgstr ""
+msgstr "Ενεργά προϊόντα"
 
 #: pretix/control/views/dashboards.py:141
 msgid "available to give to people on waiting list"
-msgstr ""
+msgstr "διατίθενται σε άτομα που βρίσκονται σε λίστα αναμονής"
 
 #: pretix/control/views/dashboards.py:149
 msgid "total waiting list length"
@@ -12377,11 +12404,11 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:187
 msgid "Your ticket shop is"
-msgstr ""
+msgstr "Το κατάστημα εισιτηρίων σας είναι"
 
 #: pretix/control/views/dashboards.py:187
 msgid "Click here to change"
-msgstr ""
+msgstr "Κάντε κλικ εδώ για να αλλάξετε"
 
 #: pretix/control/views/dashboards.py:188
 msgid "live"
@@ -12389,15 +12416,15 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:189
 msgid "live and in test mode"
-msgstr ""
+msgstr "ζωντανά και σε λειτουργία δοκιμής"
 
 #: pretix/control/views/dashboards.py:190
 msgid "not yet public"
-msgstr ""
+msgstr "δεν είναι ακόμη δημόσια"
 
 #: pretix/control/views/dashboards.py:191
 msgid "in private test mode"
-msgstr ""
+msgstr "σε ιδιωτική δοκιμαστική λειτουργία"
 
 #: pretix/control/views/dashboards.py:219
 #, python-brace-format
@@ -12406,11 +12433,11 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:235
 msgid "Welcome to pretix!"
-msgstr ""
+msgstr "Καλώς ήρθατε στο pretix!"
 
 #: pretix/control/views/dashboards.py:241
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "Ξεκινήστε με το εργαλείο ρύθμισης"
 
 #: pretix/control/views/dashboards.py:242
 msgid ""
@@ -12420,16 +12447,16 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:244
 msgid "Set up event"
-msgstr ""
+msgstr "Ρύθμιση εκδήλωσης"
 
 #: pretix/control/views/dashboards.py:382 pretix/control/views/typeahead.py:47
 msgctxt "subevent"
 msgid "No dates"
-msgstr ""
+msgstr "Δεν υπάρχουν ημερομηνίες"
 
 #: pretix/control/views/dashboards.py:395
 msgid "Action required"
-msgstr ""
+msgstr "Απαιτείται δράση"
 
 #: pretix/control/views/dashboards.py:399
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:32
@@ -12442,36 +12469,42 @@ msgstr ""
 #: pretix/control/views/dashboards.py:401
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 msgid "Soon"
-msgstr ""
+msgstr "Σύντομα"
 
 #: pretix/control/views/dashboards.py:426
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} παραγγελία"
+msgstr[1] "{num} παραγγελίες"
 
 #: pretix/control/views/event.py:282
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
+"Αυτός ο παροχέας πληρωμής δεν υπάρχει ή η αντίστοιχη προσθήκη είναι "
+"απενεργοποιημένη."
 
 #: pretix/control/views/event.py:484 pretix/control/views/organizer.py:183
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
 msgstr ""
+"Οι αλλαγές σας έχουν αποθηκευτεί. Λάβετε υπόψη ότι μπορεί να διαρκέσει λίγο "
+"χρονικό διάστημα μέχρι να ενεργοποιηθούν οι αλλαγές σας."
 
 #: pretix/control/views/event.py:527
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα κατά την επικοινωνία με τον διακομιστή SMTP: %s"
 
 #: pretix/control/views/event.py:530
 msgid ""
 "Your changes have been saved and the connection attempt to your SMTP server "
 "was successful."
 msgstr ""
+"Οι αλλαγές σας έχουν αποθηκευτεί και η προσπάθεια σύνδεσης με το διακομιστή "
+"SMTP ήταν επιτυχής."
 
 #: pretix/control/views/event.py:533
 msgid ""
@@ -12482,7 +12515,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:561
 msgid "{} has been transferred to account <9999-9999-9999-9999> at {}"
-msgstr ""
+msgstr "{} έχουν μεταφερθεί στο λογαριασμό <9999-9999-9999-9999> στις {}"
 
 #: pretix/control/views/event.py:625
 msgid "Sample Admission Ticket"
@@ -13195,53 +13228,66 @@ msgstr ""
 
 #: pretix/control/views/user.py:302
 msgid "The registration could not be completed. Please try again."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η ολοκλήρωση της εγγραφής. Παρακαλώ προσπαθήστε ξανά."
 
 #: pretix/control/views/user.py:360
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
+"Ο κωδικός που εισαγάγατε δεν ήταν έγκυρος. Εάν το πρόβλημα παραμένει, "
+"βεβαιωθείτε ότι η ημερομηνία και η ώρα του τηλεφώνου σας έχουν ρυθμιστεί "
+"σωστά."
 
 #: pretix/control/views/user.py:372
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr ""
+"Ρυθμίστε τουλάχιστον μία συσκευή προτού ενεργοποιήσετε τον έλεγχο ταυτότητας "
+"δύο παραγόντων."
 
 #: pretix/control/views/user.py:381
 msgid "Two-factor authentication is now enabled for your account."
 msgstr ""
+"Ο έλεγχος ταυτότητας δύο παραγόντων είναι πλέον ενεργοποιημένος για το "
+"λογαριασμό σας."
 
 #: pretix/control/views/user.py:395
 msgid "Two-factor authentication is now disabled for your account."
 msgstr ""
+"Ο έλεγχος ταυτότητας δύο παραγόντων είναι τώρα απενεργοποιημένος για το "
+"λογαριασμό σας."
 
 #: pretix/control/views/user.py:414
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
 msgstr ""
+"Οι κωδικοί έκτακτης ανάγκης έχουν δημιουργηθεί πρόσφατα. Θυμηθείτε να τους "
+"αποθηκεύσετε σε ασφαλές μέρος σε περίπτωση που χάσετε την πρόσβαση στις "
+"συσκευές σας."
 
 #: pretix/control/views/user.py:424
 msgid "Your notifications have been disabled."
-msgstr ""
+msgstr "Οι ειδοποιήσεις σας έχουν απενεργοποιηθεί."
 
 #: pretix/control/views/user.py:473 pretix/control/views/user.py:513
 msgid "Your notification settings have been saved."
-msgstr ""
+msgstr "Οι ρυθμίσεις ειδοποιήσεων έχουν αποθηκευτεί."
 
 #: pretix/control/views/user.py:591
 msgid "Your comment has been saved."
-msgstr ""
+msgstr "Το σχόλιο σας έχει αποθηκευτεί."
 
 #: pretix/control/views/users.py:97
 msgid "We sent out an e-mail containing further instructions."
 msgstr ""
+"Στείλαμε ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει περαιτέρω οδηγίες."
 
 #: pretix/control/views/users.py:194
 msgid "The new user has been created."
-msgstr ""
+msgstr "Ο νέος χρήστης έχει δημιουργηθεί."
 
 #: pretix/control/views/vouchers.py:61
 msgid "Reserve quota"
@@ -13287,26 +13333,28 @@ msgstr ""
 
 #: pretix/control/views/waitinglist.py:57
 msgid "You do not have permission to do this"
-msgstr ""
+msgstr "Δεν έχετε την άδεια να το κάνετε αυτό"
 
 #: pretix/control/views/waitinglist.py:70
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
+"Ένα μήνυμα ηλεκτρονικού ταχυδρομείου που περιέχει έναν κωδικό κουπονιού έχει "
+"σταλεί στη συγκεκριμένη διεύθυνση."
 
 #: pretix/control/views/waitinglist.py:74
 #: pretix/control/views/waitinglist.py:87
 #: pretix/control/views/waitinglist.py:100
 msgid "Waiting list entry not found."
-msgstr ""
+msgstr "Δεν βρέθηκε καταχώρηση λίστας αναμονής."
 
 #: pretix/control/views/waitinglist.py:84
 msgid "The waiting list entry has been moved to the top."
-msgstr ""
+msgstr "Η καταχώρηση της λίστας αναμονής μετακινήθηκε προς τα πάνω."
 
 #: pretix/control/views/waitinglist.py:97
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "Η καταχώρηση της λίστας αναμονής μετακινήθηκε στο τέλος της λίστας."
 
 #: pretix/control/views/waitinglist.py:199
 msgid "On list since"
@@ -13314,19 +13362,19 @@ msgstr ""
 
 #: pretix/control/views/waitinglist.py:200
 msgid "Priority"
-msgstr ""
+msgstr "Προτεραιότητα"
 
 #: pretix/control/views/waitinglist.py:220
 msgid "Waiting"
-msgstr ""
+msgstr "Αναμονή"
 
 #: pretix/control/views/waitinglist.py:253
 msgid "The requested entry does not exist."
-msgstr ""
+msgstr "Η ζητούμενη καταχώρηση δεν υπάρχει."
 
 #: pretix/control/views/waitinglist.py:261
 msgid "The selected entry has been deleted."
-msgstr ""
+msgstr "Η επιλεγμένη καταχώρηση έχει διαγραφεί."
 
 #: pretix/multidomain/models.py:13
 msgid "Known domain"
@@ -13357,7 +13405,7 @@ msgstr ""
 #: pretix/plugins/stripe/__init__.py:14
 #: pretix/plugins/ticketoutputpdf/__init__.py:14
 msgid "the pretix team"
-msgstr ""
+msgstr "η ομάδα του pretix"
 
 #: pretix/plugins/badges/__init__.py:15
 msgid ""
@@ -13375,14 +13423,14 @@ msgstr ""
 #: pretix/plugins/badges/exporters.py:98
 #: pretix/plugins/ticketoutputpdf/exporters.py:32
 msgid "Include pending orders"
-msgstr ""
+msgstr "Συμπεριλάβετε εκκρεμείς παραγγελίες"
 
 #: pretix/plugins/badges/exporters.py:103
 #: pretix/plugins/checkinlists/exporters.py:49
 #: pretix/plugins/reports/exporters.py:297
 #: pretix/plugins/ticketoutputpdf/exporters.py:37
 msgid "Sort by"
-msgstr ""
+msgstr "Ταξινόμηση κατά"
 
 #: pretix/plugins/badges/forms.py:21
 msgid "(Do not print badges)"
@@ -13396,7 +13444,7 @@ msgstr ""
 
 #: pretix/plugins/badges/forms.py:54 pretix/plugins/ticketoutputpdf/forms.py:31
 msgid "(Event default)"
-msgstr ""
+msgstr "(Προεπιλεγμένη εκδήλωση)"
 
 #: pretix/plugins/badges/signals.py:153
 msgid "Badge layout created."
