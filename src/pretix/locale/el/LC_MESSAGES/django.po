@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 09:47+0000\n"
-"Last-Translator: mapostolopoulou <mapostolopoulou@innovative.gr>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3875,12 +3875,12 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "Συμμετέχων: {name}"
 
 #: pretix/base/services/invoices.py:141 pretix/plugins/reports/exporters.py:198
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "Ημερομηνία: {}"
 
 #: pretix/base/services/invoices.py:157
 msgctxt "invoice"
@@ -3888,30 +3888,32 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Χρέωση ανάληψης: Σύμφωνα με το άρθρο 194, 196 της οδηγίας 2006/112 / ΕΟΚ του "
+"Συμβουλίου, η υποχρέωση ΦΠΑ ανήκει στον αποδέκτη της υπηρεσίας."
 
 #: pretix/base/services/invoices.py:301
 msgid "A payment provider specific text might appear here."
-msgstr ""
+msgstr "Ένα ειδικό κείμενο του παρόχου πληρωμής ενδέχεται να εμφανιστεί εδώ."
 
 #: pretix/base/services/invoices.py:308
 msgid "214th Example Street"
-msgstr ""
+msgstr "214th Example Street"
 
 #: pretix/base/services/invoices.py:309
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:310
 msgid "Sample city"
-msgstr ""
+msgstr "Δείγμα πόλη"
 
 #: pretix/base/services/invoices.py:325
 msgid "Sample product {}"
-msgstr ""
+msgstr "Δείγμα προϊόντος {}"
 
 #: pretix/base/services/invoices.py:331
 msgid "Sample product A"
-msgstr ""
+msgstr "Δείγμα προϊόντος Α"
 
 #: pretix/base/services/mail.py:146
 #, python-brace-format
@@ -3919,6 +3921,8 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
+"Λαμβάνετε αυτό το email επειδή κάποιος έκανε μια παραγγελία για το {event} "
+"για εσάς."
 
 #: pretix/base/services/mail.py:150 pretix/base/services/mail.py:166
 #, python-brace-format
@@ -3926,6 +3930,8 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"Μπορείτε να δείτε τα στοιχεία της παραγγελίας σας στην παρακάτω διεύθυνση "
+"URL: {orderurl}."
 
 #: pretix/base/services/mail.py:162
 #, python-brace-format
