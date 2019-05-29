@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 13:19+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "el/>\n"
 "Language: el\n"
@@ -153,7 +153,7 @@ msgstr "Περιοχή Barcode"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:428
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Powered by pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:430
 msgid "Object"
@@ -214,7 +214,7 @@ msgstr "Όλα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:306
 msgid "None"
-msgstr ""
+msgstr "Κανένα"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:595
 msgid "Use a different name internally"
@@ -232,7 +232,7 @@ msgstr "Επικοινωνία με το Stripe …"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Άλλα"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:71
 msgid "Count"
@@ -273,7 +273,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Εξαντλημένα"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
