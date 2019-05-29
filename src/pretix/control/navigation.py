@@ -474,6 +474,8 @@ def merge_in(nav, newnav):
         if 'parent' in item:
             parents = [n for n in nav if n['url'] == item['parent']]
             if parents:
+                if 'children' not in parents[0]:
+                    parents[0]['children'] = []
                 parents[0]['children'].append(item)
         else:
             nav.append(item)
