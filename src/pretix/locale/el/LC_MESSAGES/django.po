@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
 "PO-Revision-Date: 2019-05-29 10:36+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: markiousi <m.kiousi92@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -3936,33 +3936,39 @@ msgstr ""
 #: pretix/base/services/mail.py:162
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "Λαμβάνετε αυτό το email επειδή κάνατε παραγγελία για το {event}."
 
 #: pretix/base/services/orders.py:57
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
 msgstr ""
+"Ορισμένα από τα προϊόντα που επιλέξατε δεν ήταν πλέον διαθέσιμα. Παρακαλώ "
+"δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/base/services/orders.py:59
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"Μερικά από τα προϊόντα που επιλέξατε δεν ήταν πλέον διαθέσιμα στην ποσότητα "
+"που επιλέξατε. Παρακαλώ δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/base/services/orders.py:61
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"Η τιμή ορισμένων αντικειμένων στο καλάθι σας έχει αλλάξει στο μεταξύ. "
+"Παρακαλώ δείτε παρακάτω για λεπτομέρειες."
 
 #: pretix/base/services/orders.py:63
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "Παρουσιάστηκε εσωτερικό σφάλμα, παρακαλώ δοκιμάστε ξανά."
 
 #: pretix/base/services/orders.py:64
 msgid "Your cart is empty."
-msgstr ""
+msgstr "Το καλάθι σας είναι άδειο."
 
 #: pretix/base/services/orders.py:65
 #, python-format
@@ -3970,16 +3976,20 @@ msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
+"Δεν μπορείτε να επιλέξετε περισσότερα από %(max)s στοιχεία του προϊόντος "
+"%(product)s. Καταργήσαμε τα πλεονάσματα από το καλάθι σας."
 
 #: pretix/base/services/orders.py:70
 msgid "The presale period has ended."
-msgstr ""
+msgstr "Η περίοδος προπώλησης έχει λήξει."
 
 #: pretix/base/services/orders.py:71
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"Ο κωδικός κουπονιού που χρησιμοποιείται για ένα από τα στοιχεία του καλαθιού "
+"σας δεν είναι γνωστός στη βάση δεδομένων μας."
 
 #: pretix/base/services/orders.py:72
 msgid ""
@@ -3987,179 +3997,208 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Ο κωδικός κουπονιού που χρησιμοποιήθηκε για ένα από τα αντικείμενα στο "
+"καλάθι σας έχει ήδη χρησιμοποιηθεί στο μέγιστο αριθμό φορών που επιτρέπεται. "
+"Καταργήσαμε αυτό το στοιχείο από το καλάθι σας."
 
 #: pretix/base/services/orders.py:74
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"Ο κωδικός κουπονιού που χρησιμοποιείται για ένα από τα στοιχεία του καλαθιού "
+"σας έχει λήξει. Καταργήσαμε αυτό το στοιχείο από το καλάθι σας."
 
 #: pretix/base/services/orders.py:76
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"Ο κωδικός κουπονιού που χρησιμοποιείται για ένα από τα στοιχεία του καλαθιού "
+"σας δεν ισχύει για αυτό το στοιχείο. Καταργήσαμε αυτό το στοιχείο από το "
+"καλάθι σας."
 
 #: pretix/base/services/orders.py:78
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
+"Χρειάζεστε έναν έγκυρο κωδικό κουπονιού για να παραγγείλετε ένα από τα "
+"προϊόντα στο καλάθι σας. Καταργήσαμε αυτό το στοιχείο από το καλάθι σας."
 
 #: pretix/base/services/orders.py:80
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"Η περίοδος προπώλησης για μία από τις εκδηλώσεις στο καλάθι σας δεν έχει "
+"ξεκινήσει ακόμα. Οι επηρεαζόμενες θέσεις έχουν αφαιρεθεί από το καλάθι σας."
 
 #: pretix/base/services/orders.py:100 pretix/control/forms/orders.py:49
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "Η νέα ημερομηνία λήξης πρέπει να είναι στο μέλλον."
 
 #: pretix/base/services/orders.py:174 pretix/base/services/orders.py:254
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "Αυτή η παραγγελία δεν εκκρεμεί έγκριση."
 
 #: pretix/base/services/orders.py:215
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία εγκρίθηκε και επιβεβαιώθηκε: %(code)s"
 
 #: pretix/base/services/orders.py:218
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία εγκρίνεται και αναμένεται πληρωμή: %(code)s"
 
 #: pretix/base/services/orders.py:297
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία απορρίφθηκε: %(code)s"
 
 #: pretix/base/services/orders.py:331 pretix/presale/views/order.py:684
 #: pretix/presale/views/order.py:716
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "Δεν μπορείτε να ακυρώσετε αυτήν την παραγγελία."
 
 #: pretix/base/services/orders.py:357 pretix/control/forms/orders.py:109
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
+"Η χρέωση ακυρώσεως δεν μπορεί να είναι υψηλότερη από την πίστωση πληρωμής "
+"αυτής της παραγγελίας."
 
 #: pretix/base/services/orders.py:388
 #, python-format
 msgid "Order canceled: %(code)s"
-msgstr ""
+msgstr "Παραγγελία ακυρώθηκε: %(code)s"
 
 #: pretix/base/services/orders.py:704
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr ""
+msgstr "Η εγγραφή σας στην εκδήλωση: %(code)s"
 
 #: pretix/base/services/orders.py:864
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία σας πρόκειται να λήξει: %(code)s"
 
 #: pretix/base/services/orders.py:866
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία σας εκκρεμεί πληρωμή: %(code)s"
 
 #: pretix/base/services/orders.py:912
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr ""
+msgstr "Το εισιτήριό σας είναι έτοιμο για λήψη: %(code)s"
 
 #: pretix/base/services/orders.py:950
 msgid "You need to select a variation of the product."
-msgstr ""
+msgstr "Πρέπει να επιλέξετε μια παραλλαγή του προϊόντος."
 
 #: pretix/base/services/orders.py:951
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr ""
+"Το quota {name} δεν έχει αρκετή χωρητικότητα για να εκτελέσει τη λειτουργία."
 
 #: pretix/base/services/orders.py:952
 msgid "There is no quota defined that allows this operation."
 msgstr ""
+"Δεν υπάρχει καθορισμένη ποσόστωση(quota) που να επιτρέπει αυτήν τη "
+"λειτουργία."
 
 #: pretix/base/services/orders.py:953
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "Το επιλεγμένο προϊόν δεν είναι ενεργό ή δεν έχει καθοριστεί τιμή."
 
 #: pretix/base/services/orders.py:954
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr ""
+"Αυτή η ενέργεια θα άφηνε την παραγγελία άδεια. Αντικαταστήστε την παραγγελία."
 
 #: pretix/base/services/orders.py:955
 msgid "Only pending or paid orders can be changed."
-msgstr ""
+msgstr "Μόνο εκκρεμείς ή πληρωμένες εντολές μπορούν να αλλάξουν."
 
 #: pretix/base/services/orders.py:956
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
+"Η λειτουργία αυτή θα καθιστούσε την παραγγελία απαλλαγμένη και επομένως "
+"άμεσα πληρωμένη, ωστόσο δεν υπάρχει διαθέσιμη ποσόστωση(quota)."
 
 #: pretix/base/services/orders.py:958
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
+"Πρόκειται για πρόσθετο προϊόν, επιλέξτε τη θέση βάσης στην οποία πρέπει να "
+"προστεθεί."
 
 #: pretix/base/services/orders.py:959
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr ""
+"Η επιλεγμένη βασική θέση δεν σας επιτρέπει να προσθέσετε αυτό το προϊόν ως "
+"πρόσθετο."
 
 #: pretix/base/services/orders.py:960
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "Θα χρειαστεί να επιλέξετε ένα υποκατάστατο για τη νέα θέση."
 
 #: pretix/base/services/orders.py:1439
 #, python-format
 msgid "Your order has been changed: %(code)s"
-msgstr ""
+msgstr "Η παραγγελία σας έχει αλλάξει: %(code)s"
 
 #: pretix/base/services/orders.py:1567
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"Παρουσιάστηκε σφάλμα κατά την προσπάθειά σας να στείλετε τα χρήματα πίσω σε "
+"εσάς. Επικοινωνήστε με τον διοργανωτή εκδηλώσεων για περισσότερες "
+"πληροφορίες."
 
 #: pretix/base/services/shredder.py:73
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
 msgstr ""
+"Το αρχείο λήψης δεν μπορεί πλέον να βρεθεί στο διακομιστή(server), "
+"προσπαθήστε να ξεκινήσετε ξανά."
 
 #: pretix/base/services/shredder.py:77
 msgid "This file is from a different event."
-msgstr ""
+msgstr "Αυτό το αρχείο προέρχεται από διαφορετική εκδήλωση."
 
 #: pretix/base/services/shredder.py:79
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "Ο κωδικός επιβεβαίωσης που εισαγάγατε ήταν εσφαλμένος."
 
 #: pretix/base/services/shredder.py:81
 msgid "Something happened in your event after the export, please try again."
-msgstr ""
+msgstr "Κάτι που συνέβη στην εκδήλωσή σας μετά την εξαγωγή, δοκιμάστε ξανά."
 
 #: pretix/base/services/stats.py:130
 msgid "Uncategorized"
-msgstr ""
+msgstr "Μη κατηγοριοποιημένο"
 
 #: pretix/base/services/tickets.py:76 pretix/control/views/pdf.py:61
 msgid "Sample workshop"
-msgstr ""
+msgstr "Δείγμα workshop"
 
 #: pretix/base/services/update_check.py:90
 msgid "pretix update available"
-msgstr ""
+msgstr "διαθέσιμη ενημέρωση pretix"
 
 #: pretix/base/services/update_check.py:93
 #, python-brace-format
@@ -4181,12 +4220,28 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"Γεια!\n"
+"\n"
+"Μια ενημερωμένη έκδοση είναι διαθέσιμη για το pretix ή για ένα από τα "
+"plugins που εγκαταστήσατε κατά την εγκατάσταση του pretix. Κάντε κλικ στον "
+"παρακάτω σύνδεσμο για περισσότερες πληροφορίες:\n"
+"\n"
+"{url}\n"
+"\n"
+"Μπορείτε πάντα να βρείτε πληροφορίες σχετικά με τις τελευταίες ενημερώσεις "
+"στο blog του pretix.eu:\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"Με φιλικούς χαιρετισμούς,\n"
+"\n"
+"οι pretix προγραμματιστές σας"
 
 #: pretix/base/services/update_check.py:122
 #: pretix/base/services/update_check.py:124
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "Plugin: %s"
 
 #: pretix/base/settings.py:314
 #, python-brace-format
@@ -4202,6 +4257,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Γεια σας,\n"
+"\n"
+"λαμβάνετε αυτό το μήνυμα επειδή μας ζητήσατε να σας στείλουμε το link\n"
+"για την παραγγελία σας για το {event}.\n"
+"\n"
+"Μπορείτε να αλλάξετε τα στοιχεία της παραγγελίας σας και να δείτε την "
+"κατάσταση της παραγγελίας σας στη διεύθυνση\n"
+"{url}\n"
+"\n"
+"Τις καλύτερες ευχές,\n"
+"Η ομάδα του {event} σας"
 
 #: pretix/base/settings.py:327
 #, python-brace-format
@@ -4216,6 +4282,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Γεια!\n"
+"\n"
+"Κάποιος ζήτησε μια λίστα των παραγγελιών σας για το {event}.\n"
+"Η λίστα έχει ως εξής:\n"
+"\n"
+"{orders}\n"
+"\n"
+"Τις καλύτερες ευχές, \n"
+"Η ομάδα του {event} σας"
 
 #: pretix/base/settings.py:339
 #, python-brace-format
@@ -4471,14 +4546,14 @@ msgstr ""
 #: pretix/base/settings.py:770 pretix/base/settings.py:783
 #: pretix/base/settings.py:797
 msgid "Given name"
-msgstr ""
+msgstr "'Ονομα"
 
 #: pretix/base/settings.py:708 pretix/base/settings.py:721
 #: pretix/base/settings.py:737 pretix/base/settings.py:754
 #: pretix/base/settings.py:769 pretix/base/settings.py:784
 #: pretix/base/settings.py:798
 msgid "Family name"
-msgstr ""
+msgstr "Επώνυμο"
 
 #: pretix/base/settings.py:712 pretix/base/settings.py:728
 #: pretix/base/settings.py:743 pretix/base/settings.py:761
@@ -4486,96 +4561,111 @@ msgstr ""
 #: pretix/base/settings.py:829
 msgctxt "person_name_sample"
 msgid "John"
-msgstr ""
+msgstr "Γιάννης"
 
 #: pretix/base/settings.py:713 pretix/base/settings.py:729
 #: pretix/base/settings.py:745 pretix/base/settings.py:763
 #: pretix/base/settings.py:777 pretix/base/settings.py:807
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "Ντόης"
 
 #: pretix/base/settings.py:719 pretix/base/settings.py:751
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Τίτλος"
 
 #: pretix/base/settings.py:727 pretix/base/settings.py:760
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "Dr"
 
 #: pretix/base/settings.py:735 pretix/base/settings.py:752
 msgid "First name"
-msgstr ""
+msgstr "Όνομα"
 
 #: pretix/base/settings.py:736 pretix/base/settings.py:753
 msgid "Middle name"
-msgstr ""
+msgstr "Μεσαίο όνομα"
 
 #: pretix/base/settings.py:817 pretix/base/settings.py:828
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/settings.py:823
 msgid "Calling name"
-msgstr ""
+msgstr "Υποκοριστικό"
 
 #: pretix/base/settings.py:836
 msgid "Latin transcription"
-msgstr ""
+msgstr "Μεταγραφή με λατινικούς χαρακτήρες"
 
 #: pretix/base/shredder.py:38 pretix/base/shredder.py:41
 msgid "Your event needs to be over for at least 60 days to use this feature."
 msgstr ""
+"Η εκδήλωσή σας πρέπει να έχει τελειώσει για τουλάχιστον 60 ημέρες για να "
+"χρησιμοποιηθεί αυτή η λειτουργία."
 
 #: pretix/base/shredder.py:43
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr ""
+"Το κατάστημα εισιτηρίων σας πρέπει να είναι εκτός σύνδεσης για να "
+"χρησιμοποιήσετε αυτήν τη λειτουργία."
 
 #: pretix/base/shredder.py:125
 msgid "E-mails"
-msgstr ""
+msgstr "E-mails"
 
 #: pretix/base/shredder.py:127
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents."
 msgstr ""
+"Αυτό θα αφαιρέσει όλες τις διευθύνσεις emails από τις παραγγελίες και τους "
+"συμμετέχοντες, καθώς και τα περιεχόμενα ηλεκτρονικού ταχυδρομείου που έχουν "
+"συνδεθεί."
 
 #: pretix/base/shredder.py:172
 msgid "This will remove all email addresses from the waiting list."
 msgstr ""
+"Με αυτόν τον τρόπο θα καταργηθούν όλες οι διευθύνσεις ηλεκτρονικού "
+"ταχυδρομείου από τη λίστα αναμονής."
 
 #: pretix/base/shredder.py:198
 msgid "Attendee names"
-msgstr ""
+msgstr "Ονόματα συμμετεχόντων"
 
 #: pretix/base/shredder.py:200
 msgid ""
 "This will remove all attendee names from order positions, as well as logged "
 "changes to them."
 msgstr ""
+"Αυτό θα αφαιρέσει όλα τα ονόματα των συμμετεχόντων από τις θέσεις "
+"παραγγελίας, καθώς και τις καταγεγραμμένες αλλαγές σε αυτές."
 
 #: pretix/base/shredder.py:236
 msgid "Invoice addresses"
-msgstr ""
+msgstr "Διευθύνσεις τιμολογίου"
 
 #: pretix/base/shredder.py:239
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Αυτό θα αφαιρέσει όλες τις διευθύνσεις τιμολογίου από παραγγελίες, καθώς και "
+"τις καταγεγραμμένες αλλαγές σε αυτές."
 
 #: pretix/base/shredder.py:263
 msgid "Question answers"
-msgstr ""
+msgstr "Απαντήσεις ερώτησης"
 
 #: pretix/base/shredder.py:265
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Αυτό θα αφαιρέσει όλες τις απαντήσεις των ερωτήσεων, καθώς και τις "
+"καταγεγραμμένες αλλαγές σε αυτές."
 
 #: pretix/base/shredder.py:293
 msgid ""
@@ -4583,14 +4673,20 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
+"Με αυτόν τον τρόπο θα αφαιρεθούν όλα τα PDFs τιμολογίου, καθώς και "
+"οποιοδήποτε περιεχόμενο κειμένου που ενδέχεται να περιέχει δεδομένα "
+"προσωπικού χαρακτήρα από τη βάση δεδομένων. Οι αριθμοί των τιμολογίων και τα "
+"σύνολα θα διατηρηθούν."
 
 #: pretix/base/shredder.py:320
 msgid "Cached ticket files"
-msgstr ""
+msgstr "Αποθηκευμένα(cached) αρχεία εισιτηρίων"
 
 #: pretix/base/shredder.py:322
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
+"Αυτό θα καταργήσει όλα τα αποθηκευμένα(cached) αρχεία εισιτηρίων. Δεν θα "
+"υπάρξει λήψη."
 
 #: pretix/base/shredder.py:337
 msgid ""
@@ -4598,90 +4694,99 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
+"Αυτό θα καταργήσει τις πληροφορίες σχετικά με τις πληρωμές. Ανάλογα με τη "
+"μέθοδο πληρωμής, όλα τα δεδομένα θα αφαιρεθούν ή μόνο προσωπικά δεδομένα. "
+"Δεν θα υπάρξει λήψη."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr ""
+msgstr "Bad Request"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "Δεν μπορέσαμε να αναλύσουμε το αίτημά σας."
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/403.html:12
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Κάντε ένα βήμα πίσω"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
 msgid "Try again"
-msgstr ""
+msgstr "Προσπάθησε ξανά"
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
-msgstr ""
+msgstr "Άρνηση πρόσβασης"
 
 #: pretix/base/templates/403.html:9
 msgid "You do not have access to this page."
-msgstr ""
+msgstr "Δεν έχετε πρόσβαση σε αυτήν τη σελίδα."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
 #: pretix/control/templates/pretixcontrol/base.html:177
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 msgid "Admin mode"
-msgstr ""
+msgstr "Διαχειριστική λειτουργία (admin mode)"
 
 #: pretix/base/templates/404.html:4 pretix/base/templates/404.html:8
 msgid "Not found"
-msgstr ""
+msgstr "Δεν βρέθηκε (Not found)"
 
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr ""
+msgstr "Φοβάμαι ότι δεν μπορούσαμε να βρούμε τον πόρο(resource) που ζητήσατε."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Internal Server Error"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr ""
+msgstr "Υπήρξε πρόβλημα στην επεξεργασία του αιτήματός σας."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr ""
+msgstr "Εάν το πρόβλημα παραμένει, παρακαλώ επικοινωνήστε μαζί μας."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr ""
+msgstr "Εάν επικοινωνήσετε μαζί μας, στείλτε μας τον ακόλουθο κώδικα:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
-msgstr ""
+msgstr "Η επαλήθευση απέτυχε"
 
 #: pretix/base/templates/csrffail.html:9
 msgid ""
 "We could not verify that this request really was sent from you. For security "
 "reasons, we therefore cannot process it."
 msgstr ""
+"Δεν μπορέσαμε να επιβεβαιώσουμε ότι αυτό το αίτημα στάλθηκε πραγματικά από "
+"εσάς. Για λόγους ασφαλείας, συνεπώς, δεν μπορούμε να το επεξεργαστούμε."
 
 #: pretix/base/templates/csrffail.html:20
 msgid ""
 "Please go back to the last page, refresh this page and then try again. If "
 "the problem persists, please get in touch with us."
 msgstr ""
+"Επιστρέψτε στην τελευταία σελίδα, ανανεώστε αυτή τη σελίδα και δοκιμάστε "
+"ξανά. Εάν το πρόβλημα παραμένει, παρακαλούμε επικοινωνήστε μαζί μας."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr ""
+msgstr "Ετοιμάζουμε το αρχείο σας για λήψη …"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
+"Εάν αυτό διαρκεί περισσότερο από μερικά λεπτά, ανανεώστε αυτή τη σελίδα ή "
+"επικοινωνήστε μαζί μας."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #: pretix/control/templates/pretixcontrol/auth/base.html:41
@@ -5155,7 +5260,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:400
 msgid "Confirmation text"
-msgstr ""
+msgstr "Κείμενο επιβεβαίωσης"
 
 #: pretix/control/forms/event.py:401
 msgid ""
@@ -5167,7 +5272,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:408 pretix/control/forms/event.py:1420
 msgid "Contact address"
-msgstr ""
+msgstr "Διεύθυνση Επικοινωνίας"
 
 #: pretix/control/forms/event.py:410 pretix/control/forms/event.py:1422
 msgid "We'll show this publicly to allow attendees to contact you."
@@ -5195,21 +5300,24 @@ msgstr ""
 
 #: pretix/control/forms/event.py:447
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "Οι πελάτες μπορούν να ακυρώσουν τις απλήρωτες παραγγελίες τους"
 
 #: pretix/control/forms/event.py:451 pretix/control/forms/event.py:473
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "Μην επιτρέπετε ακυρώσεις μετά"
 
 #: pretix/control/forms/event.py:455
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "Οι πελάτες μπορούν να ακυρώσουν τις πληρωμένες παραγγελίες τους"
 
 #: pretix/control/forms/event.py:456
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Τα πληρωμένα χρήματα θα επιστρέφονται αυτόματα αν το επιτρέπει η μέθοδος "
+"πληρωμής. Διαφορετικά, θα δημιουργηθεί μη αυτόματη επιστροφή χρημάτων για να "
+"επεξεργαστείτε με μη αυτόματο τρόπο."
 
 #: pretix/control/forms/event.py:461
 msgid "Keep a fixed cancellation fee"
