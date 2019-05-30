@@ -54,6 +54,11 @@
           "type": "array",
           "description": "List of areas",
           "items": { "$ref": "#/definitions/area" }
+        },
+        "row_number_position": {
+          "type": ["string", "null"],
+          "enum": ["left", "right", null],
+          "description": "Should the row numbers be hidden?"
         }
       },
       "required": ["position", "rows"],
@@ -80,6 +85,11 @@
         "seats_spacing": {
           "type": "integer",
           "description": "How far apart should the seats be positioned?"
+        },
+        "row_number_position": {
+          "type": ["string", "null"],
+          "enum": ["left", "right", null],
+          "description": "Should the row numbers be hidden? (Overrides the zone setting)"
         },
         "position": {
           "$ref": "#/definitions/position"
@@ -116,13 +126,72 @@
       "properties": {
         "color": { "type": "string" },
         "border_color": { "type": "string" },
-        "width": { "type": "integer" },
-        "height": { "type": "integer" },
-        "position": { "$ref": "#/definitions/position" },
         "rotation": { "type": "number" },
-        "text": { "type": "string" }
+        "shape": {
+          "type": "string",
+          "enum": ["polygon", "rectangle", "ellipse", "circle"]
+        },
+        "polygon": {
+          "type": "object",
+          "properties": {
+            "points": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/position" }
+            }
+          },
+          "required": ["points"],
+          "additionalProperties": false
+        },
+        "rectangle": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            },
+            "position": {
+              "$ref": "#/definitions/position"
+            }
+          },
+          "required": ["width", "height", "position"],
+          "additionalProperties": false
+        },
+        "ellipse": {
+          "type": "object",
+          "properties": {
+            "position": { "$ref": "#/definitions/position" },
+            "radius": { "$ref": "#/definitions/position" }
+          },
+          "required": ["position", "radius"],
+          "additionalProperties": false
+        },
+        "circle": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "$ref": "#/definitions/position"
+            },
+            "radius": {
+              "type": "integer"
+            }
+          },
+          "required": ["position", "radius"],
+          "additionalProperties": false
+        },
+        "text": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "position": {
+              "$ref": "#/definitions/position"
+            }
+          },
+          "required": ["text", "position"],
+          "additionalProperties": false
+        }
       },
-      "required": ["width", "height", "position"],
       "additionalProperties": false
     },
     "position": {
