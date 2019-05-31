@@ -975,6 +975,12 @@ class EventLog(EventPermissionRequiredMixin, ListView):
         elif self.request.GET.get('user'):
             qs = qs.filter(user_id=self.request.GET.get('user'))
 
+        if self.request.GET.get('content_type'):
+            qs = qs.filter(content_type=get_object_or_404(ContentType, pk=self.request.GET.get('content_type')))
+
+            if self.request.GET.get('object'):
+                qs = qs.filter(object_id=self.request.GET.get('object'))
+
         return qs
 
     def get_context_data(self, **kwargs):

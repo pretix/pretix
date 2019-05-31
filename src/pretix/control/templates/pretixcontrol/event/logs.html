@@ -5,6 +5,8 @@
 {% block inside %}
     <h1>{% trans "Event logs" %}</h1>
     <form class="form-inline helper-display-inline" action="" method="get">
+        <input type="hidden" name="content_type" value="{{ request.GET.content_type }}">
+        <input type="hidden" name="object" value="{{ request.GET.object }}">
         <p>
             <select name="user" class="form-control">
                 <option value="">{% trans "All actions" %}</option>

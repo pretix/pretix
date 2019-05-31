@@ -6,7 +6,9 @@ from django.db import models
 from django.db.models.constants import LOOKUP_SEP
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.functional import cached_property
 
 from pretix.helpers.json import CustomJSONEncoder
 
@@ -113,6 +115,40 @@ class LoggedModel(models.Model, LoggingMixin):
     class Meta:
         abstract = True
 
+    @cached_property
+    def logs_content_type(self):
+        return ContentType.objects.get_for_model(type(self))
+
+    @cached_property
+    def all_logentries_link(self):
+        from pretix.base.models import Event
+
+        if isinstance(self, Event):
+            event = self
+        elif hasattr(self, 'event'):
+            event = self.event
+        else:
+            return None
+        return reverse(
+            'control:event.log',
+            kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug,
+            }
+        ) + '?content_type={}&object={}'.format(
+            self.logs_content_type.pk,
+            self.pk
+        )
+
+    def top_logentries(self):
+        qs = self.all_logentries()
+        if self.all_logentries_link:
+            qs = qs[:25]
+        return qs
+
+    def top_logentries_has_more(self):
+        return self.all_logentries().count() > 25
+
     def all_logentries(self):
         """
         Returns all log entries that are attached to this object.
@@ -122,7 +158,7 @@ class LoggedModel(models.Model, LoggingMixin):
         from .log import LogEntry
 
         return LogEntry.objects.filter(
-            content_type=ContentType.objects.get_for_model(type(self)), object_id=self.pk
+            content_type=self.logs_content_type, object_id=self.pk
         ).select_related('user', 'event', 'oauth_application', 'api_token', 'device')
 
 
