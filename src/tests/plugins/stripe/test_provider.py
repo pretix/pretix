@@ -78,7 +78,7 @@ def test_perform_success(env, factory, monkeypatch):
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_token' in req.session
+    assert 'payment_stripe_payment_method_id' in req.session
     payment = order.payments.create(
         provider='stripe_cc', amount=order.total
     )
@@ -111,7 +111,7 @@ def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_token' in req.session
+    assert 'payment_stripe_payment_method_id' in req.session
     payment = order.payments.create(
         provider='stripe_cc', amount=order.total
     )
@@ -136,7 +136,7 @@ def test_perform_card_error(env, factory, monkeypatch):
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_token' in req.session
+    assert 'payment_stripe_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total
@@ -162,7 +162,7 @@ def test_perform_stripe_error(env, factory, monkeypatch):
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_token' in req.session
+    assert 'payment_stripe_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total
@@ -192,7 +192,7 @@ def test_perform_failed(env, factory, monkeypatch):
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_token' in req.session
+    assert 'payment_stripe_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total

@@ -153,22 +153,28 @@ def webhook(request, *args, **kwargs):
 
     if event_json['data']['object']['object'] == "charge":
         func = charge_webhook
-        objid = event_json['data']['object']['payment_intent'] or event_json['data']['object']['id']
     elif event_json['data']['object']['object'] == "dispute":
         func = charge_webhook
-        objid = event_json['data']['object']['charge']
     elif event_json['data']['object']['object'] == "source":
         func = source_webhook
-        objid = event_json['data']['object']['id']
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
+    if 'payment_intent' in event_json['data']['object'] and event_json['data']['object']['payment_intent']:
+        objid = event_json['data']['object']['payment_intent']
+    elif 'payment_method' in event_json['data']['object'] and event_json['data']['object']['payment_method']:
+        objid = event_json['data']['object']['payment_method']
+    else:
+        objid = event_json['data']['object']['id']
+
+    chid = event_json['data']['object']['id']
+
     try:
         rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
-        return func(rso.order.event, event_json, objid, rso)
+        return func(rso.order.event, event_json, chid, rso)
     except ReferencedStripeObject.DoesNotExist:
         if hasattr(request, 'event'):
-            return func(request.event, event_json, objid, None)
+            return func(request.event, event_json, chid, None)
         else:
             return HttpResponse("Unable to detect event", status=200)
 
@@ -187,9 +193,6 @@ SOURCE_TYPES = {
 def charge_webhook(event, event_json, charge_id, rso):
     prov = StripeCC(event)
     prov._init_api()
-
-    if charge_id.startswith('pi_'):
-        charge_id = event_json['data']['object']['id']
 
     try:
         charge = stripe.Charge.retrieve(charge_id, expand=['dispute'], **prov.api_kwargs)
