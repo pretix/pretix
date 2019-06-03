@@ -72,6 +72,8 @@ class EventViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'event'
     permission_classes = (EventCRUDPermission,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    ordering = ('slug',)
+    ordering_fields = ('date_from', 'slug')
     filterset_class = EventFilter
 
     def get_queryset(self):

@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import filters, viewsets
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import OrganizerSerializer
@@ -10,6 +10,9 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Organizer.objects.none()
     lookup_field = 'slug'
     lookup_url_kwarg = 'organizer'
+    filter_backends = (filters.OrderingFilter,)
+    ordering = ('slug',)
+    ordering_fields = ('name', 'slug')
 
     def get_queryset(self):
         if self.request.user.is_authenticated:

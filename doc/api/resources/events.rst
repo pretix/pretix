@@ -116,6 +116,9 @@ Endpoints
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned. Event series are never (always) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned. Event series are never (always) returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned. Event series are never returned.
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date_from`` and
+                           ``slug``. Keep in mind that ``date_from`` of event series does not really tell you anything.
+                           Default: ``slug``.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
