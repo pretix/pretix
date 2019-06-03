@@ -23,3 +23,4 @@ Resources and endpoints
    waitinglist
    carts
    webhooks
+   billing_invoices
