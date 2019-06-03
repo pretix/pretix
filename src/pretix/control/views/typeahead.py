@@ -150,7 +150,9 @@ def nav_context_list(request):
 
     if show_user and organizer:
         organizer = serialize_orga(Organizer.objects.get(pk=organizer))
-        results.insert(1, results.pop(results.index(organizer)) if results.index(organizer) else organizer)
+        if organizer in results:
+            results.remove(organizer)
+        results.insert(1, organizer)
 
     doc = {
         'results': results,
