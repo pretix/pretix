@@ -102,7 +102,7 @@ Endpoints
    .. warning:: After we created the invoices, they are placed in review with our accounting department. You will
                 already see them in the API at this point, but you are not able to download them until they completed
                 review and are sent to you via email. This usually takes a few hours. If you try to download them
-                in this timeframe, you will receive a status code :http:statuscode:`423`.
+                in this time frame, you will receive a status code :http:statuscode:`423`.
 
    **Example request**:
 
