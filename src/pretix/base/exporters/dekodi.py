@@ -93,7 +93,7 @@ class DekodiNREIExporter(BaseExporter):
                         'PTNo15': p.full_id or '',
                     })
             elif p.provider.startswith('stripe'):
-                src = p.info_data.get("source", "{}")
+                src = p.info_data.get("source", p.info_data)
                 payments.append({
                     'PTID': '81',
                     'PTN': 'Stripe',
