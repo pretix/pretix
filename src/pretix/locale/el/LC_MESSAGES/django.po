@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-30 16:39+0000\n"
+"PO-Revision-Date: 2019-06-03 17:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -17267,7 +17267,7 @@ msgstr "Είσοδος: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:189
 msgid "Add to Calendar"
-msgstr "Προσθήκη στο Ημερολόγιο"
+msgstr "Προσθήκη Εκδήλωσης στο Ημερολόγιο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
@@ -17289,7 +17289,7 @@ msgstr "Εξαργύρωση κουπονιού"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
 msgid "If you already ordered a ticket"
-msgstr "Αν έχετε ήδη αγοράσει ένα εισιτήριο"
+msgstr "Αν έχετε ήδη αγοράσει κάποιο εισιτήριο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid ""
@@ -17298,17 +17298,17 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
-"Εάν θέλετε να δείτε ή να αλλάξετε την κατάσταση και τα στοιχεία της "
-"παραγγελίας σας, κάντε κλικ στο σύνδεσμο σε ένα από τα μηνύματα ηλεκτρονικού "
-"ταχυδρομείου που σας στείλαμε κατά τη διάρκεια της διαδικασίας παραγγελίας. "
-"Αν δεν μπορείτε να βρείτε τον σύνδεσμο, κάντε κλικ στο παρακάτω κουμπί για "
-"να ζητήσετε ξανά τη σύνδεση με την παραγγελία σας."
+"Για να δείτε ή να αλλάξετε την κατάσταση ή τα στοιχεία μιας παραγγελίας, "
+"κάντε κλικ στο σύνδεσμο που θα βρείτε σε ένα από τα μηνύματα ηλεκτρονικού "
+"ταχυδρομείου που σας έχουμε στείλει όταν παραγγείλατε. Αν δεν μπορείτε να το "
+"βρείτε, κάντε κλικ στο διπλανό κουμπί για να ζητήσετε να σας σταλεί εκ νέου "
+"ο σύνδεσμος που αφορά την παραγγελία σας."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
-msgstr "Ξαναστείλτε τα link των παραγγελιών"
+msgstr "Αποστολή συνδέσμου μίας ή πολλών παραγγελιών"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
@@ -17582,15 +17582,15 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Εάν χάσατε το σύνδεσμο με την παραγγελία ή τις παραγγελίες σας, εισαγάγετε "
-"τη διεύθυνση ηλεκτρονικού ταχυδρομείου που χρησιμοποιήσατε για την "
-"παραγγελία σας. Θα σας στείλουμε ένα μήνυμα ηλεκτρονικού ταχυδρομείου με "
-"συνδέσμους προς όλες τις παραγγελίες που βάλατε χρησιμοποιώντας αυτή τη "
-"διεύθυνση ηλεκτρονικού ταχυδρομείου."
+"Εάν χάσατε κάποιο σύνδεσμο από τις παραγγελίες σας, παρακαλούμε εισαγάγετε "
+"τη διεύθυνση ηλεκτρονικού ταχυδρομείου που έχετε χρησιμοποιήσει όταν "
+"παραγγείλατε και θα σας σταλεί νέο μήνυμα με όλους τους συνδέσμους των "
+"παραγγελιών που κάνατε, χρησιμοποιώντας τη συγκεκριμένη διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
-msgstr "Αποστολή συνδέσμων"
+msgstr "Αποστολή συνδέσμων παραγγελιών"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
