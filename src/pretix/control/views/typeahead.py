@@ -150,11 +150,12 @@ def nav_context_list(request):
 
     if show_user and organizer:
         try:
-            organizer = serialize_orga(Organizer.objects.get(pk=organizer))
+            organizer = Organizer.objects.get(pk=organizer)
         except Organizer.DoesNotExist:
             pass
         else:
-            if request.user.has_organizer_permission(organizer, request):
+            if request.user.has_organizer_permission(organizer, request=request):
+                organizer = serialize_orga(organizer)
                 if organizer in results:
                     results.remove(organizer)
                 results.insert(1, organizer)
