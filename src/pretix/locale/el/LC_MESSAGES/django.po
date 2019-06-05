@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-24 07:42+0000\n"
-"PO-Revision-Date: 2019-05-30 16:39+0000\n"
+"PO-Revision-Date: 2019-06-04 16:00+0000\n"
 "Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -506,7 +506,7 @@ msgstr "Όνομα"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:97
 #: pretix/presale/templates/pretixpresale/event/order.html:205
 msgid "Address"
-msgstr "Διεύθυνση"
+msgstr "Διεύθυνση έδρας"
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/exporters/orderlist.py:211
 #: pretix/base/exporters/orderlist.py:304
@@ -1182,11 +1182,11 @@ msgstr "Μη έγκυρο placeholder(s): %(value)s"
 #: pretix/base/forms/widgets.py:126 pretix/base/forms/widgets.py:131
 #: pretix/base/models/orders.py:1969
 msgid "Business customer"
-msgstr "Επιχειρηματικός πελάτης"
+msgstr "Επιχείρηση"
 
 #: pretix/base/forms/widgets.py:130
 msgid "Individual customer"
-msgstr "Μεμονωμένος πελάτης"
+msgstr "Ιδιώτης"
 
 #: pretix/base/invoice.py:59
 #, python-format
@@ -1575,9 +1575,9 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
-"Προαιρετικό. Δεν θα πωληθούν προϊόντα μετά την ημερομηνία αυτή. Αν δεν "
-"ρυθμίσετε αυτήν την τιμή, η προπώληση θα λήξει μετά την ημερομηνία λήξης του "
-"συμβάντος σας."
+"Προαιρετικά. Δεν θα πωληθούν προϊόντα μετά την ημερομηνία αυτή. Αν δεν "
+"ρυθμίσετε αυτήν την τιμή, η προπώληση θα λήξει μετά την ημερομηνία λήξης της "
+"εκδήλωσής σας."
 
 #: pretix/base/models/event.py:318 pretix/base/models/event.py:861
 #: pretix/control/forms/subevents.py:73
@@ -1587,7 +1587,7 @@ msgstr "Έναρξη προπώλησης"
 #: pretix/base/models/event.py:319 pretix/base/models/event.py:862
 #: pretix/control/forms/subevents.py:74
 msgid "Optional. No products will be sold before this date."
-msgstr "Προαιρετικό. Δεν θα πωληθούν προϊόντα πριν από αυτή την ημερομηνία."
+msgstr "Προαιρετικά. Δεν θα πωληθούν προϊόντα πριν από αυτή την ημερομηνία."
 
 #: pretix/base/models/event.py:324 pretix/base/models/event.py:867
 msgid "Location"
@@ -2398,7 +2398,7 @@ msgstr "εκκρεμής"
 
 #: pretix/base/models/orders.py:112
 msgid "paid"
-msgstr "επί πληρωμή"
+msgstr "Πληρώθηκε"
 
 #: pretix/base/models/orders.py:113
 msgid "expired"
@@ -2633,7 +2633,7 @@ msgstr "Θέσεις καλαθιού"
 
 #: pretix/base/models/orders.py:1970 pretix/control/forms/event.py:693
 msgid "Company name"
-msgstr "Όνομα εταιρείας"
+msgstr "Επωνυμία εταιρείας"
 
 #: pretix/base/models/orders.py:1977 pretix/control/forms/event.py:590
 #: pretix/plugins/stripe/payment.py:123
@@ -6542,7 +6542,7 @@ msgstr ""
 #: pretix/control/forms/event.py:1482
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
 msgid "Price (optional)"
-msgstr "Τιμή (προαιρετικό)"
+msgstr "Τιμή (προαιρετικά)"
 
 #: pretix/control/forms/event.py:1487
 msgid "Free"
@@ -7342,7 +7342,7 @@ msgstr "Τύποι εκδηλώσεων"
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:117
 msgctxt "form"
 msgid "Optional"
-msgstr "Προαιρετικό"
+msgstr "Προαιρετικά"
 
 #: pretix/control/forms/subevents.py:212
 msgid "Exclude these dates instead of adding them."
@@ -9775,7 +9775,7 @@ msgstr "Όνομα εισιτηρίου"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:48
 msgid "Capacity (optional)"
-msgstr "Χωρητικότητα (προαιρετικό)"
+msgstr "Χωρητικότητα (προαιρετικά)"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:101
 msgid "Add a new ticket type"
@@ -10544,7 +10544,7 @@ msgstr "Επεξεργασία ερωτήματος"
 #: pretix/plugins/reports/exporters.py:206
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:13
 msgid "Paid"
-msgstr "επί πληρωμή"
+msgstr "Πληρώθηκε"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
@@ -11080,7 +11080,7 @@ msgstr "Πληροφορίες τιμολογίου"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:36
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr "(προαιρετικό)"
+msgstr "(προαιρετικά)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -13124,7 +13124,7 @@ msgstr "Κωδικοί κουπονιών"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr "Πρόθεμα (προαιρετικό)"
+msgstr "Πρόθεμα (προαιρετικά)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
@@ -17079,15 +17079,16 @@ msgstr "Προσθέστε ακόμα ένα"
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:22
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr "Η παραγγελία επιβεβαιώθηκε"
+msgstr "Ολοκλήρωση Παραγγελίας"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:5
 msgid ""
 "You can download your tickets using the buttons below. Please have your "
 "ticket ready when entering the event."
 msgstr ""
-"Μπορείτε να κατεβάσετε τα εισιτήριά σας χρησιμοποιώντας τα παρακάτω κουμπιά. "
-"Παρακαλείστε να έχετε έτοιμο το εισιτήριό σας κατά την είσοδο στην εκδήλωση."
+"Μπορείτε να κατεβάσετε τα εισιτήριά που αγοράσατε κάνοντας κλικ στο παρακάτω "
+"PDF-κουμπί. Πρέπει να έχετε μαζί σας στην είσοδο της εκδήλωσης, τυπωμένο το "
+"εισιτήριό σας γιατί θα σας ζητηθεί."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:11
 msgid "Download all tickets at once:"
@@ -17267,7 +17268,7 @@ msgstr "Είσοδος: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:189
 msgid "Add to Calendar"
-msgstr "Προσθήκη στο Ημερολόγιο"
+msgstr "Προσθήκη Εκδήλωσης στο Ημερολόγιο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
@@ -17289,7 +17290,7 @@ msgstr "Εξαργύρωση κουπονιού"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
 msgid "If you already ordered a ticket"
-msgstr "Αν έχετε ήδη αγοράσει ένα εισιτήριο"
+msgstr "Αν έχετε ήδη αγοράσει κάποιο εισιτήριο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid ""
@@ -17298,17 +17299,17 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
-"Εάν θέλετε να δείτε ή να αλλάξετε την κατάσταση και τα στοιχεία της "
-"παραγγελίας σας, κάντε κλικ στο σύνδεσμο σε ένα από τα μηνύματα ηλεκτρονικού "
-"ταχυδρομείου που σας στείλαμε κατά τη διάρκεια της διαδικασίας παραγγελίας. "
-"Αν δεν μπορείτε να βρείτε τον σύνδεσμο, κάντε κλικ στο παρακάτω κουμπί για "
-"να ζητήσετε ξανά τη σύνδεση με την παραγγελία σας."
+"Για να δείτε ή να αλλάξετε την κατάσταση ή τα στοιχεία μιας παραγγελίας, "
+"κάντε κλικ στο σύνδεσμο που θα βρείτε σε ένα από τα μηνύματα ηλεκτρονικού "
+"ταχυδρομείου που σας έχουμε στείλει όταν παραγγείλατε. Αν δεν μπορείτε να το "
+"βρείτε, κάντε κλικ στο διπλανό κουμπί για να ζητήσετε να σας σταλεί εκ νέου "
+"ο σύνδεσμος που αφορά την παραγγελία σας."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
-msgstr "Ξαναστείλτε τα link των παραγγελιών"
+msgstr "Αποστολή συνδέσμου μίας ή πολλών παραγγελιών"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:13
 msgid "Thank you!"
@@ -17337,8 +17338,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:28
 msgid "Your order has been processed successfully! See below for details."
 msgstr ""
-"Η παραγγελία σας έχει υποβληθεί σε επεξεργασία με επιτυχία! Δείτε παρακάτω "
-"για λεπτομέρειες."
+"Η παραγγελία σας έχει επεξεργαστεί με επιτυχία! Δείτε παρακάτω για "
+"λεπτομέρειες."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:30
 msgid "We successfully received your payment. See below for details."
@@ -17350,10 +17351,10 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"Παρακαλούμε να προσθέσετε σελιδοδείκτη ή να αποθηκεύσετε τη σύνδεση σε αυτή "
-"την ακριβή σελίδα, αν θέλετε να αποκτήσετε πρόσβαση στην παραγγελία σας "
-"αργότερα. Σας στείλαμε επίσης ένα μήνυμα ηλεκτρονικού ταχυδρομείου που "
-"περιέχει τον σύνδεσμο προς τη διεύθυνση που έχετε ορίσει."
+"Παρακαλούμε αποθηκεύστε την διεύθυνση της σελίδας, για να μπορείτε  να έχετε "
+"πρόσβαση στην παραγγελία σας και μελλοντικά. Σας έχει σταλεί  όμως και "
+"μήνυμα ηλεκτρονικού ταχυδρομείου με τον σύνδεσμο της σελίδας στην "
+"ηλεκτρονική διεύθυνση που δηλώσατε."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
@@ -17408,7 +17409,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:121
 #: pretix/presale/templates/pretixpresale/event/order.html:184
 msgid "Change details"
-msgstr "Αλλαγή λεπτομερειών"
+msgstr "Αλλαγή στοιχείων"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 msgid "Request invoice"
@@ -17582,15 +17583,15 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Εάν χάσατε το σύνδεσμο με την παραγγελία ή τις παραγγελίες σας, εισαγάγετε "
-"τη διεύθυνση ηλεκτρονικού ταχυδρομείου που χρησιμοποιήσατε για την "
-"παραγγελία σας. Θα σας στείλουμε ένα μήνυμα ηλεκτρονικού ταχυδρομείου με "
-"συνδέσμους προς όλες τις παραγγελίες που βάλατε χρησιμοποιώντας αυτή τη "
-"διεύθυνση ηλεκτρονικού ταχυδρομείου."
+"Εάν χάσατε κάποιο σύνδεσμο από τις παραγγελίες σας, παρακαλούμε εισαγάγετε "
+"τη διεύθυνση ηλεκτρονικού ταχυδρομείου που έχετε χρησιμοποιήσει όταν "
+"παραγγείλατε και θα σας σταλεί νέο μήνυμα με όλους τους συνδέσμους των "
+"παραγγελιών που κάνατε, χρησιμοποιώντας τη συγκεκριμένη διεύθυνση "
+"ηλεκτρονικού ταχυδρομείου."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:26
 msgid "Send links"
-msgstr "Αποστολή συνδέσμων"
+msgstr "Αποστολή συνδέσμων παραγγελιών"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:12
