@@ -592,17 +592,9 @@ class StripeCC(StripeMethod):
         request.session['payment_stripe_brand'] = request.POST.get('stripe_card_brand', '')
         request.session['payment_stripe_last4'] = request.POST.get('stripe_card_last4', '')
         if payment_method_id == '':
-            messages.error(request, _('You may need to enable JavaScript for Stripe payments.'))
+            messages.warning(request, _('You may need to enable JavaScript for Stripe payments.'))
             return False
         return True
-
-    def _use_3ds(self, card):
-        if self.settings.cc_3ds_mode == 'recommended':
-            return card.three_d_secure in ('required', 'recommended')
-        elif self.settings.cc_3ds_mode == 'optional':
-            return card.three_d_secure in ('required', 'recommended', 'optional')
-        else:
-            return card.three_d_secure == 'required'
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:

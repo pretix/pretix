@@ -10,13 +10,24 @@ from pretix.testutils.sessions import add_cart_session, get_cart_session_key
 
 
 class MockedCharge():
-    def __init__(self):
-        self.status = ''
-        self.paid = False
-        self.id = 'ch_123345345'
+    status = ''
+    paid = False
+    id = 'ch_123345345'
 
     def refresh(self):
         pass
+
+
+class Object():
+    pass
+
+
+class MockedPaymentintent():
+    status = ''
+    id = 'pi_1EUon12Tb35ankTnZyvC3SdE'
+    charges = Object()
+    charges.data = [MockedCharge()]
+    last_payment_error = None
 
 
 @pytest.fixture
@@ -41,16 +52,17 @@ def env(client):
 
 @pytest.mark.django_db
 def test_payment(env, monkeypatch):
-    def charge_create(**kwargs):
+    def paymentintent_create(**kwargs):
         assert kwargs['amount'] == 1337
         assert kwargs['currency'] == 'eur'
-        assert kwargs['source'] == 'tok_189fTT2eZvKYlo2CvJKzEzeu'
-        c = MockedCharge()
+        assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
+        c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.paid = True
-        charge_create.called = True
+        c.charges.data[0].paid = True
+        setattr(paymentintent_create, 'called', True)
         return c
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
 
     client, ticket = env
     session_key = get_cart_session_key(client, ticket.event)
@@ -62,17 +74,16 @@ def test_payment(env, monkeypatch):
     client.post('/%s/%s/checkout/questions/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'email': 'admin@localhost'
     }, follow=True)
-    charge_create.called = False
+    paymentintent_create.called = False
     response = client.post('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'payment': 'stripe',
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'payment_method': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_card_brand': 'visa',
         'stripe_card_last4': '1234'
     }, follow=True)
-    assert not charge_create.called
+    assert not paymentintent_create.called
     assert response.status_code == 200
     assert 'alert-danger' not in response.rendered_content
     response = client.post('/%s/%s/checkout/confirm/' % (ticket.event.organizer.slug, ticket.event.slug), {
     }, follow=True)
-    assert charge_create.called
     assert response.status_code == 200

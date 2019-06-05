@@ -46,33 +46,45 @@ class MockedRefunds():
 
 
 class MockedCharge():
-    def __init__(self):
-        self.status = ''
-        self.paid = False
-        self.id = 'ch_123345345'
-        self.refunds = MockedRefunds()
+    status = ''
+    paid = False
+    id = 'ch_123345345'
+    refunds = MockedRefunds()
 
     def refresh(self):
         pass
+
+
+class Object():
+    pass
+
+
+class MockedPaymentintent():
+    status = ''
+    id = 'pi_1EUon12Tb35ankTnZyvC3SdE'
+    charges = Object()
+    charges.data = [MockedCharge()]
+    last_payment_error = None
 
 
 @pytest.mark.django_db
 def test_perform_success(env, factory, monkeypatch):
     event, order = env
 
-    def charge_create(**kwargs):
+    def paymentintent_create(**kwargs):
         assert kwargs['amount'] == 1337
         assert kwargs['currency'] == 'eur'
-        assert kwargs['source'] == 'tok_189fTT2eZvKYlo2CvJKzEzeu'
-        c = MockedCharge()
+        assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
+        c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.paid = True
+        c.charges.data[0].paid = True
         return c
 
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
+
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
         'stripe_brand': 'Visa'
     })
@@ -93,19 +105,19 @@ def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
     event.currency = 'JPY'
     event.save()
 
-    def charge_create(**kwargs):
+    def paymentintent_create(**kwargs):
         assert kwargs['amount'] == 13
         assert kwargs['currency'] == 'jpy'
-        assert kwargs['source'] == 'tok_189fTT2eZvKYlo2CvJKzEzeu'
-        c = MockedCharge()
+        assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
+        c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.paid = True
+        c.charges.data[0].paid = True
         return c
 
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
         'stripe_brand': 'Visa'
     })
