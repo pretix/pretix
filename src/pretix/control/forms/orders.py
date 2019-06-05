@@ -292,10 +292,7 @@ class OrderPositionChangeForm(forms.Form):
         instance = kwargs.pop('instance')
         initial = kwargs.get('initial', {})
 
-        if instance.item.tax_rule and not instance.item.tax_rule.price_includes_tax:
-            initial['price'] = instance.price - instance.tax_value
-        else:
-            initial['price'] = instance.price
+        initial['price'] = instance.price
 
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)

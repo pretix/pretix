@@ -121,11 +121,13 @@
                                 <strong>{% trans "Price" %}</strong>
                             </div>
                             <div class="col-sm-5">
-                                {{ position.price|money:request.event.currency }}<br>
+                                {{ position.price|money:request.event.currency }}
                                 {% if position.tax_rate %}
-                                    <small>{% blocktrans trimmed with rate=position.tax_rate name=position.tax_rule.name %}
-                                        <strong>incl.</strong> {{ rate }}% {{ name }}
-                                    {% endblocktrans %}</small>
+                                    <br>
+                                    <small>
+                                        ({{ position.net_price|money:request.event.currency }}
+                                        + {{ position.tax_rate }}%)
+                                    </small>
                                 {% endif %}
                             </div>
                             <div class="col-sm-4 field-container">
