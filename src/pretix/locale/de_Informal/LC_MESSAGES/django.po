@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-05 10:21+0000\n"
-"PO-Revision-Date: 2019-05-28 10:08+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"PO-Revision-Date: 2019-06-05 11:38+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -3842,10 +3842,8 @@ msgid "This ticket has already been redeemed."
 msgstr "Das Ticket wurde bereits eingelöst."
 
 #: pretix/base/services/export.py:30
-#, fuzzy
-#| msgid "Your search did not match any quotas."
 msgid "Your export did not contain any data."
-msgstr "Deine Filter treffen auf keine Kontingente zu."
+msgstr "Der Export enthielt keine Daten."
 
 #: pretix/base/services/invoices.py:68
 #, python-brace-format
@@ -7345,6 +7343,9 @@ msgid ""
 "currently only be shown by using vouchers that directly apply to the "
 "product, not via a quota."
 msgstr ""
+"Das ausgewählte Kontingent enthält nur versteckte Produkte. Versteckte "
+"Produkte können derzeit nur mit einem Gutschein gewählt werden, der direkt "
+"auf das Produkt zugreift, nicht auf ein Kontingent."
 
 #: pretix/control/forms/vouchers.py:186
 msgid "Codes"
@@ -7844,22 +7845,16 @@ msgid "An add-on has been changed on this product."
 msgstr "Eine Kategorie für Zusatzprodukte wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:254
-#, fuzzy
-#| msgid "An add-on has been added to this product."
 msgid "A bundled item has been added to this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde zum Produkt hinzugefügt."
+msgstr "Ein eingeschlossenes Produkt wurde zum Produkt hinzugefügt."
 
 #: pretix/control/logdisplay.py:255
-#, fuzzy
-#| msgid "An add-on has been removed from this product."
 msgid "A bundled item has been removed from this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde vom Produkt entfernt."
+msgstr "Eine eingeschlossenes Produkt wurde vom Produkt entfernt."
 
 #: pretix/control/logdisplay.py:256
-#, fuzzy
-#| msgid "An add-on has been changed on this product."
 msgid "A bundled item has been changed on this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde bearbeitet."
+msgstr "Eine eingeschlossenes Produkt wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:257
 msgid "The quota has been added."
@@ -10092,7 +10087,7 @@ msgstr "Veranstaltungsübersicht öffnen"
 #: pretix/control/templates/pretixcontrol/font_option.html:2
 msgctxt "typography"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "Franz jagt im komplett verwahrlosten Taxi quer durch Bayern."
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html:3
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
@@ -10178,7 +10173,7 @@ msgstr "Update-Check-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/includes/logs.html:51
 msgid "View full log"
-msgstr ""
+msgstr "Alles anzeigen"
 
 #: pretix/control/templates/pretixcontrol/item/addons.html:7
 msgid ""
@@ -13812,6 +13807,8 @@ msgid ""
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
+"Sie haben dieses Produkt deaktiviert, obwohl es Teil eines Paketes ist. "
+"Solange dies so ist, kann auch das Paket nicht mehr gekauft werden."
 
 #: pretix/control/views/item.py:1041
 msgid ""
@@ -17770,7 +17767,7 @@ msgstr "Chinesisch (vereinfacht)"
 
 #: pretix/settings.py:405
 msgid "Greek"
-msgstr ""
+msgstr "Griechisch"
 
 #: pretix/settings.py:678
 msgid "Read access"
