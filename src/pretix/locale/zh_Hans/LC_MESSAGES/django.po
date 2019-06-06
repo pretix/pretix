@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 10:21+0000\n"
+"POT-Creation-Date: 2019-06-06 09:11+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -2719,7 +2719,7 @@ msgstr "降低产品价格（％）"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:98
 #: pretix/control/views/vouchers.py:61 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:322
-#: pretix/presale/templates/pretixpresale/event/index.html:235
+#: pretix/presale/templates/pretixpresale/event/index.html:252
 msgid "Voucher code"
 msgstr "优惠券号"
 
@@ -6437,13 +6437,13 @@ msgid "Search voucher"
 msgstr "搜索票证"
 
 #: pretix/control/forms/filter.py:823 pretix/control/forms/vouchers.py:92
-#: pretix/control/views/typeahead.py:311
+#: pretix/control/views/typeahead.py:317
 #, python-brace-format
 msgid "{product} – Any variation"
 msgstr "{product} - 任何变量"
 
 #: pretix/control/forms/filter.py:829 pretix/control/forms/vouchers.py:83
-#: pretix/control/views/typeahead.py:319 pretix/control/views/typeahead.py:323
+#: pretix/control/views/typeahead.py:325 pretix/control/views/typeahead.py:329
 #: pretix/control/views/vouchers.py:73
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
@@ -7866,6 +7866,7 @@ msgstr "设置"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:19
 #: pretix/control/templates/pretixcontrol/subevents/index.html:5
 #: pretix/control/templates/pretixcontrol/subevents/index.html:7
+#: pretix/presale/templates/pretixpresale/event/index.html:115
 msgctxt "subevent"
 msgid "Dates"
 msgstr "日期"
@@ -16010,7 +16011,7 @@ msgid "We're trying to reserve another one for you!"
 msgstr "我们正试图为你预留另一个！"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:104
-#: pretix/presale/templates/pretixpresale/event/index.html:201
+#: pretix/presale/templates/pretixpresale/event/index.html:218
 #: pretix/presale/templates/pretixpresale/event/voucher.html:26
 #, python-format
 msgid ""
@@ -16162,77 +16163,90 @@ msgstr "清空购物车"
 msgid "Proceed with checkout"
 msgstr "进行结账"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:99
+#: pretix/presale/templates/pretixpresale/event/index.html:100
+#, fuzzy
+#| msgid "This file is from a different event."
+msgid "Add tickets for a different date"
+msgstr "此文件来自其他活动。"
+
+#: pretix/presale/templates/pretixpresale/event/index.html:104
 msgid "View other date"
 msgstr "查看其他日期"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:102
+#: pretix/presale/templates/pretixpresale/event/index.html:108
 msgid "Choose date to buy a ticket"
 msgstr "选择购票日期"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:129
+#: pretix/presale/templates/pretixpresale/event/index.html:113
+#, fuzzy
+#| msgid "Other features"
+msgctxt "subevent"
+msgid "Other dates"
+msgstr "其他特征"
+
+#: pretix/presale/templates/pretixpresale/event/index.html:146
 #: pretix/presale/views/widget.py:471
 msgid "The presale period for this event is over."
 msgstr "此活动的预售期已结束。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:134
+#: pretix/presale/templates/pretixpresale/event/index.html:151
 #: pretix/presale/views/widget.py:473
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr "此活动的预售将从%(date)s的%(time)s开始。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:138
+#: pretix/presale/templates/pretixpresale/event/index.html:155
 #: pretix/presale/views/widget.py:478
 msgid "The presale for this event has not yet started."
 msgstr "此活动的预售尚未开始。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:160
+#: pretix/presale/templates/pretixpresale/event/index.html:177
 #, python-format
 msgid "Begin: %(time)s"
 msgstr "开始：%(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:165
+#: pretix/presale/templates/pretixpresale/event/index.html:182
 #, python-format
 msgid "End: %(time)s"
 msgstr "结束：%(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:173
+#: pretix/presale/templates/pretixpresale/event/index.html:190
 #, python-format
 msgid "Admission: %(time)s"
 msgstr "入场：%(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:177
+#: pretix/presale/templates/pretixpresale/event/index.html:194
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr "入场：%(datetime)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:188
+#: pretix/presale/templates/pretixpresale/event/index.html:205
 msgid "Add to Calendar"
 msgstr "添加到日历"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:200
+#: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
 msgid "We're now trying to reserve this for you!"
 msgstr "我们现在正试图为您保留这个！"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:211
+#: pretix/presale/templates/pretixpresale/event/index.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:291
 msgid "Add to cart"
 msgstr "添加到购物车"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:223
+#: pretix/presale/templates/pretixpresale/event/index.html:240
 msgid "Redeem a voucher"
 msgstr "兑换优惠券"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:241
+#: pretix/presale/templates/pretixpresale/event/index.html:258
 msgid "Redeem voucher"
 msgstr "兑换优惠券"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:252
+#: pretix/presale/templates/pretixpresale/event/index.html:269
 msgid "If you already ordered a ticket"
 msgstr "如果您已经订了票"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:273
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -16243,7 +16257,7 @@ msgstr ""
 "一封电子邮件中的链接。 如果您找不到该链接，请单击以下按钮以请求再次发送给您的"
 "订单链接。"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:265
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"

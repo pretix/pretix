@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 10:21+0000\n"
+"POT-Creation-Date: 2019-06-06 09:11+0000\n"
 "PO-Revision-Date: 2018-04-24 14:22+0000\n"
 "Last-Translator: Pernille Thorsen <perth@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -262,7 +262,7 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Varerne i din kurv er reserveret for dig i et minut."
 msgstr[1] "Varerne i din kurv er reserveret for dig i {num} minutter."
 
-#: pretix/static/pretixpresale/js/ui/main.js:201
+#: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 

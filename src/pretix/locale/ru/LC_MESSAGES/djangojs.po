@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 10:21+0000\n"
+"POT-Creation-Date: 2019-06-06 09:11+0000\n"
 "PO-Revision-Date: 2019-01-02 08:21+0000\n"
 "Last-Translator: Alexey Zh <write2aracon@gmail.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -246,7 +246,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:201
+#: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 10:21+0000\n"
+"POT-Creation-Date: 2019-06-06 09:11+0000\n"
 "PO-Revision-Date: 2019-03-31 08:00+0000\n"
 "Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -266,7 +266,7 @@ msgstr[0] ""
 msgstr[1] ""
 "Los elementos en su carrito de compras se han reservado por {num} minutos."
 
-#: pretix/static/pretixpresale/js/ui/main.js:201
+#: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 

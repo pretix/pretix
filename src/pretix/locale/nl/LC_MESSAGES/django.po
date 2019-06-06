@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 10:21+0000\n"
+"POT-Creation-Date: 2019-06-06 09:11+0000\n"
 "PO-Revision-Date: 2019-04-27 21:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -2815,7 +2815,7 @@ msgstr "Verlaag productprijs met (%)"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:98
 #: pretix/control/views/vouchers.py:61 pretix/control/views/waitinglist.py:199
 #: pretix/plugins/checkinlists/exporters.py:322
-#: pretix/presale/templates/pretixpresale/event/index.html:235
+#: pretix/presale/templates/pretixpresale/event/index.html:252
 msgid "Voucher code"
 msgstr "Vouchercode"
 
@@ -6818,13 +6818,13 @@ msgid "Search voucher"
 msgstr "Zoek voucher"
 
 #: pretix/control/forms/filter.py:823 pretix/control/forms/vouchers.py:92
-#: pretix/control/views/typeahead.py:311
+#: pretix/control/views/typeahead.py:317
 #, python-brace-format
 msgid "{product} – Any variation"
 msgstr "{product} – Elke variant"
 
 #: pretix/control/forms/filter.py:829 pretix/control/forms/vouchers.py:83
-#: pretix/control/views/typeahead.py:319 pretix/control/views/typeahead.py:323
+#: pretix/control/views/typeahead.py:325 pretix/control/views/typeahead.py:329
 #: pretix/control/views/vouchers.py:73
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
@@ -8332,6 +8332,7 @@ msgstr "Instellingen"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:19
 #: pretix/control/templates/pretixcontrol/subevents/index.html:5
 #: pretix/control/templates/pretixcontrol/subevents/index.html:7
+#: pretix/presale/templates/pretixpresale/event/index.html:115
 msgctxt "subevent"
 msgid "Dates"
 msgstr "Datums"
@@ -16971,7 +16972,7 @@ msgid "We're trying to reserve another one for you!"
 msgstr "We proberen er nog een voor u te reserveren!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:104
-#: pretix/presale/templates/pretixpresale/event/index.html:201
+#: pretix/presale/templates/pretixpresale/event/index.html:218
 #: pretix/presale/templates/pretixpresale/event/voucher.html:26
 #, python-format
 msgid ""
@@ -17127,78 +17128,91 @@ msgstr "Leeg winkelwagen"
 msgid "Proceed with checkout"
 msgstr "Afrekenen"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:99
+#: pretix/presale/templates/pretixpresale/event/index.html:100
+#, fuzzy
+#| msgid "This file is from a different event."
+msgid "Add tickets for a different date"
+msgstr "Dit bestand is van een ander evenement."
+
+#: pretix/presale/templates/pretixpresale/event/index.html:104
 msgid "View other date"
 msgstr "Bekijk andere datum"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:102
+#: pretix/presale/templates/pretixpresale/event/index.html:108
 msgid "Choose date to buy a ticket"
 msgstr "Kies een datum om een ticket te kopen"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:129
+#: pretix/presale/templates/pretixpresale/event/index.html:113
+#, fuzzy
+#| msgid "Other features"
+msgctxt "subevent"
+msgid "Other dates"
+msgstr "Andere functies"
+
+#: pretix/presale/templates/pretixpresale/event/index.html:146
 #: pretix/presale/views/widget.py:471
 msgid "The presale period for this event is over."
 msgstr "De voorverkoopperiode voor dit evenement is afgelopen."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:134
+#: pretix/presale/templates/pretixpresale/event/index.html:151
 #: pretix/presale/views/widget.py:473
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr ""
 "De voorverkoopperiode voor dit evenement begint op %(date)s om %(time)s."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:138
+#: pretix/presale/templates/pretixpresale/event/index.html:155
 #: pretix/presale/views/widget.py:478
 msgid "The presale for this event has not yet started."
 msgstr "De voorverkoopperiode voor dit evenement is nog niet begonnen."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:160
+#: pretix/presale/templates/pretixpresale/event/index.html:177
 #, python-format
 msgid "Begin: %(time)s"
 msgstr "Begin: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:165
+#: pretix/presale/templates/pretixpresale/event/index.html:182
 #, python-format
 msgid "End: %(time)s"
 msgstr "Einde: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:173
+#: pretix/presale/templates/pretixpresale/event/index.html:190
 #, python-format
 msgid "Admission: %(time)s"
 msgstr "Toegang: %(time)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:177
+#: pretix/presale/templates/pretixpresale/event/index.html:194
 #, python-format
 msgid "Admission: %(datetime)s"
 msgstr "Toegang: %(datetime)s"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:188
+#: pretix/presale/templates/pretixpresale/event/index.html:205
 msgid "Add to Calendar"
 msgstr "Voeg toe aan kalender"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:200
+#: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:25
 msgid "We're now trying to reserve this for you!"
 msgstr "We proberen dit nu voor u te reserveren!"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:211
+#: pretix/presale/templates/pretixpresale/event/index.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:291
 msgid "Add to cart"
 msgstr "Voeg toe aan winkelwagen"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:223
+#: pretix/presale/templates/pretixpresale/event/index.html:240
 msgid "Redeem a voucher"
 msgstr "Verzilver een voucher"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:241
+#: pretix/presale/templates/pretixpresale/event/index.html:258
 msgid "Redeem voucher"
 msgstr "Voucher inwisselen"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:252
+#: pretix/presale/templates/pretixpresale/event/index.html:269
 msgid "If you already ordered a ticket"
 msgstr "Als u al een ticket heeft besteld"
 
-#: pretix/presale/templates/pretixpresale/event/index.html:256
+#: pretix/presale/templates/pretixpresale/event/index.html:273
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
@@ -17210,7 +17224,7 @@ msgstr ""
 "wijzigen. Als u deze link niet kunt vinden kunt u op de knop hiernaast "
 "klikken om de link opnieuw te laten versturen."
 
-#: pretix/presale/templates/pretixpresale/event/index.html:265
+#: pretix/presale/templates/pretixpresale/event/index.html:282
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:7
 msgid "Resend order links"
