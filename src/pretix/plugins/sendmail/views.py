@@ -40,7 +40,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     action_type='pretix.plugins.sendmail.sent'
                 )
                 kwargs['initial'] = {
-                    'recipients': logentry.parsed_data['recipients'],
+                    'recipients': logentry.parsed_data('recipients', 'orders'),
                     'message': LazyI18nString(logentry.parsed_data['message']),
                     'subject': LazyI18nString(logentry.parsed_data['subject']),
                     'sendto': logentry.parsed_data['sendto'],
