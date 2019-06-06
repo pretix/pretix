@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-06 09:11+0000\n"
-"PO-Revision-Date: 2019-06-05 11:38+0000\n"
+"PO-Revision-Date: 2019-06-06 09:24+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -17088,10 +17088,8 @@ msgid "Proceed with checkout"
 msgstr "Zur Kasse"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:100
-#, fuzzy
-#| msgid "This file is from a different event."
 msgid "Add tickets for a different date"
-msgstr "Diese Datei gehört zu einer anderen Veranstaltung."
+msgstr "Tickets für anderen Termin hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:104
 msgid "View other date"
@@ -17102,11 +17100,9 @@ msgid "Choose date to buy a ticket"
 msgstr "Wählen Sie einen Termin aus"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:113
-#, fuzzy
-#| msgid "Other features"
 msgctxt "subevent"
 msgid "Other dates"
-msgstr "Andere Funktionen"
+msgstr "Andere Termine"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:146
 #: pretix/presale/views/widget.py:471
