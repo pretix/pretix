@@ -95,18 +95,35 @@
 
     {% if show_dates %}
         {% if subevent %}
-            <a class="subevent-toggle">
-                {% trans "View other date" %}
-            </a>
+            {% if show_cart %}
+                <a class="subevent-toggle btn btn-primary btn-block btn-lg">
+                    {% trans "Add tickets for a different date" %}
+                </a>
+            {% else %}
+                <a class="subevent-toggle btn btn-default btn-block">
+                    {% trans "View other date" %}
+                </a>
+            {% endif %}
         {% else %}
             <h3>{% trans "Choose date to buy a ticket" %}</h3>
         {% endif %}
-        <div class="subevent-list">
-            {% if list_type == "calendar" %}
-                {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
-            {% else %}
-                {% include "pretixpresale/event/fragment_subevent_list.html" %}
-            {% endif %}
+        <div class="panel panel-default subevent-list">
+            <div class="panel-heading">
+                {% if subevent %}
+                    {% trans "Other dates" context "subevent" %}
+                {% else %}
+                    {% trans "Dates" context "subevent" %}
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                <div>
+                    {% if list_type == "calendar" %}
+                        {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                    {% else %}
+                        {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>

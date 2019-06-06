@@ -189,18 +189,7 @@ section.front-page {
     }
 }
 .subevent-toggle {
-    padding: 5px;
-    text-align: center;
-    background-color: darken($gray-lighter, 30%);
     display: none;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-        color: white;
-        text-decoration: none;
-        background-color: darken($gray-lighter, 40%);
-    }
 }
 h2.subevent-head {
     margin-top: 10px;

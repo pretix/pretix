@@ -181,6 +181,7 @@ $(function () {
         $(".subevent-list").hide();
         $(".subevent-toggle").css("display", "block").click(function () {
             $(".subevent-list").slideToggle(300);
+            $(".subevent-toggle").slideToggle(300)
         });
     }
 
