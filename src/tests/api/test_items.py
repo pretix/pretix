@@ -1553,6 +1553,22 @@ def test_quota_update(token_client, organizer, event, quota, item):
     quota = Quota.objects.get(pk=resp.data['id'])
     assert quota.name == "Ticket Quota Update"
     assert quota.size == 111
+    assert quota.all_logentries().count() == 1
+
+
+@pytest.mark.django_db
+def test_quota_update_unchanged(token_client, organizer, event, quota, item):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/quotas/{}/'.format(organizer.slug, event.slug, quota.pk),
+        {
+            "size": 200,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    quota = Quota.objects.get(pk=resp.data['id'])
+    assert quota.size == 200
+    assert quota.all_logentries().count() == 0
 
 
 @pytest.mark.django_db

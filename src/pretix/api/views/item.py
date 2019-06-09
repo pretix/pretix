@@ -65,6 +65,10 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
         return ctx
 
     def perform_update(self, serializer):
+        if serializer.data == self.get_serializer(instance=serializer.instance).data:
+            # Performance optimization: If nothing was changed, we do not need to save or log anything.
+            # This costs us a few cycles on save, but avoids thousands of lines in our log.
+            return
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
             'pretix.event.item.changed',
@@ -452,6 +456,11 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         return ctx
 
     def perform_update(self, serializer):
+        if serializer.data == self.get_serializer(instance=serializer.instance).data:
+            # Performance optimization: If nothing was changed, we do not need to save or log anything.
+            # This costs us a few cycles on save, but avoids thousands of lines in our log.
+            return
+
         current_subevent = serializer.instance.subevent
         serializer.save(event=self.request.event)
         request_subevent = serializer.instance.subevent
