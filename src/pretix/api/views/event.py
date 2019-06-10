@@ -244,12 +244,13 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         )
 
     def perform_update(self, serializer):
-        if serializer.data == self.get_serializer(instance=serializer.instance).data:
+        original_data = self.get_serializer(instance=serializer.instance).data
+        super().perform_update(serializer)
+
+        if serializer.data == original_data:
             # Performance optimization: If nothing was changed, we do not need to save or log anything.
             # This costs us a few cycles on save, but avoids thousands of lines in our log.
             return
-
-        super().perform_update(serializer)
 
         serializer.instance.log_action(
             'pretix.subevent.changed',
