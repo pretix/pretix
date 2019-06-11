@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-06 09:11+0000\n"
-"PO-Revision-Date: 2019-04-27 21:00+0000\n"
+"PO-Revision-Date: 2019-06-11 16:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -219,10 +219,8 @@ msgid "Click to close"
 msgstr "Klik om te sluiten"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:24
-#, fuzzy
-#| msgid "Contacting Stripe …"
 msgid "Calculating default price…"
-msgstr "Verbinding maken met Stripe …"
+msgstr "Standaardprijs berekenen…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
@@ -264,7 +262,7 @@ msgstr[1] ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Voer een hoeveelheid voor een van de producten in."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:15
 msgctxt "widget"
