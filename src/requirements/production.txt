@@ -53,7 +53,7 @@ django-countries
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.0.1
 vat_moss==0.11.0
-django-localflavor
+django-localflavor>=2.2
 urllib3==1.24.*
 django-redis==4.10.*
 redis==3.2.*
