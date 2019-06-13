@@ -5,6 +5,7 @@ from unittest import mock
 import pytest
 from django.conf import settings
 from django_countries.fields import Country
+from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import Event, InvoiceAddress, Order, OrderPosition
@@ -161,11 +162,12 @@ def test_event_create(token_client, organizer, event, meta_prop):
         format='json'
     )
     assert resp.status_code == 201
-    assert not organizer.events.get(slug="2030").testmode
-    assert organizer.events.get(slug="2030").meta_values.filter(
-        property__name=meta_prop.name, value="Conference"
-    ).exists()
-    assert organizer.events.get(slug="2030").plugins == settings.PRETIX_PLUGINS_DEFAULT
+    with scopes_disabled():
+        assert not organizer.events.get(slug="2030").testmode
+        assert organizer.events.get(slug="2030").meta_values.filter(
+            property__name=meta_prop.name, value="Conference"
+        ).exists()
+        assert organizer.events.get(slug="2030").plugins == settings.PRETIX_PLUGINS_DEFAULT
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),
@@ -278,13 +280,14 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     )
 
     assert resp.status_code == 201
-    cloned_event = Event.objects.get(organizer=organizer.pk, slug='2030')
-    assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
-    assert cloned_event.is_public is False
-    assert cloned_event.testmode
-    assert organizer.events.get(slug="2030").meta_values.filter(
-        property__name=meta_prop.name, value="Conference"
-    ).exists()
+    with scopes_disabled():
+        cloned_event = Event.objects.get(organizer=organizer.pk, slug='2030')
+        assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
+        assert cloned_event.is_public is False
+        assert cloned_event.testmode
+        assert organizer.events.get(slug="2030").meta_values.filter(
+            property__name=meta_prop.name, value="Conference"
+        ).exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
@@ -310,12 +313,13 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     )
 
     assert resp.status_code == 201
-    cloned_event = Event.objects.get(organizer=organizer.pk, slug='2031')
-    assert cloned_event.plugins == "pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf"
-    assert cloned_event.is_public is True
-    assert organizer.events.get(slug="2031").meta_values.filter(
-        property__name=meta_prop.name, value="Conference"
-    ).exists()
+    with scopes_disabled():
+        cloned_event = Event.objects.get(organizer=organizer.pk, slug='2031')
+        assert cloned_event.plugins == "pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf"
+        assert cloned_event.is_public is True
+        assert organizer.events.get(slug="2031").meta_values.filter(
+            property__name=meta_prop.name, value="Conference"
+        ).exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
@@ -339,8 +343,9 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     )
 
     assert resp.status_code == 201
-    cloned_event = Event.objects.get(organizer=organizer.pk, slug='2032')
-    assert cloned_event.plugins == ""
+    with scopes_disabled():
+        cloned_event = Event.objects.get(organizer=organizer.pk, slug='2032')
+        assert cloned_event.plugins == ""
 
 
 @pytest.mark.django_db
@@ -388,11 +393,12 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         format='json'
     )
     assert resp.status_code == 200
-    event = Event.objects.get(organizer=organizer.pk, slug=resp.data['slug'])
-    assert event.currency == "DKK"
-    assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
-        property__name=meta_prop.name, value="Conference"
-    ).exists()
+    with scopes_disabled():
+        event = Event.objects.get(organizer=organizer.pk, slug=resp.data['slug'])
+        assert event.currency == "DKK"
+        assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
+            property__name=meta_prop.name, value="Conference"
+        ).exists()
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -447,9 +453,10 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         format='json'
     )
     assert resp.status_code == 200
-    assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
-        property__name=meta_prop.name, value="Workshop"
-    ).exists()
+    with scopes_disabled():
+        assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
+            property__name=meta_prop.name, value="Workshop"
+        ).exists()
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -460,9 +467,10 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         format='json'
     )
     assert resp.status_code == 200
-    assert not organizer.events.get(slug=resp.data['slug']).meta_values.filter(
-        property__name=meta_prop.name
-    ).exists()
+    with scopes_disabled():
+        assert not organizer.events.get(slug=resp.data['slug']).meta_values.filter(
+            property__name=meta_prop.name
+        ).exists()
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -598,7 +606,8 @@ def test_event_detail(token_client, organizer, event, team):
 def test_event_delete(token_client, organizer, event):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     assert resp.status_code == 204
-    assert not organizer.events.filter(pk=event.id).exists()
+    with scopes_disabled():
+        assert not organizer.events.filter(pk=event.id).exists()
 
 
 @pytest.mark.django_db
@@ -607,4 +616,5 @@ def test_event_with_order_position_not_delete(token_client, organizer, event, it
     assert resp.status_code == 403
     assert resp.content.decode() == '{"detail":"The event can not be deleted as it already contains orders. Please ' \
                                     'set \'live\' to false to hide the event and take the shop offline instead."}'
-    assert organizer.events.filter(pk=event.id).exists()
+    with scopes_disabled():
+        assert organizer.events.filter(pk=event.id).exists()

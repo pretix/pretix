@@ -1,12 +1,12 @@
 import json
-from django.urls import resolve
-from django_scopes import scope
 from hashlib import sha1
 
 from django.conf import settings
 from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.urls import resolve
 from django.utils.timezone import now
+from django_scopes import scope
 from rest_framework import status
 
 from pretix.api.models import ApiCall

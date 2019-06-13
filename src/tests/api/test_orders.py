@@ -8,6 +8,7 @@ import pytest
 from django.core import mail as djmail
 from django.utils.timezone import now
 from django_countries.fields import Country
+from django_scopes import scopes_disabled
 from pytz import UTC
 from stripe.error import APIConnectionError
 from tests.plugins.stripe.test_provider import MockedCharge
@@ -229,7 +230,8 @@ TEST_ORDER_RES = {
 @pytest.mark.django_db
 def test_order_list(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
-    res["positions"][0]["id"] = order.positions.first().pk
+    with scopes_disabled():
+        res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
@@ -285,7 +287,8 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
 @pytest.mark.django_db
 def test_order_detail(token_client, organizer, event, order, item, taxrule, question):
     res = dict(TEST_ORDER_RES)
-    res["positions"][0]["id"] = order.positions.first().pk
+    with scopes_disabled():
+        res["positions"][0]["id"] = order.positions.first().pk
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
@@ -338,7 +341,8 @@ def test_payment_confirm(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/confirm/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={'force': True})
-    p = order.payments.get(local_id=2)
+    with scopes_disabled():
+        p = order.payments.get(local_id=2)
     assert resp.status_code == 200
     assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
@@ -353,7 +357,8 @@ def test_payment_cancel(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/cancel/'.format(
         organizer.slug, event.slug, order.code
     ))
-    p = order.payments.get(local_id=2)
+    with scopes_disabled():
+        p = order.payments.get(local_id=2)
     assert resp.status_code == 200
     assert p.state == OrderPayment.PAYMENT_STATE_CANCELED
 
@@ -365,7 +370,8 @@ def test_payment_cancel(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch):
-    order.payments.last().confirm()
+    with scopes_disabled():
+        order.payments.last().confirm()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/refund/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={
@@ -424,15 +430,16 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         c.refunds.create = refund_create
         return c
 
-    p1 = order.payments.create(
-        provider='stripe',
-        state='confirmed',
-        amount=Decimal('23.00'),
-        payment_date=order.datetime,
-        info=json.dumps({
-            'id': 'ch_123345345'
-        })
-    )
+    with scopes_disabled():
+        p1 = order.payments.create(
+            provider='stripe',
+            state='confirmed',
+            amount=Decimal('23.00'),
+            payment_date=order.datetime,
+            info=json.dumps({
+                'id': 'ch_123345345'
+            })
+        )
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
         organizer.slug, event.slug, order.code, p1.local_id
@@ -441,10 +448,11 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         'mark_canceled': False,
     })
     assert resp.status_code == 200
-    r = order.refunds.get(local_id=resp.data['local_id'])
-    assert r.provider == "stripe"
-    assert r.state == OrderRefund.REFUND_STATE_DONE
-    assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+    with scopes_disabled():
+        r = order.refunds.get(local_id=resp.data['local_id'])
+        assert r.provider == "stripe"
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
 
 
 @pytest.mark.django_db
@@ -457,15 +465,16 @@ def test_payment_refund_unavailable(token_client, organizer, event, order, monke
         c.refunds.create = refund_create
         return c
 
-    p1 = order.payments.create(
-        provider='stripe',
-        state='confirmed',
-        amount=Decimal('23.00'),
-        payment_date=order.datetime,
-        info=json.dumps({
-            'id': 'ch_123345345'
-        })
-    )
+    with scopes_disabled():
+        p1 = order.payments.create(
+            provider='stripe',
+            state='confirmed',
+            amount=Decimal('23.00'),
+            payment_date=order.datetime,
+            info=json.dumps({
+                'id': 'ch_123345345'
+            })
+        )
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
         organizer.slug, event.slug, order.code, p1.local_id
@@ -475,7 +484,8 @@ def test_payment_refund_unavailable(token_client, organizer, event, order, monke
     })
     assert resp.status_code == 400
     assert resp.data == {'detail': 'External error: We had trouble communicating with Stripe. Please try again and contact support if the problem persists.'}
-    r = order.refunds.last()
+    with scopes_disabled():
+        r = order.refunds.last()
     assert r.provider == "stripe"
     assert r.state == OrderRefund.REFUND_STATE_FAILED
     assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
@@ -499,13 +509,15 @@ def test_refund_detail(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_refund_done(token_client, organizer, event, order):
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     r.state = 'transit'
     r.save()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/done/'.format(
         organizer.slug, event.slug, order.code
     ))
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
 
@@ -517,12 +529,14 @@ def test_refund_done(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_refund_process_mark_refunded(token_client, organizer, event, order):
-    p = order.payments.get(local_id=1)
-    p.create_external_refund()
+    with scopes_disabled():
+        p = order.payments.get(local_id=1)
+        p.create_external_refund()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={'mark_canceled': True})
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
     order.refresh_from_db()
@@ -536,12 +550,14 @@ def test_refund_process_mark_refunded(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_refund_process_mark_pending(token_client, organizer, event, order):
-    p = order.payments.get(local_id=1)
-    p.create_external_refund()
+    with scopes_disabled():
+        p = order.payments.get(local_id=1)
+        p.create_external_refund()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/2/process/'.format(
         organizer.slug, event.slug, order.code
     ), format='json', data={'mark_canceled': False})
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_DONE
     order.refresh_from_db()
@@ -550,13 +566,15 @@ def test_refund_process_mark_pending(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_refund_cancel(token_client, organizer, event, order):
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     r.state = 'transit'
     r.save()
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/refunds/1/cancel/'.format(
         organizer.slug, event.slug, order.code
     ))
-    r = order.refunds.get(local_id=1)
+    with scopes_disabled():
+        r = order.refunds.get(local_id=1)
     assert resp.status_code == 200
     assert r.state == OrderRefund.REFUND_STATE_CANCELED
 
@@ -571,10 +589,11 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     i2 = copy.copy(item)
     i2.pk = None
     i2.save()
-    var = item.variations.create(value="Children")
-    var2 = item.variations.create(value="Children")
-    res = dict(TEST_ORDERPOSITION_RES)
-    op = order.positions.first()
+    with scopes_disabled():
+        var = item.variations.create(value="Children")
+        var2 = item.variations.create(value="Children")
+        res = dict(TEST_ORDERPOSITION_RES)
+        op = order.positions.first()
     op.variation = var
     op.save()
     res["id"] = op.pk
@@ -665,8 +684,9 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    cl = event.checkin_lists.create(name="Default")
-    op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
+    with scopes_disabled():
+        cl = event.checkin_lists.create(name="Default")
+        op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
     res['checkins'] = [{'datetime': '2017-12-26T10:00:00Z', 'list': cl.pk}]
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/orderpositions/?has_checkin=true'.format(organizer.slug, event.slug))
@@ -692,7 +712,8 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 @pytest.mark.django_db
 def test_orderposition_detail(token_client, organizer, event, order, item, question):
     res = dict(TEST_ORDERPOSITION_RES)
-    op = order.positions.first()
+    with scopes_disabled():
+        op = order.positions.first()
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
@@ -711,7 +732,8 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
 
 @pytest.mark.django_db
 def test_orderposition_detail_no_canceled(token_client, organizer, event, order, item, question):
-    op = order.all_positions.filter(canceled=True).first()
+    with scopes_disabled():
+        op = order.all_positions.filter(canceled=True).first()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         op.pk))
     assert resp.status_code == 404
@@ -719,33 +741,36 @@ def test_orderposition_detail_no_canceled(token_client, organizer, event, order,
 
 @pytest.mark.django_db
 def test_orderposition_delete(token_client, organizer, event, order, item, question):
-    op = order.positions.first()
+    with scopes_disabled():
+        op = order.positions.first()
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
         organizer.slug, event.slug, op.pk
     ))
     assert resp.status_code == 400
     assert resp.data == ['This operation would leave the order empty. Please cancel the order itself instead.']
 
-    op2 = OrderPosition.objects.create(
-        order=order,
-        item=item,
-        variation=None,
-        price=Decimal("23"),
-        attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
-        secret="foobar",
-        pseudonymization_id="BAZ",
-    )
-    order.refresh_from_db()
-    order.total = Decimal('46')
-    order.save()
-    assert order.positions.count() == 2
+    with scopes_disabled():
+        op2 = OrderPosition.objects.create(
+            order=order,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
+            secret="foobar",
+            pseudonymization_id="BAZ",
+        )
+        order.refresh_from_db()
+        order.total = Decimal('46')
+        order.save()
+        assert order.positions.count() == 2
 
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
         organizer.slug, event.slug, op2.pk
     ))
     assert resp.status_code == 204
-    assert order.positions.count() == 1
-    assert order.all_positions.count() == 3
+    with scopes_disabled():
+        assert order.positions.count() == 1
+        assert order.all_positions.count() == 3
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
 
@@ -822,7 +847,8 @@ def test_invoice_list(token_client, organizer, event, order, invoice):
         organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    ic = generate_cancellation(invoice)
+    with scopes_disabled():
+        ic = generate_cancellation(invoice)
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?is_cancellation=false'.format(
         organizer.slug, event.slug))
@@ -854,7 +880,8 @@ def test_invoice_detail(token_client, organizer, event, invoice):
 
 @pytest.mark.django_db
 def test_invoice_regenerate(token_client, organizer, event, invoice):
-    InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
+    with scopes_disabled():
+        InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/regenerate/'.format(
         organizer.slug, event.slug, invoice.number
@@ -866,7 +893,8 @@ def test_invoice_regenerate(token_client, organizer, event, invoice):
 
 @pytest.mark.django_db
 def test_invoice_reissue(token_client, organizer, event, invoice):
-    InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
+    with scopes_disabled():
+        InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/reissue/'.format(
         organizer.slug, event.slug, invoice.number
@@ -874,8 +902,9 @@ def test_invoice_reissue(token_client, organizer, event, invoice):
     assert resp.status_code == 204
     invoice.refresh_from_db()
     assert "ACME Ltd" not in invoice.invoice_to
-    assert invoice.order.invoices.count() == 3
-    invoice = invoice.order.invoices.last()
+    with scopes_disabled():
+        assert invoice.order.invoices.count() == 3
+        invoice = invoice.order.invoices.last()
     assert "ACME Ltd" in invoice.invoice_to
 
 
@@ -1009,7 +1038,8 @@ def test_order_mark_canceled_expired(token_client, organizer, event, order):
 def test_order_mark_paid_canceled_keep_fee(token_client, organizer, event, order):
     order.status = Order.STATUS_PAID
     order.save()
-    order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=order.total)
+    with scopes_disabled():
+        order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=order.total)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
             organizer.slug, event.slug, order.code
@@ -1186,7 +1216,8 @@ def test_order_extend_expired_quota_waiting_list(token_client, organizer, event,
     order.save()
     quota.size = 1
     quota.save()
-    event.waitinglistentries.create(item=item, email='foo@bar.com')
+    with scopes_disabled():
+        event.waitinglistentries.create(item=item, email='foo@bar.com')
     newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
@@ -1353,7 +1384,8 @@ def test_order_create(token_client, organizer, event, item, quota, question):
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert o.email == "dummy@dummy.test"
     assert o.locale == "en"
     assert o.total == Decimal('23.25')
@@ -1361,24 +1393,28 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.sales_channel == "web"
     assert not o.testmode
 
-    p = o.payments.first()
+    with scopes_disabled():
+        p = o.payments.first()
     assert p.provider == "banktransfer"
     assert p.amount == o.total
     assert p.state == "created"
 
-    fee = o.fees.first()
+    with scopes_disabled():
+        fee = o.fees.first()
     assert fee.fee_type == "payment"
     assert fee.value == Decimal('0.25')
     ia = o.invoice_address
     assert ia.company == "Sample company"
     assert ia.name_parts == {"full_name": "Fo", "_scheme": "full"}
     assert ia.name_cached == "Fo"
-    assert o.positions.count() == 1
-    pos = o.positions.first()
+    with scopes_disabled():
+        assert o.positions.count() == 1
+        pos = o.positions.first()
     assert pos.item == item
     assert pos.price == Decimal("23.00")
     assert pos.attendee_name_parts == {"full_name": "Peter", "_scheme": "full"}
-    answ = pos.answers.first()
+    with scopes_disabled():
+        answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "S"
 
@@ -1395,9 +1431,10 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    with pytest.raises(InvoiceAddress.DoesNotExist):
-        o.invoice_address
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        with pytest.raises(InvoiceAddress.DoesNotExist):
+            o.invoice_address
 
 
 @pytest.mark.django_db
@@ -1412,7 +1449,8 @@ def test_order_create_sales_channel_optional(token_client, organizer, event, ite
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert o.sales_channel == "web"
 
 
@@ -1443,7 +1481,8 @@ def test_order_create_in_test_mode(token_client, organizer, event, item, quota, 
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert o.testmode
 
 
@@ -1460,8 +1499,9 @@ def test_order_create_attendee_name_optional(token_client, organizer, event, ite
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.positions.first().attendee_name_parts == {}
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.positions.first().attendee_name_parts == {}
 
 
 @pytest.mark.django_db
@@ -1484,8 +1524,10 @@ def test_order_create_legacy_attendee_name(token_client, organizer, event, item,
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.positions.first().attendee_name_parts == {"_legacy": "Peter"}
+
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.positions.first().attendee_name_parts == {"_legacy": "Peter"}
 
 
 @pytest.mark.django_db
@@ -1508,8 +1550,9 @@ def test_order_create_legacy_invoice_name(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.invoice_address.name_parts == {"_legacy": "Peter"}
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.invoice_address.name_parts == {"_legacy": "Peter"}
 
 
 @pytest.mark.django_db
@@ -1524,7 +1567,8 @@ def test_order_create_code_optional(token_client, organizer, event, item, quota,
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert o.code == "ABCDE"
 
     resp = token_client.post(
@@ -1557,7 +1601,8 @@ def test_order_email_optional(token_client, organizer, event, item, quota, quest
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert not o.email
 
 
@@ -1572,7 +1617,6 @@ def test_order_create_payment_info_optional(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
 
     res['payment_info'] = {
         'foo': {
@@ -1586,9 +1630,10 @@ def test_order_create_payment_info_optional(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
 
-    p = o.payments.first()
+        p = o.payments.first()
     assert p.provider == "banktransfer"
     assert p.amount == o.total
     assert json.loads(p.info) == res['payment_info']
@@ -1605,8 +1650,9 @@ def test_order_create_position_secret_optional(token_client, organizer, event, i
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.positions.first().secret
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.positions.first().secret
 
     res['positions'][0]['secret'] = "aaa"
     resp = token_client.post(
@@ -1615,8 +1661,9 @@ def test_order_create_position_secret_optional(token_client, organizer, event, i
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.positions.first().secret == "aaa"
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.positions.first().secret == "aaa"
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -1642,15 +1689,17 @@ def test_order_create_tax_rules(token_client, organizer, event, item, quota, que
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    fee = o.fees.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
     assert fee.fee_type == "payment"
     assert fee.value == Decimal('0.25')
     assert fee.tax_rate == Decimal('19.00')
     assert fee.tax_rule == taxrule
     ia = o.invoice_address
     assert ia.company == "Sample company"
-    pos = o.positions.first()
+    with scopes_disabled():
+        pos = o.positions.first()
     assert pos.item == item
     assert pos.tax_rate == Decimal('19.00')
     assert pos.tax_value == Decimal('3.67')
@@ -1765,8 +1814,9 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
     assert resp.status_code == 400
     assert resp.data == {'positions': [{'item': ['The specified item does not belong to this event.']}]}
 
-    var2 = item2.variations.create(value="A")
-    quota.variations.add(var2)
+    with scopes_disabled():
+        var2 = item2.variations.create(value="A")
+        quota.variations.add(var2)
 
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['variation'] = var2.pk
@@ -1778,7 +1828,8 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
     assert resp.status_code == 400
     assert resp.data == {'positions': [{'variation': ['You cannot specify a variation for this item.']}]}
 
-    var1 = item.variations.create(value="A")
+    with scopes_disabled():
+        var1 = item.variations.create(value="A")
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['variation'] = var1.pk
     resp = token_client.post(
@@ -1789,7 +1840,8 @@ def test_order_create_item_validation(token_client, organizer, event, item, item
     assert resp.status_code == 400
     assert resp.data == {'positions': [{'item': ['The product "Budget Ticket" is not assigned to a quota.']}]}
 
-    quota.variations.add(var1)
+    with scopes_disabled():
+        quota.variations.add(var1)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1850,9 +1902,10 @@ def test_order_create_positionids_addons(token_client, organizer, event, item, q
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos1 = o.positions.first()
-    pos2 = o.positions.last()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos1 = o.positions.first()
+        pos2 = o.positions.last()
     assert pos2.addon_to == pos1
 
 
@@ -2046,11 +2099,13 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     assert resp.data == {'positions': [
         {'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
 
-    question.options.create(answer="L")
-    res['positions'][0]['answers'][0]['options'] = [
-        question.options.first().pk,
-        question.options.last().pk,
-    ]
+    with scopes_disabled():
+        question.options.create(answer="L")
+    with scopes_disabled():
+        res['positions'][0]['answers'][0]['options'] = [
+            question.options.first().pk,
+            question.options.last().pk,
+        ]
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -2073,19 +2128,21 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
 
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
-    res['positions'][0]['answers'][0]['options'] = [
-        question.options.first().pk,
-        question.options.last().pk,
-    ]
+    with scopes_disabled():
+        res['positions'][0]['answers'][0]['options'] = [
+            question.options.first().pk,
+            question.options.last().pk,
+        ]
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "XL, L"
 
@@ -2099,9 +2156,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "3.45"
 
     question.type = Question.TYPE_NUMBER
@@ -2126,9 +2184,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "True"
 
     question.type = Question.TYPE_BOOLEAN
@@ -2140,9 +2199,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "False"
 
     question.type = Question.TYPE_BOOLEAN
@@ -2166,9 +2226,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "2018-05-14"
 
     question.type = Question.TYPE_DATE
@@ -2192,9 +2253,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "2018-05-14 13:00:00+00:00"
 
     question.type = Question.TYPE_DATETIME
@@ -2219,9 +2281,10 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    pos = o.positions.first()
-    answ = pos.answers.first()
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+        answ = pos.answers.first()
     assert answ.answer == "13:00:00"
 
     question.type = Question.TYPE_TIME
@@ -2310,11 +2373,12 @@ def test_order_create_quota_consume_cart(token_client, organizer, event, item, q
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
 
-    cr = CartPosition.objects.create(
-        event=event, cart_id="uxLJBUMEcnxOLI2EuxLYN1hWJq9GKu4yWL9FEgs2m7M0vdFi@api", item=item,
-        price=23,
-        expires=now() + datetime.timedelta(hours=3)
-    )
+    with scopes_disabled():
+        cr = CartPosition.objects.create(
+            event=event, cart_id="uxLJBUMEcnxOLI2EuxLYN1hWJq9GKu4yWL9FEgs2m7M0vdFi@api", item=item,
+            price=23,
+            expires=now() + datetime.timedelta(hours=3)
+        )
 
     quota.size = 1
     quota.save()
@@ -2337,7 +2401,8 @@ def test_order_create_quota_consume_cart(token_client, organizer, event, item, q
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    assert not CartPosition.objects.filter(pk=cr.pk).exists()
+    with scopes_disabled():
+        assert not CartPosition.objects.filter(pk=cr.pk).exists()
 
 
 @pytest.mark.django_db
@@ -2353,11 +2418,13 @@ def test_order_create_free(token_client, organizer, event, item, quota, question
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
     assert o.total == Decimal('0.00')
     assert o.status == Order.STATUS_PAID
 
-    p = o.payments.first()
+    with scopes_disabled():
+        p = o.payments.first()
     assert p.provider == "free"
     assert p.amount == o.total
     assert p.state == "confirmed"
@@ -2437,10 +2504,11 @@ def test_order_create_paid_generate_invoice(token_client, organizer, event, item
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    o = Order.objects.get(code=resp.data['code'])
-    assert o.invoices.count() == 1
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.invoices.count() == 1
 
-    p = o.payments.first()
+        p = o.payments.first()
     assert p.provider == "banktransfer"
     assert p.amount == o.total
     assert p.state == "confirmed"
@@ -2472,7 +2540,8 @@ def test_refund_create(token_client, organizer, event, order):
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    r = order.refunds.get(local_id=resp.data['local_id'])
+    with scopes_disabled():
+        r = order.refunds.get(local_id=resp.data['local_id'])
     assert r.provider == "manual"
     assert r.amount == Decimal("23.00")
     assert r.state == "created"
@@ -2493,7 +2562,8 @@ def test_refund_create_mark_refunded(token_client, organizer, event, order):
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    r = order.refunds.get(local_id=resp.data['local_id'])
+    with scopes_disabled():
+        r = order.refunds.get(local_id=resp.data['local_id'])
     assert r.provider == "manual"
     assert r.amount == Decimal("23.00")
     assert r.state == "created"
@@ -2515,7 +2585,8 @@ def test_refund_optional_fields(token_client, organizer, event, order):
         ), format='json', data=res
     )
     assert resp.status_code == 201
-    r = order.refunds.get(local_id=resp.data['local_id'])
+    with scopes_disabled():
+        r = order.refunds.get(local_id=resp.data['local_id'])
     assert r.provider == "manual"
     assert r.amount == Decimal("23.00")
     assert r.state == "created"
@@ -2562,7 +2633,8 @@ def test_order_delete_test_mode(token_client, organizer, event, order):
         )
     )
     assert resp.status_code == 204
-    assert not Order.objects.filter(code=order.code).exists()
+    with scopes_disabled():
+        assert not Order.objects.filter(code=order.code).exists()
 
 
 @pytest.mark.django_db
@@ -2697,11 +2769,12 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert str(order.invoice_address.country) == "FR"
     assert not order.invoice_address.vat_id_validated
     assert order.invoice_address.city == "Paris"
-    assert order.all_logentries().get(action_type='pretix.event.order.comment')
-    assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
-    assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
-    assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
-    assert order.all_logentries().get(action_type='pretix.event.order.modified')
+    with scopes_disabled():
+        assert order.all_logentries().get(action_type='pretix.event.order.comment')
+        assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
+        assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
+        assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')
+        assert order.all_logentries().get(action_type='pretix.event.order.modified')
 
 
 @pytest.mark.django_db
@@ -2847,7 +2920,8 @@ def test_order_create_invoice(token_client, organizer, event, order):
 @pytest.mark.django_db
 def test_order_regenerate_secrets(token_client, organizer, event, order):
     s = order.secret
-    ps = order.positions.first().secret
+    with scopes_disabled():
+        ps = order.positions.first().secret
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/regenerate_secrets/'.format(
             organizer.slug, event.slug, order.code
@@ -2856,7 +2930,8 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
     assert resp.status_code == 200
     order.refresh_from_db()
     assert s != order.secret
-    assert ps != order.positions.first().secret
+    with scopes_disabled():
+        assert ps != order.positions.first().secret
 
 
 @pytest.mark.django_db
@@ -2882,7 +2957,8 @@ def test_order_resend_link(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation(token_client, organizer, event, order, item):
-    op = order.positions.first()
+    with scopes_disabled():
+        op = order.positions.first()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
         data={
@@ -2901,8 +2977,9 @@ def test_orderposition_price_calculation(token_client, organizer, event, order, 
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_item_with_tax(token_client, organizer, event, order, item, taxrule):
-    item2 = event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
+        op = order.positions.first()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
         data={
@@ -2922,9 +2999,10 @@ def test_orderposition_price_calculation_item_with_tax(token_client, organizer, 
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_item_with_variation(token_client, organizer, event, order):
-    item2 = event.items.create(name="Budget Ticket", default_price=23)
-    var = item2.variations.create(default_price=12, value="XS")
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        var = item2.variations.create(default_price=12, value="XS")
+        op = order.positions.first()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
         data={
@@ -2945,8 +3023,9 @@ def test_orderposition_price_calculation_item_with_variation(token_client, organ
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_subevent(token_client, organizer, event, order, subevent):
-    item2 = event.items.create(name="Budget Ticket", default_price=23)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        op = order.positions.first()
     op.subevent = subevent
     op.save()
     resp = token_client.post(
@@ -2969,10 +3048,11 @@ def test_orderposition_price_calculation_subevent(token_client, organizer, event
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_subevent_with_override(token_client, organizer, event, order, subevent):
-    item2 = event.items.create(name="Budget Ticket", default_price=23)
-    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-    se2.subeventitem_set.create(item=item2, price=12)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2.subeventitem_set.create(item=item2, price=12)
+        op = order.positions.first()
     op.subevent = subevent
     op.save()
     resp = token_client.post(
@@ -2995,12 +3075,13 @@ def test_orderposition_price_calculation_subevent_with_override(token_client, or
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_voucher_matching(token_client, organizer, event, order, subevent, item):
-    item2 = event.items.create(name="Budget Ticket", default_price=23)
-    q = event.quotas.create(name="Quota")
-    q.items.add(item)
-    q.items.add(item2)
-    voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        q = event.quotas.create(name="Quota")
+        q.items.add(item)
+        q.items.add(item2)
+        voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
+        op = order.positions.first()
     op.voucher = voucher
     op.save()
     resp = token_client.post(
@@ -3022,11 +3103,12 @@ def test_orderposition_price_calculation_voucher_matching(token_client, organize
 
 @pytest.mark.django_db
 def test_orderposition_price_calculation_voucher_not_matching(token_client, organizer, event, order, subevent, item):
-    item2 = event.items.create(name="Budget Ticket", default_price=23)
-    q = event.quotas.create(name="Quota")
-    q.items.add(item)
-    voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        q = event.quotas.create(name="Quota")
+        q.items.add(item)
+        voucher = event.vouchers.create(price_mode="set", value=15, quota=q)
+        op = order.positions.first()
     op.voucher = voucher
     op.save()
     resp = token_client.post(
@@ -3050,8 +3132,9 @@ def test_orderposition_price_calculation_voucher_not_matching(token_client, orga
 def test_orderposition_price_calculation_net_price(token_client, organizer, event, order, subevent, item, taxrule):
     taxrule.price_includes_tax = False
     taxrule.save()
-    item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
+        op = order.positions.first()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
         data={
@@ -3080,8 +3163,9 @@ def test_orderposition_price_calculation_reverse_charge(token_client, organizer,
     order.invoice_address.vat_id_validated = True
     order.invoice_address.country = Country('AT')
     order.invoice_address.save()
-    item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
-    op = order.positions.first()
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=10, tax_rule=taxrule)
+        op = order.positions.first()
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/price_calc/'.format(organizer.slug, event.slug, op.pk),
         data={

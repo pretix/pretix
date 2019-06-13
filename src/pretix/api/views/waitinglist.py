@@ -11,7 +11,6 @@ from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.models import WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 
-
 with scopes_disabled():
     class WaitingListFilter(FilterSet):
         has_voucher = django_filters.rest_framework.BooleanFilter(method='has_voucher_qs')

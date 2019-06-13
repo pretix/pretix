@@ -1,5 +1,4 @@
 import warnings
-from django_scopes import scope
 from importlib import import_module
 from urllib.parse import urljoin
 
@@ -9,6 +8,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, Organizer

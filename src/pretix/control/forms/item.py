@@ -6,7 +6,9 @@ from django.urls import reverse
 from django.utils.translation import (
     pgettext_lazy, ugettext as __, ugettext_lazy as _,
 )
-from django_scopes.forms import SafeModelMultipleChoiceField, SafeModelChoiceField
+from django_scopes.forms import (
+    SafeModelChoiceField, SafeModelMultipleChoiceField,
+)
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.channels import get_all_sales_channels

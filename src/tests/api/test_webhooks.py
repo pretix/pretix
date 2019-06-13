@@ -1,6 +1,7 @@
 import copy
 
 import pytest
+from django_scopes import scopes_disabled
 
 from pretix.api.models import WebHook
 
@@ -64,12 +65,13 @@ def test_hook_create(token_client, organizer, event):
         format='json'
     )
     assert resp.status_code == 201
-    cl = WebHook.objects.get(pk=resp.data['id'])
-    assert cl.target_url == "https://google.com"
-    assert cl.limit_events.count() == 1
-    assert set(cl.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
-                                                                       'pretix.event.order.paid'}
-    assert not cl.all_events
+    with scopes_disabled():
+        cl = WebHook.objects.get(pk=resp.data['id'])
+        assert cl.target_url == "https://google.com"
+        assert cl.limit_events.count() == 1
+        assert set(cl.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
+                                                                           'pretix.event.order.paid'}
+        assert not cl.all_events
 
 
 @pytest.mark.django_db
@@ -136,9 +138,10 @@ def test_hook_patch_url(token_client, organizer, event, webhook):
     assert resp.status_code == 200
     webhook.refresh_from_db()
     assert webhook.target_url == "https://pretix.eu"
-    assert webhook.limit_events.count() == 1
-    assert set(webhook.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
-                                                                            'pretix.event.order.paid'}
+    with scopes_disabled():
+        assert webhook.limit_events.count() == 1
+        assert set(webhook.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
+                                                                                'pretix.event.order.paid'}
     assert webhook.enabled
 
 
@@ -153,9 +156,10 @@ def test_hook_patch_types(token_client, organizer, event, webhook):
     )
     assert resp.status_code == 200
     webhook.refresh_from_db()
-    assert webhook.limit_events.count() == 1
-    assert set(webhook.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
-                                                                            'pretix.event.order.canceled'}
+    with scopes_disabled():
+        assert webhook.limit_events.count() == 1
+        assert set(webhook.listeners.values_list('action_type', flat=True)) == {'pretix.event.order.placed',
+                                                                                'pretix.event.order.canceled'}
     assert webhook.enabled
 
 

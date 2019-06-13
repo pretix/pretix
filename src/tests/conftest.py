@@ -1,4 +1,5 @@
 import pytest
+from django_scopes import scopes_disabled
 from xdist.dsession import DSession
 
 CRASHED_ITEMS = set()
@@ -31,3 +32,9 @@ def pytest_configure(config):
                 self.sched.check_schedule(node)
 
     DSession.handle_crashitem = _handle_crashitem
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_fixture_setup(fixturedef, request):
+    with scopes_disabled():
+        yield

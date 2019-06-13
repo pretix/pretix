@@ -19,7 +19,6 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.helpers.dicts import merge_dicts
 
-
 with scopes_disabled():
     class EventFilter(FilterSet):
         is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')

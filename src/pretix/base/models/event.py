@@ -2,7 +2,6 @@ import string
 import uuid
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
-from django_scopes import ScopedManager
 from operator import attrgetter
 
 import pytz
@@ -18,6 +17,7 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel

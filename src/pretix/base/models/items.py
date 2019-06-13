@@ -3,7 +3,6 @@ import uuid
 from collections import Counter
 from datetime import date, datetime, time
 from decimal import Decimal, DecimalException
-from django_scopes import ScopedManager
 from typing import Tuple
 
 import dateutil.parser
@@ -18,6 +17,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import Country
+from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models import fields
@@ -160,10 +160,10 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(sales_channels__contains=channel) & Q(require_bundling=False)
+        Q(active=True)
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+        & Q(sales_channels__contains=channel) & Q(require_bundling=False)
     )
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
@@ -390,7 +390,6 @@ class Item(LoggedModel):
     )
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
-
 
     class Meta:
         verbose_name = _("Product")

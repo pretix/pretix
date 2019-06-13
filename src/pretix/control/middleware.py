@@ -1,4 +1,3 @@
-from django_scopes import scope
 from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
@@ -6,9 +5,9 @@ from django.contrib.auth import REDIRECT_FIELD_NAME, logout
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, resolve_url
 from django.urls import get_script_prefix, resolve, reverse
-from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
+from django_scopes import scope
 from hijack.templatetags.hijack_tags import is_hijacked
 
 from pretix.base.models import Event, Organizer

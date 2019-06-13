@@ -22,7 +22,6 @@ from pretix.base.models import (
 )
 from pretix.helpers.dicts import merge_dicts
 
-
 with scopes_disabled():
     class ItemFilter(FilterSet):
         tax_rate = django_filters.CharFilter(method='tax_rate_qs')

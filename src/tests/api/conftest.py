@@ -17,16 +17,19 @@ def client():
 
 
 @pytest.fixture
+@scopes_disabled()
 def organizer():
     return Organizer.objects.create(name='Dummy', slug='dummy')
 
 
 @pytest.fixture
+@scopes_disabled()
 def meta_prop(organizer):
     return organizer.meta_properties.create(name="type", default="Concert")
 
 
 @pytest.fixture
+@scopes_disabled()
 def event(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
@@ -39,6 +42,7 @@ def event(organizer, meta_prop):
 
 
 @pytest.fixture
+@scopes_disabled()
 def event2(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy2', slug='dummy2',
@@ -50,6 +54,7 @@ def event2(organizer, meta_prop):
 
 
 @pytest.fixture
+@scopes_disabled()
 def event3(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy3', slug='dummy3',
@@ -61,6 +66,7 @@ def event3(organizer, meta_prop):
 
 
 @pytest.fixture
+@scopes_disabled()
 def team(organizer):
     return Team.objects.create(
         organizer=organizer,
@@ -75,6 +81,7 @@ def team(organizer):
 
 
 @pytest.fixture
+@scopes_disabled()
 def device(organizer):
     return Device.objects.create(
         organizer=organizer,
@@ -91,6 +98,7 @@ def user():
 
 
 @pytest.fixture
+@scopes_disabled()
 def user_client(client, team, user):
     team.can_view_orders = True
     team.can_view_vouchers = True
@@ -102,6 +110,7 @@ def user_client(client, team, user):
 
 
 @pytest.fixture
+@scopes_disabled()
 def token_client(client, team):
     team.can_view_orders = True
     team.can_view_vouchers = True
@@ -119,6 +128,7 @@ def device_client(client, device):
 
 
 @pytest.fixture
+@scopes_disabled()
 def subevent(event, meta_prop):
     event.has_subevents = True
     event.save()
@@ -129,6 +139,7 @@ def subevent(event, meta_prop):
 
 
 @pytest.fixture
+@scopes_disabled()
 def subevent2(event2, meta_prop):
     event2.has_subevents = True
     event2.save()
@@ -139,11 +150,13 @@ def subevent2(event2, meta_prop):
 
 
 @pytest.fixture
+@scopes_disabled()
 def taxrule(event):
     return event.tax_rules.create(name="VAT", rate=19)
 
 
 @pytest.fixture
+@scopes_disabled()
 def taxrule2(event2):
     return event2.tax_rules.create(name="VAT", rate=25)
 

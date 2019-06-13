@@ -1,7 +1,9 @@
 from django import forms
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy
-from django_scopes.forms import SafeModelMultipleChoiceField, SafeModelChoiceField
+from django_scopes.forms import (
+    SafeModelChoiceField, SafeModelMultipleChoiceField,
+)
 
 from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.widgets import Select2

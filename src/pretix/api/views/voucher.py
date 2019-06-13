@@ -16,7 +16,6 @@ from rest_framework.response import Response
 from pretix.api.serializers.voucher import VoucherSerializer
 from pretix.base.models import Voucher
 
-
 with scopes_disabled():
     class VoucherFilter(FilterSet):
         active = BooleanFilter(method='filter_active')

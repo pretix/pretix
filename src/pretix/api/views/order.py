@@ -51,7 +51,6 @@ from pretix.base.signals import (
 )
 from pretix.base.templatetags.money import money_filter
 
-
 with scopes_disabled():
     class OrderFilter(FilterSet):
         email = django_filters.CharFilter(field_name='email', lookup_expr='iexact')
@@ -552,25 +551,25 @@ with scopes_disabled():
                 | Q(order__email__icontains=value)
             )
 
-    def has_checkin_qs(self, queryset, name, value):
-        return queryset.filter(checkins__isnull=not value)
+        def has_checkin_qs(self, queryset, name, value):
+            return queryset.filter(checkins__isnull=not value)
 
-    def attendee_name_qs(self, queryset, name, value):
-        return queryset.filter(Q(attendee_name_cached__iexact=value) | Q(addon_to__attendee_name_cached__iexact=value))
+        def attendee_name_qs(self, queryset, name, value):
+            return queryset.filter(Q(attendee_name_cached__iexact=value) | Q(addon_to__attendee_name_cached__iexact=value))
 
-    class Meta:
-        model = OrderPosition
-        fields = {
-            'item': ['exact', 'in'],
-            'variation': ['exact', 'in'],
-            'secret': ['exact'],
-            'order__status': ['exact', 'in'],
-            'addon_to': ['exact', 'in'],
-            'subevent': ['exact', 'in'],
-            'pseudonymization_id': ['exact'],
-            'voucher__code': ['exact'],
-            'voucher': ['exact'],
-        }
+        class Meta:
+            model = OrderPosition
+            fields = {
+                'item': ['exact', 'in'],
+                'variation': ['exact', 'in'],
+                'secret': ['exact'],
+                'order__status': ['exact', 'in'],
+                'addon_to': ['exact', 'in'],
+                'subevent': ['exact', 'in'],
+                'pseudonymization_id': ['exact'],
+                'voucher__code': ['exact'],
+                'voucher': ['exact'],
+            }
 
 
 class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewSet):

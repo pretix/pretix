@@ -6,7 +6,6 @@ import os
 import string
 from datetime import datetime, time, timedelta
 from decimal import Decimal
-from django_scopes import ScopedManager
 from typing import Any, Dict, List, Union
 
 import dateutil
@@ -27,6 +26,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import Country, CountryField
+from django_scopes import ScopedManager
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 

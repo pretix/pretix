@@ -3,6 +3,7 @@ import datetime
 from unittest import mock
 
 import pytest
+from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import WaitingListEntry
@@ -44,8 +45,9 @@ TEST_WLE_RES = {
 
 @pytest.mark.django_db
 def test_wle_list(token_client, organizer, event, wle, item, subevent):
-    var = item.variations.create(value="Children")
-    var2 = item.variations.create(value="Children")
+    with scopes_disabled():
+        var = item.variations.create(value="Children")
+        var2 = item.variations.create(value="Children")
     res = dict(TEST_WLE_RES)
     wle.variation = var
     wle.save()
@@ -97,7 +99,8 @@ def test_wle_list(token_client, organizer, event, wle, item, subevent):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?has_voucher=true'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
-    v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
+    with scopes_disabled():
+        v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
     wle.voucher = v
     wle.save()
     res['voucher'] = v.pk
@@ -112,7 +115,8 @@ def test_wle_list(token_client, organizer, event, wle, item, subevent):
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
-    se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+    with scopes_disabled():
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug,
                                                                                  se2.pk))
@@ -136,19 +140,22 @@ def test_delete_wle(token_client, organizer, event, wle, item):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/{}/'.format(organizer.slug, event.slug, wle.pk),
     )
     assert resp.status_code == 204
-    assert not event.waitinglistentries.filter(pk=wle.id).exists()
+    with scopes_disabled():
+        assert not event.waitinglistentries.filter(pk=wle.id).exists()
 
 
 @pytest.mark.django_db
 def test_delete_wle_assigned(token_client, organizer, event, wle, item):
-    v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
+    with scopes_disabled():
+        v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
     wle.voucher = v
     wle.save()
     resp = token_client.delete(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/{}/'.format(organizer.slug, event.slug, wle.pk),
     )
     assert resp.status_code == 403
-    assert event.waitinglistentries.filter(pk=wle.id).exists()
+    with scopes_disabled():
+        assert event.waitinglistentries.filter(pk=wle.id).exists()
 
 
 def create_wle(token_client, organizer, event, data, expected_failure=False):
@@ -159,9 +166,9 @@ def create_wle(token_client, organizer, event, data, expected_failure=False):
     if expected_failure:
         assert resp.status_code == 400
     else:
-        print(resp.data)
         assert resp.status_code == 201
-        return WaitingListEntry.objects.get(pk=resp.data['id'])
+        with scopes_disabled():
+            return WaitingListEntry.objects.get(pk=resp.data['id'])
 
 
 @pytest.mark.django_db
@@ -205,7 +212,8 @@ def test_wle_require_fields(token_client, organizer, event, item, quota):
         },
         expected_failure=True
     )
-    v = item.variations.create(value="S")
+    with scopes_disabled():
+        v = item.variations.create(value="S")
     create_wle(
         token_client, organizer, event,
         data={
@@ -300,7 +308,8 @@ def test_wle_change_email(token_client, organizer, event, item, wle, quota):
 
 @pytest.mark.django_db
 def test_wle_change_assigned(token_client, organizer, event, item, wle, quota):
-    v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
+    with scopes_disabled():
+        v = event.vouchers.create(item=item, price_mode='set', value=12, tag='Foo')
     wle.voucher = v
     wle.save()
     change_wle(
@@ -315,8 +324,9 @@ def test_wle_change_assigned(token_client, organizer, event, item, wle, quota):
 
 @pytest.mark.django_db
 def test_wle_change_to_available_item(token_client, organizer, event, item, wle, quota):
-    i = event.items.create(name="Budget Ticket", default_price=23)
-    q = event.quotas.create(name="Budget Ticket", size=1)
+    with scopes_disabled():
+        i = event.items.create(name="Budget Ticket", default_price=23)
+        q = event.quotas.create(name="Budget Ticket", size=1)
     q.items.add(i)
     change_wle(
         token_client, organizer, event, wle,
@@ -330,9 +340,10 @@ def test_wle_change_to_available_item(token_client, organizer, event, item, wle,
 
 @pytest.mark.django_db
 def test_wle_change_to_unavailable_item(token_client, organizer, event, item, wle, quota):
-    i = event.items.create(name="Budget Ticket", default_price=23)
-    v = i.variations.create(value="S")
-    q = event.quotas.create(name="Budget Ticket", size=0)
+    with scopes_disabled():
+        i = event.items.create(name="Budget Ticket", default_price=23)
+        v = i.variations.create(value="S")
+        q = event.quotas.create(name="Budget Ticket", size=0)
     q.items.add(i)
     q.variations.add(v)
     change_wle(
@@ -349,9 +360,10 @@ def test_wle_change_to_unavailable_item(token_client, organizer, event, item, wl
 
 @pytest.mark.django_db
 def test_wle_change_to_unavailable_item_missing_var(token_client, organizer, event, item, wle, quota):
-    i = event.items.create(name="Budget Ticket", default_price=23)
-    v = i.variations.create(value="S")
-    q = event.quotas.create(name="Budget Ticket", size=0)
+    with scopes_disabled():
+        i = event.items.create(name="Budget Ticket", default_price=23)
+        v = i.variations.create(value="S")
+        q = event.quotas.create(name="Budget Ticket", size=0)
     q.items.add(i)
     q.variations.add(v)
     change_wle(

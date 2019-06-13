@@ -25,7 +25,6 @@ from pretix.base.services.checkin import (
 )
 from pretix.helpers.database import FixedOrderBy
 
-
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
         class Meta:
@@ -148,10 +147,11 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         return Response(response)
 
 
-class CheckinOrderPositionFilter(OrderPositionFilter):
+with scopes_disabled():
+    class CheckinOrderPositionFilter(OrderPositionFilter):
 
-    def has_checkin_qs(self, queryset, name, value):
-        return queryset.filter(last_checked_in__isnull=not value)
+        def has_checkin_qs(self, queryset, name, value):
+            return queryset.filter(last_checked_in__isnull=not value)
 
 
 class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
