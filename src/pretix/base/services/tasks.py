@@ -71,6 +71,11 @@ class EventTask(app.Task):
                 event = Event.objects.select_related('organizer').get(pk=event_id)
             del kwargs['event_id']
             kwargs['event'] = event
+        elif 'event' in kwargs:
+            event_id = kwargs.get('event')
+            with scopes_disabled():
+                event = Event.objects.select_related('organizer').get(pk=event_id)
+            kwargs['event'] = event
         else:
             args = list(args)
             event_id = args[0]

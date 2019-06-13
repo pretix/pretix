@@ -1,3 +1,5 @@
+import inspect
+
 import pytest
 from django_scopes import scopes_disabled
 from xdist.dsession import DSession
@@ -36,5 +38,12 @@ def pytest_configure(config):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_fixture_setup(fixturedef, request):
-    with scopes_disabled():
+    """
+    This hack automatically disables django-scopes for all fixtures which are not yield fixtures.
+    This saves us a *lot* of decorcators…
+    """
+    if inspect.isgeneratorfunction(fixturedef.func):
         yield
+    else:
+        with scopes_disabled():
+            yield

@@ -26,7 +26,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import Country, CountryField
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from jsonfallback.fields import FallbackJSONField
 
@@ -234,6 +234,7 @@ class Order(LockModel, LoggedModel):
         return self.all_fees(manager='objects')
 
     @cached_property
+    @scopes_disabled()
     def count_positions(self):
         if hasattr(self, 'pcnt'):
             return self.pcnt or 0
@@ -257,6 +258,7 @@ class Order(LockModel, LoggedModel):
             return None
 
     @property
+    @scopes_disabled()
     def payment_refund_sum(self):
         payment_sum = self.payments.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
@@ -268,6 +270,7 @@ class Order(LockModel, LoggedModel):
         return payment_sum - refund_sum
 
     @property
+    @scopes_disabled()
     def pending_sum(self):
         total = self.total
         if self.status == Order.STATUS_CANCELED:
@@ -442,6 +445,7 @@ class Order(LockModel, LoggedModel):
         return round_decimal(fee, self.event.currency)
 
     @property
+    @scopes_disabled()
     def user_cancel_allowed(self) -> bool:
         """
         Returns whether or not this order can be canceled by the user.

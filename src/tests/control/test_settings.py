@@ -2,12 +2,14 @@ import datetime
 import json
 import re
 
+from django_scopes import scopes_disabled
 from tests.base import SoupTest
 
 from pretix.base.models import Event, Organizer, Team, User
 
 
 class MailSettingPreviewTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
@@ -32,10 +34,11 @@ class MailSettingPreviewTest(SoupTest):
         self.target = '/control/event/{}/{}/settings/email/preview'
 
     def test_permission(self):
-        self.event2 = Event.objects.create(
-            organizer=self.orga2, name='30M3', slug='30m3',
-            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
-        )
+        with scopes_disabled():
+            self.event2 = Event.objects.create(
+                organizer=self.orga2, name='30M3', slug='30m3',
+                date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            )
         response = self.client.post(self.target.format(
             self.orga2.slug, self.event2.slug), {
             'test': 'test1'

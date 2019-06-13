@@ -6,6 +6,7 @@ from decimal import Decimal
 import pytest
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
+from django_scopes import scope
 
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
@@ -27,7 +28,8 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
     )
-    return event
+    with scope(organizer=o):
+        yield event
 
 
 @pytest.fixture

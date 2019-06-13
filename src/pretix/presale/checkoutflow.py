@@ -12,6 +12,7 @@ from django.utils.translation import (
     get_language, pgettext_lazy, ugettext_lazy as _,
 )
 from django.views.generic.base import TemplateResponseMixin
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
@@ -114,7 +115,10 @@ class BaseCheckoutFlowStep:
                 self.request._checkout_flow_invoice_address = InvoiceAddress()
             else:
                 try:
-                    self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    with scopes_disabled():
+                        self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
+                            pk=iapk, order__isnull=True
+                        )
                 except InvoiceAddress.DoesNotExist:
                     self.request._checkout_flow_invoice_address = InvoiceAddress()
         return self.request._checkout_flow_invoice_address

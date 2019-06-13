@@ -2,6 +2,7 @@ import pytest
 from django.conf import settings
 from django.test import override_settings
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from tests import assert_num_queries
 
 from pretix.base.models import Event, Organizer
@@ -97,6 +98,7 @@ def test_event_custom_domain_cache(env):
         'LOCATION': 'unique-snowflake',
     }
 })
+@scopes_disabled()
 def test_event_custom_domain_cache_clear(env):
     kd = KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     env[0].cache.clear()

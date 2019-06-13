@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.test import TestCase, override_settings
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from freezegun import freeze_time
 
 from pretix.base.models import Order, OrderPosition
@@ -15,6 +16,7 @@ from .test_cart import CartTestMixin
 
 
 class WidgetCartTest(CartTestMixin, TestCase):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.order = Order.objects.create(
@@ -202,7 +204,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         }
 
     def test_product_list_view_with_voucher(self):
-        self.event.vouchers.create(item=self.ticket, code="ABCDE")
+        with scopes_disabled():
+            self.event.vouchers.create(item=self.ticket, code="ABCDE")
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -247,8 +250,9 @@ class WidgetCartTest(CartTestMixin, TestCase):
         }
 
     def test_product_list_view_with_voucher_variation_through_quota(self):
-        self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE")
-        self.quota_shirts.variations.remove(self.shirt_blue)
+        with scopes_disabled():
+            self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE")
+            self.quota_shirts.variations.remove(self.shirt_blue)
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -310,7 +314,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         }
 
     def test_product_list_view_with_voucher_expired(self):
-        self.event.vouchers.create(item=self.ticket, code="ABCDE", valid_until=now() - datetime.timedelta(days=1))
+        with scopes_disabled():
+            self.event.vouchers.create(item=self.ticket, code="ABCDE", valid_until=now() - datetime.timedelta(days=1))
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -374,12 +379,13 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert data["items_by_category"][0]["items"][0]["avail"] == [0, None]
 
     def test_product_list_view_with_bundle_mixed_tax_rate(self):
-        self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-        self.shirt.tax_rule = self.tr7
-        self.shirt.require_bundling = True
-        self.shirt.save()
-        self.ticket.bundles.create(bundled_item=self.shirt, bundled_variation=self.shirt_blue,
-                                   designated_price=2, count=1)
+        with scopes_disabled():
+            self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+            self.shirt.tax_rule = self.tr7
+            self.shirt.require_bundling = True
+            self.shirt.save()
+            self.ticket.bundles.create(bundled_item=self.shirt, bundled_variation=self.shirt_blue,
+                                       designated_price=2, count=1)
         response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -398,11 +404,12 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
-            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
-            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
-            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
+            with scopes_disabled():
+                self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+                se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+                se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
             data = json.loads(response.content.decode())
@@ -422,11 +429,12 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
-            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
-            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
-            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
+            with scopes_disabled():
+                self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+                se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+                se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list?style=calendar' % (self.orga.slug, self.event.slug))
             settings.SITE_URL = 'http://example.com'
@@ -492,16 +500,17 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
-            self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
-            self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
-            self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
-            self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
-            self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
-            self.event.subevents.create(name="Present", active=True, date_from=now())
-            self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
+            with scopes_disabled():
+                self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
+                self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
+                self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+                self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
+                self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+                self.event.subevents.create(name="Present", active=True, date_from=now())
+                self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             settings.SITE_URL = 'http://example.com'
             response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
@@ -529,16 +538,17 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.event.settings.timezone = 'Europe/Berlin'
         self.event.save()
         with freeze_time("2019-01-01 10:00:00"):
-            self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
-            self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
-            self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
-            self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
-            self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
-            se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
-            se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
-            self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
+            with scopes_disabled():
+                self.orga.events.create(name="Past", live=True, is_public=True, slug='past', date_from=now() - datetime.timedelta(days=3))
+                self.orga.events.create(name="Present", live=True, is_public=True, slug='present', date_from=now())
+                self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+                self.orga.events.create(name="Disabled", live=False, is_public=True, slug='disabled', date_from=now() + datetime.timedelta(days=3))
+                self.orga.events.create(name="Secret", live=True, is_public=False, slug='secret', date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Past", active=True, date_from=now() - datetime.timedelta(days=3))
+                se1 = self.event.subevents.create(name="Present", active=True, date_from=now())
+                se2 = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
+                self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/widget/product_list?style=calendar' % (self.orga.slug,))
             settings.SITE_URL = 'http://example.com'

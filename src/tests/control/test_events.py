@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytz
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
@@ -15,6 +16,7 @@ from pretix.testutils.mock import mocker_context
 
 
 class EventsTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -49,7 +51,8 @@ class EventsTest(SoupTest):
         self.assertNotIn("MRMCD14", tabletext)
 
     def test_quick_setup_later(self):
-        self.event1.quotas.create(name='foo', size=2)
+        with scopes_disabled():
+            self.event1.quotas.create(name='foo', size=2)
         resp = self.client.get('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
         self.assertRedirects(resp, '/control/event/%s/%s/' % (self.orga1.slug, self.event1.slug))
 
@@ -86,18 +89,19 @@ class EventsTest(SoupTest):
         assert self.event1.settings.payment_banktransfer__enabled
         assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
         assert 'pretix.plugins.banktransfer' in self.event1.plugins
-        assert self.event1.items.count() == 2
-        i = self.event1.items.first()
-        assert str(i.name) == "Normal ticket"
-        assert i.default_price == Decimal('13.90')
-        i = self.event1.items.last()
-        assert str(i.name) == "Reduced ticket"
-        assert i.default_price == Decimal('13.20')
-        assert self.event1.quotas.count() == 1
-        q = self.event1.quotas.first()
-        assert q.name == 'Tickets'
-        assert q.size == 300
-        assert q.items.count() == 2
+        with scopes_disabled():
+            assert self.event1.items.count() == 2
+            i = self.event1.items.first()
+            assert str(i.name) == "Normal ticket"
+            assert i.default_price == Decimal('13.90')
+            i = self.event1.items.last()
+            assert str(i.name) == "Reduced ticket"
+            assert i.default_price == Decimal('13.20')
+            assert self.event1.quotas.count() == 1
+            q = self.event1.quotas.first()
+            assert q.name == 'Tickets'
+            assert q.size == 300
+            assert q.items.count() == 2
 
     def test_quick_setup_single_quota(self):
         doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
@@ -132,22 +136,23 @@ class EventsTest(SoupTest):
         assert self.event1.settings.payment_banktransfer__enabled
         assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
         assert 'pretix.plugins.banktransfer' in self.event1.plugins
-        assert self.event1.items.count() == 2
-        i = self.event1.items.first()
-        assert str(i.name) == "Normal ticket"
-        assert i.default_price == Decimal('13.90')
-        i = self.event1.items.last()
-        assert str(i.name) == "Reduced ticket"
-        assert i.default_price == Decimal('13.20')
-        assert self.event1.quotas.count() == 2
-        q = self.event1.quotas.first()
-        assert q.name == 'Normal ticket'
-        assert q.size == 100
-        assert q.items.count() == 1
-        q = self.event1.quotas.last()
-        assert q.name == 'Reduced ticket'
-        assert q.size == 50
-        assert q.items.count() == 1
+        with scopes_disabled():
+            assert self.event1.items.count() == 2
+            i = self.event1.items.first()
+            assert str(i.name) == "Normal ticket"
+            assert i.default_price == Decimal('13.90')
+            i = self.event1.items.last()
+            assert str(i.name) == "Reduced ticket"
+            assert i.default_price == Decimal('13.20')
+            assert self.event1.quotas.count() == 2
+            q = self.event1.quotas.first()
+            assert q.name == 'Normal ticket'
+            assert q.size == 100
+            assert q.items.count() == 1
+            q = self.event1.quotas.last()
+            assert q.name == 'Reduced ticket'
+            assert q.size == 50
+            assert q.items.count() == 1
 
     def test_quick_setup_dual_quota(self):
         doc = self.get_doc('/control/event/%s/%s/quickstart/' % (self.orga1.slug, self.event1.slug))
@@ -182,22 +187,23 @@ class EventsTest(SoupTest):
         assert self.event1.settings.payment_banktransfer__enabled
         assert self.event1.settings.get('payment_banktransfer_bank_details', as_type=LazyI18nString).localize('en') == "Foo"
         assert 'pretix.plugins.banktransfer' in self.event1.plugins
-        assert self.event1.items.count() == 2
-        i = self.event1.items.first()
-        assert str(i.name) == "Normal ticket"
-        assert i.default_price == Decimal('13.90')
-        i = self.event1.items.last()
-        assert str(i.name) == "Reduced ticket"
-        assert i.default_price == Decimal('13.20')
-        assert self.event1.quotas.count() == 3
-        q = self.event1.quotas.first()
-        assert q.name == 'Normal ticket'
-        assert q.size == 100
-        assert q.items.count() == 1
-        q = self.event1.quotas.last()
-        assert q.name == 'Tickets'
-        assert q.size == 120
-        assert q.items.count() == 2
+        with scopes_disabled():
+            assert self.event1.items.count() == 2
+            i = self.event1.items.first()
+            assert str(i.name) == "Normal ticket"
+            assert i.default_price == Decimal('13.90')
+            i = self.event1.items.last()
+            assert str(i.name) == "Reduced ticket"
+            assert i.default_price == Decimal('13.20')
+            assert self.event1.quotas.count() == 3
+            q = self.event1.quotas.first()
+            assert q.name == 'Normal ticket'
+            assert q.size == 100
+            assert q.items.count() == 1
+            q = self.event1.quotas.last()
+            assert q.name == 'Tickets'
+            assert q.size == 120
+            assert q.items.count() == 2
 
     def test_settings(self):
         doc = self.get_doc('/control/event/%s/%s/settings/' % (self.orga1.slug, self.event1.slug))
@@ -257,48 +263,52 @@ class EventsTest(SoupTest):
         assert self.event1.testmode
 
     def test_testmode_disable(self):
-        o = Order.objects.create(
-            code='FOO', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en', testmode=True
-        )
-        o2 = Order.objects.create(
-            code='FOO2', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en'
-        )
-        self.event1.testmode = True
-        self.event1.save()
+        with scopes_disabled():
+            o = Order.objects.create(
+                code='FOO', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en', testmode=True
+            )
+            o2 = Order.objects.create(
+                code='FOO2', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en'
+            )
+            self.event1.testmode = True
+            self.event1.save()
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'testmode': 'false'})
         self.event1.refresh_from_db()
         assert not self.event1.testmode
-        assert Order.objects.filter(pk=o.pk).exists()
-        assert Order.objects.filter(pk=o2.pk).exists()
+        with scopes_disabled():
+            assert Order.objects.filter(pk=o.pk).exists()
+            assert Order.objects.filter(pk=o2.pk).exists()
 
     def test_testmode_disable_delete(self):
-        o = Order.objects.create(
-            code='FOO', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en', testmode=True
-        )
-        o2 = Order.objects.create(
-            code='FOO2', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en'
-        )
-        self.event1.testmode = True
-        self.event1.save()
+        with scopes_disabled():
+            o = Order.objects.create(
+                code='FOO', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en', testmode=True
+            )
+            o2 = Order.objects.create(
+                code='FOO2', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en'
+            )
+            self.event1.testmode = True
+            self.event1.save()
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
                       {'testmode': 'false', 'delete': 'yes'})
         self.event1.refresh_from_db()
         assert not self.event1.testmode
-        assert not Order.objects.filter(pk=o.pk).exists()
-        assert Order.objects.filter(pk=o2.pk).exists()
+        with scopes_disabled():
+            assert not Order.objects.filter(pk=o.pk).exists()
+            assert Order.objects.filter(pk=o2.pk).exists()
 
     def test_live_disable(self):
         self.event1.live = True
@@ -309,9 +319,10 @@ class EventsTest(SoupTest):
         assert not self.event1.live
 
     def test_live_ok(self):
-        self.event1.items.create(name='Test', default_price=5)
-        self.event1.settings.set('payment_banktransfer__enabled', True)
-        self.event1.quotas.create(name='Test quota')
+        with scopes_disabled():
+            self.event1.items.create(name='Test', default_price=5)
+            self.event1.settings.set('payment_banktransfer__enabled', True)
+            self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
         assert len(doc.select("input[name=live]"))
         self.post_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug),
@@ -320,16 +331,18 @@ class EventsTest(SoupTest):
         assert self.event1.live
 
     def test_live_dont_require_payment_method_free(self):
-        self.event1.items.create(name='Test', default_price=0)
-        self.event1.settings.set('payment_banktransfer__enabled', False)
-        self.event1.quotas.create(name='Test quota')
+        with scopes_disabled():
+            self.event1.items.create(name='Test', default_price=0)
+            self.event1.settings.set('payment_banktransfer__enabled', False)
+            self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
         assert len(doc.select("input[name=live]"))
 
     def test_live_require_payment_method(self):
-        self.event1.items.create(name='Test', default_price=5)
-        self.event1.settings.set('payment_banktransfer__enabled', False)
-        self.event1.quotas.create(name='Test quota')
+        with scopes_disabled():
+            self.event1.items.create(name='Test', default_price=5)
+            self.event1.settings.set('payment_banktransfer__enabled', False)
+            self.event1.quotas.create(name='Test quota')
         doc = self.get_doc('/control/event/%s/%s/live/' % (self.orga1.slug, self.event1.slug))
         assert len(doc.select("input[name=live]")) == 0
 
@@ -378,7 +391,8 @@ class EventsTest(SoupTest):
         self.event1.save(update_fields=['presale_end'])
 
     def test_payment_settings_relative_date_payment_after_presale_end(self):
-        tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
+        with scopes_disabled():
+            tr19 = self.event1.tax_rules.create(rate=Decimal('19.00'))
         self.event1.presale_end = self.event1.date_from - datetime.timedelta(days=5)
         self.event1.save(update_fields=['presale_end'])
         doc = self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
@@ -578,23 +592,24 @@ class EventsTest(SoupTest):
             'copy-copy_from_event': ''
         })
 
-        ev = Event.objects.get(slug='33c3')
-        assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
-        assert ev.settings.locales == ['en', 'de']
-        assert ev.settings.locale == 'en'
-        assert ev.currency == 'EUR'
-        assert ev.settings.timezone == 'Europe/Berlin'
-        assert ev.organizer == self.orga1
-        assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
+            assert ev.settings.locales == ['en', 'de']
+            assert ev.settings.locale == 'en'
+            assert ev.currency == 'EUR'
+            assert ev.settings.timezone == 'Europe/Berlin'
+            assert ev.organizer == self.orga1
+            assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
+            assert Team.objects.filter(limit_events=ev, members=self.user).exists()
 
-        berlin_tz = timezone('Europe/Berlin')
-        assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = timezone('Europe/Berlin')
+            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
 
-        assert ev.tax_rules.filter(rate=Decimal('19.00')).exists()
+            assert ev.tax_rules.filter(rate=Decimal('19.00')).exists()
 
     def test_create_event_with_subevents_success(self):
         doc = self.get_doc('/control/events/add')
@@ -635,20 +650,22 @@ class EventsTest(SoupTest):
             'event_wizard-prefix': 'event_wizard',
             'copy-copy_from_event': ''
         })
-        ev = Event.objects.get(slug='33c3')
-        assert ev.has_subevents
-        assert ev.subevents.count() == 1
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.has_subevents
+            assert ev.subevents.count() == 1
 
     def test_create_event_copy_success(self):
-        tr = self.event1.tax_rules.create(
-            rate=19, name="VAT"
-        )
-        self.event1.items.create(
-            name='Early-bird ticket',
-            category=None, default_price=23, tax_rule=tr,
-            admission=True
-        )
-        self.event1.settings.tax_rate_default = tr
+        with scopes_disabled():
+            tr = self.event1.tax_rules.create(
+                rate=19, name="VAT"
+            )
+            self.event1.items.create(
+                name='Early-bird ticket',
+                category=None, default_price=23, tax_rule=tr,
+                admission=True
+            )
+            self.event1.settings.tax_rate_default = tr
         doc = self.get_doc('/control/events/add')
 
         doc = self.post_doc('/control/events/add', {
@@ -688,34 +705,36 @@ class EventsTest(SoupTest):
             'copy-copy_from_event': self.event1.pk
         })
 
-        ev = Event.objects.get(slug='33c3')
-        assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
-        assert ev.settings.locales == ['en', 'de']
-        assert ev.settings.locale == 'en'
-        assert ev.currency == 'EUR'
-        assert ev.settings.timezone == 'Europe/Berlin'
-        assert ev.organizer == self.orga1
-        assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
-        assert ev.items.count() == 1
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
+            assert ev.settings.locales == ['en', 'de']
+            assert ev.settings.locale == 'en'
+            assert ev.currency == 'EUR'
+            assert ev.settings.timezone == 'Europe/Berlin'
+            assert ev.organizer == self.orga1
+            assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
+            assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+            assert ev.items.count() == 1
 
-        berlin_tz = timezone('Europe/Berlin')
-        assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = timezone('Europe/Berlin')
+            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
 
-        assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
+            assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
 
     def test_create_event_clone_success(self):
-        tr = self.event1.tax_rules.create(
-            rate=19, name="VAT"
-        )
-        self.event1.items.create(
-            name='Early-bird ticket',
-            category=None, default_price=23, tax_rule=tr,
-            admission=True
-        )
+        with scopes_disabled():
+            tr = self.event1.tax_rules.create(
+                rate=19, name="VAT"
+            )
+            self.event1.items.create(
+                name='Early-bird ticket',
+                category=None, default_price=23, tax_rule=tr,
+                admission=True
+            )
         self.event1.settings.tax_rate_default = tr
         doc = self.get_doc('/control/events/add?clone=' + str(self.event1.pk))
         tabletext = doc.select("form")[0].text
@@ -754,24 +773,25 @@ class EventsTest(SoupTest):
 
         assert not doc.select("#id_copy-copy_from_event_1")
 
-        ev = Event.objects.get(slug='33c3')
-        assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
-        assert ev.settings.locales == ['en', 'de']
-        assert ev.settings.locale == 'en'
-        assert ev.currency == 'EUR'
-        assert ev.settings.timezone == 'Europe/Berlin'
-        assert ev.organizer == self.orga1
-        assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
-        assert ev.items.count() == 1
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.name == LazyI18nString({'de': '33C3', 'en': '33C3'})
+            assert ev.settings.locales == ['en', 'de']
+            assert ev.settings.locale == 'en'
+            assert ev.currency == 'EUR'
+            assert ev.settings.timezone == 'Europe/Berlin'
+            assert ev.organizer == self.orga1
+            assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
+            assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+            assert ev.items.count() == 1
 
-        berlin_tz = timezone('Europe/Berlin')
-        assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-        assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = timezone('Europe/Berlin')
+            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
+            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
 
-        assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
+            assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
 
     def test_create_event_only_date_from(self):
         # date_to, presale_start & presale_end are optional fields
@@ -806,19 +826,20 @@ class EventsTest(SoupTest):
             'copy-copy_from_event': ''
         })
 
-        ev = Event.objects.get(slug='33c3')
-        assert ev.name == LazyI18nString({'en': '33C3'})
-        assert ev.settings.locales == ['en']
-        assert ev.settings.locale == 'en'
-        assert ev.currency == 'EUR'
-        assert ev.settings.timezone == 'UTC'
-        assert ev.organizer == self.orga1
-        assert ev.location == LazyI18nString({'en': 'Hamburg'})
-        assert Team.objects.filter(limit_events=ev, members=self.user).exists()
-        assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
-        assert ev.date_to is None
-        assert ev.presale_start is None
-        assert ev.presale_end is None
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            assert ev.name == LazyI18nString({'en': '33C3'})
+            assert ev.settings.locales == ['en']
+            assert ev.settings.locale == 'en'
+            assert ev.currency == 'EUR'
+            assert ev.settings.timezone == 'UTC'
+            assert ev.organizer == self.orga1
+            assert ev.location == LazyI18nString({'en': 'Hamburg'})
+            assert Team.objects.filter(limit_events=ev, members=self.user).exists()
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
+            assert ev.date_to is None
+            assert ev.presale_start is None
+            assert ev.presale_end is None
 
     def test_create_event_missing_date_from(self):
         # date_from is mandatory
@@ -909,6 +930,7 @@ class EventsTest(SoupTest):
 
 
 class SubEventsTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -967,22 +989,23 @@ class SubEventsTest(SoupTest):
             'item-%d-price' % self.ticket.pk: '12'
         })
         assert doc.select(".alert-success")
-        se = self.event1.subevents.first()
-        assert str(se.name) == "SE2"
-        assert se.active
-        assert se.date_from.isoformat() == "2017-07-01T10:00:00+00:00"
-        assert se.date_to.isoformat() == "2017-07-01T12:00:00+00:00"
-        assert str(se.location) == "Hamburg"
-        assert se.presale_start.isoformat() == "2017-06-20T10:00:00+00:00"
-        assert not se.presale_end
-        assert se.quotas.count() == 1
-        q = se.quotas.last()
-        assert q.name == "Q1"
-        assert q.size == 50
-        assert list(q.items.all()) == [self.ticket]
-        sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
-        assert sei.price == 12
-        assert se.checkinlist_set.count() == 1
+        with scopes_disabled():
+            se = self.event1.subevents.first()
+            assert str(se.name) == "SE2"
+            assert se.active
+            assert se.date_from.isoformat() == "2017-07-01T10:00:00+00:00"
+            assert se.date_to.isoformat() == "2017-07-01T12:00:00+00:00"
+            assert str(se.location) == "Hamburg"
+            assert se.presale_start.isoformat() == "2017-06-20T10:00:00+00:00"
+            assert not se.presale_end
+            assert se.quotas.count() == 1
+            q = se.quotas.last()
+            assert q.name == "Q1"
+            assert q.size == 50
+            assert list(q.items.all()) == [self.ticket]
+            sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
+            assert sei.price == 12
+            assert se.checkinlist_set.count() == 1
 
     def test_modify(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk)
@@ -1022,14 +1045,15 @@ class SubEventsTest(SoupTest):
         assert str(se.location) == "Hamburg"
         assert se.presale_start.isoformat() == "2017-06-20T10:00:00+00:00"
         assert not se.presale_end
-        assert se.quotas.count() == 1
-        q = se.quotas.last()
-        assert q.name == "Q1"
-        assert q.size == 50
-        assert list(q.items.all()) == [self.ticket]
-        sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
-        assert sei.price == 12
-        assert se.checkinlist_set.count() == 1
+        with scopes_disabled():
+            assert se.quotas.count() == 1
+            q = se.quotas.last()
+            assert q.name == "Q1"
+            assert q.size == 50
+            assert list(q.items.all()) == [self.ticket]
+            sei = SubEventItem.objects.get(subevent=se, item=self.ticket)
+            assert sei.price == 12
+            assert se.checkinlist_set.count() == 1
 
     def test_delete(self):
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk)
@@ -1039,30 +1063,34 @@ class SubEventsTest(SoupTest):
         # deleting the second event
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent2.pk, {})
         assert doc.select(".alert-success")
-        assert not SubEvent.objects.filter(pk=self.subevent2.pk).exists()
-        assert not SubEvent.objects.filter(pk=self.subevent1.pk).exists()
+        with scopes_disabled():
+            assert not SubEvent.objects.filter(pk=self.subevent2.pk).exists()
+            assert not SubEvent.objects.filter(pk=self.subevent1.pk).exists()
 
     def test_delete_with_orders(self):
-        o = Order.objects.create(
-            code='FOO', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en'
-        )
-        OrderPosition.objects.create(
-            order=o,
-            item=self.ticket,
-            subevent=self.subevent1,
-            price=Decimal("14"),
-        )
+        with scopes_disabled():
+            o = Order.objects.create(
+                code='FOO', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en'
+            )
+            OrderPosition.objects.create(
+                order=o,
+                item=self.ticket,
+                subevent=self.subevent1,
+                price=Decimal("14"),
+            )
         doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, follow=True)
         assert doc.select(".alert-danger")
         doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/delete' % self.subevent1.pk, {}, follow=True)
         assert doc.select(".alert-danger")
-        assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
+        with scopes_disabled():
+            assert self.event1.subevents.filter(pk=self.subevent1.pk).exists()
 
     def test_create_bulk(self):
-        self.event1.subevents.all().delete()
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
         self.event1.settings.timezone = 'Europe/Berlin'
 
         doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
@@ -1120,7 +1148,8 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-0-limit_products': str(self.ticket.pk),
         })
         assert doc.select(".alert-success")
-        ses = list(self.event1.subevents.order_by('date_from'))
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 10
 
         assert str(ses[0].name) == "Foo"
@@ -1128,25 +1157,28 @@ class SubEventsTest(SoupTest):
         assert ses[0].date_to.isoformat() == "2018-04-03T13:29:31+00:00"
         assert not ses[0].presale_start
         assert ses[0].presale_end.isoformat() == "2018-04-02T11:29:31+00:00"
-        assert ses[0].quotas.count() == 1
-        assert list(ses[0].quotas.first().items.all()) == [self.ticket]
-        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
-        assert ses[0].checkinlist_set.count() == 1
+        with scopes_disabled():
+            assert ses[0].quotas.count() == 1
+            assert list(ses[0].quotas.first().items.all()) == [self.ticket]
+            assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+            assert ses[0].checkinlist_set.count() == 1
 
         assert str(ses[1].name) == "Foo"
         assert ses[1].date_from.isoformat() == "2019-04-03T11:29:31+00:00"
         assert ses[1].date_to.isoformat() == "2019-04-03T13:29:31+00:00"
         assert not ses[1].presale_start
         assert ses[1].presale_end.isoformat() == "2019-04-02T11:29:31+00:00"
-        assert ses[1].quotas.count() == 1
-        assert list(ses[1].quotas.first().items.all()) == [self.ticket]
-        assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
-        assert ses[1].checkinlist_set.count() == 1
+        with scopes_disabled():
+            assert ses[1].quotas.count() == 1
+            assert list(ses[1].quotas.first().items.all()) == [self.ticket]
+            assert SubEventItem.objects.get(subevent=ses[0], item=self.ticket).price == 16
+            assert ses[1].checkinlist_set.count() == 1
 
         assert ses[-1].date_from.isoformat() == "2027-04-03T11:29:31+00:00"
 
     def test_create_bulk_daily_interval(self):
-        self.event1.subevents.all().delete()
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
         self.event1.settings.timezone = 'Europe/Berlin'
 
         doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
@@ -1194,7 +1226,8 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-MAX_NUM_FORMS': '1000',
         })
         assert doc.select(".alert-success")
-        ses = list(self.event1.subevents.order_by('date_from'))
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 183
 
         assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
@@ -1202,7 +1235,8 @@ class SubEventsTest(SoupTest):
         assert ses[-1].date_from.isoformat() == "2019-04-02T11:29:31+00:00"
 
     def test_create_bulk_exclude(self):
-        self.event1.subevents.all().delete()
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
         self.event1.settings.timezone = 'Europe/Berlin'
 
         doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
@@ -1265,7 +1299,8 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-MAX_NUM_FORMS': '1000',
         })
         assert doc.select(".alert-success")
-        ses = list(self.event1.subevents.order_by('date_from'))
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 314
 
         assert ses[0].date_from.isoformat() == "2018-04-03T11:29:31+00:00"
@@ -1273,7 +1308,8 @@ class SubEventsTest(SoupTest):
         assert ses[6].date_from.isoformat() == "2018-04-10T11:29:31+00:00"
 
     def test_create_bulk_monthly_interval(self):
-        self.event1.subevents.all().delete()
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
         self.event1.settings.timezone = 'Europe/Berlin'
 
         doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
@@ -1320,7 +1356,8 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-MAX_NUM_FORMS': '1000',
         })
         assert doc.select(".alert-success")
-        ses = list(self.event1.subevents.order_by('date_from'))
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 12
 
         assert ses[0].date_from.isoformat() == "2018-04-30T11:29:31+00:00"
@@ -1328,7 +1365,8 @@ class SubEventsTest(SoupTest):
         assert ses[-1].date_from.isoformat() == "2019-03-29T12:29:31+00:00"
 
     def test_create_bulk_weekly_interval(self):
-        self.event1.subevents.all().delete()
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
         self.event1.settings.timezone = 'Europe/Berlin'
 
         doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
@@ -1375,7 +1413,8 @@ class SubEventsTest(SoupTest):
             'checkinlist_set-MAX_NUM_FORMS': '1000',
         })
         assert doc.select(".alert-success")
-        ses = list(self.event1.subevents.order_by('date_from'))
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
         assert len(ses) == 52
 
         assert ses[0].date_from.isoformat() == "2018-04-05T11:29:31+00:00"
@@ -1385,25 +1424,27 @@ class SubEventsTest(SoupTest):
     def test_delete_bulk(self):
         self.subevent2.active = True
         self.subevent2.save()
-        o = Order.objects.create(
-            code='FOO', event=self.event1, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=now(), expires=now() + datetime.timedelta(days=10),
-            total=14, locale='en'
-        )
-        OrderPosition.objects.create(
-            order=o,
-            item=self.ticket,
-            subevent=self.subevent1,
-            price=Decimal("14"),
-        )
+        with scopes_disabled():
+            o = Order.objects.create(
+                code='FOO', event=self.event1, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=now(), expires=now() + datetime.timedelta(days=10),
+                total=14, locale='en'
+            )
+            OrderPosition.objects.create(
+                order=o,
+                item=self.ticket,
+                subevent=self.subevent1,
+                price=Decimal("14"),
+            )
         doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_action', {
             'subevent': [str(self.subevent1.pk), str(self.subevent2.pk)],
             'action': 'delete_confirm'
         }, follow=True)
         assert doc.select(".alert-success")
-        assert not self.event1.subevents.filter(pk=self.subevent2.pk).exists()
-        assert self.event1.subevents.get(pk=self.subevent1.pk).active is False
+        with scopes_disabled():
+            assert not self.event1.subevents.filter(pk=self.subevent2.pk).exists()
+            assert self.event1.subevents.get(pk=self.subevent1.pk).active is False
 
     def test_disable_bulk(self):
         self.subevent2.active = True
@@ -1413,7 +1454,8 @@ class SubEventsTest(SoupTest):
             'action': 'disable'
         }, follow=True)
         assert doc.select(".alert-success")
-        assert self.event1.subevents.get(pk=self.subevent2.pk).active is False
+        with scopes_disabled():
+            assert self.event1.subevents.get(pk=self.subevent2.pk).active is False
 
     def test_enable_bulk(self):
         self.subevent2.active = False
@@ -1423,10 +1465,12 @@ class SubEventsTest(SoupTest):
             'action': 'enable'
         }, follow=True)
         assert doc.select(".alert-success")
-        assert self.event1.subevents.get(pk=self.subevent2.pk).active is True
+        with scopes_disabled():
+            assert self.event1.subevents.get(pk=self.subevent2.pk).active is True
 
 
 class EventDeletionTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -1454,21 +1498,24 @@ class EventDeletionTest(SoupTest):
             'slug': '30c3'
         })
 
-        assert not self.orga1.events.exists()
+        with scopes_disabled():
+            assert not self.orga1.events.exists()
 
     def test_delete_wrong_slug(self):
         self.post_doc('/control/event/ccc/30c3/delete/', {
             'user_pw': 'dummy',
             'slug': '31c3'
         })
-        assert self.orga1.events.exists()
+        with scopes_disabled():
+            assert self.orga1.events.exists()
 
     def test_delete_wrong_pw(self):
         self.post_doc('/control/event/ccc/30c3/delete/', {
             'user_pw': 'invalid',
             'slug': '30c3'
         })
-        assert self.orga1.events.exists()
+        with scopes_disabled():
+            assert self.orga1.events.exists()
 
     def test_delete_orders(self):
         Order.objects.create(
@@ -1481,4 +1528,5 @@ class EventDeletionTest(SoupTest):
             'user_pw': 'dummy',
             'slug': '30c3'
         })
-        assert self.orga1.events.exists()
+        with scopes_disabled():
+            assert self.orga1.events.exists()

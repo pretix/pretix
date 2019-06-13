@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME, logout
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, resolve_url
+from django.template.response import TemplateResponse
 from django.urls import get_script_prefix, resolve, reverse
 from django.utils.encoding import force_str
 from django.utils.translation import ugettext as _
@@ -110,7 +111,10 @@ class PermissionMiddleware:
                 request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
 
         with scope(organizer=getattr(request, 'organizer', None)):
-            return self.get_response(request)
+            r = self.get_response(request)
+            if isinstance(r, TemplateResponse):
+                r = r.render()
+            return r
 
 
 class AuditLogMiddleware:

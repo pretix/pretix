@@ -1,11 +1,13 @@
 import datetime
 
+from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, Organizer, Team, User
 
 
 class OrganizerTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')

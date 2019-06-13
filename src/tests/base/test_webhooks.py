@@ -6,6 +6,7 @@ import pytest
 import responses
 from django.db import transaction
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
 
@@ -83,13 +84,14 @@ def test_webhook_trigger_event_specific(event, order, webhook, monkeypatch_on_co
         "code": "FOO",
         "action": "pretix.event.order.paid"
     }
-    first = webhook.calls.last()
-    assert first.webhook == webhook
-    assert first.target_url == 'https://google.com'
-    assert first.action_type == 'pretix.event.order.paid'
-    assert not first.is_retry
-    assert first.return_code == 200
-    assert first.success
+    with scopes_disabled():
+        first = webhook.calls.last()
+        assert first.webhook == webhook
+        assert first.target_url == 'https://google.com'
+        assert first.action_type == 'pretix.event.order.paid'
+        assert not first.is_retry
+        assert first.return_code == 200
+        assert first.success
 
 
 @pytest.mark.django_db
@@ -170,8 +172,9 @@ def test_webhook_retry(event, order, webhook, monkeypatch_on_commit):
     with transaction.atomic():
         order.log_action('pretix.event.order.paid', {})
     assert len(responses.calls) == 2
-    second = webhook.objects.first()
-    first = webhook.objects.last()
+    with scopes_disabled():
+        second = webhook.objects.first()
+        first = webhook.objects.last()
 
     assert first.webhook == webhook
     assert first.target_url == 'https://google.com'

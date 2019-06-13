@@ -9,6 +9,7 @@ from django.db.models import Prefetch, Sum
 from django.utils.decorators import available_attrs
 from django.utils.functional import cached_property
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -40,7 +41,10 @@ class CartMixin:
                 self.request._checkout_flow_invoice_address = InvoiceAddress()
             else:
                 try:
-                    self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    with scopes_disabled():
+                        self.request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
+                            pk=iapk, order__isnull=True
+                        )
                 except InvoiceAddress.DoesNotExist:
                     self.request._checkout_flow_invoice_address = InvoiceAddress()
         return self.request._checkout_flow_invoice_address
@@ -215,7 +219,8 @@ def get_cart_invoice_address(request):
             request._checkout_flow_invoice_address = InvoiceAddress()
         else:
             try:
-                request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                with scopes_disabled():
+                    request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
             except InvoiceAddress.DoesNotExist:
                 request._checkout_flow_invoice_address = InvoiceAddress()
     return request._checkout_flow_invoice_address

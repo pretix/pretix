@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Item, Organizer, Quota, Team, User, Voucher, WaitingListEntry,
@@ -51,51 +52,52 @@ def test_list(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
 
     response = client.get('/control/event/dummy/dummy/waitinglist/')
-    assert 'success@example.org' not in response.rendered_content
-    assert 'expired@example.org' not in response.rendered_content
-    assert 'foo0@bar.com' in response.rendered_content
-    assert 'valid@example.org' not in response.rendered_content
+    assert 'success@example.org' not in response.content.decode()
+    assert 'expired@example.org' not in response.content.decode()
+    assert 'foo0@bar.com' in response.content.decode()
+    assert 'valid@example.org' not in response.content.decode()
     assert response.context['estimate'] == 23 * 5
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=a')
-    assert 'success@example.org' in response.rendered_content
-    assert 'foo0@bar.com' in response.rendered_content
-    assert 'expired@example.org' in response.rendered_content
-    assert 'valid@example.org' in response.rendered_content
+    assert 'success@example.org' in response.content.decode()
+    assert 'foo0@bar.com' in response.content.decode()
+    assert 'expired@example.org' in response.content.decode()
+    assert 'valid@example.org' in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=s')
-    assert 'success@example.org' in response.rendered_content
-    assert 'foo0@bar.com' not in response.rendered_content
-    assert 'expired@example.org' in response.rendered_content
-    assert 'valid@example.org' in response.rendered_content
+    assert 'success@example.org' in response.content.decode()
+    assert 'foo0@bar.com' not in response.content.decode()
+    assert 'expired@example.org' in response.content.decode()
+    assert 'valid@example.org' in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=v')
-    assert 'success@example.org' not in response.rendered_content
-    assert 'foo0@bar.com' not in response.rendered_content
-    assert 'expired@example.org' not in response.rendered_content
-    assert 'valid@example.org' in response.rendered_content
+    assert 'success@example.org' not in response.content.decode()
+    assert 'foo0@bar.com' not in response.content.decode()
+    assert 'expired@example.org' not in response.content.decode()
+    assert 'valid@example.org' in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=r')
-    assert 'success@example.org' in response.rendered_content
-    assert 'foo0@bar.com' not in response.rendered_content
-    assert 'expired@example.org' not in response.rendered_content
-    assert 'valid@example.org' not in response.rendered_content
+    assert 'success@example.org' in response.content.decode()
+    assert 'foo0@bar.com' not in response.content.decode()
+    assert 'expired@example.org' not in response.content.decode()
+    assert 'valid@example.org' not in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?status=e')
-    assert 'success@example.org' not in response.rendered_content
-    assert 'expired@example.org' in response.rendered_content
-    assert 'foo0@bar.com' not in response.rendered_content
-    assert 'valid@example.org' not in response.rendered_content
+    assert 'success@example.org' not in response.content.decode()
+    assert 'expired@example.org' in response.content.decode()
+    assert 'foo0@bar.com' not in response.content.decode()
+    assert 'valid@example.org' not in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/waitinglist/?item=%d' % env[3].pk)
-    assert 'item2@example.org' not in response.rendered_content
-    assert 'foo0@bar.com' in response.rendered_content
+    assert 'item2@example.org' not in response.content.decode()
+    assert 'foo0@bar.com' in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_assign_single(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
 
     client.post('/control/event/dummy/dummy/waitinglist/', {
         'assign': wle.pk
@@ -107,7 +109,8 @@ def test_assign_single(client, env):
 @pytest.mark.django_db
 def test_priority_single(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
     assert wle.priority == 0
 
     client.post('/control/event/dummy/dummy/waitinglist/', {
@@ -130,17 +133,20 @@ def test_priority_single(client, env):
 @pytest.mark.django_db
 def test_delete_single(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    wle = WaitingListEntry.objects.first()
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
 
     client.post('/control/event/dummy/dummy/waitinglist/%s/delete' % (wle.id))
     with pytest.raises(WaitingListEntry.DoesNotExist):
-        WaitingListEntry.objects.get(id=wle.id)
+        with scopes_disabled():
+            WaitingListEntry.objects.get(id=wle.id)
 
 
 @pytest.mark.django_db
 def test_dashboard(client, env):
-    quota = Quota.objects.create(name="Test", size=2, event=env[0])
-    quota.items.add(env[3])
-    w = waitinglist_widgets(env[0])
+    with scopes_disabled():
+        quota = Quota.objects.create(name="Test", size=2, event=env[0])
+        quota.items.add(env[3])
+        w = waitinglist_widgets(env[0])
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']

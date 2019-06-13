@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Checkin, Event, Item, ItemVariation, Order, OrderPosition, Organizer, Team,
@@ -61,7 +62,8 @@ def test_custom_datetime(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
-    assert Checkin.objects.last().datetime == dt
+    with scopes_disabled():
+        assert Checkin.objects.last().datetime == dt
 
 
 @pytest.mark.django_db
@@ -143,36 +145,38 @@ def test_download_all_data(client, env):
 @pytest.mark.django_db
 def test_status(client, env):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[7])
-    Checkin.objects.create(position=env[3], list=env[7])
+    with scopes_disabled():
+        Checkin.objects.create(position=env[3], list=env[7])
     resp = client.get('/pretixdroid/api/%s/%s/%d/status/?key=%s' % (
         env[0].organizer.slug, env[0].slug, env[5].pk, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
-    assert jdata['checkins'] == 1
-    assert jdata['total'] == 1
-    assert jdata['items'] == [
-        {'name': 'T-Shirt',
-         'id': env[3].item.pk,
-         'checkins': 1,
-         'admission': False,
-         'total': 1,
-         'variations': [
-             {'name': 'Red',
-              'id': env[3].variation.pk,
-              'checkins': 1,
-              'total': 1
-              },
-             {'name': 'Blue',
-              'id': env[3].item.variations.get(value='Blue').pk,
-              'checkins': 0,
-              'total': 0
-              }
-         ]
-         },
-        {'name': 'Ticket',
-         'id': env[4].item.pk,
-         'checkins': 0,
-         'admission': False,
-         'total': 0,
-         'variations': []
-         }
-    ]
+    with scopes_disabled():
+        assert jdata['checkins'] == 1
+        assert jdata['total'] == 1
+        assert jdata['items'] == [
+            {'name': 'T-Shirt',
+             'id': env[3].item.pk,
+             'checkins': 1,
+             'admission': False,
+             'total': 1,
+             'variations': [
+                 {'name': 'Red',
+                  'id': env[3].variation.pk,
+                  'checkins': 1,
+                  'total': 1
+                  },
+                 {'name': 'Blue',
+                  'id': env[3].item.variations.get(value='Blue').pk,
+                  'checkins': 0,
+                  'total': 0
+                  }
+             ]
+             },
+            {'name': 'Ticket',
+             'id': env[4].item.pk,
+             'checkins': 0,
+             'admission': False,
+             'total': 0,
+             'variations': []
+             }
+        ]

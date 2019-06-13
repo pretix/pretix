@@ -181,7 +181,7 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
 
 class ItemQuerySet(models.QuerySet):
     def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self)
+        return filter_available(self, channel, voucher, allow_addons)
 
 
 class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
@@ -190,7 +190,7 @@ class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__)
         self._queryset_class = ItemQuerySet
 
     def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        return filter_available(self.get_queryset())
+        return filter_available(self.get_queryset(), channel, voucher, allow_addons)
 
 
 class Item(LoggedModel):

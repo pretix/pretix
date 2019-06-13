@@ -2,6 +2,7 @@ from datetime import datetime, time
 
 import pytest
 import pytz
+from django_scopes import scope
 
 from pretix.base.models import Event, Organizer
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
@@ -41,27 +42,28 @@ def test_relative_date_without_time(event):
 
 @pytest.mark.django_db
 def test_relative_date_other_base_point(event):
-    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_start'))
-    assert rdw.datetime(event) == TOKYO.localize(datetime(2017, 11, 30, 5, 0, 0))
-    assert rdw.to_string() == 'RELDATE/1/-/presale_start/'
+    with scope(organizer=event.organizer):
+        rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_start'))
+        assert rdw.datetime(event) == TOKYO.localize(datetime(2017, 11, 30, 5, 0, 0))
+        assert rdw.to_string() == 'RELDATE/1/-/presale_start/'
 
-    # presale_end is unset, defaults to date_from
-    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_end'))
-    assert rdw.datetime(event) == TOKYO.localize(datetime(2017, 12, 26, 5, 0, 0))
-    assert rdw.to_string() == 'RELDATE/1/-/presale_end/'
+        # presale_end is unset, defaults to date_from
+        rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_end'))
+        assert rdw.datetime(event) == TOKYO.localize(datetime(2017, 12, 26, 5, 0, 0))
+        assert rdw.to_string() == 'RELDATE/1/-/presale_end/'
 
-    # subevent base
-    se = event.subevents.create(name="SE1", date_from=TOKYO.localize(datetime(2017, 11, 27, 5, 0, 0)))
-    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='date_from'))
-    assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 26, 5, 0, 0))
+        # subevent base
+        se = event.subevents.create(name="SE1", date_from=TOKYO.localize(datetime(2017, 11, 27, 5, 0, 0)))
+        rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='date_from'))
+        assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 26, 5, 0, 0))
 
-    # presale_start is unset on subevent, default to event
-    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_start'))
-    assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 30, 5, 0, 0))
+        # presale_start is unset on subevent, default to event
+        rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_start'))
+        assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 30, 5, 0, 0))
 
-    # presale_end is unset on all, default to date_from of subevent
-    rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_end'))
-    assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 26, 5, 0, 0))
+        # presale_end is unset on all, default to date_from of subevent
+        rdw = RelativeDateWrapper(RelativeDate(days_before=1, time=None, base_date_name='presale_end'))
+        assert rdw.datetime(se) == TOKYO.localize(datetime(2017, 11, 26, 5, 0, 0))
 
 
 @pytest.mark.django_db

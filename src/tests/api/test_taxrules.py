@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import pytest
+from django_scopes import scopes_disabled
 
 from pretix.base.models import TaxRule
 
@@ -80,7 +81,8 @@ def test_rule_delete(token_client, organizer, event, taxrule):
 
 @pytest.mark.django_db
 def test_rule_delete_forbidden(token_client, organizer, event, taxrule):
-    event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
+    with scopes_disabled():
+        event.items.create(name="Budget Ticket", default_price=23, tax_rule=taxrule)
     resp = token_client.delete(
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
     )

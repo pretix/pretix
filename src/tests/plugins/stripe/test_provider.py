@@ -5,6 +5,7 @@ from decimal import Decimal
 import pytest
 from django.test import RequestFactory
 from django.utils.timezone import now
+from django_scopes import scope
 from stripe.error import APIConnectionError, CardError, StripeError
 
 from pretix.base.models import Event, Order, OrderRefund, Organizer
@@ -15,17 +16,18 @@ from pretix.plugins.stripe.payment import StripeCC
 @pytest.fixture
 def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
-    event = Event.objects.create(
-        organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), live=True
-    )
-    o1 = Order.objects.create(
-        code='FOOBAR', event=event, email='dummy@dummy.test',
-        status=Order.STATUS_PENDING,
-        datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('13.37')
-    )
-    return event, o1
+    with scope(organizer=o):
+        event = Event.objects.create(
+            organizer=o, name='Dummy', slug='dummy',
+            date_from=now(), live=True
+        )
+        o1 = Order.objects.create(
+            code='FOOBAR', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal('13.37')
+        )
+        yield event, o1
 
 
 @pytest.fixture(autouse=True)

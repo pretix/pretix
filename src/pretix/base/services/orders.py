@@ -731,7 +731,8 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
     addr = None
     if address is not None:
         try:
-            addr = InvoiceAddress.objects.get(pk=address)
+            with scopes_disabled():
+                addr = InvoiceAddress.objects.get(pk=address)
         except InvoiceAddress.DoesNotExist:
             pass
 

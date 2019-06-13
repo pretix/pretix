@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
+from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -916,7 +917,8 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
         ia = False
         if invoice_address:
             try:
-                ia = InvoiceAddress.objects.get(pk=invoice_address)
+                with scopes_disabled():
+                    ia = InvoiceAddress.objects.get(pk=invoice_address)
             except InvoiceAddress.DoesNotExist:
                 pass
 
@@ -984,7 +986,8 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
         ia = False
         if invoice_address:
             try:
-                ia = InvoiceAddress.objects.get(pk=invoice_address)
+                with scopes_disabled():
+                    ia = InvoiceAddress.objects.get(pk=invoice_address)
             except InvoiceAddress.DoesNotExist:
                 pass
         try:

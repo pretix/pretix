@@ -239,7 +239,7 @@ class Login2FAFormTest(TestCase):
 
     def test_totp_invalid(self):
         response = self.client.get('/control/login/2fa')
-        assert 'token' in response.rendered_content
+        assert 'token' in response.content.decode()
         d = TOTPDevice.objects.create(user=self.user, name='test')
         totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
         totp.time = time.time()
@@ -251,7 +251,7 @@ class Login2FAFormTest(TestCase):
 
     def test_totp_valid(self):
         response = self.client.get('/control/login/2fa')
-        assert 'token' in response.rendered_content
+        assert 'token' in response.content.decode()
         d = TOTPDevice.objects.create(user=self.user, name='test')
         totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
         totp.time = time.time()
@@ -274,7 +274,7 @@ class Login2FAFormTest(TestCase):
         d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
 
         response = self.client.get('/control/login/2fa')
-        assert 'token' in response.rendered_content
+        assert 'token' in response.content.decode()
         response = self.client.post('/control/login/2fa'.format(d.pk), {
             'token': '{"response": "true"}'
         })
@@ -291,7 +291,7 @@ class Login2FAFormTest(TestCase):
         d = U2FDevice.objects.create(user=self.user, name='test', json_data="{}")
 
         response = self.client.get('/control/login/2fa')
-        assert 'token' in response.rendered_content
+        assert 'token' in response.content.decode()
         response = self.client.post('/control/login/2fa'.format(d.pk), {
             'token': '{"response": "true"}'
         })

@@ -8,6 +8,7 @@ from django.core import mail
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from pytz import timezone
 from tests.base import SoupTest
 
@@ -19,6 +20,7 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 
 
 class EventTestMixin:
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
@@ -69,10 +71,11 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
 
 class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_link_rewrite(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   description="http://example.org [Sample](http://example.net)")
-        q.items.add(item)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       description="http://example.org [Sample](http://example.net)")
+            q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
 
         self.assertNotIn('href="http://example.org', html)
@@ -81,83 +84,93 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn('href="/redirect/?url=http%3A//example.net%3A', html)
 
     def test_not_active(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
-        q.items.add(item)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=False)
+            q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
         self.assertNotIn("btn-add-to-cart", html)
 
     def test_without_category(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
-        q.items.add(item)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+            q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section .product-row")[0].text)
         self.assertEqual(len(doc.select("#btn-add-to-cart")), 1)
 
     def test_sales_channel(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   sales_channels=['bar'])
-        q.items.add(item)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       sales_channels=['bar'])
+            q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug), PRETIX_SALES_CHANNEL="bar").rendered_content
         self.assertIn("Early-bird", html)
 
     def test_timely_available(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   available_until=now() + datetime.timedelta(days=2),
-                                   available_from=now() - datetime.timedelta(days=2))
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       available_until=now() + datetime.timedelta(days=2),
+                                       available_from=now() - datetime.timedelta(days=2))
         q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("body")[0].text)
 
     def test_no_longer_available(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   available_until=now() - datetime.timedelta(days=2))
-        q.items.add(item)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       available_until=now() - datetime.timedelta(days=2))
+            q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_not_yet_available(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   available_from=now() + datetime.timedelta(days=2))
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       available_from=now() + datetime.timedelta(days=2))
         q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_hidden_without_voucher(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                   hide_without_voucher=True)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       hide_without_voucher=True)
         q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
     def test_simple_with_category(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        q.items.add(item)
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Entry tickets", doc.select("section:nth-of-type(1) h3")[0].text)
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
 
     def test_simple_without_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_subevents_inactive_unknown(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=False)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=False)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         assert resp.status_code == 404
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk + 1000))
@@ -166,8 +179,9 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevent_list_activeness(self):
         self.event.has_subevents = True
         self.event.save()
-        self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=1), active=True)
-        self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=1), active=False)
+        with scopes_disabled():
+            self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=1), active=True)
+            self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=1), active=False)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Foo SE1", resp.rendered_content)
         self.assertNotIn("Foo SE2", resp.rendered_content)
@@ -175,8 +189,9 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevent_list_ordering(self):
         self.event.has_subevents = True
         self.event.save()
-        self.event.subevents.create(name='Epic SE', date_from=now() + datetime.timedelta(days=1), active=True)
-        self.event.subevents.create(name='Cool SE', date_from=now() + datetime.timedelta(days=2), active=True)
+        with scopes_disabled():
+            self.event.subevents.create(name='Epic SE', date_from=now() + datetime.timedelta(days=1), active=True)
+            self.event.subevents.create(name='Cool SE', date_from=now() + datetime.timedelta(days=2), active=True)
 
         self.event.settings.frontpage_subevent_ordering = 'date_ascending'
         content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
@@ -194,8 +209,9 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.settings.event_list_type = 'calendar'
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=64), active=True)
-        self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=32), active=True)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo SE1', date_from=now() + datetime.timedelta(days=64), active=True)
+            self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=32), active=True)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Foo SE2", resp.rendered_content)
         self.assertNotIn("Foo SE1", resp.rendered_content)
@@ -207,11 +223,12 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevents(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
-        q.items.add(item)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0)
+            q.items.add(item)
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         self.assertIn("Early-bird", resp.rendered_content)
@@ -221,14 +238,15 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
     def test_subevent_prices(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
-        q.items.add(item)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
-        q.items.add(item)
-        SubEventItem.objects.create(subevent=se1, item=item, price=12)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+            q.items.add(item)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+            q.items.add(item)
+            SubEventItem.objects.create(subevent=se1, item=item, price=12)
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         self.assertIn("12.00", resp.rendered_content)
@@ -241,16 +259,17 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.event.has_subevents = True
         self.event.save()
         self.event.settings.display_net_prices = True
-        se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
-        tr = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
-                                   tax_rule=tr)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
-        q.items.add(item)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
-        q.items.add(item)
-        SubEventItem.objects.create(subevent=se1, item=item, price=12)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            tr = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=15,
+                                       tax_rule=tr)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+            q.items.add(item)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+            q.items.add(item)
+            SubEventItem.objects.create(subevent=se1, item=item, price=12)
 
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
         self.assertIn("10.08", resp.rendered_content)
@@ -262,30 +281,33 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("15.00", resp.rendered_content)
 
     def test_no_variations_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        ItemVariation.objects.create(item=item, value='Blue')
-        q.items.add(item)
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            ItemVariation.objects.create(item=item, value='Blue')
+            q.items.add(item)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
 
     def test_one_variation_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        var1 = ItemVariation.objects.create(item=item, value='Red')
-        ItemVariation.objects.create(item=item, value='Blue')
-        q.items.add(item)
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red')
+            ItemVariation.objects.create(item=item, value='Blue')
+            q.items.add(item)
         q.variations.add(var1)
         self._assert_variation_found()
 
     def test_one_variation_in_unlimited_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        q = Quota.objects.create(event=self.event, name='Quota', size=None)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
-        var1 = ItemVariation.objects.create(item=item, value='Red')
-        ItemVariation.objects.create(item=item, value='Blue')
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=None)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red')
+            ItemVariation.objects.create(item=item, value='Blue')
         q.items.add(item)
         q.variations.add(var1)
         self._assert_variation_found()
@@ -297,13 +319,14 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Black", doc.select("section:nth-of-type(1)")[0].text)
 
     def test_variation_prices_in_quota(self):
-        c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=12)
-        var1 = ItemVariation.objects.create(item=item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=item, value='Black', position=2)
-        q.variations.add(var1)
-        q.variations.add(var2)
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=12)
+            var1 = ItemVariation.objects.create(item=item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=item, value='Black', position=2)
+            q.variations.add(var1)
+            q.variations.add(var2)
         q.items.add(item)
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
@@ -313,40 +336,43 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("12.00", doc.select("section:nth-of-type(1) div.variation")[1].text)
 
     def test_require_bundling(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
-        q.items.add(item)
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, require_bundling=True)
-        q2.items.add(item2)
-        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+            q.items.add(item)
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, require_bundling=True)
+            q2.items.add(item2)
+            item.bundles.create(bundled_item=item2, designated_price=2, count=1)
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertEqual(1, len(doc.select(".availability-box")))
 
     def test_bundle_sold_out(self):
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
-        q.items.add(item)
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
-        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, position=10)
-        q2.items.add(item2)
-        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+            q.items.add(item)
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+            item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, position=10)
+            q2.items.add(item2)
+            item.bundles.create(bundled_item=item2, designated_price=2, count=1)
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
         self.assertIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
 
     def test_bundle_mixed_tax_rate(self):
-        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
-        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
-        q.items.add(item)
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
-        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
-        q2.items.add(item2)
-        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+        with scopes_disabled():
+            tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+            tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
+            q.items.add(item)
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+            item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
+            q2.items.add(item2)
+            item.bundles.create(bundled_item=item2, designated_price=2, count=1)
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
@@ -354,16 +380,17 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("incl. taxes", doc.select("section:nth-of-type(1) div.price")[0].text)
 
     def test_bundle_mixed_tax_rate_show_net(self):
-        self.event.settings.display_net_prices = True
-        tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
-        tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-        q = Quota.objects.create(event=self.event, name='Quota', size=2)
-        item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
-        q.items.add(item)
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
-        item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
-        q2.items.add(item2)
-        item.bundles.create(bundled_item=item2, designated_price=2, count=1)
+        with scopes_disabled():
+            self.event.settings.display_net_prices = True
+            tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+            tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12, tax_rule=tr19)
+            q.items.add(item)
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=0)
+            item2 = Item.objects.create(event=self.event, name='Dinner', default_price=12, tax_rule=tr7, position=10)
+            q2.items.add(item2)
+            item.bundles.create(bundled_item=item2, designated_price=2, count=1)
 
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
@@ -372,6 +399,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
 
 
 class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -387,7 +415,8 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "Early-bird" not in html.rendered_content
 
     def test_not_in_quota(self):
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=2)
+        with scopes_disabled():
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=2)
         self.v.quota = q2
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
@@ -421,10 +450,11 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "Early-bird" in html.rendered_content
 
     def test_variations_all(self):
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        self.q.variations.add(var1)
-        self.q.variations.add(var2)
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
         self.v.item = self.item
         self.v.quota = None
         self.v.save()
@@ -433,11 +463,12 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "Black" in html.rendered_content
 
     def test_variations_specific(self):
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        self.q.variations.add(var1)
-        self.q.variations.add(var2)
-        self.v.item = self.item
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
+            self.v.item = self.item
         self.v.variation = var1
         self.v.quota = None
         self.v.save()
@@ -468,20 +499,22 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "_voucher_item" in html.rendered_content
 
     def test_variations_sold_out(self):
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        self.q.variations.add(var1)
-        self.q.variations.add(var2)
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
         self.q.size = 0
         self.q.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "_voucher_item" not in html.rendered_content
 
     def test_variations_sold_out_blocking(self):
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        self.q.variations.add(var1)
-        self.q.variations.add(var2)
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
         self.q.size = 0
         self.q.save()
         self.v.block_quota = True
@@ -506,10 +539,11 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "10.80" in html.rendered_content
 
     def test_voucher_price_variations(self):
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        self.q.variations.add(var1)
-        self.q.variations.add(var2)
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', default_price=14, position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
         self.v.value = Decimal("10.00")
         self.v.price_mode = 'set'
         self.v.save()
@@ -547,25 +581,26 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "alert-danger" in html.rendered_content
 
     def test_subevent_net_prices(self):
-        self.event.settings.display_net_prices = True
-        self.event.has_subevents = True
-        self.event.save()
-        self.item.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
-        self.item.save()
-        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        with scopes_disabled():
+            self.event.settings.display_net_prices = True
+            self.event.has_subevents = True
+            self.event.save()
+            self.item.tax_rule = self.event.tax_rules.get_or_create(rate=Decimal('19.00'))[0]
+            self.item.save()
+            se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
 
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        q.items.add(self.item)
-        q.variations.add(var1)
-        q.variations.add(var2)
-        SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            q.items.add(self.item)
+            q.variations.add(var1)
+            q.variations.add(var2)
+            SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
 
-        self.v.quota = q
-        self.v.value = Decimal("2.00")
-        self.v.price_mode = 'subtract'
-        self.v.save()
+            self.v.quota = q
+            self.v.value = Decimal("2.00")
+            self.v.price_mode = 'subtract'
+            self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
             self.orga.slug, self.event.slug, self.v.code, se1.pk
         ))
@@ -575,22 +610,23 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "6.72" in html.rendered_content
 
     def test_subevent_prices(self):
-        self.event.has_subevents = True
-        self.event.save()
-        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.save()
+            se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
 
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        q.items.add(self.item)
-        q.variations.add(var1)
-        q.variations.add(var2)
-        SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            q.items.add(self.item)
+            q.variations.add(var1)
+            q.variations.add(var2)
+            SubEventItemVariation.objects.create(subevent=se1, variation=var1, price=10)
 
-        self.v.quota = q
-        self.v.value = Decimal("2.00")
-        self.v.price_mode = 'subtract'
-        self.v.save()
+            self.v.quota = q
+            self.v.value = Decimal("2.00")
+            self.v.price_mode = 'subtract'
+            self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
             self.orga.slug, self.event.slug, self.v.code, se1.pk
         ))
@@ -602,17 +638,18 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "variation_%d_%d" % (self.item.pk, var2.pk) in html.rendered_content
 
     def test_voucher_ignore_other_subevent(self):
-        self.event.has_subevents = True
-        self.event.save()
-        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
-        se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
-        q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.save()
+            se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
+            q = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se1)
 
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        q.items.add(self.item)
-        q.variations.add(var1)
-        q.variations.add(var2)
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            q.items.add(self.item)
+            q.variations.add(var1)
+            q.variations.add(var2)
 
         self.v.subevent = se1
         self.v.save()
@@ -622,19 +659,20 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         assert "SE1" in html.rendered_content
 
     def test_voucher_quota(self):
-        self.event.has_subevents = True
-        self.event.save()
-        se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
-        se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
-        q = Quota.objects.create(event=self.event, name='Quota', size=0, subevent=se1)
-        q2 = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.save()
+            se1 = self.event.subevents.create(name='SE1', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='SE2', date_from=now(), active=True)
+            q = Quota.objects.create(event=self.event, name='Quota', size=0, subevent=se1)
+            q2 = Quota.objects.create(event=self.event, name='Quota', size=2, subevent=se2)
 
-        var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
-        var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
-        q.variations.add(var1)
-        q2.variations.add(var1)
-        q.variations.add(var2)
-        q2.variations.add(var1)
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2)
+            q.variations.add(var1)
+            q2.variations.add(var1)
+            q.variations.add(var2)
+            q2.variations.add(var1)
 
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s&subevent=%s' % (
@@ -646,6 +684,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
 
 
 class WaitingListTest(EventTestMixin, SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.q = Quota.objects.create(event=self.event, name='Quota', size=0)
@@ -686,7 +725,8 @@ class WaitingListTest(EventTestMixin, SoupTest):
             }
         )
         self.assertEqual(response.status_code, 302)
-        wle = WaitingListEntry.objects.get(email='foo@bar.com')
+        with scopes_disabled():
+            wle = WaitingListEntry.objects.get(email='foo@bar.com')
         assert wle.event == self.event
         assert wle.item == self.item
         assert wle.variation is None
@@ -694,14 +734,15 @@ class WaitingListTest(EventTestMixin, SoupTest):
         assert wle.locale == 'en'
 
     def test_subevent_valid(self):
-        self.event.has_subevents = True
-        self.event.save()
-        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
-        se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
-        self.q.subevent = se1
-        self.q.save()
-        q2 = self.event.quotas.create(name="Foobar", size=100, subevent=se2)
-        q2.items.add(self.item)
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.save()
+            se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
+            se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
+            self.q.subevent = se1
+            self.q.save()
+            q2 = self.event.quotas.create(name="Foobar", size=100, subevent=se2)
+            q2.items.add(self.item)
         response = self.client.get(
             '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk)
         )
@@ -713,10 +754,11 @@ class WaitingListTest(EventTestMixin, SoupTest):
             }
         )
         self.assertEqual(response.status_code, 302)
-        wle = WaitingListEntry.objects.get(email='foo@bar.com')
-        assert wle.event == self.event
-        assert wle.item == self.item
-        assert wle.subevent == se1
+        with scopes_disabled():
+            wle = WaitingListEntry.objects.get(email='foo@bar.com')
+            assert wle.event == self.event
+            assert wle.item == self.item
+            assert wle.subevent == se1
 
     def test_invalid_item(self):
         response = self.client.get(
@@ -727,7 +769,8 @@ class WaitingListTest(EventTestMixin, SoupTest):
     def test_invalid_subevent(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=False)
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name="Foo", date_from=now(), active=False)
         response = self.client.get(
             '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
         )
@@ -750,28 +793,32 @@ class WaitingListTest(EventTestMixin, SoupTest):
             }
         )
         self.assertEqual(response.status_code, 302)
-        self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
+        with scopes_disabled():
+            self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
 
     def test_subevent_available(self):
-        self.event.has_subevents = True
-        self.event.save()
-        se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
-        se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
-        self.q.size = 1
-        self.q.subevent = se1
-        self.q.save()
-        q2 = self.event.quotas.create(name="Foobar", size=0, subevent=se2)
-        q2.items.add(self.item)
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.save()
+            se1 = self.event.subevents.create(name="Foo", date_from=now(), active=True)
+            se2 = self.event.subevents.create(name="Foobar", date_from=now(), active=True)
+            self.q.size = 1
+            self.q.subevent = se1
+            self.q.save()
+            q2 = self.event.quotas.create(name="Foobar", size=0, subevent=se2)
+            q2.items.add(self.item)
         response = self.client.post(
             '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk), {
                 'email': 'foo@bar.com'
             }
         )
         self.assertEqual(response.status_code, 302)
-        self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
+        with scopes_disabled():
+            self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
 
 
 class DeadlineTest(EventTestMixin, TestCase):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         q = Quota.objects.create(event=self.event, name='Quota', size=2)
@@ -883,11 +930,12 @@ class TestResendLink(EventTestMixin, SoupTest):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_no_orders_from_user(self):
-        Order.objects.create(
-            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
-            email='dummy@dummy.dummy', datetime=now(), expires=now(),
-            total=0,
-        )
+        with scopes_disabled():
+            Order.objects.create(
+                code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+                email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                total=0,
+            )
         mail.outbox = []
         url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
         resp = self.client.post(url, data={'email': 'dummy@dummy.different'})
@@ -896,11 +944,12 @@ class TestResendLink(EventTestMixin, SoupTest):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_one_order(self):
-        Order.objects.create(
-            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
-            email='dummy@dummy.dummy', datetime=now(), expires=now(),
-            total=0,
-        )
+        with scopes_disabled():
+            Order.objects.create(
+                code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+                email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                total=0,
+            )
         mail.outbox = []
         url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
         resp = self.client.post(url, data={'email': 'dummy@dummy.dummy'})
@@ -910,16 +959,17 @@ class TestResendLink(EventTestMixin, SoupTest):
         self.assertIn('DUMMY1', mail.outbox[0].body)
 
     def test_multiple_orders(self):
-        Order.objects.create(
-            code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
-            email='dummy@dummy.dummy', datetime=now(), expires=now(),
-            total=0,
-        )
-        Order.objects.create(
-            code='DUMMY2', status=Order.STATUS_PENDING, event=self.event,
-            email='dummy@dummy.dummy', datetime=now(), expires=now(),
-            total=0,
-        )
+        with scopes_disabled():
+            Order.objects.create(
+                code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
+                email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                total=0,
+            )
+            Order.objects.create(
+                code='DUMMY2', status=Order.STATUS_PENDING, event=self.event,
+                email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                total=0,
+            )
         mail.outbox = []
         url = '/{}/{}/resend/'.format(self.orga.slug, self.event.slug)
         resp = self.client.post(url, data={'email': 'dummy@dummy.dummy'})
@@ -1048,13 +1098,14 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
     def test_subevent(self):
         self.event.has_subevents = True
         self.event.save()
-        se1 = self.event.subevents.create(
-            name='My fancy subevent',
-            location='Heeeeeere',
-            date_from=datetime.datetime(2014, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc),
-            date_to=datetime.datetime(2014, 12, 28, 21, 57, 58, tzinfo=datetime.timezone.utc),
-            active=True
-        )
+        with scopes_disabled():
+            se1 = self.event.subevents.create(
+                name='My fancy subevent',
+                location='Heeeeeere',
+                date_from=datetime.datetime(2014, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2014, 12, 28, 21, 57, 58, tzinfo=datetime.timezone.utc),
+                active=True
+            )
         self.event.settings.show_times = False
         ical = self.client.get('/%s/%s/ical/%d/' % (self.orga.slug, self.event.slug, se1.pk)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:20141226', ical, 'incorrect start date')
@@ -1107,6 +1158,7 @@ class EventMicrodataTest(EventTestMixin, SoupTest):
 
 
 class EventSlugBlacklistValidatorTest(EventTestMixin, SoupTest):
+    @scopes_disabled()
     def test_slug_validation(self):
         event = Event(
             organizer=self.orga,

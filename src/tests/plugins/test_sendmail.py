@@ -3,6 +3,7 @@ import datetime
 import pytest
 from django.core import mail as djmail
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Item, Order, OrderPosition, Organizer, Team, User,
@@ -34,8 +35,12 @@ def order(item):
                              expires=now() + datetime.timedelta(hours=1),
                              total=13, code='DUMMY', email='dummy@dummy.test',
                              datetime=now(), locale='en')
-    OrderPosition.objects.create(order=o, item=item, price=13)
     return o
+
+
+@pytest.fixture
+def pos(order, item):
+    return OrderPosition.objects.create(order=order, item=item, price=13)
 
 
 @pytest.fixture
@@ -66,12 +71,12 @@ def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
 
 
 @pytest.mark.django_db
-def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
+def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -92,12 +97,12 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_url, event, order):
+def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -108,12 +113,12 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
 
 
 @pytest.mark.django_db
-def test_sendmail_preview(logged_in_client, sendmail_url, event, order):
+def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview'
@@ -126,12 +131,12 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order):
+def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       },
                                      follow=True)
@@ -147,12 +152,13 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
     event.settings.set('locales', ['en', 'de'])
 
-    o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
-                             expires=now() + datetime.timedelta(hours=1),
-                             total=13, code='DUMMY', email='dummy@dummy.test',
-                             datetime=now(),
-                             locale='de')
-    OrderPosition.objects.create(order=o, item=item, price=13)
+    with scopes_disabled():
+        o = Order.objects.create(event=item.event, status=Order.STATUS_PAID,
+                                 expires=now() + datetime.timedelta(hours=1),
+                                 total=13, code='DUMMY', email='dummy@dummy.test',
+                                 datetime=now(),
+                                 locale='de')
+        OrderPosition.objects.create(order=o, item=item, price=13)
 
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
@@ -181,12 +187,13 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
 
 @pytest.mark.django_db
-def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
+def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
     event.has_subevents = True
     event.save()
-    se1 = event.subevents.create(name='Subevent FOO', date_from=now())
-    se2 = event.subevents.create(name='Bar', date_from=now())
-    op = order.positions.last()
+    with scopes_disabled():
+        se1 = event.subevents.create(name='Subevent FOO', date_from=now())
+        se2 = event.subevents.create(name='Bar', date_from=now())
+        op = order.positions.last()
     op.subevent = se1
     op.save()
 
@@ -194,7 +201,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se1.pk
@@ -208,7 +215,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'subevent': se2.pk
@@ -224,12 +231,12 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
+def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'orders',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': '{code} Test subject',
                                       'message_0': 'This is a test file for sending mails.',
                                       'action': 'preview'
@@ -243,8 +250,8 @@ def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order):
-    p = order.positions.first()
+def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order, pos):
+    p = pos
     event.settings.attendee_emails_asked = True
     p.attendee_email = 'attendee@dummy.test'
     p.save()
@@ -253,7 +260,7 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order):
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -267,8 +274,8 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order):
-    p = order.positions.first()
+def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order, pos):
+    p = pos
     event.settings.attendee_emails_asked = True
     p.attendee_email = 'attendee@dummy.test'
     p.save()
@@ -277,7 +284,7 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order):
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'both',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -294,8 +301,8 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order):
 
 
 @pytest.mark.django_db
-def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, order):
-    p = order.positions.first()
+def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, order, pos):
+    p = pos
     event.settings.attendee_emails_asked = True
     p.attendee_email = 'dummy@dummy.test'
     p.save()
@@ -304,7 +311,7 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'both',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -318,8 +325,8 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
 
 
 @pytest.mark.django_db
-def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order):
-    p = order.positions.first()
+def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order, pos):
+    p = pos
     event.settings.attendee_emails_asked = True
     p.attendee_email = None
     p.save()
@@ -328,7 +335,7 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'n',
                                       'recipients': 'attendees',
-                                      'items': order.positions.first().item_id,
+                                      'items': pos.item_id,
                                       'subject_0': 'Test subject',
                                       'message_0': 'This is a test file for sending mails.'
                                       },
@@ -342,15 +349,16 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
 
 
 @pytest.mark.django_db
-def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event, order):
+def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event, order, pos):
     event.settings.attendee_emails_asked = True
-    i2 = Item.objects.create(name='Test item', event=event, default_price=13)
-    p = order.positions.first()
-    p.attendee_email = 'attendee1@dummy.test'
-    p.save()
-    order.positions.create(
-        item=i2, price=0, attendee_email='attendee2@dummy.test'
-    )
+    with scopes_disabled():
+        i2 = Item.objects.create(name='Test item', event=event, default_price=13)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=i2, price=0, attendee_email='attendee2@dummy.test'
+        )
 
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,

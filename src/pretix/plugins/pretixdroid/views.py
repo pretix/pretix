@@ -17,6 +17,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import Checkin, Event, Order, OrderPosition
 from pretix.base.models.event import SubEvent
@@ -124,34 +125,35 @@ class ConfigView(EventPermissionRequiredMixin, TemplateView):
 class ApiView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, **kwargs):
-        try:
-            self.event = Event.objects.get(
-                slug=self.kwargs['event'],
-                organizer__slug=self.kwargs['organizer']
-            )
-        except Event.DoesNotExist:
-            return HttpResponseNotFound('Unknown event')
+        with scopes_disabled():
+            try:
+                self.event = Event.objects.get(
+                    slug=self.kwargs['event'],
+                    organizer__slug=self.kwargs['organizer']
+                )
+            except Event.DoesNotExist:
+                return HttpResponseNotFound('Unknown event')
+        with scope(organizer=self.event.organizer):
+            try:
+                self.config = self.event.appconfiguration_set.get(key=request.GET.get("key", "-unset-"))
+            except AppConfiguration.DoesNotExist:
+                return HttpResponseForbidden('Invalid key')
 
-        try:
-            self.config = self.event.appconfiguration_set.get(key=request.GET.get("key", "-unset-"))
-        except AppConfiguration.DoesNotExist:
-            return HttpResponseForbidden('Invalid key')
-
-        self.subevent = None
-        if self.event.has_subevents:
-            if self.config.list.subevent:
-                self.subevent = self.config.list.subevent
-                if 'subevent' in kwargs and kwargs['subevent'] != str(self.subevent.pk):
-                    return HttpResponseForbidden('Invalid subevent selected.')
-            elif 'subevent' in kwargs:
-                self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
+            self.subevent = None
+            if self.event.has_subevents:
+                if self.config.list.subevent:
+                    self.subevent = self.config.list.subevent
+                    if 'subevent' in kwargs and kwargs['subevent'] != str(self.subevent.pk):
+                        return HttpResponseForbidden('Invalid subevent selected.')
+                elif 'subevent' in kwargs:
+                    self.subevent = get_object_or_404(SubEvent, event=self.event, pk=kwargs['subevent'])
+                else:
+                    return HttpResponseForbidden('No subevent selected.')
             else:
-                return HttpResponseForbidden('No subevent selected.')
-        else:
-            if 'subevent' in kwargs:
-                return HttpResponseForbidden('Subevents not enabled.')
+                if 'subevent' in kwargs:
+                    return HttpResponseForbidden('Subevents not enabled.')
 
-        return super().dispatch(request, **kwargs)
+            return super().dispatch(request, **kwargs)
 
 
 class ApiRedeemView(ApiView):

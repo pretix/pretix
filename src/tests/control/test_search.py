@@ -2,6 +2,7 @@ import datetime
 from decimal import Decimal
 
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from tests.base import SoupTest
 
 from pretix.base.models import (
@@ -10,6 +11,7 @@ from pretix.base.models import (
 
 
 class OrderSearchTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
@@ -67,21 +69,21 @@ class OrderSearchTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
     def test_team_limit_event(self):
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' not in resp
 
     def test_team_limit_event_wrong_permission(self):
         self.team.can_view_orders = False
         self.team.save()
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
     def test_team_all_events(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' in resp
 
@@ -89,13 +91,13 @@ class OrderSearchTest(SoupTest):
         self.team.all_events = True
         self.team.can_view_orders = False
         self.team.save()
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
     def test_team_none(self):
         self.team.members.clear()
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
@@ -104,44 +106,44 @@ class OrderSearchTest(SoupTest):
         self.user.staffsession_set.create(date_start=now(), session_key=self.client.session.session_key)
         self.user.save()
         self.team.members.clear()
-        resp = self.client.get('/control/search/orders/').rendered_content
+        resp = self.client.get('/control/search/orders/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' in resp
 
     def test_filter_email(self):
-        resp = self.client.get('/control/search/orders/?query=dummy1@dummy').rendered_content
+        resp = self.client.get('/control/search/orders/?query=dummy1@dummy').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=dummynope').rendered_content
+        resp = self.client.get('/control/search/orders/?query=dummynope').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_attendee_name(self):
-        resp = self.client.get('/control/search/orders/?query=Pete').rendered_content
+        resp = self.client.get('/control/search/orders/?query=Pete').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=Mark').rendered_content
+        resp = self.client.get('/control/search/orders/?query=Mark').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_attendee_email(self):
-        resp = self.client.get('/control/search/orders/?query=att.com').rendered_content
+        resp = self.client.get('/control/search/orders/?query=att.com').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=nope.com').rendered_content
+        resp = self.client.get('/control/search/orders/?query=nope.com').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_invoice_address(self):
-        resp = self.client.get('/control/search/orders/?query=Ltd').rendered_content
+        resp = self.client.get('/control/search/orders/?query=Ltd').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=Miller').rendered_content
+        resp = self.client.get('/control/search/orders/?query=Miller').content.decode()
         assert 'FO1' in resp
 
     def test_filter_code(self):
-        resp = self.client.get('/control/search/orders/?query=FO1').rendered_content
+        resp = self.client.get('/control/search/orders/?query=FO1').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=30c3-FO1').rendered_content
+        resp = self.client.get('/control/search/orders/?query=30c3-FO1').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=30C3-fO1A').rendered_content
+        resp = self.client.get('/control/search/orders/?query=30C3-fO1A').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=30C3-fo14').rendered_content
+        resp = self.client.get('/control/search/orders/?query=30C3-fo14').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/orders/?query=31c3-FO1').rendered_content
+        resp = self.client.get('/control/search/orders/?query=31c3-FO1').content.decode()
         assert '30C3-FO1' not in resp
-        resp = self.client.get('/control/search/orders/?query=FO2').rendered_content
+        resp = self.client.get('/control/search/orders/?query=FO2').content.decode()
         assert '30C3-FO1' not in resp
