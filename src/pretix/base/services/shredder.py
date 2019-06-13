@@ -11,14 +11,13 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from pretix.base.models import CachedFile, Event, cachedfile_name
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.shredder import ShredError
 from pretix.celery_app import app
 
 
-@app.task(base=ProfiledTask)
-def export(event: str, shredders: List[str]) -> None:
-    event = Event.objects.get(id=event)
+@app.task(base=ProfiledEventTask)
+def export(event: Event, shredders: List[str]) -> None:
     known_shredders = event.get_data_shredders()
 
     with NamedTemporaryFile() as rawfile:
@@ -63,9 +62,8 @@ def export(event: str, shredders: List[str]) -> None:
     return cf.pk
 
 
-@app.task(base=ProfiledTask, throws=(ShredError,))
-def shred(event: str, fileid: str, confirm_code: str) -> None:
-    event = Event.objects.get(id=event)
+@app.task(base=ProfiledEventTask, throws=(ShredError,))
+def shred(event: Event, fileid: str, confirm_code: str) -> None:
     known_shredders = event.get_data_shredders()
     try:
         cf = CachedFile.objects.get(pk=fileid)

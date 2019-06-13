@@ -1,17 +1,17 @@
 import sys
 
 from django.dispatch import receiver
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, User, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import EventTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 
 
-@app.task(base=ProfiledTask)
-def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None):
-    event = Event.objects.get(id=event_id)
+@app.task(base=EventTask)
+def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None):
     if user_id:
         user = User.objects.get(id=user_id)
     else:
@@ -69,6 +69,7 @@ def assign_automatically(event_id: int, user_id: int=None, subevent_id: int=None
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def process_waitinglist(sender, **kwargs):
     qs = Event.objects.filter(
         live=True

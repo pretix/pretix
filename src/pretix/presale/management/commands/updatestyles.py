@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.core.management.base import BaseCommand
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event_SettingsStore, Organizer_SettingsStore
 from pretix.base.settings import GlobalSettingsObject
@@ -15,6 +16,7 @@ from ...style import regenerate_css, regenerate_organizer_css
 class Command(BaseCommand):
     help = "Re-generate all custom stylesheets and scripts"
 
+    @scopes_disabled()
     def handle(self, *args, **options):
         for es in Organizer_SettingsStore.objects.filter(key="presale_css_file"):
             regenerate_organizer_css.apply_async(args=(es.object_id,))

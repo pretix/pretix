@@ -16,6 +16,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext as _
+from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
 from pretix.base.i18n import (
@@ -42,7 +43,7 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.pricing import get_price
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
@@ -715,10 +716,8 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
         logger.exception('Order received email could not be sent to attendee')
 
 
-def _perform_order(event: str, payment_provider: str, position_ids: List[str],
+def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web'):
-
-    event = Event.objects.get(id=event)
     if payment_provider:
         pprov = event.get_payment_providers().get(payment_provider)
         if not pprov:
@@ -804,6 +803,7 @@ def _perform_order(event: str, payment_provider: str, position_ids: List[str],
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def expire_orders(sender, **kwargs):
     eventcache = {}
 
@@ -818,6 +818,7 @@ def expire_orders(sender, **kwargs):
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def send_expiry_warnings(sender, **kwargs):
     eventcache = {}
     today = now().replace(hour=0, minute=0, second=0)
@@ -875,6 +876,7 @@ def send_expiry_warnings(sender, **kwargs):
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def send_download_reminders(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0, microsecond=0)
 
@@ -1497,8 +1499,8 @@ class OrderChangeManager:
         return pprov
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def perform_order(self, event: str, payment_provider: str, positions: List[str],
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
+def perform_order(self, event: Event, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
                   sales_channel: str='web'):
     with language(locale):
@@ -1513,6 +1515,7 @@ def perform_order(self, event: str, payment_provider: str, positions: List[str],
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
+@scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
                  device=None, cancellation_fee=None, try_auto_refund=False):
     try:

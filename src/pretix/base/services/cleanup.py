@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.dispatch import receiver
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import CachedCombinedTicket, CachedTicket
 
@@ -10,6 +11,7 @@ from ..signals import periodic_task
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def clean_cart_positions(sender, **kwargs):
     for cp in CartPosition.objects.filter(expires__lt=now() - timedelta(days=14), addon_to__isnull=False):
         cp.delete()
@@ -20,12 +22,14 @@ def clean_cart_positions(sender, **kwargs):
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def clean_cached_files(sender, **kwargs):
     for cf in CachedFile.objects.filter(expires__isnull=False, expires__lt=now()):
         cf.delete()
 
 
 @receiver(signal=periodic_task)
+@scopes_disabled()
 def clean_cached_tickets(sender, **kwargs):
     for cf in CachedTicket.objects.filter(created__lte=now() - timedelta(days=30)):
         cf.delete()

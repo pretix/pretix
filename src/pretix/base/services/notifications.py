@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.template.loader import get_template
+from django_scopes import scope, scopes_disabled
 from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import language
@@ -12,6 +13,7 @@ from pretix.helpers.urls import build_absolute_uri
 
 
 @app.task(base=TransactionAwareTask)
+@scopes_disabled()
 def notify(logentry_id: int):
     logentry = LogEntry.all.get(id=logentry_id)
     if not logentry.event:
@@ -66,17 +68,22 @@ def notify(logentry_id: int):
 @app.task(base=ProfiledTask)
 def send_notification(logentry_id: int, action_type: str, user_id: int, method: str):
     logentry = LogEntry.all.get(id=logentry_id)
-    user = User.objects.get(id=user_id)
-    types = get_all_notification_types(logentry.event)
-    notification_type = types.get(action_type)
-    if not notification_type:
-        return  # Ignore, e.g. plugin not active for this event
+    if logentry.event:
+        sm = lambda: scope(organizer=logentry.event.organizer)  # noqa
+    else:
+        sm = lambda: scopes_disabled()  # noqa
+    with sm():
+        user = User.objects.get(id=user_id)
+        types = get_all_notification_types(logentry.event)
+        notification_type = types.get(action_type)
+        if not notification_type:
+            return  # Ignore, e.g. plugin not active for this event
 
-    with language(user.locale):
-        notification = notification_type.build_notification(logentry)
+        with language(user.locale):
+            notification = notification_type.build_notification(logentry)
 
-        if method == "mail":
-            send_notification_mail(notification, user)
+            if method == "mail":
+                send_notification_mail(notification, user)
 
 
 def send_notification_mail(notification: Notification, user: User):

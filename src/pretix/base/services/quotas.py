@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models import Max, Q
 from django.dispatch import receiver
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, LogEntry
 from pretix.celery_app import app
@@ -17,6 +18,7 @@ def build_all_quota_caches(sender, **kwargs):
 
 
 @app.task
+@scopes_disabled()
 def refresh_quota_caches():
     # Active events
     active = LogEntry.objects.using(settings.DATABASE_REPLICA).filter(

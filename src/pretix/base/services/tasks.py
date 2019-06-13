@@ -14,10 +14,12 @@ import time
 
 from django.conf import settings
 from django.db import transaction
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.metrics import (
     pretix_task_duration_seconds, pretix_task_runs_total,
 )
+from pretix.base.models import Event
 from pretix.celery_app import app
 
 
@@ -59,6 +61,30 @@ class ProfiledTask(app.Task):
             pretix_task_runs_total.inc(1, task_name=self.name, status="success")
 
         return super().on_success(retval, task_id, args, kwargs)
+
+
+class EventTask(app.Task):
+    def __call__(self, *args, **kwargs):
+        if 'event_id' in kwargs:
+            event_id = kwargs.get('event_id')
+            with scopes_disabled():
+                event = Event.objects.select_related('organizer').get(pk=event_id)
+            del kwargs['event_id']
+            kwargs['event'] = event
+        else:
+            args = list(args)
+            event_id = args[0]
+            with scopes_disabled():
+                event = Event.objects.select_related('organizer').get(pk=event_id)
+            args[0] = event
+
+        with scope(organizer=event.organizer):
+            ret = super().__call__(*args, **kwargs)
+        return ret
+
+
+class ProfiledEventTask(ProfiledTask, EventTask):
+    pass
 
 
 class TransactionAwareTask(ProfiledTask):
