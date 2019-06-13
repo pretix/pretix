@@ -1,5 +1,4 @@
 from django.urls import resolve
-from django.utils.deprecation import MiddlewareMixin
 from django_scopes import scope
 
 from pretix.presale.signals import process_response
