@@ -26,8 +26,6 @@ matrix:
     - python: 3.5
       env: JOB=tests PRETIX_CONFIG_FILE=tests/travis_postgres.cfg
     - python: 3.7
-      env: JOB=plugins
-    - python: 3.7
       env: JOB=doc-spelling
     - python: 3.7
       env: JOB=translation-spelling
