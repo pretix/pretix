@@ -630,7 +630,7 @@ class Order(LockModel, LoggedModel):
             ), tz)
         return term_last
 
-    def _can_be_paid(self, count_waitinglist=True, ignore_date=False) -> Union[bool, str]:
+    def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
@@ -638,29 +638,37 @@ class Order(LockModel, LoggedModel):
                       "payments should be accepted in the payment settings."),
             'require_approval': _('This order is not yet approved by the event organizer.')
         }
-        if self.require_approval:
-            return error_messages['require_approval']
-        term_last = self.payment_term_last
-        if term_last and not ignore_date:
-            if now() > term_last:
-                return error_messages['late_lastdate']
+        if not force:
+            if self.require_approval:
+                return error_messages['require_approval']
+            term_last = self.payment_term_last
+            if term_last and not ignore_date:
+                if now() > term_last:
+                    return error_messages['late_lastdate']
 
         if self.status == self.STATUS_PENDING:
             return True
-        if not self.event.settings.get('payment_term_accept_late') and not ignore_date:
+        if not self.event.settings.get('payment_term_accept_late') and not ignore_date and not force:
             return error_messages['late']
 
-        return self._is_still_available(count_waitinglist=count_waitinglist)
+        return self._is_still_available(count_waitinglist=count_waitinglist, force=False)
 
-    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True) -> Union[bool, str]:
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False) -> Union[bool, str]:
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
+            'seat_unavailable': _('The seat "{seat}" is no longer available.'),
         }
         now_dt = now_dt or now()
-        positions = self.positions.all().select_related('item', 'variation')
+        positions = self.positions.all().select_related('item', 'variation', 'seat')
         quota_cache = {}
         try:
             for i, op in enumerate(positions):
+                if op.seat:
+                    if not op.seat.is_available(ignore_orderpos=op):
+                        raise Quota.QuotaExceededException(error_messages['seat_unavailable'].format(seat=op.seat))
+                if force:
+                    continue
+
                 quotas = list(op.quotas)
                 if len(quotas) == 0:
                     raise Quota.QuotaExceededException(error_messages['unavailable'].format(
@@ -1188,8 +1196,8 @@ class OrderPayment(models.Model):
 
     def _mark_paid(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
         from pretix.base.signals import order_paid
-        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date)
-        if not force and can_be_paid is not True:
+        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
+        if can_be_paid is not True:
             self.order.log_action('pretix.event.order.quotaexceeded', {
                 'message': can_be_paid
             }, user=user, auth=auth)
