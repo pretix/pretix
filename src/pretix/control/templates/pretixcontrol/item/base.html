@@ -27,6 +27,13 @@
                     {% trans "Bundled products" %}
                 </a>
             </li>
+            {% for n in extra_nav %}
+                <li {% if n.active %}class="active"{% endif %}>
+                    <a href="{{ n.url }}">
+                        {{ n.label }}
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
         <h1>{% trans "Create product" %}</h1>
