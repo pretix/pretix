@@ -2566,6 +2566,75 @@ def test_order_delete_test_mode(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_delete_test_mode_voucher(token_client, organizer, event, order, item):
+    order.testmode = True
+    order.save()
+    q = event.quotas.create(name="Quota")
+    q.items.add(item)
+    voucher = event.vouchers.create(price_mode="set", value=15, quota=q, redeemed=1)
+    op = order.positions.first()
+    op.voucher = voucher
+    op.save()
+
+    assert voucher.redeemed == 1
+
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 204
+    assert not Order.objects.filter(code=order.code).exists()
+    voucher.refresh_from_db()
+    assert voucher.redeemed == 0
+
+
+@pytest.mark.django_db
+def test_order_delete_test_mode_voucher_cancelled_position(token_client, organizer, event, order, item):
+    order.testmode = True
+    order.save()
+    q = event.quotas.create(name="Quota")
+    q.items.add(item)
+    voucher = event.vouchers.create(price_mode="set", value=15, quota=q, redeemed=42)
+    op = order.all_positions.last()
+    op.voucher = voucher
+    op.save()
+
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 204
+    assert not Order.objects.filter(code=order.code).exists()
+    voucher.refresh_from_db()
+    assert voucher.redeemed == 42
+
+
+@pytest.mark.django_db
+def test_order_delete_test_mode_voucher_cancelled_order(token_client, organizer, event, order, item):
+    order.testmode = True
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    q = event.quotas.create(name="Quota")
+    q.items.add(item)
+    voucher = event.vouchers.create(price_mode="set", value=15, quota=q, redeemed=42)
+    op = order.positions.first()
+    op.voucher = voucher
+    op.save()
+
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
+    assert resp.status_code == 204
+    assert not Order.objects.filter(code=order.code).exists()
+    voucher.refresh_from_db()
+    assert voucher.redeemed == 42
+
+
+@pytest.mark.django_db
 def test_order_update_ignore_fields(token_client, organizer, event, order):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/orders/{}/'.format(

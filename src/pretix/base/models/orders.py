@@ -15,7 +15,7 @@ from django.db import models, transaction
 from django.db.models import (
     Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
 )
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, Greatest
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -195,6 +195,8 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     def gracefully_delete(self, user=None, auth=None):
+        from . import Voucher
+
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
         self.event.log_action(
@@ -203,6 +205,12 @@ class Order(LockModel, LoggedModel):
                 'code': self.code,
             }
         )
+
+        if self.status != Order.STATUS_CANCELED:
+            for position in self.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
