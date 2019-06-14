@@ -238,6 +238,11 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         ) if ev.date_admission else ""
     }),
+    ("seat", {
+        "label": _("Seat name"),
+        "editor_sample": _("3, 4-5"),
+        "evaluate": lambda op, order, ev: str(op.seat if op.seat else _('General admission'))
+    }),
 ))
 
 

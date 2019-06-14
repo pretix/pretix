@@ -48,4 +48,47 @@ $(function () {
         $itemvar.on("change", update_price);
         $subevent.on("change", update_price);
     });
+    el.find('[data-model-select2=seat]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            placeholder: $(this).attr("data-placeholder"),
+            ajax: {
+                url: $(this).attr('data-select2-url'),
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            },
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("primary").append($("<div>").text(res.text).html())
+                );
+                if (res.event) {
+                    $ret.append(
+                        $("<span>").addClass("secondary").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append($("<div>").text(res.event).html())
+                    );
+                }
+                return $ret;
+            },
+        }).on("select2:select", function () {
+            // Allow continuing to select
+            if ($s.hasAttribute("multiple")) {
+                window.setTimeout(function () {
+                    $s.parent().find('.select2-search__field').focus();
+                }, 50);
+            }
+        });
+    });
 });

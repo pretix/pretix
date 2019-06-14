@@ -10,7 +10,7 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition
+from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition, Seat
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 from pretix.control.forms.widgets import Select2
@@ -269,6 +269,11 @@ class OrderPositionChangeForm(forms.Form):
         required=False,
         empty_label=_('(Unchanged)')
     )
+    seat = forms.ModelChoiceField(
+        Seat.objects.none(),
+        required=False,
+        empty_label=_('(Unchanged)')
+    )
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
@@ -311,6 +316,22 @@ class OrderPositionChangeForm(forms.Form):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']
+
+        if instance.seat:
+            self.fields['seat'].queryset = instance.order.event.seats.all()
+            self.fields['seat'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'seat',
+                    'data-select2-url': reverse('control:event.seats.select2', kwargs={
+                        'event': instance.order.event.slug,
+                        'organizer': instance.order.event.organizer.slug,
+                    }) + '?subevent=' + str(instance.subevent_id),
+                    'data-placeholder': _('(Unchanged)')
+                }
+            )
+            self.fields['seat'].widget.choices = self.fields['seat'].choices
+        else:
+            del self.fields['seat']
 
         choices = [
             ('', _('(Unchanged)'))

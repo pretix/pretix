@@ -25,7 +25,7 @@ from pretix.base.i18n import (
 from pretix.base.models import (
     CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
     OrderPosition, Quota, User, Voucher,
-)
+    Seat)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.base.models.orders import (
@@ -981,9 +981,12 @@ class OrderChangeManager:
         'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
+        'seat_unavailable': _('The selected seat "{seat}" is not available.'),
+        'seat_subevent_mismatch': _('The selected seat "{seat}" does not match the selected subevent.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
+    SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
@@ -999,6 +1002,7 @@ class OrderChangeManager:
         self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
+        self._seatdiff = Counter()
         self._operations = []
         self.notify = notify
         self._invoice_dirty = False
@@ -1015,6 +1019,13 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation))
+
+    def change_seat(self, position: OrderPosition, seat: Seat):
+        if position.seat:
+            self._seatdiff.subtract([position.seat])
+        if seat:
+            self._seatdiff.update([seat])
+        self._operations.append(self.SeatOperation(position, seat))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
         price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent,
@@ -1071,6 +1082,8 @@ class OrderChangeManager:
         self._totaldiff += -position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
+        if position.seat:
+            self._seatdiff.subtract([position.seat])
 
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
             self._invoice_dirty = True
@@ -1112,6 +1125,26 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
         self._operations.append(self.SplitOperation(position))
+
+    def _check_seats(self):
+        for seat, diff in self._seatdiff.items():
+            if diff <= 0:
+                continue
+            if not seat.is_available():
+                raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
+
+        if self.event.has_subevents:
+            state = {}
+            for p in self.order.positions.all():
+                state[p] = {'seat': p.seat, 'subevent': p.subevent}
+            for op in self._operations:
+                if isinstance(op, self.SeatOperation):
+                    state[op.position]['seat'] = op.seat
+                elif isinstance(op, self.SubeventOperation):
+                    state[op.position]['subevent'] = op.subevent
+            for v in state.values():
+                if v['seat'].subevent_id != v['subevent'].pk:
+                    raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=v['seat'].name))
 
     def _check_quotas(self):
         for quota, diff in self._quotadiff.items():
@@ -1198,6 +1231,17 @@ class OrderChangeManager:
                 op.position.item = op.item
                 op.position.variation = op.variation
                 op.position._calculate_tax()
+                op.position.save()
+            elif isinstance(op, self.SeatOperation):
+                self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'old_seat': op.position.seat.name if op.position.seat else "-",
+                    'new_seat': op.seat.name if op.seat else "-",
+                    'old_seat_id': op.position.seat.pk if op.position.seat else None,
+                    'new_seat_id': op.seat.pk if op.seat else None,
+                })
+                op.position.seat = op.seat
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
@@ -1487,6 +1531,7 @@ class OrderChangeManager:
                     raise OrderError(self.error_messages['not_pending_or_paid'])
                 if check_quotas:
                     self._check_quotas()
+                self._check_seats()
                 self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()

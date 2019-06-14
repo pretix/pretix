@@ -1266,6 +1266,9 @@ class OrderChange(OrderView):
                     if item != p.item or variation != p.variation:
                         ocm.change_item(p, item, variation)
 
+                if p.seat and p.form.cleaned_data['seat'] and p.form.cleaned_data['seat'] != p.seat:
+                    ocm.change_seat(p, p.form.cleaned_data['seat'])
+
                 if self.request.event.has_subevents and p.form.cleaned_data['subevent'] and p.form.cleaned_data['subevent'] != p.subevent:
                     ocm.change_subevent(p, p.form.cleaned_data['subevent'])
 

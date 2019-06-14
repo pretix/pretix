@@ -465,7 +465,7 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemAddOn, ItemCategory, Item, Question, Quota
+        from . import ItemAddOn, ItemCategory, Item, Question, Quota, Seat, SeatCategoryMapping
         from ..signals import event_copy_data
 
         self.plugins = other.plugins
@@ -552,6 +552,25 @@ class Event(EventMixin, LoggedModel):
             cl.save()
             for i in items:
                 cl.limit_products.add(item_map[i.pk])
+
+        if other.seating_plan:
+            if other.seating_plan.organizer_id == self.organizer_id:
+                self.seating_plan = other.seating_plan
+            else:
+                self.organizer.seating_plans.create(name=other.seating_plan.name, layout=other.seating_plan.layout)
+            self.save()
+
+        for m in other.seat_category_mappings.filter(subevent__isnull=True):
+            m.pk = None
+            m.event = self
+            m.product = item_map[m.product_id]
+            m.save()
+
+        for s in other.seats.filter(subevent__isnull=True):
+            s.pk = None
+            s.event = self
+            s.save()
+
 
         for s in other.settings._objects.all():
             s.object = self

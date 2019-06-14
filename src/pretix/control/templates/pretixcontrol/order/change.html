@@ -87,20 +87,6 @@
                                 <strong>{% trans "Change to" %}</strong>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <strong>{% trans "Product" %}</strong>
-                            </div>
-                            <div class="col-sm-5">
-                                {{ position.item }}
-                                {% if position.variation %}
-                                    – {{ position.variation }}
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-4">
-                                {% bootstrap_field position.form.itemvar layout='inline' %}
-                            </div>
-                        </div>
 
                         {% if request.event.has_subevents %}
                             <div class="row">
@@ -115,6 +101,34 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {% if position.seat %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <strong>{% trans "Seat" %}</strong>
+                                </div>
+                                <div class="col-sm-5">
+                                    {{ position.seat }}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field position.form.seat layout='inline' %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <strong>{% trans "Product" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {{ position.item }}
+                                {% if position.variation %}
+                                    – {{ position.variation }}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                {% bootstrap_field position.form.itemvar layout='inline' %}
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-3">
