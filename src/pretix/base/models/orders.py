@@ -206,9 +206,10 @@ class Order(LockModel, LoggedModel):
             }
         )
 
-        for position in OrderPosition.all.filter(order=self):
-            if position.voucher:
-                Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+        if self.status != Order.STATUS_CANCELED:
+            for position in self.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
