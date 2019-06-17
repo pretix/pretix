@@ -4,11 +4,12 @@ from django.db import models
 from django.db.models import Max
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.models import LoggedModel
 
 
+@scopes_disabled()
 def generate_serial():
     serial = get_random_string(allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', length=16)
     while Device.objects.filter(unique_serial=serial).exists():
@@ -16,6 +17,7 @@ def generate_serial():
     return serial
 
 
+@scopes_disabled()
 def generate_initialization_token():
     token = get_random_string(length=16, allowed_chars=string.ascii_lowercase + string.digits)
     while Device.objects.filter(initialization_token=token).exists():
@@ -23,6 +25,7 @@ def generate_initialization_token():
     return token
 
 
+@scopes_disabled()
 def generate_api_token():
     token = get_random_string(length=64, allowed_chars=string.ascii_lowercase + string.digits)
     while Device.objects.filter(api_token=token).exists():

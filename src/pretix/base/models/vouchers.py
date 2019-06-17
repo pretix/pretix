@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scopes_disabled
 
 from ..decimal import round_decimal
 from .base import LoggedModel
@@ -24,6 +24,7 @@ def _generate_random_code(prefix=None):
     return get_random_string(length=settings.ENTROPY['voucher_code'], allowed_chars=charset)
 
 
+@scopes_disabled()
 def generate_code(prefix=None):
     while True:
         code = _generate_random_code(prefix=prefix)

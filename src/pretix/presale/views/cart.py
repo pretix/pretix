@@ -160,6 +160,7 @@ class CartActionMixin:
         return items
 
 
+@scopes_disabled()
 def generate_cart_id(request=None, prefix=''):
     """
     Generates a random new cart ID that is not currently in use, with an optional pretix.

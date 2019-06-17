@@ -17,7 +17,7 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import ugettext_lazy as _
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel
@@ -946,6 +946,7 @@ class SubEvent(EventMixin, LoggedModel):
                 raise ValidationError(_('One or more variations do not belong to this event.'))
 
 
+@scopes_disabled()
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
 

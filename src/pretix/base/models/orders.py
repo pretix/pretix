@@ -1857,6 +1857,7 @@ class OrderPosition(AbstractPosition):
 
         return super().save(*args, **kwargs)
 
+    @scopes_disabled()
     def assign_pseudonymization_id(self):
         # This omits some character pairs completely because they are hard to read even on screens (1/I and O/0)
         # and includes only one of two characters for some pairs because they are sometimes hard to distinguish in
