@@ -1,3 +1,4 @@
+from django.template.response import TemplateResponse
 from django.urls import resolve
 from django_scopes import scope
 
@@ -28,5 +29,8 @@ class EventMiddleware:
             if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):
                 for receiver, r in process_response.send(request.event, request=request, response=response):
                     response = r
+
+            if isinstance(response, TemplateResponse):
+                response = response.render()
 
         return response

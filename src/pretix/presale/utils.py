@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import redirect
+from django.template.response import TemplateResponse
 from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 from django_scopes import scope
@@ -157,6 +158,10 @@ def _event_view(function=None, require_live=True, require_plugin=None):
                     response = func(request=request, *args, **kwargs)
                     for receiver, r in process_response.send(request.event, request=request, response=response):
                         response = r
+
+                    if isinstance(response, TemplateResponse):
+                        response = response.render()
+
                     return response
 
         for attrname in dir(func):
