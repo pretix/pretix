@@ -1,4 +1,7 @@
+import inspect
+
 import pytest
+from django_scopes import scopes_disabled
 from xdist.dsession import DSession
 
 CRASHED_ITEMS = set()
@@ -31,3 +34,16 @@ def pytest_configure(config):
                 self.sched.check_schedule(node)
 
     DSession.handle_crashitem = _handle_crashitem
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_fixture_setup(fixturedef, request):
+    """
+    This hack automatically disables django-scopes for all fixtures which are not yield fixtures.
+    This saves us a *lot* of decorcators…
+    """
+    if inspect.isgeneratorfunction(fixturedef.func):
+        yield
+    else:
+        with scopes_disabled():
+            yield

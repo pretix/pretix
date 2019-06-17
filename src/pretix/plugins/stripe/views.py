@@ -17,6 +17,7 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Order, OrderPayment, Quota
 from pretix.base.payment import PaymentException
@@ -140,6 +141,7 @@ def oauth_return(request, *args, **kwargs):
 
 @csrf_exempt
 @require_POST
+@scopes_disabled()
 def webhook(request, *args, **kwargs):
     event_json = json.loads(request.body.decode('utf-8'))
 

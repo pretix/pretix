@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import Event, Organizer
@@ -176,7 +177,8 @@ def test_ics_subevents(env, client):
         date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True, has_subevents=True
     )
-    e.subevents.create(date_from=now(), name='SE1', active=True)
+    with scopes_disabled():
+        e.subevents.create(date_from=now(), name='SE1', active=True)
     r = client.get('/mrmcd/events/ical/')
     assert b'MRMCD2017' not in r.content
     assert b'SE1' in r.content
@@ -194,7 +196,8 @@ def test_ics_subevents_attributes(env, client):
         date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True, has_subevents=True
     )
-    se1 = e.subevents.create(date_from=now(), name='SE1', active=True)
+    with scopes_disabled():
+        se1 = e.subevents.create(date_from=now(), name='SE1', active=True)
 
     prop = env[0].meta_properties.create(name='loc', default='HH')
     e0.meta_values.create(value='MA', property=prop)

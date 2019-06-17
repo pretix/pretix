@@ -17,6 +17,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     CartPosition, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
@@ -80,7 +81,8 @@ class CartActionMixin:
             return InvoiceAddress()
 
         try:
-            return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+            with scopes_disabled():
+                return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
         except InvoiceAddress.DoesNotExist:
             return InvoiceAddress()
 

@@ -12,6 +12,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_otp.models import Device
+from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
@@ -283,6 +284,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 return True
         return False
 
+    @scopes_disabled()
     def get_events_with_any_permission(self, request=None):
         """
         Returns a queryset of events the user has any permissions to.
@@ -300,6 +302,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             | Q(id__in=self.teams.values_list('limit_events__id', flat=True))
         )
 
+    @scopes_disabled()
     def get_events_with_permission(self, permission, request=None):
         """
         Returns a queryset of events the user has a specific permissions to.

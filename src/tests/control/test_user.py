@@ -146,14 +146,14 @@ class UserSettings2FATest(SoupTest):
 
     def test_enable_require_device(self):
         r = self.client.post('/control/settings/2fa/enable', follow=True)
-        assert 'alert-danger' in r.rendered_content
+        assert 'alert-danger' in r.content.decode()
         self.user.refresh_from_db()
         assert not self.user.require_2fa
 
     def test_enable(self):
         U2FDevice.objects.create(user=self.user, name='Test')
         r = self.client.post('/control/settings/2fa/enable', follow=True)
-        assert 'alert-success' in r.rendered_content
+        assert 'alert-success' in r.content.decode()
         self.user.refresh_from_db()
         assert self.user.require_2fa
 
@@ -161,7 +161,7 @@ class UserSettings2FATest(SoupTest):
         self.user.require_2fa = True
         self.user.save()
         r = self.client.post('/control/settings/2fa/disable', follow=True)
-        assert 'alert-success' in r.rendered_content
+        assert 'alert-success' in r.content.decode()
         self.user.refresh_from_db()
         assert not self.user.require_2fa
 
@@ -192,7 +192,7 @@ class UserSettings2FATest(SoupTest):
             'devicetype': 'u2f',
             'name': 'Foo'
         })
-        assert 'alert-danger' in r.rendered_content
+        assert 'alert-danger' in r.content.decode()
 
     def test_create_u2f(self):
         with mocker_context() as mocker:
@@ -227,7 +227,7 @@ class UserSettings2FATest(SoupTest):
         }, follow=True)
         d.refresh_from_db()
         assert d.confirmed
-        assert 'alert-success' in r.rendered_content
+        assert 'alert-success' in r.content.decode()
         self.user.refresh_from_db()
         assert self.user.require_2fa
 
@@ -242,7 +242,7 @@ class UserSettings2FATest(SoupTest):
         r = self.client.post('/control/settings/2fa/totp/{}/confirm'.format(d.pk), {
             'token': str(totp.token() - 2)
         }, follow=True)
-        assert 'alert-danger' in r.rendered_content
+        assert 'alert-danger' in r.content.decode()
         d.refresh_from_db()
         assert not d.confirmed
 
@@ -257,7 +257,7 @@ class UserSettings2FATest(SoupTest):
         r = self.client.post('/control/settings/2fa/u2f/{}/confirm'.format(d.pk), {
             'token': 'FOO'
         }, follow=True)
-        assert 'alert-danger' in r.rendered_content
+        assert 'alert-danger' in r.content.decode()
         d.refresh_from_db()
         assert not d.confirmed
 
@@ -279,7 +279,7 @@ class UserSettings2FATest(SoupTest):
         }, follow=True)
         d.refresh_from_db()
         assert d.confirmed
-        assert 'alert-success' in r.rendered_content
+        assert 'alert-success' in r.content.decode()
         self.user.refresh_from_db()
         assert self.user.require_2fa
 

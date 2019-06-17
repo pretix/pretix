@@ -2,6 +2,7 @@ import time
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import Event, Organizer
 from pretix.base.services import locking
@@ -17,16 +18,18 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now()
     )
-    return event
+    with scope(organizer=o):
+        yield event
 
 
 @pytest.mark.django_db
 def test_locking_exclusive(event):
     with event.lock():
         with pytest.raises(LockTimeoutException):
-            ev = Event.objects.get(id=event.id)
-            with ev.lock():
-                pass
+            with scopes_disabled():
+                ev = Event.objects.get(id=event.id)
+                with ev.lock():
+                    pass
 
 
 @pytest.mark.django_db

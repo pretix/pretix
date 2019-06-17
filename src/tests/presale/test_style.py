@@ -3,6 +3,7 @@ import os.path
 
 from django.conf import settings
 from django.test import TestCase, override_settings
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.models import KnownDomain
@@ -10,6 +11,7 @@ from pretix.presale.style import regenerate_css, regenerate_organizer_css
 
 
 class StyleTest(TestCase):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')

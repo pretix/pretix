@@ -8,6 +8,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import scope, scopes_disabled
 from requests import RequestException
 
 from pretix.api.models import WebHook, WebHookCall, WebHookEventListener
@@ -203,51 +204,52 @@ def notify_webhooks(logentry_id: int):
 @app.task(base=ProfiledTask, bind=True, max_retries=9)
 def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int):
     # 9 retries with 2**(2*x) timing is roughly 72 hours
-    logentry = LogEntry.all.get(id=logentry_id)
-    webhook = WebHook.objects.get(id=webhook_id)
+    with scopes_disabled():
+        webhook = WebHook.objects.get(id=webhook_id)
+    with scope(organizer=webhook.organizer):
+        logentry = LogEntry.all.get(id=logentry_id)
+        types = get_all_webhook_events()
+        event_type = types.get(action_type)
+        if not event_type or not webhook.enabled:
+            return  # Ignore, e.g. plugin not installed
 
-    types = get_all_webhook_events()
-    event_type = types.get(action_type)
-    if not event_type or not webhook.enabled:
-        return  # Ignore, e.g. plugin not installed
+        payload = event_type.build_payload(logentry)
+        t = time.time()
 
-    payload = event_type.build_payload(logentry)
-    t = time.time()
-
-    try:
         try:
-            resp = requests.post(
-                webhook.target_url,
-                json=payload,
-                allow_redirects=False
-            )
-            WebHookCall.objects.create(
-                webhook=webhook,
-                action_type=logentry.action_type,
-                target_url=webhook.target_url,
-                is_retry=self.request.retries > 0,
-                execution_time=time.time() - t,
-                return_code=resp.status_code,
-                payload=json.dumps(payload),
-                response_body=resp.text[:1024 * 1024],
-                success=200 <= resp.status_code <= 299
-            )
-            if resp.status_code == 410:
-                webhook.enabled = False
-                webhook.save()
-            elif resp.status_code > 299:
+            try:
+                resp = requests.post(
+                    webhook.target_url,
+                    json=payload,
+                    allow_redirects=False
+                )
+                WebHookCall.objects.create(
+                    webhook=webhook,
+                    action_type=logentry.action_type,
+                    target_url=webhook.target_url,
+                    is_retry=self.request.retries > 0,
+                    execution_time=time.time() - t,
+                    return_code=resp.status_code,
+                    payload=json.dumps(payload),
+                    response_body=resp.text[:1024 * 1024],
+                    success=200 <= resp.status_code <= 299
+                )
+                if resp.status_code == 410:
+                    webhook.enabled = False
+                    webhook.save()
+                elif resp.status_code > 299:
+                    raise self.retry(countdown=2 ** (self.request.retries * 2))
+            except RequestException as e:
+                WebHookCall.objects.create(
+                    webhook=webhook,
+                    action_type=logentry.action_type,
+                    target_url=webhook.target_url,
+                    is_retry=self.request.retries > 0,
+                    execution_time=time.time() - t,
+                    return_code=0,
+                    payload=json.dumps(payload),
+                    response_body=str(e)[:1024 * 1024]
+                )
                 raise self.retry(countdown=2 ** (self.request.retries * 2))
-        except RequestException as e:
-            WebHookCall.objects.create(
-                webhook=webhook,
-                action_type=logentry.action_type,
-                target_url=webhook.target_url,
-                is_retry=self.request.retries > 0,
-                execution_time=time.time() - t,
-                return_code=0,
-                payload=json.dumps(payload),
-                response_body=str(e)[:1024 * 1024]
-            )
-            raise self.retry(countdown=2 ** (self.request.retries * 2))
-    except MaxRetriesExceededError:
-        pass
+        except MaxRetriesExceededError:
+            pass

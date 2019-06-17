@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base import settings
@@ -43,7 +44,8 @@ class SettingsTestCase(TestCase):
         sandbox['bar'] = 'baz'
         sandbox.baz = 42
 
-        self.event = Event.objects.get(id=self.event.id)
+        with scopes_disabled():
+            self.event = Event.objects.get(id=self.event.id)
         sandbox = SettingsSandbox('testing', 'foo', self.event)
         self.assertEqual(sandbox['bar'], 'baz')
         self.assertEqual(sandbox.baz, '42')

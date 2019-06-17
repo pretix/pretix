@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Item, Order, OrderFee, OrderPayment, OrderPosition, Organizer,
@@ -125,10 +126,11 @@ def test_underpaid(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PENDING
-    p = env[2].payments.last()
-    assert p.amount == Decimal('22.50')
-    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
-    assert env[2].pending_sum == Decimal('0.50')
+    with scopes_disabled():
+        p = env[2].payments.last()
+        assert p.amount == Decimal('22.50')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+        assert env[2].pending_sum == Decimal('0.50')
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == 'Your order received an incomplete payment: 1Z3AS'
@@ -150,7 +152,8 @@ def test_in_parts(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
-    assert env[2].payments.count() == 2
+    with scopes_disabled():
+        assert env[2].payments.count() == 2
     assert env[2].pending_sum == Decimal('0.00')
 
 
@@ -164,10 +167,11 @@ def test_overpaid(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
-    p = env[2].payments.last()
-    assert p.amount == Decimal('23.50')
-    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
-    assert env[2].pending_sum == Decimal('-0.50')
+    with scopes_disabled():
+        p = env[2].payments.last()
+        assert p.amount == Decimal('23.50')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+        assert env[2].pending_sum == Decimal('-0.50')
 
 
 @pytest.mark.django_db
@@ -308,9 +312,10 @@ def test_keep_unmatched(env, orga_job):
         'date': '2016-01-26',
         'amount': '23.00'
     }])
-    job = BankImportJob.objects.last()
-    t = job.transactions.last()
-    assert t.state == BankTransaction.STATE_NOMATCH
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_NOMATCH
 
 
 @pytest.mark.django_db
@@ -355,17 +360,18 @@ Buchungstag;Valuta;Buchungstext;Auftraggeber / Empfänger;Verwendungszweck;Betra
 
 @pytest.mark.django_db
 def test_pending_paypal_drop_fee(env, job):
-    fee = env[2].fees.create(
-        fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
-    )
-    env[2].total += Decimal('2.00')
-    env[2].save()
-    p = env[2].payments.create(
-        provider='paypal',
-        state=OrderPayment.PAYMENT_STATE_PENDING,
-        fee=fee,
-        amount=env[2].total
-    )
+    with scopes_disabled():
+        fee = env[2].fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
+        )
+        env[2].total += Decimal('2.00')
+        env[2].save()
+        p = env[2].payments.create(
+            provider='paypal',
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            fee=fee,
+            amount=env[2].total
+        )
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1234S',
@@ -374,7 +380,8 @@ def test_pending_paypal_drop_fee(env, job):
     }])
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
-    assert env[2].fees.count() == 0
+    with scopes_disabled():
+        assert env[2].fees.count() == 0
     assert env[2].total == Decimal('23.00')
     p.refresh_from_db()
     assert p.state == OrderPayment.PAYMENT_STATE_CANCELED
@@ -382,45 +389,48 @@ def test_pending_paypal_drop_fee(env, job):
 
 @pytest.mark.django_db
 def test_pending_paypal_replace_fee_included(env, job):
-    env[0].settings.set('payment_banktransfer__fee_abs', '1.00')
-    fee = env[2].fees.create(
-        fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
-    )
-    env[2].total += Decimal('2.00')
-    env[2].save()
-    env[2].payments.create(
-        provider='paypal',
-        state=OrderPayment.PAYMENT_STATE_PENDING,
-        fee=fee,
-        amount=env[2].total
-    )
+    with scopes_disabled():
+        env[0].settings.set('payment_banktransfer__fee_abs', '1.00')
+        fee = env[2].fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
+        )
+        env[2].total += Decimal('2.00')
+        env[2].save()
+        env[2].payments.create(
+            provider='paypal',
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            fee=fee,
+            amount=env[2].total
+        )
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1234S',
         'date': '2016-01-26',
         'amount': '24.00'
     }])
-    env[2].refresh_from_db()
-    assert env[2].status == Order.STATUS_PAID
-    assert env[2].fees.count() == 1
-    assert env[2].fees.last().value == Decimal('1.00')
-    assert env[2].total == Decimal('24.00')
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PAID
+        assert env[2].fees.count() == 1
+        assert env[2].fees.last().value == Decimal('1.00')
+        assert env[2].total == Decimal('24.00')
 
 
 @pytest.mark.django_db
 def test_pending_paypal_replace_fee_missing(env, job):
     env[0].settings.set('payment_banktransfer__fee_abs', '1.00')
-    fee = env[2].fees.create(
-        fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
-    )
-    env[2].total += Decimal('2.00')
-    env[2].save()
-    env[2].payments.create(
-        provider='paypal',
-        state=OrderPayment.PAYMENT_STATE_PENDING,
-        fee=fee,
-        amount=env[2].total
-    )
+    with scopes_disabled():
+        fee = env[2].fees.create(
+            fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('2.00')
+        )
+        env[2].total += Decimal('2.00')
+        env[2].save()
+        env[2].payments.create(
+            provider='paypal',
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            fee=fee,
+            amount=env[2].total
+        )
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY1234S',
@@ -428,7 +438,8 @@ def test_pending_paypal_replace_fee_missing(env, job):
         'amount': '23.00'
     }])
     env[2].refresh_from_db()
-    assert env[2].status == Order.STATUS_PENDING
-    assert env[2].fees.count() == 1
-    assert env[2].fees.last().value == Decimal('1.00')
-    assert env[2].total == Decimal('24.00')
+    with scopes_disabled():
+        assert env[2].status == Order.STATUS_PENDING
+        assert env[2].fees.count() == 1
+        assert env[2].fees.last().value == Decimal('1.00')
+        assert env[2].total == Decimal('24.00')

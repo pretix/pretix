@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
@@ -223,7 +224,8 @@ def test_webhook_global(env, client, monkeypatch):
     order = env[1]
     order.status = Order.STATUS_PENDING
     order.save()
-    order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
+    with scopes_disabled():
+        order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
     charge = get_test_charge(env[1])
     monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
@@ -264,7 +266,8 @@ def test_webhook_mark_paid(env, client, monkeypatch):
     order = env[1]
     order.status = Order.STATUS_PENDING
     order.save()
-    order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
+    with scopes_disabled():
+        order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
     charge = get_test_charge(env[1])
     monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
@@ -345,12 +348,13 @@ def test_webhook_refund1(env, client, monkeypatch):
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
-    r = order.refunds.first()
-    assert r.provider == 'paypal'
-    assert r.amount == order.total
-    assert r.payment == order.payments.first()
-    assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
-    assert r.source == OrderRefund.REFUND_SOURCE_EXTERNAL
+    with scopes_disabled():
+        r = order.refunds.first()
+        assert r.provider == 'paypal'
+        assert r.amount == order.total
+        assert r.payment == order.payments.first()
+        assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+        assert r.source == OrderRefund.REFUND_SOURCE_EXTERNAL
 
 
 @pytest.mark.django_db
@@ -393,9 +397,10 @@ def test_webhook_refund2(env, client, monkeypatch):
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
-    r = order.refunds.first()
-    assert r.provider == 'paypal'
-    assert r.amount == order.total
-    assert r.payment == order.payments.first()
-    assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
-    assert r.source == OrderRefund.REFUND_SOURCE_EXTERNAL
+    with scopes_disabled():
+        r = order.refunds.first()
+        assert r.provider == 'paypal'
+        assert r.amount == order.total
+        assert r.payment == order.payments.first()
+        assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+        assert r.source == OrderRefund.REFUND_SOURCE_EXTERNAL

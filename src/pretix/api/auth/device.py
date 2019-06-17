@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django_scopes import scopes_disabled
 from rest_framework import exceptions
 from rest_framework.authentication import TokenAuthentication
 
@@ -12,7 +13,8 @@ class DeviceTokenAuthentication(TokenAuthentication):
     def authenticate_credentials(self, key):
         model = self.get_model()
         try:
-            device = model.objects.select_related('organizer').get(api_token=key)
+            with scopes_disabled():
+                device = model.objects.select_related('organizer').get(api_token=key)
         except model.DoesNotExist:
             raise exceptions.AuthenticationFailed('Invalid token.')
 

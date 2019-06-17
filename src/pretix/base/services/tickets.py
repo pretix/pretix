@@ -4,13 +4,14 @@ import os
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
+from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
     OrderPosition,
 )
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import EventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import allow_ticket_download, register_ticket_outputs
 from pretix.celery_app import app
@@ -57,10 +58,11 @@ def generate_order(order: int, provider: str):
 
 @app.task(base=ProfiledTask)
 def generate(model: str, pk: int, provider: str):
-    if model == 'order':
-        return generate_order(pk, provider)
-    elif model == 'orderposition':
-        return generate_orderposition(pk, provider)
+    with scopes_disabled():
+        if model == 'order':
+            return generate_order(pk, provider)
+        elif model == 'orderposition':
+            return generate_orderposition(pk, provider)
 
 
 class DummyRollbackException(Exception):
@@ -165,9 +167,8 @@ def get_tickets_for_order(order, base_position=None):
     return tickets
 
 
-@app.task(base=ProfiledTask)
-def invalidate_cache(event: int, item: int=None, provider: str=None, order: int=None, **kwargs):
-    event = Event.objects.get(id=event)
+@app.task(base=EventTask)
+def invalidate_cache(event: Event, item: int=None, provider: str=None, order: int=None, **kwargs):
     qs = CachedTicket.objects.filter(order_position__order__event=event)
     qsc = CachedCombinedTicket.objects.filter(order__event=event)
 

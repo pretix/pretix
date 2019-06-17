@@ -1,5 +1,6 @@
 import datetime
 
+from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, Item, Organizer, Team, User
@@ -36,8 +37,9 @@ class BadgeLayoutFormTest(SoupTest):
         )
 
     def test_set_default(self):
-        bl1 = self.event1.badge_layouts.create(name="Layout 1", default=True)
-        bl2 = self.event1.badge_layouts.create(name="Layout 2")
+        with scopes_disabled():
+            bl1 = self.event1.badge_layouts.create(name="Layout 1", default=True)
+            bl2 = self.event1.badge_layouts.create(name="Layout 2")
         self.post_doc('/control/event/%s/%s/badges/%s/default' % (self.orga1.slug, self.event1.slug, bl2.id), {})
         bl1.refresh_from_db()
         assert not bl1.default
@@ -45,21 +47,24 @@ class BadgeLayoutFormTest(SoupTest):
         assert bl2.default
 
     def test_delete(self):
-        bl1 = self.event1.badge_layouts.create(name="Layout 1", default=True)
-        bl2 = self.event1.badge_layouts.create(name="Layout 2")
+        with scopes_disabled():
+            bl1 = self.event1.badge_layouts.create(name="Layout 1", default=True)
+            bl2 = self.event1.badge_layouts.create(name="Layout 2")
         doc = self.get_doc('/control/event/%s/%s/badges/%s/delete' % (self.orga1.slug, self.event1.slug, bl1.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/badges/%s/delete' % (self.orga1.slug, self.event1.slug, bl1.id),
                             form_data)
         assert doc.select(".alert-success")
         self.assertNotIn("Layout 1", doc.select("#page-wrapper")[0].text)
-        assert self.event1.badge_layouts.count() == 1
+        with scopes_disabled():
+            assert self.event1.badge_layouts.count() == 1
         bl2.refresh_from_db()
         assert bl2.default
 
     def test_set_on_item(self):
-        self.event1.badge_layouts.create(name="Layout 1", default=True)
-        bl2 = self.event1.badge_layouts.create(name="Layout 2")
+        with scopes_disabled():
+            self.event1.badge_layouts.create(name="Layout 1", default=True)
+            bl2 = self.event1.badge_layouts.create(name="Layout 2")
         self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
             'name_0': 'Standard',
             'default_price': '23.00',
@@ -69,7 +74,8 @@ class BadgeLayoutFormTest(SoupTest):
             'badgeitem-layout': bl2.pk,
             'sales_channels': 'web',
         })
-        assert BadgeItem.objects.get(item=self.item1, layout=bl2)
+        with scopes_disabled():
+            assert BadgeItem.objects.get(item=self.item1, layout=bl2)
         self.client.post('/control/event/%s/%s/items/%d/' % (self.orga1.slug, self.event1.slug, self.item1.id), {
             'name_0': 'Standard',
             'default_price': '23.00',
@@ -78,11 +84,13 @@ class BadgeLayoutFormTest(SoupTest):
             'allow_cancel': 'yes',
             'sales_channels': 'web',
         })
-        assert not BadgeItem.objects.filter(item=self.item1, layout=bl2).exists()
+        with scopes_disabled():
+            assert not BadgeItem.objects.filter(item=self.item1, layout=bl2).exists()
 
     def test_item_copy(self):
-        bl2 = self.event1.badge_layouts.create(name="Layout 2")
-        BadgeItem.objects.create(item=self.item1, layout=bl2)
+        with scopes_disabled():
+            bl2 = self.event1.badge_layouts.create(name="Layout 2")
+            BadgeItem.objects.create(item=self.item1, layout=bl2)
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'Intermediate',
             'default_price': '23.00',
@@ -90,13 +98,15 @@ class BadgeLayoutFormTest(SoupTest):
             'copy_from': str(self.item1.pk),
             'has_variations': '1'
         })
-        i_new = Item.objects.get(name__icontains='Intermediate')
-        assert BadgeItem.objects.get(item=i_new, layout=bl2)
-        assert BadgeItem.objects.get(item=self.item1, layout=bl2)
+        with scopes_disabled():
+            i_new = Item.objects.get(name__icontains='Intermediate')
+            assert BadgeItem.objects.get(item=i_new, layout=bl2)
+            assert BadgeItem.objects.get(item=self.item1, layout=bl2)
 
     def test_copy_event(self):
-        bl2 = self.event1.badge_layouts.create(name="Layout 2")
-        BadgeItem.objects.create(item=self.item1, layout=bl2)
+        with scopes_disabled():
+            bl2 = self.event1.badge_layouts.create(name="Layout 2")
+            BadgeItem.objects.create(item=self.item1, layout=bl2)
         self.post_doc('/control/events/add', {
             'event_wizard-current_step': 'foundation',
             'event_wizard-prefix': 'event_wizard',
@@ -124,7 +134,8 @@ class BadgeLayoutFormTest(SoupTest):
             'copy-copy_from_event': self.event1.pk
         })
 
-        ev = Event.objects.get(slug='33c3')
-        i_new = ev.items.first()
-        bl_new = ev.badge_layouts.first()
-        assert BadgeItem.objects.get(item=i_new, layout=bl_new)
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            i_new = ev.items.first()
+            bl_new = ev.badge_layouts.first()
+            assert BadgeItem.objects.get(item=i_new, layout=bl_new)

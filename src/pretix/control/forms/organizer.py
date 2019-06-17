@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.api.models import WebHook
@@ -149,6 +150,9 @@ class TeamForm(forms.ModelForm):
                 'data-inverse-dependency': '#id_all_events'
             }),
         }
+        field_classes = {
+            'limit_events': SafeModelMultipleChoiceField
+        }
 
     def clean(self):
         data = super().clean()
@@ -176,6 +180,9 @@ class DeviceForm(forms.ModelForm):
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events'
             }),
+        }
+        field_classes = {
+            'limit_events': SafeModelMultipleChoiceField
         }
 
 
@@ -306,4 +313,7 @@ class WebHookForm(forms.ModelForm):
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events'
             }),
+        }
+        field_classes = {
+            'limit_events': SafeModelMultipleChoiceField
         }

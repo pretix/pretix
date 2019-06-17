@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 import pytz
+from django_scopes import scope
 
 from pretix.base.models import Event, Organizer
 from pretix.base.timeline import timeline_for_event
@@ -29,7 +30,8 @@ def event():
         date_from=datetime(2017, 10, 22, 12, 0, 0, tzinfo=tz),
         date_to=datetime(2017, 10, 23, 23, 0, 0, tzinfo=tz),
     )
-    return event
+    with scope(organizer=o):
+        yield event
 
 
 @pytest.fixture

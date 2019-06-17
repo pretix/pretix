@@ -6,13 +6,13 @@ class SoupTest(TestCase):
 
     def get_doc(self, *args, **kwargs):
         response = self.client.get(*args, **kwargs)
-        return BeautifulSoup(response.rendered_content, "lxml")
+        return BeautifulSoup(response.render().content, "lxml")
 
     def post_doc(self, *args, **kwargs):
         kwargs['follow'] = True
         response = self.client.post(*args, **kwargs)
         try:
-            return BeautifulSoup(response.rendered_content, "lxml")
+            return BeautifulSoup(response.render().content, "lxml")
         except AttributeError:
             return BeautifulSoup(response.content, "lxml")
 

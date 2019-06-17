@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Checkin, Event, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
@@ -57,7 +58,8 @@ def test_custom_datetime(client, env):
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['version'] == API_VERSION
     assert jdata['status'] == 'ok'
-    assert Checkin.objects.last().datetime == dt
+    with scopes_disabled():
+        assert Checkin.objects.last().datetime == dt
 
 
 @pytest.mark.django_db
@@ -125,7 +127,8 @@ def test_reupload_same_nonce(client, env):
                        data={'secret': '1234', 'nonce': 'fooobar'})
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'ok'
-    assert Checkin.objects.count() == 1
+    with scopes_disabled():
+        assert Checkin.objects.count() == 1
 
 
 @pytest.mark.django_db
@@ -273,7 +276,8 @@ def test_search_restricted(client, env):
 @pytest.mark.django_db
 def test_search_invoice_name(client, env):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
-    InvoiceAddress.objects.create(order=env[2], name_parts={"full_name": "John", "_scheme": "full"})
+    with scopes_disabled():
+        InvoiceAddress.objects.create(order=env[2], name_parts={"full_name": "John", "_scheme": "full"})
     resp = client.get('/pretixdroid/api/%s/%s/search/?key=%s&query=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg', 'John'))
     jdata = json.loads(resp.content.decode("utf-8"))
@@ -283,11 +287,12 @@ def test_search_invoice_name(client, env):
 
 @pytest.mark.django_db
 def test_download_all_data(client, env):
-    op = OrderPosition.objects.last()
-    OrderPosition.objects.create(
-        order=Order.objects.first(), item=op.item, addon_to=op,
-        price=12, secret='foooo'
-    )
+    with scopes_disabled():
+        op = OrderPosition.objects.last()
+        OrderPosition.objects.create(
+            order=Order.objects.first(), item=op.item, addon_to=op,
+            price=12, secret='foooo'
+        )
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
     resp = client.get('/pretixdroid/api/%s/%s/download/?key=%s' % (env[0].organizer.slug, env[0].slug, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
@@ -323,39 +328,41 @@ def test_download_item_restricted_list(client, env):
 @pytest.mark.django_db
 def test_status(client, env):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
-    Checkin.objects.create(position=env[3], list=env[5])
+    with scopes_disabled():
+        Checkin.objects.create(position=env[3], list=env[5])
     resp = client.get('/pretixdroid/api/%s/%s/status/?key=%s' % (
         env[0].organizer.slug, env[0].slug, 'abcdefg'))
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['checkins'] == 1
     assert jdata['total'] == 2
-    assert jdata['items'] == [
-        {'name': 'T-Shirt',
-         'id': env[3].item.pk,
-         'checkins': 1,
-         'admission': False,
-         'total': 1,
-         'variations': [
-             {'name': 'Red',
-              'id': env[3].variation.pk,
-              'checkins': 1,
-              'total': 1
-              },
-             {'name': 'Blue',
-              'id': env[3].item.variations.get(value='Blue').pk,
-              'checkins': 0,
-              'total': 0
-              }
-         ]
-         },
-        {'name': 'Ticket',
-         'id': env[4].item.pk,
-         'checkins': 0,
-         'admission': False,
-         'total': 1,
-         'variations': []
-         }
-    ]
+    with scopes_disabled():
+        assert jdata['items'] == [
+            {'name': 'T-Shirt',
+             'id': env[3].item.pk,
+             'checkins': 1,
+             'admission': False,
+             'total': 1,
+             'variations': [
+                 {'name': 'Red',
+                  'id': env[3].variation.pk,
+                  'checkins': 1,
+                  'total': 1
+                  },
+                 {'name': 'Blue',
+                  'id': env[3].item.variations.get(value='Blue').pk,
+                  'checkins': 0,
+                  'total': 0
+                  }
+             ]
+             },
+            {'name': 'Ticket',
+             'id': env[4].item.pk,
+             'checkins': 0,
+             'admission': False,
+             'total': 1,
+             'variations': []
+             }
+        ]
 
 
 @pytest.fixture
@@ -370,7 +377,8 @@ def question(env):
 @pytest.mark.django_db
 def test_question_number(client, env, question):
     AppConfiguration.objects.create(event=env[0], key='abcdefg', list=env[5])
-    question[0].options.all().delete()
+    with scopes_disabled():
+        question[0].options.all().delete()
     question[0].type = 'N'
     question[0].save()
 
@@ -399,7 +407,8 @@ def test_question_number(client, env, question):
     )
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'ok'
-    assert env[3].answers.get(question=question[0]).answer == '3.24'
+    with scopes_disabled():
+        assert env[3].answers.get(question=question[0]).answer == '3.24'
 
 
 @pytest.mark.django_db
@@ -440,8 +449,9 @@ def test_question_choice(client, env, question):
     )
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'ok'
-    assert env[3].answers.get(question=question[0]).answer == 'M'
-    assert list(env[3].answers.get(question=question[0]).options.all()) == [question[1]]
+    with scopes_disabled():
+        assert env[3].answers.get(question=question[0]).answer == 'M'
+        assert list(env[3].answers.get(question=question[0]).options.all()) == [question[1]]
 
 
 @pytest.mark.django_db
@@ -556,8 +566,9 @@ def test_question_multiple_choice(client, env, question):
     )
     jdata = json.loads(resp.content.decode("utf-8"))
     assert jdata['status'] == 'ok'
-    assert env[3].answers.get(question=question[0]).answer == 'M, L'
-    assert set(env[3].answers.get(question=question[0]).options.all()) == {question[1], question[2]}
+    with scopes_disabled():
+        assert env[3].answers.get(question=question[0]).answer == 'M, L'
+        assert set(env[3].answers.get(question=question[0]).options.all()) == {question[1], question[2]}
 
 
 @pytest.mark.django_db

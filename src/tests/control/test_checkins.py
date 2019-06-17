@@ -3,6 +3,7 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Checkin, Event, Item, ItemAddOn, ItemCategory, LogEntry, Order,
@@ -58,12 +59,14 @@ def dashboard_env():
 
 
 @pytest.mark.django_db
+@scopes_disabled()
 def test_dashboard(dashboard_env):
     c = checkin_widget(dashboard_env[0])
     assert '0/2' in c[0]['content']
 
 
 @pytest.mark.django_db
+@scopes_disabled()
 def test_dashboard_pending_not_count(dashboard_env):
     c = checkin_widget(dashboard_env[0])
     order_pending = Order.objects.create(
@@ -83,6 +86,7 @@ def test_dashboard_pending_not_count(dashboard_env):
 
 
 @pytest.mark.django_db
+@scopes_disabled()
 def test_dashboard_with_checkin(dashboard_env):
     op = OrderPosition.objects.get(
         order=dashboard_env[3],
@@ -256,11 +260,13 @@ def test_checkins_list_mixed(client, checkin_list_env, query, expected):
 @pytest.mark.django_db
 def test_manual_checkins(client, checkin_list_env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    assert not checkin_list_env[5][3].checkins.exists()
+    with scopes_disabled():
+        assert not checkin_list_env[5][3].checkins.exists()
     client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
         'checkin': [checkin_list_env[5][3].pk]
     })
-    assert checkin_list_env[5][3].checkins.exists()
+    with scopes_disabled():
+        assert checkin_list_env[5][3].checkins.exists()
     assert LogEntry.objects.filter(
         action_type='pretix.event.checkin', object_id=checkin_list_env[5][3].order.pk
     ).exists()
@@ -269,7 +275,8 @@ def test_manual_checkins(client, checkin_list_env):
 @pytest.mark.django_db
 def test_manual_checkins_revert(client, checkin_list_env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    assert not checkin_list_env[5][3].checkins.exists()
+    with scopes_disabled():
+        assert not checkin_list_env[5][3].checkins.exists()
     client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
         'checkin': [checkin_list_env[5][3].pk]
     })
@@ -277,7 +284,8 @@ def test_manual_checkins_revert(client, checkin_list_env):
         'checkin': [checkin_list_env[5][3].pk],
         'revert': 'true'
     })
-    assert not checkin_list_env[5][3].checkins.exists()
+    with scopes_disabled():
+        assert not checkin_list_env[5][3].checkins.exists()
     assert LogEntry.objects.filter(
         action_type='pretix.event.checkin', object_id=checkin_list_env[5][3].order.pk
     ).exists()
@@ -381,11 +389,11 @@ def test_checkins_attendee_name_from_addon_available(client, checkin_list_with_a
 
 
 class CheckinListFormTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
-        self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')
         self.event1 = Event.objects.create(
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime(2013, 12, 26, tzinfo=timezone.utc),
@@ -404,12 +412,14 @@ class CheckinListFormTest(SoupTest):
         doc = self.post_doc('/control/event/%s/%s/checkinlists/add' % (self.orga1.slug, self.event1.slug), form_data)
         assert doc.select(".alert-success")
         self.assertIn("All", doc.select("#page-wrapper table")[0].text)
-        assert self.event1.checkin_lists.get(
-            name='All', all_products=True
-        )
+        with scopes_disabled():
+            assert self.event1.checkin_lists.get(
+                name='All', all_products=True
+            )
 
     def test_update(self):
-        cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        with scopes_disabled():
+            cl = self.event1.checkin_lists.create(name='All', all_products=True)
         doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/change' % (self.orga1.slug, self.event1.slug, cl.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['all_products'] = ''
@@ -419,14 +429,17 @@ class CheckinListFormTest(SoupTest):
         assert doc.select(".alert-success")
         cl.refresh_from_db()
         assert not cl.all_products
-        assert list(cl.limit_products.all()) == [self.item_ticket]
+        with scopes_disabled():
+            assert list(cl.limit_products.all()) == [self.item_ticket]
 
     def test_delete(self):
-        cl = self.event1.checkin_lists.create(name='All', all_products=True)
+        with scopes_disabled():
+            cl = self.event1.checkin_lists.create(name='All', all_products=True)
         doc = self.get_doc('/control/event/%s/%s/checkinlists/%s/delete' % (self.orga1.slug, self.event1.slug, cl.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/checkinlists/%s/delete' % (self.orga1.slug, self.event1.slug, cl.id),
                             form_data)
         assert doc.select(".alert-success")
         self.assertNotIn("VAT", doc.select("#page-wrapper")[0].text)
-        assert not self.event1.checkin_lists.exists()
+        with scopes_disabled():
+            assert not self.event1.checkin_lists.exists()

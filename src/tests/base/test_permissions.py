@@ -1,6 +1,7 @@
 import pytest
 from django.test import RequestFactory
 from django.utils.timezone import now
+from django_scopes import scope
 
 from pretix.base.models import Event, Organizer, Team, User
 from pretix.multidomain.middlewares import SessionMiddleware
@@ -8,7 +9,9 @@ from pretix.multidomain.middlewares import SessionMiddleware
 
 @pytest.fixture
 def organizer():
-    return Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    with scope(organizer=o):
+        yield o
 
 
 @pytest.fixture
@@ -251,25 +254,26 @@ def test_list_of_events(event, user, admin, admin_request):
     team2.limit_events.add(event)
     team3.limit_events.add(event3)
 
-    events = list(user.get_events_with_any_permission(request=admin_request))
-    assert event in events
-    assert event2 in events
-    assert event3 in events
-    assert event4 not in events
+    with scope(organizer=[event.organizer, orga2]):
+        events = list(user.get_events_with_any_permission(request=admin_request))
+        assert event in events
+        assert event2 in events
+        assert event3 in events
+        assert event4 not in events
 
-    events = list(user.get_events_with_permission('can_change_event_settings', request=admin_request))
-    assert event not in events
-    assert event2 not in events
-    assert event3 in events
-    assert event4 not in events
+        events = list(user.get_events_with_permission('can_change_event_settings', request=admin_request))
+        assert event not in events
+        assert event2 not in events
+        assert event3 in events
+        assert event4 not in events
 
-    assert set(event.get_users_with_any_permission()) == {user}
-    assert set(event2.get_users_with_any_permission()) == {user}
-    assert set(event3.get_users_with_any_permission()) == {user}
-    assert set(event4.get_users_with_any_permission()) == set()
+        assert set(event.get_users_with_any_permission()) == {user}
+        assert set(event2.get_users_with_any_permission()) == {user}
+        assert set(event3.get_users_with_any_permission()) == {user}
+        assert set(event4.get_users_with_any_permission()) == set()
 
-    assert set(event.get_users_with_permission('can_change_event_settings')) == set()
-    assert set(event2.get_users_with_permission('can_change_event_settings')) == set()
-    assert set(event3.get_users_with_permission('can_change_event_settings')) == {user}
-    assert set(event4.get_users_with_permission('can_change_event_settings')) == set()
-    assert set(event.get_users_with_permission('can_change_orders')) == {user}
+        assert set(event.get_users_with_permission('can_change_event_settings')) == set()
+        assert set(event2.get_users_with_permission('can_change_event_settings')) == set()
+        assert set(event3.get_users_with_permission('can_change_event_settings')) == {user}
+        assert set(event4.get_users_with_permission('can_change_event_settings')) == set()
+        assert set(event.get_users_with_permission('can_change_orders')) == {user}

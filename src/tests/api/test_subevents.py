@@ -4,6 +4,7 @@ from unittest import mock
 
 import pytest
 from django_countries.fields import Country
+from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
@@ -159,9 +160,10 @@ def test_subevent_create(token_client, organizer, event, subevent, meta_prop, it
     )
     assert resp.status_code == 201
     assert not subevent.active
-    assert subevent.meta_values.filter(
-        property__name=meta_prop.name, value="Workshop"
-    ).exists()
+    with scopes_disabled():
+        assert subevent.meta_values.filter(
+            property__name=meta_prop.name, value="Workshop"
+        ).exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),
@@ -217,7 +219,8 @@ def test_subevent_create(token_client, organizer, event, subevent, meta_prop, it
     )
     assert resp.status_code == 201
     assert item.default_price == Decimal('23.00')
-    assert event.subevents.get(id=resp.data['id']).item_price_overrides[item.pk] == Decimal('23.42')
+    with scopes_disabled():
+        assert event.subevents.get(id=resp.data['id']).item_price_overrides[item.pk] == Decimal('23.42')
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),
@@ -261,7 +264,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    subevent = event.subevents.get(id=subevent.id)
+    with scopes_disabled():
+        subevent = event.subevents.get(id=subevent.id)
     assert subevent.date_from == datetime(2018, 12, 27, 10, 0, tzinfo=UTC)
     assert subevent.date_to == datetime(2018, 12, 28, 10, 0, tzinfo=UTC)
 
@@ -297,9 +301,10 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert organizer.events.get(slug=event.slug).subevents.get(id=resp.data['id']).meta_values.filter(
-        property__name=meta_prop.name, value="Conference"
-    ).exists()
+    with scopes_disabled():
+        assert organizer.events.get(slug=event.slug).subevents.get(id=resp.data['id']).meta_values.filter(
+            property__name=meta_prop.name, value="Conference"
+        ).exists()
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -310,9 +315,10 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert not subevent.meta_values.filter(
-        property__name=meta_prop.name
-    ).exists()
+    with scopes_disabled():
+        assert not subevent.meta_values.filter(
+            property__name=meta_prop.name
+        ).exists()
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -339,7 +345,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert subevent.items.get(id=item.pk).default_price == Decimal('23.00')
+    with scopes_disabled():
+        assert subevent.items.get(id=item.pk).default_price == Decimal('23.00')
     assert subevent.item_price_overrides[item.pk] == Decimal('99.99')
 
     resp = token_client.patch(
@@ -355,7 +362,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert event.subevents.get(id=subevent.id).item_price_overrides[item.pk] == Decimal('88.88')
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).item_price_overrides[item.pk] == Decimal('88.88')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -370,7 +378,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert item.pk not in event.subevents.get(id=subevent.id).item_price_overrides
+    with scopes_disabled():
+        assert item.pk not in event.subevents.get(id=subevent.id).item_price_overrides
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -385,7 +394,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert event.subevents.get(id=subevent.id).item_price_overrides[item.pk] == Decimal('12.34')
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).item_price_overrides[item.pk] == Decimal('12.34')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -395,7 +405,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert item.pk not in event.subevents.get(id=subevent.id).item_price_overrides
+    with scopes_disabled():
+        assert item.pk not in event.subevents.get(id=subevent.id).item_price_overrides
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -440,8 +451,9 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert subevent.variations.get(id=variations[0].pk).default_price == Decimal('12.00')
-    assert subevent.var_price_overrides[variations[0].pk] == Decimal('99.99')
+    with scopes_disabled():
+        assert subevent.variations.get(id=variations[0].pk).default_price == Decimal('12.00')
+        assert subevent.var_price_overrides[variations[0].pk] == Decimal('99.99')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -456,7 +468,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert event.subevents.get(id=subevent.id).var_price_overrides[variations[0].pk] == Decimal('88.88')
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).var_price_overrides[variations[0].pk] == Decimal('88.88')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -471,7 +484,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert variations[0].pk not in event.subevents.get(id=subevent.id).var_price_overrides
+    with scopes_disabled():
+        assert variations[0].pk not in event.subevents.get(id=subevent.id).var_price_overrides
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -486,7 +500,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert event.subevents.get(id=subevent.id).var_price_overrides[variations[0].pk] == Decimal('12.34')
+    with scopes_disabled():
+        assert event.subevents.get(id=subevent.id).var_price_overrides[variations[0].pk] == Decimal('12.34')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -496,7 +511,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 200
-    assert variations[0].pk not in event.subevents.get(id=subevent.id).var_price_overrides
+    with scopes_disabled():
+        assert variations[0].pk not in event.subevents.get(id=subevent.id).var_price_overrides
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -544,7 +560,8 @@ def test_subevent_delete(token_client, organizer, event, subevent):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug,
                                                                                       subevent.pk))
     assert resp.status_code == 204
-    assert not event.subevents.filter(pk=subevent.id).exists()
+    with scopes_disabled():
+        assert not event.subevents.filter(pk=subevent.id).exists()
 
 
 @pytest.mark.django_db
@@ -554,4 +571,5 @@ def test_subevent_with_order_position_not_delete(token_client, organizer, event,
     assert resp.status_code == 403
     assert resp.content.decode() == '{"detail":"The sub-event can not be deleted as it has already been used in ' \
                                     'orders. Please set \'active\' to false instead to hide it from users."}'
-    assert event.subevents.filter(pk=subevent.id).exists()
+    with scopes_disabled():
+        assert event.subevents.filter(pk=subevent.id).exists()

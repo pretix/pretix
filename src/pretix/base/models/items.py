@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django_countries.fields import Country
+from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models import fields
@@ -155,28 +156,41 @@ class SubEventItemVariation(models.Model):
             self.subevent.event.cache.clear()
 
 
+def filter_available(qs, channel='web', voucher=None, allow_addons=False):
+    q = (
+        # IMPORTANT: If this is updated, also update the ItemVariation query
+        # in models/event.py: EventMixin.annotated()
+        Q(active=True)
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+        & Q(sales_channels__contains=channel) & Q(require_bundling=False)
+    )
+    if not allow_addons:
+        q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
+    qs = qs.filter(q)
+
+    vouchq = Q(hide_without_voucher=False)
+    if voucher:
+        if voucher.item_id:
+            vouchq |= Q(pk=voucher.item_id)
+            qs = qs.filter(pk=voucher.item_id)
+        elif voucher.quota_id:
+            qs = qs.filter(quotas__in=[voucher.quota_id])
+    return qs.filter(vouchq)
+
+
 class ItemQuerySet(models.QuerySet):
     def filter_available(self, channel='web', voucher=None, allow_addons=False):
-        q = (
-            # IMPORTANT: If this is updated, also update the ItemVariation query
-            # in models/event.py: EventMixin.annotated()
-            Q(active=True)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
-            & Q(sales_channels__contains=channel) & Q(require_bundling=False)
-        )
-        if not allow_addons:
-            q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
-        qs = self.filter(q)
+        return filter_available(self, channel, voucher, allow_addons)
 
-        vouchq = Q(hide_without_voucher=False)
-        if voucher:
-            if voucher.item_id:
-                vouchq |= Q(pk=voucher.item_id)
-                qs = qs.filter(pk=voucher.item_id)
-            elif voucher.quota_id:
-                qs = qs.filter(quotas__in=[voucher.quota_id])
-        return qs.filter(vouchq)
+
+class ItemQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
+    def __init__(self):
+        super().__init__()
+        self._queryset_class = ItemQuerySet
+
+    def filter_available(self, channel='web', voucher=None, allow_addons=False):
+        return filter_available(self.get_queryset(), channel, voucher, allow_addons)
 
 
 class Item(LoggedModel):
@@ -226,7 +240,7 @@ class Item(LoggedModel):
     :type sales_channels: bool
     """
 
-    objects = ItemQuerySet.as_manager()
+    objects = ItemQuerySetManager()
 
     event = models.ForeignKey(
         Event,
@@ -590,6 +604,8 @@ class ItemVariation(models.Model):
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
+
+    objects = ScopedManager(organizer='item__event__organizer')
 
     class Meta:
         verbose_name = _("Product variation")
@@ -985,6 +1001,8 @@ class Question(LoggedModel):
     )
     dependency_value = models.TextField(null=True, blank=True)
 
+    objects = ScopedManager(organizer='event__organizer')
+
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
@@ -1233,6 +1251,8 @@ class Quota(LoggedModel):
     cached_availability_number = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_time = models.DateTimeField(null=True, blank=True)
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Quota")

@@ -5,15 +5,14 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.i18n import language
 from pretix.base.models import Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import SendMailException, mail
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 
-@app.task(base=ProfiledTask)
-def send_mails(event: int, user: int, subject: dict, message: dict, orders: list, items: list, recipients: str) -> None:
+@app.task(base=ProfiledEventTask)
+def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list, recipients: str) -> None:
     failures = []
-    event = Event.objects.get(pk=event)
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=orders, event=event)
     subject = LazyI18nString(subject)

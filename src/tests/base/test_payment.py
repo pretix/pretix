@@ -4,6 +4,7 @@ from decimal import Decimal
 import pytest
 import pytz
 from django.utils.timezone import now
+from django_scopes import scope
 from tests.testdummy.payment import DummyPaymentProvider
 
 from pretix.base.models import (
@@ -19,7 +20,8 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now()
     )
-    return event
+    with scope(organizer=o):
+        yield event
 
 
 @pytest.mark.django_db

@@ -3,6 +3,7 @@ from django.db.models import Case, Count, F, OuterRef, Q, Subquery, When
 from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel
 
@@ -19,6 +20,8 @@ class CheckinList(LoggedModel):
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order have not been paid. This only works with pretixdesk '
                                                       '0.3.0 or newer or pretixdroid 1.9 or newer.'))
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         ordering = ('subevent__date_from', 'name')
@@ -166,6 +169,8 @@ class Checkin(models.Model):
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
+
+    objects = ScopedManager(organizer='position__order__event__organizer')
 
     class Meta:
         unique_together = (('list', 'position'),)

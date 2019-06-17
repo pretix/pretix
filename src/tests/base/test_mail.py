@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core import mail as djmail
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import scope
 
 from pretix.base.models import Event, Organizer, User
 from pretix.base.services.mail import mail
@@ -20,7 +21,8 @@ def env():
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     user.email = 'dummy@dummy.dummy'
     user.save()
-    return event, user, o
+    with scope(organizer=o):
+        yield event, user, o
 
 
 @pytest.mark.django_db

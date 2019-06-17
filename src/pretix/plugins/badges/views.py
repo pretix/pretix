@@ -223,7 +223,7 @@ class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
         else:
             positions = [p.pk for p in order.positions.all()]
         return self.do(
-            str(cf.id),
             self.request.event.pk,
+            str(cf.id),
             positions,
         )

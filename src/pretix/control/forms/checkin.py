@@ -1,6 +1,9 @@
 from django import forms
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy
+from django_scopes.forms import (
+    SafeModelChoiceField, SafeModelMultipleChoiceField,
+)
 
 from pretix.base.models.checkin import CheckinList
 from pretix.control.forms.widgets import Select2
@@ -43,4 +46,8 @@ class CheckinListForm(forms.ModelForm):
             'limit_products': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '<[name$=all_products]'
             }),
+        }
+        field_classes = {
+            'limit_products': SafeModelMultipleChoiceField,
+            'subevent': SafeModelChoiceField,
         }

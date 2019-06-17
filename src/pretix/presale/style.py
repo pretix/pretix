@@ -11,9 +11,10 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.dispatch import Signal
 from django.templatetags.static import static as _static
+from django_scopes import scope
 
 from pretix.base.models import Event, Event_SettingsStore, Organizer
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_domain
 from pretix.presale.signals import sass_postamble, sass_preamble
@@ -78,10 +79,8 @@ def compile_scss(object, file="main.scss", fonts=True):
     return css, checksum
 
 
-@app.task(base=ProfiledTask)
-def regenerate_css(event_id: int):
-    event = Event.objects.select_related('organizer').get(pk=event_id)
-
+@app.task(base=ProfiledEventTask)
+def regenerate_css(event):
     # main.scss
     css, checksum = compile_scss(event)
     fname = 'pub/{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
@@ -105,28 +104,29 @@ def regenerate_css(event_id: int):
 def regenerate_organizer_css(organizer_id: int):
     organizer = Organizer.objects.get(pk=organizer_id)
 
-    # main.scss
-    css, checksum = compile_scss(organizer)
-    fname = 'pub/{}/presale.{}.css'.format(organizer.slug, checksum[:16])
-    if organizer.settings.get('presale_css_checksum', '') != checksum:
-        newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
-        organizer.settings.set('presale_css_file', newname)
-        organizer.settings.set('presale_css_checksum', checksum)
+    with scope(organizer=organizer):
+        # main.scss
+        css, checksum = compile_scss(organizer)
+        fname = 'pub/{}/presale.{}.css'.format(organizer.slug, checksum[:16])
+        if organizer.settings.get('presale_css_checksum', '') != checksum:
+            newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
+            organizer.settings.set('presale_css_file', newname)
+            organizer.settings.set('presale_css_checksum', checksum)
 
-    # widget.scss
-    css, checksum = compile_scss(organizer, file='widget.scss', fonts=False)
-    fname = 'pub/{}/widget.{}.css'.format(organizer.slug, checksum[:16])
-    if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
-        newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
-        organizer.settings.set('presale_widget_css_file', newname)
-        organizer.settings.set('presale_widget_css_checksum', checksum)
+        # widget.scss
+        css, checksum = compile_scss(organizer, file='widget.scss', fonts=False)
+        fname = 'pub/{}/widget.{}.css'.format(organizer.slug, checksum[:16])
+        if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
+            newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
+            organizer.settings.set('presale_widget_css_file', newname)
+            organizer.settings.set('presale_widget_css_checksum', checksum)
 
-    non_inherited_events = set(Event_SettingsStore.objects.filter(
-        object__organizer=organizer, key__in=affected_keys
-    ).values_list('object_id', flat=True))
-    for event in organizer.events.all():
-        if event.pk not in non_inherited_events:
-            regenerate_css.apply_async(args=(event.pk,))
+        non_inherited_events = set(Event_SettingsStore.objects.filter(
+            object__organizer=organizer, key__in=affected_keys
+        ).values_list('object_id', flat=True))
+        for event in organizer.events.all():
+            if event.pk not in non_inherited_events:
+                regenerate_css.apply_async(args=(event.pk,))
 
 
 register_fonts = Signal()

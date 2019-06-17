@@ -4,12 +4,14 @@ from io import BytesIO
 from zipfile import ZipFile
 
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 from tests.base import SoupTest
 
 from pretix.base.models import Event, Order, Organizer, Team, User
 
 
 class EventShredderTest(SoupTest):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')

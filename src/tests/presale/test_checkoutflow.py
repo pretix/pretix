@@ -1,6 +1,7 @@
 import pytest
 from django.test import RequestFactory
 from django.utils.timezone import now
+from django_scopes import scope
 
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.middlewares import SessionMiddleware
@@ -14,7 +15,8 @@ def event():
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now(), live=True
     )
-    return e
+    with scope(organizer=o):
+        yield e
 
 
 @pytest.fixture

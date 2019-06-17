@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import pgettext, ugettext as _
 from django_countries.fields import Country
+from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
@@ -244,16 +245,18 @@ def generate_invoice(order: Order, trigger_pdf=True):
 
 @app.task(base=TransactionAwareTask)
 def invoice_pdf_task(invoice: int):
-    i = Invoice.objects.get(pk=invoice)
-    if i.shredded:
-        return None
-    if i.file:
-        i.file.delete()
-    with language(i.locale):
-        fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
-        i.file.save(fname, ContentFile(fcontent))
-        i.save()
-        return i.file.name
+    with scopes_disabled():
+        i = Invoice.objects.get(pk=invoice)
+    with scope(organizer=i.order.event.organizer):
+        if i.shredded:
+            return None
+        if i.file:
+            i.file.delete()
+        with language(i.locale):
+            fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
+            i.file.save(fname, ContentFile(fcontent))
+            i.save()
+            return i.file.name
 
 
 def invoice_qualified(order: Order):

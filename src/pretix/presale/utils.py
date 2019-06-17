@@ -8,6 +8,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
+from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Event, Organizer
@@ -17,6 +18,7 @@ from pretix.presale.signals import process_request, process_response
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
+@scope(organizer=None)
 def _detect_event(request, require_live=True, require_plugin=None):
     if hasattr(request, '_event_detected'):
         return
@@ -151,10 +153,11 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             if ret:
                 return ret
             else:
-                response = func(request=request, *args, **kwargs)
-                for receiver, r in process_response.send(request.event, request=request, response=response):
-                    response = r
-                return response
+                with scope(organizer=getattr(request, 'organizer', None)):
+                    response = func(request=request, *args, **kwargs)
+                    for receiver, r in process_response.send(request.event, request=request, response=response):
+                        response = r
+                    return response
 
         for attrname in dir(func):
             # Preserve flags like csrf_exempt

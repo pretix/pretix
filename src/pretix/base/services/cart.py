@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
+from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -23,7 +24,7 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import get_price
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.celery_app import app
@@ -902,7 +903,7 @@ def get_fees(event, request, total, invoice_address, provider):
     return fees
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en',
                       invoice_address: int=None, widget_data=None, sales_channel='web') -> None:
     """
@@ -913,12 +914,11 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     :raises CartError: On any error that occured
     """
     with language(locale):
-        event = Event.objects.get(id=event)
-
         ia = False
         if invoice_address:
             try:
-                ia = InvoiceAddress.objects.get(pk=invoice_address)
+                with scopes_disabled():
+                    ia = InvoiceAddress.objects.get(pk=invoice_address)
             except InvoiceAddress.DoesNotExist:
                 pass
 
@@ -934,8 +934,8 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
             raise CartError(error_messages['busy'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def remove_cart_position(self, event: int, position: int, cart_id: str=None, locale='en') -> None:
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
@@ -943,7 +943,6 @@ def remove_cart_position(self, event: int, position: int, cart_id: str=None, loc
     :param session: Session ID of a guest
     """
     with language(locale):
-        event = Event.objects.get(id=event)
         try:
             try:
                 cm = CartManager(event=event, cart_id=cart_id)
@@ -955,15 +954,14 @@ def remove_cart_position(self, event: int, position: int, cart_id: str=None, loc
             raise CartError(error_messages['busy'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def clear_cart(self, event: int, cart_id: str=None, locale='en') -> None:
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def clear_cart(self, event: Event, cart_id: str=None, locale='en') -> None:
     """
     Removes a list of items from a user's cart.
     :param event: The event ID in question
     :param session: Session ID of a guest
     """
     with language(locale):
-        event = Event.objects.get(id=event)
         try:
             try:
                 cm = CartManager(event=event, cart_id=cart_id)
@@ -975,8 +973,8 @@ def clear_cart(self, event: int, cart_id: str=None, locale='en') -> None:
             raise CartError(error_messages['busy'])
 
 
-@app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, locale='en',
+@app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
+def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, locale='en',
                     invoice_address: int=None, sales_channel='web') -> None:
     """
     Removes a list of items from a user's cart.
@@ -985,12 +983,11 @@ def set_cart_addons(self, event: int, addons: List[dict], cart_id: str=None, loc
     :param session: Session ID of a guest
     """
     with language(locale):
-        event = Event.objects.get(id=event)
-
         ia = False
         if invoice_address:
             try:
-                ia = InvoiceAddress.objects.get(pk=invoice_address)
+                with scopes_disabled():
+                    ia = InvoiceAddress.objects.get(pk=invoice_address)
             except InvoiceAddress.DoesNotExist:
                 pass
         try:

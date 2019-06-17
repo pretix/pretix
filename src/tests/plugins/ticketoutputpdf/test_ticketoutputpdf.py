@@ -4,6 +4,7 @@ from io import BytesIO
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scope
 from PyPDF2 import PdfFileReader
 
 from pretix.base.models import (
@@ -41,11 +42,12 @@ def env0():
 @pytest.mark.django_db
 def test_generate_pdf(env0):
     event, order = env0
-    event.settings.set('ticketoutput_pdf_code_x', 30)
-    event.settings.set('ticketoutput_pdf_code_y', 50)
-    event.settings.set('ticketoutput_pdf_code_s', 2)
-    o = PdfTicketOutput(event)
-    fname, ftype, buf = o.generate(order.positions.first())
-    assert ftype == 'application/pdf'
-    pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 1
+    with scope(organizer=event.organizer):
+        event.settings.set('ticketoutput_pdf_code_x', 30)
+        event.settings.set('ticketoutput_pdf_code_y', 50)
+        event.settings.set('ticketoutput_pdf_code_s', 2)
+        o = PdfTicketOutput(event)
+        fname, ftype, buf = o.generate(order.positions.first())
+        assert ftype == 'application/pdf'
+        pdf = PdfFileReader(BytesIO(buf))
+        assert pdf.numPages == 1

@@ -1,6 +1,9 @@
 from django import forms
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django_scopes.forms import (
+    SafeModelChoiceField, SafeModelMultipleChoiceField,
+)
 
 from pretix.control.forms.widgets import Select2
 from pretix.plugins.pretixdroid.models import AppConfiguration
@@ -15,6 +18,10 @@ class AppConfigurationForm(forms.ModelForm):
                 'data-inverse-dependency': '#id_all_items'
             }),
             'app': forms.RadioSelect
+        }
+        field_classes = {
+            'items': SafeModelMultipleChoiceField,
+            'list': SafeModelChoiceField,
         }
 
     def __init__(self, **kwargs):

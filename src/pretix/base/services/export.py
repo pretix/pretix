@@ -6,7 +6,7 @@ from django.utils.translation import ugettext
 
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import CachedFile, Event, cachedfile_name
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.signals import register_data_exporters
 from pretix.celery_app import app
 
@@ -15,9 +15,8 @@ class ExportError(LazyLocaleException):
     pass
 
 
-@app.task(base=ProfiledTask, throws=(ExportError,))
-def export(event: str, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
-    event = Event.objects.get(id=event)
+@app.task(base=ProfiledEventTask, throws=(ExportError,))
+def export(event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
     file = CachedFile.objects.get(id=fileid)
     with language(event.settings.locale), override(event.settings.timezone):
         responses = register_data_exporters.send(event)

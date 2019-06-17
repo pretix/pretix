@@ -9,6 +9,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils.formats import date_format
 from django.utils.translation import ugettext, ugettext_noop
+from django_scopes import scope, scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -194,51 +195,53 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event=None,
 @app.task(base=TransactionAwareTask, bind=True, max_retries=5, default_retry_delay=1)
 def process_banktransfers(self, job: int, data: list) -> None:
     with language("en"):  # We'll translate error messages at display time
-        job = BankImportJob.objects.get(pk=job)
-        job.state = BankImportJob.STATE_RUNNING
-        job.save()
-        prefixes = []
+        with scopes_disabled():
+            job = BankImportJob.objects.get(pk=job)
+        with scope(organizer=job.organizer or job.event.organizer):
+            job.state = BankImportJob.STATE_RUNNING
+            job.save()
+            prefixes = []
 
-        try:
-            # Delete left-over transactions from a failed run before so they can reimported
-            BankTransaction.objects.filter(state=BankTransaction.STATE_UNCHECKED, **job.owner_kwargs).delete()
-
-            transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
-
-            code_len = settings.ENTROPY['order_code']
-            if job.event:
-                pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
-            else:
-                if not prefixes:
-                    prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
-                                for e in job.organizer.events.all()]
-                pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
-
-            for trans in transactions:
-                match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
-
-                if match:
-                    if job.event:
-                        code = match.group(1)
-                        _handle_transaction(trans, code, event=job.event)
-                    else:
-                        slug = match.group(1)
-                        code = match.group(2)
-                        _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
-                else:
-                    trans.state = BankTransaction.STATE_NOMATCH
-                    trans.save()
-        except LockTimeoutException:
             try:
-                self.retry()
-            except MaxRetriesExceededError:
-                logger.exception('Maximum number of retries exceeded for task.')
+                # Delete left-over transactions from a failed run before so they can reimported
+                BankTransaction.objects.filter(state=BankTransaction.STATE_UNCHECKED, **job.owner_kwargs).delete()
+
+                transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
+
+                code_len = settings.ENTROPY['order_code']
+                if job.event:
+                    pattern = re.compile(job.event.slug.upper() + r"[ \-_]*([A-Z0-9]{%s})" % code_len)
+                else:
+                    if not prefixes:
+                        prefixes = [e.slug.upper().replace(".", r"\.").replace("-", r"[\- ]*")
+                                    for e in job.organizer.events.all()]
+                    pattern = re.compile("(%s)[ \\-_]*([A-Z0-9]{%s})" % ("|".join(prefixes), code_len))
+
+                for trans in transactions:
+                    match = pattern.search(trans.reference.replace(" ", "").replace("\n", "").upper())
+
+                    if match:
+                        if job.event:
+                            code = match.group(1)
+                            _handle_transaction(trans, code, event=job.event)
+                        else:
+                            slug = match.group(1)
+                            code = match.group(2)
+                            _handle_transaction(trans, code, organizer=job.organizer, slug=slug)
+                    else:
+                        trans.state = BankTransaction.STATE_NOMATCH
+                        trans.save()
+            except LockTimeoutException:
+                try:
+                    self.retry()
+                except MaxRetriesExceededError:
+                    logger.exception('Maximum number of retries exceeded for task.')
+                    job.state = BankImportJob.STATE_ERROR
+                    job.save()
+            except Exception as e:
                 job.state = BankImportJob.STATE_ERROR
                 job.save()
-        except Exception as e:
-            job.state = BankImportJob.STATE_ERROR
-            job.save()
-            raise e
-        else:
-            job.state = BankImportJob.STATE_COMPLETED
-            job.save()
+                raise e
+            else:
+                job.state = BankImportJob.STATE_COMPLETED
+                job.save()

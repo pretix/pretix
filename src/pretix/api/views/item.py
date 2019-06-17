@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -21,19 +22,19 @@ from pretix.base.models import (
 )
 from pretix.helpers.dicts import merge_dicts
 
+with scopes_disabled():
+    class ItemFilter(FilterSet):
+        tax_rate = django_filters.CharFilter(method='tax_rate_qs')
 
-class ItemFilter(FilterSet):
-    tax_rate = django_filters.CharFilter(method='tax_rate_qs')
+        def tax_rate_qs(self, queryset, name, value):
+            if value in ("0", "None", "0.00"):
+                return queryset.filter(Q(tax_rule__isnull=True) | Q(tax_rule__rate=0))
+            else:
+                return queryset.filter(tax_rule__rate=value)
 
-    def tax_rate_qs(self, queryset, name, value):
-        if value in ("0", "None", "0.00"):
-            return queryset.filter(Q(tax_rule__isnull=True) | Q(tax_rule__rate=0))
-        else:
-            return queryset.filter(tax_rule__rate=value)
-
-    class Meta:
-        model = Item
-        fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']
+        class Meta:
+            model = Item
+            fields = ['active', 'category', 'admission', 'tax_rate', 'free_price']
 
 
 class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
@@ -319,10 +320,11 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
-class QuestionFilter(FilterSet):
-    class Meta:
-        model = Question
-        fields = ['ask_during_checkin', 'required', 'identifier']
+with scopes_disabled():
+    class QuestionFilter(FilterSet):
+        class Meta:
+            model = Question
+            fields = ['ask_during_checkin', 'required', 'identifier']
 
 
 class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
@@ -418,10 +420,11 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
-class QuotaFilter(FilterSet):
-    class Meta:
-        model = Quota
-        fields = ['subevent']
+with scopes_disabled():
+    class QuotaFilter(FilterSet):
+        class Meta:
+            model = Quota
+            fields = ['subevent']
 
 
 class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):

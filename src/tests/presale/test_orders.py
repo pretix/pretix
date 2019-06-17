@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
@@ -17,6 +18,7 @@ from pretix.base.services.invoices import generate_invoice
 
 
 class OrdersTest(TestCase):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.orga = Organizer.objects.create(name='CCC', slug='ccc')
@@ -197,8 +199,9 @@ class OrdersTest(TestCase):
         self.client.get(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
-        self.order = Order.objects.get(id=self.order.id)
-        assert self.order.status == Order.STATUS_CANCELED
+        with scopes_disabled():
+            self.order = Order.objects.get(id=self.order.id)
+            assert self.order.status == Order.STATUS_CANCELED
 
     def test_orders_modify_attendee_optional(self):
         self.event.settings.set('attendee_names_asked', True)
@@ -218,7 +221,8 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
+        with scopes_disabled():
+            self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
         assert self.ticket_pos.attendee_name in (None, '')
 
     def test_orders_modify_attendee_required(self):
@@ -247,7 +251,8 @@ class OrdersTest(TestCase):
         self.assertRedirects(response, '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                                 self.order.secret),
                              target_status_code=200)
-        self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
+        with scopes_disabled():
+            self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
         assert self.ticket_pos.attendee_name == 'Peter'
 
     def test_orders_questions_optional(self):
@@ -269,7 +274,8 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert not self.ticket_pos.answers.filter(question=self.question).exists()
+        with scopes_disabled():
+            assert not self.ticket_pos.answers.filter(question=self.question).exists()
 
     def test_orders_questions_required(self):
         self.event.settings.set('attendee_names_asked', False)
@@ -299,7 +305,8 @@ class OrdersTest(TestCase):
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
                                                       self.order.secret),
                              target_status_code=200)
-        assert self.ticket_pos.answers.get(question=self.question).answer == 'ABC'
+        with scopes_disabled():
+            assert self.ticket_pos.answers.get(question=self.question).answer == 'ABC'
 
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
@@ -348,7 +355,8 @@ class OrdersTest(TestCase):
     def test_orders_cancel_paid_fee_autorefund(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         self.event.settings.cancel_allow_user_paid = True
         self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
         response = self.client.get(
@@ -366,18 +374,22 @@ class OrdersTest(TestCase):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == Decimal('3.00')
-        assert self.order.refunds.count() == 1
+        with scopes_disabled():
+            assert self.order.refunds.count() == 1
 
     def test_orders_cancel_paid_fee_no_autorefund(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        self.order.payments.create(provider='testdummy', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy', amount=self.order.total,
+                                       state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         self.event.settings.cancel_allow_user_paid = True
         self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
         response = self.client.get(
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
         assert response.status_code == 200
+        print(response.rendered_content)
         assert 'cancellation fee of <strong>€3.00</strong>' in response.rendered_content
         response = self.client.get(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
@@ -395,7 +407,8 @@ class OrdersTest(TestCase):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == Decimal('3.00')
-        assert self.order.refunds.count() == 0
+        with scopes_disabled():
+            assert self.order.refunds.count() == 0
 
     def test_orders_cancel_forbidden(self):
         self.event.settings.set('cancel_allow_user', False)
@@ -414,7 +427,8 @@ class OrdersTest(TestCase):
 
     def test_invoice_create_duplicate(self):
         self.event.settings.set('invoice_generate', 'user')
-        generate_invoice(self.order)
+        with scopes_disabled():
+            generate_invoice(self.order)
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
@@ -422,7 +436,8 @@ class OrdersTest(TestCase):
 
     def test_invoice_create_wrong_secret(self):
         self.event.settings.set('invoice_generate', 'user')
-        generate_invoice(self.order)
+        with scopes_disabled():
+            generate_invoice(self.order)
         response = self.client.post(
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, '1234'),
             {})
@@ -434,7 +449,8 @@ class OrdersTest(TestCase):
             '/%s/%s/order/%s/%s/invoice' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {}, follow=True)
         assert 'alert-success' in response.rendered_content
-        assert self.order.invoices.exists()
+        with scopes_disabled():
+            assert self.order.invoices.exists()
 
     def test_orders_download_pending(self):
         self.event.settings.set('ticket_download', True)
@@ -575,11 +591,12 @@ class OrdersTest(TestCase):
         assert 'alert-danger' in response.rendered_content
 
     def test_pay_wrong_payment_state(self):
-        p = self.order.payments.create(
-            provider='manual',
-            state=OrderPayment.PAYMENT_STATE_CANCELED,
-            amount=Decimal('10.00'),
-        )
+        with scopes_disabled():
+            p = self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CANCELED,
+                amount=Decimal('10.00'),
+            )
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                             p.pk),
@@ -602,11 +619,12 @@ class OrdersTest(TestCase):
     def test_pay_wrong_order_state(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        p = self.order.payments.create(
-            provider='manual',
-            state=OrderPayment.PAYMENT_STATE_PENDING,
-            amount=Decimal('10.00'),
-        )
+        with scopes_disabled():
+            p = self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_PENDING,
+                amount=Decimal('10.00'),
+            )
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                             p.pk),
@@ -629,11 +647,12 @@ class OrdersTest(TestCase):
     def test_pay_change_link(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
-        p = self.order.payments.create(
-            provider='banktransfer',
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-            amount=self.order.total,
-        )
+        with scopes_disabled():
+            p = self.order.payments.create(
+                provider='banktransfer',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=self.order.total,
+            )
         response = self.client.get(
             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             follow=True
@@ -661,13 +680,14 @@ class OrdersTest(TestCase):
         self.event.settings.set('payment_testdummy__enabled', True)
         self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
         self.event.settings.set('payment_testdummy__fee_percent', '10.00')
-        self.order.payments.create(
-            provider='manual',
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-            amount=Decimal('10.00'),
-        )
+        with scopes_disabled():
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('10.00'),
+            )
 
-        generate_invoice(self.order)
+            generate_invoice(self.order)
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -680,35 +700,37 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        assert self.order.payments.last().provider == 'testdummy'
-        fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
-        assert fee.value == Decimal('1.30')
-        assert self.order.total == Decimal('23.00') + fee.value
-        assert self.order.invoices.count() == 3
-        p = self.order.payments.last()
-        assert p.provider == 'testdummy'
-        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
-        assert p.amount == Decimal('14.30')
+        with scopes_disabled():
+            assert self.order.payments.last().provider == 'testdummy'
+            fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
+            assert fee.value == Decimal('1.30')
+            assert self.order.total == Decimal('23.00') + fee.value
+            assert self.order.invoices.count() == 3
+            p = self.order.payments.last()
+            assert p.provider == 'testdummy'
+            assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+            assert p.amount == Decimal('14.30')
 
     def test_change_paymentmethod_partial_with_previous_fee(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)
         self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
         self.event.settings.set('payment_testdummy__fee_percent', '10.00')
-        f = self.order.fees.create(
-            fee_type=OrderFee.FEE_TYPE_PAYMENT,
-            value='1.40'
-        )
-        self.order.total += Decimal('1.4')
-        self.order.save()
-        self.order.payments.create(
-            provider='manual',
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-            amount=Decimal('11.40'),
-            fee=f
-        )
+        with scopes_disabled():
+            f = self.order.fees.create(
+                fee_type=OrderFee.FEE_TYPE_PAYMENT,
+                value='1.40'
+            )
+            self.order.total += Decimal('1.4')
+            self.order.save()
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('11.40'),
+                fee=f
+            )
 
-        generate_invoice(self.order)
+            generate_invoice(self.order)
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -721,12 +743,13 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        assert self.order.payments.last().provider == 'testdummy'
-        fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
-        assert fee.value == Decimal('1.30')
-        assert self.order.total == Decimal('24.40') + fee.value
-        assert self.order.invoices.count() == 3
-        p = self.order.payments.last()
+        with scopes_disabled():
+            assert self.order.payments.last().provider == 'testdummy'
+            fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
+            assert fee.value == Decimal('1.30')
+            assert self.order.total == Decimal('24.40') + fee.value
+            assert self.order.invoices.count() == 3
+            p = self.order.payments.last()
         assert p.provider == 'testdummy'
         assert p.state == OrderPayment.PAYMENT_STATE_CREATED
         assert p.amount == Decimal('14.30')
@@ -744,11 +767,12 @@ class OrdersTest(TestCase):
         assert p.state == OrderPayment.PAYMENT_STATE_CREATED
 
     def test_change_paymentmethod_to_same(self):
-        p_old = self.order.payments.create(
-            provider='banktransfer',
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            amount=Decimal('10.00'),
-        )
+        with scopes_disabled():
+            p_old = self.order.payments.create(
+                provider='banktransfer',
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                amount=Decimal('10.00'),
+            )
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -756,7 +780,8 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        p_new = self.order.payments.last()
+        with scopes_disabled():
+            p_new = self.order.payments.last()
         assert p_new.provider == 'banktransfer'
         assert p_new.id != p_old.id
         assert p_new.state == OrderPayment.PAYMENT_STATE_CREATED
@@ -765,11 +790,12 @@ class OrdersTest(TestCase):
 
     def test_change_paymentmethod_cancel_old(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
-        p_old = self.order.payments.create(
-            provider='testdummy',
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            amount=Decimal('10.00'),
-        )
+        with scopes_disabled():
+            p_old = self.order.payments.create(
+                provider='testdummy',
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                amount=Decimal('10.00'),
+            )
         self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -777,32 +803,34 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        p_new = self.order.payments.last()
-        assert p_new.provider == 'banktransfer'
-        assert p_new.id != p_old.id
-        assert p_new.state == OrderPayment.PAYMENT_STATE_CREATED
-        p_old.refresh_from_db()
-        assert p_old.state == OrderPayment.PAYMENT_STATE_CANCELED
+        with scopes_disabled():
+            p_new = self.order.payments.last()
+            assert p_new.provider == 'banktransfer'
+            assert p_new.id != p_old.id
+            assert p_new.state == OrderPayment.PAYMENT_STATE_CREATED
+            p_old.refresh_from_db()
+            assert p_old.state == OrderPayment.PAYMENT_STATE_CANCELED
 
     def test_change_paymentmethod_delete_fee(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)
         self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
         self.event.settings.set('payment_testdummy__fee_percent', '0.00')
-        f = self.order.fees.create(
-            fee_type=OrderFee.FEE_TYPE_PAYMENT,
-            value='1.40'
-        )
-        self.order.total += Decimal('1.4')
-        self.order.save()
-        p0 = self.order.payments.create(
-            provider='manual',
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            amount=Decimal('24.40'),
-            fee=f
-        )
+        with scopes_disabled():
+            f = self.order.fees.create(
+                fee_type=OrderFee.FEE_TYPE_PAYMENT,
+                value='1.40'
+            )
+            self.order.total += Decimal('1.4')
+            self.order.save()
+            p0 = self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                amount=Decimal('24.40'),
+                fee=f
+            )
 
-        generate_invoice(self.order)
+            generate_invoice(self.order)
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -814,28 +842,30 @@ class OrdersTest(TestCase):
                 'payment': 'testdummy'
             }
         )
-        self.order.refresh_from_db()
-        assert self.order.payments.last().provider == 'testdummy'
-        assert not self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).exists()
-        assert self.order.total == Decimal('23.00')
-        assert self.order.invoices.count() == 3
-        p0.refresh_from_db()
-        assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
-        p = self.order.payments.last()
-        assert p.provider == 'testdummy'
-        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
-        assert p.amount == Decimal('23.00')
+        with scopes_disabled():
+            self.order.refresh_from_db()
+            assert self.order.payments.last().provider == 'testdummy'
+            assert not self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).exists()
+            assert self.order.total == Decimal('23.00')
+            assert self.order.invoices.count() == 3
+            p0.refresh_from_db()
+            assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
+            p = self.order.payments.last()
+            assert p.provider == 'testdummy'
+            assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+            assert p.amount == Decimal('23.00')
 
     def test_change_paymentmethod_available(self):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_testdummy__enabled', True)
         self.event.settings.set('payment_testdummy__fee_abs', '12.00')
-        generate_invoice(self.order)
-        self.order.payments.create(
-            provider='banktransfer',
-            state=OrderPayment.PAYMENT_STATE_PENDING,
-            amount=self.order.total,
-        )
+        with scopes_disabled():
+            generate_invoice(self.order)
+            self.order.payments.create(
+                provider='banktransfer',
+                state=OrderPayment.PAYMENT_STATE_PENDING,
+                amount=self.order.total,
+            )
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -848,24 +878,26 @@ class OrdersTest(TestCase):
             }
         )
         self.order.refresh_from_db()
-        p = self.order.payments.last()
-        assert p.provider == 'testdummy'
-        assert p.state == OrderPayment.PAYMENT_STATE_CREATED
-        p0 = self.order.payments.first()
-        assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
-        assert p0.provider == 'banktransfer'
-        fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
-        assert fee.value == Decimal('12.00')
-        assert self.order.total == Decimal('23.00') + fee.value
-        assert self.order.invoices.count() == 3
+        with scopes_disabled():
+            p = self.order.payments.last()
+            assert p.provider == 'testdummy'
+            assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+            p0 = self.order.payments.first()
+            assert p0.state == OrderPayment.PAYMENT_STATE_CANCELED
+            assert p0.provider == 'banktransfer'
+            fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
+            assert fee.value == Decimal('12.00')
+            assert self.order.total == Decimal('23.00') + fee.value
+            assert self.order.invoices.count() == 3
 
     def test_answer_download_token(self):
-        q = self.event.questions.create(question="Foo", type="F")
-        q.items.add(self.ticket)
-        a = self.ticket_pos.answers.create(question=q, answer="file")
-        val = SimpleUploadedFile("testfile.txt", b"file_content")
-        a.file.save("testfile.txt", val)
-        a.save()
+        with scopes_disabled():
+            q = self.event.questions.create(question="Foo", type="F")
+            q.items.add(self.ticket)
+            a = self.ticket_pos.answers.create(question=q, answer="file")
+            val = SimpleUploadedFile("testfile.txt", b"file_content")
+            a.file.save("testfile.txt", val)
+            a.save()
 
         self.event.settings.set('ticket_download', True)
         del self.event.settings['ticket_download_date']

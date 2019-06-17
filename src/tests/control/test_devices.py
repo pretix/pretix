@@ -1,5 +1,6 @@
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Device, Event, Organizer, Team, User
 from pretix.base.models.devices import generate_api_token
@@ -40,7 +41,7 @@ def admin_team(organizer):
 def test_list_of_devices(event, admin_user, client, device):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.get('/control/organizer/dummy/devices')
-    assert 'Cashdesk' in resp.rendered_content
+    assert 'Cashdesk' in resp.content.decode()
 
 
 @pytest.mark.django_db
@@ -50,11 +51,13 @@ def test_create_device(event, admin_user, admin_team, client):
         'name': 'Foo',
         'limit_events': str(event.pk),
     }, follow=True)
-    d = Device.objects.last()
-    assert d.name == 'Foo'
-    assert not d.all_events
-    assert list(d.limit_events.all()) == [event]
-    assert d.initialization_token in resp.content.decode()
+    print(resp.status_code, resp.content)
+    with scopes_disabled():
+        d = Device.objects.last()
+        assert d.name == 'Foo'
+        assert not d.all_events
+        assert list(d.limit_events.all()) == [event]
+        assert d.initialization_token in resp.content.decode()
 
 
 @pytest.mark.django_db
@@ -67,13 +70,15 @@ def test_update_device(event, admin_user, admin_team, device, client):
     device.refresh_from_db()
     assert device.name == 'Cashdesk 2'
     assert not device.all_events
-    assert list(device.limit_events.all()) == [event]
+    with scopes_disabled():
+        assert list(device.limit_events.all()) == [event]
 
 
 @pytest.mark.django_db
 def test_revoke_device(event, admin_user, admin_team, device, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    device.api_token = generate_api_token()
+    with scopes_disabled():
+        device.api_token = generate_api_token()
     device.initialized = now()
     device.save()
 

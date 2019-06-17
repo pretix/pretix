@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.models import (
     Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
@@ -165,9 +166,10 @@ def test_webhook_mark_paid_without_reference_and_payment(env, client, monkeypatc
 def test_webhook_partial_refund(env, client, monkeypatch):
     charge = get_test_charge(env[1])
 
-    payment = env[1].payments.create(
-        provider='stripe', amount=env[1].total, info=json.dumps(charge)
-    )
+    with scopes_disabled():
+        payment = env[1].payments.create(
+            provider='stripe', amount=env[1].total, info=json.dumps(charge)
+        )
     ReferencedStripeObject.objects.create(order=env[1], reference="ch_18TY6GGGWE2Ias8TZHanef25",
                                           payment=payment)
 
@@ -216,7 +218,8 @@ def test_webhook_partial_refund(env, client, monkeypatch):
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
-    ra = order.refunds.first()
+    with scopes_disabled():
+        ra = order.refunds.first()
     assert ra.state == OrderRefund.REFUND_STATE_EXTERNAL
     assert ra.source == 'external'
     assert ra.amount == Decimal('123.00')
@@ -231,9 +234,10 @@ def test_webhook_global(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
-    payment = order.payments.create(
-        provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
-    )
+    with scopes_disabled():
+        payment = order.payments.create(
+            provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
+        )
     ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25",
                                           payment=payment)
 
@@ -270,9 +274,10 @@ def test_webhook_global_legacy_reference(env, client, monkeypatch):
     charge = get_test_charge(env[1])
     monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
 
-    payment = order.payments.create(
-        provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
-    )
+    with scopes_disabled():
+        payment = order.payments.create(
+            provider='stripe', amount=order.total, info=json.dumps(charge), state=OrderPayment.PAYMENT_STATE_CREATED
+        )
     ReferencedStripeObject.objects.create(order=order, reference="ch_18TY6GGGWE2Ias8TZHanef25")
 
     client.post('/_stripe/webhook/', json.dumps(
@@ -297,4 +302,5 @@ def test_webhook_global_legacy_reference(env, client, monkeypatch):
 
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
-    assert list(order.payments.all()) == [payment]
+    with scopes_disabled():
+        assert list(order.payments.all()) == [payment]

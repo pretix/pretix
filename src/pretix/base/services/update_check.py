@@ -6,6 +6,7 @@ import requests
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext_noop
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix import __version__
@@ -29,6 +30,7 @@ def run_update_check(sender, **kwargs):
 
 
 @app.task
+@scopes_disabled()
 def update_check():
     gs = GlobalSettingsObject()
 

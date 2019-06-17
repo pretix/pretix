@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import get_template
 from django.utils.translation import ugettext as _
+from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import ClassicMailRenderer
@@ -234,83 +235,87 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     pass
 
     if event:
-        event = Event.objects.get(id=event)
+        with scopes_disabled():
+            event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
+        cm = lambda: scope(organizer=event.organizer)  # noqa
     else:
         backend = get_connection(fail_silently=False)
+        cm = lambda: scopes_disabled()  # noqa
 
-    if event:
-        if order:
-            try:
-                order = event.orders.get(pk=order)
-            except Order.DoesNotExist:
-                order = None
-            else:
-                if position:
-                    try:
-                        position = order.positions.get(pk=position)
-                    except OrderPosition.DoesNotExist:
-                        attach_tickets = False
-                if attach_tickets:
-                    args = []
-                    attach_size = 0
-                    for name, ct in get_tickets_for_order(order, base_position=position):
-                        content = ct.file.read()
-                        args.append((name, content, ct.type))
-                        attach_size += len(content)
+    with cm():
+        if event:
+            if order:
+                try:
+                    order = event.orders.get(pk=order)
+                except Order.DoesNotExist:
+                    order = None
+                else:
+                    if position:
+                        try:
+                            position = order.positions.get(pk=position)
+                        except OrderPosition.DoesNotExist:
+                            attach_tickets = False
+                    if attach_tickets:
+                        args = []
+                        attach_size = 0
+                        for name, ct in get_tickets_for_order(order, base_position=position):
+                            content = ct.file.read()
+                            args.append((name, content, ct.type))
+                            attach_size += len(content)
 
-                    if attach_size < 4 * 1024 * 1024:
-                        # Do not attach more than 4MB, it will bounce way to often.
-                        for a in args:
-                            try:
-                                email.attach(*a)
-                            except:
-                                pass
-                    else:
-                        order.log_action(
-                            'pretix.event.order.email.attachments.skipped',
-                            data={
-                                'subject': 'Attachments skipped',
-                                'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
-                                'recipient': '',
-                                'invoices': [],
-                            }
-                        )
+                        if attach_size < 4 * 1024 * 1024:
+                            # Do not attach more than 4MB, it will bounce way to often.
+                            for a in args:
+                                try:
+                                    email.attach(*a)
+                                except:
+                                    pass
+                        else:
+                            order.log_action(
+                                'pretix.event.order.email.attachments.skipped',
+                                data={
+                                    'subject': 'Attachments skipped',
+                                    'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
+                                    'recipient': '',
+                                    'invoices': [],
+                                }
+                            )
 
-        email = email_filter.send_chained(event, 'message', message=email, order=order)
+            email = email_filter.send_chained(event, 'message', message=email, order=order)
 
-    try:
-        backend.send_messages([email])
-    except smtplib.SMTPResponseException as e:
-        if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
-            self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
-        logger.exception('Error sending email')
+        try:
+            backend.send_messages([email])
+        except smtplib.SMTPResponseException as e:
+            if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
+                self.retry(max_retries=5, countdown=2 ** (self.request.retries * 2))
+            logger.exception('Error sending email')
 
-        if order:
-            order.log_action(
-                'pretix.event.order.email.error',
-                data={
-                    'subject': 'SMTP code {}'.format(e.smtp_code),
-                    'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
-                    'recipient': '',
-                    'invoices': [],
-                }
-            )
+            if order:
+                order.log_action(
+                    'pretix.event.order.email.error',
+                    data={
+                        'subject': 'SMTP code {}'.format(e.smtp_code),
+                        'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
+                        'recipient': '',
+                        'invoices': [],
+                    }
+                )
 
-        raise SendMailException('Failed to send an email to {}.'.format(to))
-    except Exception as e:
-        if order:
-            order.log_action(
-                'pretix.event.order.email.error',
-                data={
-                    'subject': 'Internal error',
-                    'message': str(e),
-                    'recipient': '',
-                    'invoices': [],
-                }
-            )
-        logger.exception('Error sending email')
-        raise SendMailException('Failed to send an email to {}.'.format(to))
+            raise SendMailException('Failed to send an email to {}.'.format(to))
+        except Exception as e:
+            if order:
+                order.log_action(
+                    'pretix.event.order.email.error',
+                    data={
+                        'subject': 'Internal error',
+                        'message': str(e),
+                        'recipient': '',
+                        'invoices': [],
+                    }
+                )
+            logger.exception('Error sending email')
+            raise SendMailException('Failed to send an email to {}.'.format(to))
 
 
 def mail_send(*args, **kwargs):
