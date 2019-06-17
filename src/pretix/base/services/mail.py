@@ -220,19 +220,6 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
     email = EmailMultiAlternatives(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         email.attach_alternative(html, "text/html")
-    if invoices:
-        invoices = Invoice.objects.filter(pk__in=invoices)
-        for inv in invoices:
-            if inv.file:
-                try:
-                    email.attach(
-                        '{}.pdf'.format(inv.number),
-                        inv.file.file.read(),
-                        'application/pdf'
-                    )
-                except:
-                    logger.exception('Could not attach invoice to email')
-                    pass
 
     if event:
         with scopes_disabled():
@@ -244,6 +231,19 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         cm = lambda: scopes_disabled()  # noqa
 
     with cm():
+        if invoices:
+            invoices = Invoice.objects.filter(pk__in=invoices)
+            for inv in invoices:
+                if inv.file:
+                    try:
+                        email.attach(
+                            '{}.pdf'.format(inv.number),
+                            inv.file.file.read(),
+                            'application/pdf'
+                        )
+                    except:
+                        logger.exception('Could not attach invoice to email')
+                        pass
         if event:
             if order:
                 try:
