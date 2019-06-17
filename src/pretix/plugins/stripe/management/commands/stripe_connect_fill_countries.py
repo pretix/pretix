@@ -1,5 +1,6 @@
 import stripe
 from django.core.management.base import BaseCommand
+from django_scopes import scopes_disabled
 
 from pretix.base.models import Event
 from pretix.base.settings import GlobalSettingsObject
@@ -8,6 +9,7 @@ from pretix.base.settings import GlobalSettingsObject
 class Command(BaseCommand):
     help = "Detect country for Stripe Connect accounts connected with pretix 2.0 (required for payment request buttons)"
 
+    @scopes_disabled()
     def handle(self, *args, **options):
         cache = {}
         gs = GlobalSettingsObject()
