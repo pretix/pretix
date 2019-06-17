@@ -36,16 +36,16 @@ class PermissionMiddleware:
     )
 
     EXCEPTIONS_2FA = (
-        "control:user.settings.2fa",
-        "control:user.settings.2fa.add",
-        "control:user.settings.2fa.enable",
-        "control:user.settings.2fa.disable",
-        "control:user.settings.2fa.regenemergency",
-        "control:user.settings.2fa.confirm.totp",
-        "control:user.settings.2fa.confirm.u2f",
-        "control:user.settings.2fa.delete",
-        "control:auth.logout",
-        "control:user.reauth"
+        "user.settings.2fa",
+        "user.settings.2fa.add",
+        "user.settings.2fa.enable",
+        "user.settings.2fa.disable",
+        "user.settings.2fa.regenemergency",
+        "user.settings.2fa.confirm.totp",
+        "user.settings.2fa.confirm.u2f",
+        "user.settings.2fa.delete",
+        "auth.logout",
+        "user.reauth"
     )
 
     def __init__(self, get_response=None):
@@ -86,10 +86,6 @@ class PermissionMiddleware:
         if not request.user.is_authenticated:
             return self._login_redirect(request)
 
-        if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
-            and url_name not in self.EXCEPTIONS_2FA:
-            return redirect(reverse('control:user.settings.2fa'))
-
         try:
             # If this logic is updated, make sure to also update the logic in pretix/api/auth/permission.py
             assert_session_valid(request)
@@ -99,6 +95,10 @@ class PermissionMiddleware:
         except SessionReauthRequired:
             if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+
+        if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
+                and url_name not in self.EXCEPTIONS_2FA:
+            return redirect(reverse('control:user.settings.2fa'))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             with scope(organizer=None):
