@@ -35,6 +35,19 @@ class PermissionMiddleware:
         "user.settings.notifications.off",
     )
 
+    EXCEPTIONS_2FA = (
+        "user.settings.2fa",
+        "user.settings.2fa.add",
+        "user.settings.2fa.enable",
+        "user.settings.2fa.disable",
+        "user.settings.2fa.regenemergency",
+        "user.settings.2fa.confirm.totp",
+        "user.settings.2fa.confirm.u2f",
+        "user.settings.2fa.delete",
+        "auth.logout",
+        "user.reauth"
+    )
+
     def __init__(self, get_response=None):
         self.get_response = get_response
         super().__init__()
@@ -82,6 +95,10 @@ class PermissionMiddleware:
         except SessionReauthRequired:
             if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+
+        if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
+                and url_name not in self.EXCEPTIONS_2FA:
+            return redirect(reverse('control:user.settings.2fa'))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             with scope(organizer=None):

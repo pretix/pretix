@@ -78,6 +78,10 @@ Example::
     Enables or disables nagging staff users for leaving comments on their sessions for auditability.
     Defaults to ``off``.
 
+``obligatory_2fa``
+    Enables or disables obligatory usage of Two-Factor Authentication for users of the pretix backend.
+    Defaults to ``False``
+
 
 Locale settings
 ---------------
