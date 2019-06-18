@@ -51,6 +51,13 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if has_plugins > 0 %}
+                <div class="alert alert-warning">
+                    {% blocktrans trimmed with num=quota_overbooked %}
+                        A plugin is active that might modify the actual result of this quota from what you see here.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
             {% if quota_overbooked > 0 %}
                 <div class="alert alert-warning">
                     {% blocktrans trimmed with num=quota_overbooked %}

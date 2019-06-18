@@ -23,6 +23,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.tax import TaxedPrice
+from pretix.base.signals import quota_availability
 
 from .event import Event, SubEvent
 
@@ -1312,6 +1313,9 @@ class Quota(LoggedModel):
             return _cache[self.pk]
         now_dt = now_dt or now()
         res = self._availability(now_dt, count_waitinglist)
+        for recv, resp in quota_availability.send(sender=self.event, quota=self, result=res,
+                                                  count_waitinglist=count_waitinglist):
+            res = resp
 
         self.event.cache.delete('item_quota_cache')
         rewrite_cache = count_waitinglist and (

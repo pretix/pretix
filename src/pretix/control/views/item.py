@@ -25,6 +25,7 @@ from pretix.base.models import (
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle
 from pretix.base.services.tickets import invalidate_cache
+from pretix.base.signals import quota_availability
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemUpdateForm, ItemVariationForm,
@@ -665,6 +666,17 @@ class QuotaView(ChartContainingView, DetailView):
         ctx['quota_chart_data'] = json.dumps([r for r in data if r.get('sum')])
         ctx['quota_table_rows'] = list(data)
         ctx['quota_overbooked'] = sum_values - self.object.size if self.object.size is not None else 0
+
+        ctx['has_plugins'] = False
+        res = (
+            Quota.AVAILABILITY_GONE if self.object.size is not None and self.object.size - sum_values <= 0 else
+            Quota.AVAILABILITY_OK,
+            self.object.size - sum_values if self.object.size is not None else None
+        )
+        for recv, resp in quota_availability.send(sender=self.request.event, quota=self.object, result=res,
+                                                  count_waitinglist=True):
+            if resp != res:
+                ctx['has_plugins'] = True
 
         ctx['has_ignore_vouchers'] = Voucher.objects.filter(
             Q(allow_ignore_quota=True) &

@@ -524,3 +524,20 @@ a ``subevent`` argument which might be none and you are expected to return a lis
 ``pretix.base.timeline.TimelineEvent``, which is a ``namedtuple`` with the fields ``event``, ``subevent``,
 ``datetime``, ``description`` and ``edit_url``.
 """
+
+
+quota_availability = EventPluginSignal(
+    providing_args=['quota', 'result', 'count_waitinglist']
+)
+"""
+This signal allows you to modify the availability of a quota. You are passed the ``quota`` and an
+``availability`` result calculated by pretix code or other plugins. ``availability`` is a tuple
+with the first entry being one of the ``Quota.AVAILABILITY_*`` constants and the second entry being
+the number of available tickets (or ``None`` for unlimited). You are expected to return a value
+of the same time. The parameter ``count_waitinglists`` specifies whether waiting lists should be taken
+into account.
+
+**Warning: Use this signal with great caution, it allows you to screw up the performance of the
+system really bad.** Also, keep in mind that your response is subject to caching and out-of-date
+quotas might be used for display (not for actual order processing).
+"""
