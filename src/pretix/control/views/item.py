@@ -640,7 +640,7 @@ class QuotaView(ChartContainingView, DetailView):
         ]
 
         sum_values = sum([d['value'] for d in data if d['sum']])
-        s = self.object.size - sum_values if self.object.size is not None else 0
+        s = self.object.size - sum_values if self.object.size is not None else ugettext('Infinite')
 
         data.append({
             'label': ugettext('Available quota'),
