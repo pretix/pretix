@@ -42,6 +42,27 @@ $(function () {
                                     })
                                 )
                             );
+                        } else if (res.type === "order" || res.type === "voucher") {
+                            $container.append(
+                                $("<li>").append(
+                                    $("<a>").attr("href", res.url).append(
+                                        $("<div>").append(
+                                            $("<span>").addClass("event-name-full").append($("<div>").text(res.title).html())
+                                        ).append(
+                                            $("<span>").addClass("event-organizer").append(
+                                                $("<span>").addClass("fa fa-calendar fa-fw")
+                                            ).append(" ").append($("<div>").text(res.event).html())
+                                        )
+                                    ).on("mousedown", function (event) {
+                                        if ($(this).length) {
+                                            location.href = $(this).attr("href");
+                                        }
+                                        $(this).parent().addClass("active");
+                                        event.preventDefault();
+                                        event.stopPropagation();
+                                    })
+                                )
+                            );
                         } else if (res.type === "user") {
                             $container.append(
                                 $("<li>").append(
