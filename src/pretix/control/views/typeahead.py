@@ -169,7 +169,7 @@ def nav_context_list(request):
 
     qs_vouchers = Voucher.objects.filter(code__icontains=query).select_related('event', 'event__organizer')
     if not request.user.has_active_staff_session(request.session.session_key):
-        qs_orders = qs_orders.filter(
+        qs_vouchers = qs_vouchers.filter(
             Q(event__organizer_id__in=request.user.teams.filter(
                 all_events=True, can_view_vouchers=True).values_list('organizer', flat=True))
             | Q(event_id__in=request.user.teams.filter(
