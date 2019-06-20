@@ -64,16 +64,15 @@ $(function () {
             placeholder: $(this).attr("data-placeholder"),
             ajax: {
                 url: function() {
-                    var se = $(this).closest(".form-order-change").attr("data-subevent");
+                    var se = $(this).closest(".form-order-change, .form-horizontal").attr("data-subevent");
                     var url = $(this).attr('data-select2-url');
-                    if (!se) {
-                        return url;
-                    }
-                    var changed = $(this).closest(".form-order-change").find("[id$=subevent]").val();
+                    var changed = $(this).closest(".form-order-change, .form-horizontal").find("[id$=subevent]").val();
                     if (changed) {
                         return url + '?subevent=' + changed;
-                    } else {
+                    } else if (se) {
                         return url + '?subevent=' + se;
+                    } else {
+                        return url;
                     }
                 },
                 data: function (params) {

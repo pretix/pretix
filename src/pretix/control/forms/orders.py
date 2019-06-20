@@ -198,6 +198,12 @@ class OrderPositionAddForm(forms.Form):
         required=False,
         label=_('Add-on to'),
     )
+    seat = forms.ModelChoiceField(
+        Seat.objects.none(),
+        required=False,
+        label=_('Seat'),
+        empty_label=_('General admission')
+    )
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
@@ -242,6 +248,19 @@ class OrderPositionAddForm(forms.Form):
             )
         else:
             del self.fields['addon_to']
+
+        self.fields['seat'].queryset = order.event.seats.all()
+        self.fields['seat'].widget = Select2(
+            attrs={
+                'data-model-select2': 'seat',
+                'data-select2-url': reverse('control:event.seats.select2', kwargs={
+                    'event': order.event.slug,
+                    'organizer': order.event.organizer.slug,
+                }),
+                'data-placeholder': _('General admission')
+            }
+        )
+        self.fields['seat'].widget.choices = self.fields['seat'].choices
 
         if order.event.has_subevents:
             self.fields['subevent'].queryset = order.event.subevents.all()

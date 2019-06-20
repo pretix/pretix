@@ -982,14 +982,16 @@ class OrderChangeManager:
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
         'seat_unavailable': _('The selected seat "{seat}" is not available.'),
-        'seat_subevent_mismatch': _('The selected seat "{seat}" does not match the selected subevent.'),
+        'seat_subevent_mismatch': _('You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'),
+        'seat_required': _('The selected product requires you to select a seat.'),
+        'seat_forbidden': _('The selected product does not allow to select a seat.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
     SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
@@ -1089,7 +1091,7 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
-                     subevent: SubEvent = None):
+                     subevent: SubEvent = None, seat: Seat = None):
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
@@ -1108,6 +1110,14 @@ class OrderChangeManager:
         if self.order.event.has_subevents and not subevent:
             raise OrderError(self.error_messages['subevent_required'])
 
+        seated = item.seat_category_mappings.exists()
+        if seated and not seat:
+            raise OrderError(self.error_messages['seat_required'])
+        elif not seated and seat:
+            raise OrderError(self.error_messages['seat_forbidden'])
+        if seat and subevent and seat.subevent_id != subevent:
+            raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=seat.name))
+
         new_quotas = (variation.quotas.filter(subevent=subevent)
                       if variation else item.quotas.filter(subevent=subevent))
         if not new_quotas:
@@ -1118,7 +1128,9 @@ class OrderChangeManager:
 
         self._totaldiff += price.gross
         self._quotadiff.update(new_quotas)
-        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
+        if seat:
+            self._seatdiff.update([seat])
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -1296,7 +1308,7 @@ class OrderChangeManager:
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
                     price=op.price.gross, order=self.order, tax_rate=op.price.rate,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
-                    positionid=nextposid, subevent=op.subevent
+                    positionid=nextposid, subevent=op.subevent, seat=op.seat
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
@@ -1307,6 +1319,7 @@ class OrderChangeManager:
                     'price': op.price.gross,
                     'positionid': pos.positionid,
                     'subevent': op.subevent.pk if op.subevent else None,
+                    'seat': op.seat.pk if op.seat else None,
                 })
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
