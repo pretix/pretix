@@ -478,6 +478,15 @@
       font-weight: bold;
     }
   }
+
+  .pretix-widget-seating-link-wrapper {
+    padding: 0 15px;
+    margin: 15px 0 10px;
+  }
+  .pretix-widget-seating-link {
+    display: block;
+    width: 100%;
+  }
 }
 
 @keyframes pretix-widget-bounce-in {

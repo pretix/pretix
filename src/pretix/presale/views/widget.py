@@ -515,6 +515,8 @@ class WidgetAPIProductList(EventListMixin, View):
             data['display_add_to_cart'] = False
             data['itemnum'] = 0
 
+        data['has_seating_plan'] = ev.seating_plan is not None
+
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()

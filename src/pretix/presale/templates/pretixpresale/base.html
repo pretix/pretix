@@ -19,20 +19,7 @@
         {% endcompress %}
     {% endif %}
 
-    {% compress js %}
-        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-        <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
-        <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
-        <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
-        <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/questions.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/main.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixbase/js/asynctask.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixbase/js/details.js" %}"></script>
-        <script type="text/javascript" src="{% static "pretixpresale/js/ui/cart.js" %}"></script>
-        <script type="text/javascript" src="{% static "lightbox/js/lightbox.min.js" %}"></script>
-    {% endcompress %}
+    {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
@@ -79,20 +66,7 @@
         {% include "pretixpresale/base_footer.html" %}
     </footer>
 </div>
-<div id="ajaxerr">
-</div>
-<div id="loadingmodal">
-    <div class="modal-card">
-        <div class="modal-card-icon">
-            <i class="fa fa-cog big-rotating-icon"></i>
-        </div>
-        <div class="modal-card-content">
-            <h3></h3>
-            <p class="text"></p>
-            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-        </div>
-    </div>
-</div>
+{% include "pretixpresale/fragment_modals.html" %}
 {% if DEBUG %}
     <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
 {% else %}

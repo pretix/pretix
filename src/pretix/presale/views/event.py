@@ -347,6 +347,54 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         return context
 
 
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
+class SeatingPlanView(EventViewMixin, TemplateView):
+    template_name = "pretixpresale/event/seatingplan.html"
+
+    def get(self, request, *args, **kwargs):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
+        self.subevent = None
+        if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
+            # User has clicked "Open in a new tab" link in widget
+            get_or_create_cart_id(request)
+            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs))
+        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
+            # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
+            get_or_create_cart_id(request)
+            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
+                request.GET.get('take_cart_id')
+            ))
+        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
+            # We've been passed data from a widget, we need to create a cart session to store it.
+            get_or_create_cart_id(request)
+
+        if request.event.has_subevents:
+            if 'subevent' in kwargs:
+                self.subevent = request.event.subevents.using(settings.DATABASE_REPLICA).filter(pk=kwargs['subevent'], active=True).first()
+                if not self.subevent or not self.subevent.seating_plan:
+                    raise Http404()
+                return super().get(request, *args, **kwargs)
+            else:
+                raise Http404()
+        else:
+            if 'subevent' in kwargs or not request.event.seating_plan:
+                raise Http404()
+            else:
+                r = super().get(request, *args, **kwargs)
+                r._csp_ignore = True
+                return r
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
+                                                kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
+        if context['cart_redirect'].startswith('https:'):
+            context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
+        return context
+
+
 class EventIcalDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         if not self.request.event:

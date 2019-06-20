@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load static %}
+{% load eventurl %}
+{% load compress %}
+{% load eventsignal %}
+{% load statici18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% if css_file %}
+        <link rel="stylesheet" type="text/css" href="{{ css_file }}"/>
+    {% else %}
+        {% compress css %}
+            <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
+        {% endcompress %}
+    {% endif %}
+    {% include "pretixpresale/fragment_js.html" %}
+    <meta name="referrer" content="origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+</head>
+<body class="full-screen-seating" data-locale="{{ request.LANGUAGE_CODE }}">
+<form method="post" data-asynctask
+      data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
+      data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
+      action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}">
+    {% csrf_token %}
+    <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}"/>
+    {% if event.has_subevents %}
+        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent %}
+    {% else %}
+        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request %}
+    {% endif %}
+</form>
+{% include "pretixpresale/fragment_modals.html" %}
+{% if DEBUG %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+{% else %}
+    <script src="{% statici18n LANGUAGE_CODE %}" async></script>
+{% endif %}
+{% if request.session.iframe_session %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "iframeresizer/iframeResizer.contentWindow.js" %}"></script>
+    {% endcompress %}
+{% endif %}
+{{ html_foot|safe }}
+</body>
+</html>
