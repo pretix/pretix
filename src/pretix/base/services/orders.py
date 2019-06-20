@@ -511,6 +511,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = error_messages['voucher_required']
             break
 
+        if cp.seat:
+            # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every time, since we absolutely
+            # can not overbook a seat.
+            if not cp.seat.is_available(ignore_cart=cp) or cp.seat.blocked:
+                err = err or error_messages['seat_unavailable']
+                cp.delete()
+                continue
+
         if cp.expires >= now_dt and not cp.voucher:
             # Other checks are not necessary
             continue
@@ -551,12 +559,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.save()
             err = err or error_messages['price_changed']
             continue
-
-        if cp.seat:
-            if not cp.seat.is_available(ignore_cart=cp) or cp.seat.blocked:
-                err = err or error_messages['seat_unavailable']
-                cp.delete()
-                continue
 
         quota_ok = True
 
@@ -1155,7 +1157,7 @@ class OrderChangeManager:
                 elif isinstance(op, self.SubeventOperation):
                     state[op.position]['subevent'] = op.subevent
             for v in state.values():
-                if v['seat'].subevent_id != v['subevent'].pk:
+                if v['seat'] and v['seat'].subevent_id != v['subevent'].pk:
                     raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=v['seat'].name))
 
     def _check_quotas(self):

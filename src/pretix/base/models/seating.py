@@ -28,6 +28,9 @@ class SeatingPlanLayoutValidator:
 
 
 class SeatingPlan(LoggedModel):
+    """
+    Represents an abstract seating plan, without relation to any event.
+    """
     name = models.CharField(max_length=190, verbose_name=_('Name'))
     organizer = models.ForeignKey(Organizer, related_name='seating_plans', on_delete=models.CASCADE)
     layout = models.TextField(validators=[SeatingPlanLayoutValidator()])
@@ -66,6 +69,10 @@ class SeatingPlan(LoggedModel):
 
 
 class SeatCategoryMapping(models.Model):
+    """
+    Input seating plans have abstract "categories", such as "Balcony seat", etc. This model maps them to actual
+    pretix product on a per-(sub)event level.
+    """
     event = models.ForeignKey(Event, related_name='seat_category_mappings', on_delete=models.CASCADE)
     subevent = models.ForeignKey(SubEvent, null=True, blank=True, related_name='seat_category_mappings', on_delete=models.CASCADE)
     layout_category = models.CharField(max_length=190)
@@ -73,6 +80,10 @@ class SeatCategoryMapping(models.Model):
 
 
 class Seat(models.Model):
+    """
+    This model is used to represent every single specific seat within an (sub)event that can be selected. It's mainly
+    used for internal bookkeeping and not to be modified by users directly.
+    """
     event = models.ForeignKey(Event, related_name='seats', on_delete=models.CASCADE)
     subevent = models.ForeignKey(SubEvent, null=True, blank=True, related_name='seats', on_delete=models.CASCADE)
     name = models.CharField(max_length=190)
