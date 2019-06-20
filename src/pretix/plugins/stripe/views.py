@@ -49,6 +49,7 @@ def redirect_view(request, *args, **kwargs):
     return r
 
 
+@scopes_disabled()
 def oauth_return(request, *args, **kwargs):
     if 'payment_stripe_oauth_event' not in request.session:
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
