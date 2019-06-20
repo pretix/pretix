@@ -2830,6 +2830,7 @@ class CartBundleTest(CartTestMixin, TestCase):
 
 class CartSeatingTest(CartTestMixin, TestCase):
 
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.plan = SeatingPlan.objects.create(
@@ -2847,48 +2848,55 @@ class CartSeatingTest(CartTestMixin, TestCase):
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
         }, follow=True)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].item, self.ticket)
-        self.assertEqual(objs[0].seat, self.seat_a1)
-        self.assertIsNone(objs[0].variation)
-        self.assertEqual(objs[0].price, 23)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0].item, self.ticket)
+            self.assertEqual(objs[0].seat, self.seat_a1)
+            self.assertIsNone(objs[0].variation)
+            self.assertEqual(objs[0].price, 23)
 
     def test_add_with_seat_with_missing_variation(self):
-        v1 = self.ticket.variations.create(value='Regular', active=True)
-        self.quota_tickets.variations.add(v1)
+        with scopes_disabled():
+            v1 = self.ticket.variations.create(value='Regular', active=True)
+            self.quota_tickets.variations.add(v1)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
         }, follow=True)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 0)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
 
     def test_add_with_seat_with_variation(self):
-        v1 = self.ticket.variations.create(value='Regular', active=True)
-        self.quota_tickets.variations.add(v1)
+        with scopes_disabled():
+            v1 = self.ticket.variations.create(value='Regular', active=True)
+            self.quota_tickets.variations.add(v1)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d_%d' % (self.ticket.id, v1.pk): self.seat_a1.seat_guid,
         }, follow=True)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].item, self.ticket)
-        self.assertEqual(objs[0].seat, self.seat_a1)
-        self.assertEqual(objs[0].variation, v1)
-        self.assertEqual(objs[0].price, 23)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0].item, self.ticket)
+            self.assertEqual(objs[0].seat, self.seat_a1)
+            self.assertEqual(objs[0].variation, v1)
+            self.assertEqual(objs[0].price, 23)
 
     def test_add_with_seat_to_cart_twice(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
             price=23, expires=now() + timedelta(minutes=10)
         )
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
         }, follow=True)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 1)
-        self.assertEqual(objs[0].seat, self.seat_a1)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 1)
+            self.assertEqual(objs[0].seat, self.seat_a1)
 
     def test_add_used_seat_to_cart(self):
         CartPosition.objects.create(
@@ -2898,27 +2906,32 @@ class CartSeatingTest(CartTestMixin, TestCase):
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
         }, follow=True)
-        objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-        self.assertEqual(len(objs), 0)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
 
+    @scopes_disabled()
     def test_extend_seat_still_available(self):
-        cp = CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
-            price=21.5, expires=now() - timedelta(minutes=10)
-        )
+        with scopes_disabled():
+            cp = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
+                price=21.5, expires=now() - timedelta(minutes=10)
+            )
         self.cm.commit()
         cp.refresh_from_db()
         assert cp.seat == self.seat_a1
 
+    @scopes_disabled()
     def test_extend_seat_taken(self):
-        CartPosition.objects.create(
-            event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
-            price=21.5, expires=now() - timedelta(minutes=10)
-        )
-        CartPosition.objects.create(
-            event=self.event, cart_id='secondcart', item=self.ticket, seat=self.seat_a1,
-            price=21.5, expires=now() + timedelta(minutes=10)
-        )
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket, seat=self.seat_a1,
+                price=21.5, expires=now() - timedelta(minutes=10)
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id='secondcart', item=self.ticket, seat=self.seat_a1,
+                price=21.5, expires=now() + timedelta(minutes=10)
+            )
         with self.assertRaises(CartError):
             self.cm.commit()
 

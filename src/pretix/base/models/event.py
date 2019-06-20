@@ -465,7 +465,7 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
-        from . import ItemAddOn, ItemCategory, Item, Question, Quota, Seat, SeatCategoryMapping
+        from . import ItemAddOn, ItemCategory, Item, Question, Quota
         from ..signals import event_copy_data
 
         self.plugins = other.plugins
@@ -570,7 +570,6 @@ class Event(EventMixin, LoggedModel):
             s.pk = None
             s.event = self
             s.save()
-
 
         for s in other.settings._objects.all():
             s.object = self

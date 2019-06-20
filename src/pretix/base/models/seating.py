@@ -15,10 +15,13 @@ from pretix.base.models import Event, Item, LoggedModel, Organizer, SubEvent
 @deconstructible
 class SeatingPlanLayoutValidator:
     def __call__(self, value):
-        try:
-            val = json.loads(value)
-        except ValueError:
-            raise ValidationError(_('Your layout file is not a valid JSON file.'))
+        if not isinstance(value, dict):
+            try:
+                val = json.loads(value)
+            except ValueError:
+                raise ValidationError(_('Your layout file is not a valid JSON file.'))
+        else:
+            val = value
         with open(finders.find('seating/seating-plan.schema.json'), 'r') as f:
             schema = json.loads(f.read())
         try:

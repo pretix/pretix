@@ -2593,6 +2593,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
 
 
 class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
+    @scopes_disabled()
     def setUp(self):
         super().setUp()
         self.plan = SeatingPlan.objects.create(
@@ -2609,27 +2610,31 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
 
+    @scopes_disabled()
     def test_passes(self):
-        oid = _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         o = Order.objects.get(pk=oid)
         op = o.positions.first()
         assert op.item == self.ticket
         assert op.seat == self.seat_a1
 
+    @scopes_disabled()
     def test_seat_required(self):
         self.cp1.seat = None
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
+    @scopes_disabled()
     def test_seat_not_allowed(self):
         self.cp1.item = self.workshop1
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
+    @scopes_disabled()
     def test_seat_invalid_product(self):
         self.cp1.item = self.workshop1
         self.cp1.save()
@@ -2637,31 +2642,34 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             layout_category='Foo', product=self.workshop1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
+    @scopes_disabled()
     def test_seat_multiple_times_same_seat(self):
         cp2 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
         assert not CartPosition.objects.filter(pk=cp2.pk).exists()
 
+    @scopes_disabled()
     def test_seat_blocked(self):
         self.seat_a1.blocked = True
         self.seat_a1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
+    @scopes_disabled()
     def test_seat_taken(self):
         CartPosition.objects.create(
             event=self.event, cart_id=self.session_key + '_other', item=self.ticket,
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event.pk, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()

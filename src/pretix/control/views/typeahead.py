@@ -1,5 +1,6 @@
-import pytz
 from datetime import datetime, time
+
+import pytz
 from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Min, Q
@@ -10,11 +11,7 @@ from django.utils.formats import get_format
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext, ugettext as _
 
-<<<<<<< HEAD
-from pretix.base.models import Order, Organizer, User, SubEvent, Voucher
-=======
-from pretix.base.models import Organizer, SubEvent, User
->>>>>>> 08423a16... Change order positions
+from pretix.base.models import Order, Organizer, SubEvent, User, Voucher
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import event_permission_required
 from pretix.helpers.daterange import daterange

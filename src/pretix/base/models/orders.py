@@ -651,7 +651,7 @@ class Order(LockModel, LoggedModel):
         if not self.event.settings.get('payment_term_accept_late') and not ignore_date and not force:
             return error_messages['late']
 
-        return self._is_still_available(count_waitinglist=count_waitinglist, force=False)
+        return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False) -> Union[bool, str]:
         error_messages = {

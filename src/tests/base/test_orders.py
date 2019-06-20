@@ -636,18 +636,18 @@ class OrderChangeManagerTests(TestCase):
             self.quota.items.add(self.ticket2)
             self.quota.items.add(self.shirt)
 
-        self.stalls = Item.objects.create(event=self.event, name='Stalls', tax_rule=self.tr7,
-                                          default_price=Decimal('23.00'), admission=True)
-        self.plan = SeatingPlan.objects.create(
-            name="Plan", organizer=o, layout="{}"
-        )
-        self.event.seat_category_mappings.create(
-            layout_category='Stalls', product=self.stalls
-        )
-        self.quota.items.add(self.stalls)
-        self.seat_a1 = self.event.seats.create(name="A1", product=self.stalls, seat_guid="A1")
-        self.seat_a2 = self.event.seats.create(name="A2", product=self.stalls, seat_guid="A2")
-        self.seat_a3 = self.event.seats.create(name="A3", product=self.stalls, seat_guid="A3")
+            self.stalls = Item.objects.create(event=self.event, name='Stalls', tax_rule=self.tr7,
+                                              default_price=Decimal('23.00'), admission=True)
+            self.plan = SeatingPlan.objects.create(
+                name="Plan", organizer=self.o, layout="{}"
+            )
+            self.event.seat_category_mappings.create(
+                layout_category='Stalls', product=self.stalls
+            )
+            self.quota.items.add(self.stalls)
+            self.seat_a1 = self.event.seats.create(name="A1", product=self.stalls, seat_guid="A1")
+            self.seat_a2 = self.event.seats.create(name="A2", product=self.stalls, seat_guid="A2")
+            self.seat_a3 = self.event.seats.create(name="A3", product=self.stalls, seat_guid="A3")
 
     def _enable_reverse_charge(self):
         self.tr7.eu_reverse_charge = True
@@ -1646,6 +1646,7 @@ class OrderChangeManagerTests(TestCase):
         assert o2.total == Decimal('0.00')
         assert o2.status == Order.STATUS_PAID
 
+    @classscope(attr='o')
     def test_change_seat_circular(self):
         self.op1.seat = self.seat_a1
         self.op1.save()
@@ -1659,6 +1660,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.seat == self.seat_a2
         assert self.op2.seat == self.seat_a1
 
+    @classscope(attr='o')
     def test_change_seat_duplicate(self):
         self.op1.seat = self.seat_a1
         self.op1.save()
@@ -1670,6 +1672,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat == self.seat_a1
 
+    @classscope(attr='o')
     def test_change_seat_and_cancel(self):
         self.op1.seat = self.seat_a1
         self.op1.save()
@@ -1681,6 +1684,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat == self.seat_a2
 
+    @classscope(attr='o')
     def test_change_seat(self):
         self.op1.seat = self.seat_a1
         self.op1.save()
@@ -1689,6 +1693,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat == self.seat_a2
 
+    @classscope(attr='o')
     def test_change_add_seat(self):
         # does this make sense or do we block it based on the item? this is currently not reachable through the UI
         self.ocm.change_seat(self.op1, self.seat_a1)
@@ -1696,6 +1701,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat == self.seat_a1
 
+    @classscope(attr='o')
     def test_remove_seat(self):
         # does this make sense or do we block it based on the item? this is currently not reachable through the UI
         self.op1.seat = self.seat_a1
@@ -1705,6 +1711,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat is None
 
+    @classscope(attr='o')
     def test_add_with_seat(self):
         self.ocm.add_position(self.stalls, None, price=Decimal('13.00'), seat=self.seat_a3)
         self.ocm.commit()
@@ -1712,6 +1719,7 @@ class OrderChangeManagerTests(TestCase):
         assert op3.item == self.stalls
         assert op3.seat == self.seat_a3
 
+    @classscope(attr='o')
     def test_add_with_taken_seat(self):
         self.op1.seat = self.seat_a1
         self.op1.save()
@@ -1719,14 +1727,17 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.commit()
 
+    @classscope(attr='o')
     def test_add_with_seat_required(self):
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.stalls, None, price=Decimal('13.00'))
 
+    @classscope(attr='o')
     def test_add_with_seat_forbidden(self):
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.ticket, None, price=Decimal('13.00'), seat=self.seat_a1)
 
+    @classscope(attr='o')
     def test_add_with_seat_blocked(self):
         self.seat_a1.blocked = True
         self.seat_a1.save()
@@ -1734,6 +1745,7 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.commit()
 
+    @classscope(attr='o')
     def test_change_seat_to_blocked(self):
         self.seat_a2.blocked = True
         self.seat_a2.save()
@@ -1745,6 +1757,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.seat == self.seat_a1
 
+    @classscope(attr='o')
     def test_change_seat_require_subevent_change(self):
         self.event.has_subevents = True
         self.event.save()
@@ -1763,6 +1776,7 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.commit()
 
+    @classscope(attr='o')
     def test_change_subevent_require_seat_change(self):
         self.event.has_subevents = True
         self.event.save()
@@ -1781,6 +1795,7 @@ class OrderChangeManagerTests(TestCase):
         with self.assertRaises(OrderError):
             self.ocm.commit()
 
+    @classscope(attr='o')
     def test_change_subevent_and_seat(self):
         self.event.has_subevents = True
         self.event.save()
@@ -1802,6 +1817,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.seat == self.seat_a2
         assert self.op1.subevent == se2
 
+    @classscope(attr='o')
     def test_change_seat_inside_subevent(self):
         self.event.has_subevents = True
         self.event.save()
@@ -1819,6 +1835,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.seat == self.seat_a2
         assert self.op1.subevent == se1
 
+    @classscope(attr='o')
     def test_add_with_seat_and_subevent_mismatch(self):
         self.event.has_subevents = True
         self.event.save()
