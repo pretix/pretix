@@ -41,6 +41,7 @@ def redirect_view(request, *args, **kwargs):
     return r
 
 
+@scopes_disabled()
 def oauth_return(request, *args, **kwargs):
     if 'payment_paypal_oauth_event' not in request.session:
         messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
