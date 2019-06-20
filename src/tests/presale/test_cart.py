@@ -2867,6 +2867,52 @@ class CartSeatingTest(CartTestMixin, TestCase):
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
             self.assertEqual(len(objs), 0)
 
+    def test_add_seat_blocked(self):
+        self.seat_a1.blocked = True
+        self.seat_a1.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
+    def test_add_seat_unseated_product(self):
+        with scopes_disabled():
+            self.event.seat_category_mappings.all().delete()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
+    def test_add_seat_wrong_product(self):
+        with scopes_disabled():
+            self.event.seat_category_mappings.all().update(product=self.shirt)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: self.seat_a1.seat_guid,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
+    def test_add_seat_unknown(self):
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'seat_%d' % self.ticket.id: 'asdasdasd',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
+    def test_add_seat_required(self):
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            self.assertEqual(len(objs), 0)
+
     def test_add_with_seat_with_variation(self):
         with scopes_disabled():
             v1 = self.ticket.variations.create(value='Regular', active=True)
