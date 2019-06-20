@@ -46,9 +46,14 @@ $(function () {
             );
         };
         $itemvar.on("change", update_price);
-        $subevent.on("change", update_price);
+        $subevent.on("change", update_price).on("change", function () {
+            var seat = $(this).closest(".form-order-change").find("[id$=seat]");
+            if (seat.length) {
+                seat.prop("required", !!$subevent.val());
+            }
+        });
     });
-    el.find('[data-model-select2=seat]').each(function () {
+    $('[data-model-select2=seat]').each(function () {
         var $s = $(this);
         $s.select2({
             theme: "bootstrap",
@@ -58,7 +63,19 @@ $(function () {
             language: $("body").attr("data-select2-locale"),
             placeholder: $(this).attr("data-placeholder"),
             ajax: {
-                url: $(this).attr('data-select2-url'),
+                url: function() {
+                    var se = $(this).closest(".form-order-change").attr("data-subevent");
+                    var url = $(this).attr('data-select2-url');
+                    if (!se) {
+                        return url;
+                    }
+                    var changed = $(this).closest(".form-order-change").find("[id$=subevent]").val();
+                    if (changed) {
+                        return url + '?subevent=' + changed;
+                    } else {
+                        return url + '?subevent=' + se;
+                    }
+                },
                 data: function (params) {
                     return {
                         query: params.term,
@@ -82,13 +99,6 @@ $(function () {
                 }
                 return $ret;
             },
-        }).on("select2:select", function () {
-            // Allow continuing to select
-            if ($s.hasAttribute("multiple")) {
-                window.setTimeout(function () {
-                    $s.parent().find('.select2-search__field').focus();
-                }, 50);
-            }
         });
     });
 });

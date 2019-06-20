@@ -72,7 +72,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}">
+                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}" {% if position.subevent %}data-subevent="{{ position.subevent.id }}{% endif %}">
                         {% bootstrap_form_errors position.form %}
                         {% if position.custom_error %}
                             <div class="alert alert-danger">

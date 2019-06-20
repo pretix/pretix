@@ -10,7 +10,9 @@ from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import DatePickerWidget
-from pretix.base.models import InvoiceAddress, ItemAddOn, Order, OrderPosition, Seat
+from pretix.base.models import (
+    InvoiceAddress, ItemAddOn, Order, OrderPosition, Seat,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
 from pretix.control.forms.widgets import Select2
@@ -325,7 +327,7 @@ class OrderPositionChangeForm(forms.Form):
                     'data-select2-url': reverse('control:event.seats.select2', kwargs={
                         'event': instance.order.event.slug,
                         'organizer': instance.order.event.organizer.slug,
-                    }) + '?subevent=' + str(instance.subevent_id),
+                    }),
                     'data-placeholder': _('(Unchanged)')
                 }
             )

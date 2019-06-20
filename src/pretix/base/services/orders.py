@@ -24,8 +24,8 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import (
     CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
-    OrderPosition, Quota, User, Voucher,
-    Seat)
+    OrderPosition, Quota, Seat, User, Voucher,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.base.models.orders import (
