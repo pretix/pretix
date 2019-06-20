@@ -18,6 +18,7 @@ orga_router = routers.DefaultRouter()
 orga_router.register(r'events', event.EventViewSet)
 orga_router.register(r'subevents', event.SubEventViewSet)
 orga_router.register(r'webhooks', webhooks.WebHookViewSet)
+orga_router.register(r'seatingplans', organizer.SeatingPlanViewSet)
 
 event_router = routers.DefaultRouter()
 event_router.register(r'subevents', event.SubEventViewSet)
