@@ -1,32 +1,41 @@
-{% load compress %}
+{% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ event.name }}</title>
-    {% compress css %}
-        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/cachedfiles.scss" %}"/>
-    {% endcompress %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
-    {% endcompress %}
+{% block title %}{% trans "Pay order" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
     {% include "pretixplugins/stripe/presale_head.html" with settings=stripe_settings %}
     <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_intent_client_secret }}</script>
-</head>
-<body>
-    <div class="container">
-        <h1>{% trans "The payment requires Strong Customer Authentication." %}</h1>
+    <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url }}</script>
+{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% blocktrans trimmed with code=order.code %}
+                    Confirm payment: {{ code }}
+                {% endblocktrans %}
+            </h3>
+        </div>
+        <div class="panel-body embed-responsive embed-responsive-4by3" id="scacontainer">
 
-        <p>
-            {% trans "You should see a popup requesting you to approve or decline the payment." %}
-        </p>
-        <p>
-            {% trans "The window to enter your payment data was not opened or was closed?" %}
-        </p>
-        <p>
-            {% trans "Please make sure you have Javascript enabled and refresh this page" %}
-        </p>
+        </div>
     </div>
-</body>
-</html>
+    <div class="row checkout-button-row">
+        <div class="col-md-4">
+            <a class="btn btn-block btn-default btn-lg"
+               href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <a class="btn btn-block btn-primary btn-lg hidden"
+               href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}"
+               id="continuebutton">
+                {% trans "Continue" %}
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}

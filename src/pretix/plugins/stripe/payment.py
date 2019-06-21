@@ -288,7 +288,7 @@ class StripeMethod(BasePaymentProvider):
         return kwargs
 
     def _init_api(self):
-        stripe.api_version = '2019-03-14'
+        stripe.api_version = '2019-05-16'
         stripe.set_app_info("pretix", version=__version__, url="https://pretix.eu")
 
     def checkout_confirm_render(self, request) -> str:
@@ -414,6 +414,7 @@ class StripeMethod(BasePaymentProvider):
             'order': payment.order,
             'payment': payment,
             'payment_info': payment_info,
+            'payment_hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest()
         }
         return template.render(ctx)
 
@@ -606,9 +607,6 @@ class StripeCC(StripeMethod):
         self._init_api()
 
         try:
-            params = {}
-            params.update(self.api_kwargs)
-
             if 'payment_stripe_payment_method_id' in request.session:
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
@@ -631,7 +629,12 @@ class StripeCC(StripeMethod):
                     },
                     # TODO: Is this sufficient?
                     idempotency_key=str(self.event.id) + payment.order.code + request.session['payment_stripe_payment_method_id'],
-                    **params
+                    return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                        'order': payment.order.code,
+                        'payment': payment.pk,
+                        'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                    }),
+                    **self.api_kwargs
                 )
             else:
                 payment_info = json.loads(payment.info)
@@ -639,7 +642,7 @@ class StripeCC(StripeMethod):
                 if 'id' in payment_info:
                     intent = stripe.PaymentIntent.retrieve(
                         payment_info['id'],
-                        **params
+                        **self.api_kwargs
                     )
                 else:
                     return
@@ -690,25 +693,19 @@ class StripeCC(StripeMethod):
                 reference=intent.id,
                 defaults={'order': payment.order, 'payment': payment}
             )
-            if intent.status == 'requires_action' and intent.next_action.type == 'use_stripe_sdk':
+            if intent.status == 'requires_action':
                 payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.state = OrderPayment.PAYMENT_STATE_CREATED
                 payment.save()
-                return self.redirect(request, build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+                return build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
                     'order': payment.order.code,
                     'payment': payment.pk,
                     'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-                }))
-
-            if intent.status == 'requires_action' and intent.next_action.type == 'redirect_to_url':
-                payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                payment.save()
-                return self.redirect(request, intent.next_action.redirect_to_url.url)
+                })
 
             if intent.status == 'requires_confirmation':
                 payment.info = str(intent)
-                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.state = OrderPayment.PAYMENT_STATE_CREATED
                 payment.save()
                 self._confirm_payment_intent(request, payment)
 
@@ -752,13 +749,16 @@ class StripeCC(StripeMethod):
         self._init_api()
 
         try:
-            params = {}
-            params.update(self.api_kwargs)
             payment_info = json.loads(payment.info)
 
             intent = stripe.PaymentIntent.confirm(
                 payment_info['id'],
-                **params
+                return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                    'order': payment.order.code,
+                    'payment': payment.pk,
+                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                }),
+                **self.api_kwargs
             )
 
             payment.info = str(intent)

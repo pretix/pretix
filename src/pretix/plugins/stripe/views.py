@@ -497,11 +497,17 @@ class ScaView(StripeOrderView, View):
                                            'in your emails to continue.'))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
-        if intent.status == 'requires_action' and intent.next_action.type == 'use_stripe_sdk':
-            r = render(request, 'pretixplugins/stripe/sca.html', {
+        if intent.status == 'requires_action' and intent.next_action.type in ['use_stripe_sdk', 'redirect_to_url']:
+            ctx = {
+                'order': self.order,
                 'stripe_settings': StripeSettingsHolder(self.order.event).settings,
-                'payment_intent_client_secret': intent.client_secret,
-            })
+            }
+            if intent.next_action.type == 'use_stripe_sdk':
+                ctx['payment_intent_client_secret'] = intent.client_secret
+            elif intent.next_action.type == 'redirect_to_url':
+                ctx['payment_intent_next_action_redirect_url'] = intent.next_action.redirect_to_url['url']
+
+            r = render(request, 'pretixplugins/stripe/sca.html', ctx)
             r._csp_ignore = True
             return r
         else:
@@ -511,3 +517,16 @@ class ScaView(StripeOrderView, View):
                 'order': self.order.code,
                 'secret': self.order.secret
             }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class ScaReturnView(StripeOrderView, View):
+    def get(self, request, *args, **kwargs):
+        prov = self.pprov
+        prov._init_api()
+
+        StripeCC._handle_payment_intent(prov, request, self.payment)
+
+        self.order.refresh_from_db()
+
+        return render(request, 'pretixplugins/stripe/sca_return.html', {'order': self.order})

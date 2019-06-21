@@ -1,0 +1,12 @@
+{% extends "pretixpresale/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load thumb %}
+{% load eventurl %}
+{% block title %}{% trans "Pay order" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    {% include "pretixplugins/stripe/presale_head.html" with settings=stripe_settings %}
+    <script type="text/plain" id="stripe_payment_intent_SCA_status">3DS-authentication-complete</script>
+    <script type="text/plain" id="order_status">{{ order.status }}</script>
+{% endblock %}

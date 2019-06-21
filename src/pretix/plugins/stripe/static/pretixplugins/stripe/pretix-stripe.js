@@ -139,21 +139,51 @@ var pretixstripe = {
                 } else {
                     pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                 }
-
                 pretixstripe.stripe.handleCardAction(
                     payment_intent_client_secret
                 ).then(function (result) {
+                    waitingDialog.show(gettext("Confirming your payment …"));
                     location.reload();
                 });
             }
         });
+    },
+    'handleCardActioniFrame': function (payment_intent_next_action_redirect_url) {
+        waitingDialog.show(gettext("Contacting your bank …"));
+        let iframe = document.createElement('iframe');
+        iframe.src = payment_intent_next_action_redirect_url;
+        iframe.className = 'embed-responsive-item';
+        $('#scacontainer').append(iframe);
+        $('#scacontainer iframe').load(function () {
+            waitingDialog.hide();
+        });
     }
 };
 $(function () {
-    if ($("#stripe_payment_intent_client_secret").length) {
+    if ($("#stripe_payment_intent_SCA_status").length) {
+        window.top.postMessage('3DS-authentication-complete.' + $.trim($("#order_status").html()), '*');
+        return;
+    } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
+        let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
+        pretixstripe.handleCardActioniFrame(payment_intent_next_action_redirect_url);
+    } else if ($("#stripe_payment_intent_client_secret").length) {
         let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
         pretixstripe.handleCardAction(payment_intent_client_secret);
     }
+
+    $(window).on("message onmessage", function(e) {
+        if (e.originalEvent.data.startsWith('3DS-authentication-complete.')) {
+            waitingDialog.show(gettext("Contacting Stripe …"));
+            $('#scacontainer').hide();
+            $('#continuebutton').removeClass('hidden');
+
+            if (e.originalEvent.data.split('.')[1] == 'p') {
+                window.location.href = $('#continuebutton').attr('href') + '?paid=yes';
+            } else {
+                window.location.href = $('#continuebutton').attr('href');
+            }
+        }
+    });
 
     if (!$(".stripe-container").length)
         return;
