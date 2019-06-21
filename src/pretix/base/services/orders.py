@@ -1159,7 +1159,7 @@ class OrderChangeManager:
                 raise OrderError(self.error_messages['paid_to_free_exceeded'])
 
     def _perform_operations(self):
-        nextposid = self.order.positions.aggregate(m=Max('positionid'))['m'] + 1
+        nextposid = self.order.all_positions.aggregate(m=Max('positionid'))['m'] + 1
         split_positions = []
 
         for op in self._operations:
