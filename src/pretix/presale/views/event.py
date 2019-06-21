@@ -382,9 +382,7 @@ class SeatingPlanView(EventViewMixin, TemplateView):
             if 'subevent' in kwargs or not request.event.seating_plan:
                 raise Http404()
             else:
-                r = super().get(request, *args, **kwargs)
-                r._csp_ignore = True
-                return r
+                return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
