@@ -133,6 +133,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "vouchers_exist": False,
             "waiting_list_enabled": False,
             "error": None,
+            "has_seating_plan": False,
             "items_by_category": [
                 {
                     "items": [
@@ -214,6 +215,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
+            "has_seating_plan": False,
             "vouchers_exist": True,
             "waiting_list_enabled": False,
             "error": None,
@@ -262,6 +264,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "show_variations_expanded": False,
             "display_net_prices": False,
             "vouchers_exist": True,
+            "has_seating_plan": False,
             "waiting_list_enabled": False,
             "error": None,
             "items_by_category": [
@@ -324,6 +327,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "currency": "EUR",
             "show_variations_expanded": False,
             "display_net_prices": False,
+            "has_seating_plan": False,
             "vouchers_exist": True,
             "waiting_list_enabled": False,
             "error": "This voucher is expired.",
