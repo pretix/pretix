@@ -8,31 +8,33 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
-    AnswerCreateSerializer, AnswerSerializer,
+    AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
 )
-from pretix.base.models import Quota
+from pretix.base.models import Quota, Seat
 from pretix.base.models.orders import CartPosition
 
 
 class CartPositionSerializer(I18nAwareModelSerializer):
     answers = AnswerSerializer(many=True)
+    seat = InlineSeatSerializer()
 
     class Meta:
         model = CartPosition
         fields = ('id', 'cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'attendee_email', 'voucher', 'addon_to', 'subevent', 'datetime', 'expires', 'includes_tax',
-                  'answers',)
+                  'answers', 'seat')
 
 
 class CartPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
     expires = serializers.DateTimeField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
+    seat = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
         fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'subevent', 'expires', 'includes_tax', 'answers',)
+                  'subevent', 'expires', 'includes_tax', 'answers', 'seat')
 
     def create(self, validated_data):
         answers_data = validated_data.pop('answers')
@@ -71,6 +73,22 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 validated_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
+
+            seated = validated_data.get('item').seat_category_mappings.filter(subevent=validated_data.get('subevent')).exists()
+            if validated_data.get('seat'):
+                if not seated:
+                    raise ValidationError('The specified product does not allow to choose a seat.')
+                try:
+                    seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
+                except Seat.DoesNotExist:
+                    raise ValidationError('The specified seat does not exist.')
+                else:
+                    validated_data['seat'] = seat
+                    if not seat.is_available():
+                        raise ValidationError(ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
+            elif seated:
+                raise ValidationError('The specified product requires to choose a seat.')
+
             cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:

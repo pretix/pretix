@@ -399,6 +399,9 @@ class Voucher(LoggedModel):
         return Order.objects.filter(all_positions__voucher__in=[self]).distinct()
 
     def seating_available(self):
+        kwargs = {}
+        if self.subevent:
+            kwargs['subevent'] = self.subevent
         if self.quota_id:
-            return SeatCategoryMapping.objects.filter(product__quotas__pk=self.quota_id).exists()
-        return self.item.seat_category_mappings.exists()
+            return SeatCategoryMapping.objects.filter(product__quotas__pk=self.quota_id, **kwargs).exists()
+        return self.item.seat_category_mappings.filter(**kwargs).exists()

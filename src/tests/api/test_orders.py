@@ -13,7 +13,9 @@ from pytz import UTC
 from stripe.error import APIConnectionError
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition, Question
+from pretix.base.models import (
+    InvoiceAddress, Order, OrderPosition, Question, SeatingPlan,
+)
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
 )
@@ -139,6 +141,7 @@ TEST_ORDERPOSITION_RES = {
     "pseudonymization_id": "ABCDEFGHKL",
     "checkins": [],
     "downloads": [],
+    "seat": None,
     "answers": [
         {
             "question": 1,
@@ -2517,6 +2520,204 @@ def test_order_create_paid_generate_invoice(token_client, organizer, event, item
     assert p.payment_date.day == 1
     assert p.payment_date.hour == 8
     assert p.payment_date.minute == 20
+
+
+@pytest.fixture
+def seat(event, organizer, item):
+    SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="{}"
+    )
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    return event.seats.create(name="A1", product=item, seat_guid="A1")
+
+
+@pytest.mark.django_db
+def test_order_create_with_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.seat == seat
+
+
+@pytest.mark.django_db
+def test_order_create_with_blocked_seat(token_client, organizer, event, item, quota, seat, question):
+    seat.blocked = True
+    seat.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'seat': ['The selected seat "A1" is not available.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_with_used_seat(token_client, organizer, event, item, quota, seat, question):
+    CartPosition.objects.create(
+        event=event, cart_id='aaa', item=item,
+        price=21.5, expires=now() + datetime.timedelta(minutes=10), seat=seat
+    )
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'seat': ['The selected seat "A1" is not available.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_with_unknown_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid + '_'
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'seat': ['The specified seat does not exist.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_require_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'seat': ['The specified product requires to choose a seat.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_unseated(token_client, organizer, event, item, quota, seat, question):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        quota.items.add(item2)
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item2.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'seat': ['The specified product does not allow to choose a seat.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_with_duplicate_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None,
+            "seat": seat.seat_guid
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": 1,
+            "answers": [],
+            "subevent": None,
+            "seat": seat.seat_guid
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {},
+            {'seat': ['The selected seat "A1" is not available.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_with_seat_consumed_from_cart(token_client, organizer, event, item, quota, seat, question):
+    CartPosition.objects.create(
+        event=event, cart_id='aaa', item=item,
+        price=21.5, expires=now() + datetime.timedelta(minutes=10), seat=seat
+    )
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['seat'] = seat.seat_guid
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['consume_carts'] = ['aaa']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.seat == seat
 
 
 REFUND_CREATE_PAYLOAD = {

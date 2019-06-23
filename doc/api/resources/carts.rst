@@ -36,11 +36,19 @@ answers                               list of objects            Answers to user
 ├ question_identifier                 string                     The question's ``identifier`` field
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 └ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+seat                                  objects                    The assigned seat. Can be ``null``.
+├ id                                  integer                    Internal ID of the seat instance
+├ name                                string                     Human-readable seat name
+└ seat_guid                           string                     Identifier of the seat within the seating plan
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.17
 
    This resource has been added.
+
+.. versionchanged:: 3.0
+
+   This ``seat`` attribute has been added.
 
 
 Cart position endpoints
@@ -87,6 +95,7 @@ Cart position endpoints
             "datetime": "2018-06-11T10:00:00Z",
             "expires": "2018-06-11T10:00:00Z",
             "includes_tax": true,
+            "seat": null,
             "answers": []
           }
         ]
@@ -132,6 +141,7 @@ Cart position endpoints
         "datetime": "2018-06-11T10:00:00Z",
         "expires": "2018-06-11T10:00:00Z",
         "includes_tax": true,
+        "seat": null,
         "answers": []
       }
 
@@ -178,6 +188,7 @@ Cart position endpoints
    * ``item``
    * ``variation`` (optional)
    * ``price``
+   * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
    * ``attendee_name`` **or** ``attendee_name_parts`` (optional)
    * ``attendee_email`` (optional)
    * ``subevent`` (optional)

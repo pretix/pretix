@@ -1112,7 +1112,7 @@ class OrderChangeManager:
         if self.order.event.has_subevents and not subevent:
             raise OrderError(self.error_messages['subevent_required'])
 
-        seated = item.seat_category_mappings.exists()
+        seated = item.seat_category_mappings.filter(subevent=subevent).exists()
         if seated and not seat:
             raise OrderError(self.error_messages['seat_required'])
         elif not seated and seat:
@@ -1144,7 +1144,7 @@ class OrderChangeManager:
         for seat, diff in self._seatdiff.items():
             if diff <= 0:
                 continue
-            if not seat.is_available():
+            if not seat.is_available() or diff > 1:
                 raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
 
         if self.event.has_subevents:

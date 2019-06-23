@@ -396,6 +396,7 @@ Order position endpoints
             "addon_to": null,
             "subevent": null,
             "pseudonymization_id": "MQLJvANO3B",
+            "seat": null,
             "checkins": [
               {
                 "list": 1,
@@ -505,6 +506,7 @@ Order position endpoints
         "addon_to": null,
         "subevent": null,
         "pseudonymization_id": "MQLJvANO3B",
+        "seat": null,
         "checkins": [
           {
             "list": 1,

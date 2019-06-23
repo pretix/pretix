@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import Question
+from pretix.base.models import Question, SeatingPlan
 from pretix.base.models.orders import CartPosition
 
 
@@ -64,6 +64,7 @@ TEST_CARTPOSITION_RES = {
     'datetime': '2018-06-11T10:00:00Z',
     'expires': '2018-06-11T10:00:00Z',
     'includes_tax': True,
+    'seat': None,
     'answers': []
 }
 
@@ -621,3 +622,108 @@ def test_cartpos_create_quota_validation(token_client, organizer, event, item, q
     )
     assert resp.status_code == 400
     assert resp.data == ['There is not enough quota available on quota "Budget Quota" to perform the operation.']
+
+
+@pytest.fixture
+def seat(event, organizer, item):
+    SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="{}"
+    )
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    return event.seats.create(name="A1", product=item, seat_guid="A1")
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        p = CartPosition.objects.get(pk=resp.data['id'])
+    assert p.seat == seat
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_blocked_seat(token_client, organizer, event, item, quota, seat, question):
+    seat.blocked = True
+    seat.save()
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The selected seat "A1" is not available.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_used_seat(token_client, organizer, event, item, quota, seat, question):
+    CartPosition.objects.create(
+        event=event, cart_id='aaa', item=item,
+        price=21.5, expires=now() + datetime.timedelta(minutes=10), seat=seat
+    )
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The selected seat "A1" is not available.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_unknown_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['seat'] = seat.seat_guid + '_'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified seat does not exist.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_require_seat(token_client, organizer, event, item, quota, seat, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified product requires to choose a seat.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_unseated(token_client, organizer, event, item, quota, seat, question):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        quota.items.add(item2)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item2.pk
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified product does not allow to choose a seat.']
