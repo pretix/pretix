@@ -127,9 +127,12 @@
         "color": { "type": "string" },
         "border_color": { "type": "string" },
         "rotation": { "type": "number" },
+        "position": {
+          "$ref": "#/definitions/position"
+        },
         "shape": {
           "type": "string",
-          "enum": ["polygon", "rectangle", "ellipse", "circle"]
+          "enum": ["polygon", "rectangle", "ellipse", "circle", "text"]
         },
         "polygon": {
           "type": "object",
@@ -150,40 +153,34 @@
             },
             "height": {
               "type": "integer"
-            },
-            "position": {
-              "$ref": "#/definitions/position"
             }
           },
-          "required": ["width", "height", "position"],
+          "required": ["width", "height"],
           "additionalProperties": false
         },
         "ellipse": {
           "type": "object",
           "properties": {
-            "position": { "$ref": "#/definitions/position" },
             "radius": { "$ref": "#/definitions/position" }
           },
-          "required": ["position", "radius"],
+          "required": ["radius"],
           "additionalProperties": false
         },
         "circle": {
           "type": "object",
           "properties": {
-            "position": {
-              "$ref": "#/definitions/position"
-            },
             "radius": {
               "type": "integer"
             }
           },
-          "required": ["position", "radius"],
+          "required": ["radius"],
           "additionalProperties": false
         },
         "text": {
           "type": "object",
           "properties": {
             "text": { "type": "string" },
+            "color": { "type": "string" },
             "position": {
               "$ref": "#/definitions/position"
             }
