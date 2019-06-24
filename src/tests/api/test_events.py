@@ -726,7 +726,7 @@ def test_event_update_seating_invalid_product(token_client, organizer, event, it
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"seat_category_mapping":["Item \'{}\' does not exist."]}'.format(item.pk + 2)
+    assert resp.content.decode() == '{"seat_category_mapping":["Item \'%d\' does not exist."]}' % (item.pk + 2)
 
 
 @pytest.mark.django_db

@@ -117,7 +117,7 @@ class EventSerializer(I18nAwareModelSerializer):
         return value
 
     def validate_seating_plan(self, value):
-        if value.organizer != self.context['request'].organizer:
+        if value and value.organizer != self.context['request'].organizer:
             raise ValidationError('Invalid seating plan.')
         if self.instance and self.instance.pk:
             try:
@@ -301,7 +301,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
         return list(filter(lambda i: 'variation' in i, data))
 
     def validate_seating_plan(self, value):
-        if value.organizer != self.context['request'].organizer:
+        if value and value.organizer != self.context['request'].organizer:
             raise ValidationError('Invalid seating plan.')
         if self.instance and self.instance.pk:
             try:
