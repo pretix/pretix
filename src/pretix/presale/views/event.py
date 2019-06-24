@@ -7,7 +7,7 @@ from importlib import import_module
 import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Prefetch
+from django.db.models import Count, Exists, OuterRef, Prefetch
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -17,7 +17,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from pretix.base.models import ItemVariation, Quota
+from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.multidomain.urlreverse import eventreverse
@@ -82,7 +82,12 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     ).annotate(
         quotac=Count('quotas'),
         has_variations=Count('variations'),
-        requires_seat=Count('seat_category_mappings')
+        requires_seat=Exists(
+            SeatCategoryMapping.objects.filter(
+                product_id=OuterRef('pk'),
+                subevent=subevent
+            )
+        )
     ).filter(
         quotac__gt=0,
     ).order_by('category__position', 'category_id', 'position', 'name')

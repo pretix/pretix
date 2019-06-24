@@ -7,7 +7,9 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import (
+    InvoiceAddress, Order, OrderPosition, SeatingPlan, SubEvent,
+)
 from pretix.base.models.orders import OrderFee
 
 
@@ -72,6 +74,8 @@ TEST_SUBEVENT_RES = {
     'name': {'en': 'Foobar'},
     'date_from': '2017-12-27T10:00:00Z',
     'presale_end': None,
+    'seating_plan': None,
+    "seat_category_mapping": {},
     'id': 1,
     'variation_price_overrides': [],
     'location': None,
@@ -573,3 +577,256 @@ def test_subevent_with_order_position_not_delete(token_client, organizer, event,
                                     'orders. Please set \'active\' to false instead to hide it from users."}'
     with scopes_disabled():
         assert event.subevents.filter(pk=subevent.id).exists()
+
+
+@pytest.fixture
+def seatingplan(event, organizer, item):
+    return SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="""{
+  "name": "Grosser Saal",
+  "categories": [
+    {
+      "name": "Stalls",
+      "color": "red"
+    }
+  ],
+  "zones": [
+    {
+      "name": "Main Area",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "rows": [
+        {
+          "row_number": "0",
+          "seats": [
+            {
+              "seat_guid": "0-0",
+              "seat_number": "0-0",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "category": "Stalls"
+            },
+            {
+              "seat_guid": "0-1",
+              "seat_number": "0-1",
+              "position": {
+                "x": 33,
+                "y": 0
+              },
+              "category": "Stalls"
+            },
+            {
+              "seat_guid": "0-2",
+              "seat_number": "0-2",
+              "position": {
+                "x": 66,
+                "y": 0
+              },
+              "category": "Stalls"
+            }
+          ],
+          "position": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ],
+  "size": {
+    "width": 600,
+    "height": 400
+  }
+}"""
+    )
+
+
+@pytest.mark.django_db
+def test_subevent_update_seating(token_client, organizer, event, item, subevent, seatingplan):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan == seatingplan
+    with scopes_disabled():
+        assert subevent.seats.count() == 3
+        assert subevent.seats.filter(product=item).count() == 3
+        m = subevent.seat_category_mappings.get()
+    assert m.layout_category == 'Stalls'
+    assert m.product == item
+
+
+@pytest.mark.django_db
+def test_subevent_update_seating_invalid_product(token_client, organizer, event, item, seatingplan, subevent):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk + 2
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"seat_category_mapping":["Item \'3\' does not exist."]}'
+
+
+@pytest.mark.django_db
+def test_subevent_update_seating_change_mapping(token_client, organizer, event, item, seatingplan, subevent):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan == seatingplan
+    with scopes_disabled():
+        assert subevent.seats.count() == 3
+        assert subevent.seats.filter(product=item).count() == 3
+        m = subevent.seat_category_mappings.get()
+    assert m.layout_category == 'Stalls'
+    assert m.product == item
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seat_category_mapping": {
+                "VIP": item.pk,
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan == seatingplan
+    with scopes_disabled():
+        assert subevent.seats.count() == 3
+        m = subevent.seat_category_mappings.get()
+        assert subevent.seats.filter(product=None).count() == 3
+    assert m.layout_category == 'VIP'
+    assert m.product == item
+
+
+@pytest.mark.django_db
+def test_remove_seating(token_client, organizer, event, item, seatingplan, subevent):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan == seatingplan
+    with scopes_disabled():
+        assert subevent.seats.count() == 3
+        assert subevent.seat_category_mappings.count() == 1
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan is None
+    with scopes_disabled():
+        assert subevent.seats.count() == 0
+        assert subevent.seat_category_mappings.count() == 0
+
+
+@pytest.mark.django_db
+def test_remove_seating_forbidden(token_client, organizer, event, item, seatingplan, order_position, subevent):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    subevent.refresh_from_db()
+    assert subevent.seating_plan == seatingplan
+    with scopes_disabled():
+        assert subevent.seats.count() == 3
+        assert subevent.seat_category_mappings.count() == 1
+
+        order_position.seat = subevent.seats.first()
+        order_position.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
+        {
+            "seating_plan": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"seating_plan":["You can not change the plan since seat \\"0-0\\" is not ' \
+                                    'present in the new plan and is already sold."]}'
+
+
+@pytest.mark.django_db
+def test_subevent_create_with_seating(token_client, organizer, event, subevent, item, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/subevents/'.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Subevent 2020 Test",
+                "en": "Demo Subevent 2020 Test"
+            },
+            "active": False,
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": "2017-12-28T10:00:00Z",
+            "date_admission": None,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "item_price_overrides": [
+                {
+                    "item": item.pk,
+                    "price": "23.42"
+                }
+            ],
+            "variation_price_overrides": [],
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            },
+            "meta_data": {},
+            "seating_plan": seatingplan.pk,
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        subevent = SubEvent.objects.get(pk=resp.data['id'])
+        assert subevent.seats.count() == 3
+        assert subevent.seat_category_mappings.count() == 1

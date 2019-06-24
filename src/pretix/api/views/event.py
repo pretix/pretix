@@ -86,7 +86,7 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
         return qs.prefetch_related(
-            'meta_values', 'meta_values__property'
+            'meta_values', 'meta_values__property', 'seat_category_mappings'
         )
 
     def perform_update(self, serializer):
@@ -242,7 +242,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
                 event__in=self.request.user.get_events_with_any_permission()
             )
         return qs.prefetch_related(
-            'subeventitem_set', 'subeventitemvariation_set'
+            'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings'
         )
 
     def perform_update(self, serializer):

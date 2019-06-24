@@ -9,7 +9,7 @@ import pytz
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Count, Exists, F, Max, OuterRef, Q, Sum
+from django.db.models import Exists, F, Max, OuterRef, Q, Sum
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -24,7 +24,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import (
     CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
-    OrderPosition, Quota, Seat, User, Voucher,
+    OrderPosition, Quota, Seat, SeatCategoryMapping, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
@@ -755,7 +755,12 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             pass
 
     positions = CartPosition.objects.annotate(
-        requires_seat=Count('item__seat_category_mappings')
+        requires_seat=Exists(
+            SeatCategoryMapping.objects.filter(
+                Q(product=OuterRef('item'))
+                & (Q(subevent=OuterRef('subevent')) if event.has_subevents else Q(subevent__isnull=True))
+            )
+        )
     ).filter(
         id__in=position_ids, event=event
     )

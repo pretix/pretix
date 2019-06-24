@@ -6,7 +6,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
 from django.utils.translation import pgettext_lazy, ugettext as _
@@ -15,7 +15,7 @@ from django_scopes import scopes_disabled
 from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemBundle, ItemVariation, Seat,
-    Voucher,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
@@ -122,6 +122,7 @@ class CartManager:
         self._items_cache = {}
         self._subevents_cache = {}
         self._variations_cache = {}
+        self._seated_cache = {}
         self._expiry = None
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
@@ -132,6 +133,11 @@ class CartManager:
         return CartPosition.objects.filter(
             Q(cart_id=self.cart_id) & Q(event=self.event)
         ).select_related('item', 'subevent')
+
+    def _is_seated(self, item, subevent):
+        if (item, subevent) not in self._seated_cache:
+            self._seated_cache[item, subevent] = item.seat_category_mappings.filter(subevent=subevent).exists()
+        return self._seated_cache[item, subevent]
 
     def _calculate_expiry(self):
         self._expiry = self.now_dt + timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
@@ -194,7 +200,6 @@ class CartManager:
             for i in self.event.items.select_related('category').prefetch_related(
                 'addons', 'bundles', 'addons__addon_category', 'quotas'
             ).annotate(
-                requires_seat=Count('seat_category_mappings'),
                 has_variations=Count('variations'),
             ).filter(
                 id__in=[i for i in item_ids if i and i not in self._items_cache]
@@ -204,8 +209,6 @@ class CartManager:
             v.pk: v
             for v in ItemVariation.objects.filter(item__event=self.event).prefetch_related(
                 'quotas'
-            ).annotate(
-                requires_seat=Count('item__seat_category_mappings')
             ).select_related('item', 'item__event').filter(
                 id__in=[i for i in variation_ids if i and i not in self._variations_cache]
             )
@@ -255,9 +258,10 @@ class CartManager:
             if op.subevent and op.subevent.presale_has_ended:
                 raise CartError(error_messages['ended'])
 
-            if op.item.requires_seat and (not op.seat or op.seat.blocked):
+            seated = self._is_seated(op.item, op.subevent)
+            if seated and (not op.seat or op.seat.blocked):
                 raise CartError(error_messages['seat_invalid'])
-            elif op.seat and not op.item.requires_seat:
+            elif op.seat and not seated:
                 raise CartError(error_messages['seat_forbidden'])
             elif op.seat and op.seat.product != op.item:
                 raise CartError(error_messages['seat_invalid'])
@@ -327,7 +331,12 @@ class CartManager:
         expired = self.positions.filter(expires__lte=self.now_dt).select_related(
             'item', 'variation', 'voucher', 'addon_to', 'addon_to__item'
         ).annotate(
-            requires_seat=Count('item__seat_category_mappings'),
+            requires_seat=Exists(
+                SeatCategoryMapping.objects.filter(
+                    Q(product=OuterRef('item'))
+                    & (Q(subevent=OuterRef('subevent')) if self.event.has_subevents else Q(subevent__isnull=True))
+                )
+            )
         ).prefetch_related(
             'item__quotas',
             'variation__quotas',
