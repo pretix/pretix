@@ -158,23 +158,27 @@ def nav_context_list(request):
     if query:
         qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
-    qs_orders = Order.objects.filter(code__icontains=query).select_related('event', 'event__organizer')
-    if not request.user.has_active_staff_session(request.session.session_key):
-        qs_orders = qs_orders.filter(
-            Q(event__organizer_id__in=request.user.teams.filter(
-                all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-            | Q(event_id__in=request.user.teams.filter(
-                can_view_orders=True).values_list('limit_events__id', flat=True))
-        )
+    if query:
+        qs_orders = Order.objects.filter(code__icontains=query).select_related('event', 'event__organizer')
+        if not request.user.has_active_staff_session(request.session.session_key):
+            qs_orders = qs_orders.filter(
+                Q(event__organizer_id__in=request.user.teams.filter(
+                    all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+                | Q(event_id__in=request.user.teams.filter(
+                    can_view_orders=True).values_list('limit_events__id', flat=True))
+            )
 
-    qs_vouchers = Voucher.objects.filter(code__icontains=query).select_related('event', 'event__organizer')
-    if not request.user.has_active_staff_session(request.session.session_key):
-        qs_vouchers = qs_vouchers.filter(
-            Q(event__organizer_id__in=request.user.teams.filter(
-                all_events=True, can_view_vouchers=True).values_list('organizer', flat=True))
-            | Q(event_id__in=request.user.teams.filter(
-                can_view_vouchers=True).values_list('limit_events__id', flat=True))
-        )
+        qs_vouchers = Voucher.objects.filter(code__icontains=query).select_related('event', 'event__organizer')
+        if not request.user.has_active_staff_session(request.session.session_key):
+            qs_vouchers = qs_vouchers.filter(
+                Q(event__organizer_id__in=request.user.teams.filter(
+                    all_events=True, can_view_vouchers=True).values_list('organizer', flat=True))
+                | Q(event_id__in=request.user.teams.filter(
+                    can_view_vouchers=True).values_list('limit_events__id', flat=True))
+            )
+    else:
+        qs_vouchers = Voucher.objects.none()
+        qs_orders = Order.objects.none()
 
     show_user = not query or (
         query and request.user.email and query.lower() in request.user.email.lower()
