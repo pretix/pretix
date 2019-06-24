@@ -885,7 +885,7 @@ def test_event_create_with_seating(token_client, organizer, event, meta_prop, se
     )
     assert resp.status_code == 201
     with scopes_disabled():
-        event = Event.objects.get(pk=resp.data['id'])
+        event = Event.objects.get(slug=resp.data['slug'])
         assert event.seating_plan == seatingplan
         assert event.seats.count() == 3
         assert event.seat_category_mappings.count() == 0
