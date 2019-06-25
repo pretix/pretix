@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-25 09:08+0000\n"
-"PO-Revision-Date: 2019-06-06 09:24+0000\n"
+"PO-Revision-Date: 2019-06-25 09:32+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -99,11 +99,9 @@ msgstr ""
 
 #: pretix/api/serializers/cart.py:88 pretix/api/serializers/order.py:682
 #: pretix/base/services/orders.py:991
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
+#, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "Der ausgewählte Termin ist nicht aktiv."
+msgstr "Der ausgewählte Sitzplatz \"{seat}\" ist nicht verfügbar."
 
 #: pretix/api/serializers/checkin.py:27 pretix/base/models/event.py:1004
 #: pretix/base/models/items.py:1118 pretix/base/models/items.py:1455
@@ -2484,10 +2482,9 @@ msgid "The ordered product \"{item}\" is no longer available."
 msgstr "Das Produkt \"{item}\" ist nicht mehr verfügbar."
 
 #: pretix/base/models/orders.py:659
-#, fuzzy, python-brace-format
-#| msgid "The ordered product \"{item}\" is no longer available."
+#, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "Das Produkt \"{item}\" ist nicht mehr verfügbar."
+msgstr "Der Sitzplatz \"{seat}\" ist nicht mehr verfügbar."
 
 #: pretix/base/models/orders.py:779 pretix/base/services/orders.py:697
 #: pretix/control/views/event.py:697
@@ -2759,11 +2756,11 @@ msgstr "Einladung zu Team \"{team}\" für \"{email}\""
 
 #: pretix/base/models/seating.py:22
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Der Sitzplan ist keine gültige JSON-Datei."
 
 #: pretix/base/models/seating.py:30
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "Die Datei ist kein gültiger Sitzplan. Fehlermeldung: {}"
 
 #: pretix/base/models/tax.py:92
 msgid "Should be short, e.g. \"VAT\""
@@ -3589,21 +3586,17 @@ msgid "Printing time"
 msgstr "Druckzeit"
 
 #: pretix/base/pdf.py:242
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat name"
-msgstr "Teamname"
+msgstr "Name des Sitzplatzes"
 
 #: pretix/base/pdf.py:243
 msgid "3, 4-5"
-msgstr ""
+msgstr "3, 4-5"
 
 #: pretix/base/pdf.py:244 pretix/control/forms/orders.py:205
 #: pretix/control/forms/orders.py:260
-#, fuzzy
-#| msgid "Event admission"
 msgid "General admission"
-msgstr "Einlass"
+msgstr "Freie Platzwahl"
 
 #: pretix/base/pdf.py:266
 #, python-brace-format
@@ -3867,37 +3860,27 @@ msgstr ""
 "Teil fester Produktpakete."
 
 #: pretix/base/services/cart.py:94
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to select a specific seat."
-msgstr "Sie müssen einen Termin auswählen."
+msgstr "Sie müssen einen Sitzplatz auswählen."
 
 #: pretix/base/services/cart.py:95
-#, fuzzy
-#| msgid "Please select a quota."
 msgid "Please select a valid seat."
-msgstr "Bitte wählen Sie ein Kontingent aus."
+msgstr "Bitte wählen Sie einen gültigen Sitzplatz aus."
 
 #: pretix/base/services/cart.py:96
-#, fuzzy
-#| msgid "You can not select an add-on for the selected product."
 msgid "You can not select a seat for this position."
-msgstr "Sie können für das ausgewählte Produkt kein Zusatzprodukt auswählen."
+msgstr "Sie können für das ausgewählte Produkt keinen Sitzplatz auswählen."
 
 #: pretix/base/services/cart.py:97
-#, fuzzy
-#| msgid "This slug is already in use. Please choose a different one."
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
 msgstr ""
-"Diese Kurzform ist bereits in Verwendung, bitte wählen Sie eine andere."
+"Dieser Sitzplatz wurde inzwischen von einem anderen Kunden gebucht, bitte "
+"wählen Sie einen anderen."
 
 #: pretix/base/services/cart.py:98
-#, fuzzy
-#| msgid "You cannot select more than %s items per order."
 msgid "You can not select the same seat multiple times."
-msgstr "Sie können nicht mehr als %s Produkte pro Bestellung auswählen."
+msgstr "Sie können den gleichen Sitzplatz nicht mehrfach auswählen."
 
 #: pretix/base/services/checkin.py:95
 msgid "This order position has been canceled."
@@ -4108,31 +4091,20 @@ msgstr ""
 "Produkte aus dem Warenkorb entfernt."
 
 #: pretix/base/services/orders.py:85
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart is expired. We "
-#| "removed this item from your cart."
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
-"Der Gutscheincode, der für eins der Produkte in Ihrem Warenkorb benutzt "
-"wurde, ist abgelaufen. Wir haben das entsprechende Produkt aus dem Warenkorb "
+"Einer der ausgewählten Sitzplätze war ungültig und wurde aus dem Warenkorb "
 "entfernt."
 
 #: pretix/base/services/orders.py:86
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart has already been "
-#| "used the maximum number of times allowed. We removed this item from your "
-#| "cart."
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
-"Der Gutscheincode, der für eins der Produkte in Ihrem Warenkorb benutzt "
-"wurde, wurde bereits zu oft verwendet. Wir haben das entsprechende Produkt "
-"aus dem Warenkorb entfernt."
+"Einer der ausgewählten Sitzplätze wurde zwischenzeitlich verkauft und wurde "
+"aus Ihrem Warenkorb entfernt."
 
 #: pretix/base/services/orders.py:103 pretix/control/forms/orders.py:51
 msgid "The new expiry date needs to be in the future."
@@ -4258,18 +4230,16 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
+"Der ausgewählte Sitzplatz \"{seat}\" passt nicht zum ausgewählten Termin, "
+"bitte wählen Sie den Sitzplatz neu aus."
 
 #: pretix/base/services/orders.py:993
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product requires you to select a seat."
-msgstr "Das ausgewählte Produkt ist nicht aktiv oder hat keinen Preis."
+msgstr "Das ausgewählte Produkt erfordert die Wahl eines Sitzplatzes."
 
 #: pretix/base/services/orders.py:994
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected product does not allow to select a seat."
-msgstr "Das ausgewählte Produkt ist nicht aktiv oder hat keinen Preis."
+msgstr "Das ausgewählte Produkt erlaubt keine Sitzplatzwahl."
 
 #: pretix/base/services/orders.py:1526
 #, python-format
@@ -4289,6 +4259,8 @@ msgid ""
 "You can not change the plan since seat \"{}\" is not present in the new plan "
 "and is already sold."
 msgstr ""
+"Sie können den Plan nicht wechseln, da Sitzplatz \"{}\" im neuen Plan nicht "
+"vorhanden ist, aber bereits verkauft wurde."
 
 #: pretix/base/services/shredder.py:71
 msgid ""
@@ -7198,7 +7170,7 @@ msgstr "Zusatz-Produkt zu"
 #: pretix/control/forms/orders.py:204
 #: pretix/control/templates/pretixcontrol/order/change.html:108
 msgid "Seat"
-msgstr ""
+msgstr "Sitzplatz"
 
 #: pretix/control/forms/orders.py:212
 msgid "Including taxes, if any. Keep empty for the product's default price"
@@ -7532,14 +7504,9 @@ msgstr ""
 "({new_price})."
 
 #: pretix/control/logdisplay.py:46
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
-#| "\"{new_event}\" ({new_price})."
+#, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr ""
-"Position #{posid}: Termin \"{old_event}\" ({old_price}) geändert zu "
-"\"{new_event}\" ({new_price})."
+msgstr "Position #{posid}: Sitzplatz \"{old_seat}\" geändert zu \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:54
 #, python-brace-format
@@ -10738,6 +10705,8 @@ msgid ""
 "A plugin is active that might modify the actual result of this quota from "
 "what you see here."
 msgstr ""
+"Ein Plugin ist aktiv, das die tatsächlich verwendete Verfügbarkeit von der "
+"hier angezeigten abweichen lassen kann."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:63
 #, python-format
@@ -12906,29 +12875,23 @@ msgstr ""
 "regelmäßig ändert."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
-#, fuzzy
-#| msgid "Disable two-factor authentication"
 msgid "Obligatory usage of two-factor authentication"
-msgstr "Zwei-Faktor-Authentifizierung deaktivieren"
+msgstr "Pflicht zur Zwei-Faktor-Authentifizierung"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
-#, fuzzy
-#| msgid "Disable two-factor authentication"
 msgid "This system enforces the usage of two-factor authentication!"
-msgstr "Zwei-Faktor-Authentifizierung deaktivieren"
+msgstr ""
+"Dieses System erfordert, dass Sie Zwei-Faktor-Authentifizierung verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
-#, fuzzy
-#| msgid "To enable it, you need to configure at least one device below."
 msgid "Please set up at least one device below."
-msgstr ""
-"Zum Aktivieren müssen Sie zunächst unten mindestens ein Gerät konfigurieren."
+msgstr "Bitte richten Sie weiter unten mindestens ein Gerät ein."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:26
-#, fuzzy
-#| msgid "Delete a two-factor authentication device"
 msgid "Please activate two-factor authentication using the button below."
-msgstr "Gerät löschen"
+msgstr ""
+"Bitte aktivieren Sie Zwei-Faktor-Authentifizierung mit den Button weiter "
+"unten."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:35
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:51
@@ -14532,16 +14495,12 @@ msgid "Series:"
 msgstr "Reihe:"
 
 #: pretix/control/views/typeahead.py:74
-#, fuzzy
-#| msgid "Order {val}"
 msgid "Order {}"
-msgstr "Bestellung {val}"
+msgstr "Bestellung {}"
 
 #: pretix/control/views/typeahead.py:87
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher {}"
-msgstr "Gutschein"
+msgstr "Gutschein {}"
 
 #: pretix/control/views/user.py:80
 msgid "The password you entered was invalid, please try again."
