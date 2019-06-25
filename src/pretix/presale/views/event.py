@@ -7,7 +7,7 @@ from importlib import import_module
 import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Prefetch
+from django.db.models import Count, Exists, OuterRef, Prefetch
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -17,7 +17,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from pretix.base.models import ItemVariation, Quota
+from pretix.base.models import ItemVariation, Quota, SeatCategoryMapping
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
 from pretix.multidomain.urlreverse import eventreverse
@@ -49,7 +49,7 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
+def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0):
     items = event.items.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).select_related(
         'category', 'tax_rule',  # for re-grouping
     ).prefetch_related(
@@ -81,10 +81,20 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web'):
                  ).distinct()),
     ).annotate(
         quotac=Count('quotas'),
-        has_variations=Count('variations')
+        has_variations=Count('variations'),
+        requires_seat=Exists(
+            SeatCategoryMapping.objects.filter(
+                product_id=OuterRef('pk'),
+                subevent=subevent
+            )
+        )
     ).filter(
-        quotac__gt=0
+        quotac__gt=0,
     ).order_by('category__position', 'category_id', 'position', 'name')
+    if require_seat:
+        items = items.filter(requires_seat__gt=0)
+    else:
+        items = items.filter(requires_seat=0)
     display_add_to_cart = False
     external_quota_cache = event.cache.get('item_quota_cache')
     quota_cache = external_quota_cache or {}
@@ -339,6 +349,52 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         else:
             context['cart_redirect'] = self.request.path
 
+        return context
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
+class SeatingPlanView(EventViewMixin, TemplateView):
+    template_name = "pretixpresale/event/seatingplan.html"
+
+    def get(self, request, *args, **kwargs):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
+        self.subevent = None
+        if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
+            # User has clicked "Open in a new tab" link in widget
+            get_or_create_cart_id(request)
+            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs))
+        elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
+            # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
+            get_or_create_cart_id(request)
+            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
+                request.GET.get('take_cart_id')
+            ))
+        elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
+            # We've been passed data from a widget, we need to create a cart session to store it.
+            get_or_create_cart_id(request)
+
+        if request.event.has_subevents:
+            if 'subevent' in kwargs:
+                self.subevent = request.event.subevents.using(settings.DATABASE_REPLICA).filter(pk=kwargs['subevent'], active=True).first()
+                if not self.subevent or not self.subevent.seating_plan:
+                    raise Http404()
+                return super().get(request, *args, **kwargs)
+            else:
+                raise Http404()
+        else:
+            if 'subevent' in kwargs or not request.event.seating_plan:
+                raise Http404()
+            else:
+                return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
+                                                kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
+        if context['cart_redirect'].startswith('https:'):
+            context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
         return context
 
 

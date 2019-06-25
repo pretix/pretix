@@ -222,6 +222,18 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
+render_seating_plan = EventPluginSignal(
+    providing_args=["request", "subevent", "voucher"]
+)
+"""
+This signal is sent out to render a seating plan, if one is configured for the specific event.
+You will be passed the ``request`` as a keyword argument. If applicable, a ``subevent`` or
+``voucher`` argument might be given.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event. The
+receivers are expected to return HTML.
+"""
+
 front_page_bottom = EventPluginSignal(
     providing_args=[]
 )

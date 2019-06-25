@@ -72,7 +72,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}">
+                    <div class="form-order-change" data-pricecalc-endpoint="{% url "api-v1:orderposition-price_calc" organizer=order.event.organizer.slug event=order.event.slug pk=position.pk %}" {% if position.subevent %}data-subevent="{{ position.subevent.id }}{% endif %}">
                         {% bootstrap_form_errors position.form %}
                         {% if position.custom_error %}
                             <div class="alert alert-danger">
@@ -85,20 +85,6 @@
                             </div>
                             <div class="col-sm-4">
                                 <strong>{% trans "Change to" %}</strong>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <strong>{% trans "Product" %}</strong>
-                            </div>
-                            <div class="col-sm-5">
-                                {{ position.item }}
-                                {% if position.variation %}
-                                    – {{ position.variation }}
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-4">
-                                {% bootstrap_field position.form.itemvar layout='inline' %}
                             </div>
                         </div>
 
@@ -115,6 +101,34 @@
                                 </div>
                             </div>
                         {% endif %}
+
+                        {% if position.seat %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <strong>{% trans "Seat" %}</strong>
+                                </div>
+                                <div class="col-sm-5">
+                                    {{ position.seat }}
+                                </div>
+                                <div class="col-sm-4">
+                                    {% bootstrap_field position.form.seat layout='inline' %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <strong>{% trans "Product" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {{ position.item }}
+                                {% if position.variation %}
+                                    – {{ position.variation }}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                {% bootstrap_field position.form.itemvar layout='inline' %}
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-sm-3">
@@ -182,6 +196,7 @@
                     {% if add_form.subevent %}
                         {% bootstrap_field add_form.subevent layout="control" %}
                     {% endif %}
+                    {% bootstrap_field add_form.seat layout="control" %}
                 </div>
             </div>
         </div>

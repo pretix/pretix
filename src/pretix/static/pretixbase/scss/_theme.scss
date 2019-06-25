@@ -1,6 +1,13 @@
 .sidebar-nav li > a > .fa {
   color: $navbar-inverse-bg;
 }
+.sidebar-nav li > a > svg {
+  position: relative;
+  top: 3px;
+  path {
+    fill: $navbar-inverse-bg;
+  }
+}
 .nav .testmode a {
   background: $brand-warning;
   color: black;
@@ -166,6 +173,11 @@
   color: #7f5a91;
   background-color: #fff;
   border: 1px solid #ddd;
+}
+
+svg.svg-icon {
+  position: relative;
+  top: 2px;
 }
 
 @include table-row-variant('success', lighten($brand-success, 40%));

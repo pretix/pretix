@@ -1,5 +1,4 @@
 import json
-from collections import Counter
 from decimal import Decimal
 
 from django.utils.timezone import now
@@ -15,7 +14,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     Checkin, Invoice, InvoiceAddress, InvoiceLine, Item, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, SubEvent,
+    OrderPosition, Question, QuestionAnswer, Seat, SubEvent,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -69,6 +68,13 @@ class AnswerQuestionIdentifierField(serializers.Field):
 class AnswerQuestionOptionsIdentifierField(serializers.Field):
     def to_representation(self, instance: QuestionAnswer):
         return [o.identifier for o in instance.options.all()]
+
+
+class InlineSeatSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = Seat
+        fields = ('id', 'name', 'seat_guid')
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
@@ -166,12 +172,13 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     downloads = PositionDownloadsField(source='*')
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     pdf_data = PdfDataSerializer(source='*')
+    seat = InlineSeatSerializer(read_only=True)
 
     class Meta:
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data')
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -430,11 +437,12 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
+    seat = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'secret', 'addon_to', 'subevent', 'answers')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat')
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -615,8 +623,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             ia = None
 
         with self.context['event'].lock() as now_dt:
-            quotadiff = Counter()
-
+            free_seats = set()
+            seats_seen = set()
             consume_carts = validated_data.pop('consume_carts', [])
             delete_cps = []
             quota_avail_cache = {}
@@ -630,7 +638,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         if quota_avail_cache[quota][1] is not None:
                             quota_avail_cache[quota][1] += 1
                     if cp.expires > now_dt:
-                        quotadiff.subtract(quotas)
+                        if cp.seat:
+                            free_seats.add(cp.seat)
                     delete_cps.append(cp)
 
             errs = [{} for p in positions_data]
@@ -658,7 +667,22 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                         )
                                     ]
 
-                    quotadiff.update(new_quotas)
+            for i, pos_data in enumerate(positions_data):
+                seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
+                if pos_data.get('seat'):
+                    if not seated:
+                        errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
+                    try:
+                        seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
+                    except Seat.DoesNotExist:
+                        errs[i]['seat'] = ['The specified seat does not exist.']
+                    else:
+                        pos_data['seat'] = seat
+                        if (seat not in free_seats and not seat.is_available()) or seat in seats_seen:
+                            errs[i]['seat'] = [ugettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
+                        seats_seen.add(seat)
+                elif seated:
+                    errs[i]['seat'] = ['The specified product requires to choose a seat.']
 
             if any(errs):
                 raise ValidationError({'positions': errs})

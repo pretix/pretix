@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.0.1",
+  "title": "Seating Plan",
+  "description": "Seating plan for venues",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "zones": {
+      "type": "array",
+      "description": "List of zones",
+      "items": { "$ref": "#/definitions/zone" }
+    },
+    "categories": {
+      "type": "array",
+      "description": "List of categories",
+      "items": { "$ref": "#/definitions/category" }
+    },
+    "size": {
+      "type": "object",
+      "description": "Size of the entire plan (in pixels)",
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" }
+      },
+      "required": ["width", "height"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["zones", "name", "categories"],
+  "additionalProperties": false,
+  "definitions": {
+    "zone": {
+      "type": "object",
+      "description": "Zone represents the parent entity that groups all other entities. The zone itself can be hidden or displayed. Examples of different zones would be 'main area', 'balcony', etc.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the zone"
+        },
+        "displayed": {
+          "type": "boolean",
+          "description": "Should the zone outlines be displayed or not?"
+        },
+        "position": { "$ref": "#/definitions/position" },
+        "rows": {
+          "type": "array",
+          "description": "List of rows",
+          "items": { "$ref": "#/definitions/row" }
+        },
+        "areas": {
+          "type": "array",
+          "description": "List of areas",
+          "items": { "$ref": "#/definitions/area" }
+        },
+        "row_number_position": {
+          "type": ["string", "null"],
+          "enum": ["left", "right", null],
+          "description": "Should the row numbers be hidden?"
+        }
+      },
+      "required": ["position", "rows"],
+      "additionalProperties": false
+    },
+    "row": {
+      "type": "object",
+      "description": "Row is simply a collection of seats with some additional information that simplifies working with seats.",
+      "$comment": "Might need more (editor) infromation like direction, angle, curvature",
+      "properties": {
+        "row_number": {
+          "type": "string",
+          "description": "Row number or name by which it can be identified"
+        },
+        "seats": {
+          "type": "array",
+          "description": "List of seats in this row",
+          "items": { "$ref": "#/definitions/seat" }
+        },
+        "number_of_seats": {
+          "type": "integer",
+          "$comment": "This property might be redundant. Since the seats are nested within the row, it's easy to just count them."
+        },
+        "seats_spacing": {
+          "type": "integer",
+          "description": "How far apart should the seats be positioned?"
+        },
+        "row_number_position": {
+          "type": ["string", "null"],
+          "enum": ["left", "right", null],
+          "description": "Should the row numbers be hidden? (Overrides the zone setting)"
+        },
+        "position": {
+          "$ref": "#/definitions/position"
+        }
+      },
+      "required": ["seats", "row_number"],
+      "additionalProperties": false
+    },
+    "seat": {
+      "type": "object",
+      "description": "Individual seat that can be reserved.",
+      "properties": {
+        "seat_guid": {
+          "type": "string",
+          "description": "Seat global ID by which it can be identified. It should be globally unique (not just per row). It doesn't have to be pretty since it won't be shown to the user."
+        },
+        "seat_number": {
+          "type": "string",
+          "description": "Human-readable seat number."
+        },
+        "position": { "$ref": "#/definitions/position" },
+        "category": {
+          "type": "string",
+          "description": "What category does this seat belong to? This needs to refer to the name of a category defined on the top level of the file. Keep in mind that there is no way to enfore this requirement with this version of JSON schema."
+        }
+      },
+      "required": ["seat_guid", "seat_number", "position", "category"],
+      "additionalProperties": false
+    },
+    "area": {
+      "type": "object",
+      "description": "Area can represent anything from general admission area, to stage, bar or even tables.",
+      "$comment": "TODO needs a definition: should it be defined with parameters or with a free-form svg?",
+      "properties": {
+        "color": { "type": "string" },
+        "border_color": { "type": "string" },
+        "rotation": { "type": "number" },
+        "position": {
+          "$ref": "#/definitions/position"
+        },
+        "shape": {
+          "type": "string",
+          "enum": ["polygon", "rectangle", "ellipse", "circle", "text"]
+        },
+        "polygon": {
+          "type": "object",
+          "properties": {
+            "points": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/position" }
+            }
+          },
+          "required": ["points"],
+          "additionalProperties": false
+        },
+        "rectangle": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          },
+          "required": ["width", "height"],
+          "additionalProperties": false
+        },
+        "ellipse": {
+          "type": "object",
+          "properties": {
+            "radius": { "$ref": "#/definitions/position" }
+          },
+          "required": ["radius"],
+          "additionalProperties": false
+        },
+        "circle": {
+          "type": "object",
+          "properties": {
+            "radius": {
+              "type": "integer"
+            }
+          },
+          "required": ["radius"],
+          "additionalProperties": false
+        },
+        "text": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "color": { "type": "string" },
+            "position": {
+              "$ref": "#/definitions/position"
+            }
+          },
+          "required": ["text", "position"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "position": {
+      "type": "object",
+      "description": "Position of the element",
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        }
+      },
+      "required": ["x", "y"],
+      "additionalProperties": false
+    },
+    "category": {
+      "type": "object",
+      "description": "A category of seats, e.g. a price level.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Internal name of the seats, e.g. 'stalls'. This should be used to map this to actual shop products."
+        },
+        "color": {
+          "type": "string",
+          "description": "The color used to draw seats of this category."
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    }
+  }
+}

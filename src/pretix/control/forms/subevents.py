@@ -36,7 +36,7 @@ class SubEventForm(I18nModelForm):
             'presale_start',
             'presale_end',
             'location',
-            'frontpage_text'
+            'frontpage_text',
         ]
         field_classes = {
             'date_from': SplitDateTimeField,

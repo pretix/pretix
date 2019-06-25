@@ -93,8 +93,8 @@ class OrderViewSet(viewsets.ModelViewSet):
                     'positions',
                     OrderPosition.objects.all().prefetch_related(
                         'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
-                        'item__category', 'addon_to',
-                        Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
+                        'item__category', 'addon_to', 'seat',
+                        Prefetch('addons', OrderPosition.objects.select_related('item', 'variation', 'seat'))
                     )
                 )
             )
@@ -103,7 +103,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 Prefetch(
                     'positions',
                     OrderPosition.objects.all().prefetch_related(
-                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question', 'seat',
                     )
                 )
             )
@@ -611,13 +611,13 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, viewsets.ReadOnlyModelViewS
                     )
                 ))
             ).select_related(
-                'item', 'variation', 'item__category', 'addon_to'
+                'item', 'variation', 'item__category', 'addon_to', 'seat'
             )
         else:
             qs = qs.prefetch_related(
                 'checkins', 'answers', 'answers__options', 'answers__question'
             ).select_related(
-                'item', 'order', 'order__event', 'order__event__organizer'
+                'item', 'order', 'order__event', 'order__event__organizer', 'seat'
             )
         return qs
 

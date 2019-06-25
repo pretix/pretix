@@ -279,6 +279,22 @@ styles. It is advisable to set a prefix for your form to avoid clashes with othe
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+subevent_forms = EventPluginSignal(
+    providing_args=['request', 'subevent']
+)
+"""
+This signal allows you to return additional forms that should be rendered on the subevent creation
+or modification page. You are passed ``request`` and ``subevent`` arguments and are expected to return
+an instance of a form class that you bind yourself when appropriate. Your form will be executed
+as part of the standard validation and rendering cycle and rendered using default bootstrap
+styles. It is advisable to set a prefix for your form to avoid clashes with other plugins.
+
+``subevent`` can be ``None`` during creation. Before ``save()`` is called, a ``subevent`` property of
+your form instance will automatically being set to the subevent that has just been created.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 oauth_application_registered = Signal(
     providing_args=["user", "application"]
 )

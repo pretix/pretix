@@ -46,6 +46,58 @@ $(function () {
             );
         };
         $itemvar.on("change", update_price);
-        $subevent.on("change", update_price);
+        $subevent.on("change", update_price).on("change", function () {
+            var seat = $(this).closest(".form-order-change").find("[id$=seat]");
+            if (seat.length) {
+                seat.prop("required", !!$subevent.val());
+            }
+        });
+    });
+    $('[data-model-select2=seat]').each(function () {
+        var $s = $(this);
+        $s.select2({
+            theme: "bootstrap",
+            delay: 100,
+            allowClear: !$s.prop("required"),
+            width: '100%',
+            language: $("body").attr("data-select2-locale"),
+            placeholder: $(this).attr("data-placeholder"),
+            ajax: {
+                url: function() {
+                    var se = $(this).closest(".form-order-change, .form-horizontal").attr("data-subevent");
+                    var url = $(this).attr('data-select2-url');
+                    var changed = $(this).closest(".form-order-change, .form-horizontal").find("[id$=subevent]").val();
+                    if (changed) {
+                        return url + '?subevent=' + changed;
+                    } else if (se) {
+                        return url + '?subevent=' + se;
+                    } else {
+                        return url;
+                    }
+                },
+                data: function (params) {
+                    return {
+                        query: params.term,
+                        page: params.page || 1
+                    }
+                }
+            },
+            templateResult: function (res) {
+                if (!res.id) {
+                    return res.text;
+                }
+                var $ret = $("<span>").append(
+                    $("<span>").addClass("primary").append($("<div>").text(res.text).html())
+                );
+                if (res.event) {
+                    $ret.append(
+                        $("<span>").addClass("secondary").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append($("<div>").text(res.event).html())
+                    );
+                }
+                return $ret;
+            },
+        });
     });
 });

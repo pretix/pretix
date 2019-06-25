@@ -26,7 +26,11 @@ Frontend
 --------
 
 .. automodule:: pretix.presale.signals
-   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble, checkout_flow_steps, order_info, order_meta_from_request, position_info
+   :members: html_head, html_footer, footer_link, front_page_top, front_page_bottom, fee_calculation_for_cart, contact_form_fields, question_form_fields, checkout_confirm_messages, checkout_confirm_page_content, checkout_all_optional, html_page_header, sass_preamble, sass_postamble, render_seating_plan, checkout_flow_steps, position_info
+
+
+.. automodule:: pretix.presale.signals
+   :members: order_info, order_meta_from_request
 
 Request flow
 """"""""""""
@@ -45,7 +49,7 @@ Backend
 
 .. automodule:: pretix.control.signals
    :members: nav_event, html_head, html_page_start, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings,
-             order_info, event_settings_widget, oauth_application_registered, order_position_buttons, nav_item
+             order_info, event_settings_widget, oauth_application_registered, order_position_buttons, nav_item, subevent_forms
 
 
 .. automodule:: pretix.base.signals

@@ -24,7 +24,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import (
     CartPosition, Device, Event, Item, ItemVariation, Order, OrderPayment,
-    OrderPosition, Quota, User, Voucher,
+    OrderPosition, Quota, Seat, SeatCategoryMapping, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemBundle
@@ -82,6 +82,8 @@ error_messages = {
                                    'affected positions have been removed from your cart.'),
     'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
                              'positions have been removed from your cart.'),
+    'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
+    'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -428,6 +430,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     products_seen = Counter()
     changed_prices = {}
     deleted_positions = set()
+    seats_seen = set()
 
     def delete(cp):
         # Delete a cart position, including parents and children, if applicable
@@ -490,6 +493,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
             break
 
+        if (cp.requires_seat and not cp.seat) or (cp.seat and not cp.requires_seat) or (cp.seat and cp.seat.product != cp.item) or cp.seat in seats_seen:
+            err = err or error_messages['seat_invalid']
+            delete(cp)
+            break
+        if cp.seat:
+            seats_seen.add(cp.seat)
+
         if cp.item.require_voucher and cp.voucher is None:
             delete(cp)
             err = err or error_messages['voucher_required']
@@ -500,6 +510,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
             err = error_messages['voucher_required']
             break
+
+        if cp.seat:
+            # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every time, since we absolutely
+            # can not overbook a seat.
+            if not cp.seat.is_available(ignore_cart=cp) or cp.seat.blocked:
+                err = err or error_messages['seat_unavailable']
+                cp.delete()
+                continue
 
         if cp.expires >= now_dt and not cp.voucher:
             # Other checks are not necessary
@@ -736,21 +754,30 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         except InvoiceAddress.DoesNotExist:
             pass
 
-    positions = CartPosition.objects.filter(id__in=position_ids, event=event)
+    positions = CartPosition.objects.annotate(
+        requires_seat=Exists(
+            SeatCategoryMapping.objects.filter(
+                Q(product=OuterRef('item'))
+                & (Q(subevent=OuterRef('subevent')) if event.has_subevents else Q(subevent__isnull=True))
+            )
+        )
+    ).filter(
+        id__in=position_ids, event=event
+    )
 
     validate_order.send(event, payment_provider=pprov, email=email, positions=positions,
                         locale=locale, invoice_address=addr, meta_info=meta_info)
 
     lockfn = NoLockManager
     locked = False
-    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2))).exists():
+    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2)) | Q(seat__isnull=False)).exists():
         # Performance optimization: If no voucher is used and no cart position is dangerously close to its expiry date,
         # creating this order shouldn't be prone to any race conditions and we don't need to lock the event.
         locked = True
         lockfn = event.lock
 
     with lockfn() as now_dt:
-        positions = list(positions.select_related('item', 'variation', 'subevent', 'addon_to').prefetch_related('addons'))
+        positions = list(positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons'))
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
@@ -961,12 +988,17 @@ class OrderChangeManager:
         'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
         'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
         'subevent_required': _('You need to choose a subevent for the new position.'),
+        'seat_unavailable': _('The selected seat "{seat}" is not available.'),
+        'seat_subevent_mismatch': _('You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'),
+        'seat_required': _('The selected product requires you to select a seat.'),
+        'seat_forbidden': _('The selected product does not allow to select a seat.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
+    SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
@@ -979,6 +1011,7 @@ class OrderChangeManager:
         self._committed = False
         self._totaldiff = 0
         self._quotadiff = Counter()
+        self._seatdiff = Counter()
         self._operations = []
         self.notify = notify
         self._invoice_dirty = False
@@ -995,6 +1028,13 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation))
+
+    def change_seat(self, position: OrderPosition, seat: Seat):
+        if position.seat:
+            self._seatdiff.subtract([position.seat])
+        if seat:
+            self._seatdiff.update([seat])
+        self._operations.append(self.SeatOperation(position, seat))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
         price = get_price(position.item, position.variation, voucher=position.voucher, subevent=subevent,
@@ -1051,12 +1091,14 @@ class OrderChangeManager:
         self._totaldiff += -position.price
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.CancelOperation(position))
+        if position.seat:
+            self._seatdiff.subtract([position.seat])
 
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
-                     subevent: SubEvent = None):
+                     subevent: SubEvent = None, seat: Seat = None):
         if price is None:
             price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
         else:
@@ -1075,6 +1117,14 @@ class OrderChangeManager:
         if self.order.event.has_subevents and not subevent:
             raise OrderError(self.error_messages['subevent_required'])
 
+        seated = item.seat_category_mappings.filter(subevent=subevent).exists()
+        if seated and not seat:
+            raise OrderError(self.error_messages['seat_required'])
+        elif not seated and seat:
+            raise OrderError(self.error_messages['seat_forbidden'])
+        if seat and subevent and seat.subevent_id != subevent:
+            raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=seat.name))
+
         new_quotas = (variation.quotas.filter(subevent=subevent)
                       if variation else item.quotas.filter(subevent=subevent))
         if not new_quotas:
@@ -1085,13 +1135,35 @@ class OrderChangeManager:
 
         self._totaldiff += price.gross
         self._quotadiff.update(new_quotas)
-        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent))
+        if seat:
+            self._seatdiff.update([seat])
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
         self._operations.append(self.SplitOperation(position))
+
+    def _check_seats(self):
+        for seat, diff in self._seatdiff.items():
+            if diff <= 0:
+                continue
+            if not seat.is_available() or diff > 1:
+                raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
+
+        if self.event.has_subevents:
+            state = {}
+            for p in self.order.positions.all():
+                state[p] = {'seat': p.seat, 'subevent': p.subevent}
+            for op in self._operations:
+                if isinstance(op, self.SeatOperation):
+                    state[op.position]['seat'] = op.seat
+                elif isinstance(op, self.SubeventOperation):
+                    state[op.position]['subevent'] = op.subevent
+            for v in state.values():
+                if v['seat'] and v['seat'].subevent_id != v['subevent'].pk:
+                    raise OrderError(self.error_messages['seat_subevent_mismatch'].format(seat=v['seat'].name))
 
     def _check_quotas(self):
         for quota, diff in self._quotadiff.items():
@@ -1179,6 +1251,17 @@ class OrderChangeManager:
                 op.position.variation = op.variation
                 op.position._calculate_tax()
                 op.position.save()
+            elif isinstance(op, self.SeatOperation):
+                self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'old_seat': op.position.seat.name if op.position.seat else "-",
+                    'new_seat': op.seat.name if op.seat else "-",
+                    'old_seat_id': op.position.seat.pk if op.position.seat else None,
+                    'new_seat_id': op.seat.pk if op.seat else None,
+                })
+                op.position.seat = op.seat
+                op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1232,7 +1315,7 @@ class OrderChangeManager:
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
                     price=op.price.gross, order=self.order, tax_rate=op.price.rate,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
-                    positionid=nextposid, subevent=op.subevent
+                    positionid=nextposid, subevent=op.subevent, seat=op.seat
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
@@ -1243,6 +1326,7 @@ class OrderChangeManager:
                     'price': op.price.gross,
                     'positionid': pos.positionid,
                     'subevent': op.subevent.pk if op.subevent else None,
+                    'seat': op.seat.pk if op.seat else None,
                 })
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
@@ -1467,6 +1551,7 @@ class OrderChangeManager:
                     raise OrderError(self.error_messages['not_pending_or_paid'])
                 if check_quotas:
                     self._check_quotas()
+                self._check_seats()
                 self._check_complete_cancel()
                 self._perform_operations()
             self._recalculate_total_and_payment_fee()

@@ -18,7 +18,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CartPosition, Checkin, CheckinList, Event, Item, ItemCategory,
     ItemVariation, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    Organizer, Question, Quota, User, Voucher, WaitingListEntry,
+    Organizer, Question, Quota, SeatingPlan, User, Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -1969,6 +1969,157 @@ class CheckinListTestCase(TestCase):
         assert lists[3].checkin_count == 1
         assert lists[3].position_count == 4
         assert lists[3].percent == 25
+
+
+class SeatingTestCase(TestCase):
+    def setUp(self):
+        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.organizer):
+            self.event = Event.objects.create(
+                organizer=self.organizer, name='Dummy', slug='dummy',
+                date_from=now(), date_to=now() - timedelta(hours=1),
+            )
+            self.ticket = self.event.items.create(name="Ticket", default_price=12)
+            self.plan = SeatingPlan.objects.create(
+                name="Plan", organizer=self.organizer, layout="{}"
+            )
+            self.event.seat_category_mappings.create(
+                layout_category='Stalls', product=self.ticket
+            )
+            self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, blocked=False)
+            self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, blocked=False)
+
+    @classscope(attr='organizer')
+    def test_free(self):
+        assert set(self.event.free_seats) == {self.seat_a1, self.seat_a2}
+        assert self.seat_a1.is_available()
+        assert self.seat_a2.is_available()
+
+    @classscope(attr='organizer')
+    def test_blocked(self):
+        self.seat_a1.blocked = True
+        self.seat_a1.save()
+        assert set(self.event.free_seats) == {self.seat_a2}
+        assert not self.seat_a1.is_available()
+        assert self.seat_a2.is_available()
+
+    @classscope(attr='organizer')
+    def test_order_pending(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_PENDING, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1
+        )
+        assert set(self.event.free_seats) == {self.seat_a2}
+        assert not self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_order_paid(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_PAID, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1
+        )
+        assert set(self.event.free_seats) == {self.seat_a2}
+        assert not self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_order_expired(self):
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_EXPIRED, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1
+        )
+        assert set(self.event.free_seats) == {self.seat_a1, self.seat_a2}
+        assert self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_cart_active(self):
+        CartPosition.objects.create(
+            event=self.event, cart_id='a', item=self.ticket, seat=self.seat_a1,
+            price=23, expires=now() + timedelta(minutes=10)
+        )
+        assert set(self.event.free_seats) == {self.seat_a2}
+        assert not self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_cart_expired(self):
+        CartPosition.objects.create(
+            event=self.event, cart_id='a', item=self.ticket, seat=self.seat_a1,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+        assert set(self.event.free_seats) == {self.seat_a1, self.seat_a2}
+        assert self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_subevent_order_pending(self):
+        se1 = self.event.subevents.create(date_from=now(), name="SE 1")
+        self.seat_a1.subevent = se1
+        self.seat_a1.save()
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_PAID, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1, subevent=se1
+        )
+        assert set(se1.free_seats) == set()
+        assert not self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_subevent_order_canceled(self):
+        se1 = self.event.subevents.create(date_from=now(), name="SE 1")
+        self.seat_a1.subevent = se1
+        self.seat_a1.save()
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test', total=Decimal("30"),
+            locale='en', status=Order.STATUS_CANCELED, datetime=now(),
+            expires=now() + timedelta(days=10),
+        )
+        OrderPosition.objects.create(
+            order=o, item=self.ticket, variation=None, price=Decimal("12"),
+            seat=self.seat_a1, subevent=se1
+        )
+        assert set(se1.free_seats) == {self.seat_a1}
+        assert self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_subevent_cart_active(self):
+        se1 = self.event.subevents.create(date_from=now(), name="SE 1")
+        self.seat_a1.subevent = se1
+        self.seat_a1.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id='a', item=self.ticket, seat=self.seat_a1,
+            price=23, expires=now() + timedelta(minutes=10), subevent=se1
+        )
+        assert set(se1.free_seats) == set()
+        assert not self.seat_a1.is_available()
+
+    @classscope(attr='organizer')
+    def test_subevent_cart_expired(self):
+        se1 = self.event.subevents.create(date_from=now(), name="SE 1")
+        self.seat_a1.subevent = se1
+        self.seat_a1.save()
+        CartPosition.objects.create(
+            event=self.event, cart_id='a', item=self.ticket, seat=self.seat_a1,
+            price=23, expires=now() - timedelta(minutes=10), subevent=se1
+        )
+        assert set(se1.free_seats) == {self.seat_a1}
+        assert self.seat_a1.is_available()
 
 
 @pytest.mark.django_db

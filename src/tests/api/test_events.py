@@ -8,7 +8,9 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import Event, InvoiceAddress, Order, OrderPosition
+from pretix.base.models import (
+    Event, InvoiceAddress, Order, OrderPosition, SeatingPlan,
+)
 from pretix.base.models.orders import OrderFee
 
 
@@ -69,6 +71,8 @@ TEST_EVENT_RES = {
     "location": None,
     "slug": "dummy",
     "has_subevents": False,
+    "seating_plan": None,
+    "seat_category_mapping": {},
     "meta_data": {"type": "Conference"},
     'plugins': [
         'pretix.plugins.banktransfer',
@@ -618,3 +622,303 @@ def test_event_with_order_position_not_delete(token_client, organizer, event, it
                                     'set \'live\' to false to hide the event and take the shop offline instead."}'
     with scopes_disabled():
         assert organizer.events.filter(pk=event.id).exists()
+
+
+@pytest.fixture
+def seatingplan(event, organizer, item):
+    return SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="""{
+  "name": "Grosser Saal",
+  "categories": [
+    {
+      "name": "Stalls",
+      "color": "red"
+    }
+  ],
+  "zones": [
+    {
+      "name": "Main Area",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "rows": [
+        {
+          "row_number": "0",
+          "seats": [
+            {
+              "seat_guid": "0-0",
+              "seat_number": "0-0",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "category": "Stalls"
+            },
+            {
+              "seat_guid": "0-1",
+              "seat_number": "0-1",
+              "position": {
+                "x": 33,
+                "y": 0
+              },
+              "category": "Stalls"
+            },
+            {
+              "seat_guid": "0-2",
+              "seat_number": "0-2",
+              "position": {
+                "x": 66,
+                "y": 0
+              },
+              "category": "Stalls"
+            }
+          ],
+          "position": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    }
+  ],
+  "size": {
+    "width": 600,
+    "height": 400
+  }
+}"""
+    )
+
+
+@pytest.mark.django_db
+def test_event_update_seating(token_client, organizer, event, item, seatingplan):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        assert event.seats.filter(product=item).count() == 3
+        m = event.seat_category_mappings.get()
+    assert m.layout_category == 'Stalls'
+    assert m.product == item
+
+
+@pytest.mark.django_db
+def test_event_update_seating_invalid_product(token_client, organizer, event, item, seatingplan):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk + 2
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"seat_category_mapping":["Item \'%d\' does not exist."]}' % (item.pk + 2)
+
+
+@pytest.mark.django_db
+def test_event_update_seating_change_mapping(token_client, organizer, event, item, seatingplan):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        assert event.seats.filter(product=item).count() == 3
+        m = event.seat_category_mappings.get()
+    assert m.layout_category == 'Stalls'
+    assert m.product == item
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seat_category_mapping": {
+                "VIP": item.pk,
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        m = event.seat_category_mappings.get()
+        assert event.seats.filter(product=None).count() == 3
+    assert m.layout_category == 'VIP'
+    assert m.product == item
+
+
+@pytest.mark.django_db
+def test_remove_seating(token_client, organizer, event, item, seatingplan):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        assert event.seat_category_mappings.count() == 1
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan is None
+    with scopes_disabled():
+        assert event.seats.count() == 0
+        assert event.seat_category_mappings.count() == 0
+
+
+@pytest.mark.django_db
+def test_remove_seating_forbidden(token_client, organizer, event, item, seatingplan, order_position):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        assert event.seat_category_mappings.count() == 1
+
+        order_position.seat = event.seats.first()
+        order_position.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"seating_plan":["You can not change the plan since seat \\"0-0\\" is not ' \
+                                    'present in the new plan and is already sold."]}'
+
+
+@pytest.mark.django_db
+def test_no_seating_for_series(token_client, organizer, event, item, seatingplan, order_position):
+    event.has_subevents = True
+    event.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Event series should not directly be assigned a seating plan."]}'
+
+
+@pytest.mark.django_db
+def test_event_create_with_seating(token_client, organizer, event, meta_prop, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/'.format(organizer.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": "2017-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "seating_plan": seatingplan.pk,
+            "meta_data": {
+                meta_prop.name: "Conference"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        event = Event.objects.get(slug=resp.data['slug'])
+        assert event.seating_plan == seatingplan
+        assert event.seats.count() == 3
+        assert event.seat_category_mappings.count() == 0
+
+
+@pytest.mark.django_db
+def test_event_create_with_seating_maps(token_client, organizer, event, meta_prop, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/'.format(organizer.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "2017-12-27T10:00:00Z",
+            "date_to": "2017-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Foo": 1,
+            },
+            "meta_data": {
+                meta_prop.name: "Conference"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"seat_category_mapping":["You cannot specify seat category mappings on event creation."]}'

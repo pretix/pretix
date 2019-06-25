@@ -44,6 +44,7 @@ var strings = {
     'back': django.pgettext('widget', 'Back'),
     'next_month': django.pgettext('widget', 'Next month'),
     'previous_month': django.pgettext('widget', 'Previous month'),
+    'show_seating': django.pgettext('widget', 'Open seat selection'),
     'days': {
         'MO': django.gettext('Mo'),
         'TU': django.gettext('Tu'),
@@ -557,6 +558,26 @@ var shared_methods = {
             window.open(redirect_url);
         }
     },
+    startseating: function () {
+        var redirect_url = this.$root.target_url + 'w/' + widget_id;
+        if (this.$root.subevent){
+            redirect_url += '/' + this.$root.subevent;
+        }
+        redirect_url += '/seatingframe/?iframe=1&locale=' + lang;
+        if (this.$root.cart_id) {
+            redirect_url += '&take_cart_id=' + this.$root.cart_id;
+        }
+        if (this.$root.widget_data) {
+            redirect_url += '&widget_data=' + escape(this.$root.widget_data_json);
+        }
+        if (this.$root.useIframe) {
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            this.$root.overlay.frame_loading = true;
+            iframe.src = redirect_url;
+        } else {
+            window.open(redirect_url);
+        }
+    },
     handleResize: function () {
         this.mobile = this.$refs.wrapper.clientWidth <= 800;
     }
@@ -677,6 +698,11 @@ Vue.component('pretix-widget-event-form', {
         + '</button>'
         + strings['cart_exists']
         + '<div class="pretix-widget-clear"></div>'
+        + '</div>'
+        + '<div class="pretix-widget-seating-link-wrapper" v-if="this.$root.has_seating_plan">'
+        + '<button class="pretix-widget-seating-link" @click.prevent="$parent.startseating">'
+        + strings['show_seating']
+        + '</button>'
         + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
@@ -1061,6 +1087,7 @@ var shared_root_methods = {
                 root.cart_id = cart_id;
                 root.cart_exists = data.cart_exists;
                 root.vouchers_exist = data.vouchers_exist;
+                root.has_seating_plan = data.has_seating_plan;
                 root.itemnum = data.itemnum;
             }
             if (root.loading > 0) {
@@ -1226,7 +1253,8 @@ var create_widget = function (element) {
                 disable_vouchers: disable_vouchers,
                 cart_exists: false,
                 itemcount: 0,
-                overlay: null
+                overlay: null,
+                has_seating_plan: false
             }
         },
         created: function () {

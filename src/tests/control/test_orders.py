@@ -714,6 +714,103 @@ def test_order_extend_expired_quota_empty_ignore(client, env):
 
 
 @pytest.mark.django_db
+def test_order_extend_expired_seat_free(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        o.save()
+        generate_cancellation(generate_invoice(o))
+        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        p = o.positions.first()
+        p.seat = seat_a1
+        p.save()
+        q = Quota.objects.create(event=env[0], size=3)
+        q.items.add(env[3])
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        client.login(email='dummy@dummy.dummy', password='dummy')
+        assert o.invoices.count() == 2
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert b'alert-success' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+        assert o.status == Order.STATUS_PENDING
+        assert o.invoices.count() == 3
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_seat_blocked(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        olddate = o.expires
+        o.save()
+        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1", blocked=True)
+        p = o.positions.first()
+        p.seat = seat_a1
+        p.save()
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert b'alert-danger' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+    assert o.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_order_extend_expired_seat_taken(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        olddate = o.expires
+        o.save()
+        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        p = o.positions.first()
+        p.seat = seat_a1
+        p.save()
+
+        o = Order.objects.create(
+            code='BAR', event=env[0], email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=14, locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=env[3],
+            variation=None,
+            price=Decimal("14"),
+            attendee_name_parts={'full_name': "Peter", "_scheme": "full"},
+            seat=seat_a1
+        )
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+        newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d %H:%M:%S")
+        client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+        'expires': newdate
+    }, follow=True)
+    assert b'alert-danger' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+    assert o.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
 def test_order_extend_expired_quota_partial(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -831,10 +928,55 @@ def test_order_mark_paid_forced(client, env):
         'amount': str(o.pending_sum),
         'force': 'on'
     }, follow=True)
+    print(response.content.decode())
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
     assert o.status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_order_mark_paid_expired_seat_taken(client, env):
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+        o.expires = now() - timedelta(days=5)
+        o.status = Order.STATUS_EXPIRED
+        olddate = o.expires
+        o.save()
+        seat_a1 = env[0].seats.create(name="A1", product=env[3], seat_guid="A1")
+        p = o.positions.first()
+        p.seat = seat_a1
+        p.save()
+
+        o = Order.objects.create(
+            code='BAR', event=env[0], email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=14, locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=env[3],
+            variation=None,
+            price=Decimal("14"),
+            attendee_name_parts={'full_name': "Peter", "_scheme": "full"},
+            seat=seat_a1
+        )
+
+        q = Quota.objects.create(event=env[0], size=100)
+        q.items.add(env[3])
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+        'status': 'p',
+        'payment_date': now().date().isoformat(),
+        'amount': str(o.pending_sum),
+        'force': 'on'
+    }, follow=True)
+    assert b'alert-danger' in response.content
+    with scopes_disabled():
+        o = Order.objects.get(id=env[2].id)
+    assert o.expires.strftime("%Y-%m-%d %H:%M:%S") == olddate.strftime("%Y-%m-%d %H:%M:%S")
+    assert o.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db

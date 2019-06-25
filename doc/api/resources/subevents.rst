@@ -36,7 +36,11 @@ variation_price_overrides             list of objects            List of variati
                                                                  the default price
 ├ variation                           integer                    The internal variation ID
 └ price                               money (string)             The price or ``null`` for the default price
-meta_data                             dict                       Values set for organizer-specific meta data parameters.
+meta_data                             object                     Values set for organizer-specific meta data parameters.
+seating_plan                          integer                    If reserved seating is in use, the ID of a seating
+                                                                 plan. Otherwise ``null``.
+seat_category_mapping                 object                     An object mapping categories of the seating plan
+                                                                 (strings) to items in the event (integers or ``null``).
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 1.7
@@ -53,6 +57,10 @@ meta_data                             dict                       Values set for 
 .. versionchanged:: 2.7
 
    The attribute ``is_public`` has been added.
+
+.. versionchanged:: 3.0
+
+   The attributes ``seating_plan`` and ``seat_category_mapping`` have been added.
 
 Endpoints
 ---------
@@ -93,6 +101,8 @@ Endpoints
             "date_admission": null,
             "presale_start": null,
             "presale_end": null,
+            "seating_plan": null,
+            "seat_category_mapping": {},
             "location": null,
             "item_price_overrides": [
               {
@@ -142,6 +152,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "seating_plan": null,
+        "seat_category_mapping": {},
         "item_price_overrides": [
           {
             "item": 2,
@@ -172,6 +184,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "seating_plan": null,
+        "seat_category_mapping": {},
         "item_price_overrides": [
           {
             "item": 2,
@@ -223,6 +237,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "seating_plan": null,
+        "seat_category_mapping": {},
         "item_price_overrides": [
           {
             "item": 2,
@@ -287,6 +303,8 @@ Endpoints
         "presale_start": null,
         "presale_end": null,
         "location": null,
+        "seating_plan": null,
+        "seat_category_mapping": {},
         "item_price_overrides": [
           {
             "item": 2,
@@ -371,6 +389,8 @@ Endpoints
             "presale_start": null,
             "presale_end": null,
             "location": null,
+            "seating_plan": null,
+            "seat_category_mapping": {},
             "item_price_overrides": [
               {
                 "item": 2,

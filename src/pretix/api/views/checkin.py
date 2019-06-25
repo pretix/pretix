@@ -231,7 +231,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     )
                 ))
             ).select_related(
-                'item', 'variation', 'item__category', 'addon_to', 'order', 'order__invoice_address'
+                'item', 'variation', 'item__category', 'addon_to', 'order', 'order__invoice_address', 'seat'
             )
         else:
             qs = qs.prefetch_related(
@@ -241,7 +241,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 ),
                 'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
-            ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order')
+            ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat')
 
         if not self.checkinlist.all_products:
             qs = qs.filter(item__in=self.checkinlist.limit_products.values_list('id', flat=True))

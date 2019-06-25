@@ -176,6 +176,10 @@ answers                               list of objects            Answers to user
 ├ question_identifier                 string                     The question's ``identifier`` field
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 └ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+seat                                  objects                    The assigned seat. Can be ``null``.
+├ id                                  integer                    Internal ID of the seat instance
+├ name                                string                     Human-readable seat name
+└ seat_guid                           string                     Identifier of the seat within the seating plan
 pdf_data                              object                     Data object required for ticket PDF generation. By default,
                                                                  this field is missing. It will be added only if you add the
                                                                  ``pdf_data=true`` query parameter to your request.
@@ -196,6 +200,10 @@ pdf_data                              object                     Data object req
 .. versionchanged:: 1.16
 
   The attributes ``pseudonymization_id`` and ``pdf_data`` have been added.
+
+.. versionchanged:: 3.0
+
+  The attribute ``seat`` has been added.
 
 .. _order-payment-resource:
 
@@ -328,6 +336,7 @@ List of all orders
                 "addon_to": null,
                 "subevent": null,
                 "pseudonymization_id": "MQLJvANO3B",
+                "seat": null,
                 "checkins": [
                   {
                     "list": 44,
@@ -470,6 +479,7 @@ Fetching individual orders
             "addon_to": null,
             "subevent": null,
             "pseudonymization_id": "MQLJvANO3B",
+            "seat": null,
             "checkins": [
               {
                 "list": 44,
@@ -737,7 +747,7 @@ Creating orders
      then call the ``mark_paid`` API method.
    * ``testmode`` (optional) – Defaults to ``false``
    * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
-     order creation is successful. Any quotas that become free by this operation will be credited to your order
+     order creation is successful. Any quotas or seats that become free by this operation will be credited to your order
      creation.
    * ``email``
    * ``locale``
@@ -771,6 +781,7 @@ Creating orders
       * ``item``
       * ``variation``
       * ``price``
+      * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
       * ``attendee_name`` **or** ``attendee_name_parts``
       * ``attendee_email``
       * ``secret`` (optional)
@@ -1287,6 +1298,7 @@ List of all order positions
             "tax_value": "0.00",
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "pseudonymization_id": "MQLJvANO3B",
+            "seat": null,
             "addon_to": null,
             "subevent": null,
             "checkins": [
@@ -1389,6 +1401,7 @@ Fetching individual positions
         "addon_to": null,
         "subevent": null,
         "pseudonymization_id": "MQLJvANO3B",
+        "seat": null,
         "checkins": [
           {
             "list": 44,

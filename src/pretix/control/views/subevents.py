@@ -3,6 +3,7 @@ from datetime import datetime
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
+from django.core.files import File
 from django.db import transaction
 from django.db.models import F, IntegerField, OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
@@ -32,6 +33,7 @@ from pretix.control.forms.subevents import (
     SubEventMetaValueForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers.models import modelcopy
@@ -134,6 +136,16 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
 class SubEventEditorMixin(MetaDataEditorMixin):
     meta_form = SubEventMetaValueForm
     meta_model = SubEventMetaValue
+
+    @cached_property
+    def plugin_forms(self):
+        forms = []
+        for rec, resp in subevent_forms.send(sender=self.request.event, subevent=self.object, request=self.request):
+            if isinstance(resp, (list, tuple)):
+                forms.extend(resp)
+            else:
+                forms.append(resp)
+        return forms
 
     def _make_meta_form(self, p, val_instances):
         if not hasattr(self, '_default_meta'):
@@ -294,6 +306,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         ctx['cl_formset'] = self.cl_formset
         ctx['itemvar_forms'] = self.itemvar_forms
         ctx['meta_forms'] = self.meta_forms
+        ctx['plugin_forms'] = self.plugin_forms
         return ctx
 
     @cached_property
@@ -347,7 +360,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
     def is_valid(self, form):
         return form.is_valid() and all([f.is_valid() for f in self.itemvar_forms]) and self.formset.is_valid() and (
             all([f.is_valid() for f in self.meta_forms])
-        ) and self.cl_formset.is_valid()
+        ) and self.cl_formset.is_valid() and all(f.is_valid() for f in self.plugin_forms)
 
 
 class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
@@ -361,9 +374,9 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         self.object = self.get_object()
         form = self.get_form()
         if self.is_valid(form):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            r = self.form_valid(form)
+            return r
+        return self.form_invalid(form)
 
     def get_object(self, queryset=None) -> SubEvent:
         try:
@@ -384,12 +397,23 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
             # TODO: LogEntry?
 
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.has_changed():
+        if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
+            data = {
+                k: form.cleaned_data.get(k) for k in form.changed_data
+            }
+            for f in self.plugin_forms:
+                data.update({
+                    k: (f.cleaned_data.get(k).name
+                        if isinstance(f.cleaned_data.get(k), File)
+                        else f.cleaned_data.get(k))
+                    for k in f.changed_data
+                })
             self.object.log_action(
-                'pretix.subevent.changed', user=self.request.user, data={
-                    k: form.cleaned_data.get(k) for k in form.changed_data
-                }
+                'pretix.subevent.changed', user=self.request.user, data=data
             )
+        for f in self.plugin_forms:
+            f.subevent = self.object
+            f.save()
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -416,8 +440,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         form = self.get_form()
         if self.is_valid(form):
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return self.form_invalid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.subevents', kwargs={
@@ -442,7 +465,16 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         messages.success(self.request, pgettext_lazy('subevent', 'The new date has been created.'))
         ret = super().form_valid(form)
         self.object = form.instance
-        form.instance.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
+
+        data = dict(form.cleaned_data)
+        for f in self.plugin_forms:
+            data.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.cleaned_data
+            })
+        form.instance.log_action('pretix.subevent.added', data=dict(data), user=self.request.user)
 
         self.save_formset(form.instance)
         self.save_cl_formset(form.instance)
@@ -452,6 +484,9 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         for f in self.meta_forms:
             f.instance.subevent = form.instance
         self.save_meta()
+        for f in self.plugin_forms:
+            f.subevent = form.instance
+            f.save()
         return ret
 
     @cached_property
@@ -657,7 +692,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
 
     @transaction.atomic
     def form_valid(self, form):
-
         tz = self.request.event.timezone
         cnt = 0
         for rdate in self.get_rrule_set():
@@ -685,7 +719,15 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 else None
             )
             se.save()
-            se.log_action('pretix.subevent.added', data=dict(form.cleaned_data), user=self.request.user)
+            data = dict(form.cleaned_data)
+            for f in self.plugin_forms:
+                data.update({
+                    k: (f.cleaned_data.get(k).name
+                        if isinstance(f.cleaned_data.get(k), File)
+                        else f.cleaned_data.get(k))
+                    for k in f.cleaned_data
+                })
+            se.log_action('pretix.subevent.added', data=data, user=self.request.user)
 
             for f in self.meta_forms:
                 if f.cleaned_data.get('value'):
@@ -731,6 +773,11 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 i.subevent = se
                 i.save()
 
+            for f in self.plugin_forms:
+                f.is_valid()
+                f.subevent = se
+                f.save()
+
             cnt += 1
 
         messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(cnt))
@@ -742,7 +789,8 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         self.object = SubEvent(event=self.request.event)
+
         if self.is_valid(form):
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+
+        return self.form_invalid(form)

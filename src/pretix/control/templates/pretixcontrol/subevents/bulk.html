@@ -434,6 +434,12 @@
                     </button>
                 </p>
         </fieldset>
+        <fieldset>
+            <legend>{% trans "Additional settings" %}</legend>
+            {% for f in plugin_forms %}
+                {% bootstrap_form f layout="control" %}
+            {% endfor %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

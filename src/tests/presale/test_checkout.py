@@ -17,7 +17,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Event, Invoice, InvoiceAddress, Item, ItemCategory, Order,
     OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer, Quota,
-    Voucher,
+    SeatingPlan, Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem,
@@ -2590,3 +2590,86 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
+
+
+class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.plan = SeatingPlan.objects.create(
+            name="Plan", organizer=self.orga, layout="{}"
+        )
+        self.event.seat_category_mappings.create(
+            layout_category='Stalls', product=self.ticket
+        )
+        self.seat_a1 = self.event.seats.create(name="A1", product=self.ticket, seat_guid="A1")
+        self.seat_a2 = self.event.seats.create(name="A2", product=self.ticket, seat_guid="A2")
+        self.seat_a3 = self.event.seats.create(name="A3", product=self.ticket, seat_guid="A3")
+        self.cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
+        )
+
+    @scopes_disabled()
+    def test_passes(self):
+        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        op = o.positions.first()
+        assert op.item == self.ticket
+        assert op.seat == self.seat_a1
+
+    @scopes_disabled()
+    def test_seat_required(self):
+        self.cp1.seat = None
+        self.cp1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
+
+    @scopes_disabled()
+    def test_seat_not_allowed(self):
+        self.cp1.item = self.workshop1
+        self.cp1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
+
+    @scopes_disabled()
+    def test_seat_invalid_product(self):
+        self.cp1.item = self.workshop1
+        self.cp1.save()
+        self.event.seat_category_mappings.create(
+            layout_category='Foo', product=self.workshop1
+        )
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
+
+    @scopes_disabled()
+    def test_seat_multiple_times_same_seat(self):
+        cp2 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
+        )
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
+        assert not CartPosition.objects.filter(pk=cp2.pk).exists()
+
+    @scopes_disabled()
+    def test_seat_blocked(self):
+        self.seat_a1.blocked = True
+        self.seat_a1.save()
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
+
+    @scopes_disabled()
+    def test_seat_taken(self):
+        CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key + '_other', item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
+        )
+        with self.assertRaises(OrderError):
+            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()

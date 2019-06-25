@@ -24,6 +24,7 @@ from .orders import (
 from .organizer import (
     Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,
 )
+from .seating import Seat, SeatCategoryMapping, SeatingPlan
 from .tax import TaxRule
 from .vouchers import Voucher
 from .waitinglist import WaitingListEntry
