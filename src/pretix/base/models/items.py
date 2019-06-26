@@ -1269,6 +1269,15 @@ class Quota(LoggedModel):
     cached_availability_paid_orders = models.PositiveIntegerField(null=True, blank=True)
     cached_availability_time = models.DateTimeField(null=True, blank=True)
 
+    close_when_sold_out = models.BooleanField(
+        verbose_name=_('Close this quota permanently once it is sold out.'),
+        help_text=_('If you enable this, when the quota is sold out once, no more tickets will be sold, '
+                    'even if tickets become available again through cancellations or expiring orders. Of course, '
+                    'you can always re-open it manually.'),
+        default=False
+    )
+    closed = models.BooleanField(default=False)
+
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
@@ -1360,6 +1369,9 @@ class Quota(LoggedModel):
 
     def _availability(self, now_dt: datetime=None, count_waitinglist=True):
         now_dt = now_dt or now()
+        if self.closed:
+            return Quota.AVAILABILITY_ORDERED, 0
+
         size_left = self.size
         if size_left is None:
             return Quota.AVAILABILITY_OK, None
