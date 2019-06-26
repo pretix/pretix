@@ -177,11 +177,9 @@ class EventOrderFilterForm(OrderFilterForm):
     orders = {'code': 'code', 'email': 'email', 'total': 'total',
               'datetime': 'datetime', 'status': 'status'}
 
-    item = forms.ModelChoiceField(
+    item = forms.ChoiceField(
         label=_('Products'),
-        queryset=Item.objects.none(),
         required=False,
-        empty_label=_('All products')
     )
     subevent = forms.ModelChoiceField(
         label=pgettext_lazy('subevent', 'Date'),
@@ -241,12 +239,28 @@ class EventOrderFilterForm(OrderFilterForm):
         elif 'subevent':
             del self.fields['subevent']
 
+        choices = [('', _('All products'))]
+        for i in self.event.items.prefetch_related('variations').all():
+            variations = list(i.variations.all())
+            if variations:
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+            else:
+                choices.append((str(i.pk), i.name))
+        self.fields['item'].choices = choices
+
     def filter_qs(self, qs):
         fdata = self.cleaned_data
         qs = super().filter_qs(qs)
 
-        if fdata.get('item'):
-            qs = qs.filter(all_positions__item=fdata.get('item'), all_positions__canceled=False).distinct()
+        item = fdata.get('item')
+        if item:
+            if '-' in item:
+                var = item.split('-')[1]
+                qs = qs.filter(all_positions__variation_id=var, all_positions__canceled=False).distinct()
+            else:
+                qs = qs.filter(all_positions__item_id=fdata.get('item'), all_positions__canceled=False).distinct()
 
         if fdata.get('subevent'):
             qs = qs.filter(all_positions__subevent=fdata.get('subevent'), all_positions__canceled=False).distinct()

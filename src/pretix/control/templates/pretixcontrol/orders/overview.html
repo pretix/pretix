@@ -86,11 +86,29 @@
                             {% for var in item.all_variations %}
                                 <tr class="variation {% if tup.0 %}categorized{% endif %}">
                                     <td>{{ var }}</td>
-                                    <td>{{ var.num.canceled|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num.expired|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num.pending|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num.paid|togglesum:request.event.currency }}</td>
-                                    <td>{{ var.num.total|togglesum:request.event.currency }}</td>
+                                    <td>
+                                        <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=c&amp;provider={{ item.provider }}">
+                                            {{ var.num.canceled|togglesum:request.event.currency }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=e&amp;provider={{ item.provider }}">
+                                            {{ var.num.expired|togglesum:request.event.currency }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=n&amp;provider={{ item.provider }}">
+                                            {{ var.num.pending|togglesum:request.event.currency }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ listurl }}?item={{ item.id }}-{{ var.id }}&amp;status=p&amp;provider={{ item.provider }}">
+                                            {{ var.num.paid|togglesum:request.event.currency }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ var.num.total|togglesum:request.event.currency }}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
