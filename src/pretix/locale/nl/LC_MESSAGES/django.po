@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-25 09:08+0000\n"
-"PO-Revision-Date: 2019-06-26 00:00+0000\n"
+"PO-Revision-Date: 2019-06-27 09:39+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2471,7 +2471,7 @@ msgstr "Het bestelde product \"{item}\" is niet langer beschikbaar."
 #: pretix/base/models/orders.py:659
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "De gekozen stoel \"{seat}\" is niet meer beschikbaar."
+msgstr "De stoel \"{seat}\" is niet meer beschikbaar."
 
 #: pretix/base/models/orders.py:779 pretix/base/services/orders.py:697
 #: pretix/control/views/event.py:697
@@ -4204,8 +4204,8 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
-"U koost de stoel \"{seat}\" voor een datum die niet overeenkomt met de "
-"gekozen ticketdatum. Kies opnieuw een stoel."
+"De gekozen stoel \"{seat}\" is niet beschikbaar op de gekozen datum. Kies "
+"opnieuw een stoel."
 
 #: pretix/base/services/orders.py:993
 msgid "The selected product requires you to select a seat."
