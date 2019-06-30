@@ -21,6 +21,7 @@
             <legend>{% trans "General information" %}</legend>
             {% bootstrap_field form.name layout="control" %}
             {% bootstrap_field form.size layout="control" %}
+            {% bootstrap_field form.close_when_sold_out layout="control" %}
             {% if form.subevent %}
                 {% bootstrap_field form.subevent layout="control" %}
             {% endif %}

@@ -1,5 +1,7 @@
 {% load i18n %}
-{% if availability.0 == 10 %}
+{% if closed %}
+    <span class="label label-danger">{% trans "Closed" %}</span>
+{% elif availability.0 == 10 %}
     <span class="label label-warning">{% trans "Sold out (pending orders)" %}</span>
 {% elif availability.0 == 100 %}
     {% if availability.1 != None %}

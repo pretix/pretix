@@ -1270,7 +1270,7 @@ class Quota(LoggedModel):
     cached_availability_time = models.DateTimeField(null=True, blank=True)
 
     close_when_sold_out = models.BooleanField(
-        verbose_name=_('Close this quota permanently once it is sold out.'),
+        verbose_name=_('Close this quota permanently once it is sold out'),
         help_text=_('If you enable this, when the quota is sold out once, no more tickets will be sold, '
                     'even if tickets become available again through cancellations or expiring orders. Of course, '
                     'you can always re-open it manually.'),
@@ -1343,6 +1343,11 @@ class Quota(LoggedModel):
                                                   count_waitinglist=count_waitinglist):
             res = resp
 
+        if res[0] <= Quota.AVAILABILITY_ORDERED and self.close_when_sold_out and not self.closed:
+            self.closed = True
+            self.save(update_fields=['closed'])
+            self.log_action('pretix.event.quota.closed')
+
         self.event.cache.delete('item_quota_cache')
         rewrite_cache = count_waitinglist and (
             not self.cache_is_hot(now_dt) or res[0] > self.cached_availability_state
@@ -1367,9 +1372,9 @@ class Quota(LoggedModel):
             _cache['_count_waitinglist'] = count_waitinglist
         return res
 
-    def _availability(self, now_dt: datetime=None, count_waitinglist=True):
+    def _availability(self, now_dt: datetime=None, count_waitinglist=True, ignore_closed=False):
         now_dt = now_dt or now()
-        if self.closed:
+        if self.closed and not ignore_closed:
             return Quota.AVAILABILITY_ORDERED, 0
 
         size_left = self.size

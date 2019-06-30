@@ -20,6 +20,29 @@
             <span class="fa fa-calendar"></span> {{ quota.subevent.name }} – {{ quota.subevent.get_date_range_display }}
         </p>
     {% endif %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {% if quota.closed %}
+            {% if closed_and_sold_out %}
+                <div class="alert alert-info">
+                    {% if not quota.close_when_sold_out %}
+                        <button type="submit" class="btn btn-default pull-right" name="reopen" value="true">{% trans "Open quota" %}</button>
+                    {% endif %}
+                    {% trans "This quota is sold out and closed. Even if tickets become available e.g. through cancellations, they will not become available again unless you manually re-open the quota on this page." %}
+                    <div class="clearfix"></div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    {% if quota.close_when_sold_out %}
+                        <button type="submit" class="btn btn-primary pull-right" name="reopen" value="true">{% trans "Open quota" %}</button>
+                    {% endif %}
+                    {% trans "This quota is closed since it has been sold out before. Tickets are theoretically available, but will not be sold unless you manually re-open the quota." %}
+                    <div class="clearfix"></div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </form>
     <div class="row" id="quota-stats">
         <div class="col-md-5 col-xs-12">
             <legend>{% trans "Usage overview" %}</legend>
@@ -30,7 +53,6 @@
         </div>
         <div class="col-md-5 col-xs-12">
             <legend>{% trans "Availability calculation" %}</legend>
-
             <div class="row">
                 <div class="col-xs-9">{% trans "Total quota" %}</div>
                 <div class="col-xs-3 text-right">

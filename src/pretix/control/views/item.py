@@ -684,6 +684,8 @@ class QuotaView(ChartContainingView, DetailView):
             Q(Q(self.object._position_lookup) | Q(quota=self.object)) &
             Q(redeemed__lt=F('max_usages'))
         ).exists()
+        if self.object.closed:
+            ctx['closed_and_sold_out'] = self.object._availability(ignore_closed=True)[0] <= Quota.AVAILABILITY_ORDERED
 
         return ctx
 
@@ -694,6 +696,13 @@ class QuotaView(ChartContainingView, DetailView):
             )
         except Quota.DoesNotExist:
             raise Http404(_("The requested quota does not exist."))
+
+    def post(self, request, *args, **kwargs):
+        if 'reopen' in request.POST:
+            quota = self.get_object()
+            quota.closed = False
+            quota.save(update_fields=['closed'])
+            quota.log_action('pretix.event.quota.opened', user=request.user)
 
 
 class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
