@@ -125,7 +125,7 @@ setup(
         'pycparser==2.13',
         'django-redis==4.10.*',
         'redis==3.2.*',
-        'stripe==2.27.*',
+        'stripe==2.29.*',
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',
         'django-i18nfield>=1.4.0',
