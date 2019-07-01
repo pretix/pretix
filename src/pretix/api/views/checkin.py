@@ -93,6 +93,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         )
         if not clist.all_products:
             pqs = pqs.filter(item__in=clist.limit_products.values_list('id', flat=True))
+            cqs = cqs.filter(position__item__in=clist.limit_products.values_list('id', flat=True))
 
         ev = clist.subevent or clist.event
         response = {
