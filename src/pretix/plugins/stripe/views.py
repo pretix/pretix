@@ -381,6 +381,7 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
 
     return HttpResponse(status=200)
 
+
 @event_permission_required('can_change_event_settings')
 @require_POST
 def oauth_disconnect(request, **kwargs):
