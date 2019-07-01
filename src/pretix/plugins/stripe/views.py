@@ -534,7 +534,7 @@ class ScaView(StripeOrderView, View):
             r._csp_ignore = True
             return r
         else:
-            StripeCC._handle_payment_intent(prov, request, self.payment)
+            StripeCC._handle_payment_intent(prov, request, self.payment, intent)
 
             return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
                 'order': self.order.code,

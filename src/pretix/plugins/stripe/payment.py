@@ -603,7 +603,7 @@ class StripeCC(StripeMethod):
         finally:
             del request.session['payment_stripe_payment_method_id']
 
-    def _handle_payment_intent(self, request, payment):
+    def _handle_payment_intent(self, request, payment, intent=None):
         self._init_api()
 
         try:
@@ -640,10 +640,11 @@ class StripeCC(StripeMethod):
                 payment_info = json.loads(payment.info)
 
                 if 'id' in payment_info:
-                    intent = stripe.PaymentIntent.retrieve(
-                        payment_info['id'],
-                        **self.api_kwargs
-                    )
+                    if not intent:
+                        intent = stripe.PaymentIntent.retrieve(
+                            payment_info['id'],
+                            **self.api_kwargs
+                        )
                 else:
                     return
 
