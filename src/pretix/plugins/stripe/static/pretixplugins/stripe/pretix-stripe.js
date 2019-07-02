@@ -161,7 +161,7 @@ var pretixstripe = {
 };
 $(function () {
     if ($("#stripe_payment_intent_SCA_status").length) {
-        window.top.postMessage('3DS-authentication-complete.' + $.trim($("#order_status").html()), '*');
+        window.parent.postMessage('3DS-authentication-complete.' + $.trim($("#order_status").html()), '*');
         return;
     } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
         let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
