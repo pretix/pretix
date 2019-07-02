@@ -10,3 +10,11 @@
     <script type="text/plain" id="stripe_payment_intent_SCA_status">3DS-authentication-complete</script>
     <script type="text/plain" id="order_status">{{ order.status }}</script>
 {% endblock %}
+{% block page %}
+    <div class="text-center">
+        <i class="fa fa-cog big-rotating-icon"></i>
+    </div>
+    <h2 class="text-center">
+        {% trans "Confirming your payment…" %}
+    </h2>
+{% endblock %}

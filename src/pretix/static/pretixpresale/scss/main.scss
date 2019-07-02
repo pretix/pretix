@@ -88,6 +88,12 @@ body.loading .container {
     filter: blur(2px);
 }
 
+.big-rotating-icon {
+    -webkit-animation: fa-spin 8s infinite linear;
+    animation: fa-spin 8s infinite linear;
+    font-size: 120px;
+    color: $brand-primary;
+}
 #loadingmodal, #ajaxerr {
     position: fixed;
     top: 0;
@@ -121,12 +127,6 @@ body.loading .container {
             float: left;
             width: 150px;
             text-align: center;
-            .big-rotating-icon {
-                -webkit-animation: fa-spin 8s infinite linear;
-                animation: fa-spin 8s infinite linear;
-                font-size: 120px;
-                color: $brand-primary;
-            }
         }
         .modal-card-content {
             margin-left: 160px;
