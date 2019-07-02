@@ -15,7 +15,6 @@ var pretixstripe = {
         // ToDo: 'card' --> proper type of payment method
         pretixstripe.stripe.createPaymentMethod('card', pretixstripe.card).then(function (result) {
             waitingDialog.hide();
-            console.log(result);
             if (result.error) {
                 $(".stripe-errors").stop().hide().removeClass("sr-only");
                 $(".stripe-errors").html("<div class='alert alert-danger'>" + result.error.message + "</div>");
