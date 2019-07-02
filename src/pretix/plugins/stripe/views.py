@@ -26,7 +26,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.models import ReferencedStripeObject
-from pretix.plugins.stripe.payment import StripeCC
+from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
     get_domain_for_event, stripe_verify_domain,
 )
@@ -160,6 +160,9 @@ def webhook(request, *args, **kwargs):
     elif event_json['data']['object']['object'] == "source":
         func = source_webhook
         objid = event_json['data']['object']['id']
+    elif event_json['data']['object']['object'] == "payment_intent":
+        func = paymentintent_webhook
+        objid = event_json['data']['object']['id']
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
@@ -187,6 +190,7 @@ SOURCE_TYPES = {
 def charge_webhook(event, event_json, charge_id, rso):
     prov = StripeCC(event)
     prov._init_api()
+
     try:
         charge = stripe.Charge.retrieve(charge_id, expand=['dispute'], **prov.api_kwargs)
     except stripe.error.StripeError:
@@ -359,6 +363,25 @@ def source_webhook(event, event_json, source_id, rso):
     return HttpResponse(status=200)
 
 
+def paymentintent_webhook(event, event_json, paymentintent_id, rso):
+    prov = StripeCC(event)
+    prov._init_api()
+
+    try:
+        paymentintent = stripe.PaymentIntent.retrieve(paymentintent_id, **prov.api_kwargs)
+    except stripe.error.StripeError:
+        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
+        return HttpResponse('Charge not found', status=500)
+
+    for charge in paymentintent.charges.data:
+        ReferencedStripeObject.objects.get_or_create(
+            reference=charge.id,
+            defaults={'order': rso.payment.order, 'payment': rso.payment}
+        )
+
+    return HttpResponse(status=200)
+
+
 @event_permission_required('can_change_event_settings')
 @require_POST
 def oauth_disconnect(request, **kwargs):
@@ -409,15 +432,33 @@ class StripeOrderView:
     def pprov(self):
         return self.request.event.get_payment_providers()[self.payment.provider]
 
+    def _redirect_to_order(self):
+        if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
+            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
+                                           'in your emails to continue.'))
+            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+
+        return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
+            'order': self.order.code,
+            'secret': self.order.secret
+        }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
+
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
         prov = self.pprov
         prov._init_api()
-        src = stripe.Source.retrieve(request.GET.get('source'), **prov.api_kwargs)
-        if src.client_secret != request.GET.get('client_secret'):
+        try:
+            src = stripe.Source.retrieve(request.GET.get('source'), **prov.api_kwargs)
+        except stripe.error.InvalidRequestError:
+            logger.exception('Could not retrieve source')
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
+                                           'in your emails to continue.'))
+            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+
+        if src.client_secret != request.GET.get('client_secret'):
+            messages.error(self.request, _('Sorry, there was an error in the payment process.'
                                            'in your emails to continue.'))
             return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
@@ -460,13 +501,67 @@ class ReturnView(StripeOrderView, View):
                                                'get in touch with us if this problem persists.'))
         return self._redirect_to_order()
 
-    def _redirect_to_order(self):
-        if self.request.session.get('payment_stripe_order_secret') != self.order.secret:
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
 
-        return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
-            'order': self.order.code,
-            'secret': self.order.secret
-        }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
+@method_decorator(xframe_options_exempt, 'dispatch')
+class ScaView(StripeOrderView, View):
+
+    def get(self, request, *args, **kwargs):
+        prov = self.pprov
+        prov._init_api()
+
+        if self.payment.state in (OrderPayment.PAYMENT_STATE_CONFIRMED,
+                                  OrderPayment.PAYMENT_STATE_CANCELED,
+                                  OrderPayment.PAYMENT_STATE_FAILED):
+            return self._redirect_to_order()
+
+        payment_info = json.loads(self.payment.info)
+
+        if 'id' in payment_info:
+            try:
+                intent = stripe.PaymentIntent.retrieve(
+                    payment_info['id'],
+                    **prov.api_kwargs
+                )
+            except stripe.error.InvalidRequestError:
+                logger.exception('Could not retrieve payment intent')
+                messages.error(self.request, _('Sorry, there was an error in the payment process.'))
+                return self._redirect_to_order()
+        else:
+            messages.error(self.request, _('Sorry, there was an error in the payment process.'))
+            return self._redirect_to_order()
+
+        if intent.status == 'requires_action' and intent.next_action.type in ['use_stripe_sdk', 'redirect_to_url']:
+            ctx = {
+                'order': self.order,
+                'stripe_settings': StripeSettingsHolder(self.order.event).settings,
+            }
+            if intent.next_action.type == 'use_stripe_sdk':
+                ctx['payment_intent_client_secret'] = intent.client_secret
+            elif intent.next_action.type == 'redirect_to_url':
+                ctx['payment_intent_next_action_redirect_url'] = intent.next_action.redirect_to_url['url']
+
+            r = render(request, 'pretixplugins/stripe/sca.html', ctx)
+            r._csp_ignore = True
+            return r
+        else:
+            try:
+                prov._handle_payment_intent(request, self.payment, intent)
+            except PaymentException as e:
+                messages.error(request, str(e))
+
+            return self._redirect_to_order()
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class ScaReturnView(StripeOrderView, View):
+    def get(self, request, *args, **kwargs):
+        prov = self.pprov
+
+        try:
+            prov._handle_payment_intent(request, self.payment)
+        except PaymentException as e:
+            messages.error(request, str(e))
+
+        self.order.refresh_from_db()
+
+        return render(request, 'pretixplugins/stripe/sca_return.html', {'order': self.order})

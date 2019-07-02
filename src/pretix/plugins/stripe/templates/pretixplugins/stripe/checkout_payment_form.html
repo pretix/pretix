@@ -10,7 +10,7 @@
         </div>
     </noscript>
 
-    {% if request.session.payment_stripe_token %}
+    {% if request.session.payment_stripe_payment_method_id %}
         <div id="stripe-current-card">
             <p>{% blocktrans trimmed %}
                 You already entered a card number that we will use to charge the payment amount.
@@ -58,7 +58,7 @@
             Stripe and never touches our servers.
         {% endblocktrans %}
         <input type="hidden" name="stripe_total" value="{{ total }}" id="stripe_total"/>
-        <input type="hidden" name="stripe_token" value="{{ request.session.payment_stripe_token }}" id="stripe_token"/>
+        <input type="hidden" name="stripe_payment_method_id" value="{{ request.session.payment_stripe_payment_method_id }}" id="stripe_payment_method_id"/>
         <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_last4 }}"
                 id="stripe_card_last4"/>
         <input type="hidden" name="stripe_card_brand" value="{{ request.session.payment_stripe_brand }}"

@@ -3,8 +3,8 @@ from django.conf.urls import include, url
 from pretix.multidomain import event_url
 
 from .views import (
-    ReturnView, applepay_association, oauth_disconnect, oauth_return,
-    redirect_view, webhook,
+    ReturnView, ScaReturnView, ScaView, applepay_association, oauth_disconnect,
+    oauth_return, redirect_view, webhook,
 )
 
 event_patterns = [
@@ -12,6 +12,8 @@ event_patterns = [
         event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
         url(r'^redirect/$', redirect_view, name='redirect'),
         url(r'^return/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ReturnView.as_view(), name='return'),
+        url(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ScaView.as_view(), name='sca'),
+        url(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/return/$', ScaReturnView.as_view(), name='sca.return'),
     ])),
 ]
 

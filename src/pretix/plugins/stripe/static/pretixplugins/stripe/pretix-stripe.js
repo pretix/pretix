@@ -12,18 +12,19 @@ var pretixstripe = {
         waitingDialog.show(gettext("Contacting Stripe …"));
         $(".stripe-errors").hide();
 
-        pretixstripe.stripe.createSource(pretixstripe.card).then(function (result) {
+        // ToDo: 'card' --> proper type of payment method
+        pretixstripe.stripe.createPaymentMethod('card', pretixstripe.card).then(function (result) {
             waitingDialog.hide();
             if (result.error) {
                 $(".stripe-errors").stop().hide().removeClass("sr-only");
                 $(".stripe-errors").html("<div class='alert alert-danger'>" + result.error.message + "</div>");
                 $(".stripe-errors").slideDown();
             } else {
-                var $form = $("#stripe_token").closest("form");
+                var $form = $("#stripe_payment_method_id").closest("form");
                 // Insert the token into the form so it gets submitted to the server
-                $("#stripe_token").val(result.source.id);
-                $("#stripe_card_brand").val(result.source.card.brand);
-                $("#stripe_card_last4").val(result.source.card.last4);
+                $("#stripe_payment_method_id").val(result.paymentMethod.id);
+                $("#stripe_card_brand").val(result.paymentMethod.card.brand);
+                $("#stripe_card_last4").val(result.paymentMethod.card.last4);
                 // and submit
                 $form.get(0).submit();
             }
@@ -63,14 +64,14 @@ var pretixstripe = {
                                 requestShipping: false,
                             });
 
-                            pretixstripe.paymentRequest.on('token', function (ev) {
+                            pretixstripe.paymentRequest.on('paymentmethod', function (ev) {
                                 ev.complete('success');
 
-                                var $form = $("#stripe_token").closest("form");
+                                var $form = $("#stripe_payment_method_id").closest("form");
                                 // Insert the token into the form so it gets submitted to the server
-                                $("#stripe_token").val(ev.token.id);
-                                $("#stripe_card_brand").val(ev.token.card.brand);
-                                $("#stripe_card_last4").val(ev.token.card.last4);
+                                $("#stripe_payment_method_id").val(ev.paymentMethod.id);
+                                $("#stripe_card_brand").val(ev.paymentMethod.card.brand);
+                                $("#stripe_card_last4").val(ev.paymentMethod.card.last4);
                                 // and submit
                                 $form.get(0).submit();
                             });
@@ -125,84 +126,83 @@ var pretixstripe = {
             }
         );
     },
-    'load_checkout': function () {
-      if (pretixstripe.checkout_handler !== null) {
-        return;
-      }
-      $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", true);
-        $.ajax(
-            {
-                url: 'https://checkout.stripe.com/checkout.js',
-                dataType: 'script',
-                success: function () {
-                    pretixstripe.checkout_handler = StripeCheckout.configure({
-                        key: $.trim($("#stripe_pubkey").html()),
-                        locale: 'auto',
-                        token: function (token) {
-                            var $form = $("#stripe-checkout").parents("form");
-                            $("#stripe_token").val(token.id);
-                            $("#stripe_card_brand").val(token.card.brand);
-                            $("#stripe_card_last4").val(token.card.last4);
-                            $("#stripe_card_brand_display").text(token.card.brand);
-                            $("#stripe_card_last4_display").text(token.card.last4);
-                            $($form.get(0)).submit();
-                        },
-                        shippingAddress: false,
-                        allowRememberMe: false,
-                        billingAddress: false
+    'handleCardAction': function (payment_intent_client_secret) {
+        $.ajax({
+            url: 'https://js.stripe.com/v3/',
+            dataType: 'script',
+            success: function () {
+                if ($.trim($("#stripe_connectedAccountId").html())) {
+                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()), {
+                        stripeAccount: $.trim($("#stripe_connectedAccountId").html())
                     });
-                    $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
+                } else {
+                    pretixstripe.stripe = Stripe($.trim($("#stripe_pubkey").html()));
                 }
+                pretixstripe.stripe.handleCardAction(
+                    payment_intent_client_secret
+                ).then(function (result) {
+                    waitingDialog.show(gettext("Confirming your payment …"));
+                    location.reload();
+                });
             }
-        );
-    },
-    'show_checkout': function () {
-        var amount = Math.round(
-            parseFloat(
-                $("#stripe-checkout").parents("[data-total]").attr("data-total").replace(",", ".")
-            ) * 100
-        );
-        pretixstripe.checkout_handler.open({
-            name: $("#organizer_name").val(),
-            description: $("#event_name").val(),
-            currency: $("#stripe_currency").val(),
-            email: $("#stripe_email").val(),
-            amount: amount
         });
     },
-    'checkout_handler': null
+    'handleCardActioniFrame': function (payment_intent_next_action_redirect_url) {
+        waitingDialog.show(gettext("Contacting your bank …"));
+        let iframe = document.createElement('iframe');
+        iframe.src = payment_intent_next_action_redirect_url;
+        iframe.className = 'embed-responsive-item';
+        $('#scacontainer').append(iframe);
+        $('#scacontainer iframe').load(function () {
+            waitingDialog.hide();
+        });
+    }
 };
 $(function () {
-    if (!$(".stripe-container, #stripe-checkout").length) // Not on the checkout page
+    if ($("#stripe_payment_intent_SCA_status").length) {
+        window.parent.postMessage('3DS-authentication-complete.' + $.trim($("#order_status").html()), '*');
+        return;
+    } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
+        let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
+        pretixstripe.handleCardActioniFrame(payment_intent_next_action_redirect_url);
+    } else if ($("#stripe_payment_intent_client_secret").length) {
+        let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
+        pretixstripe.handleCardAction(payment_intent_client_secret);
+    }
+
+    $(window).on("message onmessage", function(e) {
+        if (typeof e.originalEvent.data === "string" && e.originalEvent.data.startsWith('3DS-authentication-complete.')) {
+            waitingDialog.show(gettext("Confirming your payment …"));
+            $('#scacontainer').hide();
+            $('#continuebutton').removeClass('hidden');
+
+            if (e.originalEvent.data.split('.')[1] == 'p') {
+                window.location.href = $('#continuebutton').attr('href') + '?paid=yes';
+            } else {
+                window.location.href = $('#continuebutton').attr('href');
+            }
+        }
+    });
+
+    if (!$(".stripe-container").length)
         return;
 
     if ($("input[name=payment][value=stripe]").is(':checked') || $(".payment-redo-form").length) {
-        if ($("#stripe-checkout").length) {
-            pretixstripe.load_checkout();
-        } else {
           pretixstripe.load();
-        }
     } else {
         $("input[name=payment]").change(function () {
             if ($(this).val() === 'stripe') {
-                if ($("#stripe-checkout").length) {
-                    pretixstripe.load_checkout();
-                } else {
-                    pretixstripe.load();
-                }
+                pretixstripe.load();
             }
         })
     }
 
     $("#stripe_other_card").click(
         function (e) {
-            $("#stripe_token").val("");
-            if ($("#stripe-checkout").length) {
-                pretixstripe.show_checkout();
-            } else {
-                $("#stripe-current-card").slideUp();
-                $("#stripe-elements").slideDown();
-            }
+            $("#stripe_payment_method_id").val("");
+            $("#stripe-current-card").slideUp();
+            $("#stripe-elements").slideDown();
+
             e.preventDefault();
             return false;
         }
@@ -218,19 +218,10 @@ $(function () {
                 return null;
             }
             if (($("input[name=payment][value=stripe]").prop('checked') || $("input[name=payment][type=radio]").length === 0)
-                && $("#stripe_token").val() == "") {
-                if ($("#stripe-checkout").length) {
-                    pretixstripe.show_checkout();
-                } else {
-                    pretixstripe.cc_request();
-                }
+                && $("#stripe_payment_method_id").val() == "") {
+                pretixstripe.cc_request();
                 return false;
             }
         }
     );
-    $(window).on('popstate', function () {
-        if (pretixstripe.checkout_handler) {
-            pretixstripe.checkout_handler.close();
-        }
-    });
 });
