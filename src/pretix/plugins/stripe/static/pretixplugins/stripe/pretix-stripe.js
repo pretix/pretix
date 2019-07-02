@@ -171,7 +171,7 @@ $(function () {
     }
 
     $(window).on("message onmessage", function(e) {
-        if (e.originalEvent.data.startsWith('3DS-authentication-complete.')) {
+        if (typeof e.originalEvent.data === "string" && e.originalEvent.data.startsWith('3DS-authentication-complete.')) {
             waitingDialog.show(gettext("Confirming your payment …"));
             $('#scacontainer').hide();
             $('#continuebutton').removeClass('hidden');
