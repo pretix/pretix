@@ -545,7 +545,7 @@ class ScaView(StripeOrderView, View):
             return r
         else:
             try:
-                StripeCC._handle_payment_intent(prov, request, self.payment, intent)
+                prov._handle_payment_intent(request, self.payment, intent)
             except PaymentException as e:
                 messages.error(request, str(e))
 
@@ -556,10 +556,9 @@ class ScaView(StripeOrderView, View):
 class ScaReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
         prov = self.pprov
-        prov._init_api()
 
         try:
-            StripeCC._handle_payment_intent(prov, request, self.payment)
+            prov._handle_payment_intent(request, self.payment)
         except PaymentException as e:
             messages.error(request, str(e))
 
