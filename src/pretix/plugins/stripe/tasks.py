@@ -4,7 +4,6 @@ from urllib.parse import urlsplit
 import stripe
 from django.conf import settings
 
-from pretix.base.models import Event
 from pretix.base.services.tasks import EventTask
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import get_domain
@@ -29,9 +28,8 @@ def get_stripe_account_key(prov):
 
 
 @app.task(base=EventTask, max_retries=5, default_retry_delay=1)
-def stripe_verify_domain(event_id, domain):
+def stripe_verify_domain(event, domain):
     from pretix.plugins.stripe.payment import StripeCC
-    event = Event.objects.get(pk=event_id)
     prov = StripeCC(event)
     account = get_stripe_account_key(prov)
 
