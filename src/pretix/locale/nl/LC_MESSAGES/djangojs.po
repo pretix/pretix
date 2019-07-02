@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-25 09:08+0000\n"
-"PO-Revision-Date: 2019-06-11 16:00+0000\n"
+"PO-Revision-Date: 2019-06-26 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -426,7 +426,7 @@ msgstr "Vorige maand"
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Open stoelkeuze"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgid "Mo"
