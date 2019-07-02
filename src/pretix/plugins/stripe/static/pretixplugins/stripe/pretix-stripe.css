@@ -24,6 +24,11 @@
   margin: 15px 0;
 }
 
+.embed-responsive-sca {
+  padding-bottom: 75%;
+  min-height: 600px;
+}
+
 @media only screen and (max-width: 999px) {
   .hr {
     width: 100%;
