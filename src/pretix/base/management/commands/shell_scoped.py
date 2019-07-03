@@ -17,7 +17,7 @@ class Command(BaseCommand):
         flags = parser.parse_known_args(sys.argv[2:])[1]
         if "--override" in flags:
             with scopes_disabled():
-                return call_command("shell", *args, **options)
+                return call_command("shell_plus", *args, **options)
 
         lookups = {}
         for flag in flags:
@@ -36,4 +36,4 @@ class Command(BaseCommand):
             for app_name, app_value in lookups.items()
         }
         with scope(**scope_options):
-            return call_command("shell", *args, **options)
+            return call_command("shell_plus", *args, **options)
