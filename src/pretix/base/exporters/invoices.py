@@ -20,7 +20,7 @@ class InvoiceExporter(BaseExporter):
     identifier = 'invoices'
     verbose_name = _('All invoices')
 
-    def render(self, form_data: dict):
+    def render(self, form_data: dict, output_file=None):
         qs = self.event.invoices.filter(shredded=False)
 
         if form_data.get('payment_provider'):
@@ -47,7 +47,7 @@ class InvoiceExporter(BaseExporter):
 
         with tempfile.TemporaryDirectory() as d:
             any = False
-            with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
+            with ZipFile(output_file or os.path.join(d, 'tmp.zip'), 'w') as zipf:
                 for i in qs:
                     try:
                         if not i.file:
@@ -68,8 +68,11 @@ class InvoiceExporter(BaseExporter):
             if not any:
                 return None
 
-            with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
-                return '{}_invoices.zip'.format(self.event.slug), 'application/zip', zipf.read()
+            if output_file:
+                return '{}_invoices.zip'.format(self.event.slug), 'application/zip', None
+            else:
+                with open(os.path.join(d, 'tmp.zip'), 'rb') as zipf:
+                    return '{}_invoices.zip'.format(self.event.slug), 'application/zip', zipf.read()
 
     @property
     def export_form_fields(self):

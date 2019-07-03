@@ -71,6 +71,8 @@ class BaseExporter:
 
         :type form_data: dict
         :param form_data: The form data of the export details form
+        :param output_file: You can optionally accept a parameter that will be given a file handle to write the
+                            output to. In this case, you can return None instead of the file content.
 
         Note: If you use a ``ModelChoiceField`` (or a ``ModelMultipleChoiceField``), the
         ``form_data`` will not contain the model instance but only it's primary key (or
@@ -111,14 +113,20 @@ class ListExporter(BaseExporter):
     def get_filename(self):
         return 'export.csv'
 
-    def _render_csv(self, form_data, **kwargs):
-        output = io.StringIO()
-        writer = csv.writer(output, **kwargs)
-        for line in self.iterate_list(form_data):
-            writer.writerow(line)
-        return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
+    def _render_csv(self, form_data, output_file=None, **kwargs):
+        if output_file:
+            writer = csv.writer(output_file, **kwargs)
+            for line in self.iterate_list(form_data):
+                writer.writerow(line)
+            return self.get_filename() + '.csv', 'text/csv', None
+        else:
+            output = io.StringIO()
+            writer = csv.writer(output, **kwargs)
+            for line in self.iterate_list(form_data):
+                writer.writerow(line)
+            return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
-    def _render_xlsx(self, form_data):
+    def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook()
         ws = wb.get_active_sheet()
         try:
@@ -129,20 +137,24 @@ class ListExporter(BaseExporter):
             for j, val in enumerate(line):
                 ws.cell(row=i + 1, column=j + 1).value = str(val) if not isinstance(val, KNOWN_TYPES) else val
 
-        with tempfile.NamedTemporaryFile(suffix='.xlsx') as f:
-            wb.save(f.name)
-            f.seek(0)
-            return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', f.read()
+        if output_file:
+            wb.save(output_file)
+            return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', None
+        else:
+            with tempfile.NamedTemporaryFile(suffix='.xlsx') as f:
+                wb.save(f.name)
+                f.seek(0)
+                return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', f.read()
 
-    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
+    def render(self, form_data: dict, output_file=None) -> Tuple[str, str, bytes]:
         if form_data.get('_format') == 'xlsx':
-            return self._render_xlsx(form_data)
+            return self._render_xlsx(form_data, output_file=output_file)
         elif form_data.get('_format') == 'default':
-            return self._render_csv(form_data, quoting=csv.QUOTE_NONNUMERIC, delimiter=',')
+            return self._render_csv(form_data, quoting=csv.QUOTE_NONNUMERIC, delimiter=',', output_file=output_file)
         elif form_data.get('_format') == 'csv-excel':
-            return self._render_csv(form_data, dialect='excel')
+            return self._render_csv(form_data, dialect='excel', output_file=output_file)
         elif form_data.get('_format') == 'semicolon':
-            return self._render_csv(form_data, dialect='excel', delimiter=';')
+            return self._render_csv(form_data, dialect='excel', delimiter=';', output_file=output_file)
 
 
 class MultiSheetListExporter(ListExporter):
@@ -180,14 +192,20 @@ class MultiSheetListExporter(ListExporter):
     def iterate_sheet(self, form_data, sheet):
         raise NotImplementedError()  # noqa
 
-    def _render_sheet_csv(self, form_data, sheet, **kwargs):
-        output = io.StringIO()
-        writer = csv.writer(output, **kwargs)
-        for line in self.iterate_sheet(form_data, sheet):
-            writer.writerow(line)
-        return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
+    def _render_sheet_csv(self, form_data, sheet, output_file=None, **kwargs):
+        if output_file:
+            writer = csv.writer(output_file, **kwargs)
+            for line in self.iterate_sheet(form_data, sheet):
+                writer.writerow(line)
+            return self.get_filename() + '.csv', 'text/csv', None
+        else:
+            output = io.StringIO()
+            writer = csv.writer(output, **kwargs)
+            for line in self.iterate_sheet(form_data, sheet):
+                writer.writerow(line)
+            return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
-    def _render_xlsx(self, form_data):
+    def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook()
         ws = wb.get_active_sheet()
         wb.remove(ws)
@@ -197,19 +215,24 @@ class MultiSheetListExporter(ListExporter):
                 for j, val in enumerate(line):
                     ws.cell(row=i + 1, column=j + 1).value = str(val) if not isinstance(val, KNOWN_TYPES) else val
 
-        with tempfile.NamedTemporaryFile(suffix='.xlsx') as f:
-            wb.save(f.name)
-            f.seek(0)
-            return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', f.read()
+        if output_file:
+            wb.save(output_file)
+            return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', None
+        else:
+            with tempfile.NamedTemporaryFile(suffix='.xlsx') as f:
+                wb.save(f.name)
+                f.seek(0)
+                return self.get_filename() + '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', f.read()
 
-    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
+    def render(self, form_data: dict, output_file=None) -> Tuple[str, str, bytes]:
         if form_data.get('_format') == 'xlsx':
-            return self._render_xlsx(form_data)
+            return self._render_xlsx(form_data, output_file=output_file)
         elif ':' in form_data.get('_format'):
             sheet, f = form_data.get('_format').split(':')
             if f == 'default':
-                return self._render_sheet_csv(form_data, sheet, quoting=csv.QUOTE_NONNUMERIC, delimiter=',')
+                return self._render_sheet_csv(form_data, sheet, quoting=csv.QUOTE_NONNUMERIC, delimiter=',',
+                                              output_file=output_file)
             elif f == 'excel':
-                return self._render_sheet_csv(form_data, sheet, dialect='excel')
+                return self._render_sheet_csv(form_data, sheet, dialect='excel', output_file=output_file)
             elif f == 'semicolon':
-                return self._render_sheet_csv(form_data, sheet, dialect='excel', delimiter=';')
+                return self._render_sheet_csv(form_data, sheet, dialect='excel', delimiter=';', output_file=output_file)
