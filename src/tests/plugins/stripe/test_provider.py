@@ -6,7 +6,7 @@ import pytest
 from django.test import RequestFactory
 from django.utils.timezone import now
 from django_scopes import scope
-from stripe.error import APIConnectionError, CardError, StripeError
+from stripe.error import APIConnectionError, CardError
 
 from pretix.base.models import Event, Order, OrderRefund, Organizer
 from pretix.base.payment import PaymentException
@@ -136,13 +136,13 @@ def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
 def test_perform_card_error(env, factory, monkeypatch):
     event, order = env
 
-    def charge_create(**kwargs):
+    def paymentintent_create(**kwargs):
         raise CardError(message='Foo', param='foo', code=100)
 
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
         'stripe_brand': 'Visa'
     })
@@ -162,13 +162,13 @@ def test_perform_card_error(env, factory, monkeypatch):
 def test_perform_stripe_error(env, factory, monkeypatch):
     event, order = env
 
-    def charge_create(**kwargs):
-        raise StripeError(message='Foo')
+    def paymentintent_create(**kwargs):
+        raise CardError(message='Foo', param='foo', code=100)
 
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
         'stripe_brand': 'Visa'
     })
@@ -188,17 +188,22 @@ def test_perform_stripe_error(env, factory, monkeypatch):
 def test_perform_failed(env, factory, monkeypatch):
     event, order = env
 
-    def charge_create(**kwargs):
-        c = MockedCharge()
+    def paymentintent_create(**kwargs):
+        assert kwargs['amount'] == 1337
+        assert kwargs['currency'] == 'eur'
+        assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
+        c = MockedPaymentintent()
         c.status = 'failed'
-        c.paid = True
         c.failure_message = 'Foo'
+        c.charges.data[0].paid = True
+        c.last_payment_error = Object()
+        c.last_payment_error.message = "Foo"
         return c
 
-    monkeypatch.setattr("stripe.Charge.create", charge_create)
+    monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_token': 'tok_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_last4': '4242',
         'stripe_brand': 'Visa'
     })
