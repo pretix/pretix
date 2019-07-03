@@ -698,8 +698,6 @@ Creating orders
 
    Creates a new order.
 
-   .. warning:: This endpoint is considered **experimental**. It might change at any time without prior notice.
-
    .. warning::
 
        This endpoint is intended for advanced users. It is not designed to be used to build your own shop frontend,
