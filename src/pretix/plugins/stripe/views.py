@@ -173,6 +173,17 @@ def webhook(request, *args, **kwargs):
         if hasattr(request, 'event'):
             return func(request.event, event_json, objid, None)
         else:
+            # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
+            # and can't match it -- but we know the payment intent ID!
+            if event_json['data']['object']['object'] == "charge" and event_json['data']['object']['payment_intent']:
+                try:
+                    rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+                        reference=event_json['data']['object']['payment_intent']
+                    )
+                    return func(rso.order.event, event_json, objid, rso)
+                except ReferencedStripeObject.DoesNotExist:
+                    pass
+
             return HttpResponse("Unable to detect event", status=200)
 
 
