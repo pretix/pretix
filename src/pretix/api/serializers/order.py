@@ -312,7 +312,6 @@ class OrderSerializer(I18nAwareModelSerializer):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
         update_fields = ['comment', 'checkin_attention', 'email', 'locale']
-        print(validated_data)
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -598,6 +597,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]}
                 for p in data
             ]
+        else:
+            for i, p in enumerate(data):
+                p['positionid'] = i + 1
 
         if any(errs):
             raise ValidationError(errs)

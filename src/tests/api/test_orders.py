@@ -2064,6 +2064,37 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
         ]
     }
 
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.positions.first().positionid == 1
+        assert o.positions.last().positionid == 2
+
 
 @pytest.mark.django_db
 def test_order_create_answer_validation(token_client, organizer, event, item, quota, question, question2):
