@@ -607,7 +607,7 @@ class StripeCC(StripeMethod):
         self._init_api()
 
         try:
-            if 'payment_stripe_payment_method_id' in request.session:
+            if self.payment_is_valid_session(request):
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
@@ -806,11 +806,6 @@ class StripeCC(StripeMethod):
             })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
-
-    def payment_pending_render(self, request, payment) -> str:
-        self._handle_payment_intent(request, payment)
-
-        return super().payment_pending_render(request, payment)
 
 
 class StripeGiropay(StripeMethod):
