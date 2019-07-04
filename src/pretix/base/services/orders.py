@@ -591,6 +591,12 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
               meta_info: dict, event: Event):
     fees = []
     total = sum([c.price for c in positions])
+
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
+                                                 meta_info=meta_info, positions=positions):
+        fees += resp
+
+    total += sum(f.value for f in fees)
     if payment_provider:
         payment_fee = payment_provider.calculate_fee(total)
     else:
@@ -601,9 +607,6 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
                       internal_type=payment_provider.identifier)
         fees.append(pf)
 
-    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
-                                                 meta_info=meta_info, positions=positions):
-        fees += resp
     return fees, pf
 
 
@@ -1377,6 +1380,14 @@ class OrderChangeManager:
             pass
 
         split_order.total = sum([p.price for p in split_positions if not p.canceled])
+
+        for fee in self.order.fees.exclude(fee_type=OrderFee.FEE_TYPE_PAYMENT):
+            new_fee = modelcopy(fee)
+            new_fee.pk = None
+            new_fee.order = split_order
+            split_order.total += new_fee.value
+            new_fee.save()
+
         if split_order.total != Decimal('0.00') and self.order.status != Order.STATUS_PAID:
             pp = self._get_payment_provider()
             if pp:
@@ -1391,13 +1402,6 @@ class OrderChangeManager:
             elif fee.pk:
                 fee.delete()
             split_order.total += fee.value
-
-        for fee in self.order.fees.exclude(fee_type=OrderFee.FEE_TYPE_PAYMENT):
-            new_fee = modelcopy(fee)
-            new_fee.pk = None
-            new_fee.order = split_order
-            split_order.total += new_fee.value
-            new_fee.save()
 
         split_order.save()
 

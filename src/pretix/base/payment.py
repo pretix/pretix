@@ -249,9 +249,7 @@ class BasePaymentProvider:
             ('_fee_percent',
              forms.DecimalField(
                  label=_('Additional fee'),
-                 help_text=_('Percentage of the order total. Note that this percentage will currently only '
-                             'be calculated on the summed price of sold tickets, not on other fees like e.g. shipping '
-                             'fees, if there are any.'),
+                 help_text=_('Percentage of the order total.'),
                  localize=True,
                  required=False,
              )),

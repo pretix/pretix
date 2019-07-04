@@ -938,6 +938,11 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
 def get_fees(event, request, total, invoice_address, provider):
     fees = []
 
+    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
+                                                    total=total):
+        fees += resp
+
+    total = total + sum(f.value for f in fees)
     if provider and total != 0:
         provider = event.get_payment_providers().get(provider)
         if provider:
@@ -962,10 +967,6 @@ def get_fees(event, request, total, invoice_address, provider):
                         tax_value=Decimal('0.00'),
                         tax_rule=payment_fee_tax_rule
                     ))
-
-    for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
-                                                    total=total):
-        fees += resp
 
     return fees
 
