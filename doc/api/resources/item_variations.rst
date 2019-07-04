@@ -152,7 +152,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/items/1/variations/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "value": {"en": "Student"},

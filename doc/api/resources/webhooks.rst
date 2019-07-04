@@ -137,7 +137,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/webhooks/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "enabled": true,

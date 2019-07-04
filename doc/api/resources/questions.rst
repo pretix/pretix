@@ -228,7 +228,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/questions/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "question": {"en": "T-Shirt size"},

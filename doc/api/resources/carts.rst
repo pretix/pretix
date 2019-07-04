@@ -207,7 +207,7 @@ Cart position endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/cartpositions/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "item": 1,

@@ -134,7 +134,7 @@ Endpoints
       POST /api/v1/organizers/(organizer)/events/(event)/items/(item)/bundles/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "bundled_item": 3,

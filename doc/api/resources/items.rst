@@ -342,7 +342,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/items/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "id": 1,

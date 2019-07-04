@@ -203,7 +203,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "name": {"en": "Sample Conference"},
@@ -285,7 +285,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/clone/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "name": {"en": "Sample Conference"},
@@ -362,7 +362,7 @@ Endpoints
       PATCH /api/v1/organizers/bigevents/events/sampleconf/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "plugins": [

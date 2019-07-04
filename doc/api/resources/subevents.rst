@@ -140,7 +140,7 @@ Endpoints
       POST /api/v1/organizers/bigevents/events/sampleconf/subevents/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "name": {"en": "First Sample Conference"},
@@ -271,7 +271,7 @@ Endpoints
       PATCH /api/v1/organizers/bigevents/events/sampleconf/subevents/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
-      Content: application/json
+      Content-Type: application/json
 
       {
         "name": {"en": "New Subevent Name"},
