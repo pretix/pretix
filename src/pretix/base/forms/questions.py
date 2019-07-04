@@ -1,6 +1,7 @@
 import copy
 import logging
 from decimal import Decimal
+from urllib.error import HTTPError
 
 import dateutil.parser
 import pytz
@@ -451,7 +452,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                                                      'your country is currently not available. We will therefore '
                                                      'need to charge VAT on your invoice. You can get the tax amount '
                                                      'back via the VAT reimbursement process.'))
-            except vat_moss.errors.WebServiceError:
+            except (vat_moss.errors.WebServiceError, HTTPError):
                 logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
                 self.instance.vat_id_validated = False
                 if self.request and self.vat_warning:
