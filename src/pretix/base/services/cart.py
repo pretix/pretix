@@ -940,7 +940,8 @@ def get_fees(event, request, total, invoice_address, provider):
 
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
                                                     total=total):
-        fees += resp
+        if resp:
+            fees += resp
 
     total = total + sum(f.value for f in fees)
     if provider and total != 0:
