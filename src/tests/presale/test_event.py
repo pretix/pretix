@@ -438,6 +438,14 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.item.hide_without_voucher = True
         self.item.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "Early-bird" in html.rendered_content
+
+    def test_hide_wo_voucher_quota_dont_show(self):
+        self.v.show_hidden_items = False
+        self.v.save()
+        self.item.hide_without_voucher = True
+        self.item.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" not in html.rendered_content
 
     def test_hide_without_voucher_item(self):

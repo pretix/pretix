@@ -74,6 +74,7 @@
                     {% bootstrap_field form.allow_ignore_quota layout="control" %}
                     {% bootstrap_field form.tag layout="control" %}
                     {% bootstrap_field form.comment layout="control" %}
+                    {% bootstrap_field form.show_hidden_items layout="control" %}
                 </fieldset>
                 {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
             </div>

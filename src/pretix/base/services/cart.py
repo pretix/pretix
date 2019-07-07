@@ -225,10 +225,7 @@ class CartManager:
 
     def _check_item_constraints(self, op):
         if isinstance(op, self.AddOperation) or isinstance(op, self.ExtendOperation):
-            if op.item.require_voucher and op.voucher is None:
-                raise CartError(error_messages['voucher_required'])
-
-            if op.item.hide_without_voucher and (op.voucher is None or op.voucher.item is None or op.voucher.item.pk != op.item.pk):
+            if (op.item.require_voucher or op.item.hide_without_voucher) and (op.voucher is None or not op.voucher.show_hidden_items):
                 raise CartError(error_messages['voucher_required'])
 
             if not op.item.is_available() or (op.variation and not op.variation.active):

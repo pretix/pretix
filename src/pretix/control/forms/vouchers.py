@@ -32,7 +32,7 @@ class VoucherForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag',
-            'comment', 'max_usages', 'price_mode', 'subevent'
+            'comment', 'max_usages', 'price_mode', 'subevent', 'show_hidden_items'
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
@@ -197,7 +197,7 @@ class VoucherBulkForm(VoucherForm):
         localized_fields = '__all__'
         fields = [
             'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment',
-            'max_usages', 'price_mode', 'subevent'
+            'max_usages', 'price_mode', 'subevent', 'show_hidden_items'
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
